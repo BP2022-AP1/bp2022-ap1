@@ -2,7 +2,7 @@
 name: Feature
 about: Create Feature Template
 title: ''
-labels: ''
+labels: Needs Estimation, Needs Prio
 assignees: ''
 
 ---
@@ -16,6 +16,9 @@ Depends on:
 
 ## UI Mockup
 [UI Mockup]
+
+## (Wiki) References
+- ...
 
 ## Acceptance Criteria
 - [ ] Todo's
