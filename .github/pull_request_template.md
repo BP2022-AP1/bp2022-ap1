@@ -5,6 +5,7 @@ Description (what might a PO or reviewer want to know?)
 ## PR checklist
 
 - [ ] Acceptance criteria fulfilled
+- [ ] Additional features are tested
 - [ ] Docs (code, wiki & diagrams) updated
 - [ ] Breaking changes anounced
 - [ ] Dev-branch has been merged into local branch to resolve conflicts
