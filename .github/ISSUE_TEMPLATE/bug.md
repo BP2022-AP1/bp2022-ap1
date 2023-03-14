@@ -2,7 +2,7 @@
 name: Bug
 about: Bug-Template
 title: ''
-labels: bug
+labels: bug, Functional
 assignees: ''
 
 ---

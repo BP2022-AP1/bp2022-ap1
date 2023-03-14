@@ -2,7 +2,7 @@
 name: Feature
 about: Create Feature Template
 title: ''
-labels: Needs Estimation, Needs Prio
+labels: Functional, Needs Estimation, Needs Prio
 assignees: ''
 
 ---
