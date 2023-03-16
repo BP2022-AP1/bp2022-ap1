@@ -9,6 +9,9 @@ assignees: ''
 
 I have to ... (in order to ...)
 
+## (Wiki) References
+- ...
+
 ## Description
 
 Due date: DD.MM.YYYY

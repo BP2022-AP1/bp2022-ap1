@@ -1,0 +1,57 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: bp2022-ap1
+
+on:
+  push
+
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install poetry
+      run: pipx install poetry
+    - name: Install dependencies
+      run: poetry install
+    - name: Check Format with black
+      run: |
+        poetry run black --check .
+    - name: Check import order with isort
+      run: |
+        poetry run isort -c .
+    - name: Lint src with pylint
+      run: |
+        poetry run pylint src
+    - name: Lint tests with pylint
+      run: |
+        poetry run pylint tests       
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"   
+    - name: Install poetry
+      run: pipx install poetry
+    - name: Install dependencies
+      run: poetry install
+    - name: Test with pytest
+      run: |
+        pytest
