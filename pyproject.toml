@@ -2,7 +2,14 @@
 name = "bp2022-ap1"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = [
+    "Antony Kamp <antony.kamp@student.hpi.de>",
+    "Max Lietze <max.lietze@student.hpi.de>",
+    "Luke Ortlam <luke.ortlam@student.hpi.de>",
+    "Anton Persitzky <anton.persitzky@student.hpi.de>",
+    "Christian Raue <christian.raue@student.hpi.de>",
+    "Lucas Reisener <lucas.reisener@student.hpi.de>"
+]
 readme = "README.md"
 packages = [{include = "bp2022_ap1"}]
 
