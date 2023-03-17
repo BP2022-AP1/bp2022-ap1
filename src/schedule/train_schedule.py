@@ -2,8 +2,7 @@ from src.schedule.schedule import Schedule
 
 
 class TrainSchedule(Schedule):
-    """A schedule for spawning SUMO trains.
-    """
+    """A schedule for spawning SUMO trains."""
 
     @classmethod
     def from_json(cls, json_object: str) -> "TrainSchedule":

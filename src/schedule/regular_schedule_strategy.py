@@ -2,8 +2,7 @@ from src.schedule.schedule_strategy import ScheduleStrategy
 
 
 class RegularScheduleStrategy(ScheduleStrategy):
-    """A schedule strategy that spawns vehicles at regular intervals.
-    """
+    """A schedule strategy that spawns vehicles at regular intervals."""
 
     @classmethod
     def from_json(cls, json_object: str) -> "RegularScheduleStrategy":

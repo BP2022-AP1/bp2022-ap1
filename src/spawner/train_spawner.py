@@ -3,8 +3,7 @@ from src.spawner.spawner import Spawner
 
 
 class TrainSpawner(Spawner):
-    """A Spawner able to spawn SUMO trains based on schedules.
-    """
+    """A Spawner able to spawn SUMO trains based on schedules."""
 
     @classmethod
     def from_json(cls, json_object: str) -> "TrainSpawner":

@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Component(ABC):
-    """Interface for components that receive ticks.
-    """
+    """Interface for components that receive ticks."""
 
     @abstractmethod
     def next_tick(self, tick: int):

@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Schedule(ABC):
-    """An abstract schedule for spawning SUMO vehicles.
-    """
+    """An abstract schedule for spawning SUMO vehicles."""
 
     @classmethod
     @abstractmethod
