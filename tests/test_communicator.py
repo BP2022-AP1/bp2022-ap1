@@ -1,29 +1,32 @@
-from bp2022_ap1.wrapper.communicator import Communicator
-import traci
 import pytest
+import traci
+
+from bp2022_ap1.wrapper.communicator import Communicator
 
 
 def test_sumo_starts():
-    c = Communicator()
-    c.start()
+    communicator = Communicator()
+    communicator.start()
 
     assert traci.getConnection() is not None
 
-    c.stop()
+    communicator.stop()
+
 
 def test_sumo_stops():
-    c = Communicator()
-    c.start()
-    c.stop()
+    communicator = Communicator()
+    communicator.start()
+    communicator.stop()
 
     with pytest.raises(traci.TraCIException):
         traci.getConnection()
 
+
 def test_sumo_steps_simulation():
-    c = Communicator()
-    c.start()
-    c.simulation_step()
+    communicator = Communicator()
+    communicator.start()
+    communicator.simulation_step()
 
     assert traci.simulation.getTime() == 1.0
 
-    c.stop()
+    communicator.stop()

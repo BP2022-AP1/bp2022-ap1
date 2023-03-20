@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from sumolib import checkBinary
 import traci
+from sumolib import checkBinary
 
 
 class Communicator:
