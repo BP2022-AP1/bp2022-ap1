@@ -31,6 +31,7 @@ def test_sumo_steps_simulation():
 
     communicator.stop()
 
+
 def test_context_manager():
     with Communicator() as communicator:
         communicator.simulation_step()
