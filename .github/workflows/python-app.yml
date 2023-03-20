@@ -33,7 +33,7 @@ jobs:
         poetry run isort -c .
     - name: Lint src with pylint
       run: |
-        poetry run pylint src
+        poetry run pylint bp2022_ap1
     - name: Lint tests with pylint
       run: |
         poetry run pylint tests       
