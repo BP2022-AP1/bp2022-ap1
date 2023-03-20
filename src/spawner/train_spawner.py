@@ -14,7 +14,7 @@ class TrainSpawner(Spawner):
         :return: A TrainSpawner.
         :rtype: TrainSpawner
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()
 
     def add_schedules_from_json(self, json_schedules: list[str]):
         """Adds train schedules to the TrainSpawner
@@ -23,7 +23,7 @@ class TrainSpawner(Spawner):
         :param json_schedules: The list of JSON objects.
         :type json_schedules: list[str]
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()
 
     def spawn_specific(self, schedule: TrainSchedule):
         """Spawns vehicles based on a train schedule.
@@ -31,7 +31,7 @@ class TrainSpawner(Spawner):
         :param schedule: The train schedule.
         :type schedule: TrainSchedule
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()
 
     def next_tick(self, tick: int):
         """Called to announce that the next tick occurred.
@@ -39,4 +39,4 @@ class TrainSpawner(Spawner):
         :param tick: The current tick.
         :type tick: int
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()

@@ -13,7 +13,7 @@ class RegularScheduleStrategy(ScheduleStrategy):
         :return: A RegularScheduleStrategy.
         :rtype: RegularScheduleStrategy
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()
 
     def maybe_spawn(self, tick: int):
         """Determines whether a vehicle should be spawned at the
@@ -22,4 +22,4 @@ class RegularScheduleStrategy(ScheduleStrategy):
         :param tick: The current tick.
         :type tick: int
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()

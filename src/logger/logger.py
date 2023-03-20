@@ -21,7 +21,7 @@ class Logger:
         :param train_id: The id of the train
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def remove_train(self, train_id: int) -> Type[None]:
         """
@@ -30,7 +30,7 @@ class Logger:
         :param train_id: The id of the train
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def arrival_train(self, train_id: int, station_id: int) -> Type[None]:
         """
@@ -40,7 +40,7 @@ class Logger:
         :param station_id: The id of the station
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def departure_train(self, train_id: int, station_id: int) -> Type[None]:
         """
@@ -50,7 +50,7 @@ class Logger:
                 :param station_id: The id of the station
                 :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def create_fahrstrasse(self, fahrstrasse: any) -> Type[None]:
         """
@@ -59,7 +59,7 @@ class Logger:
         :param fahrstrasse: The definition of the created fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def remove_fahrstrasse(self, fahrstrasse: any) -> Type[None]:
         """
@@ -68,7 +68,7 @@ class Logger:
         :param fahrstrasse: The definition of the removed fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def set_signal(
         self, signal_id: int, state_before: int, state_after: int
@@ -81,7 +81,7 @@ class Logger:
         :param state_after: The state of the signal after the change
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def inject_fault(
         self, injection_id: int, fault_type: int, injection_position: any, duration: int
@@ -96,7 +96,7 @@ class Logger:
         :param duration: The duration of the injection
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
 
     def remove_fault(self, injection_id: int) -> Type[None]:
         """
@@ -105,4 +105,4 @@ class Logger:
         :param injection_id: The id of the injection
         :rtype: None
         """
-        pass  # not implemented yet
+        pass  # not implemented yet # pylint: disable=W0107
