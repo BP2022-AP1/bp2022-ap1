@@ -13,7 +13,7 @@ class TrainSchedule(Schedule):
         :return: A TrainSchedule.
         :rtype: TrainSchedule
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()
 
     def maybe_spawn(self, tick: int):
         """Determines whether a train should be spawned at the
@@ -22,4 +22,4 @@ class TrainSchedule(Schedule):
         :param tick: The current tick.
         :type tick: int
         """
-        raise NotImplementedError()  # TODO: implement this
+        raise NotImplementedError()
