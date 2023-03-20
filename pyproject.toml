@@ -11,7 +11,7 @@ authors = [
     "Lucas Reisener <lucas.reisener@student.hpi.de>"
 ]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "bp2022_ap1"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
