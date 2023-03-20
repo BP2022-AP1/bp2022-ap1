@@ -2,7 +2,8 @@
 A basic test sample
 """
 
-def inc(num : int):
+
+def inc(num: int):
     """
     A basic increment function
 

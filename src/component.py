@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class Component(ABC):
-
     @abstractmethod
     def next_tick(self, tick: int):
         """
