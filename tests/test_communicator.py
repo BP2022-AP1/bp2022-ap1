@@ -1,7 +1,7 @@
 import pytest
 import traci
 
-from bp2022_ap1.wrapper.communicator import Communicator
+from src.wrapper.communicator import Communicator
 
 
 def test_sumo_starts():
