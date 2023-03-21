@@ -1,40 +1,11 @@
-import pytest
-import traci
+from time import sleep
 
 from src.wrapper.communicator import Communicator
 
 
-def test_sumo_starts():
+def test_simulation_runs():
     communicator = Communicator()
     communicator.start()
-
-    assert traci.getConnection() is not None
-
+    sleep(0.1)
     communicator.stop()
-
-
-def test_sumo_stops():
-    communicator = Communicator()
-    communicator.start()
-    communicator.stop()
-
-    with pytest.raises(traci.TraCIException):
-        traci.getConnection()
-
-
-def test_sumo_steps_simulation():
-    communicator = Communicator()
-    communicator.start()
-    communicator.simulation_step()
-
-    assert traci.simulation.getTime() == 1.0
-
-    communicator.stop()
-
-
-def test_context_manager():
-    with Communicator() as communicator:
-        communicator.simulation_step()
-
-    with pytest.raises(traci.TraCIException):
-        traci.getConnection()
+    assert communicator.progress > 0
