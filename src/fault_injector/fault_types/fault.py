@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from src.component import Component
 
 
