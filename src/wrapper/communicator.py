@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from threading import Thread
+from typing import List
 
 import traci
 from sumolib import checkBinary
@@ -19,9 +20,18 @@ class Communicator(Thread):
 
     _stopped = False
 
+    @property
+    def progress(self):
+        """Get the current simulation progress as a float between 0 and 1
+
+        :return: The current simulation progress
+        :rtype: float
+        """
+        return self._current_tick / self._max_tick
+
     def __init__(
         self,
-        components: list(Component),
+        components: List[Component] = None,
         max_tick: int = 1_000_000,
         sumo_port: int = None,
         sumo_configuration: str = "sumo-config/example.scenario.sumocfg",
@@ -30,7 +40,7 @@ class Communicator(Thread):
         Thread.__init__(self)
         self._configuration = sumo_configuration
         self._port = sumo_port
-        self._components = components
+        self._components = components if components is not None else []
         self._max_tick = max_tick
 
     def run(self):
@@ -46,7 +56,7 @@ class Communicator(Thread):
 
         traci.close(wait=False)
 
-    def cancel(self):
+    def stop(self):
         """Stopps the simulation requesting a simulation step.
         At most, one simulation step will happen after this request"""
         self._stopped = True
