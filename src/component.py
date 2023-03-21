@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from logger.logger import Logger
+from src.logger.logger import Logger
 
 
 class Component(ABC):
