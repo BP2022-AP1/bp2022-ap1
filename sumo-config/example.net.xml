@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2023-02-09 17:37:54 by Eclipse SUMO netconvert Version 1.15.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="sumo-config/example1.nod.xml"/>
+        <edge-files value="sumo-config/example1.edg.xml"/>
+        <connection-files value="sumo-config/example1.con.xml"/>
+    </input>
+
+    <output>
+        <output-file value="sumo-config/example1.net.xml"/>
+    </output>
+
+    <railway>
+        <railway.topology.repair value="true"/>
+        <railway.topology.repair.connect-straight value="true"/>
+        <railway.topology.all-bidi value="false"/>
+    </railway>
+
+</configuration>
+-->
+
+<net version="1.9" junctionCornerDetail="5" limitTurnSpeed="5.50" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="4533770.00,5625770.00" convBoundary="0.00,0.00,1500.00,0.00" origBoundary="-4533770.00,-5625770.00,-4532270.00,-5625770.00" projParameter="!"/>
+
+    <edge id=":32d5d_0" function="internal">
+        <lane id=":32d5d_0_0" index="0" allow="rail rail_electric" speed="0.10" length="0.10" shape="0.00,0.00 0.00,0.00"/>
+    </edge>
+    <edge id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_0" function="internal" bidi=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_1">
+        <lane id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_0_0" index="0" allow="rail rail_electric" speed="110.00" length="0.10" shape="1.00,0.00 1.00,0.00"/>
+    </edge>
+    <edge id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_1" function="internal" bidi=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_0">
+        <lane id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_1_0" index="0" allow="rail rail_electric" speed="110.00" length="0.10" shape="1.00,0.00 1.00,0.00"/>
+    </edge>
+    <edge id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_0" function="internal" bidi=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_1">
+        <lane id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_0_0" index="0" allow="rail rail_electric" speed="110.00" length="0.10" shape="1001.00,0.00 1001.00,0.00"/>
+    </edge>
+    <edge id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_1" function="internal" bidi=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_0">
+        <lane id=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_1_0" index="0" allow="rail rail_electric" speed="110.00" length="0.10" shape="1001.00,0.00 1001.00,0.00"/>
+    </edge>
+    <edge id=":8ccb0_0" function="internal">
+        <lane id=":8ccb0_0_0" index="0" allow="rail rail_electric" speed="0.10" length="0.10" shape="1500.00,0.00 1500.00,0.00"/>
+    </edge>
+
+    <edge id="e568c-0" from="32d5d" to="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" priority="-1" spreadType="center" bidi="e568c-0-re">
+        <lane id="e568c-0_0" index="0" allow="rail rail_electric" speed="110.00" length="1.00" shape="0.00,0.00 1.00,0.00"/>
+    </edge>
+    <edge id="e568c-0-re" from="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" to="32d5d" priority="-1" spreadType="center" bidi="e568c-0">
+        <lane id="e568c-0-re_0" index="0" allow="rail rail_electric" speed="110.00" length="1.00" shape="1.00,0.00 0.00,0.00"/>
+    </edge>
+    <edge id="e568c-1" from="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" to="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" priority="-1" spreadType="center" bidi="e568c-1-re">
+        <lane id="e568c-1_0" index="0" allow="rail rail_electric" speed="110.00" length="1000.00" shape="1.00,0.00 1001.00,0.00"/>
+    </edge>
+    <edge id="e568c-1-re" from="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" to="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" priority="-1" spreadType="center" bidi="e568c-1">
+        <lane id="e568c-1-re_0" index="0" allow="rail rail_electric" speed="110.00" length="1000.00" shape="1001.00,0.00 1.00,0.00"/>
+    </edge>
+    <edge id="e568c-2" from="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" to="8ccb0" priority="-1" spreadType="center" bidi="e568c-2-re">
+        <lane id="e568c-2_0" index="0" allow="rail rail_electric" speed="110.00" length="499.00" shape="1001.00,0.00 1500.00,0.00"/>
+    </edge>
+    <edge id="e568c-2-re" from="8ccb0" to="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" priority="-1" spreadType="center" bidi="e568c-2">
+        <lane id="e568c-2-re_0" index="0" allow="rail rail_electric" speed="110.00" length="499.00" shape="1500.00,0.00 1001.00,0.00"/>
+    </edge>
+
+    <junction id="32d5d" type="priority" x="0.00" y="0.00" incLanes="e568c-0-re_0" intLanes=":32d5d_0_0" shape="0.00,1.60 0.00,-1.60 0.00,1.60 0.00,-1.60">
+        <request index="0" response="0" foes="0" cont="0"/>
+    </junction>
+    <junction id="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" type="rail_signal" x="1.00" y="0.00" incLanes="e568c-1-re_0 e568c-0_0" intLanes=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_0_0 :56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_1_0" shape="1.00,1.60 1.00,-1.60 1.00,1.60">
+        <request index="0" response="00" foes="00" cont="0"/>
+        <request index="1" response="00" foes="00" cont="0"/>
+    </junction>
+    <junction id="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" type="rail_signal" x="1001.00" y="0.00" incLanes="e568c-2-re_0 e568c-1_0" intLanes=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_0_0 :56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_1_0" shape="1001.00,1.60 1001.00,-1.60 1001.00,1.60">
+        <request index="0" response="00" foes="00" cont="0"/>
+        <request index="1" response="00" foes="00" cont="0"/>
+    </junction>
+    <junction id="8ccb0" type="priority" x="1500.00" y="0.00" incLanes="e568c-2_0" intLanes=":8ccb0_0_0" shape="1500.00,-1.60 1500.00,1.60 1500.00,-1.60 1500.00,1.60">
+        <request index="0" response="0" foes="0" cont="0"/>
+    </junction>
+
+    <connection from="e568c-0" to="e568c-1" fromLane="0" toLane="0" via=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_1_0" tl="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" linkIndex="1" dir="s" state="O"/>
+    <connection from="e568c-0-re" to="e568c-0" fromLane="0" toLane="0" speed="0.10" via=":32d5d_0_0" dir="t" state="M"/>
+    <connection from="e568c-1" to="e568c-2" fromLane="0" toLane="0" via=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_1_0" tl="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" linkIndex="1" dir="s" state="O"/>
+    <connection from="e568c-1-re" to="e568c-0-re" fromLane="0" toLane="0" via=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_0_0" tl="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" linkIndex="0" dir="s" state="O"/>
+    <connection from="e568c-2" to="e568c-2-re" fromLane="0" toLane="0" speed="0.10" via=":8ccb0_0_0" dir="t" state="M"/>
+    <connection from="e568c-2-re" to="e568c-1-re" fromLane="0" toLane="0" via=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_0_0" tl="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" linkIndex="0" dir="s" state="O"/>
+
+    <connection from=":32d5d_0" to="e568c-0" fromLane="0" toLane="0" dir="t" state="M"/>
+    <connection from=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_0" to="e568c-0-re" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1_1" to="e568c-1" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_0" to="e568c-1-re" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001_1" to="e568c-2" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":8ccb0_0" to="e568c-2-re" fromLane="0" toLane="0" dir="t" state="M"/>
+
+</net>

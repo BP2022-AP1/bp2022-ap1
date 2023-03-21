@@ -355,6 +355,20 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
+name = "sumolib"
+version = "1.16.0"
+description = "Python helper modules to read networks, parse output data and do other useful stuff related to the traffic simulation Eclipse SUMO"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "sumolib-1.16.0-py3-none-any.whl", hash = "sha256:eb311bb07985cdcf9efc57a2148fbafe3f8a3a7447cc0dec5757a80945386fdc"},
+]
+
+[package.extras]
+visualization = ["matplotlib"]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -377,6 +391,20 @@ files = [
     {file = "tomlkit-0.11.6-py3-none-any.whl", hash = "sha256:07de26b0d8cfc18f871aec595fda24d95b08fef89d147caa861939f37230bf4b"},
     {file = "tomlkit-0.11.6.tar.gz", hash = "sha256:71b952e5721688937fb02cf9d354dbcf0785066149d2855e44531ebdd2b65d73"},
 ]
+
+[[package]]
+name = "traci"
+version = "1.16.0"
+description = "The pure python version of the TraCI API to communicate with the traffic simulation Eclipse SUMO"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "traci-1.16.0-py3-none-any.whl", hash = "sha256:12f8d795a1a53b5a78b9f5fb28791d3b17ff0cb7dc46ce2fccb5a22e1ebb1b44"},
+]
+
+[package.dependencies]
+sumolib = ">=1.16.0"
 
 [[package]]
 name = "typing-extensions"
@@ -478,4 +506,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6ea4c42f4f767be63a5c2fff5aa08914cec5fa7b12518a32fb81c0582d9f9d00"
+content-hash = "ff888f444b580e2cd797a132fbbf284c028b2e6e7ebf9aa3744186eb48feb405"

@@ -1,0 +1,22 @@
+<connections>
+
+
+<!-- Signal 56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1 dae68bd4-eb96-4777-8806-83df3538c5a1 -->
+<connection from="e568c-0" to="e568c-1"/>
+<connection from="e568c-0" to="e568c-1-re"/>
+<connection from="e568c-0-re" to="e568c-1"/>
+<connection from="e568c-0-re" to="e568c-1-re"/>
+<connection from="e568c-1" to="e568c-0"/>
+<connection from="e568c-1" to="e568c-0-re"/>
+<connection from="e568c-1-re" to="e568c-0"/>
+<connection from="e568c-1-re" to="e568c-0-re"/>
+<!-- Signal 56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001 fa7235ea-efd9-40bd-8123-a6ea7ec1580b -->
+<connection from="e568c-1" to="e568c-2"/>
+<connection from="e568c-1" to="e568c-2-re"/>
+<connection from="e568c-1-re" to="e568c-2"/>
+<connection from="e568c-1-re" to="e568c-2-re"/>
+<connection from="e568c-2" to="e568c-1"/>
+<connection from="e568c-2" to="e568c-1-re"/>
+<connection from="e568c-2-re" to="e568c-1"/>
+<connection from="e568c-2-re" to="e568c-1-re"/>
+</connections>
