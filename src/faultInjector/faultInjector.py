@@ -21,7 +21,7 @@ class FaultInjector(Component):
         """
 
         raise NotImplementedError()
-    
+
     def next_tick(self, tick: int):
         """Called by the wrapper to announce the next tick of the simulation
 
