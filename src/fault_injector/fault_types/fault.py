@@ -6,6 +6,12 @@ from src.component import Component
 class Fault(ABC):
     """An abstract fault for the fault injection"""
 
+    _start_time = None
+    _end_time = None
+    _component = None
+    _affected_element = None
+    _description = "injected fault"
+
     @classmethod
     @abstractmethod
     def from_json(cls, json_object: str) -> "Fault":
