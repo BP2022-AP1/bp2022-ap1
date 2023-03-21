@@ -1,0 +1,6 @@
+<nodes>
+<node id="32d5d" x="-4533770.0" y="-5625770.0" type="priority"/>
+<node id="8ccb0" x="-4532270.0" y="-5625770.0" type="priority"/>
+<node id="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1" x="-4533769.0" y="-5625770.0" type="rail_signal"/>
+<node id="56701ff9-b1fc-44d4-a2cc-0c64fd6e568c-km-1001" x="-4532769.0" y="-5625770.0" type="rail_signal"/>
+</nodes>
