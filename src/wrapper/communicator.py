@@ -32,7 +32,7 @@ class Communicator(Thread):
     def __init__(
         self,
         components: List[Component] = None,
-        max_tick: int = 1_000_000,
+        max_tick: int = 86_400,
         sumo_port: int = None,
         sumo_configuration: str = "sumo-config/example.scenario.sumocfg",
     ):
@@ -49,9 +49,9 @@ class Communicator(Thread):
         traci.start([checkBinary("sumo"), "-c", self._configuration], port=self._port)
 
         while not self._stopped and self._current_tick <= self._max_tick:
-            self._simulation_step()
             for component in self._components:
                 component.next_tick(self._current_tick)
+            self._simulation_step()
             self._current_tick += 1
 
         traci.close(wait=False)
