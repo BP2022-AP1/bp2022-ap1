@@ -222,6 +222,27 @@ files = [
 ]
 
 [[package]]
+name = "marshmallow"
+version = "3.19.0"
+description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "marshmallow-3.19.0-py3-none-any.whl", hash = "sha256:93f0958568da045b0021ec6aeb7ac37c81bfcccbb9a0e7ed8559885070b3a19b"},
+    {file = "marshmallow-3.19.0.tar.gz", hash = "sha256:90032c0fd650ce94b6ec6dc8dfeb0e3ff50c144586462c389b81a07205bedb78"},
+]
+
+[package.dependencies]
+packaging = ">=17.0"
+
+[package.extras]
+dev = ["flake8 (==5.0.4)", "flake8-bugbear (==22.10.25)", "mypy (==0.990)", "pre-commit (>=2.4,<3.0)", "pytest", "pytz", "simplejson", "tox"]
+docs = ["alabaster (==0.7.12)", "autodocsumm (==0.2.9)", "sphinx (==5.3.0)", "sphinx-issues (==3.0.1)", "sphinx-version-warning (==1.1.2)"]
+lint = ["flake8 (==5.0.4)", "flake8-bugbear (==22.10.25)", "mypy (==0.990)", "pre-commit (>=2.4,<3.0)"]
+tests = ["pytest", "pytz", "simplejson"]
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -268,6 +289,37 @@ files = [
     {file = "pathspec-0.11.1-py3-none-any.whl", hash = "sha256:d8af70af76652554bd134c22b3e8a1cc46ed7d91edcdd721ef1a0c51a84a5293"},
     {file = "pathspec-0.11.1.tar.gz", hash = "sha256:2798de800fa92780e33acca925945e9a19a133b715067cf165b8866c15a31687"},
 ]
+
+[[package]]
+name = "peewee"
+version = "3.16.0"
+description = "a little orm"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "peewee-3.16.0.tar.gz", hash = "sha256:1800c0a04962ee99d161c07f5a12fc49549caf5cfcda426a9103e34e37f854ba"},
+]
+
+[[package]]
+name = "peewee-migrate"
+version = "1.6.6"
+description = "A simple migration engine for Peewee ORM"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "peewee-migrate-1.6.6.tar.gz", hash = "sha256:b8c3ab71511a9b7ba1ef91e26dff86e3757996a0789ab3fda421f0c004c9d869"},
+    {file = "peewee_migrate-1.6.6-py3-none-any.whl", hash = "sha256:26cbfd1b1ad11e3bbd114d3f0fe1e91bfd15fec346221d184e22c87d00e6e355"},
+]
+
+[package.dependencies]
+click = ">=6.7"
+peewee = ">=3.3.3"
+
+[package.extras]
+build = ["bump2version", "wheel"]
+tests = ["psycopg2-binary", "pytest", "pytest-mypy"]
 
 [[package]]
 name = "platformdirs"
@@ -506,4 +558,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ff888f444b580e2cd797a132fbbf284c028b2e6e7ebf9aa3744186eb48feb405"
+content-hash = "9335e3c16b643bf49c245cdcccf99ba6fc1e2ee9c2b40dcc08861325fcc78cc1"
