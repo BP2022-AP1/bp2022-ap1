@@ -20,12 +20,18 @@ def run(args: argparse.Namespace):
     :type args: argparse.Namespace
     """
     name = args.database_name
-    print('Running database...')
+    print("Running database...")
     print(os.getcwd())
-    subprocess.run([
-        "docker-compose", "-f", "db/local/docker-compose.yml", "up",
-        "-d", "-".join(["postgres", name])
-    ])
+    subprocess.run(
+        [
+            "docker-compose",
+            "-f",
+            "db/local/docker-compose.yml",
+            "up",
+            "-d",
+            "-".join(["postgres", name]),
+        ]
+    )
 
 
 def stop(args: argparse.Namespace):
@@ -35,25 +41,28 @@ def stop(args: argparse.Namespace):
     :type args: argparse.Namespace
     """
     name = args.database_name
-    print('Stopping database...')
-    subprocess.run([
-        "docker-compose", "-f", "db/local/docker-compose.yml", "stop",
-        "-".join(["postgres", name])
-    ])
+    print("Stopping database...")
+    subprocess.run(
+        [
+            "docker-compose",
+            "-f",
+            "db/local/docker-compose.yml",
+            "stop",
+            "-".join(["postgres", name]),
+        ]
+    )
 
 
 def create(_: argparse.Namespace):
-    """Create database tables
-    """
+    """Create database tables"""
     db.create_tables(models)
-    print('Created tables')
+    print("Created tables")
 
 
 def drop(_: argparse.Namespace):
-    """Drop database tables
-    """
+    """Drop database tables"""
     db.drop_tables(models)
-    print('Dropped tables')
+    print("Dropped tables")
 
 
 def recreate(args: argparse.Namespace):
@@ -73,7 +82,7 @@ def fail_on_name(name: str | None):
     :type name: str | None
     """
     if not name:
-        print('Please provide a name for the migration', file=sys.stderr)
+        print("Please provide a name for the migration", file=sys.stderr)
         sys.exit(1)
 
 
@@ -89,64 +98,57 @@ def migration(args: argparse.Namespace):
         os.mkdir(MIGRATION_DIRECTORY)
     router = Router(db, migrate_dir=MIGRATION_DIRECTORY)
 
-    if action == 'create':
+    if action == "create":
         fail_on_name(name)
         router.create(name)
-        print(f'Created migration: {name}')
-    elif action == 'run':
+        print(f"Created migration: {name}")
+    elif action == "run":
         if not name:
             router.run()
-            print('Ran all unapplied migrations')
+            print("Ran all unapplied migrations")
         else:
             router.run(name)
-            print(f'Ran migration: {name}')
-    elif action == 'rollback':
+            print(f"Ran migration: {name}")
+    elif action == "rollback":
         fail_on_name(name)
         router.rollback(name)
-        print(f'Rolled back migration: {name}')
+        print(f"Rolled back migration: {name}")
 
 
 def execute_on_args():
-    """Parse command line arguments and execute the corresponding function
-    """
-    parser = argparse.ArgumentParser(description='Manage database')
-    subparsers = parser.add_subparsers(
-        dest='action', help='Action to perform'
-    )
+    """Parse command line arguments and execute the corresponding function"""
+    parser = argparse.ArgumentParser(description="Manage database")
+    subparsers = parser.add_subparsers(dest="action", help="Action to perform")
 
-    run_parser = subparsers.add_parser('run', help='Run the database')
+    run_parser = subparsers.add_parser("run", help="Run the database")
     run_parser.add_argument(
-        "database_name", type=str, help="Name of the database",
-        choices=['dev', 'test']
+        "database_name", type=str, help="Name of the database", choices=["dev", "test"]
     )
     run_parser.set_defaults(func=run)
 
-    stop_parser = subparsers.add_parser('stop', help='Stop the database')
+    stop_parser = subparsers.add_parser("stop", help="Stop the database")
     stop_parser.add_argument(
-        "database_name", type=str, help="Name of the database",
-        choices=['dev', 'test']
+        "database_name", type=str, help="Name of the database", choices=["dev", "test"]
     )
     stop_parser.set_defaults(func=stop)
 
-    create_parser = subparsers.add_parser(
-        'create', help='Create database tables'
-    )
+    create_parser = subparsers.add_parser("create", help="Create database tables")
     create_parser.set_defaults(func=create)
 
-    drop_parser = subparsers.add_parser('drop', help='Drop database tables')
+    drop_parser = subparsers.add_parser("drop", help="Drop database tables")
     drop_parser.set_defaults(func=drop)
 
     recreate_parser = subparsers.add_parser(
-        'recreate', help='Drop and create database tables'
+        "recreate", help="Drop and create database tables"
     )
     recreate_parser.set_defaults(func=recreate)
 
-    migration_parser = subparsers.add_parser(
-        'migration', help='Manage migration'
-    )
+    migration_parser = subparsers.add_parser("migration", help="Manage migration")
     migration_parser.add_argument(
-        "migration_action", type=str, help="Action to perform",
-        choices=['create', 'run', 'rollback']
+        "migration_action",
+        type=str,
+        help="Action to perform",
+        choices=["create", "run", "rollback"],
     )
     migration_parser.add_argument(
         "migration_name", type=str, help="Name of the migration"
@@ -158,8 +160,7 @@ def execute_on_args():
 
 
 def main():
-    """Main entry point for the script
-    """
+    """Main entry point for the script"""
     execute_on_args()
 
 
