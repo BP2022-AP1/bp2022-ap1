@@ -4,6 +4,8 @@ from src.base_model import BaseModel, db
 
 
 class ModelTest(BaseModel):
+    """Model for testing purposes
+    """
     test_value = IntegerField()
 
 
