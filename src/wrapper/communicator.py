@@ -44,9 +44,6 @@ class Communicator(Thread):
         self._components = components if components is not None else []
         self._max_tick = max_tick
 
-        # Add the simulation wrapper as well
-        self._components.append(SimulationComponent())
-
     def run(self):
         """Starts sumo (no gui) and connects using traci. The connection has the `default` label."""
 
