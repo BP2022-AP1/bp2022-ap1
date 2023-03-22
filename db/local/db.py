@@ -30,7 +30,7 @@ def run(args: argparse.Namespace):
             "-d",
             "-".join(["postgres", name]),
         ],
-        check=True
+        check=True,
     )
 
 
@@ -50,7 +50,7 @@ def stop(args: argparse.Namespace):
             "stop",
             "-".join(["postgres", name]),
         ],
-        check=True
+        check=True,
     )
 
 
@@ -109,8 +109,7 @@ def migration(args: argparse.Namespace):
 
 
 def rollback(_: argparse.Namespace):
-    """Rollback latest migration
-    """
+    """Rollback latest migration"""
     router = construct_migration_router()
     router.rollback()
     print("Rolled back latest migration")
@@ -156,7 +155,9 @@ def execute_on_args():
     )
     migration_parser.set_defaults(func=migration)
 
-    rollback_parser = subparsers.add_parser("rollback", help="Rollback latest migration")
+    rollback_parser = subparsers.add_parser(
+        "rollback", help="Rollback latest migration"
+    )
     rollback_parser.set_defaults(func=rollback)
 
     args = parser.parse_args()
