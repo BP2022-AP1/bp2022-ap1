@@ -1,6 +1,5 @@
 import argparse
 import os
-import sys
 import subprocess
 from typing import Type
 
@@ -30,7 +29,8 @@ def run(args: argparse.Namespace):
             "up",
             "-d",
             "-".join(["postgres", name]),
-        ]
+        ],
+        check=True
     )
 
 
@@ -49,7 +49,8 @@ def stop(args: argparse.Namespace):
             "db/local/docker-compose.yml",
             "stop",
             "-".join(["postgres", name]),
-        ]
+        ],
+        check=True
     )
 
 
@@ -75,15 +76,15 @@ def recreate(args: argparse.Namespace):
     create(args)
 
 
-def fail_on_name(name: str | None):
-    """Fail if no name is provided
+def construct_migration_router() -> Router:
+    """Construct a migration router
 
-    :param name: migration name to test
-    :type name: str | None
+    :return: A migration router
+    :rtype: Router
     """
-    if not name:
-        print("Please provide a name for the migration", file=sys.stderr)
-        sys.exit(1)
+    if not os.path.exists(MIGRATION_DIRECTORY):
+        os.mkdir(MIGRATION_DIRECTORY)
+    return Router(db, migrate_dir=MIGRATION_DIRECTORY)
 
 
 def migration(args: argparse.Namespace):
@@ -93,26 +94,26 @@ def migration(args: argparse.Namespace):
     """
     action = args.migration_action
     name = args.migration_name
-
-    if not os.path.exists(MIGRATION_DIRECTORY):
-        os.mkdir(MIGRATION_DIRECTORY)
-    router = Router(db, migrate_dir=MIGRATION_DIRECTORY)
+    router = construct_migration_router()
 
     if action == "create":
-        fail_on_name(name)
         router.create(name)
         print(f"Created migration: {name}")
     elif action == "run":
-        if not name:
+        if name == "ALL":
             router.run()
             print("Ran all unapplied migrations")
         else:
             router.run(name)
             print(f"Ran migration: {name}")
-    elif action == "rollback":
-        fail_on_name(name)
-        router.rollback(name)
-        print(f"Rolled back migration: {name}")
+
+
+def rollback(_: argparse.Namespace):
+    """Rollback latest migration
+    """
+    router = construct_migration_router()
+    router.rollback()
+    print(f"Rolled back latest migration")
 
 
 def execute_on_args():
@@ -148,12 +149,15 @@ def execute_on_args():
         "migration_action",
         type=str,
         help="Action to perform",
-        choices=["create", "run", "rollback"],
+        choices=["create", "run"],
     )
     migration_parser.add_argument(
         "migration_name", type=str, help="Name of the migration"
     )
     migration_parser.set_defaults(func=migration)
+
+    rollback_parser = subparsers.add_parser("rollback", help="Rollback latest migration")
+    rollback_parser.set_defaults(func=rollback)
 
     args = parser.parse_args()
     args.func(args)
