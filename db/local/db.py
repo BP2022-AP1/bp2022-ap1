@@ -113,7 +113,7 @@ def rollback(_: argparse.Namespace):
     """
     router = construct_migration_router()
     router.rollback()
-    print(f"Rolled back latest migration")
+    print("Rolled back latest migration")
 
 
 def execute_on_args():
