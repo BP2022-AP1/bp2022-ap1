@@ -1,0 +1,5 @@
+#!/bin/sh
+poetry run python3 db/local/db.py run test
+poetry run python3 db/local/db.py recreate
+poetry run pytest
+poetry run python3 db/local/db.py stop test
