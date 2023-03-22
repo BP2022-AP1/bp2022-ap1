@@ -7,7 +7,6 @@ import traci
 from sumolib import checkBinary
 
 from src.component import Component
-from src.wrapper.simulation_component import SimulationComponent
 
 
 class Communicator(Thread):
@@ -31,8 +30,8 @@ class Communicator(Thread):
         return self._current_tick / self._max_tick
 
     def add_component(self, component: Component):
-        """Add the given component to the simulation. 
-        There are no guarantees if the component will be called within 
+        """Add the given component to the simulation.
+        There are no guarantees if the component will be called within
         the current simualtion tick.
 
         :param component: The component to add to the current simulation
