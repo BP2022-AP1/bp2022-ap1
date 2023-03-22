@@ -1,0 +1,2 @@
+#!/bin/sh
+poetry run python3 db/local/db.py "$@"
