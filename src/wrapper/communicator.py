@@ -30,6 +30,15 @@ class Communicator(Thread):
         """
         return self._current_tick / self._max_tick
 
+    def add_component(self, component: Component):
+        """Add the given component to the simulation. 
+        There are no guarantees if the component will be called within 
+        the current simualtion tick.
+
+        :param component: The component to add to the current simulation
+        """
+        self._components.append(component)
+
     def __init__(
         self,
         components: List[Component] = None,
