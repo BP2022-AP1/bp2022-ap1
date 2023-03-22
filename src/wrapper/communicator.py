@@ -19,6 +19,7 @@ class Communicator(Thread):
     _max_tick = None
 
     _stopped = False
+    sumo_running = False
 
     @property
     def progress(self):
@@ -56,6 +57,8 @@ class Communicator(Thread):
         """Starts sumo (no gui) and connects using traci. The connection has the `default` label."""
 
         traci.start([checkBinary("sumo"), "-c", self._configuration], port=self._port)
+
+        self.sumo_running = True
 
         while not self._stopped and self._current_tick <= self._max_tick:
             for component in self._components:
