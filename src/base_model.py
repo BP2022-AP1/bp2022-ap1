@@ -1,19 +1,24 @@
+import marshmallow as marsh
 from peewee import Model, PostgresqlDatabase
 
-
-db: PostgresqlDatabase = PostgresqlDatabase(database="postgres",user="postgres",password="root",host="localhost")
+db: PostgresqlDatabase = PostgresqlDatabase(
+    database="postgres", user="postgres", password="root", host="localhost"
+)
 
 
 class BaseModel(Model):
-    """All model classes have to inherit from this base class.
-    """
+    """All model classes have to inherit from this base class."""
+
     class Meta:
-        """Set Database
-        """
+        """Set Database"""
+
         database = db
 
+    class Schema(marsh.Schema):
+        """The marshmallow schema all model schemas have to inherit from."""
+
     @classmethod
-    def from_dict(cls, data: dict) -> 'BaseModel':
+    def from_dict(cls, data: dict) -> "BaseModel":
         """constructs a model object from a dictionary.
 
         :param data: the dictionary
