@@ -46,8 +46,7 @@ def test_simulation_runs(
 ):  # pylint: disable=redefined-outer-name,unused-argument
     communicator = Communicator()
     communicator.start()
-    while not communicator.sumo_running:
-        sleep(1)
+    sleep(0.1)
     communicator.stop()
     assert communicator.progress > 0
 
@@ -58,8 +57,7 @@ def test_component_next_tick_is_called(
     mock = MockComponent()
     communicator = Communicator(components=[mock])
     communicator.start()
-    while not communicator.sumo_running:
-        sleep(1)
+    sleep(0.1)
     communicator.stop()
     assert mock.call_count > 0
 
@@ -71,7 +69,6 @@ def test_component_next_tick_is_called_late_add(
     communicator = Communicator()
     communicator.start()
     communicator.add_component(mock)
-    while not communicator.sumo_running:
-        sleep(1)
+    sleep(0.1)
     communicator.stop()
     assert mock.call_count > 0
