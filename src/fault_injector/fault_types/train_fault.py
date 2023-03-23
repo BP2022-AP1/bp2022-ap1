@@ -19,7 +19,7 @@ class TrainFault(Fault):
     def inject_fault(component: Component):
         """inject TrainFault into the given component
 
-        :param component: _description_
+        :param component: The component the fault should be injected into
         :type component: Component
         """
 
