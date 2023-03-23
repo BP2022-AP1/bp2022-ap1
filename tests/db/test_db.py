@@ -9,7 +9,7 @@ class ModelTest(BaseModel):
     test_value = IntegerField()
 
 
-def test_db():
+def test_db_connection_workflow():
     # I just wanted to test if the db is working
     db.create_tables([ModelTest])
     ModelTest.create(test_value=1).save()
