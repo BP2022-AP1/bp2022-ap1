@@ -32,7 +32,9 @@ def mock_os(monkeypatch):
     monkeypatch.setattr(os, "environ", mock_environ)
 
 
-def test_env_variables_import_order(mock_dotenv, mock_os):
+def test_env_variables_import_order(
+    mock_dotenv, mock_os
+):  # pylint: disable=redefined-outer-name,unused-argument
     """
     Test if the loading order of the environment variables are correct.
     .env.shared can be overwritten by .env.secret and os.
@@ -47,7 +49,9 @@ def test_env_variables_import_order(mock_dotenv, mock_os):
     assert constants["v3"] == "shared"
 
 
-def test_test_env_variable_import_order(mock_dotenv, mock_os):
+def test_test_env_variable_import_order(
+    mock_dotenv, mock_os
+):  # pylint: disable=redefined-outer-name,unused-argument
     """
     Test if the loading order of the test environment variables are correct.
     .env.test can be overwritten by os.
