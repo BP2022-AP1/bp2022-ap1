@@ -1,9 +1,10 @@
+import json
+import os
 from abc import ABC, abstractmethod
 
-from src.component import Component
-import os
-import json
 import jsonschema
+
+from src.component import Component
 
 
 class Fault(ABC):

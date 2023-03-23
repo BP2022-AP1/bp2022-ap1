@@ -1,5 +1,6 @@
-from src.fault_injector.fault_types.train_fault import TrainFault
 import json
+
+from src.fault_injector.fault_types.train_fault import TrainFault
 
 
 def test_json_schema():
