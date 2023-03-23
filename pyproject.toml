@@ -22,8 +22,43 @@ pytest = "^7.2.2"
 black = "^23.1.0"
 isort = "^5.12.0"
 pylint = "^2.17.0"
+poethepoet = "^0.19.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+
+    [tool.poe.tasks.format-isort]
+    help = "Run isort on the code base"
+    cmd  = "isort ."
+
+    [tool.poe.tasks.format-black]
+    help = "Run black on the code base"
+    cmd  = "black ."
+
+    [tool.poe.tasks.format]
+    help = "Run formating tools on the code base"
+    sequence  = ["format-isort", "format-black"]
+
+    [tool.poe.tasks.lint-src]
+    help = "Run lint in /src directory"
+    cmd  = "pylint src --rcfile ./.github/workflows/.pylintrcsrc"
+
+    [tool.poe.tasks.lint-tests]
+    help = "Run lint in /tests directory"
+    cmd  = "pylint tests --rcfile ./.github/workflows/.pylintrctests"
+
+    [tool.poe.tasks.lint]
+    help = "Run lint in /src and /tests directory"
+    sequence  = ["lint-src", "lint-tests"]
+
+    [tool.poe.tasks.test]
+    help = "Run test with pytest"
+    cmd = "pytest"
+
+    [tool.poe.tasks.ci]
+    help = "Run formatting, linting and testing in preparation for CI"
+    sequence = ["format", "lint", "test"]
