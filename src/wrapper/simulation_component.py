@@ -3,7 +3,7 @@ import traci
 from src.component import Component
 
 
-class SimulationComponent(Component):
+class SimulationObjectUpdatingComponent(Component):
     """Keeps all simulation objects updated by updating them with
     their subscription results from the current tick.
     Also handles the adding and removing of objects from the simulation.
