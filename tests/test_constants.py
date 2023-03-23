@@ -42,7 +42,7 @@ def test_env_variables_import_order(
     os cannot be overwritten.
     """
 
-    from src.constants import constants
+    from src.constants import constants  # pylint: disable=import-outside-toplevel
 
     assert constants["v1"] == "os"
     assert constants["v2"] == "secret"
@@ -57,7 +57,7 @@ def test_test_env_variable_import_order(
     .env.test can be overwritten by os.
     os cannot be overwritten.
     """
-    from constants import constants
+    from constants import constants  # pylint: disable=import-outside-toplevel
 
     assert constants["v1"] == "os"
     assert constants["v2"] == "test"
