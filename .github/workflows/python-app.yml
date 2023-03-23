@@ -60,4 +60,4 @@ jobs:
       run: poetry install
     - name: Test with pytest
       run: |
-        poetry run poe tests
+        poetry run poe test
