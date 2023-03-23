@@ -6,11 +6,11 @@ from src.component import Component
 class Fault(ABC):
     """An abstract fault for the fault injection"""
 
-    _start_time = None
-    _end_time = None
-    _component = None
-    _affected_element = None
-    _description = "injected fault"
+    start_tick: int = None
+    end_tick: int = None
+    component: Component = None
+    affected_element_ID: int = None
+    description: str = "injected fault"
 
     @classmethod
     @abstractmethod
