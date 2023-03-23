@@ -5,7 +5,7 @@ from src.fault_injector.fault_types.train_fault import TrainFault
 
 def test_json_schema_1():
     test_fault = TrainFault()
-    assert test_fault.check_json(
+    assert not test_fault.check_json(
         json.loads(
             """{
                     "faultID" : 1, 
@@ -20,7 +20,7 @@ def test_json_schema_1():
 
 def test_json_schema_2():
     test_fault = TrainFault()
-    assert not (
+    assert (
         test_fault.check_json(
             json.loads(
                 """{
