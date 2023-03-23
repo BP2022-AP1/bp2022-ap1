@@ -28,3 +28,17 @@ poethepoet = "^0.19.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+
+    [tool.poe.tasks.format-isort]
+    help = "Run isort on the code base"
+    cmd  = "isort ."
+
+    [tool.poe.tasks.format-black]
+    help = "Run black on the code base"
+    cmd  = "black ."
+
+    [tool.poe.tasks.format]
+    help = "Run formating tools on the code base"
+    sequence  = ["format-isort", "format-black"]
