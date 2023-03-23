@@ -33,10 +33,10 @@ jobs:
         poetry run isort -c .
     - name: Lint src with pylint
       run: |
-        poe lint-src
+        poetry run poe lint-src
     - name: Lint tests with pylint
       run: |
-        poe lint-tests
+        poetry run poe lint-tests
 
   test:
 
@@ -60,4 +60,4 @@ jobs:
       run: poetry install
     - name: Test with pytest
       run: |
-        poe tests
+        poetry run poe tests
