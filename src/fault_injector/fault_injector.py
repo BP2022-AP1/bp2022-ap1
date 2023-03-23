@@ -2,9 +2,6 @@
 This module contains the fault injector class
 """
 
-
-from typing import Type
-
 from src.component import Component
 
 
