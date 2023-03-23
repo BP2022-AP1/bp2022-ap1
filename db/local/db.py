@@ -15,7 +15,7 @@ models: list[Type[BaseModel]] = BaseModel.__subclasses__()
 def run(args: argparse.Namespace):
     """Run the database
 
-    :param args: parsed arguments
+    :param args: parsed arguments containing the string `database_name`
     :type args: argparse.Namespace
     """
     name = args.database_name
@@ -37,7 +37,7 @@ def run(args: argparse.Namespace):
 def stop(args: argparse.Namespace):
     """Stop the database
 
-    :param args: parsed arguments
+    :param args: parsed arguments containing the string `database_name`
     :type args: argparse.Namespace
     """
     name = args.database_name
@@ -69,7 +69,7 @@ def drop(_: argparse.Namespace):
 def recreate(args: argparse.Namespace):
     """Drop and create database tables
 
-    :param args: parsed arguments
+    :param args: parsed arguments (no arguments are used)
     :type args: argparse.Namespace
     """
     drop(args)
@@ -90,7 +90,7 @@ def construct_migration_router() -> Router:
 def migration(args: argparse.Namespace):
     """Create, run or rollback (a) migration(s)
 
-    :param args: parsed arguments
+    :param args: parsed arguments containing the string `migration_action` and the string `migration_name`
     """
     action = args.migration_action
     name = args.migration_name
