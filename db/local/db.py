@@ -122,13 +122,21 @@ def execute_on_args():
 
     run_parser = subparsers.add_parser("run", help="Run the database")
     run_parser.add_argument(
-        "database_name", type=str, help="Name of the database", choices=["dev", "test"]
+        "database_name",
+        type=str,
+        help="Name of the database",
+        choices=["dev", "test"],
+        required=True,
     )
     run_parser.set_defaults(func=run)
 
     stop_parser = subparsers.add_parser("stop", help="Stop the database")
     stop_parser.add_argument(
-        "database_name", type=str, help="Name of the database", choices=["dev", "test"]
+        "database_name",
+        type=str,
+        help="Name of the database",
+        choices=["dev", "test"],
+        required=True,
     )
     stop_parser.set_defaults(func=stop)
 
@@ -149,6 +157,7 @@ def execute_on_args():
         type=str,
         help="Action to perform",
         choices=["create", "run"],
+        required=True,
     )
     migration_parser.add_argument(
         "migration_name", type=str, help="Name of the migration"
