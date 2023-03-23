@@ -19,6 +19,7 @@ class Communicator(Thread):
     _max_tick = None
 
     _stopped = False
+    sumo_running = False
 
     @property
     def progress(self):
@@ -28,6 +29,15 @@ class Communicator(Thread):
         :rtype: float
         """
         return self._current_tick / self._max_tick
+
+    def add_component(self, component: Component):
+        """Add the given component to the simulation.
+        There are no guarantees if the component will be called within
+        the current simualtion tick.
+
+        :param component: The component to add to the current simulation
+        """
+        self._components.append(component)
 
     def __init__(
         self,
@@ -48,6 +58,8 @@ class Communicator(Thread):
 
         traci.start([checkBinary("sumo"), "-c", self._configuration], port=self._port)
 
+        self.sumo_running = True
+
         while not self._stopped and self._current_tick <= self._max_tick:
             for component in self._components:
                 component.next_tick(self._current_tick)
@@ -55,6 +67,8 @@ class Communicator(Thread):
             self._current_tick += 1
 
         traci.close(wait=False)
+
+        self.sumo_running = False
 
     def stop(self):
         """Stopps the simulation requesting a simulation step.
