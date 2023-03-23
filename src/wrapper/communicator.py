@@ -68,6 +68,8 @@ class Communicator(Thread):
 
         traci.close(wait=False)
 
+        self.sumo_running = False
+
     def stop(self):
         """Stopps the simulation requesting a simulation step.
         At most, one simulation step will happen after this request"""
