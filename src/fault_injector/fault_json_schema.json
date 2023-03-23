@@ -1,0 +1,20 @@
+{
+    "type" : "object",
+    "properties" : {
+        "faultID" : {"type" :"number"},
+        "startTick" : {"type" : "number"},
+        "endTick" : {"type" : "number"},
+        "affectedElementID" : {"type" : "number"},
+        "description" : {"type" : "string"},
+        "typeSpecific" : {
+            
+        }
+    },
+    "required" : ["faultID", "startTick", "endTick", "affectedElementID", "description"],
+    "if": {
+        "properties": {
+            "faultID" : {"const" : 1}
+        }
+    },
+    "then" : {"required": ["typeSpecific"]}
+}
