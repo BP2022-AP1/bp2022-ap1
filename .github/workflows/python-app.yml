@@ -33,10 +33,10 @@ jobs:
         poetry run isort -c .
     - name: Lint src with pylint
       run: |
-        poetry run pylint src --rcfile ./.github/workflows/.pylintrcsrc
+        poetry run poe lint-src
     - name: Lint tests with pylint
       run: |
-        poetry run pylint tests --rcfile ./.github/workflows/.pylintrctests
+        poetry run poe lint-tests
 
   test:
 
@@ -60,4 +60,4 @@ jobs:
       run: poetry install
     - name: Test with pytest
       run: |
-        poetry run pytest
+        poetry run poe test
