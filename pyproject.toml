@@ -62,9 +62,17 @@ build-backend = "poetry.core.masonry.api"
     sequence  = ["lint-src", "lint-tests"]
 
     [tool.poe.tasks.test]
+    help = "Run DB and test with pytest"
+    sequence  = ["db run test", "db recreate", "test-pytest", "db stop test"]
+
+    [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
     cmd = "pytest"
 
     [tool.poe.tasks.ci]
     help = "Run formatting, linting and testing in preparation for CI"
     sequence = ["format", "lint", "test"]
+
+    [tool.poe.tasks.db]
+    help = "Call DB utilities"
+    cmd = "python3 db/local/db.py"
