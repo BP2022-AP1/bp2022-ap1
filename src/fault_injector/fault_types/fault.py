@@ -34,3 +34,13 @@ class Fault(ABC):
         """
 
         raise NotImplementedError()
+
+    @abstractmethod
+    def resolve_fault(component: Component):
+        """resolves the previously injected fault
+
+        :param component: the component with the injected fault
+        :type component: Component
+        """
+
+        raise NotImplementedError()
