@@ -6,7 +6,7 @@ class TrainSpeedFault(Fault):
     """A fault affecting the speed of trains."""
 
     @classmethod
-    def from_json(cls, json_object: str) -> "TrainFault":
+    def from_json(cls, json_object: str) -> "TrainSpeedFault":
         """Constructs a TrainFault from a JSON object
 
         :param json_object: The JSON object
