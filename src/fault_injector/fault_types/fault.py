@@ -44,3 +44,16 @@ class Fault(ABC):
         """
 
         raise NotImplementedError()
+
+    def next_tick(self, tick: int):
+        """handle the next tick event accordingly
+
+        :param tick: the current simulation tick
+        :type tick: int
+        """
+        if tick == self.start_tick:
+            self.inject_fault(self.component)
+        elif tick == self.end_tick:
+            self.resolve_fault(self.component)
+
+        raise NotImplementedError
