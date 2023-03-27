@@ -2,8 +2,8 @@ from src.component import Component
 from src.fault_injector.fault_types.fault import Fault
 
 
-class TrainFault(Fault):
-    """A fault affecting trains."""
+class TrainSpeedFault(Fault):
+    """A fault affecting the speed of trains."""
 
     @classmethod
     def from_json(cls, json_object: str) -> "TrainFault":
@@ -12,7 +12,7 @@ class TrainFault(Fault):
         :param json_object: The JSON object
         :type json_object: str
         :return: a TrainFault
-        :rtype: Fault
+        :rtype: TrainFault
         """
         raise NotImplementedError()
 
@@ -22,5 +22,4 @@ class TrainFault(Fault):
         :param component: The component the fault should be injected into
         :type component: Component
         """
-
         raise NotImplementedError()
