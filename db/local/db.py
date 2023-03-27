@@ -23,7 +23,8 @@ def run(args: argparse.Namespace):
     print(os.getcwd())
     subprocess.run(
         [
-            "docker-compose",
+            "docker",
+            "compose",
             "-f",
             "db/local/docker-compose.yml",
             "up",
@@ -44,7 +45,8 @@ def stop(args: argparse.Namespace):
     print("Stopping database...")
     subprocess.run(
         [
-            "docker-compose",
+            "docker",
+            "compose",
             "-f",
             "db/local/docker-compose.yml",
             "stop",
