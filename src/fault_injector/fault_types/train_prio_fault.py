@@ -21,10 +21,3 @@ class TrainPrioFault(Fault):
         # - set the train prio to old_prio
 
         raise NotImplementedError()
-
-
-class TrainPrioFaultConfig(FaultConfig):
-    """Class that contains the attributes of the TrainPrioFault class"""
-
-    new_prio: int = None
-    old_prio: int = None

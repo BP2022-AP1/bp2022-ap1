@@ -14,7 +14,3 @@ class PlatformBlockedFault(Fault):
         # - get platform by id
         # - mark platform as blocked
         raise NotImplementedError()
-
-
-class PlatformBlockedFaultConfig(FaultConfig):
-    """Class that contains the attributes of the PlatformBlockedFault class"""

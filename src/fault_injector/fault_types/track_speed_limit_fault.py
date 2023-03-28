@@ -21,10 +21,3 @@ class TrackSpeedLimitFault(Fault):
         # - set the track speed limit to old_speed_limit
 
         raise NotImplementedError()
-
-
-class TrackSpeedLimitFaultConfig(FaultConfig):
-    """Class that contains the attributes of the TrackSpeedLimitFaultFault class"""
-
-    new_speed_limit: int = None
-    old_speed_limit: int = None
