@@ -14,7 +14,7 @@ class TrainCancelledFault(Fault):
         # - get train by id
         # - mark train as cancelled
         raise NotImplementedError()
-    
+
 
 class TrainCancelledFaultConfig(FaultConfig):
     """Class that contains the attributes of the TrainCancelledFault class"""

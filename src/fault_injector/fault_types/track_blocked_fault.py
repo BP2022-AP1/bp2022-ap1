@@ -15,5 +15,6 @@ class TrackBlockedFault(Fault):
         # - mark track as blocked
         raise NotImplementedError()
 
+
 class TrackBlockedFaultConfig(FaultConfig):
     """Class that contains the attributes of the TrackBlockedFault class"""

@@ -21,7 +21,8 @@ class TrainSpeedFault(Fault):
         # - set the train speed to old_speed
 
         raise NotImplementedError()
-    
+
+
 class TrainSpeedFaultConfig(FaultConfig):
     """Class that contains the attributes of the TrainSpeedFault class"""
 

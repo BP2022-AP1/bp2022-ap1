@@ -22,6 +22,7 @@ class TrainPrioFault(Fault):
 
         raise NotImplementedError()
 
+
 class TrainPrioFaultConfig(FaultConfig):
     """Class that contains the attributes of the TrainPrioFault class"""
 
