@@ -13,14 +13,13 @@ class FaultInjector(Component):
 
     _faults: list[Fault] = []
 
-    def add_fault_from_json(self, json_faults: list[str]):
+    def add_fault(self, fault: Fault):
         """Adds faults that should be injected to the fault injector
 
         :param json_faults: The list of faults as JSON objects
         :type json_faults: list[str]
         """
-
-        raise NotImplementedError()
+        self._faults.append(Fault)
 
     def next_tick(self, tick: int):
         """Called by the wrapper to announce the next tick of the simulation
@@ -28,15 +27,5 @@ class FaultInjector(Component):
         :param tick: The current simulation tick
         :type tick: int
         """
-
-        raise NotImplementedError()
-
-
-class IFaultInjector(object):
-    """Class that provides an interface to the Faultinjector for other components"""
-
-    def next_tick(self, tick: int):
-        raise NotImplementedError()
-
-    def create():
-        raise NotImplementedError()
+        for fault in self._faults:
+            fault.next_tick(tick)
