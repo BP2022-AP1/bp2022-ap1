@@ -19,7 +19,7 @@ class TrainPrioFault(Fault):
         """
         raise NotImplementedError()
 
-    def inject_fault(component: Component):
+    def inject_fault(self, component: Component):
         """inject TrainPrioFault into the given component
 
         :param component: The component the fault should be injected into
@@ -30,7 +30,7 @@ class TrainPrioFault(Fault):
         # - set train prio to new_prio
         raise NotImplementedError()
 
-    def resolve_fault(component: Component):
+    def resolve_fault(self, component: Component):
         # - get train object
         # - set the train prio to old_prio
 

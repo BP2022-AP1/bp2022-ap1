@@ -26,7 +26,7 @@ class Fault(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def inject_fault(component: Component):
+    def inject_fault(self, component: Component):
         """injects the fault into the given component
 
         :param component: the component the fault should be injected into
@@ -36,7 +36,7 @@ class Fault(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def resolve_fault(component: Component):
+    def resolve_fault(self, component: Component):
         """resolves the previously injected fault
 
         :param component: the component with the injected fault
@@ -55,5 +55,3 @@ class Fault(ABC):
             self.inject_fault(self.component)
         elif tick == self.end_tick:
             self.resolve_fault(self.component)
-
-        raise NotImplementedError

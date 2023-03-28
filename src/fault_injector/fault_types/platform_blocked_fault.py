@@ -16,7 +16,7 @@ class PlatformBlockedFault(Fault):
         """
         raise NotImplementedError()
 
-    def inject_fault(component: Component):
+    def inject_fault(self, component: Component):
         """inject PlatformBlockedFault into the given component
 
         :param component: The component the fault should be injected into

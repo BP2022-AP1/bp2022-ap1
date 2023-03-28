@@ -16,7 +16,7 @@ class TrackBlockedFault(Fault):
         """
         raise NotImplementedError()
 
-    def inject_fault(component: Component):
+    def inject_fault(self, component: Component):
         """inject TrackBlockedFault into the given component
 
         :param component: The component the fault should be injected into
