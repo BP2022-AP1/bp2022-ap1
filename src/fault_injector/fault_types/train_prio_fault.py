@@ -8,17 +8,6 @@ class TrainPrioFault(Fault):
     new_prio: int = None
     old_prio: int = None
 
-    @classmethod
-    def from_json(cls, json_object: str) -> "TrainPrioFault":
-        """Constructs a TrainPrioFault from a JSON object
-
-        :param json_object: The JSON object
-        :type json_object: str
-        :return: a TrainPrioFault
-        :rtype: TrainPrioFault
-        """
-        raise NotImplementedError()
-
     def inject_fault(self, component: Component):
         """inject TrainPrioFault into the given component
 

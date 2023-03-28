@@ -8,17 +8,6 @@ class TrackSpeedLimitFault(Fault):
     new_speed_limit: int = None
     old_speed_limit: int = None
 
-    @classmethod
-    def from_json(cls, json_object: str) -> "TrackSpeedLimitFault":
-        """Constructs a TrackSpeedLimitFault from a JSON object
-
-        :param json_object: The JSON object
-        :type json_object: str
-        :return: a TrackSpeedLimitFault
-        :rtype: TrackSpeedLimitFault
-        """
-        raise NotImplementedError()
-
     def inject_fault(self, component: Component):
         """inject TrackSpeedLimitFault into the given component
 

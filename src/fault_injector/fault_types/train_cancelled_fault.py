@@ -7,17 +7,6 @@ class TrainCancelledFault(Fault):
 
     end_tick: int = -1
 
-    @classmethod
-    def from_json(cls, json_object: str) -> "TrainCancelledFault":
-        """Constructs a TrainCancelledFault from a JSON object
-
-        :param json_object: The JSON object
-        :type json_object: str
-        :return: a TrainCancelledFault
-        :rtype: TrainCancelledFault
-        """
-        raise NotImplementedError()
-
     def inject_fault(self, component: Component):
         """inject TrainCancelledFault into the given component
 

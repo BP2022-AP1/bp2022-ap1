@@ -8,17 +8,6 @@ class TrainSpeedFault(Fault):
     new_speed: int = None
     old_speed: int = None
 
-    @classmethod
-    def from_json(cls, json_object: str) -> "TrainSpeedFault":
-        """Constructs a TrainSpeedFault from a JSON object
-
-        :param json_object: The JSON object
-        :type json_object: str
-        :return: a TrainSpeedFault
-        :rtype: TrainSpeedFault
-        """
-        raise NotImplementedError()
-
     def inject_fault(self, component: Component):
         """inject TrainSpeedFault into the given component
 

@@ -5,17 +5,6 @@ from src.fault_injector.fault_types.fault import Fault
 class PlatformBlockedFault(Fault):
     """A fault that blocks a platform"""
 
-    @classmethod
-    def from_json(cls, json_object: str) -> "PlatformBlockedFault":
-        """Constructs a PlatformBlockedFault from a JSON object
-
-        :param json_object: The JSON object
-        :type json_object: str
-        :return: a PlatformBlockedFault
-        :rtype: PlatformBlockedFault
-        """
-        raise NotImplementedError()
-
     def inject_fault(self, component: Component):
         """inject PlatformBlockedFault into the given component
 
