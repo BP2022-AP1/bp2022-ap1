@@ -1,6 +1,6 @@
+from collections.abc import Callable
 from enum import Enum
 from typing import List, Protocol, Tuple
-from collections.abc import Callable
 
 
 class ISimulationObject(Protocol):
