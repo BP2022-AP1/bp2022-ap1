@@ -1,0 +1,63 @@
+openapi: 3.0.0
+info:
+    version: 1.0.0
+    title: BP2022-API1 API
+    description: An API for simulation and analysis of train traffic on the LEAG rail network
+
+paths:
+    /token:
+        $ref: './paths/token.yaml'
+    /token/{id}:
+        $ref: './paths/token-by-id.yaml'
+    /simulation:
+        $ref: './paths/simulation.yaml'
+    /simulation/{id}:
+        $ref: './paths/simulation-by-id.yaml'
+    /component/interlocking:
+        $ref: './paths/component/interlocking.yaml'
+    /component/interlocking/{id}:
+        $ref: './paths/component/interlocking-by-id.yaml'
+    /component/spawner:
+        $ref: './paths/component/spawner.yaml'
+    /component/spawner/{id}:
+        $ref: './paths/component/spawner-by-id.yaml'
+    /component/data-science:
+        $ref: './paths/component/data-science.yaml'
+    /component/data-science/{id}:
+        $ref: './paths/component/data-science-by-id.yaml'
+    /component/data-science/{id}/result:
+        $ref: './paths/component/data-science-result.yaml'
+    /component/fault-injection/train-speed-fault:
+        $ref: './paths/component/fault-injection/train-speed-fault.yaml'
+    /component/fault-injection/train-speed-fault/{id}:
+        $ref: './paths/component/fault-injection/train-speed-fault-by-id.yaml'
+    /component/fault-injection/train-prio-fault:
+        $ref: './paths/component/fault-injection/train-prio-fault.yaml'
+    /component/fault-injection/train-prio-fault/{id}:
+        $ref: './paths/component/fault-injection/train-prio-fault-by-id.yaml'
+    /component/fault-injection/train-cancelled-fault:
+        $ref: './paths/component/fault-injection/train-cancelled-fault.yaml'
+    /component/fault-injection/train-cancelled-fault/{id}:
+        $ref: './paths/component/fault-injection/train-cancelled-fault-by-id.yaml'
+    /component/fault-injection/train-speed-limit-fault:
+        $ref: './paths/component/fault-injection/train-speed-limit-fault.yaml'
+    /component/fault-injection/train-split-limit-fault/{id}:
+        $ref: './paths/component/fault-injection/train-speed-limit-fault-by-id.yaml'
+    /component/fault-injection/train-blocked-fault:
+        $ref: './paths/component/fault-injection/train-blocked-fault.yaml'
+    /component/fault-injection/train-blocked-fault/{id}:
+        $ref: './paths/component/fault-injection/train-blocked-fault-by-id.yaml'
+    /run:
+        $ref: './paths/run.yaml'
+    /run/{id}:
+        $ref: './paths/run-by-id.yaml'
+
+components:
+    securitySchemes:
+        ApiKeyAuth:
+            type: apiKey
+            in: header
+            name: bp2022-ap1-api-key
+
+security:
+    - ApiKeyAuth: []

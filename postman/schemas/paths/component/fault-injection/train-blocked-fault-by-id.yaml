@@ -1,0 +1,64 @@
+# /component/fault-injection/train-blocked-fault/{id}
+get:
+    summary: Get all information about a train-blocked-fault configuration.
+    operationId: getTrainBlockedFaultConfiguration
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+    responses:
+        "200":
+            description: Successfull operation
+            content:
+                application/json:
+                    schema:
+                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainBlockedFaultConfiguration"
+        "401":
+            description: API token missing
+        "404":
+            description: Id not found
+delete:
+    summary: Delete a train-blocked-fault configuration.
+    operationId: deleteTrainBlockedFaultConfiguration
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+    responses:
+        "204":
+            description: Deleted train-blocked-fault configuration
+        "401":
+            description: API token missing
+        "404":
+            description: Id not found
+        
+patch:
+    summary: Edit the a train-blocked-fault configuration.
+    operationId: updateTrainBlockedFaultConfiguration
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+                type: string
+                format: uuid
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainBlockedFaultConfiguration"
+    responses:
+        "204":
+            description: Updated train-blocked-fault configuration
+        "400":
+            description: Update not possible, you can't update the id
+        "401":
+            description: API token missing
+        "404":
+            description: Id not found

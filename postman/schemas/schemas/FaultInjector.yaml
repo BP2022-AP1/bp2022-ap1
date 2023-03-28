@@ -1,0 +1,20 @@
+components:
+    schemas:
+        TrainSpeedFaultConfiguration:
+            type: object
+            properties: {}
+        TrainPrioFaultConfiguration:
+            type: object
+            properties: {}
+        TrainCancelledFaultConfiguration:
+            type: object
+            properties: {}
+        TrainSpeedLimitFaultConfiguration:
+            type: object
+            properties: {}
+        TrainBlockedFaultConfiguration:
+            type: object
+            properties: {}
+        PlatformBlockedFaultConfiguration:
+            type: object
+            properties: {}

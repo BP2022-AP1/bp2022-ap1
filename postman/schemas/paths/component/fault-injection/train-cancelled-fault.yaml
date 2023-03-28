@@ -1,0 +1,48 @@
+# /component/fault-injecton/train-cancelled-fault
+get:
+    summary: Get ids of train-cancelled-fault configurations connected to a user.
+    operationId: getTrainCancelledFaultConfigurationIds
+    parameters:
+        - in: query
+          name: simulationId
+          schema:
+              type: string
+              format: uuid
+          description: Specify id of simulation if you only want to get the train-cancelled-fault configuration of a single simulation
+    responses:
+        "200":
+            description: Successfull operation
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: string
+                            format: uuid
+        "401":
+            description: API token missing
+        "404":
+            description: Simulation not found
+put:
+    summary: Insert a new train-cancelled-fault component. Returns the id of the configuration object.
+    operationId: createTrainCancelledFaultConfiguration
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainCancelledFaultConfiguration"
+    responses:
+        "201":
+            description: Successfully created new train-cancelled-fault configuration object
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            id:
+                                type: string
+                                format: uuid
+        "401":
+            description: API token missing
+        "409":
+            description: Train-cancelled-fault configuration exists with this id already

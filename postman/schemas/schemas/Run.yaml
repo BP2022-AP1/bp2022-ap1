@@ -1,0 +1,8 @@
+components:
+  schemas:
+    RunConfiguraion:
+      type: object
+      properties: {}
+    RunStatus:
+      type: object
+      properties: {}

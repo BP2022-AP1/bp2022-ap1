@@ -1,0 +1,39 @@
+# /run/{id}
+get:
+    summary: Get all information about a run, including the progress.
+    operationId: getRun
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+    responses:
+        "200":
+            description: Successfull operation
+            content:
+                application/json:
+                    schema:
+                        $ref: "../schemas/Run.yaml#/components/schema/RunStatus"
+        "401":
+            description: API token missing
+        "404":
+            description: Id not found
+delete:
+    summary: Delete a run and the connected results. If the run is still running, it'll cancel it.
+    operationId: deleteRun
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+              type: string
+              format: uuid
+    responses:
+        "204":
+            description: Deleted simulation configuration
+        "401":
+            description: API token missing
+        "404":
+            description: Id not found

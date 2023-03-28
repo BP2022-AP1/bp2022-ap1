@@ -1,0 +1,41 @@
+# /simulation
+get:
+    summary: Get all ids of simulation configurations connected to a user.
+    operationId: getAllSimulationId
+    responses:
+        "200":
+            description: Successfull operation
+            content:
+                application/json:
+                    schema:
+                        type: array
+                        items:
+                            type: string
+                            format: uuid
+
+        "401":
+            description: API token missing
+put:
+    summary: Create a new simulation. Returns id connected to the simulation to connect components or runs to it.
+    operationId: createSimulationConfiguration
+    requestBody:
+        content:
+            application/json:
+                schema:
+                    $ref: "../schemas/Simulation.yaml#/components/schema/SimulationConfiguration"
+    responses:
+        "201":
+            description: Successfully created new simulation configuration
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            id:
+                                type: string
+                                format: uuid
+
+        "401":
+            description: API token missing
+        "409":
+            description: Simulation configuration already exists with this id

@@ -1,0 +1,28 @@
+# /component/data-science/{id}/result?runId=runId
+get:
+    summary: Get results about a specified run from the data-science component.
+    operationId: getDataScienceResult
+    parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: runId
+          required: true
+          schema:
+              type: string
+              format: uuid
+    responses:
+        "200":
+            description: Successfull operation
+            content:
+                application/json:
+                    schema:
+                        $ref: "../../schemas/DataScience.yaml#/components/schema/DataScienceResult"
+        "401":
+            description: API token missing
+        "404":
+            description: Id of data-science component or run not found

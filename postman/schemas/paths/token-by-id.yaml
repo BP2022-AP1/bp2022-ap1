@@ -1,0 +1,45 @@
+# /token/{id}
+get:
+    summary: Get information about token if current user is admin
+    operationId: getToken
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Id of the requested token
+    responses:
+        "200":
+            description: Successfull operation
+            content:
+                application/json:
+                    schema:
+                        $ref: "../schemas/Token.yaml#/components/schema/Token"
+        "401":
+            description: API token missing
+        "403":
+            description: No rights to execute this action
+        "404":
+            description: Id not found
+delete:
+    summary: Remove token if current user is admin.
+    operationId: deleteToken
+    parameters:
+        - in: path
+          name: id
+          schema:
+              type: string
+              format: uuid
+          required: true
+          description: Id of the requested token
+    responses:
+        "204":
+            description: "Deleted token"
+        "401":
+            description: API token missing
+        "403":
+            description: No rights to execute this action
+        "404":
+            description: Id not found
