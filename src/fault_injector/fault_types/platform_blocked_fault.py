@@ -1,5 +1,5 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault, FaultConfig
+from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class PlatformBlockedFault(Fault):
@@ -25,5 +25,6 @@ class PlatformBlockedFault(Fault):
         # - mark platform as no longer blocked
         raise NotImplementedError()
 
-class PlatformBlockedFaultConfiguration(FaultConfig):
+
+class PlatformBlockedFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the PlatformBlockedFault class"""
