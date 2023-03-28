@@ -1,11 +1,9 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, FaultConfig
 
 
 class TrainCancelledFault(Fault):
     """A fault that blocks a platform"""
-
-    end_tick: int = -1
 
     def inject_fault(self, component: Component):
         """inject TrainCancelledFault into the given component
@@ -16,3 +14,9 @@ class TrainCancelledFault(Fault):
         # - get train by id
         # - mark train as cancelled
         raise NotImplementedError()
+    
+
+class TrainCancelledFaultConfig(FaultConfig):
+    """Class that contains the attributes of the TrainCancelledFault class"""
+
+    end_tick: int = -1

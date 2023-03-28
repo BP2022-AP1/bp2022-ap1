@@ -1,12 +1,9 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, FaultConfig
 
 
 class TrackSpeedLimitFault(Fault):
     """A fault affecting the speed limit of tracks."""
-
-    new_speed_limit: int = None
-    old_speed_limit: int = None
 
     def inject_fault(self, component: Component):
         """inject TrackSpeedLimitFault into the given component
@@ -24,3 +21,8 @@ class TrackSpeedLimitFault(Fault):
         # - set the track speed limit to old_speed_limit
 
         raise NotImplementedError()
+    
+class TrackSpeedLimitFaultConfig(FaultConfig):
+    """Class that contains the attributes of the TrackSpeedLimitFaultFault class"""
+    new_speed_limit: int = None
+    old_speed_limit: int = None

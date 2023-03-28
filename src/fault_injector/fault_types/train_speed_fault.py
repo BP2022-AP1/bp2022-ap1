@@ -1,12 +1,9 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, FaultConfig
 
 
 class TrainSpeedFault(Fault):
     """A fault affecting the speed of trains."""
-
-    new_speed: int = None
-    old_speed: int = None
 
     def inject_fault(self, component: Component):
         """inject TrainSpeedFault into the given component
@@ -24,3 +21,9 @@ class TrainSpeedFault(Fault):
         # - set the train speed to old_speed
 
         raise NotImplementedError()
+    
+class TrainSpeedFaultConfig(FaultConfig):
+    """Class that contains the attributes of the TrainSpeedFault class"""
+
+    new_prio: int = None
+    old_prio: int = None

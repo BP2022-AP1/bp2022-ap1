@@ -1,16 +1,14 @@
 from abc import ABC, abstractmethod
 
+from src.base_model import BaseModel
 from src.component import Component
 
 
 class Fault(ABC):
     """An abstract fault for the fault injection"""
 
-    start_tick: int = None
-    end_tick: int = None
-    component: Component = None
-    affected_element_ID: int = None
-    description: str = "injected fault"
+    def __init__(self, fault_config: "FaultConfig"):
+        self.config = fault_config
 
     @abstractmethod
     def inject_fault(self, component: Component):
@@ -42,3 +40,13 @@ class Fault(ABC):
             self.inject_fault(self.component)
         elif tick == self.end_tick:
             self.resolve_fault(self.component)
+
+
+class FaultConfig(BaseModel):
+    """Class that contains the attributes of the Fault class"""
+
+    start_tick: int = None
+    end_tick: int = None
+    component: Component = None
+    affected_element_ID: int = None
+    description: str = "injected fault"

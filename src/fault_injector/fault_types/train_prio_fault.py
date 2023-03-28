@@ -1,12 +1,9 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, FaultConfig
 
 
 class TrainPrioFault(Fault):
     """A fault affecting the priority of trains."""
-
-    new_prio: int = None
-    old_prio: int = None
 
     def inject_fault(self, component: Component):
         """inject TrainPrioFault into the given component
@@ -24,3 +21,9 @@ class TrainPrioFault(Fault):
         # - set the train prio to old_prio
 
         raise NotImplementedError()
+
+class TrainPrioFaultConfig(FaultConfig):
+    """Class that contains the attributes of the TrainPrioFault class"""
+
+    new_prio: int = None
+    old_prio: int = None
