@@ -14,3 +14,13 @@ class TrackBlockedFault(Fault):
         # - get track by id
         # - mark track as blocked
         raise NotImplementedError()
+
+    def resolve_fault(self, component: Component):
+        """resolves the previously injected fault
+
+        :param component: the component with the injected TrackBlockedFault
+        :type component: Component
+        """
+        # - get track by id
+        # - mark track as no longer blocked
+        raise NotImplementedError()

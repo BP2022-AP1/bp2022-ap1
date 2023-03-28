@@ -14,3 +14,13 @@ class PlatformBlockedFault(Fault):
         # - get platform by id
         # - mark platform as blocked
         raise NotImplementedError()
+
+    def resolve_fault(self, component: Component):
+        """resolve the PlatformBlockedFault that was previously injected into the given component
+
+        :param component: The component the fault was injected into
+        :type component: Component
+        """
+        # - get platform by id
+        # - mark platform as no longer blocked
+        raise NotImplementedError()

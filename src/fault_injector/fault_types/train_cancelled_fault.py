@@ -14,3 +14,11 @@ class TrainCancelledFault(Fault):
         # - get train by id
         # - mark train as cancelled
         raise NotImplementedError()
+
+    def resolve_fault(self, component: Component):
+        """resolves the previously injected TrainCancelledFault
+
+        :param component: the component with the injected fault
+        :type component: Component
+        """
+        raise NotImplementedError()

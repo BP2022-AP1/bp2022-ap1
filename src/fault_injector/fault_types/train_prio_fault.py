@@ -17,6 +17,11 @@ class TrainPrioFault(Fault):
         raise NotImplementedError()
 
     def resolve_fault(self, component: Component):
+        """resolves the previously injected TrainPrioFault
+
+        :param component: the component with the injected fault
+        :type component: Component
+        """
         # - get train object
         # - set the train prio to old_prio
 

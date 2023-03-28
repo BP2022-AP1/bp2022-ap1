@@ -17,6 +17,11 @@ class TrackSpeedLimitFault(Fault):
         raise NotImplementedError()
 
     def resolve_fault(self, component: Component):
+        """resolves the previously injected fault
+
+        :param component: the component with the injected TrackSpeedLimitFault
+        :type component: Component
+        """
         # - get track object
         # - set the track speed limit to old_speed_limit
 

@@ -17,6 +17,11 @@ class TrainSpeedFault(Fault):
         raise NotImplementedError()
 
     def resolve_fault(self, component: Component):
+        """resolves the previously injected TrainSpeedFault
+
+        :param component: the component with the injected fault
+        :type component: Component
+        """
         # - get train object
         # - set the train speed to old_speed
 
