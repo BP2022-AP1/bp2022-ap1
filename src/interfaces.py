@@ -1,9 +1,10 @@
-from typing import Protocol
-from src.fault_injector.fault_types.fault import Fault
 from collections.abc import Callable
+from typing import Protocol
+
+from src.fault_injector.fault_types.fault import Fault
+
 
 class IFaultInjector(Protocol):
-
     def add_fault(self, fault: Fault) -> None:
         ...
 
