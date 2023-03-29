@@ -10,6 +10,8 @@ class IComponent(Protocol):
 
 
 class ISpawner(IComponent, Protocol):
+    config: "SpawnerConfig"
+
     def add_schedule(self, schedule: "ISchedule") -> int:
         ...
 
