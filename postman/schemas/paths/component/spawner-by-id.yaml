@@ -39,7 +39,7 @@ delete:
             description: Id not found
         
 patch:
-    summary: Edit the a spawner configuration.
+    summary: Edit a spawner configuration.
     operationId: updateSpawnerConfiguration
     parameters:
         - in: path
