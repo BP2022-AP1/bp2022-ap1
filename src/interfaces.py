@@ -1,3 +1,5 @@
+# pylint: disable=C0115, C0116
+
 from collections.abc import Callable
 from typing import Protocol
 
