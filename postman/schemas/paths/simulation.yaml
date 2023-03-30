@@ -37,5 +37,3 @@ put:
 
         "401":
             description: API token missing
-        "409":
-            description: Simulation configuration already exists with this id

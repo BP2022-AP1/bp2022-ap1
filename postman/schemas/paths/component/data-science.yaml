@@ -46,5 +46,3 @@ put:
             description: An data-science configuration exists for this simulation already
         "401":
             description: API token missing
-        "409":
-            description: Data-science configuration exists with this id already

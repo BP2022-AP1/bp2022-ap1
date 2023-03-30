@@ -56,8 +56,6 @@ patch:
     responses:
         "204":
             description: Updated simulation configuration
-        "400":
-            description: Update not possible, you can't update the id
         "401":
             description: API token missing
         "404":

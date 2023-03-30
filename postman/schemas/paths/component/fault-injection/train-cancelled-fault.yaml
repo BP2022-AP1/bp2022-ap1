@@ -44,5 +44,3 @@ put:
                                 format: uuid
         "401":
             description: API token missing
-        "409":
-            description: Train-cancelled-fault configuration exists with this id already

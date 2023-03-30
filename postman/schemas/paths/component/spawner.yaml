@@ -46,5 +46,3 @@ put:
             description: An spawner configuration exists for this simulation already
         "401":
             description: API token missing
-        "409":
-            description: Spawner configuration exists with this id already
