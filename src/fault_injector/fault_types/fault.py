@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+import marshmallow as marsh
 from peewee import *
 
 from src.base_model import BaseModel
@@ -43,6 +44,11 @@ class Fault(ABC):
 
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
+
+    class FaultConfigurationSchema(BaseModel.Schema):
+        start_tick = marsh.fields.Int
+        end_tick = marsh.fields.Int
+        description = marsh.fields.Str
 
     start_tick = BigIntegerField()
     end_tick = BigIntegerField()
