@@ -1,3 +1,0 @@
-ScheduleBlockedFaultConfiguration:
-  type: object
-  properties: {}

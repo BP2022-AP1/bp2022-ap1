@@ -1,61 +1,1238 @@
 openapi: 3.0.0
 info:
-    version: 1.0.0
-    title: BP2022-API1 API
-    description: An API for simulation and analysis of train traffic on the LEAG rail network
-
+  description:
+    An API for simulation and analysis of train traffic on the LEAG rail
+    network
+  title: BP2022-API1 API
+  version: 1.0.0
+servers:
+  - url: /
+security:
+  - ApiKeyAuth: []
 paths:
-    /token:
-        $ref: './paths/token.yaml'
-    /simulation:
-        $ref: './paths/simulation.yaml'
-    /simulation/{id}:
-        $ref: './paths/simulation-by-id.yaml'
-    /component/interlocking:
-        $ref: './paths/component/interlocking.yaml'
-    /component/interlocking/{id}:
-        $ref: './paths/component/interlocking-by-id.yaml'
-    /component/spawner:
-        $ref: './paths/component/spawner.yaml'
-    /component/spawner/{id}:
-        $ref: './paths/component/spawner-by-id.yaml'
-    /component/data-science:
-        $ref: './paths/component/data-science.yaml'
-    /component/data-science/{id}:
-        $ref: './paths/component/data-science-by-id.yaml'
-    /component/data-science/{id}/result:
-        $ref: './paths/component/data-science-result.yaml'
-    /component/fault-injection/train-speed-fault:
-        $ref: './paths/component/fault-injection/train-speed-fault.yaml'
-    /component/fault-injection/train-speed-fault/{id}:
-        $ref: './paths/component/fault-injection/train-speed-fault-by-id.yaml'
-    /component/fault-injection/train-prio-fault:
-        $ref: './paths/component/fault-injection/train-prio-fault.yaml'
-    /component/fault-injection/train-prio-fault/{id}:
-        $ref: './paths/component/fault-injection/train-prio-fault-by-id.yaml'
-    /component/fault-injection/schedule-blocked-fault:
-        $ref: './paths/component/fault-injection/schedule-blocked-fault.yaml'
-    /component/fault-injection/schedule-blockedfault/{id}:
-        $ref: './paths/component/fault-injection/schedule-blocked-fault-by-id.yaml'
-    /component/fault-injection/track-speed-limit-fault:
-        $ref: './paths/component/fault-injection/track-speed-limit-fault.yaml'
-    /component/fault-injection/track-split-limit-fault/{id}:
-        $ref: './paths/component/fault-injection/track-speed-limit-fault-by-id.yaml'
-    /component/fault-injection/track-blocked-fault:
-        $ref: './paths/component/fault-injection/track-blocked-fault.yaml'
-    /component/fault-injection/track-blocked-fault/{id}:
-        $ref: './paths/component/fault-injection/track-blocked-fault-by-id.yaml'
-    /run:
-        $ref: './paths/run.yaml'
-    /run/{id}:
-        $ref: './paths/run-by-id.yaml'
+  /component/data-science:
+    get:
+      operationId: get_data_science_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the data-science
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of data-science configurations connected to a user.
+
+    put:
+      operationId: create_data_science_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataScienceConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created new data-science configuration object
+        "400":
+          description: An data-science configuration exists for this simulation already
+        "401":
+          description: API token missing
+      summary:
+        Insert a new data-science component. Returns the id of the configuration
+        object.
+
+  /component/data-science/{id}:
+    delete:
+      operationId: delete_data_science_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted data-science configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a data-science configuration.
+
+    get:
+      operationId: get_data_science_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataScienceConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a data-science configuration.
+
+    patch:
+      operationId: update_data_science_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataScienceConfiguration"
+      responses:
+        "204":
+          description: Updated data-science configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit the a data-science configuration.
+
+  /component/data-science/{id}/result:
+    get:
+      operationId: get_data_science_result
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - in: query
+          name: runId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataScienceResult"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id of data-science component or run not found
+      summary: Get results about a specified run from the data-science component.
+
+  /component/fault-injection/schedule-blocked-fault:
+    get:
+      operationId: get_schedule_blocked_fault_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the schedule-blocked-faul
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of schedule-blocked-faul configurations connected to a user.
+
+    put:
+      operationId: create_schedule_blocked_fault_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description:
+            Successfully created new schedule-blocked-faul configuration
+            object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new schedule-blocked-faul component. Returns the id of the
+        configuration object.
+
+  /component/fault-injection/schedule-blockedfault/{id}:
+    delete:
+      operationId: delete_schedule_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted schedule-blocked-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a schedule-blocked-fault configuration.
+
+    get:
+      operationId: get_schedule_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a schedule-blocked-fault configuration.
+
+    patch:
+      operationId: update_schedule_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
+      responses:
+        "204":
+          description: Updated schedule-blocked-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a schedule-blocked-fault configuration.
+
+  /component/fault-injection/track-blocked-fault:
+    get:
+      operationId: get_track_blocked_fault_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the track-blocked-fault
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of track-blocked-fault configurations connected to a user.
+
+    put:
+      operationId: create_track_blocked_fault_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description:
+            Successfully created new track-blocked-fault configuration
+            object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new track-blocked-fault component. Returns the id of the configuration
+        object.
+
+  /component/fault-injection/track-blocked-fault/{id}:
+    delete:
+      operationId: delete_track_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted track-blocked-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a track-blocked-fault configuration.
+
+    get:
+      operationId: get_track_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a track-blocked-fault configuration.
+
+    patch:
+      operationId: update_track_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
+      responses:
+        "204":
+          description: Updated track-blocked-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a track-blocked-fault configuration.
+
+  /component/fault-injection/track-speed-limit-fault:
+    get:
+      operationId: get_track_speed_limit_fault_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the track-speed-limit-fault
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of track-speed-limit-fault configurations connected to a user.
+
+    put:
+      operationId: create_track_speed_limit_fault_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description:
+            Successfully created new track-speed-limit-fault configuration
+            object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new track-speed-limit-fault component. Returns the id of the
+        configuration object.
+
+  /component/fault-injection/track-split-limit-fault/{id}:
+    delete:
+      operationId: delete_track_speed_limit_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted track-speed-limit-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a track-speed-limit-fault configuration.
+
+    get:
+      operationId: get_track_speed_limit_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a track-speed-limit-fault configuration.
+
+    patch:
+      operationId: update_track_speed_limit_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
+      responses:
+        "204":
+          description: Updated track-speed-limit-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a track-speed-limit-fault configuration.
+
+  /component/fault-injection/train-prio-fault:
+    get:
+      operationId: get_train_prio_fault_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the train-prio-fault
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of train-prio-fault configurations connected to a user.
+
+    put:
+      operationId: create_train_prio_fault_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainPrioFaultConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created new train-prio-fault configuration object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new train-prio-fault component. Returns the id of the configuration
+        object.
+
+  /component/fault-injection/train-prio-fault/{id}:
+    delete:
+      operationId: delete_train_prio_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted train-prio-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a train-prio-fault configuration.
+
+    get:
+      operationId: get_train_prio_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainPrioFaultConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a train-prio-fault configuration.
+
+    patch:
+      operationId: update_train_prio_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainPrioFaultConfiguration"
+      responses:
+        "204":
+          description: Updated train-prio-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a train-prio-fault configuration.
+
+  /component/fault-injection/train-speed-fault:
+    get:
+      operationId: get_train_speed_fault_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the train-speed-fault
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of train-speed-fault configurations connected to a user.
+
+    put:
+      operationId: create_train_speed_fault_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created new train-speed-fault configuration object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new train-speed-fault component. Returns the id of the configuration
+        object.
+
+  /component/fault-injection/train-speed-fault/{id}:
+    delete:
+      operationId: delete_train_speed_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted train-speed-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a train-speed-fault configuration.
+
+    get:
+      operationId: get_train_speed_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a train-speed-fault configuration.
+
+    patch:
+      operationId: update_train_speed_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
+      responses:
+        "204":
+          description: Updated train-speed-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a train-speed-fault configuration.
+
+  /component/interlocking:
+    get:
+      operationId: get_interlocking_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the interlocking
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of interlocking configurations connected to a user.
+
+    put:
+      operationId: create_interlocking_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InterlockingConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created new interlocking configuration object
+        "400":
+          description: An interlocking configuration exists for this simulation already
+        "401":
+          description: API token missing
+      summary:
+        Insert a new interlocking component. Returns the id of the configuration
+        object.
+
+  /component/interlocking/{id}:
+    delete:
+      operationId: delete_interlocking_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted interlocking configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete an interlocking configuration.
+
+    get:
+      operationId: get_interlocking_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InterlockingConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a interlocking configuration.
+
+    patch:
+      operationId: update_interlocking_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InterlockingConfiguration"
+      responses:
+        "204":
+          description: Updated interlocking configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit the a interlocking configuration.
+
+  /component/spawner:
+    get:
+      operationId: get_spawner_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the spawner
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of spawner configurations connected to a user.
+
+    put:
+      operationId: create_spawner_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpawnerConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created new spawner configuration object
+        "400":
+          description: An spawner configuration exists for this simulation already
+        "401":
+          description: API token missing
+      summary:
+        Insert a new spawner component. Returns the id of the configuration
+        object.
+
+  /component/spawner/{id}:
+    delete:
+      operationId: delete_spawner_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted spawner configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a spawner configuration.
+
+    get:
+      operationId: get_spawner_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpawnerConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a spawner configuration.
+
+    patch:
+      operationId: update_spawner_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpawnerConfiguration"
+      responses:
+        "204":
+          description: Updated spawner configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a spawner configuration.
+
+  /run:
+    get:
+      operationId: get_all_run_id
+      parameters:
+        - in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation id not found
+      summary: Get all ids of runs connected to a user and a simulation.
+
+    put:
+      operationId: create_run
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created and started a new run
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation id not found
+        "409":
+          description: Run already exists with this id
+      summary:
+        Create a new run. Returns id connected to the run to get the results
+        and status from.
+
+  /run/{id}:
+    delete:
+      operationId: delete_run
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted simulation configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary:
+        "Delete a run and the connected results. If the simulation is still\
+        \ running, cancel it."
+
+    get:
+      operationId: get_run
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunStatus"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: "Get all information about a run, including the progress."
+
+  /simulation:
+    get:
+      operationId: get_all_simulation_id
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+      summary: Get all ids of simulation configurations connected to a user.
+
+    put:
+      operationId: create_simulation_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SimulationConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+          description: Successfully created new simulation configuration
+        "401":
+          description: API token missing
+      summary:
+        Create a new simulation. Returns id connected to the simulation to
+        connect components or runs to it.
+
+  /simulation/{id}:
+    delete:
+      operationId: delete_simulation_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted simulation configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary:
+        Delete a simulation configuration and every connected component and
+        run.
+
+    get:
+      operationId: get_simulation_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimulationConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary:
+        "Get all information about a simulation, including the ids of connected\
+        \ components and runs."
+
+    patch:
+      operationId: update_simulation_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SimulationConfiguration"
+      responses:
+        "204":
+          description: Updated simulation configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit the name or description of a simulation configuration.
+
+  /token:
+    put:
+      operationId: create_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createToken_request"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+          description: Successfully created new token
+        "401":
+          description: API token missing
+        "403":
+          description: No rights to execute this action
+      summary:
+        Create new token with specified permission specified in body if current
+        user is admin
 
 components:
-    securitySchemes:
-        ApiKeyAuth:
-            type: apiKey
-            in: header
-            name: bp2022-ap1-api-key
-
-security:
-    - ApiKeyAuth: []
+  schemas:
+    Token:
+      type: object
+    SimulationConfiguration:
+      type: object
+    InterlockingConfiguration:
+      type: object
+    SpawnerConfiguration:
+      type: object
+    DataScienceConfiguration:
+      type: object
+    DataScienceResult:
+      type: object
+    TrainSpeedFaultConfiguration:
+      type: object
+    TrainPrioFaultConfiguration:
+      type: object
+    ScheduleBlockedFaultConfiguration:
+      type: object
+    TrackSpeedLimitFaultConfiguration:
+      type: object
+    TrackBlockedFaultConfiguration:
+      type: object
+    RunConfiguration:
+      type: object
+    RunStatus:
+      type: object
+    createToken_request:
+      properties:
+        permission:
+          title: permission
+          type: string
+      title: createToken_request
+      type: object
+    createSimulationConfiguration_201_response:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          title: id
+          type: string
+      title: createSimulationConfiguration_201_response
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: bp2022-ap1-api-key
+      type: apiKey

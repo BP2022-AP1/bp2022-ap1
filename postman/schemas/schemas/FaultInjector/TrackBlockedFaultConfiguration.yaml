@@ -1,3 +1,0 @@
-TrackBlockedFaultConfiguration:
-  type: object
-  properties: {}
