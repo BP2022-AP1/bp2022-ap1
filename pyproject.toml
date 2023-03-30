@@ -19,7 +19,7 @@ traci = "^1.16.0"
 peewee = "^3.16.0"
 peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
-psycopg2 = "^2.9.5"
+interlocking = { path = "../Yaramo/interlocking" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
