@@ -11,7 +11,7 @@ get:
           description: Specify id of simulation if you only want to get the platform-blocked-fault configuration of a single simulation
     responses:
         "200":
-            description: Successfull operation
+            description: Successful operation
             content:
                 application/json:
                     schema:

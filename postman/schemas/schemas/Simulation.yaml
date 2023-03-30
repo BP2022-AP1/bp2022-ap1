@@ -1,5 +1,5 @@
 components:
   schemas:
-    SimulationConfugration:
+    SimulationConfigration:
       type: object
       properties: {}

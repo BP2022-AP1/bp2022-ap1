@@ -4,7 +4,7 @@ get:
     operationId: getAllToken
     responses:
         "200":
-            description: Successfull operation
+            description: Successful operation
             content:
                 application/json:
                     schema:
