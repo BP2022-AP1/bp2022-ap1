@@ -38,8 +38,3 @@ class ISpawnerRestrictor(Protocol):
 
     def unblock_schedule(self, schedule_id: int):
         ...
-
-
-class IInterlocking(Protocol):
-    def next_tick(self, tick: int):
-        ...
