@@ -1,6 +1,6 @@
-# /component/fault-injection/train-blocked-fault/{id}
+# /component/fault-injection/track-blocked-fault/{id}
 get:
-    summary: Get all information about a train-blocked-fault configuration.
+    summary: Get all information about a track-blocked-fault configuration.
     operationId: getTrainBlockedFaultConfiguration
     parameters:
         - in: path
@@ -21,7 +21,7 @@ get:
         "404":
             description: Id not found
 delete:
-    summary: Delete a train-blocked-fault configuration.
+    summary: Delete a track-blocked-fault configuration.
     operationId: deleteTrainBlockedFaultConfiguration
     parameters:
         - in: path
@@ -32,14 +32,14 @@ delete:
               format: uuid
     responses:
         "204":
-            description: Deleted train-blocked-fault configuration
+            description: Deleted track-blocked-fault configuration
         "401":
             description: API token missing
         "404":
             description: Id not found
         
 patch:
-    summary: Edit a train-blocked-fault configuration.
+    summary: Edit a track-blocked-fault configuration.
     operationId: updateTrainBlockedFaultConfiguration
     parameters:
         - in: path
@@ -55,7 +55,7 @@ patch:
                     $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainBlockedFaultConfiguration"
     responses:
         "204":
-            description: Updated train-blocked-fault configuration
+            description: Updated track-blocked-fault configuration
         "400":
             description: Update not possible, you can't update the id
         "401":

@@ -1,6 +1,6 @@
-# /component/fault-injecton/train-blocked-fault
+# /component/fault-injecton/track-blocked-fault
 get:
-    summary: Get ids of train-blocked-fault configurations connected to a user.
+    summary: Get ids of track-blocked-fault configurations connected to a user.
     operationId: getTrainBlockedFaultConfigurationIds
     parameters:
         - in: query
@@ -8,7 +8,7 @@ get:
           schema:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the train-blocked-fault configuration of a single simulation
+          description: Specify id of simulation if you only want to get the track-blocked-fault configuration of a single simulation
     responses:
         "200":
             description: Successful operation
@@ -24,7 +24,7 @@ get:
         "404":
             description: Simulation not found
 put:
-    summary: Insert a new train-blocked-fault component. Returns the id of the configuration object.
+    summary: Insert a new track-blocked-fault component. Returns the id of the configuration object.
     operationId: createTrainBlockedFaultConfiguration
     requestBody:
         content:
@@ -33,7 +33,7 @@ put:
                     $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainBlockedFaultConfiguration"
     responses:
         "201":
-            description: Successfully created new train-blocked-fault configuration object
+            description: Successfully created new track-blocked-fault configuration object
             content:
                 application/json:
                     schema:

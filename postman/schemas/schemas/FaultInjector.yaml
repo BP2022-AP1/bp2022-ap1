@@ -12,7 +12,7 @@ components:
         TrainSpeedLimitFaultConfiguration:
             type: object
             properties: {}
-        TrainBlockedFaultConfiguration:
+        TrackBlockedFaultConfiguration:
             type: object
             properties: {}
         PlatformBlockedFaultConfiguration:
