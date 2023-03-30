@@ -180,9 +180,9 @@ files = []
 develop = false
 
 [package.dependencies]
-planpro_exporter = {git = "https://github.com/simulate-digital-rail/planpro-exporter"}
-planpro_importer = {git = "https://github.com/simulate-digital-rail/planpro-importer"}
-railway_route_generator = {git = "https://github.com/simulate-digital-rail/railway-route-generator"}
+planpro-exporter = {git = "https://github.com/simulate-digital-rail/planpro-exporter"}
+planpro-importer = {git = "https://github.com/simulate-digital-rail/planpro-importer"}
+railway-route-generator = {git = "https://github.com/simulate-digital-rail/railway-route-generator"}
 yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
 
 [package.source]
