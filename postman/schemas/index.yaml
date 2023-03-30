@@ -39,14 +39,14 @@ paths:
         $ref: './paths/component/fault-injection/train-cancelled-fault.yaml'
     /component/fault-injection/train-cancelled-fault/{id}:
         $ref: './paths/component/fault-injection/train-cancelled-fault-by-id.yaml'
-    /component/fault-injection/train-speed-limit-fault:
-        $ref: './paths/component/fault-injection/train-speed-limit-fault.yaml'
-    /component/fault-injection/train-split-limit-fault/{id}:
-        $ref: './paths/component/fault-injection/train-speed-limit-fault-by-id.yaml'
-    /component/fault-injection/train-blocked-fault:
-        $ref: './paths/component/fault-injection/train-blocked-fault.yaml'
-    /component/fault-injection/train-blocked-fault/{id}:
-        $ref: './paths/component/fault-injection/train-blocked-fault-by-id.yaml'
+    /component/fault-injection/track-speed-limit-fault:
+        $ref: './paths/component/fault-injection/track-speed-limit-fault.yaml'
+    /component/fault-injection/track-split-limit-fault/{id}:
+        $ref: './paths/component/fault-injection/track-speed-limit-fault-by-id.yaml'
+    /component/fault-injection/track-blocked-fault:
+        $ref: './paths/component/fault-injection/track-blocked-fault.yaml'
+    /component/fault-injection/track-blocked-fault/{id}:
+        $ref: './paths/component/fault-injection/track-blocked-fault-by-id.yaml'
     /run:
         $ref: './paths/run.yaml'
     /run/{id}:
