@@ -38,7 +38,6 @@ files[] = {"path":"paths/run-by-id.yaml","metaData":{}}
 files[] = {"path":"paths/run.yaml","metaData":{}}
 files[] = {"path":"paths/simulation-by-id.yaml","metaData":{}}
 files[] = {"path":"paths/simulation.yaml","metaData":{}}
-files[] = {"path":"paths/token-by-id.yaml","metaData":{}}
 files[] = {"path":"paths/token.yaml","metaData":{}}
 files[] = {"path":"schemas/DataScience.yaml","metaData":{}}
 files[] = {"path":"schemas/FaultInjector.yaml","metaData":{}}

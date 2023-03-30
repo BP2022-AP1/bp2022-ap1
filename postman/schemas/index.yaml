@@ -7,8 +7,6 @@ info:
 paths:
     /token:
         $ref: './paths/token.yaml'
-    /token/{id}:
-        $ref: './paths/token-by-id.yaml'
     /simulation:
         $ref: './paths/simulation.yaml'
     /simulation/{id}:
