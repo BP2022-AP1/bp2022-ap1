@@ -37,3 +37,12 @@ class Fault(ABC):
             self.inject_fault(self.component)
         elif tick == self.end_tick:
             self.resolve_fault(self.component)
+
+class FaultConfiguration(BaseModel):
+    """Class that contains the attributes of the Fault class"""
+
+    start_tick: int = None
+    end_tick: int = None
+    component: Component = None
+    affected_element_ID: int = None
+    description: str = "injected fault"
