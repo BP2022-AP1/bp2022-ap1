@@ -1,3 +1,19 @@
+import marshmallow as marsh
+from peewee import BooleanField
+
+from base_model import BaseModel
+
+
+class InterlockingConfiguration(BaseModel):
+    class Schema(BaseModel.Schema):
+        dynamicRouting = marsh.fields.Boolean()
+
+        def _make(self, data: dict) -> "InterlockingConfiguration":
+            return InterlockingConfiguration(**data)
+
+    dynamicRouting = BooleanField(default=True)
+
+
 class RouteController(Component):
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
