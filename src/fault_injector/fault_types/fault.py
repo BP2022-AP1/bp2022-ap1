@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
+from peewee import *
+
 from src.base_model import BaseModel
 from src.component import Component
-from peewee import *
 
 
 class Fault(ABC):
