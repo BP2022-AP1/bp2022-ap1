@@ -1,4 +1,4 @@
-class route_controller(Component):
+class Route_Controller(Component):
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
