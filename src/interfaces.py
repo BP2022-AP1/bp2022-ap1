@@ -21,7 +21,8 @@ class ISpawner(IComponent, Protocol):
 
     @property
     def schedules(self) -> list["ISchedule"]:
-    
+        ...
+
 
 class IInfrastructureProvider(Protocol):
     """Provides the api for the interlocking component to control the simulation"""
