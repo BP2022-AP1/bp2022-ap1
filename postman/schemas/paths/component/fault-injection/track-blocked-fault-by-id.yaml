@@ -1,7 +1,7 @@
 # /component/fault-injection/track-blocked-fault/{id}
 get:
     summary: Get all information about a track-blocked-fault configuration.
-    operationId: getTrainBlockedFaultConfiguration
+    operationId: getTrackBlockedFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -15,14 +15,14 @@ get:
             content:
                 application/json:
                     schema:
-                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainBlockedFaultConfiguration"
+                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrackBlockedFaultConfiguration"
         "401":
             description: API token missing
         "404":
             description: Id not found
 delete:
     summary: Delete a track-blocked-fault configuration.
-    operationId: deleteTrainBlockedFaultConfiguration
+    operationId: deleteTrackBlockedFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -40,7 +40,7 @@ delete:
         
 patch:
     summary: Edit a track-blocked-fault configuration.
-    operationId: updateTrainBlockedFaultConfiguration
+    operationId: updateTrackBlockedFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -52,7 +52,7 @@ patch:
         content:
             application/json:
                 schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainBlockedFaultConfiguration"
+                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrackBlockedFaultConfiguration"
     responses:
         "204":
             description: Updated track-blocked-fault configuration
