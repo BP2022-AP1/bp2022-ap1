@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from src.base_model import BaseModel
 from src.component import Component
+from peewee import *
 
 
 class Fault(ABC):
@@ -42,9 +43,8 @@ class Fault(ABC):
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
-    fault_id: str = None
-    start_tick: int = None
-    end_tick: int = None
+    start_tick = BigIntegerField()
+    end_tick = BigIntegerField()
     component: Component = None
-    affected_element_ID: int = None
-    description: str = "injected fault"
+    # - affected_element_ID: int = None // has to be implemented in subclasses
+    description = TextField(default="injected Fault")
