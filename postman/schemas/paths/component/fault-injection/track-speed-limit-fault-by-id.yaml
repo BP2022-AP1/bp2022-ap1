@@ -60,3 +60,5 @@ patch:
             description: API token missing
         "404":
             description: Id not found
+        "405":
+            description: It's forbidden to edit an already ran simulation
