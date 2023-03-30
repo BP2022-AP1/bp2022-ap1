@@ -38,6 +38,7 @@ class Fault(ABC):
         elif tick == self.end_tick:
             self.resolve_fault(self.component)
 
+
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
