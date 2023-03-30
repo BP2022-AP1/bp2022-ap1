@@ -5,7 +5,7 @@ class RouteController(Component):
     """
 
     def next_tick(self, tick: int):
-        """This may be called to prosses a new simulation tick.
+        """This may be called to process a new simulation tick.
 
         :param tick: The current tick of the simulation.
         :type tick: int
