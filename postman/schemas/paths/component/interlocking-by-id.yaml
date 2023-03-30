@@ -1,64 +1,64 @@
 # /component/interlocking/{id}
 get:
-    summary: Get all information about a interlocking configuration.
-    operationId: getInterlockingConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
+  summary: Get all information about a interlocking configuration.
+  operationId: getInterlockingConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
-            type: string
-            format: uuid
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        $ref: "../../schemas/Interlocking.yaml#/components/schema/InterlockingConfiguration"
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
+            $ref: "../../schemas/Interlocking/InterlockingConfiguration.yaml"
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
 delete:
-    summary: Delete an interlocking configuration.
-    operationId: deleteInterlockingConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-              type: string
-              format: uuid
-    responses:
-        "204":
-            description: Deleted interlocking configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        
+  summary: Delete an interlocking configuration.
+  operationId: deleteInterlockingConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Deleted interlocking configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+
 patch:
-    summary: Edit the a interlocking configuration.
-    operationId: updateInterlockingConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-                type: string
-                format: uuid
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../schemas/Interlocking.yaml#/components/schema/InterlockingConfiguration"
-    responses:
-        "204":
-            description: Updated interlocking configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        "405":
-            description: It's forbidden to edit an already ran simulation
+  summary: Edit the a interlocking configuration.
+  operationId: updateInterlockingConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/Interlocking/InterlockingConfiguration.yaml"
+  responses:
+    "204":
+      description: Updated interlocking configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+    "405":
+      description: It's forbidden to edit an already ran simulation

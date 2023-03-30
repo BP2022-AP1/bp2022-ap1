@@ -1,46 +1,46 @@
 # /component/fault-injecton/platform-blocked-fault
 get:
-    summary: Get ids of platform-blocked-fault configurations connected to a user.
-    operationId: getPlatformBlockedFaultConfigurationIds
-    parameters:
-        - in: query
-          name: simulationId
+  summary: Get ids of platform-blocked-fault configurations connected to a user.
+  operationId: getPlatformBlockedFaultConfigurationIds
+  parameters:
+    - in: query
+      name: simulationId
+      schema:
+        type: string
+        format: uuid
+      description: Specify id of simulation if you only want to get the platform-blocked-fault configuration of a single simulation
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
+            type: array
+            items:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the platform-blocked-fault configuration of a single simulation
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            type: string
-                            format: uuid
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation not found
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation not found
 put:
-    summary: Insert a new platform-blocked-fault component. Returns the id of the configuration object.
-    operationId: createPlatformBlockedFaultConfiguration
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/PlatformBlockedFaultConfiguration"
-    responses:
-        "201":
-            description: Successfully created new platform-blocked-fault configuration object
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
-        "401":
-            description: API token missing
+  summary: Insert a new platform-blocked-fault component. Returns the id of the configuration object.
+  operationId: createPlatformBlockedFaultConfiguration
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/FaultInjector/PlatformBlockedFaultConfiguration.yaml"
+  responses:
+    "201":
+      description: Successfully created new platform-blocked-fault configuration object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+    "401":
+      description: API token missing

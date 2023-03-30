@@ -1,64 +1,64 @@
 # /component/fault-injection/schedule-blocked-fault/{id}
 get:
-    summary: Get all information about a schedule-blocked-fault configuration.
-    operationId: getScheduleBlockedFaultConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
+  summary: Get all information about a schedule-blocked-fault configuration.
+  operationId: getScheduleBlockedFaultConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
-            type: string
-            format: uuid
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/ScheduleBlockedFaultConfiguration"
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
+            $ref: "../../../schemas/FaultInjector/ScheduleBlockedFaultConfiguration.yaml"
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
 delete:
-    summary: Delete a schedule-blocked-fault configuration.
-    operationId: deleteScheduleBlockedFaultConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-              type: string
-              format: uuid
-    responses:
-        "204":
-            description: Deleted schedule-blocked-fault configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        
+  summary: Delete a schedule-blocked-fault configuration.
+  operationId: deleteScheduleBlockedFaultConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Deleted schedule-blocked-fault configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+
 patch:
-    summary: Edit a schedule-blocked-fault configuration.
-    operationId: updateScheduleBlockedFaultConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-                type: string
-                format: uuid
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/ScheduleBlockedFaultConfiguration"
-    responses:
-        "204":
-            description: Updated schedule-blocked-fault configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        "405":
-            description: It's forbidden to edit an already ran simulation
+  summary: Edit a schedule-blocked-fault configuration.
+  operationId: updateScheduleBlockedFaultConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/FaultInjector/ScheduleBlockedFaultConfiguration.yaml"
+  responses:
+    "204":
+      description: Updated schedule-blocked-fault configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+    "405":
+      description: It's forbidden to edit an already ran simulation

@@ -1,0 +1,3 @@
+PlatformBlockedFaultConfiguration:
+  type: object
+  properties: {}

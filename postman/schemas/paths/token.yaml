@@ -1,24 +1,24 @@
 # /token
 put:
-    summary: Create new token with specified permission specified in body if current user is admin
-    operationId: createToken
-    requestBody:
-        required: true
-        content:
-            application/json:
-                schema:
-                    type: object
-                    properties:
-                        permission:
-                            type: string
-    responses:
-        "201":
-            description: Successfully created new token
-            content:
-                application/json:
-                    schema:
-                        $ref: "../schemas/Token.yaml#/components/schema/Token"
-        "401":
-            description: API token missing
-        "403":
-            description: No rights to execute this action
+  summary: Create new token with specified permission specified in body if current user is admin
+  operationId: createToken
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            permission:
+              type: string
+  responses:
+    "201":
+      description: Successfully created new token
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Token/Token.yaml"
+    "401":
+      description: API token missing
+    "403":
+      description: No rights to execute this action

@@ -1,5 +1,0 @@
-components:
-  schemas:
-    InterlockingConfugration:
-      type: object
-      properties: {}

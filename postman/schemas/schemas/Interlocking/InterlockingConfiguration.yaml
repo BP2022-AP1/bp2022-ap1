@@ -1,0 +1,3 @@
+InterlockingConfiguration:
+  type: object
+  properties: {}

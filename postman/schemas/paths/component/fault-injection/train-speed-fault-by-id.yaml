@@ -1,64 +1,64 @@
 # /component/fault-injection/train-speed-fault/{id}
 get:
-    summary: Get all information about a train-speed-fault configuration.
-    operationId: getTrainSpeedFaultConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
+  summary: Get all information about a train-speed-fault configuration.
+  operationId: getTrainSpeedFaultConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
-            type: string
-            format: uuid
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainSpeedFaultConfiguration"
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
+            $ref: "../../../schemas/FaultInjector/TrainSpeedFaultConfiguration.yaml"
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
 delete:
-    summary: Delete a train-speed-fault configuration.
-    operationId: deleteTrainSpeedFaultConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-              type: string
-              format: uuid
-    responses:
-        "204":
-            description: Deleted train-speed-fault configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        
+  summary: Delete a train-speed-fault configuration.
+  operationId: deleteTrainSpeedFaultConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Deleted train-speed-fault configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+
 patch:
-    summary: Edit a train-speed-fault configuration.
-    operationId: updateTrainSpeedFaultConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-                type: string
-                format: uuid
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainSpeedFaultConfiguration"
-    responses:
-        "204":
-            description: Updated train-speed-fault configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        "405":
-            description: It's forbidden to edit an already ran simulation
+  summary: Edit a train-speed-fault configuration.
+  operationId: updateTrainSpeedFaultConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/FaultInjector/TrainSpeedFaultConfiguration.yaml"
+  responses:
+    "204":
+      description: Updated train-speed-fault configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+    "405":
+      description: It's forbidden to edit an already ran simulation

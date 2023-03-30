@@ -1,0 +1,3 @@
+DataScienceConfiguration:
+  type: object
+  properties: {}

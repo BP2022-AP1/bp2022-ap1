@@ -1,64 +1,64 @@
 # /simulation/{id}
 get:
-    summary: Get all information about a simulation, including the ids of connected components and runs.
-    operationId: getSimulationConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
+  summary: Get all information about a simulation, including the ids of connected components and runs.
+  operationId: getSimulationConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
-            type: string
-            format: uuid
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        $ref: "../schemas/Simulation.yaml#/components/schema/SimulationConfiguration"
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
+            $ref: "../schemas/Simulation/SimulationConfiguration.yaml"
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
 delete:
-    summary: Delete a simulation configuration and every connected component and run.
-    operationId: deleteSimulationConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-              type: string
-              format: uuid
-    responses:
-        "204":
-            description: Deleted simulation configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        
+  summary: Delete a simulation configuration and every connected component and run.
+  operationId: deleteSimulationConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Deleted simulation configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+
 patch:
-    summary: Edit the name or description of a simulation configuration.
-    operationId: updateSimulationConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-                type: string
-                format: uuid
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../schemas/Simulation.yaml#/components/schema/SimulationConfiguration"
-    responses:
-        "204":
-            description: Updated simulation configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        "405":
-            description: It's forbidden to edit an already ran simulation
+  summary: Edit the name or description of a simulation configuration.
+  operationId: updateSimulationConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/Simulation/SimulationConfiguration.yaml"
+  responses:
+    "204":
+      description: Updated simulation configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+    "405":
+      description: It's forbidden to edit an already ran simulation

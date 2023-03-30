@@ -1,46 +1,46 @@
 # /component/fault-injecton/schedule-blocked-faul
 get:
-    summary: Get ids of schedule-blocked-faul configurations connected to a user.
-    operationId: getScheduleBlockedFaultConfigurationIds
-    parameters:
-        - in: query
-          name: simulationId
+  summary: Get ids of schedule-blocked-faul configurations connected to a user.
+  operationId: getScheduleBlockedFaultConfigurationIds
+  parameters:
+    - in: query
+      name: simulationId
+      schema:
+        type: string
+        format: uuid
+      description: Specify id of simulation if you only want to get the schedule-blocked-faul configuration of a single simulation
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
+            type: array
+            items:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the schedule-blocked-faul configuration of a single simulation
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            type: string
-                            format: uuid
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation not found
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation not found
 put:
-    summary: Insert a new schedule-blocked-faul component. Returns the id of the configuration object.
-    operationId: createScheduleBlockedFaultConfiguration
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/ScheduleBlockedFaultConfiguration"
-    responses:
-        "201":
-            description: Successfully created new schedule-blocked-faul configuration object
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
-        "401":
-            description: API token missing
+  summary: Insert a new schedule-blocked-faul component. Returns the id of the configuration object.
+  operationId: createScheduleBlockedFaultConfiguration
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/FaultInjector/ScheduleBlockedFaultConfiguration.yaml"
+  responses:
+    "201":
+      description: Successfully created new schedule-blocked-faul configuration object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+    "401":
+      description: API token missing

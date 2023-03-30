@@ -1,46 +1,46 @@
 # /component/fault-injecton/track-blocked-fault
 get:
-    summary: Get ids of track-blocked-fault configurations connected to a user.
-    operationId: getTrackBlockedFaultConfigurationIds
-    parameters:
-        - in: query
-          name: simulationId
+  summary: Get ids of track-blocked-fault configurations connected to a user.
+  operationId: getTrackBlockedFaultConfigurationIds
+  parameters:
+    - in: query
+      name: simulationId
+      schema:
+        type: string
+        format: uuid
+      description: Specify id of simulation if you only want to get the track-blocked-fault configuration of a single simulation
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
+            type: array
+            items:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the track-blocked-fault configuration of a single simulation
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            type: string
-                            format: uuid
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation not found
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation not found
 put:
-    summary: Insert a new track-blocked-fault component. Returns the id of the configuration object.
-    operationId: createTrackBlockedFaultConfiguration
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrackBlockedFaultConfiguration"
-    responses:
-        "201":
-            description: Successfully created new track-blocked-fault configuration object
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
-        "401":
-            description: API token missing
+  summary: Insert a new track-blocked-fault component. Returns the id of the configuration object.
+  operationId: createTrackBlockedFaultConfiguration
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/FaultInjector/TrackBlockedFaultConfiguration.yaml"
+  responses:
+    "201":
+      description: Successfully created new track-blocked-fault configuration object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+    "401":
+      description: API token missing

@@ -1,8 +1,0 @@
-components:
-  schemas:
-    DataScienceConfiguration:
-      type: object
-      properties: {}
-    DataScienceResult:
-      type: object
-      properties: {}

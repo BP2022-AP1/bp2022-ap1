@@ -1,0 +1,3 @@
+TrackSpeedLimitFaultConfiguration:
+  type: object
+  properties: {}

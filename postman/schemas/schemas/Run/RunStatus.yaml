@@ -1,0 +1,3 @@
+RunStatus:
+  type: object
+  properties: {}

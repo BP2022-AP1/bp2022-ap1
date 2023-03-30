@@ -1,64 +1,64 @@
 # /component/spawner/{id}
 get:
-    summary: Get all information about a spawner configuration.
-    operationId: getSpawnerConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
+  summary: Get all information about a spawner configuration.
+  operationId: getSpawnerConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
-            type: string
-            format: uuid
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        $ref: "../../schemas/Spawner.yaml#/components/schema/SpawnerConfiguration"
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
+            $ref: "../../schemas/Spawner/SpawnerConfiguration.yaml"
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
 delete:
-    summary: Delete a spawner configuration.
-    operationId: deleteSpawnerConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-              type: string
-              format: uuid
-    responses:
-        "204":
-            description: Deleted spawner configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        
+  summary: Delete a spawner configuration.
+  operationId: deleteSpawnerConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Deleted spawner configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+
 patch:
-    summary: Edit a spawner configuration.
-    operationId: updateSpawnerConfiguration
-    parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-                type: string
-                format: uuid
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../schemas/Spawner.yaml#/components/schema/SpawnerConfiguration"
-    responses:
-        "204":
-            description: Updated spawner configuration
-        "401":
-            description: API token missing
-        "404":
-            description: Id not found
-        "405":
-            description: It's forbidden to edit an already ran simulation
+  summary: Edit a spawner configuration.
+  operationId: updateSpawnerConfiguration
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/Spawner/SpawnerConfiguration.yaml"
+  responses:
+    "204":
+      description: Updated spawner configuration
+    "401":
+      description: API token missing
+    "404":
+      description: Id not found
+    "405":
+      description: It's forbidden to edit an already ran simulation

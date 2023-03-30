@@ -1,48 +1,48 @@
 # /component/data-science
 get:
-    summary: Get ids of data-science configurations connected to a user.
-    operationId: getDataScienceConfigurationIds
-    parameters:
-        - in: query
-          name: simulationId
+  summary: Get ids of data-science configurations connected to a user.
+  operationId: getDataScienceConfigurationIds
+  parameters:
+    - in: query
+      name: simulationId
+      schema:
+        type: string
+        format: uuid
+      description: Specify id of simulation if you only want to get the data-science configuration of a single simulation
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
+            type: array
+            items:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the data-science configuration of a single simulation
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            type: string
-                            format: uuid
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation not found
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation not found
 put:
-    summary: Insert a new data-science component. Returns the id of the configuration object.
-    operationId: createDataScienceConfiguration
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../schemas/DataScience.yaml#/components/schema/DataScienceConfiguration"
-    responses:
-        "201":
-            description: Successfully created new data-science configuration object
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
-        "400":
-            description: An data-science configuration exists for this simulation already
-        "401":
-            description: API token missing
+  summary: Insert a new data-science component. Returns the id of the configuration object.
+  operationId: createDataScienceConfiguration
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/DataScience/DataScienceConfiguration.yaml"
+  responses:
+    "201":
+      description: Successfully created new data-science configuration object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+    "400":
+      description: An data-science configuration exists for this simulation already
+    "401":
+      description: API token missing

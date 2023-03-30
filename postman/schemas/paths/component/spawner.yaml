@@ -1,48 +1,48 @@
 # /component/spawner
 get:
-    summary: Get ids of spawner configurations connected to a user.
-    operationId: getSpawnerConfigurationIds
-    parameters:
-        - in: query
-          name: simulationId
+  summary: Get ids of spawner configurations connected to a user.
+  operationId: getSpawnerConfigurationIds
+  parameters:
+    - in: query
+      name: simulationId
+      schema:
+        type: string
+        format: uuid
+      description: Specify id of simulation if you only want to get the spawner configuration of a single simulation
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
+            type: array
+            items:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the spawner configuration of a single simulation
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            type: string
-                            format: uuid
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation not found
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation not found
 put:
-    summary: Insert a new spawner component. Returns the id of the configuration object.
-    operationId: createSpawnerConfiguration
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../../schemas/Spawner.yaml#/components/schema/SpawnerConfiguration"
-    responses:
-        "201":
-            description: Successfully created new spawner configuration object
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
-        "400":
-            description: An spawner configuration exists for this simulation already
-        "401":
-            description: API token missing
+  summary: Insert a new spawner component. Returns the id of the configuration object.
+  operationId: createSpawnerConfiguration
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/Spawner/SpawnerConfiguration.yaml"
+  responses:
+    "201":
+      description: Successfully created new spawner configuration object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+    "400":
+      description: An spawner configuration exists for this simulation already
+    "401":
+      description: API token missing

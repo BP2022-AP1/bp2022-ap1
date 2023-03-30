@@ -1,51 +1,51 @@
 # /run
 get:
-    summary: Get all ids of runs connected to a user and a simulation.
-    operationId: getAllRunId
-    parameters:
-        - in: query
-          name: simulationId
+  summary: Get all ids of runs connected to a user and a simulation.
+  operationId: getAllRunId
+  parameters:
+    - in: query
+      name: simulationId
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
           schema:
+            type: array
+            items:
               type: string
               format: uuid
-    responses:
-        "200":
-            description: Successful operation
-            content:
-                application/json:
-                    schema:
-                        type: array
-                        items:
-                            type: string
-                            format: uuid
 
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation id not found
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation id not found
 put:
-    summary: Create a new run. Returns id connected to the run to get the results and status from.
-    operationId: createRun
-    requestBody:
-        content:
-            application/json:
-                schema:
-                    $ref: "../schemas/Run.yaml#/components/schema/RunConfiguration"
-    responses:
-        "201":
-            description: Successfully created and started a new run
-            content:
-                application/json:
-                    schema:
-                        type: object
-                        properties:
-                            id:
-                                type: string
-                                format: uuid
+  summary: Create a new run. Returns id connected to the run to get the results and status from.
+  operationId: createRun
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/Run/RunConfiguration.yaml"
+  responses:
+    "201":
+      description: Successfully created and started a new run
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
 
-        "401":
-            description: API token missing
-        "404":
-            description: Simulation id not found
-        "409":
-            description: Run already exists with this id
+    "401":
+      description: API token missing
+    "404":
+      description: Simulation id not found
+    "409":
+      description: Run already exists with this id
