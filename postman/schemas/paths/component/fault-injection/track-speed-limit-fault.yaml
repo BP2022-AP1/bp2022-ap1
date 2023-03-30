@@ -1,14 +1,14 @@
-# /component/fault-injecton/train-speed-limit-fault
+# /component/fault-injecton/track-speed-limit-fault
 get:
-    summary: Get ids of train-speed-limit-fault configurations connected to a user.
-    operationId: getTrainSpeedLimitFaultConfigurationIds
+    summary: Get ids of track-speed-limit-fault configurations connected to a user.
+    operationId: getTrackSpeedLimitFaultConfigurationIds
     parameters:
         - in: query
           name: simulationId
           schema:
               type: string
               format: uuid
-          description: Specify id of simulation if you only want to get the train-speed-limit-fault configuration of a single simulation
+          description: Specify id of simulation if you only want to get the track-speed-limit-fault configuration of a single simulation
     responses:
         "200":
             description: Successful operation
@@ -24,16 +24,16 @@ get:
         "404":
             description: Simulation not found
 put:
-    summary: Insert a new train-speed-limit-fault component. Returns the id of the configuration object.
-    operationId: createTrainSpeedLimitFaultConfiguration
+    summary: Insert a new track-speed-limit-fault component. Returns the id of the configuration object.
+    operationId: createTrackSpeedLimitFaultConfiguration
     requestBody:
         content:
             application/json:
                 schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainSpeedLimitFaultConfiguration"
+                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrackSpeedLimitFaultConfiguration"
     responses:
         "201":
-            description: Successfully created new train-speed-limit-fault configuration object
+            description: Successfully created new track-speed-limit-fault configuration object
             content:
                 application/json:
                     schema:

@@ -1,7 +1,7 @@
-# /component/fault-injection/train-speed-limit-fault/{id}
+# /component/fault-injection/track-speed-limit-fault/{id}
 get:
-    summary: Get all information about a train-speed-limit-fault configuration.
-    operationId: getTrainSpeedLimitFaultConfiguration
+    summary: Get all information about a track-speed-limit-fault configuration.
+    operationId: getTrackSpeedLimitFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -15,14 +15,14 @@ get:
             content:
                 application/json:
                     schema:
-                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainSpeedLimitFaultConfiguration"
+                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrackSpeedLimitFaultConfiguration"
         "401":
             description: API token missing
         "404":
             description: Id not found
 delete:
-    summary: Delete a train-speed-limit-fault configuration.
-    operationId: deleteTrainSpeedLimitFaultConfiguration
+    summary: Delete a track-speed-limit-fault configuration.
+    operationId: deleteTrackSpeedLimitFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -32,15 +32,15 @@ delete:
               format: uuid
     responses:
         "204":
-            description: Deleted train-speed-limit-fault configuration
+            description: Deleted track-speed-limit-fault configuration
         "401":
             description: API token missing
         "404":
             description: Id not found
         
 patch:
-    summary: Edit a train-speed-limit-fault configuration.
-    operationId: updateTrainSpeedLimitFaultConfiguration
+    summary: Edit a track-speed-limit-fault configuration.
+    operationId: updateTrackSpeedLimitFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -52,10 +52,10 @@ patch:
         content:
             application/json:
                 schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainSpeedLimitFaultConfiguration"
+                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrackSpeedLimitFaultConfiguration"
     responses:
         "204":
-            description: Updated train-speed-limit-fault configuration
+            description: Updated track-speed-limit-fault configuration
         "400":
             description: Update not possible, you can't update the id
         "401":
