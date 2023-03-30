@@ -1,4 +1,4 @@
-# pylint: disable=C0115, C0116
+# pylint: disable=missing-class-docstring, missing-function-docstring
 
 from collections.abc import Callable
 from typing import Protocol
