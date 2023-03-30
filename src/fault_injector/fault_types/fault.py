@@ -42,6 +42,7 @@ class Fault(ABC):
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
+    fault_id: str = None
     start_tick: int = None
     end_tick: int = None
     component: Component = None
