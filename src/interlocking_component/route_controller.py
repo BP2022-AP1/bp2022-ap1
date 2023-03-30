@@ -1,7 +1,8 @@
 import marshmallow as marsh
 from peewee import BooleanField
 
-from base_model import BaseModel
+from src.base_model import BaseModel
+from src.component import Component
 
 
 class InterlockingConfiguration(BaseModel):
