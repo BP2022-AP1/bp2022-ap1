@@ -39,13 +39,20 @@ files[] = {"path":"paths/run.yaml","metaData":{}}
 files[] = {"path":"paths/simulation-by-id.yaml","metaData":{}}
 files[] = {"path":"paths/simulation.yaml","metaData":{}}
 files[] = {"path":"paths/token.yaml","metaData":{}}
-files[] = {"path":"schemas/DataScience.yaml","metaData":{}}
-files[] = {"path":"schemas/FaultInjector.yaml","metaData":{}}
-files[] = {"path":"schemas/Interlocking.yaml","metaData":{}}
-files[] = {"path":"schemas/Run.yaml","metaData":{}}
-files[] = {"path":"schemas/Simulation.yaml","metaData":{}}
-files[] = {"path":"schemas/Spawner.yaml","metaData":{}}
-files[] = {"path":"schemas/Token.yaml","metaData":{}}
+files[] = {"path":"schemas/DataScience/DataScienceConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/DataScience/DataScienceResult.yaml","metaData":{}}
+files[] = {"path":"schemas/FaultInjector/BlockedPlatformFaultConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/FaultInjector/ScheduleBlockedFaultConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/FaultInjector/TrackBlockedFaultConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/FaultInjector/TrackSpeedLimitFaultConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/FaultInjector/TrainPrioFaultConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/FaultInjector/TrainSpeedFaultConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/Interlocking/InterlockingConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/Run/RunConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/Run/RunStatus.yaml","metaData":{}}
+files[] = {"path":"schemas/Simulation/SimulationConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/Spawner/SpawnerConfiguration.yaml","metaData":{}}
+files[] = {"path":"schemas/Token/Token.yaml","metaData":{}}
 
 [config.relations.apiDefinition.metaData]
 type = openapi:3

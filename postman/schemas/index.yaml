@@ -33,7 +33,7 @@ paths:
         $ref: './paths/component/fault-injection/train-prio-fault.yaml'
     /component/fault-injection/train-prio-fault/{id}:
         $ref: './paths/component/fault-injection/train-prio-fault-by-id.yaml'
-    /component/fault-injection/train-cancelled-fault:
+    /component/fault-injection/schedule-blocked-fault:
         $ref: './paths/component/fault-injection/schedule-blocked-fault.yaml'
     /component/fault-injection/schedule-blockedfault/{id}:
         $ref: './paths/component/fault-injection/schedule-blocked-fault-by-id.yaml'
