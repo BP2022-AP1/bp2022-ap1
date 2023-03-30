@@ -6,7 +6,7 @@ components:
         TrainPrioFaultConfiguration:
             type: object
             properties: {}
-        TrainCancelledFaultConfiguration:
+        ScheduleBlockedFaultConfiguration:
             type: object
             properties: {}
         TrackSpeedLimitFaultConfiguration:

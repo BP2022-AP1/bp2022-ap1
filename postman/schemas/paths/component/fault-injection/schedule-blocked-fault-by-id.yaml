@@ -1,7 +1,7 @@
-# /component/fault-injection/train-cancelled-fault/{id}
+# /component/fault-injection/schedule-blocked-fault/{id}
 get:
-    summary: Get all information about a train-cancelled-fault configuration.
-    operationId: getTrainCancelledFaultConfiguration
+    summary: Get all information about a schedule-blocked-fault configuration.
+    operationId: getScheduleBlockedFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -15,14 +15,14 @@ get:
             content:
                 application/json:
                     schema:
-                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainCancelledFaultConfiguration"
+                        $ref: "../../../schemas/FaultInjector.yaml#/components/schema/ScheduleBlockedFaultConfiguration"
         "401":
             description: API token missing
         "404":
             description: Id not found
 delete:
-    summary: Delete a train-cancelled-fault configuration.
-    operationId: deleteTrainCancelledFaultConfiguration
+    summary: Delete a schedule-blocked-fault configuration.
+    operationId: deleteScheduleBlockedFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -32,15 +32,15 @@ delete:
               format: uuid
     responses:
         "204":
-            description: Deleted train-cancelled-fault configuration
+            description: Deleted schedule-blocked-fault configuration
         "401":
             description: API token missing
         "404":
             description: Id not found
         
 patch:
-    summary: Edit a train-cancelled-fault configuration.
-    operationId: updateTrainCancelledFaultConfiguration
+    summary: Edit a schedule-blocked-fault configuration.
+    operationId: updateScheduleBlockedFaultConfiguration
     parameters:
         - in: path
           name: id
@@ -52,10 +52,10 @@ patch:
         content:
             application/json:
                 schema:
-                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/TrainCancelledFaultConfiguration"
+                    $ref: "../../../schemas/FaultInjector.yaml#/components/schema/ScheduleBlockedFaultConfiguration"
     responses:
         "204":
-            description: Updated train-cancelled-fault configuration
+            description: Updated schedule-blocked-fault configuration
         "401":
             description: API token missing
         "404":
