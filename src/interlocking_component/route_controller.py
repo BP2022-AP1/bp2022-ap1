@@ -6,15 +6,15 @@ from src.component import Component
 
 
 class InterlockingConfiguration(BaseModel):
-    """Ths class contains all fiels needed to configure the Interlocking and the RouteController
-    """
+    """Ths class contains all fiels needed to configure the Interlocking and the RouteController"""
+
     class Schema(BaseModel.Schema):
         dynamicRouting = marsh.fields.Boolean()
 
         def _make(self, data: dict) -> "InterlockingConfiguration":
             return InterlockingConfiguration(**data)
 
-    dynamicRouting = BooleanField(default=True)
+    dynamicRouting = BooleanField(default=False)
 
 
 class RouteController(Component):
