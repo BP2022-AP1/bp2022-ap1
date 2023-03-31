@@ -1,5 +1,4 @@
-from src.interlocking_component.route_controller import \
-    InterlockingConfiguration
+from src.interlocking_component.route_controller import InterlockingConfiguration
 
 
 def test_initialisation():
