@@ -46,9 +46,9 @@ class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
     class FaultConfigurationSchema(BaseModel.Schema):
-        start_tick = marsh.fields.Int
-        end_tick = marsh.fields.Int
-        description = marsh.fields.Str
+        start_tick = marsh.fields.Integer()
+        end_tick = marsh.fields.Integer()
+        description = marsh.fields.String()
 
     start_tick = BigIntegerField()
     end_tick = BigIntegerField()
