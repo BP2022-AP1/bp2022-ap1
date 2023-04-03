@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 
+import marshmallow as marsh
+from peewee import *
+
 from src.base_model import BaseModel
 from src.component import Component
 
@@ -37,3 +40,21 @@ class Fault(ABC):
             self.inject_fault(self.component)
         elif tick == self.end_tick:
             self.resolve_fault(self.component)
+
+
+class FaultConfiguration(BaseModel, ABC):
+    """Class that contains the attributes of the Fault class"""
+
+    class FaultConfigurationSchema(BaseModel.Schema):
+        start_tick = marsh.fields.Integer()
+        end_tick = marsh.fields.Integer()
+        description = marsh.fields.String()
+
+        def _make(self, data: dict) -> "FaultConfiguration":
+            return FaultConfiguration(**data)
+
+    start_tick = BigIntegerField()
+    end_tick = BigIntegerField()
+    component: Component = None
+    # - affected_element_ID: int = None // has to be implemented in subclasses
+    description = TextField(default="injected Fault")
