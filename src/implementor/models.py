@@ -14,3 +14,11 @@ class SimulationConfiguration(BaseModel):
             return SimulationConfiguration(**data)
 
     description = CharField(null=True)
+
+
+class Run(BaseModel):
+    """Represents the configuration of a single execution of a simulation configuration."""
+
+    class Schema(BaseModel.Schema):
+        def _make(self, data: dict) -> "Run":
+            return Run(**data)
