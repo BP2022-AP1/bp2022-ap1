@@ -32,3 +32,6 @@ class RegularScheduleStrategy(ScheduleStrategy):
         return (
             tick >= self.start_tick and (tick - self.start_tick) % self.frequency == 0
         )
+
+    def __repr__(self) -> str:
+        return f"RegularScheduleStrategy({self.id=}, {self.start_tick=}, {self.frequency=})"
