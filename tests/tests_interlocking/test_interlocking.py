@@ -1,1 +1,5 @@
-from interlocking.test_interlocking import test_01
+from interlocking import test_interlocking
+
+
+def test_from_interlocking():
+    test_interlocking.test_01()
