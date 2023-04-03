@@ -4,7 +4,7 @@ import marshmallow as marsh
 import peewee
 import pytest
 
-from src.implementor.models import Token, Run
+from src.implementor.models import Run, Token
 
 
 class TestImplementorModelsToken:
