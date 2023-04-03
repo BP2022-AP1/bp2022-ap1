@@ -10,4 +10,3 @@ class Run(BaseModel):
     class Schema(BaseModel.Schema):
         def _make(self, data: dict) -> "Run":
             return Run(**data)
-
