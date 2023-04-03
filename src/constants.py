@@ -19,5 +19,3 @@ tables: list[Type[BaseModel]] = [
     SimulationConfiguration, 
     Token
 ]
-
-tables: list[Type[BaseModel]] = [Run, SimulationConfiguration, Token]
