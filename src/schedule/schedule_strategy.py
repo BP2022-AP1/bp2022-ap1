@@ -1,24 +1,18 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from src.base_model import BaseModel
 
 
-class ScheduleStrategy(ABC):
+class ScheduleStrategy(BaseModel):
     """An abstract ScheduleStrategy.
     ScheduleStartegies implement the decision logic of
     how a schedule determines whether a vehicle should be spawned
     at a given tick.
     """
 
-    @classmethod
-    @abstractmethod
-    def from_json(cls, json_object: str) -> "ScheduleStrategy":
-        """Constructs a ScheduleStrategy from a JSON object.
-
-        :param json_object: The JSON object.
-        :type json_object: str
-        :return: A ScheduleStrategy.
-        :rtype: ScheduleStrategy
-        """
-        raise NotImplementedError()
+    class Schema(BaseModel.Schema):
+        """Schema for ScheduleStrategy."""
+        pass
 
     @abstractmethod
     def maybe_spawn(self, tick: int):
