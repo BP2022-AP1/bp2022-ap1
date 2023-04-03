@@ -1,3 +1,6 @@
+import marshmallow as marsh
+from peewee import TextField
+
 from src.component import Component
 from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
@@ -28,3 +31,10 @@ class PlatformBlockedFault(Fault):
 
 class PlatformBlockedFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the PlatformBlockedFault class"""
+
+    class PlatformBlockedFaultConfigurationSchema(
+        FaultConfiguration.FaultConfigurationSchema
+    ):
+        affected_element_id = marsh.fields.String()
+
+    affected_element_id = TextField()
