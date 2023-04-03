@@ -1,10 +1,9 @@
 from uuid import UUID
 
-import marshmallow as marsh
-import peewee
 import pytest
 
 from src.implementor.models import SimulationConfiguration
+
 
 class TestImplementorModelsSimulationConfiguration:
     """Test the simulation configuration table and the serialization/deserialization"""
