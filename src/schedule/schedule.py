@@ -1,3 +1,4 @@
+# pylint: disable=useless-parent-delegation
 from abc import abstractmethod
 
 import marshmallow as marsh
