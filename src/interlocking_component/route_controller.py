@@ -4,9 +4,7 @@ class RouteController:
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    def check_if_new_fahrstrasse_is_needed(
-        self, train_id: str, track_segment_id: str
-    ):
+    def check_if_new_fahrstrasse_is_needed(self, train_id: str, track_segment_id: str):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
@@ -18,9 +16,7 @@ class RouteController:
         raise NotImplementedError()
 
     def check_all_fahrstrassen_for_failures(self):
-        """This method checks for all trains, if their fahrstrassen and routes are still valid.
-
-        """
+        """This method checks for all trains, if their fahrstrassen and routes are still valid."""
         raise NotImplementedError()
 
 
@@ -32,7 +28,6 @@ class IInterlockingDisruptor:
 
         :param track_id: the id of the blocked track
         :type track_id: str
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
@@ -41,7 +36,6 @@ class IInterlockingDisruptor:
 
         :param track_id: the id of the unblocked track
         :type track_id: str
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
@@ -50,7 +44,6 @@ class IInterlockingDisruptor:
 
         :param platform_id: the id of the blocked platform
         :type platform_id: str
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
@@ -59,7 +52,6 @@ class IInterlockingDisruptor:
 
         :param platform_id: the id of the unblocked platform
         :type platform_id: str
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
@@ -68,7 +60,6 @@ class IInterlockingDisruptor:
 
         :param track_id: the id of the track, which speedlimit changed
         :type track_id: str
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
@@ -77,6 +68,5 @@ class IInterlockingDisruptor:
 
         :param train_id: the id of the train, which speed limit changed
         :type train_id: str
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
