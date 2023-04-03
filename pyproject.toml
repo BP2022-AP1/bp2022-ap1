@@ -77,3 +77,6 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.db]
     help = "Call DB utilities"
     cmd = "python3 db/local/db.py"
+
+[tool.isort]
+profile = "black"
