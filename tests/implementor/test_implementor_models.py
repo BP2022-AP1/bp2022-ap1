@@ -2,7 +2,7 @@ from uuid import UUID
 
 import pytest
 
-from src.implementor.models import SimulationConfiguration, Run
+from src.implementor.models import Run, SimulationConfiguration
 
 
 class TestImplementorModelsSimulationConfiguration:
