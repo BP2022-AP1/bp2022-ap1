@@ -1,14 +1,26 @@
-class RouteController(Component):
+class RouteController:
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    def next_tick(self, tick: int):
-        """This may be called to process a new simulation tick.
+    def check_if_new_fahrstrasse_is_needed(
+        self, train_id: train_id, track_segment_id: track_segment_id
+    ):
+        """This method should be called when a train enters a new track_segment.
+        It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
-        :param tick: The current tick of the simulation.
-        :type tick: int
+        :param train_id: the id of the train that may need a new fahrstasse
+        :type train_id: train_id
+        :param track_segment_id: the id of the tracksegment it just entered
+        :type track_segment_id: track_segment_id
+        :raises NotImplementedError: This has not yet been implemented.
+        """
+        raise NotImplementedError()
+
+    def check_all_fahrstrassen_for_failures(self):
+        """This method checks for all trains, if their fahrstrassen and routes are still valid.
+
         :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
