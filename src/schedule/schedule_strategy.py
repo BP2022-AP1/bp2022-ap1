@@ -13,6 +13,14 @@ class ScheduleStrategy(BaseModel):
     class Schema(BaseModel.Schema):
         """Schema for ScheduleStrategy."""
 
+        def _make(self, data: dict) -> "ScheduleStrategy":
+            """Constructs a ScheduleStrategy from a dictionary.
+
+            :param data: The dictionary.
+            :return: A ScheduleStrategy.
+            """
+            return super()._make(data)
+
     @abstractmethod
     def should_spawn(self, tick: int) -> bool:
         """Determines whether a vehicle should be spawned at the current tick

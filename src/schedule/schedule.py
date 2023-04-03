@@ -13,6 +13,14 @@ class Schedule(BaseModel):
     class Schema(BaseModel.Schema):
         """Schema for Schedule."""
 
+        def _make(self, data: dict) -> "BaseModel":
+            """Constructs a Schedule from a dictionary.
+
+            :param data: The dictionary.
+            :return: A Schedule.
+            """
+            return super()._make(data)
+
         strategy_id = marsh.fields.UUID(required=True)
 
     _blocked: bool
