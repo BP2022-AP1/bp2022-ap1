@@ -8,19 +8,16 @@ class RegularScheduleStrategy(ScheduleStrategy):
     """A schedule strategy that spawns vehicles at regular intervals."""
 
     class Schema(ScheduleStrategy.Schema):
-        """_summary_
-
-        :param ScheduleStrategy: _description_
-        :return: _description_
+        """Schema for RegularScheduleStrategy.
         """
         start_tick = marsh.fields.Int(required=True)
         frequency = marsh.fields.Int(required=True)
 
         def _make(self, data: dict) -> "RegularScheduleStrategy":
-            """_summary_
+            """Constructs a RegularScheduleStrategy from a dictionary.
 
-            :param data: _description_
-            :return: _description_
+            :param data: The dictionary.
+            :return: A RegularScheduleStrategy.
             """
             return RegularScheduleStrategy(**data)
 
@@ -28,10 +25,10 @@ class RegularScheduleStrategy(ScheduleStrategy):
     frequency: IntegerField(null=False)
 
     def __init__(self, start_tick: int, frequency: int):
-        """_summary_
+        """Constructs a RegularScheduleStrategy.
 
-        :param start_tick: _description_
-        :param frequency: _description_
+        :param start_tick: The tick at which the first vehicle should be spawned.
+        :param frequency: The frequency at which vehicles should be spawned.
         """
         self.start_tick = start_tick
         self.frequency = frequency
