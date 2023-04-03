@@ -186,8 +186,10 @@ railway-route-generator = {git = "https://github.com/simulate-digital-rail/railw
 yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
 
 [package.source]
-type = "directory"
-url = "../Yaramo/interlocking"
+type = "git"
+url = "https://github.com/Lietze/interlocking.git"
+reference = "2be51e6"
+resolved_reference = "2be51e63e0f542e213bf8bcd5e0a94986437f041"
 
 [[package]]
 name = "isort"
@@ -886,4 +888,4 @@ resolved_reference = "f94b06c551bbbd527129448cd9bf5eb5a4575097"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d0af56a5a14768e658ae34d2ac2735e1fb91c5e0abb3a61c8b545a6193180ef0"
+content-hash = "2308a39e71bca223fe02db6cad6fb6b5fc46b0146b2b89ebfc0414b711a76aa0"
