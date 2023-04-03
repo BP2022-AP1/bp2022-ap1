@@ -4,11 +4,9 @@ This module contains the logger class
 from typing import Type
 
 
-class Logger:
+class ILogCreator:
     """
     The logger class is used to log the events of the simulation
-
-    :ivar connection_string: str
     """
 
     def __init__(self, connection_string):
