@@ -37,7 +37,8 @@ class Schedule(BaseModel):
         :param tick: The current tick
         :param traci_wrapper: The TraCI wrapper to give the spawned vehicle to.
         """
-        if not self._blocked and self.strategy.should_spawn(tick):
+        strategy = ScheduleStrategy.get(ScheduleStrategy.id == self.strategy_id).first()
+        if not self._blocked and strategy.should_spawn(tick):
             self._spawn(traci_wrapper)
 
     def block(self):
