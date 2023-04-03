@@ -1,7 +1,6 @@
 from typing import Type
 
 from src.base_model import BaseModel
-from src.implementor.models import Run
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_strategy import ScheduleStrategy
