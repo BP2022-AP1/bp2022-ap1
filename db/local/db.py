@@ -1,15 +1,13 @@
 import argparse
 import os
 import subprocess
-from typing import Type
 
 from peewee_migrate import Router
 
-from src.base_model import BaseModel, db
+from src.base_model import db
+from src.constants import tables
 
 MIGRATION_DIRECTORY: str = "db/local/migrations"
-
-models: list[Type[BaseModel]] = BaseModel.__subclasses__()
 
 
 def run(args: argparse.Namespace):
@@ -58,13 +56,13 @@ def stop(args: argparse.Namespace):
 
 def create(_: argparse.Namespace):
     """Create database tables"""
-    db.create_tables(models)
+    db.create_tables(tables)
     print("Created tables")
 
 
 def drop(_: argparse.Namespace):
     """Drop database tables"""
-    db.drop_tables(models)
+    db.drop_tables(tables)
     print("Dropped tables")
 
 

@@ -1,7 +1,9 @@
+import abc
 import os
+from uuid import uuid4
 
 import marshmallow as marsh
-from peewee import Model, PostgresqlDatabase
+from peewee import Model, PostgresqlDatabase, SqliteDatabase, UUIDField
 
 db: PostgresqlDatabase = PostgresqlDatabase(
     database=os.getenv("DATABASE_NAME") or "postgres",
@@ -18,10 +20,24 @@ class BaseModel(Model):
     class Meta:
         """Set Database"""
 
-        database = db
+        database: SqliteDatabase = db
 
     class Schema(marsh.Schema):
         """The marshmallow schema all model schemas have to inherit from."""
+
+        id = marsh.fields.UUID()
+
+        @abc.abstractmethod
+        def _make(self, data: dict) -> "BaseModel":
+            """Constructs a model object from a dictionary."""
+            raise NotImplementedError()
+
+        @marsh.post_load
+        def make(self, data: dict, **_) -> "BaseModel":
+            """Constructs a model object from a dictionary."""
+            return self._make(data)
+
+    id = UUIDField(primary_key=True, default=uuid4)
 
     @classmethod
     def from_dict(cls, data: dict) -> "BaseModel":
