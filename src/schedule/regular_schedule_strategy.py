@@ -22,7 +22,7 @@ class RegularScheduleStrategy(ScheduleStrategy):
             return RegularScheduleStrategy(**data)
 
     start_tick = IntegerField(null=False)
-    frequency: IntegerField(null=False)
+    frequency = IntegerField(null=False)
 
     def should_spawn(self, tick: int) -> bool:
         """Determines whether a vehicle should be spawned at the current tick
