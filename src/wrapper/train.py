@@ -183,7 +183,7 @@ class Train(SimulationObject):
     def _add_to_simulation(
         self, identifier: str, timetable: List[Platform], train_type: str
     ):
-        route = str(timetable) # TODO: fetch the first route from the list of platforms
+        route = str(timetable)  # TODO: fetch the first route from the list of platforms
         vehicle.add(identifier, route, train_type)
 
     def update(self, data: dict):
@@ -193,7 +193,7 @@ class Train(SimulationObject):
         self._position = data[constants.VAR_POSITION]
         self._track = data[
             constants.VAR_ROAD_ID
-        ] # TODO: fetch the track from the list of tracks
+        ]  # TODO: fetch the track from the list of tracks
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
         self._max_speed = data[constants.VAR_MAXSPEED]
