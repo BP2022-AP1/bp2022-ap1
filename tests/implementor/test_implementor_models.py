@@ -17,15 +17,17 @@ from src.implementor.models import Run, SimulationConfiguration, Token
     ],
 )
 class TestFailingDict:
+    """Test that a object of a class cannot be created or deserialized with invalid data."""
+
     def test_create(self, Class, object_as_dict):
-        """Test that a token cannot be created."""
+        """Test that an object of a class cannot be created."""
         with pytest.raises(peewee.IntegrityError):
             Class.create(
                 **object_as_dict,
             )
 
     def test_deserialization(self, Class, object_as_dict):
-        """Test that a token can be deserialized."""
+        """Test that an object of a class cannot be deserialized."""
         with pytest.raises(marsh.exceptions.ValidationError):
             Class.Schema().load(object_as_dict)
 
@@ -47,15 +49,17 @@ class TestFailingDict:
     ],
 )
 class TestCorrectFilledDict:
+    """Test that a object of a class can be created and deserialized with valid data."""
+
     def test_create(self, Class, object_as_dict):
-        """Test that a token can be created."""
+        """Test that a object of a class can be created."""
         obj = Class.create(
             **object_as_dict,
         )
         assert Class.select().where(Class.id == obj.id).first() == obj
 
     def test_serialization(self, Class, object_as_dict):
-        """Test that a token can be serialized."""
+        """Test that an object of a class can be serialized."""
         obj = Class.create(
             **object_as_dict,
         )
@@ -70,7 +74,7 @@ class TestCorrectFilledDict:
             assert getattr(obj, key) is None
 
     def test_deserialization_full_dict(self, Class, object_as_dict):
-        """Test that a token can be deserialized."""
+        """Test that an object of a class can be deserialized."""
         obj = Class.Schema().load(
             object_as_dict,
         )
