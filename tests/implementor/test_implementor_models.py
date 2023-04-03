@@ -8,7 +8,7 @@ from src.implementor.models import Run, Token
 
 
 class TestImplementorModelsToken:
-    """Test the Token table and the serialization/deserialization."""
+    """Test the token table and the serialization/deserialization."""
 
     @pytest.fixture
     def name(self):
