@@ -24,15 +24,6 @@ class RegularScheduleStrategy(ScheduleStrategy):
     start_tick = IntegerField(null=False)
     frequency: IntegerField(null=False)
 
-    def __init__(self, start_tick: int, frequency: int):
-        """Constructs a RegularScheduleStrategy.
-
-        :param start_tick: The tick at which the first vehicle should be spawned.
-        :param frequency: The frequency at which vehicles should be spawned.
-        """
-        self.start_tick = start_tick
-        self.frequency = frequency
-
     def should_spawn(self, tick: int) -> bool:
         """Determines whether a vehicle should be spawned at the current tick
 
