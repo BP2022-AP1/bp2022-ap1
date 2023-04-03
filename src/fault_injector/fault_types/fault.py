@@ -50,6 +50,9 @@ class FaultConfiguration(BaseModel):
         end_tick = marsh.fields.Integer()
         description = marsh.fields.String()
 
+        def _make(self, data: dict) -> 'FaultConfiguration':
+            return FaultConfiguration(**data)
+
     start_tick = BigIntegerField()
     end_tick = BigIntegerField()
     component: Component = None
