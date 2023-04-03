@@ -1,5 +1,16 @@
+# pylint: disable=missing-class-docstring, missing-function-docstring
 from collections.abc import Callable
 from typing import Protocol
+
+from src.fault_injector.fault_types.fault import Fault
+
+
+class IFaultInjector(Protocol):
+    def add_fault(self, fault: Fault) -> None:
+        ...
+
+    def next_tick(self, tick: int) -> None:
+        ...
 
 
 class IInfrastructureProvider(Protocol):
@@ -30,3 +41,11 @@ class IInfrastructureProvider(Protocol):
 
         :param callback: The callback which takes an yaramo-track-id as an input and returns nothing
         """
+
+
+class ISpawnerRestrictor(Protocol):
+    def block_schedule(self, schedule_id: int):
+        ...
+
+    def unblock_schedule(self, schedule_id: int):
+        ...
