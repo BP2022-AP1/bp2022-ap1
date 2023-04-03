@@ -37,6 +37,10 @@ def test_database_interaction():
     strategy = RegularScheduleStrategy(start_tick=10, frequency=100)
     strategy.save(force_insert=True)
     id_ = strategy.id
-    db_strategy = RegularScheduleStrategy.select().where(id == id_).first()
+    db_strategy = (
+        RegularScheduleStrategy.select()
+        .where(RegularScheduleStrategy.id == id_)
+        .first()
+    )
     assert db_strategy.start_tick == strategy.start_tick
     assert db_strategy.frequency == strategy.frequency

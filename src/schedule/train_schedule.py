@@ -50,8 +50,6 @@ class TrainScheduleXSimulationPlatform(BaseModel):
             """
             return TrainScheduleXSimulationPlatform(**data)
 
-    train_schedule_id = ForeignKeyField(
-        TrainSchedule, null=False, backref="platforms"
-    )
+    train_schedule_id = ForeignKeyField(TrainSchedule, null=False, backref="platforms")
     simulation_platform_id = TextField(null=False)
     index = IntegerField(null=False)
