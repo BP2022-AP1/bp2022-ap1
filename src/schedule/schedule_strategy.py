@@ -13,8 +13,6 @@ class ScheduleStrategy(BaseModel):
     class Schema(BaseModel.Schema):
         """Schema for ScheduleStrategy."""
 
-        pass
-
     @abstractmethod
     def should_spawn(self, tick: int) -> bool:
         """Determines whether a vehicle should be spawned at the current tick
