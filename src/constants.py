@@ -14,5 +14,5 @@ tables: list[Type[BaseModel]] = [
     RegularScheduleStrategy,
     Schedule,
     TrainSchedule,
-    TrainScheduleXSimulationPlatform
+    TrainScheduleXSimulationPlatform,
 ]
