@@ -42,7 +42,7 @@ class Fault(ABC):
             self.resolve_fault(self.component)
 
 
-class FaultConfiguration(BaseModel):
+class FaultConfiguration(BaseModel, ABC):
     """Class that contains the attributes of the Fault class"""
 
     class FaultConfigurationSchema(BaseModel.Schema):
