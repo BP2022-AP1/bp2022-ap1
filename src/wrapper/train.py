@@ -1,22 +1,19 @@
 from simualtion_object import SimulationObject
-from traci import vehicle, constants
+from traci import constants, vehicle
+
 
 class Train(SimulationObject):
-
     _position = None
     _route: str = None
     _track_id: str = None
     _vehicle_type: str = None
     _speed: float = None
     _max_speed: float = None
-    timetable: object = None 
-
-# add(self, vehID, routeID, typeID='DEFAULT_VEHTYPE', depart='now', departLane='first', departPos='base', departSpeed='0', arrivalLane='current', arrivalPos='max', arrivalSpeed='current', fromTaz='', toTaz='', line='', personCapacity=0, personNumber=0)
-# changeTarget(self, vehID, edgeID)
+    timetable: object = None
 
     @property
     def track_id(self) -> str:
-        """Returns the current track the train is on 
+        """Returns the current track the train is on
 
         :return: _description_
         """
@@ -57,7 +54,7 @@ class Train(SimulationObject):
         vehicle.setMaxSpeed(self.traci_id, speed)
         self._max_speed = speed
 
-    def __init__(self, *args, **kwargs, from_traci: bool = False):
+    def __init__(self, from_traci: bool = False, *args, **kwargs):
         SimulationObject.__init__(self, *args, **kwargs)
 
     def _add_to_simulation(self, route_id: str, vehicle_type: str):
@@ -65,10 +62,32 @@ class Train(SimulationObject):
 
     def update(self, updates: dict):
         self._position = updates[constants.VAR_POSITION]
-        self._road_id = updates[constants.VAR_ROAD_ID]
+        self._track_id = updates[constants.VAR_ROAD_ID]
         self._route = updates[constants.VAR_ROUTE]
         self._speed = updates[constants.VAR_SPEED]
         self._max_speed = updates[constants.VAR_MAXSPEED]
 
     def add_subscriptions(self) -> int:
-        return constants.VAR_POSITION + constants.VAR_ROUTE + constants.VAR_ROAD_ID + constants.VAR_SPEED + constants.VAR_MAXSPEED
+        return (
+            constants.VAR_POSITION
+            + constants.VAR_ROUTE
+            + constants.VAR_ROAD_ID
+            + constants.VAR_SPEED
+            + constants.VAR_MAXSPEED
+        )
+
+
+class Node(SimulationObject):
+    pass
+
+
+class Signal(Node):
+    pass
+
+
+class Switch(Node):
+    pass
+
+
+class Track(SimulationObject):
+    pass
