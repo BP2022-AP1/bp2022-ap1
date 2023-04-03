@@ -14,14 +14,12 @@ class RouteController:
         :type train_id: train_id
         :param track_segment_id: the id of the tracksegment it just entered
         :type track_segment_id: track_segment_id
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
     def check_all_fahrstrassen_for_failures(self):
         """This method checks for all trains, if their fahrstrassen and routes are still valid.
 
-        :raises NotImplementedError: This has not yet been implemented.
         """
         raise NotImplementedError()
 
