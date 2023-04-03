@@ -4,7 +4,7 @@ This module contains the logger class
 from typing import Type
 
 
-class ILogCreator:
+class Logger:
     """
     The logger class is used to log the events of the simulation
     """
