@@ -25,7 +25,7 @@ class Schedule(BaseModel):
         strategy_id = marsh.fields.UUID(required=True)
 
     _blocked: bool
-    strategy_id: ForeignKeyField(ScheduleStrategy, null=False)
+    strategy_id = ForeignKeyField(ScheduleStrategy, null=False)
 
     def __init__(self, *args, **kwargs):
         """Constructs a Schedule."""
