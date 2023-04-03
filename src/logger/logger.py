@@ -66,7 +66,7 @@ class Logger:
         pass  # not implemented yet # pylint: disable=W0107
 
     def set_signal(
-            self, signal_id: int, state_before: int, state_after: int
+        self, signal_id: int, state_before: int, state_after: int
     ) -> Type[None]:
         """
         This function is beeing called when setting a signal or changing its state. This should
@@ -79,7 +79,7 @@ class Logger:
         pass  # not implemented yet # pylint: disable=W0107
 
     def inject_fault(
-            self, injection_id: int, fault_type: int, injection_position: any, duration: int
+        self, injection_id: int, fault_type: int, injection_position: any, duration: int
     ) -> Type[None]:
         """
         This function should be called when injecting a fault into the simulation. This should
