@@ -1,27 +1,39 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+import marshmallow as marsh
+from peewee import ForeignKeyField
+
+from src.base_model import BaseModel
+from src.schedule.schedule_strategy import ScheduleStrategy
 
 
-class Schedule(ABC):
+class Schedule(BaseModel):
     """An abstract schedule for spawning SUMO vehicles."""
 
-    @classmethod
-    @abstractmethod
-    def from_json(cls, json_object: str) -> "Schedule":
-        """Constructs a schedule from a JSON object.
+    class Schema(BaseModel.Schema):
+        strategy = marsh.fields.Nested(ScheduleStrategy.Schema())
 
-        :param json_object: The JSON object.
-        :type json_object: str
-        :return: A schedule.
-        :rtype: Schedule
-        """
-        raise NotImplementedError()
+    _blocked: bool
+    strategy: ForeignKeyField(ScheduleStrategy, primary_key=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._blocked = False
 
     @abstractmethod
-    def maybe_spawn(self, tick: int):
-        """Determines whether a vehicle should be spawned at the
-        current tick and spawns it if so.
-
-        :param tick: The current tick.
-        :type tick: int
-        """
+    def _spawn(self, traci_wrapper: "ITraCiWrapper"):
         raise NotImplementedError()
+
+    def maybe_spawn(self, tick: int, traci_wrapper: "ITraCiWrapper"):
+        if not self._blocked and self.strategy.should_spawn(tick):
+            self._spawn(traci_wrapper)
+
+    def block(self):
+        if self._blocked:
+            raise RuntimeError(f"Schedule {self.id} is already blocked")
+        self._blocked = True
+
+    def unblock(self):
+        if not self._blocked:
+            raise RuntimeError(f"Schedule {self.id} is already unblocked")
+        self._blocked = False
