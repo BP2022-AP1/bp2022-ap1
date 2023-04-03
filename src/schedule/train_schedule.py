@@ -6,11 +6,11 @@ from src.schedule.schedule import Schedule
 
 
 class TrainScheduleXSimulationPlatform(BaseModel):
-    """A many-to-many relationship between a train schedule and a simulation platform.
-    """
+    """A many-to-many relationship between a train schedule and a simulation platform."""
+
     class Schema(BaseModel.Schema):
-        """Schema for TrainScheduleXSimulationPlatform.
-        """
+        """Schema for TrainScheduleXSimulationPlatform."""
+
         train_schedule_id = marsh.fields.UUID(required=True)
         simulation_platform_id = marsh.fields.UUID(required=True)
         index = marsh.fields.Int(required=True)
@@ -23,7 +23,9 @@ class TrainScheduleXSimulationPlatform(BaseModel):
             """
             return TrainScheduleXSimulationPlatform(**data)
 
-    train_schedule_id = ForeignKeyField("TrainSchedule", null=False, backref="platforms")
+    train_schedule_id = ForeignKeyField(
+        "TrainSchedule", null=False, backref="platforms"
+    )
     simulation_platform_id = TextField(null=False)
     index = IntegerField(null=False)
 
@@ -32,8 +34,8 @@ class TrainSchedule(Schedule):
     """A schedule for spawning SUMO trains."""
 
     class Schema(Schedule.Schema):
-        """Schema for TrainSchedule.
-        """
+        """Schema for TrainSchedule."""
+
         train_type = marsh.fields.Str(required=True)
 
         def _make(self, data: dict) -> "TrainSchedule":

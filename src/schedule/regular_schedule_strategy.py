@@ -8,8 +8,8 @@ class RegularScheduleStrategy(ScheduleStrategy):
     """A schedule strategy that spawns vehicles at regular intervals."""
 
     class Schema(ScheduleStrategy.Schema):
-        """Schema for RegularScheduleStrategy.
-        """
+        """Schema for RegularScheduleStrategy."""
+
         start_tick = marsh.fields.Int(required=True)
         frequency = marsh.fields.Int(required=True)
 

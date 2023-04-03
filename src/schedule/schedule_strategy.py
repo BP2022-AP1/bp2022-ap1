@@ -12,6 +12,7 @@ class ScheduleStrategy(BaseModel):
 
     class Schema(BaseModel.Schema):
         """Schema for ScheduleStrategy."""
+
         pass
 
     @abstractmethod

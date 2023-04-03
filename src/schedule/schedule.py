@@ -11,16 +11,15 @@ class Schedule(BaseModel):
     """An abstract schedule for spawning SUMO vehicles."""
 
     class Schema(BaseModel.Schema):
-        """Schema for Schedule.
-        """
+        """Schema for Schedule."""
+
         strategy_id = marsh.fields.UUID(required=True)
 
     _blocked: bool
     strategy_id: ForeignKeyField(ScheduleStrategy, null=False)
 
     def __init__(self, *args, **kwargs):
-        """Constructs a Schedule.
-        """
+        """Constructs a Schedule."""
         super().__init__(*args, **kwargs)
         self._blocked = False
 
