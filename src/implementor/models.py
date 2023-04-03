@@ -2,6 +2,8 @@ import marshmallow as marsh
 from peewee import CharField
 
 from src.base_model import BaseModel
+
+
 class Token(BaseModel):
     """Represents a token."""
 
