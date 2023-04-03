@@ -1,8 +1,9 @@
 from enum import Enum
 from typing import List, Tuple
 
-from simualtion_object import SimulationObject
 from traci import constants, vehicle
+
+from src.wrapper.simulation_object import SimulationObject
 
 
 class Node(SimulationObject):
@@ -113,7 +114,8 @@ class Train(SimulationObject):
         """Returns the maximum speed of the train (m/s).
         performance impact: This method does not call traci.
 
-        :return: The top speed (see <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-getMaxSpeed>)
+        :return: The top speed (see
+        <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-getMaxSpeed>)
         """
         return self._max_speed
 
@@ -122,7 +124,8 @@ class Train(SimulationObject):
         """Updates the maximum speed to the given value (m/s).
         performance impact: This method calls traci.
 
-        :param speed: The new top speed (see <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-setMaxSpeed>)
+        :param speed: The new top speed (see
+        <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-setMaxSpeed>)
         """
         vehicle.setMaxSpeed(self.traci_id, speed)
         self._max_speed = speed
@@ -154,15 +157,17 @@ class Train(SimulationObject):
     ):
         vehicle.add(identifier, "route_id", train_type)
 
-    def update(self, updates: dict):
+    def update(self, data: dict):
         """Gets called whenever a simualtion tick has happened.
         :param updates: The updated values for the synchronized properties
         """
-        self._position = updates[constants.VAR_POSITION]
-        self._track = updates[constants.VAR_ROAD_ID] # TODO: fetch the track from the list of tracks
-        self._route = updates[constants.VAR_ROUTE]
-        self._speed = updates[constants.VAR_SPEED]
-        self._max_speed = updates[constants.VAR_MAXSPEED]
+        self._position = data[constants.VAR_POSITION]
+        self._track = data[
+            constants.VAR_ROAD_ID
+        ]  # TODO: fetch the track from the list of tracks
+        self._route = data[constants.VAR_ROUTE]
+        self._speed = data[constants.VAR_SPEED]
+        self._max_speed = data[constants.VAR_MAXSPEED]
 
     def add_subscriptions(self) -> int:
         """Gets called when this object is created to allow
