@@ -63,6 +63,8 @@ class Train(SimulationObject):
     _vehicle_type: str = None
     _speed: float = None
     _max_speed: float = None
+    _priority: int = None
+    _train_type: str = None
     timetable: List[Platform] = None
 
     @property
@@ -130,6 +132,30 @@ class Train(SimulationObject):
         vehicle.setMaxSpeed(self.traci_id, speed)
         self._max_speed = speed
 
+    @property
+    def priority(self) -> int:
+        """Returns the priority for this train (higher number means higher priority)
+
+        :return: The train priority
+        """
+        return self._priority
+
+    @priority.setter
+    def priority(self, priority: int) -> None:
+        """Sets the priority of this train (higher number means higher priority)
+
+        :param priority: The new train priority
+        """
+        self._priority = priority
+
+    @property
+    def train_type(self) -> str:
+        """Returns the train type.
+
+        :return: The SUMO-type of the train
+        """
+        return self._train_type
+
     def __init__(
         self,
         identifier: str = None,
@@ -149,13 +175,16 @@ class Train(SimulationObject):
         """
         SimulationObject.__init__(self)
 
+        self._train_type = train_type
+
         if from_simulator:
             self._add_to_simulation(identifier, timetable, train_type)
 
     def _add_to_simulation(
         self, identifier: str, timetable: List[Platform], train_type: str
     ):
-        vehicle.add(identifier, "route_id", train_type)
+        route = str(timetable) # TODO: fetch the first route from the list of platforms
+        vehicle.add(identifier, route, train_type)
 
     def update(self, data: dict):
         """Gets called whenever a simualtion tick has happened.
@@ -164,7 +193,7 @@ class Train(SimulationObject):
         self._position = data[constants.VAR_POSITION]
         self._track = data[
             constants.VAR_ROAD_ID
-        ]  # TODO: fetch the track from the list of tracks
+        ] # TODO: fetch the track from the list of tracks
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
         self._max_speed = data[constants.VAR_MAXSPEED]
