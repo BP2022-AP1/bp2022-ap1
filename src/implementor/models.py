@@ -18,3 +18,11 @@ class Token(BaseModel):
     permission = CharField()
     name = CharField()
     hashedToken = CharField()
+
+
+class Run(BaseModel):
+    """Represents the configuration of a single execution of a simulation configuration."""
+
+    class Schema(BaseModel.Schema):
+        def _make(self, data: dict) -> "Run":
+            return Run(**data)
