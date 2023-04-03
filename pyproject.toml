@@ -37,6 +37,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 
+    sleep = "sleep 5"
+
     [tool.poe.tasks.format-isort]
     help = "Run isort on the code base"
     cmd  = "isort ."
@@ -63,7 +65,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test]
     help = "Run DB and test with pytest"
-    sequence  = ["db run test", "db recreate", "test-pytest", "db stop test"]
+    sequence  = ["db run test", "sleep", "db recreate", "test-pytest", "db stop test"]
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
@@ -76,3 +78,6 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.db]
     help = "Call DB utilities"
     cmd = "python3 db/local/db.py"
+
+[tool.isort]
+profile = "black"

@@ -1,5 +1,16 @@
+# pylint: disable=missing-class-docstring, missing-function-docstring
 from collections.abc import Callable
 from typing import Protocol
+
+from src.fault_injector.fault_types.fault import Fault
+
+
+class IFaultInjector(Protocol):
+    def add_fault(self, fault: Fault) -> None:
+        ...
+
+    def next_tick(self, tick: int) -> None:
+        ...
 
 
 class IInfrastructureProvider(Protocol):
