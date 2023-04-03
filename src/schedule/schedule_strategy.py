@@ -15,11 +15,9 @@ class ScheduleStrategy(BaseModel):
         pass
 
     @abstractmethod
-    def maybe_spawn(self, tick: int):
-        """Determines whether a train should be spawned at the
-        current tick and spawns it if so.
+    def should_spawn(self, tick: int) -> bool:
+        """Determines whether a vehicle should be spawned at the current tick
 
-        :param tick: The current tick.
-        :type tick: int
+        :param tick: The current tick
         """
         raise NotImplementedError()
