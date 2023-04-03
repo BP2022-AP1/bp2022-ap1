@@ -170,7 +170,7 @@ files = [
 ]
 
 [[package]]
-name = "interlocking-package"
+name = "interlocking"
 version = "0.1.1"
 description = ""
 category = "main"
@@ -886,4 +886,4 @@ resolved_reference = "f94b06c551bbbd527129448cd9bf5eb5a4575097"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "801abe7cf56805ada863eea1515b00857a6b04aa4dcd5d169d6d9530e6d6c078"
+content-hash = "d0af56a5a14768e658ae34d2ac2735e1fb91c5e0abb3a61c8b545a6193180ef0"

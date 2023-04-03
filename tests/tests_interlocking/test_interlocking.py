@@ -1,1 +1,1 @@
-from interlocking_package.test_interlocking import test_01
+from interlocking.test_interlocking import test_01
