@@ -1,9 +1,5 @@
 import pytest
 
-from src.fault_injector.fault_types.platform_blocked_fault import (
-    PlatformBlockedFaultConfiguration,
-)
-
 
 class TestPlatformBlockedFaultConfiguration:
     """
