@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from interlocking import interlockinginterface, route, track
 
 import marshmallow as marsh
 from peewee import BooleanField
@@ -105,6 +106,8 @@ class RouteController(IRouteController):
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
+    Interlocking = None
+    ISimulationObjectsUpdater = None
 
     def check_if_new_fahrstrasse_is_needed(self, train_id: str, track_segment_id: str):
         """This method should be called when a train enters a new track_segment.
@@ -115,6 +118,19 @@ class RouteController(IRouteController):
         :param track_segment_id: the id of the tracksegment it just entered
         :type track_segment_id: track_segment_id
         """
+        train = self.ISimulationObjectsUpdater.get_train_by_id(train_id)
+        track_segment = self.ISimulationObjectsUpdater.get_track_segment_by_id(track_segment_id)
+        track = None
+        route = None
+        for route_candidate in self.Interlocking.active_routes:
+            track_candidat = route_candidate.contains_segment(track_segment_id)
+            if(track_candidat is not None):
+                track = track_candidat
+                route = route_candidate
+        if(route.get_last_segment_of_route != track_segment_id):
+            return
+        new_route = self.Router.get_route(track_segment_id, train.plattforms.first())
+        
         raise NotImplementedError()
 
     def check_all_fahrstrassen_for_failures(self):
