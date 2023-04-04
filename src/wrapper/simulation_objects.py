@@ -75,8 +75,8 @@ class Signal(Node):
 
         self._state = target
 
-    def __init__(self, state: "Signal.State" = State.HALT):
-        Node.__init__(self)
+    def __init__(self, identifier: str = None, state: "Signal.State" = State.HALT):
+        Node.__init__(self, identifier)
         self.state = state
 
     def update(self, data: dict):
