@@ -1,5 +1,5 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault, FaultConfig
+from src.fault_injector.fault_types.fault import Fault
 
 
 class TrainCancelledFault(Fault):
