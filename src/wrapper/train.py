@@ -202,7 +202,7 @@ class Train(SimulationObject):
         self, identifier: str, timetable: List[Platform], train_type: str
     ):
         self._timetable = timetable
-        route = str(timetable)  # TODO: fetch the first route from the list of platforms
+        route = "not-implemented"  # TODO: fetch the first route from the list of platforms #pylint: disable=fixme
         vehicle.add(identifier, route, train_type)
 
     def update(self, data: dict):
@@ -210,9 +210,7 @@ class Train(SimulationObject):
         :param updates: The updated values for the synchronized properties
         """
         self._position = data[constants.VAR_POSITION]
-        self._track = data[
-            constants.VAR_ROAD_ID
-        ]  # TODO: fetch the track from the list of tracks
+        self._track = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
         self._max_speed = data[constants.VAR_MAXSPEED]
