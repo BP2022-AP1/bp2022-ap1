@@ -47,21 +47,21 @@ class Fault(ABC):
             self.resolve_fault(self.configuration.component)
 
 
-class FaultConfiguration(BaseModel, ABC):
+class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
-    class FaultConfigurationSchema(BaseModel.Schema):
+    class Schema(BaseModel.Schema):
         """Schema for the FaultConfiguration"""
 
-        start_tick = marsh.fields.Integer()
-        end_tick = marsh.fields.Integer()
+        start_tick = marsh.fields.Integer(required=True)
+        end_tick = marsh.fields.Integer(required=True)
         description = marsh.fields.String()
 
         def _make(self, data: dict) -> "FaultConfiguration":
             return FaultConfiguration(**data)
 
-    start_tick = BigIntegerField()
-    end_tick = BigIntegerField()
+    start_tick = BigIntegerField(null=False)
+    end_tick = BigIntegerField(null=False)
     component: Component = None
     # - affected_element_ID: int = None // has to be implemented in subclasses
     description = TextField(default="injected Fault")
