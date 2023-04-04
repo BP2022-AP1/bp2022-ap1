@@ -1,31 +1,30 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+
+from src.base_model import BaseModel
 
 
-class ScheduleStrategy(ABC):
+class ScheduleStrategy(BaseModel):
     """An abstract ScheduleStrategy.
     ScheduleStartegies implement the decision logic of
     how a schedule determines whether a vehicle should be spawned
     at a given tick.
     """
 
-    @classmethod
+    class Schema(BaseModel.Schema):
+        """Schema for ScheduleStrategy."""
+
+        def _make(self, data: dict) -> "ScheduleStrategy":
+            """Constructs a ScheduleStrategy from a dictionary.
+
+            :param data: The dictionary.
+            :return: A ScheduleStrategy.
+            """
+            return super()._make(data)
+
     @abstractmethod
-    def from_json(cls, json_object: str) -> "ScheduleStrategy":
-        """Constructs a ScheduleStrategy from a JSON object.
+    def should_spawn(self, tick: int) -> bool:
+        """Determines whether a vehicle should be spawned at the current tick
 
-        :param json_object: The JSON object.
-        :type json_object: str
-        :return: A ScheduleStrategy.
-        :rtype: ScheduleStrategy
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def maybe_spawn(self, tick: int):
-        """Determines whether a train should be spawned at the
-        current tick and spawns it if so.
-
-        :param tick: The current tick.
-        :type tick: int
+        :param tick: The current tick
         """
         raise NotImplementedError()
