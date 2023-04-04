@@ -133,14 +133,14 @@ class Train(SimulationObject):
         return self._route
 
     @route.setter
-    def route(self, route: int) -> None:
+    def route(self, route_id: str) -> None:
         """This method updates the vehicle route to the given sumo-route.
 
         :performance consideration: This method makes one traci-roundtrip
         :param route: the route that the vehicle should follow
         """
-        vehicle.setRouteID(self.identifier, route)
-        self._route = route
+        vehicle.setRouteID(self.identifier, route_id)
+        self._route = route_id
 
     @property
     def max_speed(self) -> float:
