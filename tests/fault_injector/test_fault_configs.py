@@ -38,5 +38,3 @@ class TestPlatformBlockedFaultConfiguration:
     @pytest.fixture
     def empty_fault_as_dict(self):
         return {}
-    
-    

@@ -5,7 +5,6 @@ from src.component import Component
 from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
-
 class PlatformBlockedFault(Fault):
     """A fault that blocks a platform"""
 
@@ -36,6 +35,8 @@ class PlatformBlockedFaultConfiguration(FaultConfiguration):
     class PlatformBlockedFaultConfigurationSchema(
         FaultConfiguration.FaultConfigurationSchema
     ):
+        """Schema for PlatformBlockedFaultConfiguration"""
+
         affected_element_id = marsh.fields.String()
 
     affected_element_id = TextField()
