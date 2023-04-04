@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from interlocking import interlockinginterface, route, track
 
 import marshmallow as marsh
+from interlocking import interlockinginterface
 from peewee import BooleanField
 
 from src.base_model import BaseModel
@@ -106,8 +106,10 @@ class RouteController(IRouteController):
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
+
     Interlocking = None
     ISimulationObjectsUpdater = None
+    topology = None
 
     def check_if_new_fahrstrasse_is_needed(self, train_id: str, track_segment_id: str):
         """This method should be called when a train enters a new track_segment.
@@ -119,18 +121,33 @@ class RouteController(IRouteController):
         :type track_segment_id: track_segment_id
         """
         train = self.ISimulationObjectsUpdater.get_train_by_id(train_id)
-        track_segment = self.ISimulationObjectsUpdater.get_track_segment_by_id(track_segment_id)
+        track_segment = self.ISimulationObjectsUpdater.get_track_segment_by_id(
+            track_segment_id
+        )
         track = None
         route = None
         for route_candidate in self.Interlocking.active_routes:
             track_candidat = route_candidate.contains_segment(track_segment_id)
-            if(track_candidat is not None):
+            if track_candidat is not None:
                 track = track_candidat
                 route = route_candidate
-        if(route.get_last_segment_of_route != track_segment_id):
+        if route.get_last_segment_of_route != track_segment_id:
             return
-        new_route = self.Router.get_route(track_segment_id, train.plattforms.first())
-        
+
+        new_route = self.Router.get_route(track_segment_id, train.plattforms[0])
+        # This return a list of (tracks) signals
+        for _route_uuid in self.topology.routes:
+            _route = self.topology.routes[_route_uuid]
+            if (
+                _route.start_signal.name == new_route[0]
+                and _route.end_signal.name == new_route[-1]
+            ):
+                # This sets the route in the interlocking
+                self.Interlocking.set_route(_route)
+
+                # This sets the route in SUMO. The Routes have (hopefully) the same name.
+                train.route = _route.uuid
+
         raise NotImplementedError()
 
     def check_all_fahrstrassen_for_failures(self):
