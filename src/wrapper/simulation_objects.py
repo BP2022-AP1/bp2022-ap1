@@ -12,9 +12,14 @@ class SimulationObject(ABC):
     """
 
     identifier = None
+    _updater = None
 
     def __init__(self, identifier=None):
         self.identifier = identifier
+
+    @updater.setter
+    def updater(self, updater: "SimulationObjectUpdatingComponent"):
+        self._updater = updater
 
     @abstractmethod
     def update(self, data: dict):
@@ -206,7 +211,7 @@ class Train(SimulationObject):
     def __init__(
         self,
         identifier: str = None,
-        timetable: List[Platform] = None,
+        timetable: List[str] = None,
         train_type: str = None,
         priority: int = 0,
         from_simulator: bool = False,
@@ -222,14 +227,23 @@ class Train(SimulationObject):
         :param from_simulator: Specifies if train is created by the simulation or manually.
         You probably don't need to touch this.
         """
-        SimulationObject.__init__(self, identifier)
+        SimulationObject.__init__(self, identifier=identifier)
 
         self._priority = priority
         self._train_type = train_type
-        self._timetable = timetable
+        self._convert_timetable(timetable)
 
         if not from_simulator:
             self._add_to_simulation(identifier, timetable, train_type)
+
+    def _convert_timetable(self, timetable: List[str]):
+        converted = []
+        for item in timetable:
+            converted.append(
+                next(x for x in self._updater.platforms if x.identifier == item)
+            )
+
+        self._timetable = converted
 
     def _add_to_simulation(
         self, identifier: str, timetable: List[Platform], train_type: str
