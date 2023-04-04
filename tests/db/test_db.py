@@ -4,7 +4,7 @@ import marshmallow as marsh
 from peewee import IntegerField
 
 from src.base_model import BaseModel, db
-from tests.decorators import recreate_db
+from tests.decorators import recreate_db_setup
 
 
 class ModelTest(BaseModel):
@@ -28,7 +28,7 @@ class ModelTest(BaseModel):
 class TestDB:
     """Test the database connection and the serialization/deserialization"""
 
-    @recreate_db
+    @recreate_db_setup
     def setup_method(self):
         db.create_tables([ModelTest])
 
