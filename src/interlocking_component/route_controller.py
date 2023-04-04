@@ -106,7 +106,7 @@ class RouteController(IRouteController):
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    def check_if_new_fahrstrasse_is_needed(self, train_id: str, track_segment_id: str):
+    def is_new_fahrstrasse_needed(self, train: "Train", track_segment: "Track"):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
