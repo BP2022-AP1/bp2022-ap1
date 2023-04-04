@@ -52,6 +52,7 @@ class FaultConfiguration(BaseModel, ABC):
 
     class FaultConfigurationSchema(BaseModel.Schema):
         """Schema for the FaultConfiguration"""
+
         start_tick = marsh.fields.Integer()
         end_tick = marsh.fields.Integer()
         description = marsh.fields.String()
