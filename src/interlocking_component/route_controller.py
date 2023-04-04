@@ -7,7 +7,7 @@ from src.base_model import BaseModel
 
 
 class InterlockingConfiguration(BaseModel):
-    """This class contains all fields needed to configure the Interlocking and the RouteController"""
+    """This class contains all fields needed to configure the Interlocking and RouteController"""
 
     class Schema(BaseModel.Schema):
         """Schema for the InterlockingConfiguration"""
