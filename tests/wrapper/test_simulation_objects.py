@@ -1,5 +1,5 @@
 import pytest
-from traci import trafficlight, edge
+from traci import edge, trafficlight
 
 from src.wrapper.simulation_objects import Signal, Track
 
@@ -28,6 +28,7 @@ class TestSignal:
         signal.state = Signal.State.GO
 
         assert signal.state == Signal.State.GO
+
 
 class TestTrack:
     """Tests for the track component"""
