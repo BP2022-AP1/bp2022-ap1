@@ -28,6 +28,7 @@ class RegularScheduleStrategy(ScheduleStrategy):
         """Determines whether a vehicle should be spawned at the current tick
 
         :param tick: The current tick
+        :return: True if a vehicle should be spawned, False otherwise
         """
         return (
             tick >= self.start_tick and (tick - self.start_tick) % self.frequency == 0
