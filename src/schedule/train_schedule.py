@@ -26,7 +26,7 @@ class TrainSchedule(Schedule):
     def _spawn(self, traci_wrapper: "ITraCiWrapper"):
         """Spawns a train.
 
-        :param traci_wrapper: The TraCI wrapper to give the train to.
+        :param traci_wrapper: The TraCi wrapper to give the train to.
         """
         # Trains are not implemented yet.
         raise NotImplementedError()
