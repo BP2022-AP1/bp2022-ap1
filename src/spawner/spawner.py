@@ -1,7 +1,54 @@
 from abc import abstractmethod
 
+import marshmallow as marsh
+from peewee import ForeignKeyField
+
+from src.base_model import BaseModel
 from src.component import Component
 from src.schedule.schedule import Schedule
+
+
+class SpawnerConfiguration(BaseModel):
+    """Class representing a spawner configuration. It holds a list of
+    Schedules which are handled in the reference table class `SpawnerConfigurationXSchedule`.
+    This class has no fields except the `id` which is needed by the `Spawner`.
+    """
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for SpawnerConfiguration"""
+
+        def _make(self, data: dict) -> "SpawnerConfiguration":
+            """Constructs a SpawnerConfiguration from a dictionary.
+
+            :param data: The dictionary.
+            :return: A SpawnerConfiguration.
+            """
+            return SpawnerConfiguration(**data)
+
+
+class SpawnerConfigurationXSchedule(BaseModel):
+    """Reference table class for m:n relation
+    between SpawnerConfiguration and Schedule.
+    """
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for SpawnerConfigurationXSchedule"""
+
+        spawner_configuration_id = marsh.fields.UUID(required=True)
+        schedule_id = marsh.fields.UUID(required=True)
+
+        def _make(self, data: dict) -> "SpawnerConfigurationXSchedule":
+            """Constructs a SpawnerConfigurationXSchedule from a dictionary.
+
+            :param data: The dictionary.
+            :return: A SpawnerConfigurationXSchedule.
+            """
+            return SpawnerConfigurationXSchedule(**data)
+
+    spawner_configuration_id = ForeignKeyField(
+        SpawnerConfiguration, null=False, backref="schedules"
+    )
+    schedule_id = ForeignKeyField(Schedule, null=False)
 
 
 class Spawner(Component):
