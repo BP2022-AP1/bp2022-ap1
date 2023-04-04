@@ -88,7 +88,7 @@ class Train(SimulationObject):
 
     # pylint: disable=too-many-instance-attributes
 
-    _position: Tuple(str, str) = None
+    _position: Tuple[float, float] = None
     _route: str = None
     _track: Track = None
     _vehicle_type: str = None
@@ -125,7 +125,7 @@ class Train(SimulationObject):
         return self._speed
 
     @property
-    def route(self) -> int:
+    def route(self) -> str:
         """This method returns the current sumo-route-id.
 
         :return: The route this vehicle is following
@@ -208,8 +208,9 @@ class Train(SimulationObject):
         identifier: str = None,
         timetable: List[Platform] = None,
         train_type: str = None,
+        priority: int = 0,
         from_simulator: bool = False,
-    ):
+    ):  # pylint: disable=too-many-arguments
         """Creates a new train from the given parameters.
         When initializing manually, `timetable` and `train_type` are mandatory
         :param identifier: The identifier of the train
@@ -217,14 +218,17 @@ class Train(SimulationObject):
         in the correct order. Mandatory when initializing the train yourself.
         :param train_type: The type of the train (as a SUMO VEHICLE_TYPE).
         Mandatory when initializing the train yourself.
+        :param priority: The priority of the train (higher number means higher priority)
         :param from_simulator: Specifies if train is created by the simulation or manually.
         You probably don't need to touch this.
         """
-        SimulationObject.__init__(self)
+        SimulationObject.__init__(self, identifier)
 
+        self._priority = priority
         self._train_type = train_type
+        self._timetable = timetable
 
-        if from_simulator:
+        if not from_simulator:
             self._add_to_simulation(identifier, timetable, train_type)
 
     def _add_to_simulation(
