@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List, Tuple
 
-from traci import constants, vehicle, trafficlight
+from traci import constants, trafficlight, vehicle
 
 
 class SimulationObject(ABC):
@@ -12,14 +12,10 @@ class SimulationObject(ABC):
     """
 
     identifier = None
-    _updater = None
+    updater = None
 
     def __init__(self, identifier=None):
         self.identifier = identifier
-
-    @updater.setter
-    def updater(self, updater: "SimulationObjectUpdatingComponent"):
-        self._updater = updater
 
     @abstractmethod
     def update(self, data: dict):
@@ -272,9 +268,10 @@ class Train(SimulationObject):
 
     def _convert_timetable(self, timetable: List[str]):
         converted = []
+        timetable = [] if timetable is None else timetable
         for item in timetable:
             converted.append(
-                next(x for x in self._updater.platforms if x.identifier == item)
+                next(x for x in self.updater.platforms if x.identifier == item)
             )
 
         self._timetable = converted

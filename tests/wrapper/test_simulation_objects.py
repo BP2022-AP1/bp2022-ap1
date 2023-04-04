@@ -1,7 +1,7 @@
 import pytest
-from traci import constants, vehicle
+from traci import constants, trafficlight, vehicle
 
-from src.wrapper.simulation_objects import Train
+from src.wrapper.simulation_objects import Signal, Train
 
 
 class TestSignal:
@@ -157,6 +157,3 @@ class TestTrain:
 
     def test_subscription(self, train):
         assert train.add_subscriptions() > 0
-from traci import trafficlight
-
-from src.wrapper.simulation_objects import Signal
