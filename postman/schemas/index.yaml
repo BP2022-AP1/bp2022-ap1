@@ -38,7 +38,7 @@ paths:
           description: Simulation not found
       summary: Get ids of schedule-blocked-faul configurations connected to a user.
 
-    put:
+    post:
       operationId: create_schedule_blocked_fault_configuration
       requestBody:
         content:
@@ -101,7 +101,7 @@ paths:
           description: Id not found
       summary: Get all information about a schedule-blocked-fault configuration.
 
-    patch:
+    put:
       operationId: update_schedule_blocked_fault_configuration
       parameters:
         - in: path
@@ -154,7 +154,7 @@ paths:
           description: Simulation not found
       summary: Get ids of track-blocked-fault configurations connected to a user.
 
-    put:
+    post:
       operationId: create_track_blocked_fault_configuration
       requestBody:
         content:
@@ -217,7 +217,7 @@ paths:
           description: Id not found
       summary: Get all information about a track-blocked-fault configuration.
 
-    patch:
+    put:
       operationId: update_track_blocked_fault_configuration
       parameters:
         - in: path
@@ -270,7 +270,7 @@ paths:
           description: Simulation not found
       summary: Get ids of track-speed-limit-fault configurations connected to a user.
 
-    put:
+    post:
       operationId: create_track_speed_limit_fault_configuration
       requestBody:
         content:
@@ -333,7 +333,7 @@ paths:
           description: Id not found
       summary: Get all information about a track-speed-limit-fault configuration.
 
-    patch:
+    put:
       operationId: update_track_speed_limit_fault_configuration
       parameters:
         - in: path
@@ -386,7 +386,7 @@ paths:
           description: Simulation not found
       summary: Get ids of train-prio-fault configurations connected to a user.
 
-    put:
+    post:
       operationId: create_train_prio_fault_configuration
       requestBody:
         content:
@@ -447,7 +447,7 @@ paths:
           description: Id not found
       summary: Get all information about a train-prio-fault configuration.
 
-    patch:
+    put:
       operationId: update_train_prio_fault_configuration
       parameters:
         - in: path
@@ -500,7 +500,7 @@ paths:
           description: Simulation not found
       summary: Get ids of train-speed-fault configurations connected to a user.
 
-    put:
+    post:
       operationId: create_train_speed_fault_configuration
       requestBody:
         content:
@@ -561,7 +561,7 @@ paths:
           description: Id not found
       summary: Get all information about a train-speed-fault configuration.
 
-    patch:
+    put:
       operationId: update_train_speed_fault_configuration
       parameters:
         - in: path
@@ -614,7 +614,7 @@ paths:
           description: Simulation not found
       summary: Get ids of interlocking configurations connected to a user.
 
-    put:
+    post:
       operationId: create_interlocking_configuration
       requestBody:
         content:
@@ -677,7 +677,7 @@ paths:
           description: Id not found
       summary: Get all information about a interlocking configuration.
 
-    patch:
+    put:
       operationId: update_interlocking_configuration
       parameters:
         - in: path
@@ -730,7 +730,7 @@ paths:
           description: Simulation not found
       summary: Get ids of spawner configurations connected to a user.
 
-    put:
+    post:
       operationId: create_spawner_configuration
       requestBody:
         content:
@@ -793,7 +793,7 @@ paths:
           description: Id not found
       summary: Get all information about a spawner configuration.
 
-    patch:
+    put:
       operationId: update_spawner_configuration
       parameters:
         - in: path
@@ -843,7 +843,7 @@ paths:
           description: Simulation id not found
       summary: Get all ids of runs connected to a user and a simulation.
 
-    put:
+    post:
       operationId: create_run
       requestBody:
         content:
@@ -927,7 +927,7 @@ paths:
           description: API token missing
       summary: Get all ids of simulation configurations connected to a user.
 
-    put:
+    post:
       operationId: create_simulation_configuration
       requestBody:
         content:
@@ -992,7 +992,7 @@ paths:
         "Get all information about a simulation, including the ids of connected\
         \ components and runs."
 
-    patch:
+    put:
       operationId: update_simulation_configuration
       parameters:
         - in: path
@@ -1018,7 +1018,7 @@ paths:
       summary: Edit the name or description of a simulation configuration.
 
   /token:
-    put:
+    post:
       operationId: create_token
       requestBody:
         content:

@@ -8,7 +8,8 @@ from src.fault_injector.fault_types.fault import Fault
 
 class FaultInjector(Component):
     """
-    Class for fault injection. Faults can be injected into the interlockingController, the Spawner and the Wrapper
+    Class for fault injection. Faults can be injected into the
+    InterlockingController, the Spawner and the Wrapper
     """
 
     _faults: list[Fault] = []
@@ -19,7 +20,7 @@ class FaultInjector(Component):
         :param json_faults: The list of faults as JSON objects
         :type json_faults: list[str]
         """
-        self._faults.append(Fault)
+        self._faults.append(fault)
 
     def next_tick(self, tick: int):
         """Called by the wrapper to announce the next tick of the simulation
