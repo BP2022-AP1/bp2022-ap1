@@ -1,5 +1,5 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault, FaultConfig
+from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class TrainCancelledFault(Fault):
@@ -22,3 +22,7 @@ class TrainCancelledFault(Fault):
         :type component: Component
         """
         raise NotImplementedError()
+
+
+class TrainCancelledFaultConfiguration(FaultConfiguration):
+    """Class that contains the attributes of the TrainCancelledFault class"""
