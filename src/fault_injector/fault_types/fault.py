@@ -60,7 +60,6 @@ class FaultConfiguration(BaseModel):
         def _make(self, data: dict) -> "FaultConfiguration":
             return FaultConfiguration(**data)
 
-
     start_tick = IntegerField(null=False)
     end_tick = IntegerField(null=False)
 
