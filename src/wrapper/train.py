@@ -57,6 +57,8 @@ class Platform(SimulationObject):
 class Train(SimulationObject):
     """A train driving around in the simulation."""
 
+    # pylint: disable=too-many-instance-attributes
+
     _position: Tuple(str, str) = None
     _route: str = None
     _track: Track = None
