@@ -3,6 +3,7 @@ from typing import Callable
 import pytest
 
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
+from tests.decorators import recreate_db
 
 
 class TestRegularScheduleStrategy:
@@ -66,6 +67,7 @@ class TestRegularScheduleStrategy:
         assert regular_strategy.start_tick == deserialized.start_tick
         assert regular_strategy.frequency == deserialized.frequency
 
+    @recreate_db
     def test_database_interaction(
         self, regular_strategy: Callable[[None], RegularScheduleStrategy]
     ):
