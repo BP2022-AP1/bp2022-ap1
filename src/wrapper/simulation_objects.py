@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List, Tuple
 
-from traci import constants, vehicle
+from traci import constants, vehicle, trafficlight
 
 
 class SimulationObject(ABC):
@@ -55,7 +55,41 @@ class Signal(Node):
         HALT = 1
         GO = 2
 
-    state: State
+    _state: "Signal.State"
+
+    @property
+    def state(self) -> "Signal.State":
+        """Returns the current state of the signal
+        performance impact: this method does not call traci
+
+        :return: the current signal state (see `Signal.State`)
+        """
+        return self._state
+
+    @state.setter
+    def state(self, target: "Signal.State") -> None:
+        """Updates the signal state to the given state.
+        performance impact: this method calls traci every time.
+        See <https://sumo.dlr.de/pydoc/traci._trafficlight.html>
+
+        :param target: the target signal state
+        """
+        if target is Signal.State.HALT:
+            trafficlight.setRedYellowGreenState(self.identifier, "rr")
+        elif target is Signal.State.GO:
+            trafficlight.setRedYellowGreenState(self.identifier, "GG")
+
+        self._state = target
+
+    def __init__(self, identifier: str = None, state: "Signal.State" = State.HALT):
+        Node.__init__(self, identifier)
+        self.state = state
+
+    def update(self, data: dict):
+        return
+
+    def add_subscriptions(self) -> int:
+        return 0
 
 
 class Switch(Node):
