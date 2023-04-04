@@ -8,6 +8,8 @@ class SimulationConfiguration(BaseModel):
     """Represents a single simulation configuration."""
 
     class Schema(BaseModel.Schema):
+        """The marshmallow schema for the simulation configuration model."""
+
         description = marsh.fields.String()
 
         def _make(self, data: dict) -> "SimulationConfiguration":
@@ -20,6 +22,8 @@ class Token(BaseModel):
     """Represents a token."""
 
     class Schema(BaseModel.Schema):
+        """The marshmallow schema for the token model."""
+
         permission = marsh.fields.String(required=True)
         name = marsh.fields.String(required=True)
         hashedToken = marsh.fields.String(required=True)
@@ -36,5 +40,7 @@ class Run(BaseModel):
     """Represents the configuration of a single execution of a simulation configuration."""
 
     class Schema(BaseModel.Schema):
+        """The marshmallow schema for the run model."""
+
         def _make(self, data: dict) -> "Run":
             return Run(**data)
