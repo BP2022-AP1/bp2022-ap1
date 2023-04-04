@@ -5,6 +5,9 @@ import peewee
 import pytest
 
 from src.base_model import BaseModel
+from src.fault_injector.fault_types.train_speed_fault import (
+    TrainSpeedFaultConfiguration,
+)
 from src.implementor.models import Run, SimulationConfiguration, Token
 from tests.decorators import recreate_db_setup
 
@@ -14,6 +17,10 @@ from tests.decorators import recreate_db_setup
     [
         (
             Token,
+            {},
+        ),
+        (
+            TrainSpeedFaultConfiguration,
             {},
         ),
     ],
@@ -47,6 +54,15 @@ class TestFailingDict:
                 "name": "Owner",
                 "permission": "admin",
                 "hashedToken": "hash",
+            },
+        ),
+        (
+            TrainSpeedFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrainSpeedFault",
+                "affected_element_id": "12345678",
             },
         ),
         (Run, {}),

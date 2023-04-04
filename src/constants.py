@@ -1,6 +1,9 @@
 from typing import Type
 
 from src.base_model import BaseModel
+from src.fault_injector.fault_types.train_speed_fault import (
+    TrainSpeedFaultConfiguration,
+)
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule import Schedule
@@ -17,4 +20,5 @@ tables: list[Type[BaseModel]] = [
     TrainScheduleXSimulationPlatform,
     SimulationConfiguration,
     Token,
+    TrainSpeedFaultConfiguration,
 ]
