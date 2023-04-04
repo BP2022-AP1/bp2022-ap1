@@ -11,10 +11,10 @@ class SimulationObject(ABC):
     and can manipulate the simualtion directly.
     """
 
-    traci_id = None
+    identifier = None
 
-    def __init__(self, traci_id=None):
-        self.traci_id = traci_id
+    def __init__(self, identifier=None):
+        self.identifier = identifier
 
     @abstractmethod
     def update(self, data: dict):
@@ -139,7 +139,7 @@ class Train(SimulationObject):
         :performance consideration: This method makes one traci-roundtrip
         :param route: the route that the vehicle should follow
         """
-        vehicle.setRouteID(self.traci_id, route)
+        vehicle.setRouteID(self.identifier, route)
         self._route = route
 
     @property
@@ -160,7 +160,7 @@ class Train(SimulationObject):
         :param speed: The new top speed (see
         <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-setMaxSpeed>)
         """
-        vehicle.setMaxSpeed(self.traci_id, speed)
+        vehicle.setMaxSpeed(self.identifier, speed)
         self._max_speed = speed
 
     @property
