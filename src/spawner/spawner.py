@@ -10,7 +10,7 @@ from src.schedule.schedule import Schedule
 
 class SpawnerConfiguration(BaseModel):
     """Class representing a spawner configuration. It holds a list of
-    Schedules which is handled in the reference table class `SpawnerConfigurationXSchedule`.
+    Schedules which are handled in the reference table class `SpawnerConfigurationXSchedule`.
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
 
