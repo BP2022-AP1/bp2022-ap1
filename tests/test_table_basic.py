@@ -4,8 +4,8 @@ import marshmallow as marsh
 import peewee
 import pytest
 
-from src.implementor.models import Run, SimulationConfiguration, Token
 from src.base_model import BaseModel
+from src.implementor.models import Run, SimulationConfiguration, Token
 
 
 @pytest.mark.parametrize(
@@ -76,7 +76,9 @@ class TestCorrectFilledDict:
         for key in none_fields:
             assert getattr(obj, key) is None
 
-    def test_deserialization_full_dict(self, table_class: BaseModel, object_as_dict: dict):
+    def test_deserialization_full_dict(
+        self, table_class: BaseModel, object_as_dict: dict
+    ):
         """Test that an object of a class can be deserialized."""
         obj = table_class.Schema().load(
             object_as_dict,
