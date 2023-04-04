@@ -8,9 +8,9 @@
 
 ## Code Coverage
 
-`dev` branch: ![Code Coverage](https://img.shields.io/coverallsCoverage/github/BP2022-AP1/bp2022-ap1?branch=dev)
+`dev` branch: [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=main)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=dev)
 
-`main` branch: ![Code Coverage](https://img.shields.io/coverallsCoverage/github/BP2022-AP1/bp2022-ap1?branch=main)
+`main` branch: [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=main)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=main)
 
 ## Environment variables
 
