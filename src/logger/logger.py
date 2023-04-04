@@ -7,12 +7,7 @@ from typing import Type
 class Logger:
     """
     The logger class is used to log the events of the simulation
-
-    :ivar connection_string: str
     """
-
-    def __init__(self, connection_string):
-        self.connection_string = connection_string
 
     def spawn_train(self, train_id: int) -> Type[None]:
         """
