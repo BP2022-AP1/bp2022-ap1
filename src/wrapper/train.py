@@ -65,7 +65,7 @@ class Train(SimulationObject):
     _max_speed: float = None
     _priority: int = None
     _train_type: str = None
-    timetable: List[Platform] = None
+    _timetable: List[Platform] = None
 
     @property
     def track(self) -> Track:
@@ -156,6 +156,22 @@ class Train(SimulationObject):
         """
         return self._train_type
 
+    @property
+    def timetable(self) -> List[Platform]:
+        """Returns the timetable of the train
+
+        :return: the timetable of the train
+        """
+        return self._timetable
+
+    @timetable.setter
+    def timetable(self, timetable: List[Platform]) -> None:
+        """Updates the timetable of this train to the given timetable
+
+        :param timetable: the new timetable
+        """
+        self._timetable = timetable
+
     def __init__(
         self,
         identifier: str = None,
@@ -183,6 +199,7 @@ class Train(SimulationObject):
     def _add_to_simulation(
         self, identifier: str, timetable: List[Platform], train_type: str
     ):
+        self._timetable = timetable
         route = str(timetable)  # TODO: fetch the first route from the list of platforms
         vehicle.add(identifier, route, train_type)
 
