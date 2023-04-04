@@ -8,7 +8,7 @@ from src.fault_injector.fault_types.fault import Fault
 
 class FaultInjector(Component):
     """
-    Class for fault injection. Faults can be injected into the 
+    Class for fault injection. Faults can be injected into the
     InterlockingController, the Spawner and the Wrapper
     """
 
