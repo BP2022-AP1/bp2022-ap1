@@ -1,5 +1,5 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault, FaultConfig
+from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class TrainSpeedFault(Fault):
@@ -26,3 +26,7 @@ class TrainSpeedFault(Fault):
         # - set the train speed to old_speed
 
         raise NotImplementedError()
+
+
+class TrainSpeedFaultConfiguration(FaultConfiguration):
+    """Class that contains the attributes of the TrainSpeedFault class"""
