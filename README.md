@@ -3,7 +3,7 @@
 ## CI & CD
 
 `dev` branch: ![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=dev)
-`main` branch: ![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main&event=push)
+`main` branch: ![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main)
 
 ## Code Coverage
 
