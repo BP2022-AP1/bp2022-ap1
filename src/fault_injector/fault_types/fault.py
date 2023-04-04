@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import marshmallow as marsh
-from peewee import BigIntegerField, TextField
+from peewee import IntegerField, TextField
 
 from src.base_model import BaseModel
 from src.component import Component
@@ -60,8 +60,10 @@ class FaultConfiguration(BaseModel):
         def _make(self, data: dict) -> "FaultConfiguration":
             return FaultConfiguration(**data)
 
-    start_tick = BigIntegerField(null=False)
-    end_tick = BigIntegerField(null=False)
+
+    start_tick = IntegerField(null=False)
+    end_tick = IntegerField(null=False)
+
     component: Component = None
     # - affected_element_ID: int = None // has to be implemented in subclasses
     description = TextField(default="injected Fault")
