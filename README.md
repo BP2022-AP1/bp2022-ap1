@@ -3,11 +3,13 @@
 ## CI & CD
 
 `dev` branch: ![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=dev)
+
 `main` branch: ![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main)
 
 ## Code Coverage
 
 `dev` branch: ![Code Coverage](https://img.shields.io/coverallsCoverage/github/BP2022-AP1/bp2022-ap1?branch=dev)
+
 `main` branch: ![Code Coverage](https://img.shields.io/coverallsCoverage/github/BP2022-AP1/bp2022-ap1?branch=main)
 
 ## Environment variables
