@@ -35,6 +35,11 @@ class IRouteController(ABC):
         :rtype: str
         """
         raise NotImplementedError()
+    
+    @abstractmethod
+    def start_interlocking(self):
+        """This method sets up the interlocking"""
+        raise NotImplementedError()
 
 
 class IInterlockingDisruptor:
