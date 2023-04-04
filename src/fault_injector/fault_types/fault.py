@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 import marshmallow as marsh
-from peewee import *
+from peewee import BigIntegerField, TextField
 
 from src.base_model import BaseModel
 from src.component import Component
@@ -9,6 +9,11 @@ from src.component import Component
 
 class Fault(ABC):
     """An abstract fault for the fault injection"""
+
+    configuration: "FaultConfiguration"
+
+    def __init__(self, configuration):
+        self.configuration = configuration
 
     @abstractmethod
     def inject_fault(self, component: Component):
@@ -36,16 +41,17 @@ class Fault(ABC):
         :param tick: the current simulation tick
         :type tick: int
         """
-        if tick == self.start_tick:
-            self.inject_fault(self.component)
-        elif tick == self.end_tick:
-            self.resolve_fault(self.component)
+        if tick == self.configuration.start_tick:
+            self.inject_fault(self.configuration.component)
+        elif tick == self.configuration.end_tick:
+            self.resolve_fault(self.configuration.component)
 
 
 class FaultConfiguration(BaseModel, ABC):
     """Class that contains the attributes of the Fault class"""
 
     class FaultConfigurationSchema(BaseModel.Schema):
+        """Schema for the FaultConfiguration"""
         start_tick = marsh.fields.Integer()
         end_tick = marsh.fields.Integer()
         description = marsh.fields.String()
