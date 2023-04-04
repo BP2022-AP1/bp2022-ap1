@@ -1,5 +1,3 @@
-
-
 import marshmallow as marsh
 from peewee import BooleanField
 
@@ -19,7 +17,7 @@ class InterlockingConfiguration(BaseModel):
     dynamicRouting = BooleanField(default=False)
 
 
-class RouteController():
+class RouteController:
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
