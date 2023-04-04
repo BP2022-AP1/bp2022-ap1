@@ -6,6 +6,7 @@ import pytest
 
 from src.base_model import BaseModel
 from src.implementor.models import Run, SimulationConfiguration, Token
+from tests.decorators import recreate_db_setup
 
 
 @pytest.mark.parametrize(
@@ -19,6 +20,10 @@ from src.implementor.models import Run, SimulationConfiguration, Token
 )
 class TestFailingDict:
     """Test that a object of a class cannot be created or deserialized with invalid data."""
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
 
     def test_create(self, table_class: BaseModel, object_as_dict: dict):
         """Test that an object of a class cannot be created."""
@@ -51,6 +56,10 @@ class TestFailingDict:
 )
 class TestCorrectFilledDict:
     """Test that a object of a class can be created and deserialized with valid data."""
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
 
     def test_create(self, table_class: BaseModel, object_as_dict: dict):
         """Test that a object of a class can be created."""
