@@ -25,7 +25,7 @@ class IRouteController(ABC):
 
     @abstractmethod
     def set_spawn_route(self, platforms: list("Plattform")) -> str:
-        """This method can be called when instanciating a train 
+        """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
 
@@ -35,7 +35,7 @@ class IRouteController(ABC):
         :rtype: str
         """
         raise NotImplementedError()
-    
+
     @abstractmethod
     def start_interlocking(self):
         """This method sets up the interlocking"""
@@ -43,8 +43,9 @@ class IRouteController(ABC):
 
 
 class IInterlockingDisruptor:
-    """This class is the Interface to inject faults into the interlocking 
-    as well as to notify the Interlocking faults that occur in other parts of the simulation."""
+    """This class is the Interface to inject faults into the interlocking
+    as well as to notify the Interlocking faults that occur in other parts of the simulation.
+    """
 
     def insert_track_blocked(self, track_id: str):
         """This method is used to block a track and recalculate the routes of relevant trains.
@@ -63,7 +64,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
     def insert_platform_blocked(self, platform_id: str):
-        """This method is used to block a platform and recalculate the routes 
+        """This method is used to block a platform and recalculate the routes
         and stops of relevant trains.
 
         :param platform_id: the id of the blocked platform
@@ -72,7 +73,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
     def insert_platform_unblocked(self, platform_id: str):
-        """This method is used to unblock a platform and recalculate the routes 
+        """This method is used to unblock a platform and recalculate the routes
         and stops of relevant trains.
 
         :param platform_id: the id of the unblocked platform
@@ -81,7 +82,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
     def insert_track_speed_limit_changed(self, track_id: str):
-        """This method is used to notify the interlocking about a changed track speed limit, 
+        """This method is used to notify the interlocking about a changed track speed limit,
         so that it can recalculate the routing of relevant trains.
 
         :param track_id: the id of the track, which speedlimit changed
@@ -90,7 +91,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
     def insert_train_speed_changed(self, train_id: str):
-        """This method is used to notify the interlocking about a changed train speed limit, 
+        """This method is used to notify the interlocking about a changed train speed limit,
         so that it can recalculate the routing of relevant trains.
 
         :param train_id: the id of the train, which speed limit changed
