@@ -2,7 +2,7 @@ import marshmallow as marsh
 from peewee import TextField
 
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
+from src.fault_injector.fault_types.fault import Fault
 
 
 class TrainCancelledFault(Fault):

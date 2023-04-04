@@ -1,25 +1,38 @@
+import marshmallow as marsh
+from peewee import IntegerField
+
 from src.schedule.schedule_strategy import ScheduleStrategy
 
 
 class RegularScheduleStrategy(ScheduleStrategy):
     """A schedule strategy that spawns vehicles at regular intervals."""
 
-    @classmethod
-    def from_json(cls, json_object: str) -> "RegularScheduleStrategy":
-        """Constructs a RegularScheduleStrategy from a JSON object.
+    class Schema(ScheduleStrategy.Schema):
+        """Schema for RegularScheduleStrategy."""
 
-        :param json_object: The JSON object.
-        :type json_object: str
-        :return: A RegularScheduleStrategy.
-        :rtype: RegularScheduleStrategy
+        start_tick = marsh.fields.Int(required=True)
+        frequency = marsh.fields.Int(required=True)
+
+        def _make(self, data: dict) -> "RegularScheduleStrategy":
+            """Constructs a RegularScheduleStrategy from a dictionary.
+
+            :param data: The dictionary.
+            :return: A RegularScheduleStrategy.
+            """
+            return RegularScheduleStrategy(**data)
+
+    start_tick = IntegerField(null=False)
+    frequency = IntegerField(null=False)
+
+    def should_spawn(self, tick: int) -> bool:
+        """Determines whether a vehicle should be spawned at the current tick
+
+        :param tick: The current tick
+        :return: True if a vehicle should be spawned, False otherwise
         """
-        raise NotImplementedError()
+        return (
+            tick >= self.start_tick and (tick - self.start_tick) % self.frequency == 0
+        )
 
-    def maybe_spawn(self, tick: int):
-        """Determines whether a vehicle should be spawned at the
-        current tick and spawns it if so.
-
-        :param tick: The current tick.
-        :type tick: int
-        """
-        raise NotImplementedError()
+    def __repr__(self) -> str:
+        return f"RegularScheduleStrategy({self.id=}, {self.start_tick=}, {self.frequency=})"
