@@ -7,7 +7,7 @@ from src.base_model import BaseModel
 
 
 class InterlockingConfiguration(BaseModel):
-    """Ths class contains all fiels needed to configure the Interlocking and the RouteController"""
+    """This class contains all fields needed to configure the Interlocking and the RouteController"""
 
     class Schema(BaseModel.Schema):
         """Schema for the InterlockingConfiguration"""
@@ -47,7 +47,7 @@ class IInterlockingDisruptor:
     as well as to notify the Interlocking faults that occur in other parts of the simulation.
     """
 
-    def insert_track_blocked(self, track_id: str):
+    def insert_track_blocked(self, track: "Track"):
         """This method is used to block a track and recalculate the routes of relevant trains.
 
         :param track_id: the id of the blocked track
@@ -55,7 +55,7 @@ class IInterlockingDisruptor:
         """
         raise NotImplementedError()
 
-    def insert_track_unblocked(self, track_id: str):
+    def insert_track_unblocked(self, track: "Track"):
         """This method is used to unblock a track and recalculate the routes of relevant trains.
 
         :param track_id: the id of the unblocked track
@@ -63,7 +63,7 @@ class IInterlockingDisruptor:
         """
         raise NotImplementedError()
 
-    def insert_platform_blocked(self, platform_id: str):
+    def insert_platform_blocked(self, platform: "Platform"):
         """This method is used to block a platform and recalculate the routes
         and stops of relevant trains.
 
@@ -72,7 +72,7 @@ class IInterlockingDisruptor:
         """
         raise NotImplementedError()
 
-    def insert_platform_unblocked(self, platform_id: str):
+    def insert_platform_unblocked(self, platform: "Platform"):
         """This method is used to unblock a platform and recalculate the routes
         and stops of relevant trains.
 
@@ -81,7 +81,7 @@ class IInterlockingDisruptor:
         """
         raise NotImplementedError()
 
-    def insert_track_speed_limit_changed(self, track_id: str):
+    def insert_track_speed_limit_changed(self, track: "Track"):
         """This method is used to notify the interlocking about a changed track speed limit,
         so that it can recalculate the routing of relevant trains.
 
@@ -90,7 +90,7 @@ class IInterlockingDisruptor:
         """
         raise NotImplementedError()
 
-    def insert_train_speed_changed(self, train_id: str):
+    def insert_train_max_speed_changed(self, train: "Train"):
         """This method is used to notify the interlocking about a changed train speed limit,
         so that it can recalculate the routing of relevant trains.
 

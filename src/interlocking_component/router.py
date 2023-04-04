@@ -1,5 +1,5 @@
 class Router:
-    """This class will calculate routes for trains from track segment to track segment."""
+    """This class calculates routes for trains from track segment to track segment."""
 
     def get_route(self, start_track_segment: "Track", end_track_segment: "Track"):
         """This method returns a route from a start track_segment to an end track_segment.
