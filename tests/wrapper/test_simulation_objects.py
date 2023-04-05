@@ -50,9 +50,11 @@ class TestTrain:
                 constants.VAR_ROAD_ID: 123,
                 constants.VAR_ROUTE: "testing-route",
                 constants.VAR_SPEED: 10.2,
-                constants.VAR_MAXSPEED: 11,
             }
         )
+        created_train.train_type.update({
+            constants.VAR_MAXSPEED: 11,
+        })
 
         return created_train
 
@@ -102,22 +104,22 @@ class TestTrain:
         assert train.route == "testing-route-beta"
 
     def test_max_speed(self, train):
-        assert train.max_speed == 11
+        assert train.train_type.max_speed == 11
 
     def test_set_max_speed(self, train, max_speed):
         # pylint: disable=unused-argument
-        train.max_speed = 100
-        assert train.max_speed == 100
+        train.train_type.max_speed = 100
+        assert train.train_type.max_speed == 100
 
     def test_priority(self, train):
-        assert train.priority == 0
+        assert train.train_type.priority == 0
 
     def test_set_priority(self, train):
-        train.priority = 10
-        assert train.priority == 10
+        train.train_type.priority = 10
+        assert train.train_type.priority == 10
 
     def test_train_type(self, train):
-        assert train.train_type == "fancy-ice"
+        assert train.train_type.name == "fancy-ice"
 
     def test_timetable(self, train):
         assert train.timetable == []
@@ -140,19 +142,21 @@ class TestTrain:
                 constants.VAR_ROAD_ID: 124,
                 constants.VAR_ROUTE: "ending-route",
                 constants.VAR_SPEED: 10,
-                constants.VAR_MAXSPEED: 10,
             }
         )
+        train.train_type.update({
+            constants.VAR_MAXSPEED: 10,
+        })
         assert train.track == 124
         assert train.position == (
             110,
             90,
         )
         assert train.speed == 10
-        assert train.max_speed == 10
+        assert train.train_type.max_speed == 10
         assert train.route == "ending-route"
-        assert train.priority == 0
-        assert train.train_type == "fancy-ice"
+        assert train.train_type.priority == 0
+        assert train.train_type.name == "fancy-ice"
         assert train.timetable == []
 
     def test_subscription(self, train):

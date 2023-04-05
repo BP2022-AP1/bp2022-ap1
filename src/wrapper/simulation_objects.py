@@ -121,16 +121,83 @@ class Platform(SimulationObject):
 class Train(SimulationObject):
     """A train driving around in the simulation."""
 
-    # pylint: disable=too-many-instance-attributes
+    class TrainType(SimulationObject):
+        _max_speed: float = None
+        _priority: int = None
+        _name: str = None
 
-    _position: Tuple[float, float] = None
-    _route: str = None
-    _track: Track = None
-    _speed: float = None
-    _max_speed: float = None
-    _priority: int = None
-    _train_type: str = None
-    _timetable: List[Platform] = None
+        @property
+        def max_speed(self) -> float:
+            """Returns the maximum speed of the train (m/s).
+            performance impact: This method does not call traci.
+
+            :return: The top speed (see
+            <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-getMaxSpeed>)
+            """
+            return self._max_speed
+
+        @max_speed.setter
+        def max_speed(self, speed: float) -> None:
+            """Updates the maximum speed to the given value (m/s).
+            performance impact: This method calls traci.
+
+            :param speed: The new top speed (see
+            <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-setMaxSpeed>)
+            """
+            vehicle.setMaxSpeed(self.identifier, speed)
+            self._max_speed = speed
+
+        @property
+        def priority(self) -> int:
+            """Returns the priority for this train (higher number means higher priority)
+
+            :return: The train priority
+            """
+            return self._priority if self._priority is not None else 0
+
+        @priority.setter
+        def priority(self, priority: int) -> None:
+            """Sets the priority of this train (higher number means higher priority)
+
+            :param priority: The new train priority
+            """
+            self._priority = priority
+
+        @property
+        def name(self) -> str:
+            """Returns the train type.
+
+            :return: The SUMO-type of the train
+            """
+            return self._name
+
+        @staticmethod
+        def from_sumo_type(train_type: str, instance: str):
+            """Creates a new train type for the given instance
+
+            :param train_type: The sumo type of the train
+            :param instance: The sumo train to which this type corresponds
+            """
+            created_train_type = Train.TrainType(instance)
+            created_train_type._name = train_type
+
+            return created_train_type
+
+        def __init(self, identifier):
+            SimulationObject.__init__(self, identifier)
+
+        def update(self, data: dict) -> None:
+            self._max_speed = data[constants.VAR_MAXSPEED]
+
+        def add_subscriptions(self) -> int:
+            return constants.VAR_MAXSPEED
+
+    _position: Tuple[float, float]
+    _route: str
+    _track: Track
+    _speed: float
+    _timetable: List[Platform]
+    train_type: TrainType
 
     @property
     def track(self) -> Track:
@@ -177,51 +244,6 @@ class Train(SimulationObject):
         self._route = route_id
 
     @property
-    def max_speed(self) -> float:
-        """Returns the maximum speed of the train (m/s).
-        performance impact: This method does not call traci.
-
-        :return: The top speed (see
-        <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-getMaxSpeed>)
-        """
-        return self._max_speed
-
-    @max_speed.setter
-    def max_speed(self, speed: float) -> None:
-        """Updates the maximum speed to the given value (m/s).
-        performance impact: This method calls traci.
-
-        :param speed: The new top speed (see
-        <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-setMaxSpeed>)
-        """
-        vehicle.setMaxSpeed(self.identifier, speed)
-        self._max_speed = speed
-
-    @property
-    def priority(self) -> int:
-        """Returns the priority for this train (higher number means higher priority)
-
-        :return: The train priority
-        """
-        return self._priority
-
-    @priority.setter
-    def priority(self, priority: int) -> None:
-        """Sets the priority of this train (higher number means higher priority)
-
-        :param priority: The new train priority
-        """
-        self._priority = priority
-
-    @property
-    def train_type(self) -> str:
-        """Returns the train type.
-
-        :return: The SUMO-type of the train
-        """
-        return self._train_type
-
-    @property
     def timetable(self) -> List[Platform]:
         """Returns the timetable of the train
 
@@ -242,7 +264,6 @@ class Train(SimulationObject):
         identifier: str = None,
         timetable: List[str] = None,
         train_type: str = None,
-        priority: int = 0,
         from_simulator: bool = False,
     ):  # pylint: disable=too-many-arguments
         """Creates a new train from the given parameters.
@@ -258,8 +279,7 @@ class Train(SimulationObject):
         """
         SimulationObject.__init__(self, identifier=identifier)
 
-        self._priority = priority
-        self._train_type = train_type
+        self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
         self._convert_timetable(timetable)
 
         if not from_simulator:
@@ -290,7 +310,6 @@ class Train(SimulationObject):
         self._track = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
-        self._max_speed = data[constants.VAR_MAXSPEED]
 
     def add_subscriptions(self) -> int:
         """Gets called when this object is created to allow
@@ -302,5 +321,4 @@ class Train(SimulationObject):
             + constants.VAR_ROUTE
             + constants.VAR_ROAD_ID
             + constants.VAR_SPEED
-            + constants.VAR_MAXSPEED
         )
