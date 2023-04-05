@@ -1,5 +1,5 @@
 from src.component import Component
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class TrackBlockedFault(Fault):
@@ -24,3 +24,6 @@ class TrackBlockedFault(Fault):
         # - get track by id
         # - mark track as no longer blocked
         raise NotImplementedError()
+    
+class TrackBlockedFaultConfiguration(FaultConfiguration):
+    """Class that contains the attributes of the TrackBlockedFault class"""
