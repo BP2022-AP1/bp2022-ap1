@@ -15,6 +15,26 @@ class SimulationObjectUpdatingComponent(Component):
     _simulation_objects = None
 
     @property
+    def simulation_objects(self) -> List["SimulationObject"]:
+        """Returns a list of all objects in the simulation
+
+        :return: the objects in the simulation
+        """
+        return self._simulation_objects
+
+    @property
+    def signals(self) -> List["Signal"]:
+        """Returns all signals in the simulation
+
+        :return: The signals in the simulation
+        """
+        return [
+            x
+            for x in self._simulation_objects
+            if isinstance(x, src.wrapper.simulation_objects.Signal)
+        ]
+
+    @property
     def tracks(self) -> List["Track"]:
         """Returns all tracks in the simulation
 
@@ -26,8 +46,8 @@ class SimulationObjectUpdatingComponent(Component):
             if isinstance(x, src.wrapper.simulation_objects.Track)
         ]
 
-    def __init__(self, *args, **kwargs):
-        Component.__init__(self, *args, **kwargs)
+    def __init__(self, logger=None):
+        Component.__init__(self, priority=10, logger=logger)
         self._simulation_objects = []
 
         self._fetch_initial_simulation_objects()
