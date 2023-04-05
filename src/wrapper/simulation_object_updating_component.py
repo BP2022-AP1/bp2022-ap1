@@ -1,5 +1,8 @@
+from typing import List
+
 import traci
 
+import src.wrapper.simulation_objects
 from src.component import Component
 
 
@@ -10,6 +13,18 @@ class SimulationObjectUpdatingComponent(Component):
     """
 
     _simulation_objects = None
+
+    @property
+    def tracks(self) -> List["Track"]:
+        """Returns all tracks in the simulation
+
+        :return: The tracks in the simulation
+        """
+        return [
+            x
+            for x in self._simulation_objects
+            if isinstance(x, src.wrapper.simulation_objects.Track)
+        ]
 
     def __init__(self, *args, **kwargs):
         Component.__init__(self, *args, **kwargs)
