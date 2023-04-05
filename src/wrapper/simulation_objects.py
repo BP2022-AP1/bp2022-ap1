@@ -137,7 +137,7 @@ class Train(SimulationObject):
     def track(self) -> Track:
         """Returns the current track the train is on
 
-        :return: _description_
+        :return: The current track the train is on
         """
         return self._track
 
