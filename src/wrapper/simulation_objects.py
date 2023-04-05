@@ -122,6 +122,8 @@ class Train(SimulationObject):
     """A train driving around in the simulation."""
 
     class TrainType(SimulationObject):
+        """Metadata about a specific train"""
+
         _max_speed: float = None
         _priority: int = None
         _name: str = None
@@ -178,13 +180,11 @@ class Train(SimulationObject):
             :param train_type: The sumo type of the train
             :param instance: The sumo train to which this type corresponds
             """
-            created_train_type = Train.TrainType(instance)
-            created_train_type._name = train_type
+            return Train.TrainType(instance, name=train_type)
 
-            return created_train_type
-
-        def __init(self, identifier):
+        def __init__(self, identifier, name=None):
             SimulationObject.__init__(self, identifier)
+            self._name = name
 
         def update(self, data: dict) -> None:
             self._max_speed = data[constants.VAR_MAXSPEED]

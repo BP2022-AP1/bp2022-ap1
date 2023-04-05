@@ -52,9 +52,11 @@ class TestTrain:
                 constants.VAR_SPEED: 10.2,
             }
         )
-        created_train.train_type.update({
-            constants.VAR_MAXSPEED: 11,
-        })
+        created_train.train_type.update(
+            {
+                constants.VAR_MAXSPEED: 11,
+            }
+        )
 
         return created_train
 
@@ -144,9 +146,11 @@ class TestTrain:
                 constants.VAR_SPEED: 10,
             }
         )
-        train.train_type.update({
-            constants.VAR_MAXSPEED: 10,
-        })
+        train.train_type.update(
+            {
+                constants.VAR_MAXSPEED: 10,
+            }
+        )
         assert train.track == 124
         assert train.position == (
             110,
