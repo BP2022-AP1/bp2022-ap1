@@ -24,6 +24,7 @@ from tests.decorators import recreate_db_setup
 
 class TestLogEntry:
     """Class for testing all LogEntry classes."""
+
     @pytest.fixture
     def timestamp(self):
         return datetime.strptime("2023-04-11-10-00-00", "%Y-%m-%d-%H-%M-%S")
@@ -159,6 +160,7 @@ class TestLogEntry:
 
     class TestTrainSpawnLogEntry:
         """Tests for TrainSpawnLogEntry."""
+
         @pytest.fixture
         def train_spawn_log_entry_as_dict(self, timestamp, message, run, train_id):
             """TrainSpawnLogEntry as dict with all fields set."""
@@ -272,6 +274,7 @@ class TestLogEntry:
 
     class TestTrainRemoveLogEntry:
         """Tests for TrainRemoveLogEntry."""
+
         @pytest.fixture
         def train_remove_log_entry_as_dict(self, timestamp, message, run, train_id):
             """TrainRemoveLogEntry as dict with all fields set."""
@@ -380,6 +383,7 @@ class TestLogEntry:
 
     class TestTrainArrivalLogEntry:
         """Tests for TrainArrivalLogEntry."""
+
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def train_arrival_log_entry_as_dict(
@@ -513,6 +517,7 @@ class TestLogEntry:
 
     class TestTrainDepartureLogEntry:
         """Tests for the Train Departure Log Entry."""
+
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def train_departure_log_entry_as_dict(
@@ -646,6 +651,7 @@ class TestLogEntry:
 
     class TestCreateFahrstrasseLogEntry:
         """Tests for CreateFahrstrasseLogEntry."""
+
         @pytest.fixture
         def create_fahrstrasse_log_entry_as_dict(
             self, timestamp, message, run, fahrstrasse
@@ -769,6 +775,7 @@ class TestLogEntry:
 
     class TestRemoveFahrstrasseLogEntry:
         """Tests for RemoveFahrstrasseLogEntry."""
+
         @pytest.fixture
         def remove_fahrstrasse_log_entry_as_dict(
             self, timestamp, message, run, fahrstrasse
@@ -892,6 +899,7 @@ class TestLogEntry:
 
     class TestSignalLogEntry:
         """Tests for SignalLogEntry."""
+
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def set_signal_log_entry_as_dict(
@@ -1031,6 +1039,7 @@ class TestLogEntry:
 
     class TestInjectFaultLogEntry:
         """Tests for InjectFaultLogEntry."""
+
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def inject_fault_log_entry_as_dict(
@@ -1201,6 +1210,7 @@ class TestLogEntry:
 
     class TestRemoveFaultLogEntry:
         """Tests for RemoveFaultLogEntry."""
+
         @pytest.fixture
         def remove_fault_log_entry_as_dict(self, timestamp, message, run, injection_id):
             """RemoveFaultLogEntry as dict with all fields set."""
