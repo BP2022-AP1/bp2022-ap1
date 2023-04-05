@@ -25,62 +25,6 @@ from tests.decorators import recreate_db_setup
 class TestLogEntry:
     """Class for testing all LogEntry classes."""
 
-    @pytest.fixture
-    def timestamp(self):
-        return datetime.strptime("2023-04-11-10-00-00", "%Y-%m-%d-%H-%M-%S")
-
-    @pytest.fixture
-    def message(self):
-        return "Test Log Done"
-
-    @pytest.fixture
-    def run_as_dict(self):
-        return {}
-
-    @pytest.fixture
-    def run(self, run_as_dict):
-        return Run.create(**run_as_dict)
-
-    @pytest.fixture
-    def train_id(self):
-        return 123
-
-    @pytest.fixture
-    def station_id(self):
-        return 456
-
-    @pytest.fixture
-    def fahrstrasse(self):
-        return "Test Fahrstrasse"
-
-    @pytest.fixture
-    def signal_id(self):
-        return "Test Signal"
-
-    @pytest.fixture
-    def state_before(self):
-        return 0
-
-    @pytest.fixture
-    def state_after(self):
-        return 1
-
-    @pytest.fixture
-    def injection_id(self):
-        return 123
-
-    @pytest.fixture
-    def fault_type(self):
-        return 3
-
-    @pytest.fixture
-    def injection_position(self):
-        return "Test Position"
-
-    @pytest.fixture
-    def duration(self):
-        return 10
-
     class TestLogEntry:
         """Test LogEntry."""
 
