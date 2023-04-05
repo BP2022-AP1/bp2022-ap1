@@ -62,6 +62,7 @@ class FaultConfiguration(BaseModel):
 
     start_tick = IntegerField(null=False)
     end_tick = IntegerField(null=False)
+
     component: Component = None
     # - affected_element_ID: int = None // has to be implemented in subclasses
     description = TextField(default="injected Fault")
