@@ -126,7 +126,6 @@ class Train(SimulationObject):
     _position: Tuple[float, float] = None
     _route: str = None
     _track: Track = None
-    _vehicle_type: str = None
     _speed: float = None
     _max_speed: float = None
     _priority: int = None
