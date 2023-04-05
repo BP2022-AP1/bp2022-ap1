@@ -13,7 +13,8 @@ class TestSimulationObjectUpdatingComponent:
     @pytest.fixture
     def traffic_update(self, monkeypatch):
         def set_traffic_light_state(identifier: str, state: str) -> None:
-            pass # we don't care what happens here
+            # pylint: disable=unused-argument
+            pass  # we don't care what happens here
 
         monkeypatch.setattr(
             trafficlight, "setRedYellowGreenState", set_traffic_light_state
@@ -21,7 +22,7 @@ class TestSimulationObjectUpdatingComponent:
 
     @pytest.fixture
     def component(self, traffic_update):
-        # pylint: disable=unused-argument
+        # pylint: disable=unused-argument,attribute-defined-outside-init
 
         self.signal = Signal("fancy-signal")
         self.track = Track("fancy-track")
