@@ -35,4 +35,7 @@ class TrainCancelledFaultConfiguration(FaultConfiguration):
 
         affected_element_id = marsh.fields.String()
 
+        def _make(self, data: dict) -> "TrainCancelledFaultConfiguration":
+            return TrainCancelledFaultConfiguration(**data)
+
     affected_element_id = TextField()
