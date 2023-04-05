@@ -8,6 +8,18 @@ from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration, Token
+from src.logger.log_entry import (
+    CreateFahrstrasseLogEntry,
+    InjectFaultLogEntry,
+    LogEntry,
+    RemoveFahrstrasseLogEntry,
+    RemoveFaultLogEntry,
+    SetSignalLogEntry,
+    TrainArrivalLogEntry,
+    TrainDepartureLogEntry,
+    TrainRemoveLogEntry,
+    TrainSpawnLogEntry,
+)
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_strategy import ScheduleStrategy
@@ -25,4 +37,14 @@ tables: list[Type[BaseModel]] = [
     Token,
     TrainSpeedFaultConfiguration,
     PlatformBlockedFaultConfiguration,
+    LogEntry,
+    TrainSpawnLogEntry,
+    TrainRemoveLogEntry,
+    TrainArrivalLogEntry,
+    TrainDepartureLogEntry,
+    CreateFahrstrasseLogEntry,
+    RemoveFahrstrasseLogEntry,
+    SetSignalLogEntry,
+    InjectFaultLogEntry,
+    RemoveFaultLogEntry,
 ]
