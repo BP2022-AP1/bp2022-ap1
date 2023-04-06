@@ -14,6 +14,7 @@ from src.fault_injector.fault_types.train_cancelled_fault import (
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFaultConfiguration
 from tests.decorators import recreate_db_setup
 
 # pylint: disable=duplicate-code
@@ -27,11 +28,11 @@ from tests.decorators import recreate_db_setup
             PlatformBlockedFaultConfiguration,
             {},
         ),
-        (TrainSpeedFaultConfiguration, {}),
+        (TrainSpeedFaultConfiguration, {},),
         (
             TrainCancelledFaultConfiguration,
             {},
-        ),
+        ), (TrackBlockedFaultConfiguration, {}),
     ],
 )
 class TestFailingDict:
@@ -81,6 +82,15 @@ class TestFailingDict:
                 "start_tick": 1,
                 "end_tick": 100,
                 "description": "TrainCancelledFault",
+                "affected_element_id": "12345678",
+            },
+        ),
+        (
+            TrackBlockedFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrackBlockedFault",
                 "affected_element_id": "12345678",
             },
         ),
