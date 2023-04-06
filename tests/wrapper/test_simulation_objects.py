@@ -1,7 +1,7 @@
 import pytest
-from traci import constants, trafficlight, vehicle
+from traci import constants, edge, trafficlight, vehicle
 
-from src.wrapper.simulation_objects import Signal, Train
+from src.wrapper.simulation_objects import Signal, Track, Train
 
 
 class TestSignal:
@@ -28,6 +28,36 @@ class TestSignal:
         signal.state = Signal.State.GO
 
         assert signal.state == Signal.State.GO
+
+
+class TestTrack:
+    """Tests for the track component"""
+
+    @pytest.fixture
+    def track(self):
+        return Track("track")
+
+    @pytest.fixture
+    def speed_update(self, monkeypatch):
+        def set_max_speed(identifier: str, speed: float) -> None:
+            assert identifier == "track"
+            assert speed == 100
+
+        monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
+
+    def test_update_speed(self, track, speed_update):
+        # pylint: disable=unused-argument
+        track.max_speed = 100
+
+        assert track.max_speed == 100
+
+    def test_default_blocked(self, track):
+        assert not track.blocked
+
+    def test_update_blocked(self, track):
+        track.blocked = True
+
+        assert track.blocked
 
 
 class TestTrain:
