@@ -8,6 +8,9 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.train_cancelled_fault import (
+    TrainCancelledFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
@@ -27,6 +30,10 @@ from tests.decorators import recreate_db_setup
             {},
         ),
         (TrainSpeedFaultConfiguration, {}),
+        (
+            TrainCancelledFaultConfiguration,
+            {},
+        ),
     ],
 )
 class TestFailingDict:
@@ -75,6 +82,15 @@ class TestFailingDict:
                 "start_tick": 1,
                 "end_tick": 100,
                 "description": "PlatformBlockedFault",
+                "affected_element_id": "12345678",
+            },
+        ),
+        (
+            TrainCancelledFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrainCancelledFault",
                 "affected_element_id": "12345678",
             },
         ),
