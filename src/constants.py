@@ -4,6 +4,12 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.train_cancelled_fault import (
+    TrainCancelledFaultConfiguration,
+)
+from src.fault_injector.fault_types.train_speed_fault import (
+    TrainSpeedFaultConfiguration,
+)
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
@@ -32,6 +38,7 @@ tables: list[Type[BaseModel]] = [
     TrainScheduleXSimulationPlatform,
     SimulationConfiguration,
     Token,
+    TrainSpeedFaultConfiguration,
     PlatformBlockedFaultConfiguration,
     LogEntry,
     TrainSpawnLogEntry,
@@ -43,4 +50,5 @@ tables: list[Type[BaseModel]] = [
     SetSignalLogEntry,
     InjectFaultLogEntry,
     RemoveFaultLogEntry,
+    TrainCancelledFaultConfiguration,
 ]
