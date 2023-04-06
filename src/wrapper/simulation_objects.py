@@ -101,6 +101,12 @@ class Switch(Node):
 
     state: State
 
+    def update(self, data: dict) -> None:
+        return  # We don't have to update anything from the simulator
+
+    def add_subscriptions(self) -> int:
+        return 0  # We don't have to update anything from the simulator
+
 
 class Track(SimulationObject):
     """A track in the simulation where trains can drive along"""
