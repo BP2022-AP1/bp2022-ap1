@@ -6,6 +6,7 @@ from peewee import ForeignKeyField
 from src.base_model import BaseModel
 from src.component import Component
 from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.schedule.schedule import Schedule
 
 
 class SpawnerConfiguration(BaseModel):
