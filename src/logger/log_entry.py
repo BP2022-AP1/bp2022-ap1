@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import marshmallow as marsh
 from peewee import CharField, DateTimeField, ForeignKeyField, IntegerField
 
@@ -18,7 +20,8 @@ class LogEntry(BaseModel):
         def _make(self, data: dict) -> "LogEntry":
             return LogEntry(**data)
 
-    timestamp = DateTimeField(null=False)
+    timestamp = DateTimeField(null=False, default=datetime.now())
+
     message = CharField(null=False)
     run_id = ForeignKeyField(Run, null=False)
 
