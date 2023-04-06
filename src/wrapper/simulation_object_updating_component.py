@@ -33,7 +33,7 @@ class SimulationObjectUpdatingComponent(Component):
             for x in self._simulation_objects
             if isinstance(x, src.wrapper.simulation_objects.Signal)
         ]
-        
+
     @property
     def platforms(self) -> List["Platform"]:
         """Returns all platforms in the simulation
@@ -45,7 +45,6 @@ class SimulationObjectUpdatingComponent(Component):
             for x in self._simulation_objects
             if isinstance(x, src.wrapper.simulation_objects.Platform)
         ]
-
 
     @property
     def tracks(self) -> List["Track"]:

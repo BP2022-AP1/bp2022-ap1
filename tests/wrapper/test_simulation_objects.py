@@ -1,7 +1,7 @@
 import pytest
 from traci import constants, edge, trafficlight, vehicle
 
-from src.wrapper.simulation_objects import Signal, Track
+from src.wrapper.simulation_objects import Signal, Track, Train
 
 
 class TestSignal:
