@@ -16,7 +16,7 @@ class ScheduleStrategy(ABC):
         """Constructs a RegularScheduleStrategy from a ScheduleConfiguration.
 
         :param schedule_configuration: The ScheduleConfiguration
-        :return: A RegularScheduleStrategy
+        :return: A ScheduleStrategy
         """
         raise NotImplementedError()
 
