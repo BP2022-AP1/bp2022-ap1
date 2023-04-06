@@ -10,6 +10,126 @@ servers:
 security:
   - ApiKeyAuth: []
 paths:
+
+  /schedule:
+    get:
+      operationId: get_all_schedule_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get all schedules
+            of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of schedules connected to a user.
+
+    post:
+      operationId: create_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Schedule"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    type: string
+                type: object
+          description:
+            Successfully created new schedule object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new schedule. Returns the id of the configuration object.
+
+  /schedule/{id}:
+    delete:
+      operationId: delete_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted schedule
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a schedule
+
+    get:
+      operationId: get_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Schedule"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a schedule.
+
+    put:
+      operationId: update_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Schedule"
+      responses:
+        "204":
+          description: Updated schedule.
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a schedule.
+
+
   /component/fault-injection/schedule-blocked-fault:
     get:
       operationId: get_schedule_blocked_fault_configuration_ids
@@ -1068,6 +1188,8 @@ components:
     RunConfiguration:
       type: object
     RunStatus:
+      type: object
+    Schedule:
       type: object
     createToken_request:
       properties:
