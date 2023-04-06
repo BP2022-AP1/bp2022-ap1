@@ -5,7 +5,7 @@ from peewee import ForeignKeyField
 
 from src.base_model import BaseModel
 from src.component import Component
-from src.schedule.schedule import Schedule
+from src.schedule.schedule_configuration import ScheduleConfiguration
 
 
 class SpawnerConfiguration(BaseModel):
@@ -35,7 +35,7 @@ class SpawnerConfigurationXSchedule(BaseModel):
         """Marshmallow schema for SpawnerConfigurationXSchedule"""
 
         spawner_configuration_id = marsh.fields.UUID(required=True)
-        schedule_id = marsh.fields.UUID(required=True)
+        schedule_configuration_id = marsh.fields.UUID(required=True)
 
         def _make(self, data: dict) -> "SpawnerConfigurationXSchedule":
             """Constructs a SpawnerConfigurationXSchedule from a dictionary.
@@ -46,9 +46,9 @@ class SpawnerConfigurationXSchedule(BaseModel):
             return SpawnerConfigurationXSchedule(**data)
 
     spawner_configuration_id = ForeignKeyField(
-        SpawnerConfiguration, null=False, backref="schedules"
+        SpawnerConfiguration, null=False, backref="schedule_configuration_references"
     )
-    schedule_id = ForeignKeyField(Schedule, null=False)
+    schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
 
 
 class Spawner(Component):
