@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from enum import Enum
+from typing import List, Tuple
 
-from traci import constants, edge, trafficlight
+from traci import constants, edge, trafficlight, vehicle
 
 
 class SimulationObject(ABC):
@@ -11,6 +12,7 @@ class SimulationObject(ABC):
     """
 
     identifier = None
+    updater = None
 
     def __init__(self, identifier=None):
         self.identifier = identifier
@@ -86,6 +88,20 @@ class Signal(Node):
         return 0
 
 
+class Switch(Node):
+    """A switch in the simulation which can point either left or right
+    (see `ISimulationSwitch.State`)
+    """
+
+    class State(Enum):
+        """The possible states of the switch"""
+
+        LEFT = 1
+        RIGHT = 2
+
+    state: State
+
+
 class Track(SimulationObject):
     """A track in the simulation where trains can drive along"""
 
@@ -119,3 +135,218 @@ class Track(SimulationObject):
 
     def add_subscriptions(self) -> int:
         return constants.VAR_MAXSPEED
+
+
+class Platform(SimulationObject):
+    """A platform where trains can arrive, load and unload passengers and depart"""
+
+    track: Track
+    station_name: str
+    platform_number: int
+    blocked: bool
+
+
+class Train(SimulationObject):
+    """A train driving around in the simulation."""
+
+    class TrainType(SimulationObject):
+        """Metadata about a specific train"""
+
+        _max_speed: float = None
+        _priority: int = None
+        _name: str = None
+
+        @property
+        def max_speed(self) -> float:
+            """Returns the maximum speed of the train (m/s).
+            performance impact: This method does not call traci.
+
+            :return: The top speed (see
+            <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-getMaxSpeed>)
+            """
+            return self._max_speed
+
+        @max_speed.setter
+        def max_speed(self, speed: float) -> None:
+            """Updates the maximum speed to the given value (m/s).
+            performance impact: This method calls traci.
+
+            :param speed: The new top speed (see
+            <https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-setMaxSpeed>)
+            """
+            vehicle.setMaxSpeed(self.identifier, speed)
+            self._max_speed = speed
+
+        @property
+        def priority(self) -> int:
+            """Returns the priority for this train (higher number means higher priority)
+
+            :return: The train priority
+            """
+            return self._priority if self._priority is not None else 0
+
+        @priority.setter
+        def priority(self, priority: int) -> None:
+            """Sets the priority of this train (higher number means higher priority)
+
+            :param priority: The new train priority
+            """
+            self._priority = priority
+
+        @property
+        def name(self) -> str:
+            """Returns the train type.
+
+            :return: The SUMO-type of the train
+            """
+            return self._name
+
+        @staticmethod
+        def from_sumo_type(train_type: str, instance: str):
+            """Creates a new train type for the given instance
+
+            :param train_type: The sumo type of the train
+            :param instance: The sumo train to which this type corresponds
+            """
+            return Train.TrainType(instance, name=train_type)
+
+        def __init__(self, identifier, name=None):
+            SimulationObject.__init__(self, identifier)
+            self._name = name
+
+        def update(self, data: dict) -> None:
+            self._max_speed = data[constants.VAR_MAXSPEED]
+
+        def add_subscriptions(self) -> int:
+            return constants.VAR_MAXSPEED
+
+    _position: Tuple[float, float]
+    _route: str
+    _track: Track
+    _speed: float
+    _timetable: List[Platform]
+    train_type: TrainType
+
+    @property
+    def track(self) -> Track:
+        """Returns the current track the train is on
+
+        :return: The current track the train is on
+        """
+        return self._track
+
+    @property
+    def position(self) -> Tuple[float, float]:
+        """The position of the train.
+        performance impact: This method doesn't perform a traci call.
+
+        :return: The position of the train
+        """
+        return self._position
+
+    @property
+    def speed(self) -> float:
+        """The current speed of the train
+        performance impact: This method doesn't perform a traci call.
+
+        :return: The train-speed
+        """
+        return self._speed
+
+    @property
+    def route(self) -> str:
+        """This method returns the current sumo-route-id.
+
+        :return: The route this vehicle is following
+        """
+        return self._route
+
+    @route.setter
+    def route(self, route_id: str) -> None:
+        """This method updates the vehicle route to the given sumo-route.
+
+        :performance consideration: This method makes one traci-roundtrip
+        :param route: the route that the vehicle should follow
+        """
+        vehicle.setRouteID(self.identifier, route_id)
+        self._route = route_id
+
+    @property
+    def timetable(self) -> List[Platform]:
+        """Returns the timetable of the train
+
+        :return: the timetable of the train
+        """
+        return self._timetable
+
+    @timetable.setter
+    def timetable(self, timetable: List[Platform]) -> None:
+        """Updates the timetable of this train to the given timetable
+
+        :param timetable: the new timetable
+        """
+        self._timetable = timetable
+
+    def __init__(
+        self,
+        identifier: str = None,
+        timetable: List[str] = None,
+        train_type: str = None,
+        from_simulator: bool = False,
+    ):  # pylint: disable=too-many-arguments
+        """Creates a new train from the given parameters.
+        When initializing manually, `timetable` and `train_type` are mandatory
+        :param identifier: The identifier of the train
+        :param timetable: The stations which the train should drive along,
+        in the correct order. Mandatory when initializing the train yourself.
+        :param train_type: The type of the train (as a SUMO VEHICLE_TYPE).
+        Mandatory when initializing the train yourself.
+        :param priority: The priority of the train (higher number means higher priority)
+        :param from_simulator: Specifies if train is created by the simulation or manually.
+        You probably don't need to touch this.
+        """
+        SimulationObject.__init__(self, identifier=identifier)
+
+        self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
+        self._convert_timetable(timetable)
+
+        if not from_simulator:
+            self._add_to_simulation(identifier, timetable, train_type)
+
+    def _convert_timetable(self, timetable: List[str]):
+        converted = []
+        timetable = [] if timetable is None else timetable
+        for item in timetable:
+            converted.append(
+                next(x for x in self.updater.platforms if x.identifier == item)
+            )
+
+        self._timetable = converted
+
+    def _add_to_simulation(
+        self, identifier: str, timetable: List[Platform], train_type: str
+    ):
+        self._timetable = timetable
+        route = "not-implemented"  # TODO: fetch the first route from the list of platforms #pylint: disable=fixme
+        vehicle.add(identifier, route, train_type)
+
+    def update(self, data: dict):
+        """Gets called whenever a simualtion tick has happened.
+        :param updates: The updated values for the synchronized properties
+        """
+        self._position = data[constants.VAR_POSITION]
+        self._track = data[constants.VAR_ROAD_ID]
+        self._route = data[constants.VAR_ROUTE]
+        self._speed = data[constants.VAR_SPEED]
+
+    def add_subscriptions(self) -> int:
+        """Gets called when this object is created to allow
+        specification of simulator-synchronized properties.
+        :return: The synchronized properties (see <https://sumo.dlr.de/pydoc/traci.constants.html>)
+        """
+        return (
+            constants.VAR_POSITION
+            + constants.VAR_ROUTE
+            + constants.VAR_ROAD_ID
+            + constants.VAR_SPEED
+        )
