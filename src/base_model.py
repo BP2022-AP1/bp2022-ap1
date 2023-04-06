@@ -1,9 +1,10 @@
 import abc
 import os
 from uuid import uuid4
+from datetime import datetime
 
 import marshmallow as marsh
-from peewee import Model, PostgresqlDatabase, SqliteDatabase, UUIDField
+from peewee import Model, PostgresqlDatabase, SqliteDatabase, UUIDField, DateTimeField
 
 db: PostgresqlDatabase = PostgresqlDatabase(
     database=os.getenv("DATABASE_NAME") or "postgres",
@@ -26,6 +27,8 @@ class BaseModel(Model):
         """The marshmallow schema all model schemas have to inherit from."""
 
         id = marsh.fields.UUID()
+        created_at = marsh.fields.DateTime(format='iso')
+        updated_at = marsh.fields.DateTime(format='iso')
 
         @abc.abstractmethod
         def _make(self, data: dict) -> "BaseModel":
@@ -38,6 +41,18 @@ class BaseModel(Model):
             return self._make(data)
 
     id = UUIDField(primary_key=True, default=uuid4)
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField()
+
+    def save(self, force_insert=True, only=None):
+        """Save the data in the model instance
+        See https://docs.peewee-orm.com/en/latest/peewee/api.html#Model.save
+
+        :param force_insert: Force INSERT query, defaults to True
+        :param only: Only save the given Field instances, defaults to None
+        """
+        self.updated_at = datetime.now()
+        super().save(force_insert, only)
 
     @classmethod
     def from_dict(cls, data: dict) -> "BaseModel":
