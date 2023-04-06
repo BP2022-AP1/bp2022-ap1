@@ -49,6 +49,6 @@ tables: list[Type[BaseModel]] = [
     RemoveFahrstrasseLogEntry,
     SetSignalLogEntry,
     InjectFaultLogEntry,
-    RemoveFaultLogEntry,
+    ResolveFaultLogEntry,
     TrainCancelledFaultConfiguration,
 ]

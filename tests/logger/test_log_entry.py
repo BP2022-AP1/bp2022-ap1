@@ -6,13 +6,22 @@ import pytest
 from marshmallow import ValidationError
 from peewee import IntegrityError
 
+from src.fault_injector.fault_types.platform_blocked_fault import (
+    PlatformBlockedFaultConfiguration,
+)
+from src.fault_injector.fault_types.train_cancelled_fault import (
+    TrainCancelledFaultConfiguration,
+)
+from src.fault_injector.fault_types.train_speed_fault import (
+    TrainSpeedFaultConfiguration,
+)
 from src.implementor.models import Run
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     InjectFaultLogEntry,
     LogEntry,
     RemoveFahrstrasseLogEntry,
-    RemoveFaultLogEntry,
+    ResolveFaultLogEntry,
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
@@ -25,79 +34,25 @@ from tests.decorators import recreate_db_setup
 class TestLogEntry:
     """Class for testing all LogEntry classes."""
 
-    @pytest.fixture
-    def timestamp(self):
-        return datetime.strptime("2023-04-11-10-00-00", "%Y-%m-%d-%H-%M-%S")
-
-    @pytest.fixture
-    def message(self):
-        return "Test Log Done"
-
-    @pytest.fixture
-    def run_as_dict(self):
-        return {}
-
-    @pytest.fixture
-    def run(self, run_as_dict):
-        return Run.create(**run_as_dict)
-
-    @pytest.fixture
-    def train_id(self):
-        return 123
-
-    @pytest.fixture
-    def station_id(self):
-        return 456
-
-    @pytest.fixture
-    def fahrstrasse(self):
-        return "Test Fahrstrasse"
-
-    @pytest.fixture
-    def signal_id(self):
-        return "Test Signal"
-
-    @pytest.fixture
-    def state_before(self):
-        return 0
-
-    @pytest.fixture
-    def state_after(self):
-        return 1
-
-    @pytest.fixture
-    def injection_id(self):
-        return 123
-
-    @pytest.fixture
-    def fault_type(self):
-        return 3
-
-    @pytest.fixture
-    def injection_position(self):
-        return "Test Position"
-
-    @pytest.fixture
-    def duration(self):
-        return 10
-
     class TestLogEntry:
         """Test LogEntry."""
 
         @pytest.fixture
-        def log_entry_as_dict(self, timestamp, message, run):
+        def log_entry_as_dict(self, timestamp, tick, message, run):
             """LogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
             }
 
         @pytest.fixture
-        def log_entry_as_dict_serialized(self, timestamp, message, run):
+        def log_entry_as_dict_serialized(self, timestamp, tick, message, run):
             """LogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
             }
@@ -128,12 +83,14 @@ class TestLogEntry:
             """Test that Log Entry can be serialized."""
             log_entry = LogEntry.create(**log_entry_as_dict)
             assert log_entry.timestamp == log_entry_as_dict["timestamp"]
+            assert log_entry.tick == log_entry_as_dict["tick"]
             assert log_entry.message == log_entry_as_dict["message"]
             assert log_entry.run_id.id == log_entry_as_dict["run_id"]
 
             assert log_entry.to_dict() == {
                 "id": str(log_entry.id),
                 "timestamp": log_entry_as_dict["timestamp"].isoformat(),
+                "tick": log_entry_as_dict["tick"],
                 "message": log_entry_as_dict["message"],
                 "run_id": str(log_entry_as_dict["run_id"]),
             }
@@ -144,12 +101,14 @@ class TestLogEntry:
             assert isinstance(log_entry, LogEntry)
             assert isinstance(log_entry.id, UUID)
             assert isinstance(log_entry.timestamp, datetime)
+            assert isinstance(log_entry.tick, int)
             assert isinstance(log_entry.message, str)
             assert isinstance(log_entry.run_id, Run)
             assert (
                 log_entry.timestamp.isoformat()
                 == log_entry_as_dict_serialized["timestamp"]
             )
+            assert log_entry.tick == log_entry_as_dict_serialized["tick"]
             assert log_entry.message == log_entry_as_dict_serialized["message"]
             assert str(log_entry.run_id) == log_entry_as_dict_serialized["run_id"]
 
@@ -162,22 +121,28 @@ class TestLogEntry:
         """Tests for TrainSpawnLogEntry."""
 
         @pytest.fixture
-        def train_spawn_log_entry_as_dict(self, timestamp, message, run, train_id):
+        # pylint: disable=too-many-arguments
+        def train_spawn_log_entry_as_dict(
+            self, timestamp, tick, message, run, train_id
+        ):
             """TrainSpawnLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "train_id": train_id,
             }
 
         @pytest.fixture
+        # pylint: disable=too-many-arguments
         def train_spawn_log_entry_as_dict_serialized(
-            self, timestamp, message, run, train_id
+            self, timestamp, tick, message, run, train_id
         ):
             """TrainSpawnLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
@@ -218,6 +183,7 @@ class TestLogEntry:
                 train_spawn_log_entry.timestamp
                 == train_spawn_log_entry_as_dict["timestamp"]
             )
+            assert train_spawn_log_entry.tick == train_spawn_log_entry_as_dict["tick"]
             assert (
                 train_spawn_log_entry.message
                 == train_spawn_log_entry_as_dict["message"]
@@ -234,6 +200,7 @@ class TestLogEntry:
             assert train_spawn_log_entry.to_dict() == {
                 "id": str(train_spawn_log_entry.id),
                 "timestamp": train_spawn_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": train_spawn_log_entry_as_dict["tick"],
                 "message": train_spawn_log_entry_as_dict["message"],
                 "run_id": str(train_spawn_log_entry_as_dict["run_id"]),
                 "train_id": train_spawn_log_entry_as_dict["train_id"],
@@ -247,12 +214,17 @@ class TestLogEntry:
             assert isinstance(train_spawn_log_entry, TrainSpawnLogEntry)
             assert isinstance(train_spawn_log_entry.id, UUID)
             assert isinstance(train_spawn_log_entry.timestamp, datetime)
+            assert isinstance(train_spawn_log_entry.tick, int)
             assert isinstance(train_spawn_log_entry.message, str)
             assert isinstance(train_spawn_log_entry.run_id, Run)
-            assert isinstance(train_spawn_log_entry.train_id, int)
+            assert isinstance(train_spawn_log_entry.train_id, str)
             assert (
                 train_spawn_log_entry.timestamp.isoformat()
                 == train_spawn_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_spawn_log_entry.tick
+                == train_spawn_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 train_spawn_log_entry.message
@@ -276,22 +248,28 @@ class TestLogEntry:
         """Tests for TrainRemoveLogEntry."""
 
         @pytest.fixture
-        def train_remove_log_entry_as_dict(self, timestamp, message, run, train_id):
+        # pylint: disable=too-many-arguments
+        def train_remove_log_entry_as_dict(
+            self, timestamp, tick, message, run, train_id
+        ):
             """TrainRemoveLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "train_id": train_id,
             }
 
         @pytest.fixture
+        # pylint: disable=too-many-arguments
         def train_remove_log_entry_as_dict_serialized(
-            self, timestamp, message, run, train_id
+            self, timestamp, tick, message, run, train_id
         ):
             """TrainRemoveLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
@@ -332,6 +310,7 @@ class TestLogEntry:
                 train_remove_log_entry.timestamp
                 == train_remove_log_entry_as_dict["timestamp"]
             )
+            assert train_remove_log_entry.tick == train_remove_log_entry_as_dict["tick"]
             assert (
                 train_remove_log_entry.message
                 == train_remove_log_entry_as_dict["message"]
@@ -348,6 +327,7 @@ class TestLogEntry:
             assert train_remove_log_entry.to_dict() == {
                 "id": str(train_remove_log_entry.id),
                 "timestamp": train_remove_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": train_remove_log_entry_as_dict["tick"],
                 "message": train_remove_log_entry_as_dict["message"],
                 "run_id": str(train_remove_log_entry_as_dict["run_id"]),
                 "train_id": train_remove_log_entry_as_dict["train_id"],
@@ -361,12 +341,17 @@ class TestLogEntry:
             assert isinstance(train_remove_log_entry, TrainRemoveLogEntry)
             assert isinstance(train_remove_log_entry.id, UUID)
             assert isinstance(train_remove_log_entry.timestamp, datetime)
+            assert isinstance(train_remove_log_entry.tick, int)
             assert isinstance(train_remove_log_entry.message, str)
             assert isinstance(train_remove_log_entry.run_id, Run)
-            assert isinstance(train_remove_log_entry.train_id, int)
+            assert isinstance(train_remove_log_entry.train_id, str)
             assert (
                 train_remove_log_entry.timestamp.isoformat()
                 == train_remove_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_remove_log_entry.tick
+                == train_remove_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 train_remove_log_entry.message
@@ -387,11 +372,12 @@ class TestLogEntry:
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def train_arrival_log_entry_as_dict(
-            self, timestamp, message, run, train_id, station_id
+            self, timestamp, tick, message, run, train_id, station_id
         ):
             """TrainArrivalLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "train_id": train_id,
@@ -401,11 +387,12 @@ class TestLogEntry:
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def train_arrival_log_entry_as_dict_serialized(
-            self, timestamp, message, run, train_id, station_id
+            self, timestamp, tick, message, run, train_id, station_id
         ):
             """TrainArrivalLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
@@ -448,6 +435,9 @@ class TestLogEntry:
                 == train_arrival_log_entry_as_dict["timestamp"]
             )
             assert (
+                train_arrival_log_entry.tick == train_arrival_log_entry_as_dict["tick"]
+            )
+            assert (
                 train_arrival_log_entry.message
                 == train_arrival_log_entry_as_dict["message"]
             )
@@ -467,6 +457,7 @@ class TestLogEntry:
             assert train_arrival_log_entry.to_dict() == {
                 "id": str(train_arrival_log_entry.id),
                 "timestamp": train_arrival_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": train_arrival_log_entry_as_dict["tick"],
                 "message": train_arrival_log_entry_as_dict["message"],
                 "run_id": str(train_arrival_log_entry_as_dict["run_id"]),
                 "train_id": train_arrival_log_entry_as_dict["train_id"],
@@ -481,13 +472,18 @@ class TestLogEntry:
             assert isinstance(train_arrival_log_entry, TrainArrivalLogEntry)
             assert isinstance(train_arrival_log_entry.id, UUID)
             assert isinstance(train_arrival_log_entry.timestamp, datetime)
+            assert isinstance(train_arrival_log_entry.tick, int)
             assert isinstance(train_arrival_log_entry.message, str)
             assert isinstance(train_arrival_log_entry.run_id, Run)
-            assert isinstance(train_arrival_log_entry.train_id, int)
-            assert isinstance(train_arrival_log_entry.station_id, int)
+            assert isinstance(train_arrival_log_entry.train_id, str)
+            assert isinstance(train_arrival_log_entry.station_id, str)
             assert (
                 train_arrival_log_entry.timestamp.isoformat()
                 == train_arrival_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_arrival_log_entry.tick
+                == train_arrival_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 train_arrival_log_entry.message
@@ -521,11 +517,12 @@ class TestLogEntry:
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def train_departure_log_entry_as_dict(
-            self, timestamp, message, run, train_id, station_id
+            self, timestamp, tick, message, run, train_id, station_id
         ):
             """TrainDepartureLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "train_id": train_id,
@@ -535,11 +532,12 @@ class TestLogEntry:
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def train_departure_log_entry_as_dict_serialized(
-            self, timestamp, message, run, train_id, station_id
+            self, timestamp, tick, message, run, train_id, station_id
         ):
             """TrainDepartureLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
@@ -582,6 +580,10 @@ class TestLogEntry:
                 == train_departure_log_entry_as_dict["timestamp"]
             )
             assert (
+                train_departure_log_entry.tick
+                == train_departure_log_entry_as_dict["tick"]
+            )
+            assert (
                 train_departure_log_entry.message
                 == train_departure_log_entry_as_dict["message"]
             )
@@ -601,6 +603,7 @@ class TestLogEntry:
             assert train_departure_log_entry.to_dict() == {
                 "id": str(train_departure_log_entry.id),
                 "timestamp": train_departure_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": train_departure_log_entry_as_dict["tick"],
                 "message": train_departure_log_entry_as_dict["message"],
                 "run_id": str(train_departure_log_entry_as_dict["run_id"]),
                 "train_id": train_departure_log_entry_as_dict["train_id"],
@@ -615,13 +618,18 @@ class TestLogEntry:
             assert isinstance(train_departure_log_entry, TrainDepartureLogEntry)
             assert isinstance(train_departure_log_entry.id, UUID)
             assert isinstance(train_departure_log_entry.timestamp, datetime)
+            assert isinstance(train_departure_log_entry.tick, int)
             assert isinstance(train_departure_log_entry.message, str)
             assert isinstance(train_departure_log_entry.run_id, Run)
-            assert isinstance(train_departure_log_entry.train_id, int)
-            assert isinstance(train_departure_log_entry.station_id, int)
+            assert isinstance(train_departure_log_entry.train_id, str)
+            assert isinstance(train_departure_log_entry.station_id, str)
             assert (
                 train_departure_log_entry.timestamp.isoformat()
                 == train_departure_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_departure_log_entry.tick
+                == train_departure_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 train_departure_log_entry.message
@@ -653,24 +661,28 @@ class TestLogEntry:
         """Tests for CreateFahrstrasseLogEntry."""
 
         @pytest.fixture
+        # pylint: disable=too-many-arguments
         def create_fahrstrasse_log_entry_as_dict(
-            self, timestamp, message, run, fahrstrasse
+            self, timestamp, tick, message, run, fahrstrasse
         ):
             """CreateFahrstrasseLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "fahrstrasse": fahrstrasse,
             }
 
         @pytest.fixture
+        # pylint: disable=too-many-arguments
         def create_fahrstrasse_log_entry_as_dict_serialized(
-            self, timestamp, message, run, fahrstrasse
+            self, timestamp, tick, message, run, fahrstrasse
         ):
             """CreateFahrstrasseLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
                 "fahrstrasse": fahrstrasse,
@@ -714,6 +726,10 @@ class TestLogEntry:
                 == create_fahrstrasse_log_entry_as_dict["timestamp"]
             )
             assert (
+                create_fahrstrasse_log_entry.tick
+                == create_fahrstrasse_log_entry_as_dict["tick"]
+            )
+            assert (
                 create_fahrstrasse_log_entry.message
                 == create_fahrstrasse_log_entry_as_dict["message"]
             )
@@ -731,6 +747,7 @@ class TestLogEntry:
                 "timestamp": create_fahrstrasse_log_entry_as_dict[
                     "timestamp"
                 ].isoformat(),
+                "tick": create_fahrstrasse_log_entry_as_dict["tick"],
                 "message": create_fahrstrasse_log_entry_as_dict["message"],
                 "run_id": str(create_fahrstrasse_log_entry_as_dict["run_id"]),
                 "fahrstrasse": create_fahrstrasse_log_entry_as_dict["fahrstrasse"],
@@ -744,12 +761,17 @@ class TestLogEntry:
             assert isinstance(create_fahrstrasse_log_entry, CreateFahrstrasseLogEntry)
             assert isinstance(create_fahrstrasse_log_entry.id, UUID)
             assert isinstance(create_fahrstrasse_log_entry.timestamp, datetime)
+            assert isinstance(create_fahrstrasse_log_entry.tick, int)
             assert isinstance(create_fahrstrasse_log_entry.message, str)
             assert isinstance(create_fahrstrasse_log_entry.run_id, Run)
             assert isinstance(create_fahrstrasse_log_entry.fahrstrasse, str)
             assert (
                 create_fahrstrasse_log_entry.timestamp.isoformat()
                 == create_fahrstrasse_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                create_fahrstrasse_log_entry.tick
+                == create_fahrstrasse_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 create_fahrstrasse_log_entry.message
@@ -777,24 +799,28 @@ class TestLogEntry:
         """Tests for RemoveFahrstrasseLogEntry."""
 
         @pytest.fixture
+        # pylint: disable=too-many-arguments
         def remove_fahrstrasse_log_entry_as_dict(
-            self, timestamp, message, run, fahrstrasse
+            self, timestamp, tick, message, run, fahrstrasse
         ):
             """RemoveFahrstrasseLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "fahrstrasse": fahrstrasse,
             }
 
         @pytest.fixture
+        # pylint: disable=too-many-arguments
         def remove_fahrstrasse_log_entry_as_dict_serialized(
-            self, timestamp, message, run, fahrstrasse
+            self, timestamp, tick, message, run, fahrstrasse
         ):
             """RemoveFahrstrasseLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
                 "fahrstrasse": fahrstrasse,
@@ -838,6 +864,10 @@ class TestLogEntry:
                 == remove_fahrstrasse_log_entry_as_dict["timestamp"]
             )
             assert (
+                remove_fahrstrasse_log_entry.tick
+                == remove_fahrstrasse_log_entry_as_dict["tick"]
+            )
+            assert (
                 remove_fahrstrasse_log_entry.message
                 == remove_fahrstrasse_log_entry_as_dict["message"]
             )
@@ -855,6 +885,7 @@ class TestLogEntry:
                 "timestamp": remove_fahrstrasse_log_entry_as_dict[
                     "timestamp"
                 ].isoformat(),
+                "tick": remove_fahrstrasse_log_entry_as_dict["tick"],
                 "message": remove_fahrstrasse_log_entry_as_dict["message"],
                 "run_id": str(remove_fahrstrasse_log_entry_as_dict["run_id"]),
                 "fahrstrasse": remove_fahrstrasse_log_entry_as_dict["fahrstrasse"],
@@ -868,12 +899,17 @@ class TestLogEntry:
             assert isinstance(remove_fahrstrasse_log_entry, RemoveFahrstrasseLogEntry)
             assert isinstance(remove_fahrstrasse_log_entry.id, UUID)
             assert isinstance(remove_fahrstrasse_log_entry.timestamp, datetime)
+            assert isinstance(remove_fahrstrasse_log_entry.tick, int)
             assert isinstance(remove_fahrstrasse_log_entry.message, str)
             assert isinstance(remove_fahrstrasse_log_entry.run_id, Run)
             assert isinstance(remove_fahrstrasse_log_entry.fahrstrasse, str)
             assert (
                 remove_fahrstrasse_log_entry.timestamp.isoformat()
                 == remove_fahrstrasse_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                remove_fahrstrasse_log_entry.tick
+                == remove_fahrstrasse_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 remove_fahrstrasse_log_entry.message
@@ -903,11 +939,12 @@ class TestLogEntry:
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def set_signal_log_entry_as_dict(
-            self, timestamp, message, run, signal_id, state_before, state_after
+            self, timestamp, tick, message, run, signal_id, state_before, state_after
         ):
             """SetSignalLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
                 "signal_id": signal_id,
@@ -918,14 +955,15 @@ class TestLogEntry:
         @pytest.fixture
         # pylint: disable=too-many-arguments
         def set_signal_log_entry_as_dict_serialized(
-            self, timestamp, message, run, signal_id, state_before, state_after
+            self, timestamp, tick, message, run, signal_id, state_before, state_after
         ):
             """SetSignalLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
-                "signal_id": signal_id,
+                "signal_id": str(signal_id),
                 "state_before": state_before,
                 "state_after": state_after,
             }
@@ -965,6 +1003,7 @@ class TestLogEntry:
                 set_signal_log_entry.timestamp
                 == set_signal_log_entry_as_dict["timestamp"]
             )
+            assert set_signal_log_entry.tick == set_signal_log_entry_as_dict["tick"]
             assert (
                 set_signal_log_entry.message == set_signal_log_entry_as_dict["message"]
             )
@@ -987,9 +1026,10 @@ class TestLogEntry:
             assert set_signal_log_entry.to_dict() == {
                 "id": str(set_signal_log_entry.id),
                 "timestamp": set_signal_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": set_signal_log_entry_as_dict["tick"],
                 "message": set_signal_log_entry_as_dict["message"],
                 "run_id": str(set_signal_log_entry_as_dict["run_id"]),
-                "signal_id": set_signal_log_entry_as_dict["signal_id"],
+                "signal_id": str(set_signal_log_entry_as_dict["signal_id"]),
                 "state_before": set_signal_log_entry_as_dict["state_before"],
                 "state_after": set_signal_log_entry_as_dict["state_after"],
             }
@@ -1002,14 +1042,19 @@ class TestLogEntry:
             assert isinstance(set_signal_log_entry, SetSignalLogEntry)
             assert isinstance(set_signal_log_entry.id, UUID)
             assert isinstance(set_signal_log_entry.timestamp, datetime)
+            assert isinstance(set_signal_log_entry.tick, int)
             assert isinstance(set_signal_log_entry.message, str)
             assert isinstance(set_signal_log_entry.run_id, Run)
-            assert isinstance(set_signal_log_entry.signal_id, str)
+            assert isinstance(set_signal_log_entry.signal_id, UUID)
             assert isinstance(set_signal_log_entry.state_before, int)
             assert isinstance(set_signal_log_entry.state_after, int)
             assert (
                 set_signal_log_entry.timestamp.isoformat()
                 == set_signal_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                set_signal_log_entry.tick
+                == set_signal_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 set_signal_log_entry.message
@@ -1020,7 +1065,7 @@ class TestLogEntry:
                 == set_signal_log_entry_as_dict_serialized["run_id"]
             )
             assert (
-                set_signal_log_entry.signal_id
+                str(set_signal_log_entry.signal_id)
                 == set_signal_log_entry_as_dict_serialized["signal_id"]
             )
             assert (
@@ -1045,22 +1090,28 @@ class TestLogEntry:
         def inject_fault_log_entry_as_dict(
             self,
             timestamp,
+            tick,
             message,
             run,
-            injection_id,
-            fault_type,
-            injection_position,
-            duration,
+            train_speed_fault_configuration,
+            platform_blocked_fault_configuration,
+            train_cancelled_fault_configuration,
+            affected_element,
+            value_before,
+            value_after,
         ):
             """InjectFaultLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
-                "injection_id": injection_id,
-                "fault_type": fault_type,
-                "injection_position": injection_position,
-                "duration": duration,
+                "train_speed_fault_configuration": train_speed_fault_configuration.id,
+                "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
+                "train_cancelled_fault_configuration": train_cancelled_fault_configuration.id,
+                "affected_element": affected_element,
+                "value_before": value_before,
+                "value_after": value_after,
             }
 
         @pytest.fixture
@@ -1068,22 +1119,34 @@ class TestLogEntry:
         def inject_fault_log_entry_as_dict_serialized(
             self,
             timestamp,
+            tick,
             message,
             run,
-            injection_id,
-            fault_type,
-            injection_position,
-            duration,
+            train_speed_fault_configuration,
+            platform_blocked_fault_configuration,
+            train_cancelled_fault_configuration,
+            affected_element,
+            value_before,
+            value_after,
         ):
             """InjectFaultLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
-                "injection_id": injection_id,
-                "fault_type": fault_type,
-                "injection_position": injection_position,
-                "duration": duration,
+                "train_speed_fault_configuration": str(
+                    train_speed_fault_configuration.id
+                ),
+                "platform_blocked_fault_configuration": str(
+                    platform_blocked_fault_configuration.id
+                ),
+                "train_cancelled_fault_configuration": str(
+                    train_cancelled_fault_configuration.id
+                ),
+                "affected_element": affected_element,
+                "value_before": value_before,
+                "value_after": value_after,
             }
 
         @pytest.fixture
@@ -1121,6 +1184,7 @@ class TestLogEntry:
                 inject_fault_log_entry.timestamp
                 == inject_fault_log_entry_as_dict["timestamp"]
             )
+            assert inject_fault_log_entry.tick == inject_fault_log_entry_as_dict["tick"]
             assert (
                 inject_fault_log_entry.message
                 == inject_fault_log_entry_as_dict["message"]
@@ -1130,32 +1194,51 @@ class TestLogEntry:
                 == inject_fault_log_entry_as_dict["run_id"]
             )
             assert (
-                inject_fault_log_entry.injection_id
-                == inject_fault_log_entry_as_dict["injection_id"]
+                inject_fault_log_entry.train_speed_fault_configuration.id
+                == inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
             )
             assert (
-                inject_fault_log_entry.fault_type
-                == inject_fault_log_entry_as_dict["fault_type"]
+                inject_fault_log_entry.platform_blocked_fault_configuration.id
+                == inject_fault_log_entry_as_dict[
+                    "platform_blocked_fault_configuration"
+                ]
             )
             assert (
-                inject_fault_log_entry.injection_position
-                == inject_fault_log_entry_as_dict["injection_position"]
+                inject_fault_log_entry.train_cancelled_fault_configuration.id
+                == inject_fault_log_entry_as_dict["train_cancelled_fault_configuration"]
             )
             assert (
-                inject_fault_log_entry.duration
-                == inject_fault_log_entry_as_dict["duration"]
+                inject_fault_log_entry.affected_element
+                == inject_fault_log_entry_as_dict["affected_element"]
+            )
+            assert (
+                inject_fault_log_entry.value_before
+                == inject_fault_log_entry_as_dict["value_before"]
+            )
+            assert (
+                inject_fault_log_entry.value_after
+                == inject_fault_log_entry_as_dict["value_after"]
             )
 
             assert inject_fault_log_entry.to_dict() == {
                 "id": str(inject_fault_log_entry.id),
                 # pylint: disable=no-member
                 "timestamp": inject_fault_log_entry.timestamp.isoformat(),
+                "tick": inject_fault_log_entry.tick,
                 "message": inject_fault_log_entry.message,
                 "run_id": str(inject_fault_log_entry.run_id),
-                "injection_id": inject_fault_log_entry.injection_id,
-                "fault_type": inject_fault_log_entry.fault_type,
-                "injection_position": inject_fault_log_entry.injection_position,
-                "duration": inject_fault_log_entry.duration,
+                "train_speed_fault_configuration": str(
+                    inject_fault_log_entry.train_speed_fault_configuration
+                ),
+                "platform_blocked_fault_configuration": str(
+                    inject_fault_log_entry.platform_blocked_fault_configuration
+                ),
+                "train_cancelled_fault_configuration": str(
+                    inject_fault_log_entry.train_cancelled_fault_configuration
+                ),
+                "affected_element": inject_fault_log_entry.affected_element,
+                "value_before": inject_fault_log_entry.value_before,
+                "value_after": inject_fault_log_entry.value_after,
             }
 
         def test_deserialization(self, inject_fault_log_entry_as_dict_serialized):
@@ -1166,15 +1249,32 @@ class TestLogEntry:
             assert isinstance(inject_fault_log_entry, InjectFaultLogEntry)
             assert isinstance(inject_fault_log_entry.id, UUID)
             assert isinstance(inject_fault_log_entry.timestamp, datetime)
+            assert isinstance(inject_fault_log_entry.tick, int)
             assert isinstance(inject_fault_log_entry.message, str)
             assert isinstance(inject_fault_log_entry.run_id, Run)
-            assert isinstance(inject_fault_log_entry.injection_id, int)
-            assert isinstance(inject_fault_log_entry.fault_type, int)
-            assert isinstance(inject_fault_log_entry.injection_position, str)
-            assert isinstance(inject_fault_log_entry.duration, int)
+            assert isinstance(
+                inject_fault_log_entry.train_speed_fault_configuration,
+                TrainSpeedFaultConfiguration,
+            )
+            assert isinstance(
+                inject_fault_log_entry.platform_blocked_fault_configuration,
+                PlatformBlockedFaultConfiguration,
+            )
+            assert isinstance(
+                inject_fault_log_entry.train_cancelled_fault_configuration,
+                TrainCancelledFaultConfiguration,
+            )
+            assert isinstance(inject_fault_log_entry.affected_element, str)
+            assert isinstance(inject_fault_log_entry.value_before, str)
+            assert isinstance(inject_fault_log_entry.value_after, str)
+
             assert (
                 inject_fault_log_entry.timestamp.isoformat()
                 == inject_fault_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                inject_fault_log_entry.tick
+                == inject_fault_log_entry_as_dict_serialized["tick"]
             )
             assert (
                 inject_fault_log_entry.message
@@ -1185,20 +1285,34 @@ class TestLogEntry:
                 == inject_fault_log_entry_as_dict_serialized["run_id"]
             )
             assert (
-                inject_fault_log_entry.injection_id
-                == inject_fault_log_entry_as_dict_serialized["injection_id"]
+                str(inject_fault_log_entry.train_speed_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "train_speed_fault_configuration"
+                ]
             )
             assert (
-                inject_fault_log_entry.fault_type
-                == inject_fault_log_entry_as_dict_serialized["fault_type"]
+                str(inject_fault_log_entry.platform_blocked_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "platform_blocked_fault_configuration"
+                ]
             )
             assert (
-                inject_fault_log_entry.injection_position
-                == inject_fault_log_entry_as_dict_serialized["injection_position"]
+                str(inject_fault_log_entry.train_cancelled_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "train_cancelled_fault_configuration"
+                ]
             )
             assert (
-                inject_fault_log_entry.duration
-                == inject_fault_log_entry_as_dict_serialized["duration"]
+                inject_fault_log_entry.affected_element
+                == inject_fault_log_entry_as_dict_serialized["affected_element"]
+            )
+            assert (
+                inject_fault_log_entry.value_before
+                == inject_fault_log_entry_as_dict_serialized["value_before"]
+            )
+            assert (
+                inject_fault_log_entry.value_after
+                == inject_fault_log_entry_as_dict_serialized["value_after"]
             )
 
         def test_deserialization_empty_fails(
@@ -1208,119 +1322,205 @@ class TestLogEntry:
             with pytest.raises(ValidationError):
                 InjectFaultLogEntry.Schema().load(empty_inject_fault_log_entry_as_dict)
 
-    class TestRemoveFaultLogEntry:
-        """Tests for RemoveFaultLogEntry."""
+    class TestResolveFaultLogEntry:
+        """Tests for ResolveFaultLogEntry."""
 
         @pytest.fixture
-        def remove_fault_log_entry_as_dict(self, timestamp, message, run, injection_id):
-            """RemoveFaultLogEntry as dict with all fields set."""
+        # pylint: disable=too-many-arguments
+        def resolve_fault_log_entry_as_dict(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_speed_fault_configuration,
+            platform_blocked_fault_configuration,
+            train_cancelled_fault_configuration,
+        ):
+            """ResolveFaultLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
+                "tick": tick,
                 "message": message,
                 "run_id": run.id,
-                "injection_id": injection_id,
+                "train_speed_fault_configuration": train_speed_fault_configuration.id,
+                "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
+                "train_cancelled_fault_configuration": train_cancelled_fault_configuration.id,
             }
 
         @pytest.fixture
-        def remove_fault_log_entry_as_dict_serialized(
-            self, timestamp, message, run, injection_id
+        # pylint: disable=too-many-arguments
+        def resolve_fault_log_entry_as_dict_serialized(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_speed_fault_configuration,
+            platform_blocked_fault_configuration,
+            train_cancelled_fault_configuration,
         ):
-            """RemoveFaultLogEntry as serialized dict with all fields set."""
+            """ResolveFaultLogEntry as serialized dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
+                "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
-                "injection_id": injection_id,
+                "train_speed_fault_configuration": str(
+                    train_speed_fault_configuration.id
+                ),
+                "platform_blocked_fault_configuration": str(
+                    platform_blocked_fault_configuration.id
+                ),
+                "train_cancelled_fault_configuration": str(
+                    train_cancelled_fault_configuration.id
+                ),
             }
 
         @pytest.fixture
-        def empty_remove_fault_log_entry_as_dict(self):
-            """RemoveFaultLogEntry as dict with no fields set."""
+        def empty_resolve_fault_log_entry_as_dict(self):
+            """ResolveFaultLogEntry as dict with no fields set."""
             return {}
 
         @recreate_db_setup
         def setup_method(self):
             pass
 
-        def test_create(self, remove_fault_log_entry_as_dict):
+        def test_create(self, resolve_fault_log_entry_as_dict):
             """Test that Remove Fault Log Entry can be created."""
-            remove_fault_log_entry = RemoveFaultLogEntry.create(
-                **remove_fault_log_entry_as_dict
+            resolve_fault_log_entry = ResolveFaultLogEntry.create(
+                **resolve_fault_log_entry_as_dict
             )
             assert (
-                RemoveFaultLogEntry.select()
-                .where(RemoveFaultLogEntry.id == remove_fault_log_entry.id)
+                ResolveFaultLogEntry.select()
+                .where(ResolveFaultLogEntry.id == resolve_fault_log_entry.id)
                 .first()
-                == remove_fault_log_entry
+                == resolve_fault_log_entry
             )
 
-        def test_create_empty_fails(self, empty_remove_fault_log_entry_as_dict):
+        def test_create_empty_fails(self, empty_resolve_fault_log_entry_as_dict):
             """Test that Remove Fault Log Entry cannot be created with no fields set."""
             with pytest.raises(IntegrityError):
-                RemoveFaultLogEntry.create(**empty_remove_fault_log_entry_as_dict)
+                ResolveFaultLogEntry.create(**empty_resolve_fault_log_entry_as_dict)
 
-        def test_serialization(self, remove_fault_log_entry_as_dict):
+        def test_serialization(self, resolve_fault_log_entry_as_dict):
             """Test that Remove Fault Log Entry can be serialized."""
-            remove_fault_log_entry = RemoveFaultLogEntry.create(
-                **remove_fault_log_entry_as_dict
+            resolve_fault_log_entry = ResolveFaultLogEntry.create(
+                **resolve_fault_log_entry_as_dict
             )
             assert (
-                remove_fault_log_entry.timestamp
-                == remove_fault_log_entry_as_dict["timestamp"]
+                resolve_fault_log_entry.timestamp
+                == resolve_fault_log_entry_as_dict["timestamp"]
             )
             assert (
-                remove_fault_log_entry.message
-                == remove_fault_log_entry_as_dict["message"]
+                resolve_fault_log_entry.tick == resolve_fault_log_entry_as_dict["tick"]
             )
             assert (
-                remove_fault_log_entry.run_id.id
-                == remove_fault_log_entry_as_dict["run_id"]
+                resolve_fault_log_entry.message
+                == resolve_fault_log_entry_as_dict["message"]
             )
             assert (
-                remove_fault_log_entry.injection_id
-                == remove_fault_log_entry_as_dict["injection_id"]
+                resolve_fault_log_entry.run_id.id
+                == resolve_fault_log_entry_as_dict["run_id"]
+            )
+            assert (
+                resolve_fault_log_entry.train_speed_fault_configuration.id
+                == resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
+            )
+            assert (
+                resolve_fault_log_entry.platform_blocked_fault_configuration.id
+                == resolve_fault_log_entry_as_dict[
+                    "platform_blocked_fault_configuration"
+                ]
+            )
+            assert (
+                resolve_fault_log_entry.train_cancelled_fault_configuration.id
+                == resolve_fault_log_entry_as_dict[
+                    "train_cancelled_fault_configuration"
+                ]
             )
 
-            assert remove_fault_log_entry.to_dict() == {
-                "id": str(remove_fault_log_entry.id),
+            assert resolve_fault_log_entry.to_dict() == {
+                "id": str(resolve_fault_log_entry.id),
                 # pylint: disable=no-member
-                "timestamp": remove_fault_log_entry.timestamp.isoformat(),
-                "message": remove_fault_log_entry.message,
-                "run_id": str(remove_fault_log_entry.run_id.id),
-                "injection_id": remove_fault_log_entry.injection_id,
+                "timestamp": resolve_fault_log_entry.timestamp.isoformat(),
+                "tick": resolve_fault_log_entry.tick,
+                "message": resolve_fault_log_entry.message,
+                "run_id": str(resolve_fault_log_entry.run_id.id),
+                "train_speed_fault_configuration": str(
+                    resolve_fault_log_entry.train_speed_fault_configuration.id
+                ),
+                "platform_blocked_fault_configuration": str(
+                    resolve_fault_log_entry.platform_blocked_fault_configuration.id
+                ),
+                "train_cancelled_fault_configuration": str(
+                    resolve_fault_log_entry.train_cancelled_fault_configuration.id
+                ),
             }
 
-        def test_deserialization(self, remove_fault_log_entry_as_dict_serialized):
+        def test_deserialization(self, resolve_fault_log_entry_as_dict_serialized):
             """Test that Remove Fault Log Entry can be deserialized."""
-            remove_fault_log_entry = RemoveFaultLogEntry.Schema().load(
-                remove_fault_log_entry_as_dict_serialized
+            resolve_fault_log_entry = ResolveFaultLogEntry.Schema().load(
+                resolve_fault_log_entry_as_dict_serialized
             )
-            assert isinstance(remove_fault_log_entry, RemoveFaultLogEntry)
-            assert isinstance(remove_fault_log_entry.id, UUID)
-            assert isinstance(remove_fault_log_entry.timestamp, datetime)
-            assert isinstance(remove_fault_log_entry.message, str)
-            assert isinstance(remove_fault_log_entry.run_id, Run)
-            assert isinstance(remove_fault_log_entry.injection_id, int)
-            assert (
-                remove_fault_log_entry.timestamp.isoformat()
-                == remove_fault_log_entry_as_dict_serialized["timestamp"]
+            assert isinstance(resolve_fault_log_entry, ResolveFaultLogEntry)
+            assert isinstance(resolve_fault_log_entry.id, UUID)
+            assert isinstance(resolve_fault_log_entry.timestamp, datetime)
+            assert isinstance(resolve_fault_log_entry.tick, int)
+            assert isinstance(resolve_fault_log_entry.message, str)
+            assert isinstance(resolve_fault_log_entry.run_id, Run)
+            assert isinstance(
+                resolve_fault_log_entry.train_speed_fault_configuration,
+                TrainSpeedFaultConfiguration,
+            )
+            assert isinstance(
+                resolve_fault_log_entry.platform_blocked_fault_configuration,
+                PlatformBlockedFaultConfiguration,
+            )
+            assert isinstance(
+                resolve_fault_log_entry.train_cancelled_fault_configuration,
+                TrainCancelledFaultConfiguration,
             )
             assert (
-                remove_fault_log_entry.message
-                == remove_fault_log_entry_as_dict_serialized["message"]
+                resolve_fault_log_entry.timestamp.isoformat()
+                == resolve_fault_log_entry_as_dict_serialized["timestamp"]
             )
             assert (
-                str(remove_fault_log_entry.run_id)
-                == remove_fault_log_entry_as_dict_serialized["run_id"]
+                resolve_fault_log_entry.tick
+                == resolve_fault_log_entry_as_dict_serialized["tick"]
             )
             assert (
-                remove_fault_log_entry.injection_id
-                == remove_fault_log_entry_as_dict_serialized["injection_id"]
+                resolve_fault_log_entry.message
+                == resolve_fault_log_entry_as_dict_serialized["message"]
+            )
+            assert (
+                str(resolve_fault_log_entry.run_id)
+                == resolve_fault_log_entry_as_dict_serialized["run_id"]
+            )
+            assert (
+                str(resolve_fault_log_entry.train_speed_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "train_speed_fault_configuration"
+                ]
+            )
+            assert (
+                str(resolve_fault_log_entry.platform_blocked_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "platform_blocked_fault_configuration"
+                ]
+            )
+            assert (
+                str(resolve_fault_log_entry.train_cancelled_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "train_cancelled_fault_configuration"
+                ]
             )
 
         def test_deserialization_empty_fails(
-            self, empty_remove_fault_log_entry_as_dict
+            self, empty_resolve_fault_log_entry_as_dict
         ):
             """Test that Remove Fault Log Entry cannot be deserialized with no fields set."""
             with pytest.raises(ValidationError):
-                RemoveFaultLogEntry.Schema().load(empty_remove_fault_log_entry_as_dict)
+                ResolveFaultLogEntry.Schema().load(
+                    empty_resolve_fault_log_entry_as_dict
+                )
