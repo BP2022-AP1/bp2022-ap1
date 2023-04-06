@@ -12,7 +12,7 @@ from tests.decorators import recreate_db_setup
     "init_dict",
     [{}],
 )
-class TestTokenFailingIni:
+class TestTokenFailingInit:
     """Test that a object of a class cannot be created or deserialized with invalid data."""
 
     @recreate_db_setup
