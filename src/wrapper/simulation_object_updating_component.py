@@ -47,7 +47,7 @@ class SimulationObjectUpdatingComponent(Component):
         ]
 
     def __init__(self, logger=None):
-        Component.__init__(self, priority=10, logger=logger)
+        super().__init__(priority=10, logger=logger)
         self._simulation_objects = []
 
         self._fetch_initial_simulation_objects()

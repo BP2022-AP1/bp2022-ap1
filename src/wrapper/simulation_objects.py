@@ -111,7 +111,7 @@ class Track(SimulationObject):
         self._max_speed = max_speed
 
     def __init__(self, identifier: str = None):
-        SimulationObject.__init__(self, identifier)
+        super().__init__(identifier)
         self.blocked = False
 
     def update(self, data: dict):
