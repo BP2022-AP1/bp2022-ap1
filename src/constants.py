@@ -23,10 +23,6 @@ from src.logger.log_entry import (
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
-from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
-from src.schedule.schedule import Schedule
-from src.schedule.schedule_strategy import ScheduleStrategy
-from src.schedule.train_schedule import TrainSchedule, TrainScheduleXSimulationPlatform
 from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
