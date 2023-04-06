@@ -4,13 +4,15 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_blocked_fault import (
+    TrackBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_cancelled_fault import (
     TrainCancelledFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
-from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFaultConfiguration
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule import Schedule
@@ -30,5 +32,5 @@ tables: list[Type[BaseModel]] = [
     TrainSpeedFaultConfiguration,
     PlatformBlockedFaultConfiguration,
     TrainCancelledFaultConfiguration,
-    TrackBlockedFaultConfiguration
+    TrackBlockedFaultConfiguration,
 ]

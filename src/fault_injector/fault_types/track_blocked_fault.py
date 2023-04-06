@@ -1,7 +1,8 @@
-from src.component import Component
-from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 import marshmallow as marsh
 from peewee import TextField
+
+from src.component import Component
+from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class TrackBlockedFault(Fault):
@@ -38,5 +39,5 @@ class TrackBlockedFaultConfiguration(FaultConfiguration):
 
         def _make(self, data: dict) -> "TrackBlockedFaultConfiguration":
             return TrackBlockedFaultConfiguration(**data)
-        
+
     affected_element_id = TextField()
