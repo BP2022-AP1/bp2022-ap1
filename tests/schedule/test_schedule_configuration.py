@@ -1,3 +1,5 @@
+# pylint: disable=unused-argument
+
 import marshmallow as marsh
 import peewee
 import pytest
