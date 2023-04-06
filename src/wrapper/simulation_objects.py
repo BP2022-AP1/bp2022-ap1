@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List, Tuple
 
-from traci import constants, trafficlight, vehicle
+from traci import constants, edge, trafficlight, vehicle
 
 
 class SimulationObject(ABC):
@@ -106,7 +106,35 @@ class Track(SimulationObject):
     """A track in the simulation where trains can drive along"""
 
     blocked: bool
-    speed_limit: float
+    _max_speed: float
+
+    @property
+    def max_speed(self) -> float:
+        """The current maximum speed of the track
+
+        :return: the speed in m/s
+        """
+        return self._max_speed
+
+    @max_speed.setter
+    def max_speed(self, max_speed: float) -> None:
+        """Updates the max_speed of the edge
+        performance consideration: This method performs a traci call
+
+        :param max_speed: The new maximum speed of the edge
+        """
+        edge.setMaxSpeed(self.identifier, max_speed)
+        self._max_speed = max_speed
+
+    def __init__(self, identifier: str = None):
+        super().__init__(identifier)
+        self.blocked = False
+
+    def update(self, data: dict):
+        self._max_speed = data[constants.VAR_MAXSPEED]
+
+    def add_subscriptions(self) -> int:
+        return constants.VAR_MAXSPEED
 
 
 class Platform(SimulationObject):
