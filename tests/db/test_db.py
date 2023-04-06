@@ -29,8 +29,6 @@ class ModelTest(BaseModel):
 class TestDB:
     """Test the database connection and the serialization/deserialization"""
 
-    TEST_DATETIME_STRING: str = "2023-04-06 16:42:01"
-
     @recreate_db_setup
     def setup_method(self):
         db.create_tables([ModelTest])
