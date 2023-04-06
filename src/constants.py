@@ -40,6 +40,7 @@ tables: list[Type[BaseModel]] = [
     Token,
     TrainSpeedFaultConfiguration,
     PlatformBlockedFaultConfiguration,
+    TrainCancelledFaultConfiguration,
     LogEntry,
     TrainSpawnLogEntry,
     TrainRemoveLogEntry,
@@ -50,5 +51,4 @@ tables: list[Type[BaseModel]] = [
     SetSignalLogEntry,
     InjectFaultLogEntry,
     ResolveFaultLogEntry,
-    TrainCancelledFaultConfiguration,
 ]
