@@ -53,6 +53,8 @@ class TestRunSuccessfulInit:
         assert isinstance(obj.id, UUID)
         assert Run.select().where(Run.id == obj.id).first() == obj
 
+    # pylint: disable=duplicate-code
+    # will change, when adding foreign keys
     @pytest.mark.parametrize(
         "init_values, expected_dict",
         [
@@ -84,3 +86,6 @@ class TestRunSuccessfulInit:
         assert isinstance(obj.id, UUID)
         for key in expected_values.keys():
             assert getattr(obj, key) == expected_values[key]
+
+    # pylint: enable=duplicate-code
+    # will change, when adding foreign keys

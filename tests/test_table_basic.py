@@ -14,7 +14,6 @@ from src.fault_injector.fault_types.train_cancelled_fault import (
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import Run, SimulationConfiguration, Token
 from tests.decorators import recreate_db_setup
 
 
