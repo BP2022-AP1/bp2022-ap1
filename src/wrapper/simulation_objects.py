@@ -112,10 +112,36 @@ class Track(SimulationObject):
 class Platform(SimulationObject):
     """A platform where trains can arrive, load and unload passengers and depart"""
 
-    track: Track
-    station_name: str
-    platform_number: int
+    _track_id: str
+    _platform_id: str
     blocked: bool
+
+    @property
+    def track(self) -> Track:
+        """The track on which the stop is located
+
+        :return: The track
+        """
+        next(self.updater.tracks.filter(lambda item: item.identifier == self._track_id))
+
+    @property
+    def platform_id(self) -> str:
+        """The platform identifier of this platform
+
+        :return: The identifier
+        """
+        return self._platform_id
+
+    def __init__(self, identifier, platform_id: str = None):
+        super().__init__(identifier)
+        self._platform_id = platform_id
+        self.blocked = False
+
+    def update(self, data: dict) -> None:
+        return  # We don't have to update anything from the simulator
+
+    def add_subscriptions(self) -> int:
+        return 0  # We don't have to update anything from the simulator
 
 
 class Train(SimulationObject):
