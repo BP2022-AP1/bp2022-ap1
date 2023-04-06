@@ -27,15 +27,16 @@ from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_strategy import ScheduleStrategy
 from src.schedule.train_schedule import TrainSchedule, TrainScheduleXSimulationPlatform
+from src.schedule.schedule_configuration import (
+    ScheduleConfiguration,
+    ScheduleConfigurationXSimulationPlatform,
+)
 
 # Add classes that should be created as tables to this list
 tables: list[Type[BaseModel]] = [
     Run,
-    ScheduleStrategy,
-    RegularScheduleStrategy,
-    Schedule,
-    TrainSchedule,
-    TrainScheduleXSimulationPlatform,
+    ScheduleConfiguration,
+    ScheduleConfigurationXSimulationPlatform,
     SimulationConfiguration,
     Token,
     TrainSpeedFaultConfiguration,
