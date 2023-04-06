@@ -3,7 +3,13 @@ from typing import List
 import traci
 
 from src.component import Component
-from src.wrapper.simulation_objects import Platform, Signal, Switch, SimulationObject, Track
+from src.wrapper.simulation_objects import (
+    Platform,
+    Signal,
+    SimulationObject,
+    Switch,
+    Track,
+)
 
 
 class SimulationObjectUpdatingComponent(Component):
@@ -21,7 +27,6 @@ class SimulationObjectUpdatingComponent(Component):
         :return: the objects in the simulation
         """
         return self._simulation_objects
-
 
     @property
     def switches(self) -> List[Switch]:
