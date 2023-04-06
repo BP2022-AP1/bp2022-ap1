@@ -16,6 +16,9 @@ from src.fault_injector.fault_types.train_speed_fault import (
 )
 from tests.decorators import recreate_db_setup
 
+# pylint: disable=duplicate-code
+# will change, when adding foreign keys
+
 
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
@@ -125,3 +128,7 @@ class TestCorrectFilledDict:
         assert isinstance(obj.id, UUID)
         for key in object_as_dict.keys():
             assert getattr(obj, key) == object_as_dict[key]
+
+
+# pylint: enable=duplicate-code
+# will change, when adding foreign keys

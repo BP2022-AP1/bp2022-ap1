@@ -1051,10 +1051,6 @@ components:
       type: object
     SpawnerConfiguration:
       type: object
-    DataScienceConfiguration:
-      type: object
-    DataScienceResult:
-      type: object
     TrainSpeedFaultConfiguration:
       type: object
     TrainPrioFaultConfiguration:
