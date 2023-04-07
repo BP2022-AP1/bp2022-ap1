@@ -1,7 +1,8 @@
+import marshmallow as marsh
+from peewee import IntegerField, TextField
+
 from src.component import Component
 from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
-import marshmallow as marsh
-from peewee import TextField, IntegerField
 
 
 class TrackSpeedLimitFault(Fault):
@@ -28,7 +29,8 @@ class TrackSpeedLimitFault(Fault):
         # - set the track speed limit to old_speed_limit
 
         raise NotImplementedError()
-    
+
+
 class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the TrackSpeedLimitFault class"""
 
