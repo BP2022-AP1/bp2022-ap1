@@ -1,9 +1,6 @@
-from typing import Callable
-
 import pytest
 
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
-from tests.decorators import recreate_db
 
 
 class TestRegularScheduleStrategy:
