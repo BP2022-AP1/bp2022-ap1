@@ -1,6 +1,7 @@
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
+from src.wrapper.simulation_objects import Train
 
 
 class TrainSchedule(Schedule):
@@ -47,10 +48,11 @@ class TrainSchedule(Schedule):
         self.platform_ids = platform_ids
         super().__init__(strategy, id_)
 
-    def _spawn(self, traci_wrapper: "ITraCiWrapper"):
+    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
         """Spawns a train.
 
         :param traci_wrapper: The TraCi wrapper to give the train to.
+        :param tick: The current tick
         """
-        # Will be implemented in a later issue
-        raise NotImplementedError()
+        train = Train(f"{self.id}_{tick}", self.platform_ids, self.train_type)
+        traci_wrapper.spawn_train(train)

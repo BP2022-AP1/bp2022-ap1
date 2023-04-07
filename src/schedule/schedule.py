@@ -32,10 +32,11 @@ class Schedule(ABC):
         self.id = id_  # pylint: disable=invalid-name
 
     @abstractmethod
-    def _spawn(self, traci_wrapper: "ITraCiWrapper"):
+    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
         """Spawns a vehicle.
 
         :param traci_wrapper: The TraCi wrapper to give the vehicle to.
+        :param tick: The current tick
         """
         raise NotImplementedError()
 
@@ -46,7 +47,7 @@ class Schedule(ABC):
         :param traci_wrapper: The TraCi wrapper to give the spawned vehicle to.
         """
         if not self._blocked and self.strategy.should_spawn(tick):
-            self._spawn(traci_wrapper)
+            self._spawn(traci_wrapper, tick)
 
     def block(self):
         """Blocks the schedule.

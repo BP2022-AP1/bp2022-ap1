@@ -1,12 +1,14 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 import marshmallow as marsh
 from peewee import ForeignKeyField
 
 from src.base_model import BaseModel
 from src.component import Component
+from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.schedule.train_schedule import TrainSchedule
 
 
 class SpawnerConfiguration(BaseModel):
@@ -52,37 +54,103 @@ class SpawnerConfigurationXSchedule(BaseModel):
     schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
 
 
-class Spawner(Component):
+class ISpawnerDisruptor(ABC):
+    @abstractmethod
+    def block_schedule(self, schedule_id: str):
+        """Blocks a schedule.
+
+        :param schedule_id: The id of the schedule to block
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def unblock_schedule(self, schedule_id: str):
+        """Unblocks a schedule.
+
+        :param schedule_id: The id of the schedule to unblock
+        """
+        raise NotImplementedError()
+
+
+class Spawner(Component, ISpawnerDisruptor):
     """Abstract class for spawners. Spawners can spawn SUMO vehicles
     based on shedules.
     """
 
-    @classmethod
-    @abstractmethod
-    def from_json(cls, json_object: str) -> "Spawner":
-        """Constructs a spawner from a JSON object.
+    configuration: SpawnerConfiguration
+    traci_wrapper: "ITraCiWrapper"
+    _schedules: dict[str, Schedule]
 
-        :param json_object: The JSON object.
-        :type json_object: str
-        :return: A spawner.
-        :rtype: Spawner
+    PRIOTITY: int = 0  # This will need to be set to the correct value
+
+    def next_tick(self, tick: int):
+        """Called to announce that the next tick occurred.
+
+        :param tick: The current tick.
+        :type tick: int
         """
-        raise NotImplementedError()
+        for schedule in self.schedules:
+            schedule.maybe_spawn(tick, self.traci_wrapper)
 
-    @abstractmethod
-    def add_schedules_from_json(self, json_schedules: list[str]):
-        """Adds schedules to the spawner from a list of JSON objects.
+    def __init__(
+        self,
+        logger: Logger,
+        configuration: SpawnerConfiguration,
+        traci_wrapper: "ITraCiWrapper",
+    ):
+        """Initializes the spawner.
 
-        :param json_schedules: The list of JSON objects.
-        :type json_schedules: list[str]
+        :param configuration: The configuration.
+        :type configuration: SpawnerConfiguration
         """
-        raise NotImplementedError()
+        # Method resolution order (MRO) is:
+        # Spawner -> Component -> ISpawner -> ISpawnerDisruptor -> ABC -> object
+        # super(<CLASS>, self).__init__ calls the __init__ method of the next <CLASS> in the MRO
+        # call <CLASS>.mro() to see the MRO of <CLASS>
+        super(Spawner, self).__init__(logger, self.PRIOTITY)  # calls Component.__init__
+        self.configuration = configuration
+        self.traci_wrapper = traci_wrapper
+        self._load_schedules()
 
-    @abstractmethod
-    def spawn_specific(self, schedule: Schedule):
-        """Spawns vehicles based on a schedule.
+    SCHEDULE_SUBCLASS_MAPPINGS: dict[str, type[Schedule]] = {
+        "TrainSchedule": TrainSchedule,
+    }
 
-        :param schedule: The schedule.
-        :type schedule: Schedule
+    def _load_schedules(self):
+        """Loads the schedules from the database."""
+        self._schedules = {}
+        for reference in self.configuration.schedule_configuration_references:
+            schedule_configuration = reference.schedule_configuration_id
+            schedule_subclass = self.SCHEDULE_SUBCLASS_MAPPINGS[
+                schedule_configuration.schedule_type
+            ]
+            schedule = schedule_subclass.from_schedule_configuration(
+                schedule_configuration
+            )
+            self._schedules[schedule.id] = schedule
+
+    def get_schedule(self, schedule_id: str) -> Schedule:
+        """Returns the schedule with the given id.
+
+        :param schedule_id: The id of the schedule.
+        :return: The schedule.
         """
-        raise NotImplementedError()
+        return self._schedules[schedule_id]
+
+    def block_schedule(self, schedule_id: str):
+        """Blocks a schedule.
+
+        :param schedule_id: The id of the schedule to block
+        """
+        self._schedules[schedule_id].block()
+
+    def unblock_schedule(self, schedule_id: str):
+        """Unblocks a schedule.
+
+        :param schedule_id: The id of the schedule to unblock
+        """
+        self._schedules[schedule_id].unblock()
+
+
+# As the spawner perfectly defines its interface we can do the following:
+ISpawner = Spawner
