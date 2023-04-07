@@ -100,7 +100,7 @@ class TestFailingDict:
                 "end_tick": 100,
                 "description": "TrainPrioFault",
                 "affected_element_id": "12345678",
-                "new_prio": 1
+                "new_prio": 1,
             },
         ),
     ],
