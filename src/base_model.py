@@ -26,9 +26,9 @@ class BaseModel(Model):
     class Schema(marsh.Schema):
         """The marshmallow schema all model schemas have to inherit from."""
 
-        id = marsh.fields.UUID()
-        created_at = marsh.fields.DateTime(format="iso")
-        updated_at = marsh.fields.DateTime(format="iso")
+        id = marsh.fields.UUID(dump_only=True)
+        created_at = marsh.fields.DateTime(format="iso", dump_only=True)
+        updated_at = marsh.fields.DateTime(format="iso", dump_only=True)
 
         @abc.abstractmethod
         def _make(self, data: dict) -> "BaseModel":
