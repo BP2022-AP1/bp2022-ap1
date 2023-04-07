@@ -1,25 +1,24 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-from src.base_model import BaseModel
+from src.schedule.schedule_configuration import ScheduleConfiguration
 
 
-class ScheduleStrategy(BaseModel):
+class ScheduleStrategy(ABC):
     """An abstract ScheduleStrategy.
     ScheduleStartegies implement the decision logic of
     how a schedule determines whether a vehicle should be spawned
     at a given tick.
     """
 
-    class Schema(BaseModel.Schema):
-        """Schema for ScheduleStrategy."""
+    @classmethod
+    @abstractmethod
+    def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
+        """Constructs a RegularScheduleStrategy from a ScheduleConfiguration.
 
-        def _make(self, data: dict) -> "ScheduleStrategy":
-            """Constructs a ScheduleStrategy from a dictionary.
-
-            :param data: The dictionary.
-            :return: A ScheduleStrategy.
-            """
-            return super()._make(data)
+        :param schedule_configuration: The ScheduleConfiguration
+        :return: A ScheduleStrategy
+        """
+        raise NotImplementedError()
 
     @abstractmethod
     def should_spawn(self, tick: int) -> bool:

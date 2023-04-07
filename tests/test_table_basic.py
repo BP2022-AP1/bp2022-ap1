@@ -14,17 +14,12 @@ from src.fault_injector.fault_types.train_cancelled_fault import (
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import Run, SimulationConfiguration, Token
 from tests.decorators import recreate_db_setup
 
 
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
     [
-        (
-            Token,
-            {},
-        ),
         (
             PlatformBlockedFaultConfiguration,
             {},
@@ -60,14 +55,6 @@ class TestFailingDict:
     "table_class, object_as_dict",
     [
         (
-            Token,
-            {
-                "name": "Owner",
-                "permission": "admin",
-                "hashedToken": "hash",
-            },
-        ),
-        (
             TrainSpeedFaultConfiguration,
             {
                 "start_tick": 1,
@@ -94,9 +81,6 @@ class TestFailingDict:
                 "affected_element_id": "12345678",
             },
         ),
-        (Run, {}),
-        (SimulationConfiguration, {"description": "test"}),
-        (SimulationConfiguration, {}),
     ],
 )
 class TestCorrectFilledDict:
