@@ -63,6 +63,9 @@ class TestRegularScheduleStrategy:
         self, regular_strategy: Callable[[None], RegularScheduleStrategy]
     ):
         serialized = regular_strategy.to_dict()
+        del serialized["id"]
+        del serialized["created_at"]
+        del serialized["updated_at"]
         deserialized = RegularScheduleStrategy.from_dict(serialized)
         assert regular_strategy.start_tick == deserialized.start_tick
         assert regular_strategy.frequency == deserialized.frequency
