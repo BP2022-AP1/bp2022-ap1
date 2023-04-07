@@ -15,7 +15,7 @@ def recreate_db(func: Callable):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        db.drop_tables(tables)
+        db.drop_tables(tables, cascade=True)
         db.create_tables(tables)
         return func(*args, **kwargs)
 
@@ -32,7 +32,7 @@ def recreate_db_setup(func: Callable):
 
     @wraps(func)
     def wrapper(method: Callable, *args, **kwargs):
-        db.drop_tables(tables)
+        db.drop_tables(tables, cascade=True)
         db.create_tables(tables)
         return func(method, *args, **kwargs)
 
