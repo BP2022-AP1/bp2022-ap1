@@ -1,5 +1,5 @@
-from uuid import uuid4
 from functools import cache
+from uuid import uuid4
 
 import pytest
 
@@ -9,7 +9,6 @@ from src.wrapper.simulation_objects import Train
 
 
 class MockTraCiWrapper:
-
     train: Train
 
     def spawn_train(self, train: Train):
@@ -17,7 +16,6 @@ class MockTraCiWrapper:
 
 
 class TestTrainSchedule:
-
     PLATFORM_COUNT: int = 8
     START_TICK: int = 0
     FREQUENCY: int = 10
@@ -35,18 +33,24 @@ class TestTrainSchedule:
 
     @pytest.fixture
     def schedule(self, platform_ids: list[str], schedule_id: str):
-        strategy = RegularScheduleStrategy(start_tick=self.START_TICK, frequency=self.FREQUENCY)
+        strategy = RegularScheduleStrategy(
+            start_tick=self.START_TICK, frequency=self.FREQUENCY
+        )
         return TrainSchedule(
             train_type=self.TRAIN_TYPE,
             platform_ids=platform_ids,
             strategy=strategy,
-            id_=schedule_id
+            id_=schedule_id,
         )
 
-    def test_spawning(self, schedule: TrainSchedule, platform_ids: list[str], schedule_id: str):
+    def test_spawning(
+        self, schedule: TrainSchedule, platform_ids: list[str], schedule_id: str
+    ):
         mock_traci_wrapper = MockTraCiWrapper()
         schedule._spawn(mock_traci_wrapper, self.START_TICK)
         assert mock_traci_wrapper.train.identifier == f"{schedule_id}_{self.START_TICK}"
         assert mock_traci_wrapper.train.train_type.name == self.TRAIN_TYPE
-        for platform_id, platform in zip(platform_ids, mock_traci_wrapper.train.timetable):
+        for platform_id, platform in zip(
+            platform_ids, mock_traci_wrapper.train.timetable
+        ):
             assert platform.identifier == platform_id
