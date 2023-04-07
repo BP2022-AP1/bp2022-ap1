@@ -7,6 +7,9 @@ from src.fault_injector.fault_types.platform_blocked_fault import (
 from src.fault_injector.fault_types.track_blocked_fault import (
     TrackBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_speed_limit_fault import (
+    TrackSpeedLimitFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_cancelled_fault import (
     TrainCancelledFaultConfiguration,
 )
@@ -32,4 +35,5 @@ tables: list[Type[BaseModel]] = [
     TrainCancelledFaultConfiguration,
     TrackBlockedFaultConfiguration,
     TrainPrioFaultConfiguration,
+    TrackSpeedLimitFaultConfiguration,
 ]
