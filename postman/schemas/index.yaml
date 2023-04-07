@@ -170,7 +170,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description:
             Successfully created new schedule-blocked-faul configuration
             object
@@ -286,7 +291,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description:
             Successfully created new track-blocked-fault configuration
             object
@@ -402,7 +412,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description:
             Successfully created new track-speed-limit-fault configuration
             object
@@ -518,7 +533,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description: Successfully created new train-prio-fault configuration object
         "401":
           description: API token missing
@@ -632,7 +652,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description: Successfully created new train-speed-fault configuration object
         "401":
           description: API token missing
@@ -746,7 +771,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description: Successfully created new interlocking configuration object
         "400":
           description: An interlocking configuration exists for this simulation already
@@ -862,7 +892,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description: Successfully created new spawner configuration object
         "400":
           description: An spawner configuration exists for this simulation already
@@ -975,7 +1010,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description: Successfully created and started a new run
         "401":
           description: API token missing
@@ -1059,7 +1099,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/createSimulationConfiguration_201_response"
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
           description: Successfully created new simulation configuration
         "401":
           description: API token missing
@@ -1144,7 +1189,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/createToken_request"
+              $ref: "#/components/schemas/TokenConfiguration"
         required: true
       responses:
         "201":
@@ -1171,10 +1216,6 @@ components:
       type: object
     SpawnerConfiguration:
       type: object
-    DataScienceConfiguration:
-      type: object
-    DataScienceResult:
-      type: object
     TrainSpeedFaultConfiguration:
       type: object
     TrainPrioFaultConfiguration:
@@ -1191,22 +1232,11 @@ components:
       type: object
     Schedule:
       type: object
-    createToken_request:
+    TokenConfiguration:
       properties:
         permission:
           title: permission
           type: string
-      title: createToken_request
-      type: object
-    createSimulationConfiguration_201_response:
-      example:
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-      properties:
-        id:
-          format: uuid
-          title: id
-          type: string
-      title: createSimulationConfiguration_201_response
       type: object
   securitySchemes:
     ApiKeyAuth:

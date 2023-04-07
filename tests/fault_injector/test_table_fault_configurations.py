@@ -8,32 +8,28 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_blocked_fault import (
+    TrackBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_cancelled_fault import (
     TrainCancelledFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import Run, SimulationConfiguration, Token
 from tests.decorators import recreate_db_setup
+
+# pylint: disable=duplicate-code
+# will change, when adding foreign keys
 
 
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
     [
-        (
-            Token,
-            {},
-        ),
-        (
-            PlatformBlockedFaultConfiguration,
-            {},
-        ),
+        (PlatformBlockedFaultConfiguration, {}),
         (TrainSpeedFaultConfiguration, {}),
-        (
-            TrainCancelledFaultConfiguration,
-            {},
-        ),
+        (TrainCancelledFaultConfiguration, {}),
+        (TrackBlockedFaultConfiguration, {}),
     ],
 )
 class TestFailingDict:
@@ -59,14 +55,6 @@ class TestFailingDict:
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
     [
-        (
-            Token,
-            {
-                "name": "Owner",
-                "permission": "admin",
-                "hashedToken": "hash",
-            },
-        ),
         (
             TrainSpeedFaultConfiguration,
             {
@@ -94,9 +82,15 @@ class TestFailingDict:
                 "affected_element_id": "12345678",
             },
         ),
-        (Run, {}),
-        (SimulationConfiguration, {"description": "test"}),
-        (SimulationConfiguration, {}),
+        (
+            TrackBlockedFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrackBlockedFault",
+                "affected_element_id": "12345678",
+            },
+        ),
     ],
 )
 class TestCorrectFilledDict:
@@ -141,3 +135,7 @@ class TestCorrectFilledDict:
         assert isinstance(obj.id, UUID)
         for key in object_as_dict.keys():
             assert getattr(obj, key) == object_as_dict[key]
+
+
+# pylint: enable=duplicate-code
+# will change, when adding foreign keys
