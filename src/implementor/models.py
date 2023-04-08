@@ -46,3 +46,7 @@ class Run(BaseModel):
 
         def _make(self, data: dict) -> "Run":
             return Run(**data)
+
+        simulation_configuration = marsh.fields.UUID(required=True)
+
+    simulation_configuration = ForeignKeyField(SimulationConfiguration, backref="runs")
