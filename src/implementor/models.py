@@ -4,20 +4,6 @@ from peewee import CharField
 from src.base_model import BaseModel
 
 
-class SimulationConfiguration(BaseModel):
-    """Represents a single simulation configuration."""
-
-    class Schema(BaseModel.Schema):
-        """The marshmallow schema for the simulation configuration model."""
-
-        description = marsh.fields.String()
-
-        def _make(self, data: dict) -> "SimulationConfiguration":
-            return SimulationConfiguration(**data)
-
-    description = CharField(null=True)
-
-
 class Token(BaseModel):
     """Represents a token."""
 
@@ -34,6 +20,20 @@ class Token(BaseModel):
     permission = CharField()
     name = CharField()
     hashedToken = CharField()
+
+
+class SimulationConfiguration(BaseModel):
+    """Represents a single simulation configuration."""
+
+    class Schema(BaseModel.Schema):
+        """The marshmallow schema for the simulation configuration model."""
+
+        description = marsh.fields.String()
+
+        def _make(self, data: dict) -> "SimulationConfiguration":
+            return SimulationConfiguration(**data)
+
+    description = CharField(null=True)
 
 
 class Run(BaseModel):
