@@ -1,5 +1,5 @@
 import marshmallow as marsh
-from peewee import CharField
+from peewee import CharField, ForeignKeyField
 
 from src.base_model import BaseModel
 
@@ -29,11 +29,13 @@ class SimulationConfiguration(BaseModel):
         """The marshmallow schema for the simulation configuration model."""
 
         description = marsh.fields.String()
+        token = marsh.fields.UUID(required=True)
 
         def _make(self, data: dict) -> "SimulationConfiguration":
             return SimulationConfiguration(**data)
 
     description = CharField(null=True)
+    token = ForeignKeyField(Token, backref="simulation_configurations")
 
 
 class Run(BaseModel):
