@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import marshmallow as marsh
-from peewee import DateTimeField, ForeignKeyField, IntegerField, TextField
+from peewee import DateTimeField, ForeignKeyField, IntegerField, TextField, UUIDField
 
 from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
@@ -137,7 +137,7 @@ class SetSignalLogEntry(LogEntry):
         def _make(self, data: dict) -> "SetSignalLogEntry":
             return SetSignalLogEntry(**data)
 
-    signal_id = TextField(null=False)
+    signal_id = UUIDField(null=False)
     state_before = IntegerField(null=False)
     state_after = IntegerField(null=False)
 
