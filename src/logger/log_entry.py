@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import marshmallow as marsh
-from peewee import DateTimeField, ForeignKeyField, IntegerField, TextField, UUIDField
+from peewee import DateTimeField, ForeignKeyField, IntegerField, TextField, UUIDField, BigIntegerField
 
 from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
@@ -31,7 +31,7 @@ class LogEntry(BaseModel):
             return LogEntry(**data)
 
     timestamp = DateTimeField(null=False, default=datetime.now())
-    tick = IntegerField(null=False)
+    tick = BigIntegerField(null=False)
     message = TextField(null=False)
     run_id = ForeignKeyField(Run, null=False)
 
