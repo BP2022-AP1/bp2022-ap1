@@ -1,7 +1,14 @@
 from datetime import datetime
 
 import marshmallow as marsh
-from peewee import DateTimeField, ForeignKeyField, IntegerField, TextField, UUIDField, BigIntegerField
+from peewee import (
+    BigIntegerField,
+    DateTimeField,
+    ForeignKeyField,
+    IntegerField,
+    TextField,
+    UUIDField,
+)
 
 from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
