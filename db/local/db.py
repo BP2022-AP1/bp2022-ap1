@@ -62,7 +62,7 @@ def create(_: argparse.Namespace):
 
 def drop(_: argparse.Namespace):
     """Drop database tables"""
-    db.drop_tables(tables)
+    db.drop_tables(tables, cascade=True)
     print("Dropped tables")
 
 
