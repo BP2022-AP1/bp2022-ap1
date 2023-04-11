@@ -1,1 +1,2 @@
-# Schedule is testable when trains are implemented.
+# TrainSchedule is testable when train spawning functionality is implemented.
+# Will be done in a later issue

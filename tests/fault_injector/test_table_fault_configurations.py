@@ -8,32 +8,34 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_blocked_fault import (
+    TrackBlockedFaultConfiguration,
+)
+from src.fault_injector.fault_types.track_speed_limit_fault import (
+    TrackSpeedLimitFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_cancelled_fault import (
     TrainCancelledFaultConfiguration,
 )
+from src.fault_injector.fault_types.train_prio_fault import TrainPrioFaultConfiguration
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import Run, SimulationConfiguration, Token
 from tests.decorators import recreate_db_setup
+
+# pylint: disable=duplicate-code
+# will change, when adding foreign keys
 
 
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
     [
-        (
-            Token,
-            {},
-        ),
-        (
-            PlatformBlockedFaultConfiguration,
-            {},
-        ),
+        (PlatformBlockedFaultConfiguration, {}),
         (TrainSpeedFaultConfiguration, {}),
-        (
-            TrainCancelledFaultConfiguration,
-            {},
-        ),
+        (TrainCancelledFaultConfiguration, {}),
+        (TrackBlockedFaultConfiguration, {}),
+        (TrainPrioFaultConfiguration, {}),
+        (TrackSpeedLimitFaultConfiguration, {}),
     ],
 )
 class TestFailingDict:
@@ -59,14 +61,6 @@ class TestFailingDict:
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
     [
-        (
-            Token,
-            {
-                "name": "Owner",
-                "permission": "admin",
-                "hashedToken": "hash",
-            },
-        ),
         (
             TrainSpeedFaultConfiguration,
             {
@@ -94,9 +88,35 @@ class TestFailingDict:
                 "affected_element_id": "12345678",
             },
         ),
-        (Run, {}),
-        (SimulationConfiguration, {"description": "test"}),
-        (SimulationConfiguration, {}),
+        (
+            TrackBlockedFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrackBlockedFault",
+                "affected_element_id": "12345678",
+            },
+        ),
+        (
+            TrainPrioFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrainPrioFault",
+                "affected_element_id": "12345678",
+                "new_prio": 1,
+            },
+        ),
+        (
+            TrackSpeedLimitFaultConfiguration,
+            {
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "TrackSpeedLimitFault",
+                "affected_element_id": "12345678",
+                "new_speed_limit": 60,
+            },
+        ),
     ],
 )
 class TestCorrectFilledDict:
@@ -125,7 +145,7 @@ class TestCorrectFilledDict:
         none_fields = (
             set(table_class.Schema().fields.keys())
             - set(object_as_dict.keys())
-            - set(["id"])
+            - set(["id", "created_at", "updated_at"])
         )
         for key in none_fields:
             assert getattr(obj, key) is None
@@ -141,3 +161,7 @@ class TestCorrectFilledDict:
         assert isinstance(obj.id, UUID)
         for key in object_as_dict.keys():
             assert getattr(obj, key) == object_as_dict[key]
+
+
+# pylint: enable=duplicate-code
+# will change, when adding foreign keys
