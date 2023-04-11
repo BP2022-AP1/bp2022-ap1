@@ -15,13 +15,9 @@ from tests.decorators import recreate_db_setup
 class MockTraCiWrapper:
     """Mock for the TraCiWrapper"""
 
-    pass
-
 
 class MockLogger:
     """Mock for the Logger"""
-
-    pass
 
 
 class TestSpawner:
