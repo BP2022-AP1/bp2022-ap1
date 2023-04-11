@@ -118,7 +118,7 @@ class Logger:
 
     pass  # not implemented yet # pylint: disable=W0107
 
-    def inject_cancelled_speed_fault(
+    def inject_train_cancelled_speed_fault(
         self,
         train_cancelled_fault_configuration: UUID,
         affected_element: str,
