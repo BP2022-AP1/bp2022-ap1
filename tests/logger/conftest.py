@@ -6,8 +6,8 @@ import pytest
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
-from src.fault_injector.fault_types.train_cancelled_fault import (
-    TrainCancelledFaultConfiguration,
+from src.fault_injector.fault_types.schedule_blocked_fault import (
+    ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
@@ -86,11 +86,11 @@ def platform_blocked_fault_configuration():
 
 
 @pytest.fixture
-def train_cancelled_fault_configuration():
-    return TrainCancelledFaultConfiguration.create(
+def schedule_blocked_fault_configuration():
+    return ScheduleBlockedFaultConfiguration.create(
         start_tick=1,
         end_tick=100,
-        description="TrainCancelledFault",
+        description="ScheduleBlockedFault",
         affected_element_id="12345678",
     )
 
