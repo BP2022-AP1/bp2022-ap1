@@ -18,7 +18,7 @@ class Schedule(ABC):
 
     @classmethod
     def strategy_from_schedule_configuration(
-        cls, schedule_configruation: ScheduleConfiguration
+        cls, schedule_configuration: ScheduleConfiguration
     ) -> ScheduleStrategy:
         """Dynamically cosntructs a ScheduleStrategy from a ScheduleConfiguration
 
