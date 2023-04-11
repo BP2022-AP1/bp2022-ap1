@@ -1,7 +1,10 @@
+# pylint: disable=unused-argument
+# pylint: disable=duplicate-code
+
 import json
 
 
-def GetAllRunId(options):
+def get_all_run_id(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]
@@ -14,7 +17,7 @@ def GetAllRunId(options):
     return json.dumps(""), 200
 
 
-def CreateRun(body):
+def create_run(body):
     """
 
     :param body: The parsed body of the request
@@ -33,7 +36,7 @@ def CreateRun(body):
     )
 
 
-def GetRun(options):
+def get_run(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -46,7 +49,7 @@ def GetRun(options):
     return json.dumps("<map>"), 200
 
 
-def DeleteRun(options):
+def delete_run(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]

@@ -1,5 +1,9 @@
 from marshmallow import Schema, fields
 
+# ------------------------------- #
+# THIS FILE WILL BE REMOVED LATER #
+# ------------------------------- #
+
 
 class CreateInterlockingConfigurationInlineResp(Schema):
     id = fields.UUID()

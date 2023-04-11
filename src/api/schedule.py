@@ -1,53 +1,57 @@
 from flask import Blueprint, request
-from marshmallow import Schema, fields
 from webargs.flaskparser import parser
 
-from .. import impl
+from .. import implementor as impl
 from ..schemas import model
 
 bp = Blueprint("schedule", __name__)
 
 
 @bp.route("/schedule", methods=["get"])
-def GetAllScheduleIds():
+def get_all_schedule_ids():
+    """Get all schedule id"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.schedule.GetAllScheduleIds(options)
+    return impl.schedule.get_all_schedule_ids(options)
 
 
 @bp.route("/schedule", methods=["post"])
-def CreateSchedule():
-    schema = Schedule.Schema()
+def create_schedule():
+    """Create a schedule"""
+    schema = model.Schedule()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.schedule.CreateSchedule(body)
+    return impl.schedule.create_schedule(body)
 
 
-@bp.route("/schedule/<id>", methods=["get"])
-def GetSchedule(id):
+@bp.route("/schedule/<identifier>", methods=["get"])
+def get_schedule(identifier):
+    """Get a schedule"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
-    return impl.schedule.GetSchedule(options)
+    return impl.schedule.get_schedule(options)
 
 
-@bp.route("/schedule/<id>", methods=["put"])
-def UpdateSchedule(id):
+@bp.route("/schedule/<identifier>", methods=["put"])
+def update_schedule(identifier):
+    """Update a schedule"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
     schema = model.Schedule()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.schedule.UpdateSchedule(options, body)
+    return impl.schedule.update_schedule(options, body)
 
 
-@bp.route("/schedule/<id>", methods=["delete"])
-def DeleteSchedule(id):
+@bp.route("/schedule/<identifier>", methods=["delete"])
+def delete_schedule(identifier):
+    """Delete a schedule"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
-    return impl.schedule.DeleteSchedule(options)
+    return impl.schedule.delete_schedule(options)

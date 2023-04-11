@@ -1,8 +1,13 @@
+# pylint: disable=unused-argument
+# pylint: disable=duplicate-code
+
 import json
 
 
-def GetAllSimulationId():
-    """ """
+def get_all_simulation_id():
+    """
+    Get all simulation ids
+    """
 
     # Implement your business logic here
     # All the parameters are present in the options argument
@@ -10,7 +15,7 @@ def GetAllSimulationId():
     return json.dumps(""), 200
 
 
-def CreateSimulationConfiguration(body):
+def create_simulation_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -29,7 +34,7 @@ def CreateSimulationConfiguration(body):
     )
 
 
-def GetSimulationConfiguration(options):
+def get_simulation_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -42,7 +47,7 @@ def GetSimulationConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateSimulationConfiguration(options, body):
+def update_simulation_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -56,7 +61,7 @@ def UpdateSimulationConfiguration(options, body):
     return "", 204
 
 
-def DeleteSimulationConfiguration(options):
+def delete_simulation_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]

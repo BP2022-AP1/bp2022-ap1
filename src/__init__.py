@@ -2,10 +2,17 @@ import os
 
 from flask import Flask
 
-from .api import component, run, schedule, simulation, token
+from src.api import component, run, schedule, simulation, token
 
 
-def create_app(test_config=None):
+def create_app(test_config=None) -> Flask:
+    """
+    Create a flask app.
+    Add test configuration of you want to run the app in test mode.
+
+    :param test_config: A dictionary containing the test configuration
+    :return: A flask app
+    """
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(SECRET_KEY="dev")
     if test_config is None:

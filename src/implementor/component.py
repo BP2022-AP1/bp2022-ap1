@@ -1,10 +1,14 @@
+# pylint: disable=unused-argument
+# pylint: disable=duplicate-code
+
 import json
 
 
-def GetScheduleBlockedFaultConfigurationIds(options):
+def get_schedule_blocked_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the schedule-blocked-faul configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the schedule-blocked-faul configuration of a single simulation
 
     """
 
@@ -14,7 +18,7 @@ def GetScheduleBlockedFaultConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateScheduleBlockedFaultConfiguration(body):
+def create_schedule_blocked_fault_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -33,7 +37,7 @@ def CreateScheduleBlockedFaultConfiguration(body):
     )
 
 
-def GetScheduleBlockedFaultConfiguration(options):
+def get_schedule_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -46,7 +50,7 @@ def GetScheduleBlockedFaultConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateScheduleBlockedFaultConfiguration(options, body):
+def update_schedule_blocked_fault_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -60,7 +64,7 @@ def UpdateScheduleBlockedFaultConfiguration(options, body):
     return "", 204
 
 
-def DeleteScheduleBlockedFaultConfiguration(options):
+def delete_schedule_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -73,10 +77,11 @@ def DeleteScheduleBlockedFaultConfiguration(options):
     return "", 204
 
 
-def GetTrackBlockedFaultConfigurationIds(options):
+def get_track_blocked_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the track-blocked-fault configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the track-blocked-fault configuration of a single simulation
 
     """
 
@@ -86,7 +91,7 @@ def GetTrackBlockedFaultConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateTrackBlockedFaultConfiguration(body):
+def create_track_blocked_fault_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -105,7 +110,7 @@ def CreateTrackBlockedFaultConfiguration(body):
     )
 
 
-def GetTrackBlockedFaultConfiguration(options):
+def get_track_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -118,7 +123,7 @@ def GetTrackBlockedFaultConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateTrackBlockedFaultConfiguration(options, body):
+def update_track_blocked_fault_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -132,7 +137,7 @@ def UpdateTrackBlockedFaultConfiguration(options, body):
     return "", 204
 
 
-def DeleteTrackBlockedFaultConfiguration(options):
+def delete_track_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -145,10 +150,11 @@ def DeleteTrackBlockedFaultConfiguration(options):
     return "", 204
 
 
-def GetTrackSpeedLimitFaultConfigurationIds(options):
+def get_track_speed_limit_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the track-speed-limit-fault configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the track-speed-limit-fault configuration of a single simulation
 
     """
 
@@ -158,7 +164,7 @@ def GetTrackSpeedLimitFaultConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateTrackSpeedLimitFaultConfiguration(body):
+def create_track_speed_limit_fault_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -177,7 +183,7 @@ def CreateTrackSpeedLimitFaultConfiguration(body):
     )
 
 
-def GetTrackSpeedLimitFaultConfiguration(options):
+def get_track_speed_limit_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -190,7 +196,7 @@ def GetTrackSpeedLimitFaultConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateTrackSpeedLimitFaultConfiguration(options, body):
+def update_track_speed_limit_fault_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -204,7 +210,7 @@ def UpdateTrackSpeedLimitFaultConfiguration(options, body):
     return "", 204
 
 
-def DeleteTrackSpeedLimitFaultConfiguration(options):
+def delete_track_speed_limit_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -217,10 +223,11 @@ def DeleteTrackSpeedLimitFaultConfiguration(options):
     return "", 204
 
 
-def GetTrainPrioFaultConfigurationIds(options):
+def get_train_prio_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the train-prio-fault configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the train-prio-fault configuration of a single simulation
 
     """
 
@@ -230,7 +237,7 @@ def GetTrainPrioFaultConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateTrainPrioFaultConfiguration(body):
+def create_train_prio_fault_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -249,7 +256,7 @@ def CreateTrainPrioFaultConfiguration(body):
     )
 
 
-def GetTrainPrioFaultConfiguration(options):
+def get_train_prio_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -262,7 +269,7 @@ def GetTrainPrioFaultConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateTrainPrioFaultConfiguration(options, body):
+def update_train_prio_fault_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -276,7 +283,7 @@ def UpdateTrainPrioFaultConfiguration(options, body):
     return "", 204
 
 
-def DeleteTrainPrioFaultConfiguration(options):
+def delete_train_prio_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -289,10 +296,11 @@ def DeleteTrainPrioFaultConfiguration(options):
     return "", 204
 
 
-def GetTrainSpeedFaultConfigurationIds(options):
+def get_train_speed_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the train-speed-fault configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the train-speed-fault configuration of a single simulation
 
     """
 
@@ -302,7 +310,7 @@ def GetTrainSpeedFaultConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateTrainSpeedFaultConfiguration(body):
+def create_train_speed_fault_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -321,7 +329,7 @@ def CreateTrainSpeedFaultConfiguration(body):
     )
 
 
-def GetTrainSpeedFaultConfiguration(options):
+def get_train_speed_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -334,7 +342,7 @@ def GetTrainSpeedFaultConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateTrainSpeedFaultConfiguration(options, body):
+def update_train_speed_fault_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -348,7 +356,7 @@ def UpdateTrainSpeedFaultConfiguration(options, body):
     return "", 204
 
 
-def DeleteTrainSpeedFaultConfiguration(options):
+def delete_train_speed_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -361,10 +369,11 @@ def DeleteTrainSpeedFaultConfiguration(options):
     return "", 204
 
 
-def GetInterlockingConfigurationIds(options):
+def get_interlocking_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the interlocking configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the interlocking configuration of a single simulation
 
     """
 
@@ -374,7 +383,7 @@ def GetInterlockingConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateInterlockingConfiguration(body):
+def create_interlocking_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -393,7 +402,7 @@ def CreateInterlockingConfiguration(body):
     )
 
 
-def GetInterlockingConfiguration(options):
+def get_interlocking_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -406,7 +415,7 @@ def GetInterlockingConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateInterlockingConfiguration(options, body):
+def update_interlocking_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -420,7 +429,7 @@ def UpdateInterlockingConfiguration(options, body):
     return "", 204
 
 
-def DeleteInterlockingConfiguration(options):
+def delete_interlocking_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -433,10 +442,11 @@ def DeleteInterlockingConfiguration(options):
     return "", 204
 
 
-def GetSpawnerConfigurationIds(options):
+def get_spawner_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["simulationId"]: Specify id of simulation if you only want to get the spawner configuration of a single simulation
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the spawner configuration of a single simulation
 
     """
 
@@ -446,7 +456,7 @@ def GetSpawnerConfigurationIds(options):
     return json.dumps(""), 200
 
 
-def CreateSpawnerConfiguration(body):
+def create_spawner_configuration(body):
     """
 
     :param body: The parsed body of the request
@@ -465,7 +475,7 @@ def CreateSpawnerConfiguration(body):
     )
 
 
-def GetSpawnerConfiguration(options):
+def get_spawner_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -478,7 +488,7 @@ def GetSpawnerConfiguration(options):
     return json.dumps("<map>"), 200
 
 
-def UpdateSpawnerConfiguration(options, body):
+def update_spawner_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
@@ -492,7 +502,7 @@ def UpdateSpawnerConfiguration(options, body):
     return "", 204
 
 
-def DeleteSpawnerConfiguration(options):
+def delete_spawner_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]

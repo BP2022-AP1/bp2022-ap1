@@ -1,41 +1,44 @@
 from flask import Blueprint, request
-from marshmallow import Schema, fields
 from webargs.flaskparser import parser
 
-from .. import impl
+from .. import implementor as impl
 from ..schemas import model
 
 bp = Blueprint("run", __name__)
 
 
 @bp.route("/run", methods=["get"])
-def GetAllRunId():
+def get_all_run_id():
+    """Get all run id"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.run.GetAllRunId(options)
+    return impl.run.get_all_run_id(options)
 
 
 @bp.route("/run", methods=["post"])
-def CreateRun():
+def create_run():
+    """Create a run"""
     schema = model.RunConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.run.CreateRun(body)
+    return impl.run.create_run(body)
 
 
-@bp.route("/run/<id>", methods=["get"])
-def GetRun(id):
+@bp.route("/run/<identifier>", methods=["get"])
+def get_run(identifier):
+    """Get a run"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
-    return impl.run.GetRun(options)
+    return impl.run.get_run(options)
 
 
-@bp.route("/run/<id>", methods=["delete"])
-def DeleteRun(id):
+@bp.route("/run/<identifier>", methods=["delete"])
+def delete_run(identifier):
+    """Delete a run"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
-    return impl.run.DeleteRun(options)
+    return impl.run.delete_run(options)

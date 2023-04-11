@@ -1,50 +1,54 @@
 from flask import Blueprint, request
-from marshmallow import Schema, fields
 from webargs.flaskparser import parser
 
-from .. import impl
+from .. import implementor as impl
 from ..schemas import model
 
 bp = Blueprint("simulation", __name__)
 
 
 @bp.route("/simulation", methods=["get"])
-def GetAllSimulationId():
-    return impl.simulation.GetAllSimulationId()
+def get_all_simulation_id():
+    """Get all simulation id"""
+    return impl.simulation.get_all_simulation_id()
 
 
 @bp.route("/simulation", methods=["post"])
-def CreateSimulationConfiguration():
+def create_simulation_configuration():
+    """Create a simulation configuration"""
     schema = model.SimulationConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.simulation.CreateSimulationConfiguration(body)
+    return impl.simulation.create_simulation_configuration(body)
 
 
-@bp.route("/simulation/<id>", methods=["get"])
-def GetSimulationConfiguration(id):
+@bp.route("/simulation/<identifier>", methods=["get"])
+def get_simulation_configuration(identifier):
+    """Get a simulation configuration"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
-    return impl.simulation.GetSimulationConfiguration(options)
+    return impl.simulation.get_simulation_configuration(options)
 
 
-@bp.route("/simulation/<id>", methods=["put"])
-def UpdateSimulationConfiguration(id):
+@bp.route("/simulation/<identifier>", methods=["put"])
+def update_simulation_configuration(identifier):
+    """Update a simulation configuration"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
     schema = model.SimulationConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.simulation.UpdateSimulationConfiguration(options, body)
+    return impl.simulation.update_simulation_configuration(options, body)
 
 
-@bp.route("/simulation/<id>", methods=["delete"])
-def DeleteSimulationConfiguration(id):
+@bp.route("/simulation/<identifier>", methods=["delete"])
+def delete_simulation_configuration(identifier):
+    """Delete a simulation configuration"""
     options = {}
-    options["id"] = id
+    options["identifier"] = identifier
 
-    return impl.simulation.DeleteSimulationConfiguration(options)
+    return impl.simulation.delete_simulation_configuration(options)

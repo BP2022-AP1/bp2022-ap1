@@ -1,7 +1,10 @@
+# pylint: disable=unused-argument
+# pylint: disable=duplicate-code
+
 import json
 
 
-def CreateToken(body):
+def create_token(body):
     """
 
     :param body: The parsed body of the request
