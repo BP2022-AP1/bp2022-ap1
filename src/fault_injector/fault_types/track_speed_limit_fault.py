@@ -16,6 +16,7 @@ class TrackSpeedLimitFault(Fault):
 
     configuration: "TrackSpeedLimitFaultConfiguration"
     old_speed_limit: int
+    affected_track: Track
     wrapper: SimulationObjectUpdatingComponent
     interlocking: IInterlockingDisruptor
 
@@ -36,13 +37,13 @@ class TrackSpeedLimitFault(Fault):
         :param component: The component the fault should be injected into
         :type component: Component
         """
-        track: Track = [
+        self.track: Track = [
             track
             for track in self.configuration.wrapper_component.tracks()
             if track.id == self.configuration.affected_element_id
         ][0]
-        self.old_speed_limit = track.max_speed
-        track.max_speed = self.configuration.new_speed_limit
+        self.old_speed_limit = self.track.max_speed
+        self.track.max_speed = self.configuration.new_speed_limit
 
         self.configuration.interlocking_component.insert_track_speed_limit_changed(
             self.configuration.affected_element_id
@@ -60,6 +61,11 @@ class TrackSpeedLimitFault(Fault):
         :param component: the component with the injected TrackSpeedLimitFault
         :type component: Component
         """
+        self.track.max_speed = self.old_speed_limit
+        self.interlocking.insert_track_speed_limit_changed(self.configuration.affected_element_id)
+        
+        # self.logger.
+
         # - get track object
         # - set the track speed limit to old_speed_limit
 
