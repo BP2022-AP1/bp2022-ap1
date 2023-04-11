@@ -83,7 +83,7 @@ class Spawner(Component, ISpawnerDisruptor):
     traci_wrapper: "ITraCiWrapper"
     _schedules: dict[str, Schedule]
 
-    PRIOTITY: int = 0  # This will need to be set to the correct value
+    PRIORITY: int = 0  # This will need to be set to the correct value
 
     def next_tick(self, tick: int):
         """Called to announce that the next tick occurred.
