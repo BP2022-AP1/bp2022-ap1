@@ -22,6 +22,11 @@ def track():
 
 
 @pytest.fixture
+def track2():
+    return Track("track2")
+
+
+@pytest.fixture
 def speed_update(monkeypatch):
     def set_max_speed(identifier: str, speed: float) -> None:
         assert identifier == "track"
@@ -44,7 +49,7 @@ def train():
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: 123,
+            constants.VAR_ROAD_ID: "track",
             constants.VAR_ROUTE: "testing-route",
             constants.VAR_SPEED: 10.2,
         }
@@ -144,9 +149,15 @@ class TestTrack:
 class TestTrain:
     """Tests for the train object"""
 
-    def test_track(self, train):
+    def test_track(self, train, souc, track):
         # pylint: disable=redefined-outer-name
-        assert train.track == 123
+        souc.simulation_objects.append(train)
+        souc.simulation_objects.append(track)
+
+        train.updater = souc
+        track.updater = souc
+
+        assert train.track == track
 
     def test_position(self, train):
         # pylint: disable=redefined-outer-name
@@ -203,15 +214,21 @@ class TestTrain:
         # pylint: disable=unused-argument,redefined-outer-name
         Train(identifier="fancy-rb-001", train_type="fancy-rb")
 
-    def test_update(self, train):
+    def test_update(self, souc, train, track2):
         # pylint: disable=redefined-outer-name
+        train.updater = souc
+        track2.updater = souc
+
+        souc.simulation_objects.append(train)
+        souc.simulation_objects.append(track2)
+
         train.update(
             {
                 constants.VAR_POSITION: (
                     110,
                     90,
                 ),
-                constants.VAR_ROAD_ID: 124,
+                constants.VAR_ROAD_ID: "track2",
                 constants.VAR_ROUTE: "ending-route",
                 constants.VAR_SPEED: 10,
             }
@@ -221,7 +238,8 @@ class TestTrain:
                 constants.VAR_MAXSPEED: 10,
             }
         )
-        assert train.track == 124
+
+        assert train.track == track2
         assert train.position == (
             110,
             90,
