@@ -153,7 +153,3 @@ class Spawner(Component, ISpawnerDisruptor):
         :param schedule_id: The id of the schedule to unblock
         """
         self._schedules[schedule_id].unblock()
-
-
-# As the spawner perfectly defines its interface we can do the following:
-ISpawner = Spawner
