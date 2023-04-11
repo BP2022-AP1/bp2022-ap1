@@ -9,9 +9,16 @@ from peewee import IntegrityError
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_blocked_fault import (
+    TrackBlockedFaultConfiguration,
+)
+from src.fault_injector.fault_types.track_speed_limit_fault import (
+    TrackSpeedLimitFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_cancelled_fault import (
     TrainCancelledFaultConfiguration,
 )
+from src.fault_injector.fault_types.train_prio_fault import TrainPrioFaultConfiguration
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
@@ -1117,9 +1124,12 @@ class TestLogEntry:
             tick,
             message,
             run,
-            train_speed_fault_configuration,
             platform_blocked_fault_configuration,
+            track_blocked_fault_configuration,
+            track_speed_limit_fault_configuration,
             train_cancelled_fault_configuration,
+            train_prio_fault_configuration,
+            train_speed_fault_configuration,
             affected_element,
             value_before,
             value_after,
@@ -1130,9 +1140,12 @@ class TestLogEntry:
                 "tick": tick,
                 "message": message,
                 "run_id": run.id,
-                "train_speed_fault_configuration": train_speed_fault_configuration.id,
                 "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
+                "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
+                "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
                 "train_cancelled_fault_configuration": train_cancelled_fault_configuration.id,
+                "train_prio_fault_configuration": train_prio_fault_configuration.id,
+                "train_speed_fault_configuration": train_speed_fault_configuration.id,
                 "affected_element": affected_element,
                 "value_before": value_before,
                 "value_after": value_after,
@@ -1146,9 +1159,12 @@ class TestLogEntry:
             tick,
             message,
             run,
-            train_speed_fault_configuration,
             platform_blocked_fault_configuration,
+            track_blocked_fault_configuration,
+            track_speed_limit_fault_configuration,
             train_cancelled_fault_configuration,
+            train_prio_fault_configuration,
+            train_speed_fault_configuration,
             affected_element,
             value_before,
             value_after,
@@ -1159,14 +1175,23 @@ class TestLogEntry:
                 "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
-                "train_speed_fault_configuration": str(
-                    train_speed_fault_configuration.id
-                ),
                 "platform_blocked_fault_configuration": str(
                     platform_blocked_fault_configuration.id
                 ),
+                "track_blocked_fault_configuration": str(
+                    track_blocked_fault_configuration.id
+                ),
+                "track_speed_limit_fault_configuration": str(
+                    track_speed_limit_fault_configuration.id
+                ),
                 "train_cancelled_fault_configuration": str(
                     train_cancelled_fault_configuration.id
+                ),
+                "train_prio_fault_configuration": str(
+                    train_prio_fault_configuration.id
+                ),
+                "train_speed_fault_configuration": str(
+                    train_speed_fault_configuration.id
                 ),
                 "affected_element": affected_element,
                 "value_before": value_before,
@@ -1218,18 +1243,32 @@ class TestLogEntry:
                 == inject_fault_log_entry_as_dict["run_id"]
             )
             assert (
-                inject_fault_log_entry.train_speed_fault_configuration.id
-                == inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
-            )
-            assert (
                 inject_fault_log_entry.platform_blocked_fault_configuration.id
                 == inject_fault_log_entry_as_dict[
                     "platform_blocked_fault_configuration"
                 ]
             )
             assert (
+                inject_fault_log_entry.track_blocked_fault_configuration.id
+                == inject_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+            )
+            assert (
+                inject_fault_log_entry.track_speed_limit_fault_configuration.id
+                == inject_fault_log_entry_as_dict[
+                    "track_speed_limit_fault_configuration"
+                ]
+            )
+            assert (
                 inject_fault_log_entry.train_cancelled_fault_configuration.id
                 == inject_fault_log_entry_as_dict["train_cancelled_fault_configuration"]
+            )
+            assert (
+                inject_fault_log_entry.train_prio_fault_configuration.id
+                == inject_fault_log_entry_as_dict["train_prio_fault_configuration"]
+            )
+            assert (
+                inject_fault_log_entry.train_speed_fault_configuration.id
+                == inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
             )
             assert (
                 inject_fault_log_entry.affected_element
@@ -1253,18 +1292,29 @@ class TestLogEntry:
                 "tick": inject_fault_log_entry_as_dict["tick"],
                 "message": inject_fault_log_entry_as_dict["message"],
                 "run_id": str(inject_fault_log_entry_as_dict["run_id"]),
-                "train_speed_fault_configuration": str(
-                    inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
-                ),
                 "platform_blocked_fault_configuration": str(
                     inject_fault_log_entry_as_dict[
                         "platform_blocked_fault_configuration"
+                    ]
+                ),
+                "track_blocked_fault_configuration": str(
+                    inject_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+                ),
+                "track_speed_limit_fault_configuration": str(
+                    inject_fault_log_entry_as_dict[
+                        "track_speed_limit_fault_configuration"
                     ]
                 ),
                 "train_cancelled_fault_configuration": str(
                     inject_fault_log_entry_as_dict[
                         "train_cancelled_fault_configuration"
                     ]
+                ),
+                "train_prio_fault_configuration": str(
+                    inject_fault_log_entry_as_dict["train_prio_fault_configuration"]
+                ),
+                "train_speed_fault_configuration": str(
+                    inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
                 ),
                 "affected_element": inject_fault_log_entry_as_dict["affected_element"],
                 "value_before": inject_fault_log_entry_as_dict["value_before"],
@@ -1283,16 +1333,28 @@ class TestLogEntry:
             assert isinstance(inject_fault_log_entry.message, str)
             assert isinstance(inject_fault_log_entry.run_id, Run)
             assert isinstance(
-                inject_fault_log_entry.train_speed_fault_configuration,
-                TrainSpeedFaultConfiguration,
-            )
-            assert isinstance(
                 inject_fault_log_entry.platform_blocked_fault_configuration,
                 PlatformBlockedFaultConfiguration,
             )
             assert isinstance(
+                inject_fault_log_entry.track_blocked_fault_configuration,
+                TrackBlockedFaultConfiguration,
+            )
+            assert isinstance(
+                inject_fault_log_entry.track_speed_limit_fault_configuration,
+                TrackSpeedLimitFaultConfiguration,
+            )
+            assert isinstance(
                 inject_fault_log_entry.train_cancelled_fault_configuration,
                 TrainCancelledFaultConfiguration,
+            )
+            assert isinstance(
+                inject_fault_log_entry.train_prio_fault_configuration,
+                TrainPrioFaultConfiguration,
+            )
+            assert isinstance(
+                inject_fault_log_entry.train_speed_fault_configuration,
+                TrainSpeedFaultConfiguration,
             )
             assert isinstance(inject_fault_log_entry.affected_element, str)
             assert isinstance(inject_fault_log_entry.value_before, str)
@@ -1315,21 +1377,39 @@ class TestLogEntry:
                 == inject_fault_log_entry_as_dict_serialized["run_id"]
             )
             assert (
-                str(inject_fault_log_entry.train_speed_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "train_speed_fault_configuration"
-                ]
-            )
-            assert (
                 str(inject_fault_log_entry.platform_blocked_fault_configuration)
                 == inject_fault_log_entry_as_dict_serialized[
                     "platform_blocked_fault_configuration"
                 ]
             )
             assert (
+                str(inject_fault_log_entry.track_blocked_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "track_blocked_fault_configuration"
+                ]
+            )
+            assert (
+                str(inject_fault_log_entry.track_speed_limit_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "track_speed_limit_fault_configuration"
+                ]
+            )
+            assert (
                 str(inject_fault_log_entry.train_cancelled_fault_configuration)
                 == inject_fault_log_entry_as_dict_serialized[
                     "train_cancelled_fault_configuration"
+                ]
+            )
+            assert (
+                str(inject_fault_log_entry.train_prio_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "train_prio_fault_configuration"
+                ]
+            )
+            assert (
+                str(inject_fault_log_entry.train_speed_fault_configuration)
+                == inject_fault_log_entry_as_dict_serialized[
+                    "train_speed_fault_configuration"
                 ]
             )
             assert (
@@ -1363,9 +1443,12 @@ class TestLogEntry:
             tick,
             message,
             run,
-            train_speed_fault_configuration,
             platform_blocked_fault_configuration,
+            track_blocked_fault_configuration,
+            track_speed_limit_fault_configuration,
             train_cancelled_fault_configuration,
+            train_prio_fault_configuration,
+            train_speed_fault_configuration,
         ):
             """ResolveFaultLogEntry as dict with all fields set."""
             return {
@@ -1373,9 +1456,12 @@ class TestLogEntry:
                 "tick": tick,
                 "message": message,
                 "run_id": run.id,
-                "train_speed_fault_configuration": train_speed_fault_configuration.id,
                 "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
+                "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
+                "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
                 "train_cancelled_fault_configuration": train_cancelled_fault_configuration.id,
+                "train_prio_fault_configuration": train_prio_fault_configuration.id,
+                "train_speed_fault_configuration": train_speed_fault_configuration.id,
             }
 
         @pytest.fixture
@@ -1386,9 +1472,12 @@ class TestLogEntry:
             tick,
             message,
             run,
-            train_speed_fault_configuration,
             platform_blocked_fault_configuration,
+            track_blocked_fault_configuration,
+            track_speed_limit_fault_configuration,
             train_cancelled_fault_configuration,
+            train_prio_fault_configuration,
+            train_speed_fault_configuration,
         ):
             """ResolveFaultLogEntry as serialized dict with all fields set."""
             return {
@@ -1396,14 +1485,23 @@ class TestLogEntry:
                 "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
-                "train_speed_fault_configuration": str(
-                    train_speed_fault_configuration.id
-                ),
                 "platform_blocked_fault_configuration": str(
                     platform_blocked_fault_configuration.id
                 ),
+                "track_blocked_fault_configuration": str(
+                    track_blocked_fault_configuration.id
+                ),
+                "track_speed_limit_fault_configuration": str(
+                    track_speed_limit_fault_configuration.id
+                ),
                 "train_cancelled_fault_configuration": str(
                     train_cancelled_fault_configuration.id
+                ),
+                "train_prio_fault_configuration": str(
+                    train_prio_fault_configuration.id
+                ),
+                "train_speed_fault_configuration": str(
+                    train_speed_fault_configuration.id
                 ),
             }
 
@@ -1454,13 +1552,19 @@ class TestLogEntry:
                 == resolve_fault_log_entry_as_dict["run_id"]
             )
             assert (
-                resolve_fault_log_entry.train_speed_fault_configuration.id
-                == resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
-            )
-            assert (
                 resolve_fault_log_entry.platform_blocked_fault_configuration.id
                 == resolve_fault_log_entry_as_dict[
                     "platform_blocked_fault_configuration"
+                ]
+            )
+            assert (
+                resolve_fault_log_entry.track_blocked_fault_configuration.id
+                == resolve_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+            )
+            assert (
+                resolve_fault_log_entry.track_speed_limit_fault_configuration.id
+                == resolve_fault_log_entry_as_dict[
+                    "track_speed_limit_fault_configuration"
                 ]
             )
             assert (
@@ -1468,6 +1572,14 @@ class TestLogEntry:
                 == resolve_fault_log_entry_as_dict[
                     "train_cancelled_fault_configuration"
                 ]
+            )
+            assert (
+                resolve_fault_log_entry.train_prio_fault_configuration.id
+                == resolve_fault_log_entry_as_dict["train_prio_fault_configuration"]
+            )
+            assert (
+                resolve_fault_log_entry.train_speed_fault_configuration.id
+                == resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
             )
 
             assert resolve_fault_log_entry.to_dict() == {
@@ -1479,18 +1591,29 @@ class TestLogEntry:
                 "tick": resolve_fault_log_entry_as_dict["tick"],
                 "message": resolve_fault_log_entry_as_dict["message"],
                 "run_id": str(resolve_fault_log_entry_as_dict["run_id"]),
-                "train_speed_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
-                ),
                 "platform_blocked_fault_configuration": str(
                     resolve_fault_log_entry_as_dict[
                         "platform_blocked_fault_configuration"
+                    ]
+                ),
+                "track_blocked_fault_configuration": str(
+                    resolve_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+                ),
+                "track_speed_limit_fault_configuration": str(
+                    resolve_fault_log_entry_as_dict[
+                        "track_speed_limit_fault_configuration"
                     ]
                 ),
                 "train_cancelled_fault_configuration": str(
                     resolve_fault_log_entry_as_dict[
                         "train_cancelled_fault_configuration"
                     ]
+                ),
+                "train_prio_fault_configuration": str(
+                    resolve_fault_log_entry_as_dict["train_prio_fault_configuration"]
+                ),
+                "train_speed_fault_configuration": str(
+                    resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
                 ),
             }
 
@@ -1506,16 +1629,28 @@ class TestLogEntry:
             assert isinstance(resolve_fault_log_entry.message, str)
             assert isinstance(resolve_fault_log_entry.run_id, Run)
             assert isinstance(
-                resolve_fault_log_entry.train_speed_fault_configuration,
-                TrainSpeedFaultConfiguration,
-            )
-            assert isinstance(
                 resolve_fault_log_entry.platform_blocked_fault_configuration,
                 PlatformBlockedFaultConfiguration,
             )
             assert isinstance(
+                resolve_fault_log_entry.track_blocked_fault_configuration,
+                TrackBlockedFaultConfiguration,
+            )
+            assert isinstance(
+                resolve_fault_log_entry.track_speed_limit_fault_configuration,
+                TrackSpeedLimitFaultConfiguration,
+            )
+            assert isinstance(
                 resolve_fault_log_entry.train_cancelled_fault_configuration,
                 TrainCancelledFaultConfiguration,
+            )
+            assert isinstance(
+                resolve_fault_log_entry.train_prio_fault_configuration,
+                TrainPrioFaultConfiguration,
+            )
+            assert isinstance(
+                resolve_fault_log_entry.train_speed_fault_configuration,
+                TrainSpeedFaultConfiguration,
             )
             assert (
                 resolve_fault_log_entry.timestamp.isoformat()
@@ -1534,21 +1669,39 @@ class TestLogEntry:
                 == resolve_fault_log_entry_as_dict_serialized["run_id"]
             )
             assert (
-                str(resolve_fault_log_entry.train_speed_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "train_speed_fault_configuration"
-                ]
-            )
-            assert (
                 str(resolve_fault_log_entry.platform_blocked_fault_configuration)
                 == resolve_fault_log_entry_as_dict_serialized[
                     "platform_blocked_fault_configuration"
                 ]
             )
             assert (
+                str(resolve_fault_log_entry.track_blocked_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "track_blocked_fault_configuration"
+                ]
+            )
+            assert (
+                str(resolve_fault_log_entry.track_speed_limit_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "track_speed_limit_fault_configuration"
+                ]
+            )
+            assert (
                 str(resolve_fault_log_entry.train_cancelled_fault_configuration)
                 == resolve_fault_log_entry_as_dict_serialized[
                     "train_cancelled_fault_configuration"
+                ]
+            )
+            assert (
+                str(resolve_fault_log_entry.train_prio_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "train_prio_fault_configuration"
+                ]
+            )
+            assert (
+                str(resolve_fault_log_entry.train_speed_fault_configuration)
+                == resolve_fault_log_entry_as_dict_serialized[
+                    "train_speed_fault_configuration"
                 ]
             )
 
