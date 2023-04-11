@@ -80,5 +80,13 @@ build-backend = "poetry.core.masonry.api"
     help = "Call DB utilities"
     cmd = "python3 db/local/db.py"
 
+    [tool.poe.tasks.cov]
+    help = "Run coverage report"
+    cmd = "pytest --co --cov=src"
+
+    [tool.poe.tasks.cov-xml]
+    help = "Run coverage report and write to XML file"
+    cmd = "pytest --co --cov=src --cov-report xml"
+
 [tool.isort]
 profile = "black"
