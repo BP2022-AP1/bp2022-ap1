@@ -6,6 +6,8 @@ from src.wrapper.simulation_objects import Train
 
 
 class MockTraCiWrapper:
+    """Mock for TraCiWrapper"""
+
     train: Train
 
     def spawn_train(self, train: Train):
@@ -13,6 +15,8 @@ class MockTraCiWrapper:
 
 
 class TestTrainSchedule:
+    """Tests for TrainSchedule"""
+
     START_TICK: int = 0
     FREQUENCY: int = 10
     TRAIN_TYPE: str = "cargo"

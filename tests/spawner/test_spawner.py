@@ -1,7 +1,5 @@
 from uuid import uuid4
 
-import pytest
-
 from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
@@ -15,10 +13,20 @@ from tests.decorators import recreate_db_setup
 
 
 class MockTraCiWrapper:
-    ...
+    """Mock for the TraCiWrapper"""
+
+    pass
+
+
+class MockLogger:
+    """Mock for the Logger"""
+
+    pass
 
 
 class TestSpawner:
+    """Tests for the Spawner"""
+
     TRAIN_TYPES: list[str] = ["cargo", "passenger"]
     START_TICKS: list[int] = [10, 100]
     FREQUENCIES: list[int] = [100, 42]
@@ -78,9 +86,9 @@ class TestSpawner:
     def test_creation_from_configuration(self):
         mock_traci_wrapper = MockTraCiWrapper()
         spawner = Spawner(
-            logger=None,
+            logger=MockLogger(),
             configuration=self._spawner_configuration,
-            traci_wrapper=mock_traci_wrapper,
+            traci_wrapper=MockTraCiWrapper(),
         )
         assert spawner.configuration == self._spawner_configuration
         assert spawner.traci_wrapper == mock_traci_wrapper

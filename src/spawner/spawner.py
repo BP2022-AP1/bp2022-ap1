@@ -55,6 +55,8 @@ class SpawnerConfigurationXSchedule(BaseModel):
 
 
 class ISpawnerDisruptor(ABC):
+    """Interface for the FaultInjector to block and unblock schedules"""
+
     @abstractmethod
     def block_schedule(self, schedule_id: str):
         """Blocks a schedule.
@@ -89,7 +91,7 @@ class Spawner(Component, ISpawnerDisruptor):
         :param tick: The current tick.
         :type tick: int
         """
-        for schedule in self.schedules:
+        for schedule in self._schedules:
             schedule.maybe_spawn(tick, self.traci_wrapper)
 
     def __init__(
@@ -107,6 +109,7 @@ class Spawner(Component, ISpawnerDisruptor):
         # Spawner -> Component -> ISpawner -> ISpawnerDisruptor -> ABC -> object
         # super(<CLASS>, self).__init__ calls the __init__ method of the next <CLASS> in the MRO
         # call <CLASS>.mro() to see the MRO of <CLASS>
+        # pylint: disable=super-with-arguments
         super(Spawner, self).__init__(logger, self.PRIOTITY)  # calls Component.__init__
         self.configuration = configuration
         self.traci_wrapper = traci_wrapper
