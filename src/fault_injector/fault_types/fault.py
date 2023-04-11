@@ -5,6 +5,7 @@ from peewee import IntegerField, TextField
 
 from src.base_model import BaseModel
 from src.component import Component
+from logger.logger import Logger
 
 
 class Fault(ABC):
@@ -50,6 +51,9 @@ class Fault(ABC):
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
+    def __init__(self, logger: Logger):
+        self.logger = logger
+
     class Schema(BaseModel.Schema):
         """Schema for the FaultConfiguration"""
 
@@ -63,6 +67,6 @@ class FaultConfiguration(BaseModel):
     start_tick = IntegerField(null=False)
     end_tick = IntegerField(null=False)
 
-    component: Component = None
+    logger: Logger = None
     # - affected_element_ID: int = None // has to be implemented in subclasses
     description = TextField(default="injected Fault")
