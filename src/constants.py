@@ -34,6 +34,7 @@ from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
 )
+from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
 
 # Add classes that should be created as tables to this list
 tables: list[Type[BaseModel]] = [
@@ -58,4 +59,6 @@ tables: list[Type[BaseModel]] = [
     TrackBlockedFaultConfiguration,
     TrainPrioFaultConfiguration,
     TrackSpeedLimitFaultConfiguration,
+    SpawnerConfiguration,
+    SpawnerConfigurationXSchedule
 ]
