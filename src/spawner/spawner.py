@@ -102,8 +102,9 @@ class Spawner(Component, ISpawnerDisruptor):
     ):
         """Initializes the spawner.
 
+        :param logger: The logger.
         :param configuration: The configuration.
-        :type configuration: SpawnerConfiguration
+        :param traci_wrapper: The TraCiWrapper.
         """
         # Method resolution order (MRO) is:
         # Spawner -> Component -> ISpawner -> ISpawnerDisruptor -> ABC -> object
