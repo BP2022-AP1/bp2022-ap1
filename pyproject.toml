@@ -82,5 +82,13 @@ build-backend = "poetry.core.masonry.api"
     help = "Call DB utilities"
     cmd = "python3 db/local/db.py"
 
+    [tool.poe.tasks.dev]
+    help = "Run flask app in development mode and run db"
+    sequence = ["db run dev", "dev-flask"]
+
+    [tool.poe.tasks.dev-flask]
+    help = "Run flask app in development mode"
+    cmd = "flask --app src run"
+
 [tool.isort]
 profile = "black"
