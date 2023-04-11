@@ -14,7 +14,7 @@ class TrainSchedule(Schedule):
         :param schedule_configuration: The ScheduleConfiguration
         :return: A TrainSchedule
         """
-        assert schedule_configuration.strategy_type == "TrainSchedule"
+        assert schedule_configuration.schedule_type == "TrainSchedule"
         platform_ids = [
             platform_reference.id
             for platform_reference in sorted(
