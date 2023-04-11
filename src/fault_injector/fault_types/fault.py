@@ -12,9 +12,11 @@ class Fault(ABC):
     """An abstract fault for the fault injection"""
 
     configuration: "FaultConfiguration"
+    logger: Logger
 
-    def __init__(self, configuration):
+    def __init__(self, configuration, logger: Logger):
         self.configuration = configuration
+        self.logger = logger
 
     @abstractmethod
     def inject_fault(self, component: Component):
@@ -51,10 +53,6 @@ class Fault(ABC):
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
-    def __init__(self, logger: Logger) -> None:
-        super().__init__()
-        self.logger = logger
-
     class Schema(BaseModel.Schema):
         """Schema for the FaultConfiguration"""
 
@@ -68,6 +66,5 @@ class FaultConfiguration(BaseModel):
     start_tick = IntegerField(null=False)
     end_tick = IntegerField(null=False)
 
-    logger: Logger = None
     # - affected_element_ID: int = None // has to be implemented in subclasses
     description = TextField(default="injected Fault")

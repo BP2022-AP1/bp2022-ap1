@@ -16,6 +16,19 @@ class TrackSpeedLimitFault(Fault):
 
     configuration: "TrackSpeedLimitFaultConfiguration"
     old_speed_limit: int
+    wrapper: SimulationObjectUpdatingComponent
+    interlocking: IInterlockingDisruptor
+
+    def __init__(
+        self,
+        configuration,
+        logger: Logger,
+        wrapper: SimulationObjectUpdatingComponent,
+        interlocking: IInterlockingDisruptor,
+    ):
+        super().__init__(configuration, logger)
+        self.wrapper = wrapper
+        self.interlocking = interlocking
 
     def inject_fault(self, component: Component):
         """inject TrackSpeedLimitFault into the given component
@@ -56,16 +69,6 @@ class TrackSpeedLimitFault(Fault):
 class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the TrackSpeedLimitFault class"""
 
-    def __init__(
-        self,
-        logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
-    ):
-        super().__init__(logger=logger)
-        self.wrapper_component = wrapper
-        self.interlocking_component = interlocking
-
     class Schema(FaultConfiguration.Schema):
         """Schema for TrackSpeedLimitFaultConfiguration"""
 
@@ -75,7 +78,5 @@ class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
         def _make(self, data: dict) -> "TrackSpeedLimitFaultConfiguration":
             return TrackSpeedLimitFaultConfiguration(**data)
 
-    wrapper_component: SimulationObjectUpdatingComponent
-    interlocking_component: IInterlockingDisruptor
     affected_element_id = TextField()
     new_speed_limit = IntegerField(null=False)
