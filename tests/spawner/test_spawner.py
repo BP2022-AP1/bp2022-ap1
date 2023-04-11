@@ -80,13 +80,15 @@ class TestSpawner:
         ]
 
     def test_creation_from_configuration(self):
+        logger = MockLogger()
         mock_traci_wrapper = MockTraCiWrapper()
         spawner = Spawner(
-            logger=MockLogger(),
+            logger=logger,
             configuration=self._spawner_configuration,
-            traci_wrapper=MockTraCiWrapper(),
+            traci_wrapper=mock_traci_wrapper,
         )
         assert spawner.configuration == self._spawner_configuration
+        assert spawner.logger == logger
         assert spawner.traci_wrapper == mock_traci_wrapper
 
     def test_get_schedules(self):
