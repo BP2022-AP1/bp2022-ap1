@@ -16,7 +16,7 @@ class TrackSpeedLimitFault(Fault):
 
     configuration: "TrackSpeedLimitFaultConfiguration"
     old_speed_limit: int
-    affected_track: Track
+    track: Track
     wrapper: SimulationObjectUpdatingComponent
     interlocking: IInterlockingDisruptor
 
