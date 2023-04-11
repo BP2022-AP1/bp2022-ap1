@@ -28,7 +28,7 @@ class Schedule(ABC):
         strategy_type = schedule_configuration.strategy_type
         strategy_class = cls.STRATEGY_CLASSES[strategy_type]
         assert issubclass(strategy_class, ScheduleStrategy)
-        return strategy_class.from_schedule_configuration(schedule_configruation)
+        return strategy_class.from_schedule_configuration(schedule_configuration)
 
     def __init__(self, strategy: ScheduleStrategy, id_: str):
         """Constructs a Schedule."""
