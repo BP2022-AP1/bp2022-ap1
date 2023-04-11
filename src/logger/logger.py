@@ -93,7 +93,7 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    def remove_fault(self, injection_id: int) -> Type[None]:
+    def resolve_fault(self, injection_id: int) -> Type[None]:
         """
         This function should be called when removing a fault from the simulation. This should
         reference the injection id, that was removed.
