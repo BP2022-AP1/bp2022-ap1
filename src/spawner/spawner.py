@@ -111,7 +111,7 @@ class Spawner(Component, ISpawnerDisruptor):
         # super(<CLASS>, self).__init__ calls the __init__ method of the next <CLASS> in the MRO
         # call <CLASS>.mro() to see the MRO of <CLASS>
         # pylint: disable=super-with-arguments
-        super(Spawner, self).__init__(logger, self.PRIOTITY)  # calls Component.__init__
+        super(Spawner, self).__init__(logger, self.PRIORITY)  # calls Component.__init__
         self.configuration = configuration
         self.traci_wrapper = traci_wrapper
         self._load_schedules()
