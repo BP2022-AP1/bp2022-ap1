@@ -86,7 +86,7 @@ class TestSpawner:
             traci_wrapper=mock_traci_wrapper
         )
 
-        schedule_ids = [config.id for config in self._schdeule_configurations]
+        schedule_ids = [config.id for config in self._schedule_configurations]
         for i, schedule_id in enumerate(schedule_ids):
             schedule = spawner.get_schedule(schedule_id)
             assert schedule.id == schedule_id
