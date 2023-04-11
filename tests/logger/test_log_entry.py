@@ -89,6 +89,9 @@ class TestLogEntry:
 
             assert log_entry.to_dict() == {
                 "id": str(log_entry.id),
+                # pylint: disable=no-member
+                "created_at": log_entry.created_at.isoformat(),
+                "updated_at": log_entry.updated_at.isoformat(),
                 "timestamp": log_entry_as_dict["timestamp"].isoformat(),
                 "tick": log_entry_as_dict["tick"],
                 "message": log_entry_as_dict["message"],
@@ -199,6 +202,9 @@ class TestLogEntry:
 
             assert train_spawn_log_entry.to_dict() == {
                 "id": str(train_spawn_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_spawn_log_entry.created_at.isoformat(),
+                "updated_at": train_spawn_log_entry.updated_at.isoformat(),
                 "timestamp": train_spawn_log_entry_as_dict["timestamp"].isoformat(),
                 "tick": train_spawn_log_entry_as_dict["tick"],
                 "message": train_spawn_log_entry_as_dict["message"],
@@ -326,6 +332,9 @@ class TestLogEntry:
 
             assert train_remove_log_entry.to_dict() == {
                 "id": str(train_remove_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_remove_log_entry.created_at.isoformat(),
+                "updated_at": train_remove_log_entry.updated_at.isoformat(),
                 "timestamp": train_remove_log_entry_as_dict["timestamp"].isoformat(),
                 "tick": train_remove_log_entry_as_dict["tick"],
                 "message": train_remove_log_entry_as_dict["message"],
@@ -456,6 +465,9 @@ class TestLogEntry:
 
             assert train_arrival_log_entry.to_dict() == {
                 "id": str(train_arrival_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_arrival_log_entry.created_at.isoformat(),
+                "updated_at": train_arrival_log_entry.updated_at.isoformat(),
                 "timestamp": train_arrival_log_entry_as_dict["timestamp"].isoformat(),
                 "tick": train_arrival_log_entry_as_dict["tick"],
                 "message": train_arrival_log_entry_as_dict["message"],
@@ -602,6 +614,9 @@ class TestLogEntry:
 
             assert train_departure_log_entry.to_dict() == {
                 "id": str(train_departure_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_departure_log_entry.created_at.isoformat(),
+                "updated_at": train_departure_log_entry.updated_at.isoformat(),
                 "timestamp": train_departure_log_entry_as_dict["timestamp"].isoformat(),
                 "tick": train_departure_log_entry_as_dict["tick"],
                 "message": train_departure_log_entry_as_dict["message"],
@@ -744,6 +759,9 @@ class TestLogEntry:
 
             assert create_fahrstrasse_log_entry.to_dict() == {
                 "id": str(create_fahrstrasse_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": create_fahrstrasse_log_entry.created_at.isoformat(),
+                "updated_at": create_fahrstrasse_log_entry.updated_at.isoformat(),
                 "timestamp": create_fahrstrasse_log_entry_as_dict[
                     "timestamp"
                 ].isoformat(),
@@ -882,6 +900,9 @@ class TestLogEntry:
 
             assert remove_fahrstrasse_log_entry.to_dict() == {
                 "id": str(remove_fahrstrasse_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": remove_fahrstrasse_log_entry.created_at.isoformat(),
+                "updated_at": remove_fahrstrasse_log_entry.updated_at.isoformat(),
                 "timestamp": remove_fahrstrasse_log_entry_as_dict[
                     "timestamp"
                 ].isoformat(),
@@ -1025,6 +1046,9 @@ class TestLogEntry:
 
             assert set_signal_log_entry.to_dict() == {
                 "id": str(set_signal_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": set_signal_log_entry.created_at.isoformat(),
+                "updated_at": set_signal_log_entry.updated_at.isoformat(),
                 "timestamp": set_signal_log_entry_as_dict["timestamp"].isoformat(),
                 "tick": set_signal_log_entry_as_dict["tick"],
                 "message": set_signal_log_entry_as_dict["message"],
@@ -1223,22 +1247,28 @@ class TestLogEntry:
             assert inject_fault_log_entry.to_dict() == {
                 "id": str(inject_fault_log_entry.id),
                 # pylint: disable=no-member
-                "timestamp": inject_fault_log_entry.timestamp.isoformat(),
-                "tick": inject_fault_log_entry.tick,
-                "message": inject_fault_log_entry.message,
-                "run_id": str(inject_fault_log_entry.run_id),
+                "created_at": inject_fault_log_entry.created_at.isoformat(),
+                "updated_at": inject_fault_log_entry.updated_at.isoformat(),
+                "timestamp": inject_fault_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": inject_fault_log_entry_as_dict["tick"],
+                "message": inject_fault_log_entry_as_dict["message"],
+                "run_id": str(inject_fault_log_entry_as_dict["run_id"]),
                 "train_speed_fault_configuration": str(
-                    inject_fault_log_entry.train_speed_fault_configuration
+                    inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
                 ),
                 "platform_blocked_fault_configuration": str(
-                    inject_fault_log_entry.platform_blocked_fault_configuration
+                    inject_fault_log_entry_as_dict[
+                        "platform_blocked_fault_configuration"
+                    ]
                 ),
                 "train_cancelled_fault_configuration": str(
-                    inject_fault_log_entry.train_cancelled_fault_configuration
+                    inject_fault_log_entry_as_dict[
+                        "train_cancelled_fault_configuration"
+                    ]
                 ),
-                "affected_element": inject_fault_log_entry.affected_element,
-                "value_before": inject_fault_log_entry.value_before,
-                "value_after": inject_fault_log_entry.value_after,
+                "affected_element": inject_fault_log_entry_as_dict["affected_element"],
+                "value_before": inject_fault_log_entry_as_dict["value_before"],
+                "value_after": inject_fault_log_entry_as_dict["value_after"],
             }
 
         def test_deserialization(self, inject_fault_log_entry_as_dict_serialized):
@@ -1443,18 +1473,24 @@ class TestLogEntry:
             assert resolve_fault_log_entry.to_dict() == {
                 "id": str(resolve_fault_log_entry.id),
                 # pylint: disable=no-member
-                "timestamp": resolve_fault_log_entry.timestamp.isoformat(),
-                "tick": resolve_fault_log_entry.tick,
-                "message": resolve_fault_log_entry.message,
-                "run_id": str(resolve_fault_log_entry.run_id.id),
+                "created_at": resolve_fault_log_entry.created_at.isoformat(),
+                "updated_at": resolve_fault_log_entry.updated_at.isoformat(),
+                "timestamp": resolve_fault_log_entry_as_dict["timestamp"].isoformat(),
+                "tick": resolve_fault_log_entry_as_dict["tick"],
+                "message": resolve_fault_log_entry_as_dict["message"],
+                "run_id": str(resolve_fault_log_entry_as_dict["run_id"]),
                 "train_speed_fault_configuration": str(
-                    resolve_fault_log_entry.train_speed_fault_configuration.id
+                    resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
                 ),
                 "platform_blocked_fault_configuration": str(
-                    resolve_fault_log_entry.platform_blocked_fault_configuration.id
+                    resolve_fault_log_entry_as_dict[
+                        "platform_blocked_fault_configuration"
+                    ]
                 ),
                 "train_cancelled_fault_configuration": str(
-                    resolve_fault_log_entry.train_cancelled_fault_configuration.id
+                    resolve_fault_log_entry_as_dict[
+                        "train_cancelled_fault_configuration"
+                    ]
                 ),
             }
 
