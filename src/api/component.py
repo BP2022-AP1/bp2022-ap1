@@ -1,8 +1,8 @@
 from flask import Blueprint, request
 from webargs.flaskparser import parser
 
-from .. import implementor as impl
-from ..schemas import model
+from src import implementor as impl
+from src.schemas import model
 
 bp = Blueprint("component", __name__)
 
