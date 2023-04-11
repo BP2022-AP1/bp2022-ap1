@@ -8,14 +8,14 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.schedule_blocked_fault import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_types.track_blocked_fault import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.track_speed_limit_fault import (
     TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_types.schedule_blocked_fault import (
-    ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_prio_fault import TrainPrioFaultConfiguration
 from src.fault_injector.fault_types.train_speed_fault import (
