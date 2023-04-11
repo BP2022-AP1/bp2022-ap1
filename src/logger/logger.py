@@ -79,6 +79,101 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
+    def inject_platform_blocked_fault(
+        self,
+        platform_blocked_fault_configuration: UUID,
+        affected_element: str,
+        value_before: str,
+        value_after: str,
+    ) -> Type[None]:
+        """
+        This function should be called when injecting a platform blocked fault into the simulation.
+        This should include the fault configuration, the affected element, the value before and the
+        value after the fault.
+        :param platform_blocked_fault_configuration: The configuration of the fault
+        :param affected_element: The affected element
+        :param value_before: The value before the fault
+        :param value_after: The value after the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def inject_track_blocked_fault(
+        self,
+        track_blocked_fault_configuration: UUID,
+        affected_element: str,
+        value_before: str,
+        value_after: str,
+    ) -> Type[None]:
+        """
+        This function should be called when injecting a track blocked fault into the simulation.
+        This should include the fault configuration, the affected element, the value before and the
+        value after the fault.
+        :param track_blocked_fault_configuration: The configuration of the fault
+        :param affected_element: The affected element
+        :param value_before: The value before the fault
+        :param value_after: The value after the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def inject_track_speed_limit_fault(
+        self,
+        track_speed_limit_fault_configuration: UUID,
+        affected_element: str,
+        value_before: str,
+        value_after: str,
+    ) -> Type[None]:
+        """
+        This function should be called when injecting a track speed limit fault into the simulation.
+        This should include the fault configuration, the affected element, the value before and the
+        value after the fault.
+        :param track_speed_limit_fault_configuration: The configuration of the fault
+        :param affected_element: The affected element
+        :param value_before: The value before the fault
+        :param value_after: The value after the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def inject_train_cancelled_speed_fault(
+        self,
+        train_cancelled_fault_configuration: UUID,
+        affected_element: str,
+        value_before: str,
+        value_after: str,
+    ) -> Type[None]:
+        """
+        This function should be called when injecting a train speed fault into the simulation.
+        This should include the fault configuration, the affected element, the value before and the
+        value after the fault.
+        :param train_cancelled_fault_configuration: The configuration of the fault
+        :param affected_element: The affected element
+        :param value_before: The value before the fault
+        :param value_after: The value after the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def inject_train_prio_fault_configuration(
+        self,
+        train_prio_fault_configuration: UUID,
+        affected_element: str,
+        value_before: str,
+        value_after: str,
+    ) -> Type[None]:
+        """
+        This function should be called when injecting a train prio fault into the simulation.
+        This should include the fault configuration, the affected element, the value before and the
+        value after the fault.
+        :param train_prio_fault_configuration: The configuration of the fault
+        :param affected_element: The affected element
+        :param value_before: The value before the fault
+        :param value_after: The value after the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
     def inject_train_speed_fault(
         self,
         train_speed_fault_configuration: UUID,
@@ -98,57 +193,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    def inject_platform_blocked_fault(
-        self,
-        platform_blocked_fault_configuration: UUID,
-        affected_element: str,
-        value_before: str,
-        value_after: str,
-    ) -> Type[None]:
-        """
-        This function should be called when injecting a platform blocked fault into the simulation.
-        This should include the fault configuration, the affected element, the value before and the
-        value after the fault.
-        :param platform_blocked_fault_configuration: The configuration of the fault
-        :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
-        :rtype: None
-        """
-
-    pass  # not implemented yet # pylint: disable=W0107
-
-    def inject_train_cancelled_speed_fault(
-        self,
-        train_cancelled_fault_configuration: UUID,
-        affected_element: str,
-        value_before: str,
-        value_after: str,
-    ) -> Type[None]:
-        """
-        This function should be called when injecting a train speed fault into the simulation.
-        This should include the fault configuration, the affected element, the value before and the
-        value after the fault.
-        :param train_cancelled_fault_configuration: The configuration of the fault
-        :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
-        :rtype: None
-        """
-
-    pass  # not implemented yet # pylint: disable=W0107
-
-    def resolve_train_speed_fault(
-        self, train_speed_fault_configuration: UUID
-    ) -> Type[None]:
-        """
-        This function should be called when removing a train speed fault from the simulation. This
-        should reference the fault configuration of the fault.
-        :param train_speed_fault_configuration: The configuration of the fault
-        :rtype: None
-        """
-        pass  # not implemented yet # pylint: disable=W0107
-
     def resolve_platform_blocked_fault(
         self, platform_blocked_fault_configuration: UUID
     ) -> Type[None]:
@@ -160,6 +204,28 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
+    def resolve_track_blocked_fault(
+        self, track_blocked_fault_configuration: UUID
+    ) -> Type[None]:
+        """
+        This function should be called when removing a track blocked fault from the simulation.
+        This should reference the fault configuration of the fault.
+        :param track_blocked_fault_configuration: The configuration of the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def resolve_track_speed_limit_fault(
+        self, track_speed_limit_fault_configuration: UUID
+    ) -> Type[None]:
+        """
+        This function should be called when removing a track speed limit fault from the simulation.
+        This should reference the fault configuration of the fault.
+        :param track_speed_limit_fault_configuration: The configuration of the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
     def resolve_train_cancelled_fault(
         self, train_cancelled_fault_configuration: UUID
     ) -> Type[None]:
@@ -167,6 +233,28 @@ class Logger:
         This function should be called when removing a train cancelled fault from the simulation.
         This should reference the fault configuration of the fault.
         :param train_cancelled_fault_configuration: The configuration of the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def resolve_train_prio_fault_configuration(
+        self, train_prio_fault_configuration: UUID
+    ) -> Type[None]:
+        """
+        This function should be called when removing a train prio fault from the simulation.
+        This should reference the fault configuration of the fault.
+        :param train_prio_fault_configuration: The configuration of the fault
+        :rtype: None
+        """
+        pass  # not implemented yet # pylint: disable=W0107
+
+    def resolve_train_speed_fault(
+        self, train_speed_fault_configuration: UUID
+    ) -> Type[None]:
+        """
+        This function should be called when removing a train speed fault from the simulation. This
+        should reference the fault configuration of the fault.
+        :param train_speed_fault_configuration: The configuration of the fault
         :rtype: None
         """
         pass  # not implemented yet # pylint: disable=W0107
