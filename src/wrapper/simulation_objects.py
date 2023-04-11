@@ -222,7 +222,8 @@ class Train(SimulationObject):
 
     _position: Tuple[float, float]
     _route: str
-    _track: Track
+    _track: Track = None
+    _track_id: str
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
@@ -233,6 +234,12 @@ class Train(SimulationObject):
 
         :return: The current track the train is on
         """
+        if self._track is None or self._track.identifier != self._track_id:
+            self._track = next(
+                item
+                for item in self.updater.tracks
+                if item.identifier == self._track_id
+            )
         return self._track
 
     @property
@@ -335,7 +342,7 @@ class Train(SimulationObject):
         :param updates: The updated values for the synchronized properties
         """
         self._position = data[constants.VAR_POSITION]
-        self._track = data[constants.VAR_ROAD_ID]
+        self._track_id = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
 
