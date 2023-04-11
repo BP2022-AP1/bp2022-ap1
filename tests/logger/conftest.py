@@ -37,18 +37,18 @@ def message():
     return "Test Log Done"
 
 
-@pytest.fixture(name="token")
-def fixture_token():
+@pytest.fixture
+def token():
     return Token.create(name="user", permission="admin", hashedToken="hash")
 
 
-@pytest.fixture(name="simulation_configuration")
-def fixture_simulation_configuration(token):
+@pytest.fixture
+def simulation_configuration(token):
     return SimulationConfiguration.create(token=token.id)
 
 
-@pytest.fixture(name="run")
-def fixture_run(simulation_configuration):
+@pytest.fixture
+def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
 
 
