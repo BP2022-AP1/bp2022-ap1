@@ -43,7 +43,7 @@ class MockComponent(Component):
 
 def test_simulation_runs(
     mock_traci,
-):  # pylint: disable=redefined-outer-name,unused-argument
+):  # pylint: disable=unused-argument
     communicator = Communicator()
     communicator.start()
     sleep(0.1)
@@ -53,7 +53,7 @@ def test_simulation_runs(
 
 def test_component_next_tick_is_called(
     mock_traci,
-):  # pylint: disable=redefined-outer-name,unused-argument
+):  # pylint: disable=unused-argument
     mock = MockComponent()
     communicator = Communicator(components=[mock])
     communicator.start()
@@ -64,7 +64,7 @@ def test_component_next_tick_is_called(
 
 def test_component_next_tick_is_called_late_add(
     mock_traci,
-):  # pylint: disable=redefined-outer-name,unused-argument
+):  # pylint: disable=unused-argument
     mock = MockComponent()
     communicator = Communicator()
     communicator.start()

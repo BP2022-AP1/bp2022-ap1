@@ -90,5 +90,13 @@ build-backend = "poetry.core.masonry.api"
     help = "Run flask app in development mode"
     cmd = "flask --app src run"
 
+    [tool.poe.tasks.cov]
+    help = "Run coverage report"
+    cmd = "pytest --co --cov=src"
+
+    [tool.poe.tasks.cov-xml]
+    help = "Run coverage report and write to XML file"
+    cmd = "pytest --co --cov=src --cov-report xml"
+
 [tool.isort]
 profile = "black"

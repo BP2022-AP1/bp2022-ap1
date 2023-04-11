@@ -14,9 +14,16 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_types.platform_blocked_fault import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_blocked_fault import (
+    TrackBlockedFaultConfiguration,
+)
+from src.fault_injector.fault_types.track_speed_limit_fault import (
+    TrackSpeedLimitFaultConfiguration,
+)
 from src.fault_injector.fault_types.train_cancelled_fault import (
     TrainCancelledFaultConfiguration,
 )
+from src.fault_injector.fault_types.train_prio_fault import TrainPrioFaultConfiguration
 from src.fault_injector.fault_types.train_speed_fault import (
     TrainSpeedFaultConfiguration,
 )
@@ -155,9 +162,12 @@ class InjectFaultLogEntry(LogEntry):
     class Schema(LogEntry.Schema):
         """The marshmallow schema for the InjectFaultLogEntry model."""
 
-        train_speed_fault_configuration = marsh.fields.UUID(required=False)
         platform_blocked_fault_configuration = marsh.fields.UUID(required=False)
+        track_blocked_fault_configuration = marsh.fields.UUID(required=False)
+        track_speed_limit_fault_configuration = marsh.fields.UUID(required=False)
         train_cancelled_fault_configuration = marsh.fields.UUID(required=False)
+        train_prio_fault_configuration = marsh.fields.UUID(required=False)
+        train_speed_fault_configuration = marsh.fields.UUID(required=False)
         affected_element = marsh.fields.String(required=True)
         value_before = marsh.fields.String()
         value_after = marsh.fields.String()
@@ -165,14 +175,23 @@ class InjectFaultLogEntry(LogEntry):
         def _make(self, data: dict) -> "InjectFaultLogEntry":
             return InjectFaultLogEntry(**data)
 
-    train_speed_fault_configuration = ForeignKeyField(
-        TrainSpeedFaultConfiguration, null=True
-    )
     platform_blocked_fault_configuration = ForeignKeyField(
         PlatformBlockedFaultConfiguration, null=True
     )
+    track_blocked_fault_configuration = ForeignKeyField(
+        TrackBlockedFaultConfiguration, null=True
+    )
+    track_speed_limit_fault_configuration = ForeignKeyField(
+        TrackSpeedLimitFaultConfiguration, null=True
+    )
     train_cancelled_fault_configuration = ForeignKeyField(
         TrainCancelledFaultConfiguration, null=True
+    )
+    train_prio_fault_configuration = ForeignKeyField(
+        TrainPrioFaultConfiguration, null=True
+    )
+    train_speed_fault_configuration = ForeignKeyField(
+        TrainSpeedFaultConfiguration, null=True
     )
     affected_element = TextField(null=False)
     value_before = TextField(null=True)
@@ -185,19 +204,31 @@ class ResolveFaultLogEntry(LogEntry):
     class Schema(LogEntry.Schema):
         """The marshmallow schema for the ResolveFaultLogEntry model."""
 
-        train_speed_fault_configuration = marsh.fields.UUID(required=False)
         platform_blocked_fault_configuration = marsh.fields.UUID(required=False)
+        track_blocked_fault_configuration = marsh.fields.UUID(required=False)
+        track_speed_limit_fault_configuration = marsh.fields.UUID(required=False)
         train_cancelled_fault_configuration = marsh.fields.UUID(required=False)
+        train_prio_fault_configuration = marsh.fields.UUID(required=False)
+        train_speed_fault_configuration = marsh.fields.UUID(required=False)
 
         def _make(self, data: dict) -> "ResolveFaultLogEntry":
             return ResolveFaultLogEntry(**data)
 
-    train_speed_fault_configuration = ForeignKeyField(
-        TrainSpeedFaultConfiguration, null=True
-    )
     platform_blocked_fault_configuration = ForeignKeyField(
         PlatformBlockedFaultConfiguration, null=True
     )
+    track_blocked_fault_configuration = ForeignKeyField(
+        TrackBlockedFaultConfiguration, null=True
+    )
+    track_speed_limit_fault_configuration = ForeignKeyField(
+        TrackSpeedLimitFaultConfiguration, null=True
+    )
     train_cancelled_fault_configuration = ForeignKeyField(
         TrainCancelledFaultConfiguration, null=True
+    )
+    train_prio_fault_configuration = ForeignKeyField(
+        TrainPrioFaultConfiguration, null=True
+    )
+    train_speed_fault_configuration = ForeignKeyField(
+        TrainSpeedFaultConfiguration, null=True
     )

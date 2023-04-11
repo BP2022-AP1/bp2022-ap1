@@ -1,21 +1,112 @@
 import pytest
 from traci import constants, edge, trafficlight, vehicle
 
-from src.wrapper.simulation_objects import Signal, Track, Train
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
+from src.wrapper.simulation_objects import Platform, Signal, Switch, Track, Train
+
+
+@pytest.fixture
+def traffic_update(monkeypatch):
+    def set_traffic_light_state(identifier: str, state: str) -> None:
+        assert identifier == "fancy-signal"
+        assert state in ("rr", "GG")
+
+    monkeypatch.setattr(trafficlight, "setRedYellowGreenState", set_traffic_light_state)
+
+
+@pytest.fixture
+def track():
+    return Track("track")
+
+
+@pytest.fixture
+def speed_update(monkeypatch):
+    def set_max_speed(identifier: str, speed: float) -> None:
+        assert identifier == "track"
+        assert speed == 100
+
+    monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
+
+
+@pytest.fixture
+def train():
+    created_train = Train(
+        identifier="fake-sim-train",
+        train_type="fancy-ice",
+        timetable=[],
+        from_simulator=True,
+    )
+    created_train.update(
+        {
+            constants.VAR_POSITION: (
+                100,
+                100,
+            ),
+            constants.VAR_ROAD_ID: 123,
+            constants.VAR_ROUTE: "testing-route",
+            constants.VAR_SPEED: 10.2,
+        }
+    )
+    created_train.train_type.update(
+        {
+            constants.VAR_MAXSPEED: 11,
+        }
+    )
+
+    return created_train
+
+
+@pytest.fixture
+def vehicle_route(monkeypatch):
+    def set_route_id(train_id: str, route_id: str):
+        assert train_id == "fake-sim-train"
+        assert route_id == "testing-route-beta"
+
+    monkeypatch.setattr(vehicle, "setRouteID", set_route_id)
+
+
+@pytest.fixture
+def max_speed(monkeypatch):
+    def set_max_speed(train_id: str, speed: float):
+        assert train_id == "fake-sim-train"
+        assert speed == 100
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
+@pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier == "fancy-rb-001"
+        assert route == "not-implemented"
+        assert train_type == "fancy-rb"
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
+def switch():
+    return Switch(identifier="fancy-switch")
+
+
+@pytest.fixture
+def platform() -> Platform:
+    return Platform(
+        identifier="fancy-city-platform-1",
+        platform_id="fancy-city-platform-1",
+        track_id="track",
+    )
+
+
+@pytest.fixture
+def souc():
+    return SimulationObjectUpdatingComponent()
 
 
 class TestSignal:
     """Tests for the signal component"""
-
-    @pytest.fixture
-    def traffic_update(self, monkeypatch):
-        def set_traffic_light_state(identifier: str, state: str) -> None:
-            assert identifier == "fancy-signal"
-            assert state in ("rr", "GG")
-
-        monkeypatch.setattr(
-            trafficlight, "setRedYellowGreenState", set_traffic_light_state
-        )
 
     def test_initial_state(self, traffic_update):
         # pylint: disable=unused-argument
@@ -32,18 +123,6 @@ class TestSignal:
 
 class TestTrack:
     """Tests for the track component"""
-
-    @pytest.fixture
-    def track(self):
-        return Track("track")
-
-    @pytest.fixture
-    def speed_update(self, monkeypatch):
-        def set_max_speed(identifier: str, speed: float) -> None:
-            assert identifier == "track"
-            assert speed == 100
-
-        monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
 
     def test_update_speed(self, track, speed_update):
         # pylint: disable=unused-argument
@@ -62,58 +141,6 @@ class TestTrack:
 
 class TestTrain:
     """Tests for the train object"""
-
-    @pytest.fixture
-    def train(self):
-        created_train = Train(
-            identifier="fake-sim-train",
-            train_type="fancy-ice",
-            timetable=[],
-            from_simulator=True,
-        )
-        created_train.update(
-            {
-                constants.VAR_POSITION: (
-                    100,
-                    100,
-                ),
-                constants.VAR_ROAD_ID: 123,
-                constants.VAR_ROUTE: "testing-route",
-                constants.VAR_SPEED: 10.2,
-            }
-        )
-        created_train.train_type.update(
-            {
-                constants.VAR_MAXSPEED: 11,
-            }
-        )
-
-        return created_train
-
-    @pytest.fixture
-    def vehicle_route(self, monkeypatch):
-        def set_route_id(train_id: str, route_id: str):
-            assert train_id == "fake-sim-train"
-            assert route_id == "testing-route-beta"
-
-        monkeypatch.setattr(vehicle, "setRouteID", set_route_id)
-
-    @pytest.fixture
-    def max_speed(self, monkeypatch):
-        def set_max_speed(train_id: str, speed: float):
-            assert train_id == "fake-sim-train"
-            assert speed == 100
-
-        monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
-
-    @pytest.fixture
-    def train_add(self, monkeypatch):
-        def add_train(identifier, route, train_type):
-            assert identifier == "fancy-rb-001"
-            assert route == "not-implemented"
-            assert train_type == "fancy-rb"
-
-        monkeypatch.setattr(vehicle, "add", add_train)
 
     def test_track(self, train):
         assert train.track == 123
@@ -195,3 +222,48 @@ class TestTrain:
 
     def test_subscription(self, train):
         assert train.add_subscriptions() > 0
+
+
+class TestSwitch:
+    """Tests for the switch object"""
+
+    def test_state(self, switch):
+        assert switch.state == Switch.State.LEFT
+        switch.state = Switch.State.RIGHT
+        assert switch.state == Switch.State.RIGHT
+
+    def test_invalid_state(self, switch):
+        def bad_state():
+            switch.state = "left"
+
+        pytest.raises(ValueError, bad_state)
+
+    def test_update(self, switch):
+        switch.update({"state": "right"})
+        assert switch.state == Switch.State.LEFT
+
+    def test_subscription(self, switch):
+        assert switch.add_subscriptions() == 0
+
+
+class TestPlatform:
+    """Tests for the platform object"""
+
+    def test_track(self, souc, platform, track):
+        souc.simulation_objects.append(track)
+        souc.simulation_objects.append(platform)
+
+        track.updater = souc
+        platform.updater = souc
+
+        assert platform.track == track
+
+    def test_platform_id(self, platform):
+        assert platform.platform_id == "fancy-city-platform-1"
+
+    def test_update(self, platform):
+        platform.update({})
+        assert platform.platform_id == "fancy-city-platform-1"
+
+    def test_subscription(self, platform):
+        assert platform.add_subscriptions() == 0
