@@ -22,7 +22,7 @@ class Schedule(ABC):
     ) -> ScheduleStrategy:
         """Dynamically cosntructs a ScheduleStrategy from a ScheduleConfiguration
 
-        :param schedule_configruation: The ScheduleSonfiguration
+        :param schedule_configuration: The Schedule configuration
         :return: A ScheduleStrategy
         """
         strategy_type = schedule_configuration.strategy_type
