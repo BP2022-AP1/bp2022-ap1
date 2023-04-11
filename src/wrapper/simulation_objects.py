@@ -78,7 +78,7 @@ class Signal(Node):
         self._state = target
 
     def __init__(self, identifier: str = None, state: "Signal.State" = State.HALT):
-        Node.__init__(self, identifier)
+        super().__init__(identifier=identifier)
         self.state = state
 
     def update(self, data: dict):
@@ -99,7 +99,32 @@ class Switch(Node):
         LEFT = 1
         RIGHT = 2
 
-    state: State
+    _state: "Switch.State"
+
+    def __init__(self, identifier: str = None):
+        super().__init__(identifier)
+        self._state = Switch.State.LEFT
+
+    @property
+    def state(self) -> State:
+        """Returns current state of the switch
+        (the state is only local as SUMO doesn't consider the switch state)
+
+        :return: The switch state
+        """
+        return self._state
+
+    @state.setter
+    def state(self, target) -> None:
+        """Updates the state of the switch
+
+        :param target: The new state
+        :raises ValueError: Thrown when you are trying to set the state to an invalid state
+        """
+        if target not in (Switch.State.LEFT, Switch.State.RIGHT):
+            raise ValueError("Wrong target state")
+
+        self._state = target
 
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
@@ -146,6 +171,7 @@ class Track(SimulationObject):
 class Platform(SimulationObject):
     """A platform where trains can arrive, load and unload passengers and depart"""
 
+    _track: Track = None
     _track_id: str
     _platform_id: str
     blocked: bool
@@ -156,7 +182,13 @@ class Platform(SimulationObject):
 
         :return: The track
         """
-        next(self.updater.tracks.filter(lambda item: item.identifier == self._track_id))
+        if self._track is None or self._track.identifier != self._track_id:
+            self._track = next(
+                item
+                for item in self.updater.tracks
+                if item.identifier == self._track_id
+            )
+        return self._track
 
     @property
     def platform_id(self) -> str:
@@ -166,10 +198,11 @@ class Platform(SimulationObject):
         """
         return self._platform_id
 
-    def __init__(self, identifier, platform_id: str = None):
+    def __init__(self, identifier, platform_id: str = None, track_id=None):
         super().__init__(identifier)
         self._platform_id = platform_id
         self.blocked = False
+        self._track_id = track_id
 
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
