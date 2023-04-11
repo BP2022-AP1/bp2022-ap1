@@ -62,8 +62,10 @@ class TrackSpeedLimitFault(Fault):
         :type component: Component
         """
         self.track.max_speed = self.old_speed_limit
-        self.interlocking.insert_track_speed_limit_changed(self.configuration.affected_element_id)
-        
+        self.interlocking.insert_track_speed_limit_changed(
+            self.configuration.affected_element_id
+        )
+
         # self.logger.
 
         # - get track object
