@@ -2,7 +2,11 @@ import os
 
 from flask import Flask
 
-from src.api import component, run, schedule, simulation, token
+from src.api.component import bp as component_bp
+from src.api.run import bp as run_bp
+from src.api.schedule import bp as schedule_bp
+from src.api.simulation import bp as simulation_bp
+from src.api.token import bp as token_bp
 
 
 def create_app(test_config=None) -> Flask:
@@ -27,10 +31,10 @@ def create_app(test_config=None) -> Flask:
         pass
 
     # Add blueprints
-    app.register_blueprint(component.bp)
-    app.register_blueprint(run.bp)
-    app.register_blueprint(schedule.bp)
-    app.register_blueprint(simulation.bp)
-    app.register_blueprint(token.bp)
+    app.register_blueprint(component_bp)
+    app.register_blueprint(run_bp)
+    app.register_blueprint(schedule_bp)
+    app.register_blueprint(simulation_bp)
+    app.register_blueprint(token_bp)
 
     return app
