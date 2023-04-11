@@ -25,7 +25,7 @@ class Schedule(ABC):
         :param schedule_configruation: The ScheduleSonfiguration
         :return: A ScheduleStrategy
         """
-        strategy_type = schedule_configruation.strategy_type
+        strategy_type = schedule_configuration.strategy_type
         strategy_class = cls.STRATEGY_CLASSES[strategy_type]
         assert issubclass(strategy_class, ScheduleStrategy)
         return strategy_class.from_schedule_configuration(schedule_configruation)
