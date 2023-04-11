@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
+from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 
 
 class Schedule(ABC):
@@ -10,6 +11,10 @@ class Schedule(ABC):
     id: str
     _blocked: bool
     strategy: ScheduleStrategy
+
+    STRATEGY_CLASSES: dict[str, type] = {
+        'RegularScheduleStrategy': RegularScheduleStrategy,
+    }
 
     @classmethod
     def strategy_from_schedule_configuration(
@@ -20,8 +25,8 @@ class Schedule(ABC):
         :param schedule_configruation: The ScheduleSonfiguration
         :return: A ScheduleStrategy
         """
-        strategy_type = schedule_configruation["strategy_type"]
-        strategy_class = globals[strategy_type]
+        strategy_type = schedule_configruation.strategy_type
+        strategy_class = cls.STRATEGY_CLASSES[strategy_type]
         assert issubclass(strategy_class, ScheduleStrategy)
         return strategy_class.from_schedule_configuration(schedule_configruation)
 
