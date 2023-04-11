@@ -109,12 +109,12 @@ class TestSignal:
     """Tests for the signal component"""
 
     def test_initial_state(self, traffic_update):
-        # pylint: disable=unused-argument,redefined-outer-name
+        # pylint: disable=unused-argument
         signal = Signal("fancy-signal")
         assert signal.state == Signal.State.HALT
 
     def test_update_state(self, traffic_update):
-        # pylint: disable=unused-argument,redefined-outer-name
+        # pylint: disable=unused-argument
         signal = Signal("fancy-signal")
         signal.state = Signal.State.GO
 
@@ -125,17 +125,15 @@ class TestTrack:
     """Tests for the track component"""
 
     def test_update_speed(self, track, speed_update):
-        # pylint: disable=unused-argument,redefined-outer-name
+        # pylint: disable=unused-argument
         track.max_speed = 100
 
         assert track.max_speed == 100
 
     def test_default_blocked(self, track):
-        # pylint: disable=redefined-outer-name
         assert not track.blocked
 
     def test_update_blocked(self, track):
-        # pylint: disable=redefined-outer-name
         track.blocked = True
 
         assert track.blocked
@@ -145,66 +143,55 @@ class TestTrain:
     """Tests for the train object"""
 
     def test_track(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.track == 123
 
     def test_position(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.position == (
             100,
             100,
         )
 
     def test_speed(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.speed == 10.2
 
     def test_route(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.route == "testing-route"
 
     def test_set_route(self, train, vehicle_route):
-        # pylint: disable=unused-argument,redefined-outer-name
+        # pylint: disable=unused-argument
         train.route = "testing-route-beta"
         assert train.route == "testing-route-beta"
 
     def test_max_speed(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.train_type.max_speed == 11
 
     def test_set_max_speed(self, train, max_speed):
-        # pylint: disable=unused-argument,redefined-outer-name
+        # pylint: disable=unused-argument
         train.train_type.max_speed = 100
         assert train.train_type.max_speed == 100
 
     def test_priority(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.train_type.priority == 0
 
     def test_set_priority(self, train):
-        # pylint: disable=redefined-outer-name
         train.train_type.priority = 10
         assert train.train_type.priority == 10
 
     def test_train_type(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.train_type.name == "fancy-ice"
 
     def test_timetable(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.timetable == []
 
     def test_set_timetable(self, train):
-        # pylint: disable=redefined-outer-name
         train.timetable = ["asdf"]
         assert train.timetable == ["asdf"]
 
     def test_spawning(self, train_add):
-        # pylint: disable=unused-argument,redefined-outer-name
+        # pylint: disable=unused-argument
         Train(identifier="fancy-rb-001", train_type="fancy-rb")
 
     def test_update(self, train):
-        # pylint: disable=redefined-outer-name
         train.update(
             {
                 constants.VAR_POSITION: (
@@ -234,7 +221,6 @@ class TestTrain:
         assert train.timetable == []
 
     def test_subscription(self, train):
-        # pylint: disable=redefined-outer-name
         assert train.add_subscriptions() > 0
 
 
@@ -242,25 +228,21 @@ class TestSwitch:
     """Tests for the switch object"""
 
     def test_state(self, switch):
-        # pylint: disable=redefined-outer-name
         assert switch.state == Switch.State.LEFT
         switch.state = Switch.State.RIGHT
         assert switch.state == Switch.State.RIGHT
 
     def test_invalid_state(self, switch):
-        # pylint: disable=redefined-outer-name
         def bad_state():
             switch.state = "left"
 
         pytest.raises(ValueError, bad_state)
 
     def test_update(self, switch):
-        # pylint: disable=redefined-outer-name
         switch.update({"state": "right"})
         assert switch.state == Switch.State.LEFT
 
     def test_subscription(self, switch):
-        # pylint: disable=redefined-outer-name
         assert switch.add_subscriptions() == 0
 
 
@@ -268,7 +250,6 @@ class TestPlatform:
     """Tests for the platform object"""
 
     def test_track(self, souc, platform, track):
-        # pylint: disable=redefined-outer-name
         souc.simulation_objects.append(track)
         souc.simulation_objects.append(platform)
 
@@ -278,14 +259,11 @@ class TestPlatform:
         assert platform.track == track
 
     def test_platform_id(self, platform):
-        # pylint: disable=redefined-outer-name
         assert platform.platform_id == "fancy-city-platform-1"
 
     def test_update(self, platform):
-        # pylint: disable=redefined-outer-name
         platform.update({})
         assert platform.platform_id == "fancy-city-platform-1"
 
     def test_subscription(self, platform):
-        # pylint: disable=redefined-outer-name
         assert platform.add_subscriptions() == 0
