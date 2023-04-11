@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
 
@@ -11,19 +12,23 @@ class Schedule(ABC):
     _blocked: bool
     strategy: ScheduleStrategy
 
+    STRATEGY_CLASSES: dict[str, type] = {
+        "RegularScheduleStrategy": RegularScheduleStrategy,
+    }
+
     @classmethod
     def strategy_from_schedule_configuration(
-        cls, schedule_configruation: ScheduleConfiguration
+        cls, schedule_configuration: ScheduleConfiguration
     ) -> ScheduleStrategy:
         """Dynamically cosntructs a ScheduleStrategy from a ScheduleConfiguration
 
-        :param schedule_configruation: The ScheduleSonfiguration
+        :param schedule_configuration: The Schedule configuration
         :return: A ScheduleStrategy
         """
-        strategy_type = schedule_configruation["strategy_type"]
-        strategy_class = globals[strategy_type]
+        strategy_type = schedule_configuration.strategy_type
+        strategy_class = cls.STRATEGY_CLASSES[strategy_type]
         assert issubclass(strategy_class, ScheduleStrategy)
-        return strategy_class.from_schedule_configuration(schedule_configruation)
+        return strategy_class.from_schedule_configuration(schedule_configuration)
 
     def __init__(self, strategy: ScheduleStrategy, id_: str):
         """Constructs a Schedule."""
@@ -32,10 +37,11 @@ class Schedule(ABC):
         self.id = id_  # pylint: disable=invalid-name
 
     @abstractmethod
-    def _spawn(self, traci_wrapper: "ITraCiWrapper"):
+    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
         """Spawns a vehicle.
 
         :param traci_wrapper: The TraCi wrapper to give the vehicle to.
+        :param tick: The current tick
         """
         raise NotImplementedError()
 
@@ -46,7 +52,7 @@ class Schedule(ABC):
         :param traci_wrapper: The TraCi wrapper to give the spawned vehicle to.
         """
         if not self._blocked and self.strategy.should_spawn(tick):
-            self._spawn(traci_wrapper)
+            self._spawn(traci_wrapper, tick)
 
     def block(self):
         """Blocks the schedule.
