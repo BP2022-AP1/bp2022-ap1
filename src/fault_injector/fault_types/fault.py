@@ -5,7 +5,7 @@ from peewee import IntegerField, TextField
 
 from src.base_model import BaseModel
 from src.component import Component
-from logger.logger import Logger
+from src.logger.logger import Logger
 
 
 class Fault(ABC):
@@ -51,7 +51,8 @@ class Fault(ABC):
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
-    def __init__(self, logger: Logger):
+    def __init__(self, logger: Logger) -> None:
+        super().__init__()
         self.logger = logger
 
     class Schema(BaseModel.Schema):
