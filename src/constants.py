@@ -60,5 +60,5 @@ tables: list[Type[BaseModel]] = [
     TrainPrioFaultConfiguration,
     TrackSpeedLimitFaultConfiguration,
     SpawnerConfiguration,
-    SpawnerConfigurationXSchedule
+    SpawnerConfigurationXSchedule,
 ]
