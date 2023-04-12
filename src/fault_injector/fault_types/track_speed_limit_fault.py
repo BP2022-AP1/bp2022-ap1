@@ -1,7 +1,4 @@
-import marshmallow as marsh
-from peewee import IntegerField, TextField
-
-from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
+from src.fault_injector.fault_types.fault import Fault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
