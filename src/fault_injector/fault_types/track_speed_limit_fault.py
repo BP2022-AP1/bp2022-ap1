@@ -47,12 +47,11 @@ class TrackSpeedLimitFault(Fault):
         self.interlocking.insert_track_speed_limit_changed(
             self.configuration.affected_element_id
         )
-        # self.configuration.logger.inject_fault
+        self.logger.inject_track_speed_limit_fault(self.configuration.id, self.track.identifier, self.old_speed_limit, self.configuration.new_speed_limit)
 
         # - get track object
         # - save the current speed limit of the track in old_speed_limit
         # - set track speed limit to new_speed_limit
-        raise NotImplementedError()
 
     def resolve_fault(self):
         """resolves the previously injected fault
@@ -65,12 +64,10 @@ class TrackSpeedLimitFault(Fault):
             self.configuration.affected_element_id
         )
 
-        # self.logger.
+        self.logger.resolve_track_speed_limit_fault(self.configuration.id)
 
         # - get track object
         # - set the track speed limit to old_speed_limit
-
-        raise NotImplementedError()
 
 
 class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
