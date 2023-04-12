@@ -49,7 +49,11 @@ class TestLogger:
         logger.arrival_train(tick=tick, train_id=train_id, station_id=station_id)
         log_entry = (
             TrainArrivalLogEntry.select()
-            .where(TrainArrivalLogEntry.train_id == train_id)
+            .where(
+                TrainArrivalLogEntry.tick == tick
+                and TrainArrivalLogEntry.train_id == train_id
+                and TrainArrivalLogEntry.station_id == station_id
+            )
             .first()
         )
         assert log_entry.timestamp == datetime.now()
