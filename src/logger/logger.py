@@ -12,6 +12,7 @@ class Logger:
     """
     The logger class is used to log the events of the simulation
     """
+
     run_id: int
 
     def __init__(self, run_id: int):
@@ -28,13 +29,13 @@ class Logger:
         :param train_id: The id of the train
         :rtype: None
         """
-        spawn_train_log_entry = TrainSpawnLogEntry.create(
+        TrainSpawnLogEntry.create(
             timestamp=datetime.now(),
+            tick=tick,
             message=f"Train with ID {train_id} spawned",
             run_id=self.run_id,
             train_id=train_id,
         )
-        spawn_train_log_entry.save()
 
     def remove_train(self, tick: int, train_id: str) -> Type[None]:
         """
