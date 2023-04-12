@@ -5,6 +5,8 @@ from interlocking import interlockinginterface
 from peewee import BooleanField
 
 from src.base_model import BaseModel
+from src.interlocking_component.router import Router
+from src.wrapper.simulation_objects import Track, Train
 
 
 class InterlockingConfiguration(BaseModel):
@@ -42,11 +44,11 @@ class IRouteController(ABC):
         """This method sets up the interlocking"""
         raise NotImplementedError()
 
+
 class IInterlockingDisruptor:
     """This class is the Interface to inject faults into the interlocking
     as well as to notify the Interlocking faults that occur in other parts of the simulation.
     """
-
 
     def insert_track_blocked(self, track: "Track"):
         """This method is used to block a track and recalculate the routes of relevant trains.
@@ -107,11 +109,12 @@ class RouteController(IRouteController):
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    Interlocking = None
+    Interlocking: interlockinginterface = None
     ISimulationObjectsUpdater = None
     topology = None
+    router: Router = None
 
-    def check_if_new_fahrstrasse_is_needed(self, train_id: str, track_segment_id: str):
+    def check_if_new_fahrstrasse_is_needed(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
@@ -120,34 +123,38 @@ class RouteController(IRouteController):
         :param track_segment_id: the id of the tracksegment it just entered
         :type track_segment_id: track_segment_id
         """
-        train = self.ISimulationObjectsUpdater.get_train_by_id(train_id)
-        track_segment = self.ISimulationObjectsUpdater.get_track_segment_by_id(
-            track_segment_id
-        )
-        track = None
         route = None
         for route_candidate in self.Interlocking.active_routes:
-            track_candidat = route_candidate.contains_segment(track_segment_id)
-            if track_candidat is not None:
-                track = track_candidat
+            interlocking_track_candidat = route_candidate.contains_segment(
+                track.identifier
+            )
+            # This assumes, that track.identifier does not contain '-re',
+            # as the interlocking does not know of reverse directions.
+            if interlocking_track_candidat is not None:
                 route = route_candidate
-        if route.get_last_segment_of_route != track_segment_id:
+        if route is None or route.get_last_segment_of_route != track.identifier:
             return
 
-        new_route = self.Router.get_route(track_segment_id, train.plattforms[0])
-        # This return a list of (tracks) signals
-        for _route_uuid in self.topology.routes:
-            _route = self.topology.routes[_route_uuid]
-            if (
-                _route.start_signal.name == new_route[0]
-                and _route.end_signal.name == new_route[-1]
-            ):
-                # This sets the route in the interlocking
-                self.Interlocking.set_route(_route)
+        new_route = self.router.get_route(track, train.timetable[0].track)
+        new_route_is_set = False
+        for end_node_candidat in new_route:
+            if new_route_is_set:
+                break
+            for interlocking_route in self.Interlocking.routes:
+                if (
+                    interlocking_route.start_signal.name == new_route[0]
+                    and interlocking_route.end_signal.name == end_node_candidat
+                ):
+                    # This sets the route in the interlocking
+                    self.Interlocking.set_route(interlocking_route.yaramo_route)
+                    # This does not check if the route can even be set and does not handle,
+                    # if it can not be set this simulation step.
 
-                # This sets the route in SUMO. The Routes have (hopefully) the same name.
-                train.route = _route.uuid
-        raise NotImplementedError()
+                    # This sets the route in SUMO.
+                    # The Interlocking Route has the same id as the SUMO route.
+                    train.route = interlocking_route.id
+                    new_route_is_set = True
+                    break
 
     def is_new_fahrstrasse_needed(self, train: "Train", track_segment: "Track"):
         """This method should be called when a train enters a new track_segment.
