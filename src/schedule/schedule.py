@@ -1,42 +1,47 @@
-# pylint: disable=useless-parent-delegation
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
-import marshmallow as marsh
-from peewee import ForeignKeyField
-
-from src.base_model import BaseModel
+from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
+from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
 
 
-class Schedule(BaseModel):
+class Schedule(ABC):
     """An abstract schedule for spawning SUMO vehicles."""
 
-    class Schema(BaseModel.Schema):
-        """Schema for Schedule."""
-
-        def _make(self, data: dict) -> "BaseModel":
-            """Constructs a Schedule from a dictionary.
-
-            :param data: The dictionary.
-            :return: A Schedule.
-            """
-            return super()._make(data)
-
-        strategy_id = marsh.fields.UUID(required=True)
-
+    id: str
     _blocked: bool
-    strategy_id = ForeignKeyField(ScheduleStrategy, null=False)
+    strategy: ScheduleStrategy
 
-    def __init__(self, *args, **kwargs):
+    STRATEGY_CLASSES: dict[str, type] = {
+        "RegularScheduleStrategy": RegularScheduleStrategy,
+    }
+
+    @classmethod
+    def strategy_from_schedule_configuration(
+        cls, schedule_configuration: ScheduleConfiguration
+    ) -> ScheduleStrategy:
+        """Dynamically cosntructs a ScheduleStrategy from a ScheduleConfiguration
+
+        :param schedule_configuration: The Schedule configuration
+        :return: A ScheduleStrategy
+        """
+        strategy_type = schedule_configuration.strategy_type
+        strategy_class = cls.STRATEGY_CLASSES[strategy_type]
+        assert issubclass(strategy_class, ScheduleStrategy)
+        return strategy_class.from_schedule_configuration(schedule_configuration)
+
+    def __init__(self, strategy: ScheduleStrategy, id_: str):
         """Constructs a Schedule."""
-        super().__init__(*args, **kwargs)
         self._blocked = False
+        self.strategy = strategy
+        self.id = id_  # pylint: disable=invalid-name
 
     @abstractmethod
-    def _spawn(self, traci_wrapper: "ITraCiWrapper"):
+    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
         """Spawns a vehicle.
 
         :param traci_wrapper: The TraCi wrapper to give the vehicle to.
+        :param tick: The current tick
         """
         raise NotImplementedError()
 
@@ -46,9 +51,8 @@ class Schedule(BaseModel):
         :param tick: The current tick
         :param traci_wrapper: The TraCi wrapper to give the spawned vehicle to.
         """
-        strategy = ScheduleStrategy.get(ScheduleStrategy.id == self.strategy_id).first()
-        if not self._blocked and strategy.should_spawn(tick):
-            self._spawn(traci_wrapper)
+        if not self._blocked and self.strategy.should_spawn(tick):
+            self._spawn(traci_wrapper, tick)
 
     def block(self):
         """Blocks the schedule.

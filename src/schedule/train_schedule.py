@@ -1,55 +1,58 @@
-import marshmallow as marsh
-from peewee import ForeignKeyField, IntegerField, TextField
-
-from src.base_model import BaseModel
 from src.schedule.schedule import Schedule
+from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.schedule.schedule_strategy import ScheduleStrategy
+from src.wrapper.simulation_objects import Train
 
 
 class TrainSchedule(Schedule):
     """A schedule for spawning SUMO trains."""
 
-    class Schema(Schedule.Schema):
-        """Schema for TrainSchedule."""
+    @classmethod
+    def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
+        """Constructs a TrainSchedule from a ScheduleConfiguration
 
-        train_type = marsh.fields.Str(required=True)
+        :param schedule_configuration: The ScheduleConfiguration
+        :return: A TrainSchedule
+        """
+        assert schedule_configuration.schedule_type == "TrainSchedule"
+        platform_ids = [
+            platform_reference.id
+            for platform_reference in sorted(
+                schedule_configuration.train_schedule_platform_references,
+                key=lambda ref: ref.index,
+            )
+        ]
+        return cls(
+            train_type=schedule_configuration.train_schedule_train_type,
+            platform_ids=platform_ids,
+            strategy=cls.strategy_from_schedule_configuration(schedule_configuration),
+            id_=schedule_configuration.id,
+        )
 
-        def _make(self, data: dict) -> "TrainSchedule":
-            """Constructs a TrainSchedule object from a dictionary.
+    train_type: str
+    platform_ids: list[str]
 
-            :param data: the dictionary
-            :return: an instance of the model
-            """
-            return TrainSchedule(**data)
+    def __init__(
+        self,
+        train_type: str,
+        platform_ids: list[str],
+        strategy: ScheduleStrategy,
+        id_: str,
+    ):
+        """Initializer for TrainSchedule
 
-    train_type = TextField(null=False)
+        :param train_type: The type of the train
+        :param platform_ids: A list of platforms the train has to visit
+        """
+        self.train_type = train_type
+        self.platform_ids = platform_ids
+        super().__init__(strategy, id_)
 
-    def _spawn(self, traci_wrapper: "ITraCiWrapper"):
+    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
         """Spawns a train.
 
         :param traci_wrapper: The TraCi wrapper to give the train to.
+        :param tick: The current tick
         """
-        # Trains are not implemented yet.
-        raise NotImplementedError()
-
-
-class TrainScheduleXSimulationPlatform(BaseModel):
-    """A many-to-many relationship between a train schedule and a simulation platform."""
-
-    class Schema(BaseModel.Schema):
-        """Schema for TrainScheduleXSimulationPlatform."""
-
-        train_schedule_id = marsh.fields.UUID(required=True)
-        simulation_platform_id = marsh.fields.UUID(required=True)
-        index = marsh.fields.Int(required=True)
-
-        def _make(self, data: dict) -> "TrainScheduleXSimulationPlatform":
-            """Constructs a TrainScheduleXSimulationPlatform object from a dictionary.
-
-            :param data: the dictionary
-            :return: an instance of the model
-            """
-            return TrainScheduleXSimulationPlatform(**data)
-
-    train_schedule_id = ForeignKeyField(TrainSchedule, null=False, backref="platforms")
-    simulation_platform_id = TextField(null=False)
-    index = IntegerField(null=False)
+        train = Train(f"{self.id}_{tick}", self.platform_ids, self.train_type)
+        traci_wrapper.spawn_train(train)
