@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Type
 from uuid import UUID
 
-from src.logger.log_entry import TrainSpawnLogEntry
+from src.logger.log_entry import TrainSpawnLogEntry, TrainRemoveLogEntry
 
 
 class Logger:
@@ -45,7 +45,13 @@ class Logger:
         :param train_id: The id of the train
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        TrainRemoveLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} removed",
+            run_id=self.run_id,
+            train_id=train_id,
+        )
 
     def arrival_train(self, tick: int, train_id: str, station_id: str) -> Type[None]:
         """
