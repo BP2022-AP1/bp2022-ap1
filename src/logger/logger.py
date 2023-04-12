@@ -1,14 +1,25 @@
 """
 This module contains the logger class
 """
+from datetime import datetime
 from typing import Type
 from uuid import UUID
+
+from src.logger.log_entry import TrainRemoveLogEntry, TrainSpawnLogEntry
 
 
 class Logger:
     """
     The logger class is used to log the events of the simulation
     """
+
+    run_id: int
+
+    def __init__(self, run_id: int):
+        """
+        The constructor of the logger class
+        """
+        self.run_id = run_id
 
     def spawn_train(self, tick: int, train_id: str) -> Type[None]:
         """
@@ -18,7 +29,13 @@ class Logger:
         :param train_id: The id of the train
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        TrainSpawnLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} spawned",
+            run_id=self.run_id,
+            train_id=train_id,
+        )
 
     def remove_train(self, tick: int, train_id: str) -> Type[None]:
         """
@@ -28,7 +45,13 @@ class Logger:
         :param train_id: The id of the train
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        TrainRemoveLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} removed",
+            run_id=self.run_id,
+            train_id=train_id,
+        )
 
     def arrival_train(self, tick: int, train_id: str, station_id: str) -> Type[None]:
         """
