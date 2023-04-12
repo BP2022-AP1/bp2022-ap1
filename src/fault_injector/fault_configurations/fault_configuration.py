@@ -3,6 +3,7 @@ from peewee import IntegerField, TextField
 
 from src.base_model import BaseModel
 
+
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
 
