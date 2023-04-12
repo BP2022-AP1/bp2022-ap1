@@ -21,21 +21,24 @@ class Router:
         """
         start_node = start_track.end_node
         penultimate_node = end_track.start_node
-        distances: dict
-        previous_nodes: dict
+        distances = {}
+        previous_nodes = {}
         distances[start_node] = 0
         current_index = 0
-        end_found = False
-        while not end_found:
-            sorted_distances = sorted(distances.items(), key = lambda item: item[1])
+        current_node = start_node
+        while True:
+            sorted_distances = sorted(distances.items(), key=lambda item: item[1])
             last_node = current_node
             current_node = sorted_distances[current_index][0]
-            previous_node[current_node] = last_node
+            previous_nodes[current_node] = last_node
             if current_node == penultimate_node:
                 break
             for track in current_node.tracks:
                 distance_to_next_node = distances[current_node] + track.length
-                if track.end_node not in distances or distances[track.end_node]<distance_to_next_node:
+                if (
+                    track.end_node not in distances
+                    or distances[track.end_node] < distance_to_next_node
+                ):
                     distances[track.end_node] = distance_to_next_node
             current_index += 1
         route = List[penultimate_node, end_track.end_node]
