@@ -1,4 +1,5 @@
 import pytest
+from traci import edge
 
 from src.fault_injector.fault_types.track_speed_limit_fault import (
     TrackSpeedLimitFault,
@@ -11,7 +12,6 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Track
 from tests.decorators import recreate_db_setup
-from traci import edge
 
 
 class TestTrackSpeedLimitFault:
@@ -65,7 +65,7 @@ class TestTrackSpeedLimitFault:
             configuration=track_speed_limit_fault_configuration,
             logger=logger,
             wrapper=wrapper,
-            interlocking=interlocking
+            interlocking=interlocking,
         )
 
     @pytest.fixture
@@ -75,9 +75,12 @@ class TestTrackSpeedLimitFault:
 
         monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
 
-
     def test_inject_track_speed_limit_fault(
-        self, combine, track_speed_limit_fault: TrackSpeedLimitFault, track: Track, speed_update
+        self,
+        combine,
+        track_speed_limit_fault: TrackSpeedLimitFault,
+        track: Track,
+        speed_update,
     ):
         track.max_speed = 100
         assert track.max_speed == 100
