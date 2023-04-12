@@ -5,7 +5,11 @@ from datetime import datetime
 from typing import Type
 from uuid import UUID
 
-from src.logger.log_entry import TrainRemoveLogEntry, TrainSpawnLogEntry
+from src.logger.log_entry import (
+    CreateFahrstrasseLogEntry,
+    TrainRemoveLogEntry,
+    TrainSpawnLogEntry,
+)
 
 
 class Logger:
@@ -83,7 +87,13 @@ class Logger:
         :param fahrstrasse: The definition of the created fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        CreateFahrstrasseLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Fahrstrasse {fahrstrasse} created",
+            run_id=self.run_id,
+            fahrstrasse=fahrstrasse,
+        )
 
     def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
         """
