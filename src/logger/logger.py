@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Type
 from uuid import UUID
 
-from src.logger.log_entry import TrainSpawnLogEntry, TrainRemoveLogEntry
+from src.logger.log_entry import TrainRemoveLogEntry, TrainSpawnLogEntry
 
 
 class Logger:
