@@ -26,6 +26,3 @@ class TrackSpeedLimitFault(Fault):
         # - set the track speed limit to old_speed_limit
 
         raise NotImplementedError()
-
-
-

@@ -26,6 +26,3 @@ class TrainSpeedFault(Fault):
         # - set the train speed to old_speed
 
         raise NotImplementedError()
-
-
-

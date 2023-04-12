@@ -22,6 +22,3 @@ class TrainCancelledFault(Fault):
         :type component: Component
         """
         raise NotImplementedError()
-
-
-

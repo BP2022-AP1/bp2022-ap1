@@ -15,7 +15,9 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
 from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
     TrainCancelledFaultConfiguration,
 )
-from src.fault_injector.fault_configurations.train_prio_fault_configuration import TrainPrioFaultConfiguration
+from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
+    TrainPrioFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )

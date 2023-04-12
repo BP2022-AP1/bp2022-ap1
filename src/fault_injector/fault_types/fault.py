@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from src.component import Component
 
 
@@ -40,6 +41,3 @@ class Fault(ABC):
             self.inject_fault(self.configuration.component)
         elif tick == self.configuration.end_tick:
             self.resolve_fault(self.configuration.component)
-
-
-

@@ -1,6 +1,10 @@
-from src.fault_injector.fault_configurations.fault_configuration import FaultConfiguration
 import marshmallow as marsh
 from peewee import TextField
+
+from src.fault_injector.fault_configurations.fault_configuration import (
+    FaultConfiguration,
+)
+
 
 class TrainCancelledFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the TrainCancelledFault class"""

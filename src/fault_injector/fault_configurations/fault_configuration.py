@@ -1,7 +1,9 @@
-from src.component import Component
-from src.base_model import BaseModel
 import marshmallow as marsh
 from peewee import IntegerField, TextField
+
+from src.base_model import BaseModel
+from src.component import Component
+
 
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""

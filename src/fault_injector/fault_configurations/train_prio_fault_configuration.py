@@ -1,6 +1,10 @@
-from src.fault_injector.fault_configurations.fault_configuration import FaultConfiguration
 import marshmallow as marsh
-from peewee import TextField, IntegerField
+from peewee import IntegerField, TextField
+
+from src.fault_injector.fault_configurations.fault_configuration import (
+    FaultConfiguration,
+)
+
 
 class TrainPrioFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the TrainPrioFault class"""
