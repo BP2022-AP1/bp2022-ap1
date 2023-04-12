@@ -45,7 +45,7 @@ class TrackSpeedLimitFault(Fault):
         self.track.max_speed = self.configuration.new_speed_limit
 
         self.interlocking.insert_track_speed_limit_changed(
-            self.configuration.affected_element_id
+            self.track.identifier
         )
         self.logger.inject_track_speed_limit_fault(self.configuration.id, self.track.identifier, self.old_speed_limit, self.configuration.new_speed_limit)
 
@@ -61,7 +61,7 @@ class TrackSpeedLimitFault(Fault):
         """
         self.track.max_speed = self.old_speed_limit
         self.interlocking.insert_track_speed_limit_changed(
-            self.configuration.affected_element_id
+            self.track.identifier
         )
 
         self.logger.resolve_track_speed_limit_fault(self.configuration.id)
