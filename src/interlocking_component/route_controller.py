@@ -109,7 +109,7 @@ class RouteController(IRouteController):
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    Interlocking: interlockinginterface = None
+    interlocking: interlockinginterface = None
     ISimulationObjectsUpdater = None
     topology = None
     router: Router = None
@@ -124,7 +124,7 @@ class RouteController(IRouteController):
         :type track_segment_id: track_segment_id
         """
         route = None
-        for route_candidate in self.Interlocking.active_routes:
+        for route_candidate in self.interlocking.active_routes:
             interlocking_track_candidat = route_candidate.contains_segment(
                 track.identifier
             )
@@ -140,13 +140,13 @@ class RouteController(IRouteController):
         for end_node_candidat in new_route:
             if new_route_is_set:
                 break
-            for interlocking_route in self.Interlocking.routes:
+            for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
                     # This sets the route in the interlocking
-                    self.Interlocking.set_route(interlocking_route.yaramo_route)
+                    self.interlocking.set_route(interlocking_route.yaramo_route)
                     # This does not check if the route can even be set and does not handle,
                     # if it can not be set this simulation step.
 
