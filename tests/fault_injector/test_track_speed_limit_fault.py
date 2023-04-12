@@ -93,3 +93,11 @@ class TestTrackSpeedLimitFault:
         # comment in following line if `insert_track_speed_limit_changed`
         # in RouteController is implemented
         # assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
+
+    def test_resolve_track_speed_limit_fault(self, combine, track_speed_limit_fault: TrackSpeedLimitFault, track: Track, speed_update):
+        track.max_speed = 100
+        with pytest.raises(NotImplementedError):
+            track_speed_limit_fault.inject_fault()
+        with pytest.raises(NotImplementedError):
+            track_speed_limit_fault.resolve_fault()
+        # assert track.max_speed == track_speed_limit_fault.old_speed_limit
