@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
+from src.fault_injector.fault_configurations.fault_configuration import (
+    FaultConfiguration,
+)
 from src.logger.logger import Logger
-from src.component import Component
 
 
 class Fault(ABC):
@@ -16,21 +18,13 @@ class Fault(ABC):
 
     @abstractmethod
     def inject_fault(self):
-        """injects the fault into the given component
-
-        :param component: the component the fault should be injected into
-        :type component: Component
-        """
+        """injects the fault into the given component"""
 
         raise NotImplementedError()
 
     @abstractmethod
     def resolve_fault(self):
-        """resolves the previously injected fault
-
-        :param component: the component with the injected fault
-        :type component: Component
-        """
+        """resolves the previously injected fault"""
 
         raise NotImplementedError()
 

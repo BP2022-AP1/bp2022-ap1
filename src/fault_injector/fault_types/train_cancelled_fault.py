@@ -1,4 +1,3 @@
-
 from src.fault_injector.fault_types.fault import Fault
 
 

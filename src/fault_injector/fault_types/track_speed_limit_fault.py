@@ -1,3 +1,6 @@
+from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
+    TrackSpeedLimitFaultConfiguration,
+)
 from src.fault_injector.fault_types.fault import Fault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
@@ -66,19 +69,3 @@ class TrackSpeedLimitFault(Fault):
 
         # - get track object
         # - set the track speed limit to old_speed_limit
-
-
-class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
-    """Class that contains the attributes of the TrackSpeedLimitFault class"""
-
-    class Schema(FaultConfiguration.Schema):
-        """Schema for TrackSpeedLimitFaultConfiguration"""
-
-        affected_element_id = marsh.fields.String()
-        new_speed_limit = marsh.fields.Integer(required=True)
-
-        def _make(self, data: dict) -> "TrackSpeedLimitFaultConfiguration":
-            return TrackSpeedLimitFaultConfiguration(**data)
-
-    affected_element_id = TextField()
-    new_speed_limit = IntegerField(null=False)
