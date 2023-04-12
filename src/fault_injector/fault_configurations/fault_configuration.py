@@ -2,8 +2,6 @@ import marshmallow as marsh
 from peewee import IntegerField, TextField
 
 from src.base_model import BaseModel
-from src.component import Component
-
 
 class FaultConfiguration(BaseModel):
     """Class that contains the attributes of the Fault class"""
@@ -21,6 +19,5 @@ class FaultConfiguration(BaseModel):
     start_tick = IntegerField(null=False)
     end_tick = IntegerField(null=False)
 
-    component: Component = None
     # - affected_element_ID: int = None // has to be implemented in subclasses
     description = TextField(default="injected Fault")
