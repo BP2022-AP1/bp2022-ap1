@@ -1,14 +1,13 @@
 import marshmallow as marsh
 from peewee import IntegerField, TextField
 
-from src.component import Component
 from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class TrainPrioFault(Fault):
     """A fault affecting the priority of trains."""
 
-    def inject_fault(self, component: Component):
+    def inject_fault(self):
         """inject TrainPrioFault into the given component
 
         :param component: The component the fault should be injected into
@@ -19,7 +18,7 @@ class TrainPrioFault(Fault):
         # - set train prio to new_prio
         raise NotImplementedError()
 
-    def resolve_fault(self, component: Component):
+    def resolve_fault(self):
         """resolves the previously injected TrainPrioFault
 
         :param component: the component with the injected fault

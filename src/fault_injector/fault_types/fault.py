@@ -4,7 +4,6 @@ import marshmallow as marsh
 from peewee import IntegerField, TextField
 
 from src.base_model import BaseModel
-from src.component import Component
 from src.logger.logger import Logger
 
 
@@ -19,7 +18,7 @@ class Fault(ABC):
         self.logger = logger
 
     @abstractmethod
-    def inject_fault(self, component: Component):
+    def inject_fault(self):
         """injects the fault into the given component
 
         :param component: the component the fault should be injected into
@@ -29,7 +28,7 @@ class Fault(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def resolve_fault(self, component: Component):
+    def resolve_fault(self):
         """resolves the previously injected fault
 
         :param component: the component with the injected fault
@@ -45,9 +44,9 @@ class Fault(ABC):
         :type tick: int
         """
         if tick == self.configuration.start_tick:
-            self.inject_fault(self.configuration.component)
+            self.inject_fault()
         elif tick == self.configuration.end_tick:
-            self.resolve_fault(self.configuration.component)
+            self.resolve_fault()
 
 
 class FaultConfiguration(BaseModel):

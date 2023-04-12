@@ -1,7 +1,6 @@
 import marshmallow as marsh
 from peewee import IntegerField, TextField
 
-from src.component import Component
 from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger

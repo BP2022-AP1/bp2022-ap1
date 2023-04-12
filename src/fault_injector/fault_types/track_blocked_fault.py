@@ -1,14 +1,13 @@
 import marshmallow as marsh
 from peewee import TextField
 
-from src.component import Component
 from src.fault_injector.fault_types.fault import Fault, FaultConfiguration
 
 
 class TrackBlockedFault(Fault):
     """A fault that blocks a track"""
 
-    def inject_fault(self, component: Component):
+    def inject_fault(self):
         """inject TrackBlockedFault into the given component
 
         :param component: The component the fault should be injected into
@@ -18,7 +17,7 @@ class TrackBlockedFault(Fault):
         # - mark track as blocked
         raise NotImplementedError()
 
-    def resolve_fault(self, component: Component):
+    def resolve_fault(self):
         """resolves the previously injected fault
 
         :param component: the component with the injected TrackBlockedFault
