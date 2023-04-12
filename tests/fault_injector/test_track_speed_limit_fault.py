@@ -15,6 +15,8 @@ from tests.decorators import recreate_db_setup
 
 
 class TestTrackSpeedLimitFault:
+    """Tests for TrackSpeedLimitFault"""
+
     @recreate_db_setup
     def setup_method(self):
         pass
@@ -32,7 +34,7 @@ class TestTrackSpeedLimitFault:
         return Track("fault injector track")
 
     @pytest.fixture
-    def wrapper(self, monkeypatch):
+    def wrapper(self):
         return SimulationObjectUpdatingComponent()
 
     @pytest.fixture
@@ -71,6 +73,7 @@ class TestTrackSpeedLimitFault:
     @pytest.fixture
     def speed_update(self, monkeypatch):
         def set_max_speed(identifier: str, speed: float) -> None:
+            # pylint: disable=unused-argument
             pass
 
         monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
@@ -82,9 +85,11 @@ class TestTrackSpeedLimitFault:
         track: Track,
         speed_update,
     ):
+        # pylint: disable=unused-argument
         track.max_speed = 100
         assert track.max_speed == 100
         with pytest.raises(NotImplementedError):
             track_speed_limit_fault.inject_fault()
-        # comment in following line if `insert_track_speed_limit_changed` in RouteController is implemented
+        # comment in following line if `insert_track_speed_limit_changed`
+        # in RouteController is implemented
         # assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
