@@ -7,6 +7,7 @@ from uuid import UUID
 
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
+    InjectFaultLogEntry,
     RemoveFahrstrasseLogEntry,
     SetSignalLogEntry,
     TrainArrivalLogEntry,
@@ -156,8 +157,6 @@ class Logger:
         tick: int,
         platform_blocked_fault_configuration: UUID,
         affected_element: str,
-        value_before: str,
-        value_after: str,
     ) -> Type[None]:
         """
         This function should be called when injecting a platform blocked fault into the simulation.
@@ -166,19 +165,23 @@ class Logger:
         :param tick: The current simulation tick
         :param platform_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Platform blocked fault with configuration "
+            f"{platform_blocked_fault_configuration} on element {affected_element}",
+            run_id=self.run_id,
+            platform_blocked_fault_configuration=platform_blocked_fault_configuration,
+            affected_element=affected_element,
+        )
 
     def inject_track_blocked_fault(
         self,
         tick: int,
         track_blocked_fault_configuration: UUID,
         affected_element: str,
-        value_before: str,
-        value_after: str,
     ) -> Type[None]:
         """
         This function should be called when injecting a track blocked fault into the simulation.
@@ -187,11 +190,17 @@ class Logger:
         :param tick: The current simulation tick
         :param track_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Track blocked fault with configuration {track_blocked_fault_configuration} "
+            f"on element {affected_element}",
+            run_id=self.run_id,
+            track_blocked_fault_configuration=track_blocked_fault_configuration,
+            affected_element=affected_element,
+        )
 
     def inject_track_speed_limit_fault(
         self,
@@ -212,15 +221,24 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Track speed limit fault with configuration "
+            f"{track_speed_limit_fault_configuration} on element {affected_element} "
+            f"changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def inject_schedule_blocked_fault(
         self,
         tick: int,
         schedule_blocked_fault_configuration: UUID,
         affected_element: str,
-        value_before: str,
-        value_after: str,
     ) -> Type[None]:
         """
         This function should be called when injecting a train speed fault into the simulation.
@@ -229,13 +247,19 @@ class Logger:
         :param tick: The current simulation tick
         :param schedule_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Schedule blocked fault with configuration "
+            f"{schedule_blocked_fault_configuration} on element {affected_element}",
+            run_id=self.run_id,
+            schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
+            affected_element=affected_element,
+        )
 
-    def inject_train_prio_fault_configuration(
+    def inject_train_prio_fault(
         self,
         tick: int,
         train_prio_fault_configuration: UUID,
@@ -254,7 +278,17 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train prio fault with configuration {train_prio_fault_configuration} "
+            f"on element {affected_element} changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            train_prio_fault_configuration=train_prio_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def inject_train_speed_fault(
         self,
@@ -275,7 +309,17 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train speed fault with configuration {train_speed_fault_configuration} "
+            f"on element {affected_element} changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            train_speed_fault_configuration=train_speed_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def resolve_platform_blocked_fault(
         self, tick: int, platform_blocked_fault_configuration: UUID
