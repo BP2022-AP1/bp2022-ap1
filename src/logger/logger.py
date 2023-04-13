@@ -7,6 +7,7 @@ from uuid import UUID
 
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
+    InjectFaultLogEntry,
     RemoveFahrstrasseLogEntry,
     SetSignalLogEntry,
     TrainArrivalLogEntry,
@@ -170,7 +171,18 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Platform blocked fault with configuration "
+            f"{platform_blocked_fault_configuration} on element {affected_element} "
+            f"changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            platform_blocked_fault_configuration=platform_blocked_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def inject_track_blocked_fault(
         self,
@@ -191,7 +203,17 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Track blocked fault with configuration {track_blocked_fault_configuration} "
+            f"on element {affected_element} changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            track_blocked_fault_configuration=track_blocked_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def inject_track_speed_limit_fault(
         self,
@@ -212,7 +234,18 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Track speed limit fault with configuration "
+            f"{track_speed_limit_fault_configuration} on element {affected_element} "
+            f"changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def inject_schedule_blocked_fault(
         self,
@@ -233,9 +266,20 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Schedule blocked fault with configuration "
+            f"{schedule_blocked_fault_configuration} on element {affected_element} "
+            f"changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
-    def inject_train_prio_fault_configuration(
+    def inject_train_prio_fault(
         self,
         tick: int,
         train_prio_fault_configuration: UUID,
@@ -254,7 +298,17 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train prio fault with configuration {train_prio_fault_configuration} "
+            f"on element {affected_element} changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            train_prio_fault_configuration=train_prio_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def inject_train_speed_fault(
         self,
@@ -275,7 +329,17 @@ class Logger:
         :param value_after: The value after the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        InjectFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train speed fault with configuration {train_speed_fault_configuration} "
+            f"on element {affected_element} changed from {value_before} to {value_after}",
+            run_id=self.run_id,
+            train_speed_fault_configuration=train_speed_fault_configuration,
+            affected_element=affected_element,
+            value_before=value_before,
+            value_after=value_after,
+        )
 
     def resolve_platform_blocked_fault(
         self, tick: int, platform_blocked_fault_configuration: UUID
