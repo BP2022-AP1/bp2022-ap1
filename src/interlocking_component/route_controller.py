@@ -112,7 +112,7 @@ class RouteController(IRouteController):
     interlocking: interlockinginterface = None
     router: Router = None
 
-    def check_if_new_fahrstrasse_is_needed(self, train: Train, track: Track):
+    def is_new_fahrstrasse_is_needed(self, train: Train, track: Track) -> bool:
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
@@ -131,13 +131,10 @@ class RouteController(IRouteController):
             if interlocking_track_candidat is not None:
                 route = route_candidate
         if route is None or route.get_last_segment_of_route != track.identifier:
-            return
+            return false
 
         new_route = self.router.get_route(track, train.timetable[0].track)
-        new_route_is_set = False
         for end_node_candidat in new_route:
-            if new_route_is_set:
-                break
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
@@ -157,8 +154,8 @@ class RouteController(IRouteController):
                     # This sets the route in SUMO.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
-                    new_route_is_set = True
-                    break
+                    return True
+        return False
 
     def check_all_fahrstrassen_for_failures(self):
         """This method checks for all trains, if their fahrstrassen and routes are still valid."""
