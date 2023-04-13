@@ -110,8 +110,6 @@ class RouteController(IRouteController):
     """
 
     interlocking: interlockinginterface = None
-    ISimulationObjectsUpdater = None
-    topology = None
     router: Router = None
 
     def check_if_new_fahrstrasse_is_needed(self, train: Train, track: Track):
