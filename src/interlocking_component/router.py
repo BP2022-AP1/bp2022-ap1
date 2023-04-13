@@ -19,8 +19,10 @@ class Router:
         to the Node right after the end track
         :rtype: List[Node]
         """
-        start_node = start_track.end_node
-        penultimate_node = end_track.start_node
+        start_node = start_track.to_node
+        penultimate_node = end_track.from_node
+        # The next part is dijkstra as a first mvp. 
+        # This will lead to deadlocks if two trains drive in opposite directions.
         distances = {}
         previous_nodes = {}
         distances[start_node] = 0
@@ -37,11 +39,11 @@ class Router:
                 distance_to_next_node = distances[current_node] + track.length
                 if (
                     track.end_node not in distances
-                    or distances[track.end_node] < distance_to_next_node
+                    or distances[track.to_node] < distance_to_next_node
                 ):
-                    distances[track.end_node] = distance_to_next_node
+                    distances[track.to_node] = distance_to_next_node
             current_index += 1
-        route = List[penultimate_node, end_track.end_node]
+        route = List[penultimate_node, end_track.to_node]
         while current_node in previous_nodes:
             previous_node = previous_nodes[current_node]
             route.insert(0, previous_node)
