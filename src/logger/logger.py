@@ -6,7 +6,11 @@ from typing import Type
 from uuid import UUID
 
 from src.logger.log_entry import (
+    CreateFahrstrasseLogEntry,
+    RemoveFahrstrasseLogEntry,
+    SetSignalLogEntry,
     TrainArrivalLogEntry,
+    TrainDepartureLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -84,7 +88,14 @@ class Logger:
         :param station_id: The id of the station
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        TrainDepartureLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} departed from station with ID {station_id}",
+            run_id=self.run_id,
+            train_id=train_id,
+            station_id=station_id,
+        )
 
     def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
         """
@@ -94,7 +105,13 @@ class Logger:
         :param fahrstrasse: The definition of the created fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        CreateFahrstrasseLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Fahrstrasse {fahrstrasse} created",
+            run_id=self.run_id,
+            fahrstrasse=fahrstrasse,
+        )
 
     def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
         """
@@ -104,7 +121,13 @@ class Logger:
         :param fahrstrasse: The definition of the removed fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        RemoveFahrstrasseLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Fahrstrasse {fahrstrasse} removed",
+            run_id=self.run_id,
+            fahrstrasse=fahrstrasse,
+        )
 
     def set_signal(
         self, tick: int, signal_id: UUID, state_before: int, state_after: int
@@ -118,7 +141,15 @@ class Logger:
         :param state_after: The state of the signal after the change
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        SetSignalLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Signal with ID {signal_id} changed from {state_before} to {state_after}",
+            run_id=self.run_id,
+            signal_id=signal_id,
+            state_before=state_before,
+            state_after=state_after,
+        )
 
     def inject_platform_blocked_fault(
         self,
@@ -183,10 +214,10 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    def inject_train_cancelled_fault(
+    def inject_schedule_blocked_fault(
         self,
         tick: int,
-        train_cancelled_fault_configuration: UUID,
+        schedule_blocked_fault_configuration: UUID,
         affected_element: str,
         value_before: str,
         value_after: str,
@@ -196,7 +227,7 @@ class Logger:
         This should include the fault configuration, the affected element, the value before and the
         value after the fault.
         :param tick: The current simulation tick
-        :param train_cancelled_fault_configuration: The configuration of the fault
+        :param schedule_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
         :param value_before: The value before the fault
         :param value_after: The value after the fault
@@ -282,14 +313,14 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    def resolve_train_cancelled_fault(
-        self, tick: int, train_cancelled_fault_configuration: UUID
+    def resolve_schedule_blocked_fault(
+        self, tick: int, schedule_blocked_fault_configuration: UUID
     ) -> Type[None]:
         """
-        This function should be called when removing a train cancelled fault from the simulation.
+        This function should be called when removing a schedule blocked fault from the simulation.
         This should reference the fault configuration of the fault.
         :param tick: The current simulation tick
-        :param train_cancelled_fault_configuration: The configuration of the fault
+        :param schedule_blocked_fault_configuration: The configuration of the fault
         :rtype: None
         """
         pass  # not implemented yet # pylint: disable=W0107
