@@ -15,7 +15,7 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
-    TrainCancelledFaultConfiguration,
+    ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -34,7 +34,7 @@ from tests.decorators import recreate_db_setup
     [
         (PlatformBlockedFaultConfiguration, {}),
         (TrainSpeedFaultConfiguration, {}),
-        (TrainCancelledFaultConfiguration, {}),
+        (ScheduleBlockedFaultConfiguration, {}),
         (TrackBlockedFaultConfiguration, {}),
         (TrainPrioFaultConfiguration, {}),
         (TrackSpeedLimitFaultConfiguration, {}),
@@ -82,11 +82,11 @@ class TestFailingDict:
             },
         ),
         (
-            TrainCancelledFaultConfiguration,
+            ScheduleBlockedFaultConfiguration,
             {
                 "start_tick": 1,
                 "end_tick": 100,
-                "description": "TrainCancelledFault",
+                "description": "ScheduleBlockedFault",
                 "affected_element_id": "12345678",
             },
         ),
