@@ -6,6 +6,8 @@ from typing import Type
 from uuid import UUID
 
 from src.logger.log_entry import (
+    CreateFahrstrasseLogEntry,
+    RemoveFahrstrasseLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
     TrainRemoveLogEntry,
@@ -102,7 +104,13 @@ class Logger:
         :param fahrstrasse: The definition of the created fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        CreateFahrstrasseLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Fahrstrasse {fahrstrasse} created",
+            run_id=self.run_id,
+            fahrstrasse=fahrstrasse,
+        )
 
     def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
         """
@@ -112,7 +120,13 @@ class Logger:
         :param fahrstrasse: The definition of the removed fahrstrasse
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        RemoveFahrstrasseLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Fahrstrasse {fahrstrasse} removed",
+            run_id=self.run_id,
+            fahrstrasse=fahrstrasse,
+        )
 
     def set_signal(
         self, tick: int, signal_id: UUID, state_before: int, state_after: int
