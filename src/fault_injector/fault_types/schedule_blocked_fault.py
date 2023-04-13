@@ -1,7 +1,8 @@
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_types.fault import Fault
-from src.spawner.spawner import ISpawnerDisruptor, Schedule
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import ScheduleBlockedFaultConfiguration
-
+from src.spawner.spawner import ISpawnerDisruptor
 
 
 class ScheduleBlockedFault(Fault):
@@ -17,7 +18,9 @@ class ScheduleBlockedFault(Fault):
         :type tick: Integer
         """
         self.spawner.block_schedule(self.configuration.affected_element_id)
-        self.logger.inject_schedule_blocked_fault(tick=tick, schedule_blocked_fault_configuration=self.configuration.id)
+        self.logger.inject_schedule_blocked_fault(
+            tick=tick, schedule_blocked_fault_configuration=self.configuration.id
+        )
         # - get schedule by id
         # - mark schedule as blocked
 
@@ -28,4 +31,6 @@ class ScheduleBlockedFault(Fault):
         :type tick: Integer
         """
         self.spawner.unblock_schedule(self.configuration.affected_element_id)
-        self.logger.resolve_schedule_blocked_fault(tick=tick, schedule_blocked_fault_configuration=self.configuration.id)
+        self.logger.resolve_schedule_blocked_fault(
+            tick=tick, schedule_blocked_fault_configuration=self.configuration.id
+        )
