@@ -7,6 +7,7 @@ from uuid import UUID
 
 from src.logger.log_entry import (
     TrainDepartureLogEntry,
+    TrainArrivalLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -17,9 +18,9 @@ class Logger:
     The logger class is used to log the events of the simulation
     """
 
-    run_id: int
+    run_id: UUID
 
-    def __init__(self, run_id: int):
+    def __init__(self, run_id: UUID):
         """
         The constructor of the logger class
         """
@@ -66,7 +67,14 @@ class Logger:
         :param station_id: The id of the station
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        TrainArrivalLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} arrived at station with ID {station_id}",
+            run_id=self.run_id,
+            train_id=train_id,
+            station_id=station_id,
+        )
 
     def departure_train(self, tick: int, train_id: str, station_id: str) -> Type[None]:
         """
@@ -120,7 +128,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_platform_blocked_fault(
         self,
         tick: int,
@@ -142,7 +149,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_track_blocked_fault(
         self,
         tick: int,
@@ -164,7 +170,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_track_speed_limit_fault(
         self,
         tick: int,
@@ -186,8 +191,7 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
-    def inject_train_cancelled_speed_fault(
+    def inject_train_cancelled_fault(
         self,
         tick: int,
         train_cancelled_fault_configuration: UUID,
@@ -208,7 +212,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_train_prio_fault_configuration(
         self,
         tick: int,
@@ -230,7 +233,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_train_speed_fault(
         self,
         tick: int,
