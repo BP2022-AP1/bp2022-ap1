@@ -73,7 +73,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
-    cmd = "pytest -W=ignore::DeprecationWarning:importlib._bootstrap_external: --cov=src --cov-report xml"
+    cmd = "pytest --cov=src --cov-report xml"
 
     [tool.poe.tasks.ci]
     help = "Run formatting, linting and testing in preparation for CI"
