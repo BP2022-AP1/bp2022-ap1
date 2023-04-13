@@ -8,6 +8,7 @@ from uuid import UUID
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     RemoveFahrstrasseLogEntry,
+    SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
     TrainRemoveLogEntry,
@@ -140,7 +141,15 @@ class Logger:
         :param state_after: The state of the signal after the change
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        SetSignalLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Signal with ID {signal_id} changed from {state_before} to {state_after}",
+            run_id=self.run_id,
+            signal_id=signal_id,
+            state_before=state_before,
+            state_after=state_after,
+        )
 
     def inject_platform_blocked_fault(
         self,
