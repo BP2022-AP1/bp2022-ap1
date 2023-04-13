@@ -4,6 +4,7 @@ from freezegun import freeze_time
 
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
+    RemoveFahrstrasseLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
     TrainRemoveLogEntry,
@@ -106,5 +107,23 @@ class TestLogger:
         assert log_entry.timestamp == datetime.now()
         assert log_entry.tick == tick
         assert log_entry.message == f"Fahrstrasse {fahrstrasse} created"
+        assert log_entry.run_id.id == run.id
+        assert log_entry.fahrstrasse == fahrstrasse
+
+    @freeze_time()
+    def test_remove_fahrstrasse(self, run, tick, fahrstrasse):
+        logger = Logger(run_id=run.id)
+        logger.remove_fahrstrasse(tick=tick, fahrstrasse=fahrstrasse)
+        log_entry = (
+            RemoveFahrstrasseLogEntry.select()
+            .where(
+                RemoveFahrstrasseLogEntry.tick == tick
+                and RemoveFahrstrasseLogEntry.fahrstrasse == fahrstrasse
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert log_entry.message == f"Fahrstrasse {fahrstrasse} removed"
         assert log_entry.run_id.id == run.id
         assert log_entry.fahrstrasse == fahrstrasse
