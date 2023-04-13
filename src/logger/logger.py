@@ -109,7 +109,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_platform_blocked_fault(
         self,
         tick: int,
@@ -131,7 +130,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_track_blocked_fault(
         self,
         tick: int,
@@ -153,7 +151,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_track_speed_limit_fault(
         self,
         tick: int,
@@ -175,7 +172,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_train_cancelled_speed_fault(
         self,
         tick: int,
@@ -197,7 +193,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_train_prio_fault_configuration(
         self,
         tick: int,
@@ -219,7 +214,6 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    # pylint: disable=too-many-arguments
     def inject_train_speed_fault(
         self,
         tick: int,
