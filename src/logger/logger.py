@@ -191,10 +191,10 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    def inject_train_cancelled_fault(
+    def inject_schedule_blocked_fault(
         self,
         tick: int,
-        train_cancelled_fault_configuration: UUID,
+        schedule_blocked_fault_configuration: UUID,
         affected_element: str,
         value_before: str,
         value_after: str,
@@ -204,7 +204,7 @@ class Logger:
         This should include the fault configuration, the affected element, the value before and the
         value after the fault.
         :param tick: The current simulation tick
-        :param train_cancelled_fault_configuration: The configuration of the fault
+        :param schedule_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
         :param value_before: The value before the fault
         :param value_after: The value after the fault
@@ -290,14 +290,14 @@ class Logger:
         """
         pass  # not implemented yet # pylint: disable=W0107
 
-    def resolve_train_cancelled_fault(
-        self, tick: int, train_cancelled_fault_configuration: UUID
+    def resolve_schedule_blocked_fault(
+        self, tick: int, schedule_blocked_fault_configuration: UUID
     ) -> Type[None]:
         """
-        This function should be called when removing a train cancelled fault from the simulation.
+        This function should be called when removing a schedule blocked fault from the simulation.
         This should reference the fault configuration of the fault.
         :param tick: The current simulation tick
-        :param train_cancelled_fault_configuration: The configuration of the fault
+        :param schedule_blocked_fault_configuration: The configuration of the fault
         :rtype: None
         """
         pass  # not implemented yet # pylint: disable=W0107
