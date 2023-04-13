@@ -10,6 +10,17 @@ class ScheduleStrategy(ABC):
     at a given tick.
     """
 
+    start_tick: int
+    end_tick: int
+
+    def __init__(self, start_tick: int, end_tick: int):
+        """Initializer for ScheduleStrategy
+
+        :param start_tick: The tick when train spawning should start
+        """
+        self.start_tick = start_tick
+        self.end_tick = end_tick
+
     @classmethod
     @abstractmethod
     def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
@@ -20,10 +31,11 @@ class ScheduleStrategy(ABC):
         """
         raise NotImplementedError()
 
-    @abstractmethod
     def should_spawn(self, tick: int) -> bool:
         """Determines whether a vehicle should be spawned at the current tick
 
         :param tick: The current tick
         """
-        raise NotImplementedError()
+        return tick >= self.start_tick and tick <= (
+            self.end_tick if self.end_tick else tick
+        )
