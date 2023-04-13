@@ -80,6 +80,7 @@ class TestTrackSpeedLimitFault:
 
     def test_inject_track_speed_limit_fault(
         self,
+        tick,
         combine,
         track_speed_limit_fault: TrackSpeedLimitFault,
         track: Track,
@@ -89,13 +90,14 @@ class TestTrackSpeedLimitFault:
         track.max_speed = 100
         assert track.max_speed == 100
         with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault()
+            track_speed_limit_fault.inject_fault(tick=tick)
         # comment in following line if `insert_track_speed_limit_changed`
         # in RouteController is implemented
         # assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
 
     def test_resolve_track_speed_limit_fault(
         self,
+        tick,
         combine,
         track_speed_limit_fault: TrackSpeedLimitFault,
         track: Track,
@@ -104,7 +106,7 @@ class TestTrackSpeedLimitFault:
         # pylint: disable=unused-argument
         track.max_speed = 100
         with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault()
+            track_speed_limit_fault.inject_fault(tick=tick)
         with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.resolve_fault()
+            track_speed_limit_fault.resolve_fault(tick=tick)
         # assert track.max_speed == track_speed_limit_fault.old_speed_limit
