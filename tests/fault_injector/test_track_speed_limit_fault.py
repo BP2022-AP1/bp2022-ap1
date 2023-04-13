@@ -41,7 +41,7 @@ class TestTrackSpeedLimitFault:
     def combine(self, track, wrapper):
         track.updater = wrapper
         wrapper.simulation_objects.append(track)
-        return (track, wrapper)
+        return track, wrapper
 
     @pytest.fixture
     def track_speed_limit_fault_configuration(self, track: Track):
