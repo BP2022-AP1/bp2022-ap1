@@ -131,7 +131,7 @@ class RouteController(IRouteController):
             if interlocking_track_candidat is not None:
                 route = route_candidate
         if route is None or route.get_last_segment_of_route != track.identifier:
-            return false
+            return False
 
         new_route = self.router.get_route(track, train.timetable[0].track)
         for end_node_candidat in new_route:
