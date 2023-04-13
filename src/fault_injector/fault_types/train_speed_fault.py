@@ -7,8 +7,8 @@ class TrainSpeedFault(Fault):
     def inject_fault(self, tick: int):
         """inject TrainSpeedFault into the given component
 
-        :param component: The component the fault should be injected into
-        :type component: Component
+        :param tick: the simulation tick in which inject_fault was called
+        :type tick: Integer
         """
         # - get train object
         # - save the current speed of the train in old_speed
@@ -18,8 +18,8 @@ class TrainSpeedFault(Fault):
     def resolve_fault(self, tick: int):
         """resolves the previously injected TrainSpeedFault
 
-        :param component: the component with the injected fault
-        :type component: Component
+        :param tick: the simulation tick in which resolve_fault was called
+        :type tick: Integer
         """
         # - get train object
         # - set the train speed to old_speed

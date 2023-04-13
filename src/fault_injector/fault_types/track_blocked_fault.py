@@ -7,8 +7,8 @@ class TrackBlockedFault(Fault):
     def inject_fault(self, tick: int):
         """inject TrackBlockedFault into the given component
 
-        :param component: The component the fault should be injected into
-        :type component: Component
+        :param tick: the simulation tick in which inject_fault was called
+        :type tick: Integer
         """
         # - get track by id
         # - mark track as blocked
@@ -17,8 +17,8 @@ class TrackBlockedFault(Fault):
     def resolve_fault(self, tick: int):
         """resolves the previously injected fault
 
-        :param component: the component with the injected TrackBlockedFault
-        :type component: Component
+        :param tick: the simulation tick in which resolve_fault was called
+        :type tick: Integer
         """
         # - get track by id
         # - mark track as no longer blocked

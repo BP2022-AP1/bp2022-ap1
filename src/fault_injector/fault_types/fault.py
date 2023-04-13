@@ -18,13 +18,21 @@ class Fault(ABC):
 
     @abstractmethod
     def inject_fault(self, tick: int):
-        """injects the fault into the given component"""
+        """injects the fault into the given component
+
+        :param tick: the simulation tick in which inject_fault was called
+        :type tick: Integer
+        """
 
         raise NotImplementedError()
 
     @abstractmethod
     def resolve_fault(self, tick: int):
-        """resolves the previously injected fault"""
+        """resolves the previously injected fault
+        
+        :param tick: the simulation tick in which resolve_fault was called
+        :type tick: Integer
+        """
 
         raise NotImplementedError()
 

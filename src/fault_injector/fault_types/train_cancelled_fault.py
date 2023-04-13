@@ -7,8 +7,8 @@ class TrainCancelledFault(Fault):
     def inject_fault(self, tick: int):
         """inject TrainCancelledFault into the given component
 
-        :param component: The component the fault should be injected into
-        :type component: Component
+        :param tick: the simulation tick in which inject_fault was called
+        :type tick: Integer
         """
         # - get train by id
         # - mark train as cancelled
@@ -17,7 +17,7 @@ class TrainCancelledFault(Fault):
     def resolve_fault(self, tick: int):
         """resolves the previously injected TrainCancelledFault
 
-        :param component: the component with the injected fault
-        :type component: Component
+        :param tick: the simulation tick in which resolve_fault was called
+        :type tick: Integer
         """
         raise NotImplementedError()

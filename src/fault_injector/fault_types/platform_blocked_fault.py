@@ -7,8 +7,8 @@ class PlatformBlockedFault(Fault):
     def inject_fault(self, tick: int):
         """inject PlatformBlockedFault into the given component
 
-        :param component: The component the fault should be injected into
-        :type component: Component
+        :param tick: the simulation tick in which inject_fault was called
+        :type tick: Integer
         """
         # - get platform by id
         # - mark platform as blocked
@@ -17,8 +17,8 @@ class PlatformBlockedFault(Fault):
     def resolve_fault(self, tick: int):
         """resolve the PlatformBlockedFault that was previously injected into the given component
 
-        :param component: The component the fault was injected into
-        :type component: Component
+        :param tick: the simulation tick in which resolve_fault was called
+        :type tick: Integer
         """
         # - get platform by id
         # - mark platform as no longer blocked
