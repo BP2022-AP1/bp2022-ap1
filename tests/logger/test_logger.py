@@ -5,6 +5,7 @@ from freezegun import freeze_time
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     RemoveFahrstrasseLogEntry,
+    SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
     TrainRemoveLogEntry,
@@ -127,3 +128,33 @@ class TestLogger:
         assert log_entry.message == f"Fahrstrasse {fahrstrasse} removed"
         assert log_entry.run_id.id == run.id
         assert log_entry.fahrstrasse == fahrstrasse
+
+    @freeze_time()
+    def test_set_signal(self, run, tick, signal_id, state_before, state_after):
+        logger = Logger(run_id=run.id)
+        logger.set_signal(
+            tick=tick,
+            signal_id=signal_id,
+            state_before=state_before,
+            state_after=state_after,
+        )
+        log_entry = (
+            SetSignalLogEntry.select()
+            .where(
+                SetSignalLogEntry.tick == tick
+                and SetSignalLogEntry.signal_id == signal_id
+                and SetSignalLogEntry.state_before == state_before
+                and SetSignalLogEntry.state_after == state_after
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Signal with ID {signal_id} changed from {state_before} to {state_after}"
+        )
+        assert log_entry.run_id.id == run.id
+        assert log_entry.signal_id == signal_id
+        assert log_entry.state_before == state_before
+        assert log_entry.state_after == state_after
