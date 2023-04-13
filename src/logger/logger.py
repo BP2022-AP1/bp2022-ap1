@@ -7,6 +7,7 @@ from uuid import UUID
 
 from src.logger.log_entry import (
     TrainArrivalLogEntry,
+    TrainDepartureLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -84,7 +85,14 @@ class Logger:
         :param station_id: The id of the station
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        TrainDepartureLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} departed from station with ID {station_id}",
+            run_id=self.run_id,
+            train_id=train_id,
+            station_id=station_id,
+        )
 
     def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
         """
