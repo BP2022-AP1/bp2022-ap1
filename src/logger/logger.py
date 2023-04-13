@@ -6,8 +6,8 @@ from typing import Type
 from uuid import UUID
 
 from src.logger.log_entry import (
-    TrainDepartureLogEntry,
     TrainArrivalLogEntry,
+    TrainDepartureLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )

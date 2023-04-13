@@ -3,8 +3,8 @@ from datetime import datetime
 from freezegun import freeze_time
 
 from src.logger.log_entry import (
-    TrainDepartureLogEntry,
     TrainArrivalLogEntry,
+    TrainDepartureLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -76,19 +76,16 @@ class TestLogger:
             .where(
                 TrainRemoveLogEntry.tick == tick
                 and TrainDepartureLogEntry.train_id == train_id
-                and TrainDepartureLogEntry.station_id == station_id    
+                and TrainDepartureLogEntry.station_id == station_id
             )
             .first()
         )
         assert log_entry.timestamp == datetime.now()
         assert log_entry.tick == tick
         assert (
-            log_entry.message   
+            log_entry.message
             == f"Train with ID {train_id} departed from station with ID {station_id}"
         )
         assert log_entry.run_id.id == run.id
         assert log_entry.train_id == train_id
-        assert log_entry.station_id == station_id     
-
-
-
+        assert log_entry.station_id == station_id
