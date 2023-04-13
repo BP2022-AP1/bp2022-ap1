@@ -22,8 +22,8 @@ class TestTrackSpeedLimitFault:
         pass
 
     @pytest.fixture
-    def logger(self):
-        return Logger()
+    def logger(self, run):
+        return Logger(run.id)
 
     @pytest.fixture
     def interlocking(self):

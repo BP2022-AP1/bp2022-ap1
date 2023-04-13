@@ -4,7 +4,7 @@ from src.fault_injector.fault_types.fault import Fault
 class TrainSpeedFault(Fault):
     """A fault affecting the speed of trains."""
 
-    def inject_fault(self):
+    def inject_fault(self, tick: int):
         """inject TrainSpeedFault into the given component
 
         :param component: The component the fault should be injected into
@@ -15,7 +15,7 @@ class TrainSpeedFault(Fault):
         # - set train speed to new_speed
         raise NotImplementedError()
 
-    def resolve_fault(self):
+    def resolve_fault(self, tick: int):
         """resolves the previously injected TrainSpeedFault
 
         :param component: the component with the injected fault

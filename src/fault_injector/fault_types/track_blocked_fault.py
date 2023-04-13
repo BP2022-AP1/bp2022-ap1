@@ -4,7 +4,7 @@ from src.fault_injector.fault_types.fault import Fault
 class TrackBlockedFault(Fault):
     """A fault that blocks a track"""
 
-    def inject_fault(self):
+    def inject_fault(self, tick: int):
         """inject TrackBlockedFault into the given component
 
         :param component: The component the fault should be injected into
@@ -14,7 +14,7 @@ class TrackBlockedFault(Fault):
         # - mark track as blocked
         raise NotImplementedError()
 
-    def resolve_fault(self):
+    def resolve_fault(self, tick: int):
         """resolves the previously injected fault
 
         :param component: the component with the injected TrackBlockedFault

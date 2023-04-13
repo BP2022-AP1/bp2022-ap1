@@ -30,7 +30,7 @@ class TrackSpeedLimitFault(Fault):
         self.wrapper = wrapper
         self.interlocking = interlocking
 
-    def inject_fault(self):
+    def inject_fault(self, tick: int):
         """inject TrackSpeedLimitFault into the given component
 
         :param component: The component the fault should be injected into
@@ -46,6 +46,7 @@ class TrackSpeedLimitFault(Fault):
 
         self.interlocking.insert_track_speed_limit_changed(self.track.identifier)
         self.logger.inject_track_speed_limit_fault(
+            tick,
             self.configuration.id,
             self.track.identifier,
             self.old_speed_limit,
@@ -56,7 +57,7 @@ class TrackSpeedLimitFault(Fault):
         # - save the current speed limit of the track in old_speed_limit
         # - set track speed limit to new_speed_limit
 
-    def resolve_fault(self):
+    def resolve_fault(self, tick: int):
         """resolves the previously injected fault
 
         :param component: the component with the injected TrackSpeedLimitFault
@@ -65,7 +66,7 @@ class TrackSpeedLimitFault(Fault):
         self.track.max_speed = self.old_speed_limit
         self.interlocking.insert_track_speed_limit_changed(self.track.identifier)
 
-        self.logger.resolve_track_speed_limit_fault(self.configuration.id)
+        self.logger.resolve_track_speed_limit_fault(tick, self.configuration.id)
 
         # - get track object
         # - set the track speed limit to old_speed_limit

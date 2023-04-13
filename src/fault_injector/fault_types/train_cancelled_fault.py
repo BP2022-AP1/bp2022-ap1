@@ -4,7 +4,7 @@ from src.fault_injector.fault_types.fault import Fault
 class TrainCancelledFault(Fault):
     """A fault that blocks a platform"""
 
-    def inject_fault(self):
+    def inject_fault(self, tick: int):
         """inject TrainCancelledFault into the given component
 
         :param component: The component the fault should be injected into
@@ -14,7 +14,7 @@ class TrainCancelledFault(Fault):
         # - mark train as cancelled
         raise NotImplementedError()
 
-    def resolve_fault(self):
+    def resolve_fault(self, tick: int):
         """resolves the previously injected TrainCancelledFault
 
         :param component: the component with the injected fault

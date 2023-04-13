@@ -17,13 +17,13 @@ class Fault(ABC):
         self.logger = logger
 
     @abstractmethod
-    def inject_fault(self):
+    def inject_fault(self, tick: int):
         """injects the fault into the given component"""
 
         raise NotImplementedError()
 
     @abstractmethod
-    def resolve_fault(self):
+    def resolve_fault(self, tick: int):
         """resolves the previously injected fault"""
 
         raise NotImplementedError()
@@ -35,6 +35,6 @@ class Fault(ABC):
         :type tick: int
         """
         if tick == self.configuration.start_tick:
-            self.inject_fault()
+            self.inject_fault(tick=tick)
         elif tick == self.configuration.end_tick:
-            self.resolve_fault()
+            self.resolve_fault(tick=tick)
