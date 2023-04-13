@@ -13,8 +13,8 @@ class ScheduleConfiguration(BaseModel):
         schedule_type = marsh.fields.String(required=True)
         strategy_type = marsh.fields.String(required=True)
 
-        strategy_start_tick = marsh.fields.Integer(required=True)
-        strategy_end_tick = marsh.fields.Integer(required=True)
+        strategy_start_tick = marsh.fields.Integer()
+        strategy_end_tick = marsh.fields.Integer()
 
         train_schedule_train_type = marsh.fields.String()
 
@@ -34,8 +34,8 @@ class ScheduleConfiguration(BaseModel):
     schedule_type = TextField()
     strategy_type = TextField()
 
-    strategy_start_tick = IntegerField()
-    strategy_end_tick = IntegerField()
+    strategy_start_tick = IntegerField(null=True)
+    strategy_end_tick = IntegerField(null=True)
 
     train_schedule_train_type = TextField(null=True)
 
