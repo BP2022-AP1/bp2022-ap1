@@ -8,12 +8,24 @@ class TestRegularScheduleStrategy:
 
     @pytest.fixture
     def regular_strategy(self) -> RegularScheduleStrategy:
-        return RegularScheduleStrategy(start_tick=1000, end_tick=None, frequency=100)
+        return RegularScheduleStrategy(start_tick=1000, end_tick=10000, frequency=100)
 
     @pytest.mark.parametrize(
         "strategy,tick", (("regular_strategy", tick) for tick in [0, 900])
     )
     def test_not_spawning_before_start_tick(
+        self,
+        strategy: RegularScheduleStrategy,
+        tick: int,
+        request: pytest.FixtureRequest,
+    ):
+        strategy = request.getfixturevalue(strategy)
+        assert not strategy.should_spawn(tick=tick)
+
+    @pytest.mark.parametrize(
+        "strategy,tick", (("regular_strategy", tick) for tick in [20000])
+    )
+    def test_not_spawning_after_end_tick(
         self,
         strategy: RegularScheduleStrategy,
         tick: int,
