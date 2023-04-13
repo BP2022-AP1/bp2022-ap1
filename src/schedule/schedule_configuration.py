@@ -1,5 +1,5 @@
 import marshmallow as marsh
-from peewee import ForeignKeyField, IntegerField, TextField, FloatField
+from peewee import FloatField, ForeignKeyField, IntegerField, TextField
 
 from src.base_model import BaseModel
 
