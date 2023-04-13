@@ -36,6 +36,6 @@ class ScheduleStrategy(ABC):
 
         :param tick: The current tick
         """
-        return tick >= self.start_tick and tick <= (
-            self.end_tick if self.end_tick else tick
-        )
+        after_start_tick = tick >= (self.start_tick if self.start_tick else 0)
+        before_end_tick = tick <= (self.end_tick if self.end_tick else tick)
+        return after_start_tick and before_end_tick
