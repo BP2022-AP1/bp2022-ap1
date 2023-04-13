@@ -29,7 +29,6 @@ class TestRegularScheduleStrategy:
         self,
         regular_strategy: RegularScheduleStrategy,
         tick: int,
-        request: pytest.FixtureRequest,
     ):
         assert regular_strategy.should_spawn(tick=tick)
 
