@@ -1,20 +1,22 @@
+from random import Random
+
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
-from random import Random
 
 
 class RandomScheduleStrategy(ScheduleStrategy):
-    """A schedule strategy that spawns trains randomly with a given probability
-    """
+    """A schedule strategy that spawns trains randomly with a given probability"""
 
     @classmethod
-    def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration) -> 'RandomScheduleStrategy':
+    def from_schedule_configuration(
+        cls, schedule_configuration: ScheduleConfiguration
+    ) -> "RandomScheduleStrategy":
         """Constructs a RandomScheduleStrategy from a ScheduleConfiguration
 
         :param schedule_configuration: The ScheduleConfiguration
         :return: A RandomScheduleStrategy
         """
-        assert schedule_configuration.strategy_type == 'RandomScheduleStrategy'
+        assert schedule_configuration.strategy_type == "RandomScheduleStrategy"
         return cls(
             start_tick=schedule_configuration.strategy_start_tick,
             end_tick=schedule_configuration.strategy_end_tick,
@@ -25,7 +27,13 @@ class RandomScheduleStrategy(ScheduleStrategy):
     trains_per_1000_ticks: float
     _random_number_generator: Random
 
-    def __init__(self, start_tick: int, end_tick: int, trains_per_1000_ticks: float, seed: int = None):
+    def __init__(
+        self,
+        start_tick: int,
+        end_tick: int,
+        trains_per_1000_ticks: float,
+        seed: int = None,
+    ):
         """Constructs a RandomScheduleStrategy
 
         :param start_tick: The tick when train spawning should start
@@ -45,5 +53,6 @@ class RandomScheduleStrategy(ScheduleStrategy):
         """
         return (
             super().should_spawn(tick)
-            and self._random_number_generator.random() * 1000 < self.trains_per_1000_ticks
+            and self._random_number_generator.random() * 1000
+            < self.trains_per_1000_ticks
         )
