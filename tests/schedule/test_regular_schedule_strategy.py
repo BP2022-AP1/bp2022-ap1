@@ -8,7 +8,7 @@ class TestRegularScheduleStrategy:
 
     @pytest.fixture
     def regular_strategy(self) -> RegularScheduleStrategy:
-        return RegularScheduleStrategy(start_tick=1000, frequency=100)
+        return RegularScheduleStrategy(start_tick=1000, end_tick=None, frequency=100)
 
     @pytest.mark.parametrize(
         "strategy,tick", (("regular_strategy", tick) for tick in [0, 900])
