@@ -9,14 +9,14 @@ from peewee import IntegrityError
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
-    ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -1246,7 +1246,9 @@ class TestLogEntry:
             )
             assert (
                 inject_fault_log_entry.schedule_blocked_fault_configuration.id
-                == inject_fault_log_entry_as_dict["schedule_blocked_fault_configuration"]
+                == inject_fault_log_entry_as_dict[
+                    "schedule_blocked_fault_configuration"
+                ]
             )
             assert (
                 inject_fault_log_entry.train_prio_fault_configuration.id
