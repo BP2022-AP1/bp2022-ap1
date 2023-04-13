@@ -1,32 +1,37 @@
 from abc import ABC, abstractmethod
 
-from src.component import Component
+from src.fault_injector.fault_configurations.fault_configuration import (
+    FaultConfiguration,
+)
+from src.logger.logger import Logger
 
 
 class Fault(ABC):
     """An abstract fault for the fault injection"""
 
     configuration: "FaultConfiguration"
+    logger: Logger
 
-    def __init__(self, configuration):
+    def __init__(self, configuration, logger: Logger):
         self.configuration = configuration
+        self.logger = logger
 
     @abstractmethod
-    def inject_fault(self, component: Component):
+    def inject_fault(self, tick: int):
         """injects the fault into the given component
 
-        :param component: the component the fault should be injected into
-        :type component: Component
+        :param tick: the simulation tick in which inject_fault was called
+        :type tick: Integer
         """
 
         raise NotImplementedError()
 
     @abstractmethod
-    def resolve_fault(self, component: Component):
+    def resolve_fault(self, tick: int):
         """resolves the previously injected fault
 
-        :param component: the component with the injected fault
-        :type component: Component
+        :param tick: the simulation tick in which resolve_fault was called
+        :type tick: Integer
         """
 
         raise NotImplementedError()
@@ -38,6 +43,6 @@ class Fault(ABC):
         :type tick: int
         """
         if tick == self.configuration.start_tick:
-            self.inject_fault(self.configuration.component)
+            self.inject_fault(tick=tick)
         elif tick == self.configuration.end_tick:
-            self.resolve_fault(self.configuration.component)
+            self.resolve_fault(tick=tick)
