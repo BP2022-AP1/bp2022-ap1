@@ -152,8 +152,8 @@ class RouteController(IRouteController):
 
                     # This frees the least route in the interlocking
                     self.interlocking.free_route(route.yaramo_route)
-                    # This may not be the best place (time) to do so, 
-                    # as the route schould be freed when the train leaves the route 
+                    # This may not be the best place (time) to do so,
+                    # as the route schould be freed when the train leaves the route
                     # and not when it is still on the last segment.
 
                     # This sets the route in SUMO.

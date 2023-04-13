@@ -21,7 +21,7 @@ class Router:
         """
         start_node = start_track.to_node
         penultimate_node = end_track.from_node
-        # The next part is dijkstra as a first mvp. 
+        # The next part is dijkstra as a first mvp.
         # This will lead to deadlocks if two trains drive in opposite directions.
         distances = {}
         previous_nodes = {}
