@@ -12,7 +12,7 @@ def get_all_simulation_id():
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_simulation_configuration(body):
@@ -30,7 +30,7 @@ def create_simulation_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -44,7 +44,7 @@ def get_simulation_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_simulation_configuration(options, body):
@@ -58,7 +58,7 @@ def update_simulation_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_simulation_configuration(options):
@@ -71,4 +71,4 @@ def delete_simulation_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204

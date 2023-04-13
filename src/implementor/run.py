@@ -14,7 +14,7 @@ def get_all_run_id(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_run(body):
@@ -32,7 +32,7 @@ def create_run(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -46,7 +46,7 @@ def get_run(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def delete_run(options):
@@ -59,4 +59,4 @@ def delete_run(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204

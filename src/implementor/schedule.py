@@ -15,7 +15,7 @@ def get_all_schedule_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_schedule(body):
@@ -33,7 +33,7 @@ def create_schedule(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -47,7 +47,7 @@ def get_schedule(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_schedule(options, body):
@@ -61,7 +61,7 @@ def update_schedule(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_schedule(options):
@@ -74,4 +74,4 @@ def delete_schedule(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204

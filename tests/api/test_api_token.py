@@ -8,7 +8,7 @@ class TestApiToken:
 
     def test_post(self, client):
         response = client.post("/token")
-        assert response.status_code == 201
+        assert response.status_code == 501
 
     def test_get_all(self, client):
         response = client.get("/token")

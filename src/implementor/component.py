@@ -15,7 +15,7 @@ def get_schedule_blocked_fault_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_schedule_blocked_fault_configuration(body):
@@ -33,7 +33,7 @@ def create_schedule_blocked_fault_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -47,7 +47,7 @@ def get_schedule_blocked_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_schedule_blocked_fault_configuration(options, body):
@@ -61,7 +61,7 @@ def update_schedule_blocked_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_schedule_blocked_fault_configuration(options):
@@ -74,7 +74,7 @@ def delete_schedule_blocked_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def get_track_blocked_fault_configuration_ids(options):
@@ -88,7 +88,7 @@ def get_track_blocked_fault_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_track_blocked_fault_configuration(body):
@@ -106,7 +106,7 @@ def create_track_blocked_fault_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -120,7 +120,7 @@ def get_track_blocked_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_track_blocked_fault_configuration(options, body):
@@ -134,7 +134,7 @@ def update_track_blocked_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_track_blocked_fault_configuration(options):
@@ -147,7 +147,7 @@ def delete_track_blocked_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def get_track_speed_limit_fault_configuration_ids(options):
@@ -161,7 +161,7 @@ def get_track_speed_limit_fault_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_track_speed_limit_fault_configuration(body):
@@ -179,7 +179,7 @@ def create_track_speed_limit_fault_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -193,7 +193,7 @@ def get_track_speed_limit_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_track_speed_limit_fault_configuration(options, body):
@@ -207,7 +207,7 @@ def update_track_speed_limit_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_track_speed_limit_fault_configuration(options):
@@ -220,7 +220,7 @@ def delete_track_speed_limit_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def get_train_prio_fault_configuration_ids(options):
@@ -234,7 +234,7 @@ def get_train_prio_fault_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_train_prio_fault_configuration(body):
@@ -252,7 +252,7 @@ def create_train_prio_fault_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -266,7 +266,7 @@ def get_train_prio_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_train_prio_fault_configuration(options, body):
@@ -280,7 +280,7 @@ def update_train_prio_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_train_prio_fault_configuration(options):
@@ -293,7 +293,7 @@ def delete_train_prio_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def get_train_speed_fault_configuration_ids(options):
@@ -307,7 +307,7 @@ def get_train_speed_fault_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_train_speed_fault_configuration(body):
@@ -325,7 +325,7 @@ def create_train_speed_fault_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -339,7 +339,7 @@ def get_train_speed_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_train_speed_fault_configuration(options, body):
@@ -353,7 +353,7 @@ def update_train_speed_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_train_speed_fault_configuration(options):
@@ -366,7 +366,7 @@ def delete_train_speed_fault_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def get_interlocking_configuration_ids(options):
@@ -380,7 +380,7 @@ def get_interlocking_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_interlocking_configuration(body):
@@ -398,7 +398,7 @@ def create_interlocking_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -412,7 +412,7 @@ def get_interlocking_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_interlocking_configuration(options, body):
@@ -426,7 +426,7 @@ def update_interlocking_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_interlocking_configuration(options):
@@ -439,7 +439,7 @@ def delete_interlocking_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def get_spawner_configuration_ids(options):
@@ -453,7 +453,7 @@ def get_spawner_configuration_ids(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps(""), 200
+    return json.dumps(""), 501  # 200
 
 
 def create_spawner_configuration(body):
@@ -471,7 +471,7 @@ def create_spawner_configuration(body):
                 "id": "<uuid>",
             }
         ),
-        201,
+        501,  # 201,
     )
 
 
@@ -485,7 +485,7 @@ def get_spawner_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 200
+    return json.dumps("<map>"), 501  # 200
 
 
 def update_spawner_configuration(options, body):
@@ -499,7 +499,7 @@ def update_spawner_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204
 
 
 def delete_spawner_configuration(options):
@@ -512,4 +512,4 @@ def delete_spawner_configuration(options):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 204
+    return "", 501  # 204

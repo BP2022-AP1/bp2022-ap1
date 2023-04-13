@@ -13,4 +13,4 @@ def create_token(body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 201
+    return json.dumps("<map>"), 501  # 201
