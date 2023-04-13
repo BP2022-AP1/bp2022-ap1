@@ -21,6 +21,8 @@ peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
 psycopg2 = "^2.9.5"
 interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "2be51e6" }
+flask = "^2.2.3"
+webargs = "^8.2.0"
 freezegun = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
@@ -80,6 +82,15 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.db]
     help = "Call DB utilities"
     cmd = "python3 db/local/db.py"
+
+    [tool.poe.tasks.dev]
+    help = "Run flask app in development mode and run db"
+    sequence = ["db run dev", "dev-flask"]
+    envfile=[".env.shared", ".env.secret"]
+
+    [tool.poe.tasks.dev-flask]
+    help = "Run flask app in development mode"
+    cmd = "flask --app src run"
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"

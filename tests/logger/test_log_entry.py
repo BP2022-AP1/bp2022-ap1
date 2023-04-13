@@ -9,14 +9,14 @@ from peewee import IntegrityError
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
-    TrainCancelledFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -1114,7 +1114,7 @@ class TestLogEntry:
             platform_blocked_fault_configuration,
             track_blocked_fault_configuration,
             track_speed_limit_fault_configuration,
-            train_cancelled_fault_configuration,
+            schedule_blocked_fault_configuration,
             train_prio_fault_configuration,
             train_speed_fault_configuration,
             affected_element,
@@ -1130,7 +1130,7 @@ class TestLogEntry:
                 "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
                 "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
                 "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
-                "train_cancelled_fault_configuration": train_cancelled_fault_configuration.id,
+                "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration.id,
                 "train_prio_fault_configuration": train_prio_fault_configuration.id,
                 "train_speed_fault_configuration": train_speed_fault_configuration.id,
                 "affected_element": affected_element,
@@ -1148,7 +1148,7 @@ class TestLogEntry:
             platform_blocked_fault_configuration,
             track_blocked_fault_configuration,
             track_speed_limit_fault_configuration,
-            train_cancelled_fault_configuration,
+            schedule_blocked_fault_configuration,
             train_prio_fault_configuration,
             train_speed_fault_configuration,
             affected_element,
@@ -1170,8 +1170,8 @@ class TestLogEntry:
                 "track_speed_limit_fault_configuration": str(
                     track_speed_limit_fault_configuration.id
                 ),
-                "train_cancelled_fault_configuration": str(
-                    train_cancelled_fault_configuration.id
+                "schedule_blocked_fault_configuration": str(
+                    schedule_blocked_fault_configuration.id
                 ),
                 "train_prio_fault_configuration": str(
                     train_prio_fault_configuration.id
@@ -1245,8 +1245,10 @@ class TestLogEntry:
                 ]
             )
             assert (
-                inject_fault_log_entry.train_cancelled_fault_configuration.id
-                == inject_fault_log_entry_as_dict["train_cancelled_fault_configuration"]
+                inject_fault_log_entry.schedule_blocked_fault_configuration.id
+                == inject_fault_log_entry_as_dict[
+                    "schedule_blocked_fault_configuration"
+                ]
             )
             assert (
                 inject_fault_log_entry.train_prio_fault_configuration.id
@@ -1291,9 +1293,9 @@ class TestLogEntry:
                         "track_speed_limit_fault_configuration"
                     ]
                 ),
-                "train_cancelled_fault_configuration": str(
+                "schedule_blocked_fault_configuration": str(
                     inject_fault_log_entry_as_dict[
-                        "train_cancelled_fault_configuration"
+                        "schedule_blocked_fault_configuration"
                     ]
                 ),
                 "train_prio_fault_configuration": str(
@@ -1331,8 +1333,8 @@ class TestLogEntry:
                 TrackSpeedLimitFaultConfiguration,
             )
             assert isinstance(
-                inject_fault_log_entry.train_cancelled_fault_configuration,
-                TrainCancelledFaultConfiguration,
+                inject_fault_log_entry.schedule_blocked_fault_configuration,
+                ScheduleBlockedFaultConfiguration,
             )
             assert isinstance(
                 inject_fault_log_entry.train_prio_fault_configuration,
@@ -1381,9 +1383,9 @@ class TestLogEntry:
                 ]
             )
             assert (
-                str(inject_fault_log_entry.train_cancelled_fault_configuration)
+                str(inject_fault_log_entry.schedule_blocked_fault_configuration)
                 == inject_fault_log_entry_as_dict_serialized[
-                    "train_cancelled_fault_configuration"
+                    "schedule_blocked_fault_configuration"
                 ]
             )
             assert (
@@ -1431,7 +1433,7 @@ class TestLogEntry:
             platform_blocked_fault_configuration,
             track_blocked_fault_configuration,
             track_speed_limit_fault_configuration,
-            train_cancelled_fault_configuration,
+            schedule_blocked_fault_configuration,
             train_prio_fault_configuration,
             train_speed_fault_configuration,
         ):
@@ -1444,7 +1446,7 @@ class TestLogEntry:
                 "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
                 "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
                 "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
-                "train_cancelled_fault_configuration": train_cancelled_fault_configuration.id,
+                "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration.id,
                 "train_prio_fault_configuration": train_prio_fault_configuration.id,
                 "train_speed_fault_configuration": train_speed_fault_configuration.id,
             }
@@ -1459,7 +1461,7 @@ class TestLogEntry:
             platform_blocked_fault_configuration,
             track_blocked_fault_configuration,
             track_speed_limit_fault_configuration,
-            train_cancelled_fault_configuration,
+            schedule_blocked_fault_configuration,
             train_prio_fault_configuration,
             train_speed_fault_configuration,
         ):
@@ -1478,8 +1480,8 @@ class TestLogEntry:
                 "track_speed_limit_fault_configuration": str(
                     track_speed_limit_fault_configuration.id
                 ),
-                "train_cancelled_fault_configuration": str(
-                    train_cancelled_fault_configuration.id
+                "schedule_blocked_fault_configuration": str(
+                    schedule_blocked_fault_configuration.id
                 ),
                 "train_prio_fault_configuration": str(
                     train_prio_fault_configuration.id
@@ -1552,9 +1554,9 @@ class TestLogEntry:
                 ]
             )
             assert (
-                resolve_fault_log_entry.train_cancelled_fault_configuration.id
+                resolve_fault_log_entry.schedule_blocked_fault_configuration.id
                 == resolve_fault_log_entry_as_dict[
-                    "train_cancelled_fault_configuration"
+                    "schedule_blocked_fault_configuration"
                 ]
             )
             assert (
@@ -1588,9 +1590,9 @@ class TestLogEntry:
                         "track_speed_limit_fault_configuration"
                     ]
                 ),
-                "train_cancelled_fault_configuration": str(
+                "schedule_blocked_fault_configuration": str(
                     resolve_fault_log_entry_as_dict[
-                        "train_cancelled_fault_configuration"
+                        "schedule_blocked_fault_configuration"
                     ]
                 ),
                 "train_prio_fault_configuration": str(
@@ -1625,8 +1627,8 @@ class TestLogEntry:
                 TrackSpeedLimitFaultConfiguration,
             )
             assert isinstance(
-                resolve_fault_log_entry.train_cancelled_fault_configuration,
-                TrainCancelledFaultConfiguration,
+                resolve_fault_log_entry.schedule_blocked_fault_configuration,
+                ScheduleBlockedFaultConfiguration,
             )
             assert isinstance(
                 resolve_fault_log_entry.train_prio_fault_configuration,
@@ -1671,9 +1673,9 @@ class TestLogEntry:
                 ]
             )
             assert (
-                str(resolve_fault_log_entry.train_cancelled_fault_configuration)
+                str(resolve_fault_log_entry.schedule_blocked_fault_configuration)
                 == resolve_fault_log_entry_as_dict_serialized[
-                    "train_cancelled_fault_configuration"
+                    "schedule_blocked_fault_configuration"
                 ]
             )
             assert (
