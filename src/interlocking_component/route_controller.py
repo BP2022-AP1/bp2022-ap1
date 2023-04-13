@@ -118,10 +118,10 @@ class RouteController(IRouteController):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
-        :param train_id: the id of the train that may need a new fahrstasse
-        :type train_id: train_id
-        :param track_segment_id: the id of the tracksegment it just entered
-        :type track_segment_id: track_segment_id
+        :param train: the train that may need a new fahrstasse
+        :type Train: Train
+        :param track_segment: the track it just entered
+        :type Track: Track
         """
         route = None
         for route_candidate in self.interlocking.active_routes:
