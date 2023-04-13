@@ -3,16 +3,25 @@ from uuid import uuid4
 
 import pytest
 
-from src.fault_injector.fault_types.platform_blocked_fault import (
+from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
-from src.fault_injector.fault_types.train_cancelled_fault import (
+from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
+    TrackBlockedFaultConfiguration,
+)
+from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
+    TrackSpeedLimitFaultConfiguration,
+)
+from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
     TrainCancelledFaultConfiguration,
 )
-from src.fault_injector.fault_types.train_speed_fault import (
+from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
+    TrainPrioFaultConfiguration,
+)
+from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import Run
+from src.implementor.models import Run, SimulationConfiguration, Token
 
 
 @pytest.fixture
@@ -31,8 +40,18 @@ def message():
 
 
 @pytest.fixture
-def run():
-    return Run.create()
+def token():
+    return Token.create(name="user", permission="admin", hashedToken="hash")
+
+
+@pytest.fixture
+def simulation_configuration(token):
+    return SimulationConfiguration.create(token=token.id)
+
+
+@pytest.fixture
+def run(simulation_configuration):
+    return Run.create(simulation_configuration=simulation_configuration.id)
 
 
 @pytest.fixture
@@ -66,16 +85,6 @@ def state_after():
 
 
 @pytest.fixture
-def train_speed_fault_configuration():
-    return TrainSpeedFaultConfiguration.create(
-        start_tick=1,
-        end_tick=100,
-        description="TrainSpeedFault",
-        affected_element_id="12345678",
-    )
-
-
-@pytest.fixture
 def platform_blocked_fault_configuration():
     return PlatformBlockedFaultConfiguration.create(
         start_tick=1,
@@ -86,11 +95,53 @@ def platform_blocked_fault_configuration():
 
 
 @pytest.fixture
+def track_blocked_fault_configuration():
+    return TrackBlockedFaultConfiguration.create(
+        start_tick=1,
+        end_tick=100,
+        description="TrackBlockedFault",
+        affected_element_id="12345678",
+    )
+
+
+@pytest.fixture
+def track_speed_limit_fault_configuration():
+    return TrackSpeedLimitFaultConfiguration.create(
+        start_tick=1,
+        end_tick=100,
+        description="TrackSpeedLimitFault",
+        affected_element_id="12345678",
+        new_speed_limit=60,
+    )
+
+
+@pytest.fixture
 def train_cancelled_fault_configuration():
     return TrainCancelledFaultConfiguration.create(
         start_tick=1,
         end_tick=100,
         description="TrainCancelledFault",
+        affected_element_id="12345678",
+    )
+
+
+@pytest.fixture
+def train_prio_fault_configuration():
+    return TrainPrioFaultConfiguration.create(
+        start_tick=1,
+        end_tick=100,
+        description="TrainPrioFault",
+        affected_element_id="12345678",
+        new_prio=1,
+    )
+
+
+@pytest.fixture
+def train_speed_fault_configuration():
+    return TrainSpeedFaultConfiguration.create(
+        start_tick=1,
+        end_tick=100,
+        description="TrainSpeedFault",
         affected_element_id="12345678",
     )
 
