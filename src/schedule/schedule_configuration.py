@@ -1,5 +1,5 @@
 import marshmallow as marsh
-from peewee import ForeignKeyField, IntegerField, TextField
+from peewee import ForeignKeyField, IntegerField, TextField, FloatField
 
 from src.base_model import BaseModel
 
@@ -41,7 +41,7 @@ class ScheduleConfiguration(BaseModel):
 
     regular_strategy_frequency = IntegerField(null=True)
 
-    random_strategy_trains_per_1000_ticks = IntegerField(null=True)
+    random_strategy_trains_per_1000_ticks = FloatField(null=True)
     random_strategy_seed = IntegerField(null=True)
 
 
