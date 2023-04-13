@@ -172,16 +172,12 @@ class TestLogger:
         tick,
         platform_blocked_fault_configuration,
         affected_element,
-        value_before,
-        value_after,
     ):
         logger = Logger(run_id=run.id)
         logger.inject_platform_blocked_fault(
             tick=tick,
             platform_blocked_fault_configuration=platform_blocked_fault_configuration,
             affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -190,8 +186,6 @@ class TestLogger:
                 and InjectFaultLogEntry.platform_blocked_fault_configuration
                 == platform_blocked_fault_configuration
                 and InjectFaultLogEntry.affected_element == affected_element
-                and InjectFaultLogEntry.value_before == value_before
-                and InjectFaultLogEntry.value_after == value_after
             )
             .first()
         )
@@ -200,7 +194,7 @@ class TestLogger:
         assert (
             log_entry.message
             == f"Platform blocked fault with configuration {platform_blocked_fault_configuration} "
-            f"on element {affected_element} changed from {value_before} to {value_after}"
+            f"on element {affected_element}"
         )
         assert log_entry.run_id.id == run.id
         assert (
@@ -208,8 +202,6 @@ class TestLogger:
             == platform_blocked_fault_configuration
         )
         assert log_entry.affected_element == affected_element
-        assert log_entry.value_before == value_before
-        assert log_entry.value_after == value_after
 
         assert log_entry.track_blocked_fault_configuration is None
         assert log_entry.track_speed_limit_fault_configuration is None
@@ -224,16 +216,12 @@ class TestLogger:
         tick,
         track_blocked_fault_configuration,
         affected_element,
-        value_before,
-        value_after,
     ):
         logger = Logger(run_id=run.id)
         logger.inject_track_blocked_fault(
             tick=tick,
             track_blocked_fault_configuration=track_blocked_fault_configuration,
             affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -242,8 +230,6 @@ class TestLogger:
                 and InjectFaultLogEntry.track_blocked_fault_configuration
                 == track_blocked_fault_configuration
                 and InjectFaultLogEntry.affected_element == affected_element
-                and InjectFaultLogEntry.value_before == value_before
-                and InjectFaultLogEntry.value_after == value_after
             )
             .first()
         )
@@ -252,7 +238,7 @@ class TestLogger:
         assert (
             log_entry.message
             == f"Track blocked fault with configuration {track_blocked_fault_configuration} "
-            f"on element {affected_element} changed from {value_before} to {value_after}"
+            f"on element {affected_element}"
         )
         assert log_entry.run_id.id == run.id
         assert (
@@ -260,8 +246,6 @@ class TestLogger:
             == track_blocked_fault_configuration
         )
         assert log_entry.affected_element == affected_element
-        assert log_entry.value_before == value_before
-        assert log_entry.value_after == value_after
 
         assert log_entry.platform_blocked_fault_configuration is None
         assert log_entry.track_speed_limit_fault_configuration is None
@@ -328,16 +312,12 @@ class TestLogger:
         tick,
         schedule_blocked_fault_configuration,
         affected_element,
-        value_before,
-        value_after,
     ):
         logger = Logger(run_id=run.id)
         logger.inject_schedule_blocked_fault(
             tick=tick,
             schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
             affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -346,8 +326,6 @@ class TestLogger:
                 and InjectFaultLogEntry.schedule_blocked_fault_configuration
                 == schedule_blocked_fault_configuration
                 and InjectFaultLogEntry.affected_element == affected_element
-                and InjectFaultLogEntry.value_before == value_before
-                and InjectFaultLogEntry.value_after == value_after
             )
             .first()
         )
@@ -356,7 +334,7 @@ class TestLogger:
         assert (
             log_entry.message
             == f"Schedule blocked fault with configuration {schedule_blocked_fault_configuration} "
-            f"on element {affected_element} changed from {value_before} to {value_after}"
+            f"on element {affected_element}"
         )
         assert log_entry.run_id.id == run.id
         assert (
@@ -364,8 +342,6 @@ class TestLogger:
             == schedule_blocked_fault_configuration
         )
         assert log_entry.affected_element == affected_element
-        assert log_entry.value_before == value_before
-        assert log_entry.value_after == value_after
 
         assert log_entry.platform_blocked_fault_configuration is None
         assert log_entry.track_blocked_fault_configuration is None

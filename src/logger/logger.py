@@ -157,8 +157,6 @@ class Logger:
         tick: int,
         platform_blocked_fault_configuration: UUID,
         affected_element: str,
-        value_before: str,
-        value_after: str,
     ) -> Type[None]:
         """
         This function should be called when injecting a platform blocked fault into the simulation.
@@ -167,21 +165,16 @@ class Logger:
         :param tick: The current simulation tick
         :param platform_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
         :rtype: None
         """
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=tick,
             message=f"Platform blocked fault with configuration "
-            f"{platform_blocked_fault_configuration} on element {affected_element} "
-            f"changed from {value_before} to {value_after}",
+            f"{platform_blocked_fault_configuration} on element {affected_element}",
             run_id=self.run_id,
             platform_blocked_fault_configuration=platform_blocked_fault_configuration,
             affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
         )
 
     def inject_track_blocked_fault(
@@ -189,8 +182,6 @@ class Logger:
         tick: int,
         track_blocked_fault_configuration: UUID,
         affected_element: str,
-        value_before: str,
-        value_after: str,
     ) -> Type[None]:
         """
         This function should be called when injecting a track blocked fault into the simulation.
@@ -199,20 +190,16 @@ class Logger:
         :param tick: The current simulation tick
         :param track_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
         :rtype: None
         """
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=tick,
             message=f"Track blocked fault with configuration {track_blocked_fault_configuration} "
-            f"on element {affected_element} changed from {value_before} to {value_after}",
+            f"on element {affected_element}",
             run_id=self.run_id,
             track_blocked_fault_configuration=track_blocked_fault_configuration,
             affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
         )
 
     def inject_track_speed_limit_fault(
@@ -252,8 +239,6 @@ class Logger:
         tick: int,
         schedule_blocked_fault_configuration: UUID,
         affected_element: str,
-        value_before: str,
-        value_after: str,
     ) -> Type[None]:
         """
         This function should be called when injecting a train speed fault into the simulation.
@@ -262,21 +247,16 @@ class Logger:
         :param tick: The current simulation tick
         :param schedule_blocked_fault_configuration: The configuration of the fault
         :param affected_element: The affected element
-        :param value_before: The value before the fault
-        :param value_after: The value after the fault
         :rtype: None
         """
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=tick,
             message=f"Schedule blocked fault with configuration "
-            f"{schedule_blocked_fault_configuration} on element {affected_element} "
-            f"changed from {value_before} to {value_after}",
+            f"{schedule_blocked_fault_configuration} on element {affected_element}",
             run_id=self.run_id,
             schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
             affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
         )
 
     def inject_train_prio_fault(
