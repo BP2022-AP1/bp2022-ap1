@@ -358,7 +358,7 @@ class Train(SimulationObject):
         timetable: List[str] = None,
         train_type: str = None,
         from_simulator: bool = False,
-    ):  # pylint: disable=too-many-arguments
+    ):
         """Creates a new train from the given parameters.
         When initializing manually, `timetable` and `train_type` are mandatory
         :param identifier: The identifier of the train

@@ -133,7 +133,6 @@ class TestLogEntry:
         """Tests for TrainSpawnLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_spawn_log_entry_as_dict(
             self, timestamp, tick, message, run, train_id
         ):
@@ -147,7 +146,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_spawn_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, train_id
         ):
@@ -263,7 +261,6 @@ class TestLogEntry:
         """Tests for TrainRemoveLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_remove_log_entry_as_dict(
             self, timestamp, tick, message, run, train_id
         ):
@@ -277,7 +274,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_remove_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, train_id
         ):
@@ -388,7 +384,6 @@ class TestLogEntry:
         """Tests for TrainArrivalLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_arrival_log_entry_as_dict(
             self, timestamp, tick, message, run, train_id, station_id
         ):
@@ -403,7 +398,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_arrival_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, train_id, station_id
         ):
@@ -536,7 +530,6 @@ class TestLogEntry:
         """Tests for the Train Departure Log Entry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_departure_log_entry_as_dict(
             self, timestamp, tick, message, run, train_id, station_id
         ):
@@ -551,7 +544,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def train_departure_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, train_id, station_id
         ):
@@ -685,7 +677,6 @@ class TestLogEntry:
         """Tests for CreateFahrstrasseLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def create_fahrstrasse_log_entry_as_dict(
             self, timestamp, tick, message, run, fahrstrasse
         ):
@@ -699,7 +690,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def create_fahrstrasse_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, fahrstrasse
         ):
@@ -826,7 +816,6 @@ class TestLogEntry:
         """Tests for RemoveFahrstrasseLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def remove_fahrstrasse_log_entry_as_dict(
             self, timestamp, tick, message, run, fahrstrasse
         ):
@@ -840,7 +829,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def remove_fahrstrasse_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, fahrstrasse
         ):
@@ -967,7 +955,6 @@ class TestLogEntry:
         """Tests for SignalLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def set_signal_log_entry_as_dict(
             self, timestamp, tick, message, run, signal_id, state_before, state_after
         ):
@@ -983,7 +970,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def set_signal_log_entry_as_dict_serialized(
             self, timestamp, tick, message, run, signal_id, state_before, state_after
         ):
@@ -1119,7 +1105,6 @@ class TestLogEntry:
         """Tests for InjectFaultLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def inject_fault_log_entry_as_dict(
             self,
             timestamp,
@@ -1154,7 +1139,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def inject_fault_log_entry_as_dict_serialized(
             self,
             timestamp,
@@ -1438,7 +1422,6 @@ class TestLogEntry:
         """Tests for ResolveFaultLogEntry."""
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def resolve_fault_log_entry_as_dict(
             self,
             timestamp,
@@ -1467,7 +1450,6 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        # pylint: disable=too-many-arguments
         def resolve_fault_log_entry_as_dict_serialized(
             self,
             timestamp,
