@@ -150,22 +150,17 @@ class RouteController(IRouteController):
                     # This does not check if the route can even be set and does not handle,
                     # if it can not be set this simulation step.
 
+                    # This frees the least route in the interlocking
+                    self.interlocking.free_route(route.yaramo_route)
+                    # This may not be the best place (time) to do so, 
+                    # as the route schould be freed when the train leaves the route 
+                    # and not when it is still on the last segment.
+
                     # This sets the route in SUMO.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     new_route_is_set = True
                     break
-
-    def is_new_fahrstrasse_needed(self, train: "Train", track_segment: "Track"):
-        """This method should be called when a train enters a new track_segment.
-        It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
-
-        :param train: the train that may need a new fahrstasse
-        :type Train: Train
-        :param track_segment: the track_segment it just entered
-        :type Track: Track
-        """
-        raise NotImplementedError()
 
     def check_all_fahrstrassen_for_failures(self):
         """This method checks for all trains, if their fahrstrassen and routes are still valid."""
