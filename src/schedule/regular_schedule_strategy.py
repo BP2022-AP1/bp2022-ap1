@@ -6,7 +6,9 @@ class RegularScheduleStrategy(ScheduleStrategy):
     """A schedule strategy that spawns vehicles at regular intervals."""
 
     @classmethod
-    def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
+    def from_schedule_configuration(
+        cls, schedule_configuration: ScheduleConfiguration
+    ) -> "RegularScheduleStrategy":
         """Constructs a RegularScheduleStrategy from a ScheduleConfiguration.
 
         :param schedule_configuration: The ScheduleConfiguration
