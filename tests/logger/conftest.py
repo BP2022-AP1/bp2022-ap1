@@ -13,7 +13,7 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
-    TrainCancelledFaultConfiguration,
+    ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -116,11 +116,11 @@ def track_speed_limit_fault_configuration():
 
 
 @pytest.fixture
-def train_cancelled_fault_configuration():
-    return TrainCancelledFaultConfiguration.create(
+def schedule_blocked_fault_configuration():
+    return ScheduleBlockedFaultConfiguration.create(
         start_tick=1,
         end_tick=100,
-        description="TrainCancelledFault",
+        description="ScheduleBlockedFault",
         affected_element_id="12345678",
     )
 
