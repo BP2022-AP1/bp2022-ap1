@@ -3,20 +3,22 @@ from uuid import uuid4
 
 import pytest
 
-from src.fault_injector.fault_types.platform_blocked_fault import (
+from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
-from src.fault_injector.fault_types.track_blocked_fault import (
+from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
-from src.fault_injector.fault_types.track_speed_limit_fault import (
+from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
-from src.fault_injector.fault_types.train_cancelled_fault import (
+from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
     TrainCancelledFaultConfiguration,
 )
-from src.fault_injector.fault_types.train_prio_fault import TrainPrioFaultConfiguration
-from src.fault_injector.fault_types.train_speed_fault import (
+from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
+    TrainPrioFaultConfiguration,
+)
+from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration, Token
@@ -37,18 +39,18 @@ def message():
     return "Test Log Done"
 
 
-@pytest.fixture(name="token")
-def fixture_token():
+@pytest.fixture
+def token():
     return Token.create(name="user", permission="admin", hashedToken="hash")
 
 
-@pytest.fixture(name="simulation_configuration")
-def fixture_simulation_configuration(token):
+@pytest.fixture
+def simulation_configuration(token):
     return SimulationConfiguration.create(token=token.id)
 
 
-@pytest.fixture(name="run")
-def fixture_run(simulation_configuration):
+@pytest.fixture
+def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
 
 
