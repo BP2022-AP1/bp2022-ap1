@@ -13,9 +13,9 @@ class Logger:
     The logger class is used to log the events of the simulation
     """
 
-    run_id: int
+    run_id: UUID
 
-    def __init__(self, run_id: int):
+    def __init__(self, run_id: UUID):
         """
         The constructor of the logger class
         """
@@ -176,7 +176,7 @@ class Logger:
         pass  # not implemented yet # pylint: disable=W0107
 
     # pylint: disable=too-many-arguments
-    def inject_train_cancelled_speed_fault(
+    def inject_train_cancelled_fault(
         self,
         tick: int,
         train_cancelled_fault_configuration: UUID,
