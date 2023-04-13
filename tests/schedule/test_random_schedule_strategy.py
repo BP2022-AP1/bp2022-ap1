@@ -4,6 +4,8 @@ from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 
 
 class TestRandomScheduleStrategy:
+    """Test the random schedule strategy"""
+
     @pytest.fixture
     def start_tick(self) -> int:
         return 100
