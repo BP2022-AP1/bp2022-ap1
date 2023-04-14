@@ -6,6 +6,7 @@ from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     InjectFaultLogEntry,
     RemoveFahrstrasseLogEntry,
+    ResolveFaultLogEntry,
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
@@ -444,6 +445,243 @@ class TestLogger:
         assert log_entry.affected_element == affected_element
         assert log_entry.value_before == value_before
         assert log_entry.value_after == value_after
+
+        assert log_entry.platform_blocked_fault_configuration is None
+        assert log_entry.track_blocked_fault_configuration is None
+        assert log_entry.track_speed_limit_fault_configuration is None
+        assert log_entry.schedule_blocked_fault_configuration is None
+        assert log_entry.train_prio_fault_configuration is None
+
+    @freeze_time()
+    def resolve_platform_blocked_fault(
+        self,
+        run,
+        tick,
+        platform_blocked_fault_configuration,
+    ):
+        logger = Logger(run_id=run.id)
+        logger.resolve_platform_blocked_fault(
+            tick=tick,
+            platform_blocked_fault_configuration=platform_blocked_fault_configuration,
+        )
+        log_entry = (
+            ResolveFaultLogEntry.select()
+            .where(
+                ResolveFaultLogEntry.tick == tick
+                and ResolveFaultLogEntry.platform_blocked_fault_configuration
+                == platform_blocked_fault_configuration
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Platform blocked fault with configuration {platform_blocked_fault_configuration} "
+            f"resolved"
+        )
+        assert log_entry.run_id.id == run.id
+        assert (
+            log_entry.platform_blocked_fault_configuration
+            == platform_blocked_fault_configuration
+        )
+
+        assert log_entry.track_blocked_fault_configuration is None
+        assert log_entry.track_speed_limit_fault_configuration is None
+        assert log_entry.schedule_blocked_fault_configuration is None
+        assert log_entry.train_prio_fault_configuration is None
+        assert log_entry.train_speed_fault_configuration is None
+
+    @freeze_time()
+    def resolve_track_blocked_fault(
+        self,
+        run,
+        tick,
+        track_blocked_fault_configuration,
+    ):
+        logger = Logger(run_id=run.id)
+        logger.resolve_track_blocked_fault(
+            tick=tick,
+            track_blocked_fault_configuration=track_blocked_fault_configuration,
+        )
+        log_entry = (
+            ResolveFaultLogEntry.select()
+            .where(
+                ResolveFaultLogEntry.tick == tick
+                and ResolveFaultLogEntry.track_blocked_fault_configuration
+                == track_blocked_fault_configuration
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Track blocked fault with configuration {track_blocked_fault_configuration} "
+            f"resolved"
+        )
+        assert log_entry.run_id.id == run.id
+        assert (
+            log_entry.track_blocked_fault_configuration
+            == track_blocked_fault_configuration
+        )
+
+        assert log_entry.platform_blocked_fault_configuration is None
+        assert log_entry.track_speed_limit_fault_configuration is None
+        assert log_entry.schedule_blocked_fault_configuration is None
+        assert log_entry.train_prio_fault_configuration is None
+        assert log_entry.train_speed_fault_configuration is None
+
+    @freeze_time()
+    def resolve_track_speed_limit_fault(
+        self,
+        run,
+        tick,
+        track_speed_limit_fault_configuration,
+    ):
+        logger = Logger(run_id=run.id)
+        logger.resolve_track_speed_limit_fault(
+            tick=tick,
+            track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
+        )
+        log_entry = (
+            ResolveFaultLogEntry.select()
+            .where(
+                ResolveFaultLogEntry.tick == tick
+                and ResolveFaultLogEntry.track_speed_limit_fault_configuration
+                == track_speed_limit_fault_configuration
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message == f"Track speed limit fault with configuration "
+            f"{track_speed_limit_fault_configuration} resolved"
+        )
+        assert log_entry.run_id.id == run.id
+        assert (
+            log_entry.track_speed_limit_fault_configuration
+            == track_speed_limit_fault_configuration
+        )
+
+        assert log_entry.platform_blocked_fault_configuration is None
+        assert log_entry.track_blocked_fault_configuration is None
+        assert log_entry.schedule_blocked_fault_configuration is None
+        assert log_entry.train_prio_fault_configuration is None
+        assert log_entry.train_speed_fault_configuration is None
+
+    @freeze_time()
+    def resolve_schedule_blocked_fault(
+        self,
+        run,
+        tick,
+        schedule_blocked_fault_configuration,
+    ):
+        logger = Logger(run_id=run.id)
+        logger.resolve_schedule_blocked_fault(
+            tick=tick,
+            schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
+        )
+        log_entry = (
+            ResolveFaultLogEntry.select()
+            .where(
+                ResolveFaultLogEntry.tick == tick
+                and ResolveFaultLogEntry.schedule_blocked_fault_configuration
+                == schedule_blocked_fault_configuration
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Schedule blocked fault with configuration {schedule_blocked_fault_configuration} "
+            f"resolved"
+        )
+        assert log_entry.run_id.id == run.id
+        assert (
+            log_entry.schedule_blocked_fault_configuration
+            == schedule_blocked_fault_configuration
+        )
+
+        assert log_entry.platform_blocked_fault_configuration is None
+        assert log_entry.track_blocked_fault_configuration is None
+        assert log_entry.track_speed_limit_fault_configuration is None
+        assert log_entry.train_prio_fault_configuration is None
+        assert log_entry.train_speed_fault_configuration is None
+
+    @freeze_time()
+    def resolve_train_prio_fault(
+        self,
+        run,
+        tick,
+        train_prio_fault_configuration,
+    ):
+        logger = Logger(run_id=run.id)
+        logger.resolve_train_prio_fault(
+            tick=tick,
+            train_prio_fault_configuration=train_prio_fault_configuration,
+        )
+        log_entry = (
+            ResolveFaultLogEntry.select()
+            .where(
+                ResolveFaultLogEntry.tick == tick
+                and ResolveFaultLogEntry.train_prio_fault_configuration
+                == train_prio_fault_configuration
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Train prio fault with configuration {train_prio_fault_configuration} "
+            f"resolved"
+        )
+        assert log_entry.run_id.id == run.id
+        assert (
+            log_entry.train_prio_fault_configuration == train_prio_fault_configuration
+        )
+
+        assert log_entry.platform_blocked_fault_configuration is None
+        assert log_entry.track_blocked_fault_configuration is None
+        assert log_entry.track_speed_limit_fault_configuration is None
+        assert log_entry.schedule_blocked_fault_configuration is None
+        assert log_entry.train_speed_fault_configuration is None
+
+    @freeze_time()
+    def resolve_train_speed_fault(
+        self,
+        run,
+        tick,
+        train_speed_fault_configuration,
+    ):
+        logger = Logger(run_id=run.id)
+        logger.resolve_train_speed_fault(
+            tick=tick,
+            train_speed_fault_configuration=train_speed_fault_configuration,
+        )
+        log_entry = (
+            ResolveFaultLogEntry.select()
+            .where(
+                ResolveFaultLogEntry.tick == tick
+                and ResolveFaultLogEntry.train_speed_fault_configuration
+                == train_speed_fault_configuration
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Train speed fault with configuration {train_speed_fault_configuration} "
+            f"resolved"
+        )
+        assert log_entry.run_id.id == run.id
+        assert (
+            log_entry.train_speed_fault_configuration == train_speed_fault_configuration
+        )
 
         assert log_entry.platform_blocked_fault_configuration is None
         assert log_entry.track_blocked_fault_configuration is None
