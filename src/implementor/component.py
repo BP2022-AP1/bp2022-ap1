@@ -369,6 +369,79 @@ def delete_train_speed_fault_configuration(options):
     return "", 501  # 204
 
 
+def get_platform_blocked_fault_configuration_ids(options):
+    """
+    :param options: A dictionary containing all the paramters for the Operations
+        options["simulationId"]: Specify id of simulation
+            if you only want to get the train-speed-fault configuration of a single simulation
+
+    """
+
+    # Implement your business logic here
+    # All the parameters are present in the options argument
+
+    return json.dumps(""), 501  # 200
+
+
+def create_platform_blocked_fault_configuration(body):
+    """
+
+    :param body: The parsed body of the request
+    """
+
+    # Implement your business logic here
+    # All the parameters are present in the options argument
+
+    return (
+        json.dumps(
+            {
+                "id": "<uuid>",
+            }
+        ),
+        501,  # 201,
+    )
+
+
+def get_platform_blocked_fault_configuration(options):
+    """
+    :param options: A dictionary containing all the paramters for the Operations
+        options["id"]
+
+    """
+
+    # Implement your business logic here
+    # All the parameters are present in the options argument
+
+    return json.dumps("<map>"), 501  # 200
+
+
+def update_platform_blocked_fault_configuration(options, body):
+    """
+    :param options: A dictionary containing all the paramters for the Operations
+        options["id"]
+
+    :param body: The parsed body of the request
+    """
+
+    # Implement your business logic here
+    # All the parameters are present in the options argument
+
+    return "", 501  # 200
+
+
+def delete_platform_blocked_fault_configuration(options):
+    """
+    :param options: A dictionary containing all the paramters for the Operations
+        options["id"]
+
+    """
+
+    # Implement your business logic here
+    # All the parameters are present in the options argument
+
+    return "", 501  # 204
+
+
 def get_interlocking_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
