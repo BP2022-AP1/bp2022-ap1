@@ -7551,7 +7551,7 @@
 											]
 										},
 										{
-											"name": "/component/fault-injection/schedule-blockedfault/:id",
+											"name": "/component/fault-injection/schedule-blocked-fault/:id",
 											"id": "824f25aa-e2d6-4fb5-ab91-574311c39b32",
 											"protocolProfileBehavior": {
 												"disableBodyPruning": true
