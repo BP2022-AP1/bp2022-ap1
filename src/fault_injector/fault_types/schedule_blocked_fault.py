@@ -2,9 +2,8 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
     ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.fault import Fault
-from src.spawner.spawner import Spawner
 from src.logger.logger import Logger
-
+from src.spawner.spawner import Spawner
 
 
 class ScheduleBlockedFault(Fault):
@@ -30,7 +29,9 @@ class ScheduleBlockedFault(Fault):
         """
         self.spawner.block_schedule(self.configuration.affected_element_id)
         self.logger.inject_schedule_blocked_fault(
-            tick=tick, schedule_blocked_fault_configuration=self.configuration.id, affected_element=self.configuration.affected_element_id
+            tick=tick,
+            schedule_blocked_fault_configuration=self.configuration.id,
+            affected_element=self.configuration.affected_element_id,
         )
         # - get schedule by id
         # - mark schedule as blocked
