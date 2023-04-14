@@ -33,8 +33,6 @@ class ScheduleBlockedFault(Fault):
             schedule_blocked_fault_configuration=self.configuration.id,
             affected_element=self.configuration.affected_element_id,
         )
-        # - get schedule by id
-        # - mark schedule as blocked
 
     def resolve_fault(self, tick: int):
         """resolves the previously injected ScheduleBlockedFault
