@@ -508,54 +508,6 @@
 							},
 							"response": [
 								{
-									"id": "0582a77c-5949-45ef-ab95-18b971dd9257",
-									"name": "Updated simulation configuration",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: apikey",
-												"key": "bp2022-ap1-api-key",
-												"value": "<API Key>"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/simulation/:id",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"simulation",
-												":id"
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "No Content",
-									"code": 204,
-									"_postman_previewlanguage": "text",
-									"header": [],
-									"cookie": []
-								},
-								{
 									"id": "b74c21de-4cfb-48b7-a868-fd2df00f5a84",
 									"name": "API token missing",
 									"originalRequest": {
@@ -696,6 +648,50 @@
 									"status": "Method Not Allowed",
 									"code": 405,
 									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "ffc4e031-4816-4fe0-bb78-912c2981cf80",
+									"name": "Updated simulation configuration",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "bp2022-ap1-api-key",
+												"value": "<API Key>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/simulation/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"simulation",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "Text",
 									"header": [],
 									"cookie": []
 								}
@@ -1249,54 +1245,6 @@
 							},
 							"response": [
 								{
-									"id": "85b55852-2387-4118-b3c0-d35a79959e01",
-									"name": "Updated schedule.",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											},
-											{
-												"description": "Added as a part of security scheme: apikey",
-												"key": "bp2022-ap1-api-key",
-												"value": "<API Key>"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/schedule/:id",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"schedule",
-												":id"
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "No Content",
-									"code": 204,
-									"_postman_previewlanguage": "text",
-									"header": [],
-									"cookie": []
-								},
-								{
 									"id": "9a037614-f7f7-4994-b2a3-621c014b3683",
 									"name": "API token missing",
 									"originalRequest": {
@@ -1437,6 +1385,50 @@
 									"status": "Method Not Allowed",
 									"code": 405,
 									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "9b0444df-066b-4803-9cc3-ae27f4b976eb",
+									"name": "Updated schedule.",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "bp2022-ap1-api-key",
+												"value": "<API Key>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/schedule/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"schedule",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "Text",
 									"header": [],
 									"cookie": []
 								}
@@ -2699,55 +2691,6 @@
 									},
 									"response": [
 										{
-											"id": "89a4af00-0ca0-4d82-82a0-30031e87c511",
-											"name": "Updated spawner configuration",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"description": "Added as a part of security scheme: apikey",
-														"key": "bp2022-ap1-api-key",
-														"value": "<API Key>"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/component/spawner/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"component",
-														"spawner",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id"
-														}
-													]
-												}
-											},
-											"status": "No Content",
-											"code": 204,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": []
-										},
-										{
 											"id": "651798d0-9c15-4d37-a54f-3eb7c15832f0",
 											"name": "API token missing",
 											"originalRequest": {
@@ -2891,6 +2834,51 @@
 											"status": "Method Not Allowed",
 											"code": 405,
 											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "097d994e-62a3-414c-9142-5f020663ee1f",
+											"name": "Updated spawner configuration",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: apikey",
+														"key": "bp2022-ap1-api-key",
+														"value": "<API Key>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/component/spawner/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"component",
+														"spawner",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "Text",
 											"header": [],
 											"cookie": []
 										}
@@ -3559,55 +3547,6 @@
 									},
 									"response": [
 										{
-											"id": "ed945a50-cadc-4cc3-9e60-63589bb47f23",
-											"name": "Updated interlocking configuration",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"description": "Added as a part of security scheme: apikey",
-														"key": "bp2022-ap1-api-key",
-														"value": "<API Key>"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/component/interlocking/:id",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"component",
-														"interlocking",
-														":id"
-													],
-													"variable": [
-														{
-															"key": "id"
-														}
-													]
-												}
-											},
-											"status": "No Content",
-											"code": 204,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": []
-										},
-										{
 											"id": "2f8a36e8-b56e-4d31-a92c-9a5465733b2c",
 											"name": "API token missing",
 											"originalRequest": {
@@ -3751,6 +3690,51 @@
 											"status": "Method Not Allowed",
 											"code": 405,
 											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": []
+										},
+										{
+											"id": "a6b6f86d-7302-4dda-b8b5-76646d4dcebf",
+											"name": "Updated interlocking configuration",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"description": "Added as a part of security scheme: apikey",
+														"key": "bp2022-ap1-api-key",
+														"value": "<API Key>"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/component/interlocking/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"component",
+														"interlocking",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "Text",
 											"header": [],
 											"cookie": []
 										}
@@ -4431,56 +4415,6 @@
 											},
 											"response": [
 												{
-													"id": "d5698e17-d8c6-41ba-8564-76d285033b81",
-													"name": "Updated train-speed-fault configuration",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"description": "Added as a part of security scheme: apikey",
-																"key": "bp2022-ap1-api-key",
-																"value": "<API Key>"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/train-speed-fault/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"component",
-																"fault-injection",
-																"train-speed-fault",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "No Content",
-													"code": 204,
-													"_postman_previewlanguage": "text",
-													"header": [],
-													"cookie": []
-												},
-												{
 													"id": "e8af0051-0815-4f0a-92b6-ee5dab999751",
 													"name": "API token missing",
 													"originalRequest": {
@@ -4627,6 +4561,52 @@
 													"status": "Method Not Allowed",
 													"code": 405,
 													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "b677843d-58b7-41b9-b36b-ca0fe8ee4f08",
+													"name": "Updated train-speed-fault configuration",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "bp2022-ap1-api-key",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/component/fault-injection/train-speed-fault/:id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"component",
+																"fault-injection",
+																"train-speed-fault",
+																":id"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "Text",
 													"header": [],
 													"cookie": []
 												}
@@ -5268,56 +5248,6 @@
 											},
 											"response": [
 												{
-													"id": "28588aec-aa47-4ff4-85e0-d6486d37d902",
-													"name": "Updated train-prio-fault configuration",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"description": "Added as a part of security scheme: apikey",
-																"key": "bp2022-ap1-api-key",
-																"value": "<API Key>"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/train-prio-fault/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"component",
-																"fault-injection",
-																"train-prio-fault",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "No Content",
-													"code": 204,
-													"_postman_previewlanguage": "text",
-													"header": [],
-													"cookie": []
-												},
-												{
 													"id": "46fb3f19-be48-4835-94dc-27b2e5740798",
 													"name": "API token missing",
 													"originalRequest": {
@@ -5464,6 +5394,52 @@
 													"status": "Method Not Allowed",
 													"code": 405,
 													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "5e093567-33eb-4aa0-8a46-bcecf31a282f",
+													"name": "Updated train-prio-fault configuration",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "bp2022-ap1-api-key",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/component/fault-injection/train-prio-fault/:id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"component",
+																"fault-injection",
+																"train-prio-fault",
+																":id"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "Text",
 													"header": [],
 													"cookie": []
 												}
@@ -6105,56 +6081,6 @@
 											},
 											"response": [
 												{
-													"id": "9a9827f7-bcd6-4f49-b09f-e6d6e902eb8f",
-													"name": "Updated track-speed-limit-fault configuration",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"description": "Added as a part of security scheme: apikey",
-																"key": "bp2022-ap1-api-key",
-																"value": "<API Key>"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/track-split-limit-fault/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"component",
-																"fault-injection",
-																"track-split-limit-fault",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "No Content",
-													"code": 204,
-													"_postman_previewlanguage": "text",
-													"header": [],
-													"cookie": []
-												},
-												{
 													"id": "0330b35c-8b52-42fc-99af-1a02eb6a04b1",
 													"name": "API token missing",
 													"originalRequest": {
@@ -6301,6 +6227,52 @@
 													"status": "Method Not Allowed",
 													"code": 405,
 													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "4a6da9ff-18c0-41a6-98db-42c254eb75e1",
+													"name": "Updated track-speed-limit-fault configuration",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "bp2022-ap1-api-key",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/component/fault-injection/track-split-limit-fault/:id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"component",
+																"fault-injection",
+																"track-split-limit-fault",
+																":id"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "Text",
 													"header": [],
 													"cookie": []
 												}
@@ -6948,56 +6920,6 @@
 											},
 											"response": [
 												{
-													"id": "2d1f2a0e-0c41-493a-bad3-a957ac77a401",
-													"name": "Updated track-blocked-fault configuration",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"description": "Added as a part of security scheme: apikey",
-																"key": "bp2022-ap1-api-key",
-																"value": "<API Key>"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/track-blocked-fault/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"component",
-																"fault-injection",
-																"track-blocked-fault",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "No Content",
-													"code": 204,
-													"_postman_previewlanguage": "text",
-													"header": [],
-													"cookie": []
-												},
-												{
 													"id": "239c62d5-8338-4f81-997a-e05bfdfa1161",
 													"name": "API token missing",
 													"originalRequest": {
@@ -7144,6 +7066,52 @@
 													"status": "Method Not Allowed",
 													"code": 405,
 													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "a5b53e9f-9011-4903-bd06-d560949f07f5",
+													"name": "Updated track-blocked-fault configuration",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "bp2022-ap1-api-key",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/component/fault-injection/track-blocked-fault/:id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"component",
+																"fault-injection",
+																"track-blocked-fault",
+																":id"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "Text",
 													"header": [],
 													"cookie": []
 												}
@@ -7785,56 +7753,6 @@
 											},
 											"response": [
 												{
-													"id": "a2f535fd-4f8f-426a-af7e-72eae855b150",
-													"name": "Updated schedule-blocked-fault configuration",
-													"originalRequest": {
-														"method": "PUT",
-														"header": [
-															{
-																"key": "Content-Type",
-																"value": "application/json"
-															},
-															{
-																"description": "Added as a part of security scheme: apikey",
-																"key": "bp2022-ap1-api-key",
-																"value": "<API Key>"
-															}
-														],
-														"body": {
-															"mode": "raw",
-															"raw": "{}",
-															"options": {
-																"raw": {
-																	"headerFamily": "json",
-																	"language": "json"
-																}
-															}
-														},
-														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
-															"host": [
-																"{{baseUrl}}"
-															],
-															"path": [
-																"component",
-																"fault-injection",
-																"schedule-blockedfault",
-																":id"
-															],
-															"variable": [
-																{
-																	"key": "id"
-																}
-															]
-														}
-													},
-													"status": "No Content",
-													"code": 204,
-													"_postman_previewlanguage": "text",
-													"header": [],
-													"cookie": []
-												},
-												{
 													"id": "a402e9c7-a2b9-4044-a78d-ce4beef81f2a",
 													"name": "API token missing",
 													"originalRequest": {
@@ -7981,6 +7899,52 @@
 													"status": "Method Not Allowed",
 													"code": 405,
 													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": []
+												},
+												{
+													"id": "c6dc0951-5c09-4117-82bb-1ff90933902e",
+													"name": "Updated schedule-blocked-fault configuration",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"description": "Added as a part of security scheme: apikey",
+																"key": "bp2022-ap1-api-key",
+																"value": "<API Key>"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"component",
+																"fault-injection",
+																"schedule-blockedfault",
+																":id"
+															],
+															"variable": [
+																{
+																	"key": "id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "Text",
 													"header": [],
 													"cookie": []
 												}
@@ -8319,7 +8283,8 @@
 		{
 			"id": "f197ccd0-aa80-4359-8291-710945bdf20f",
 			"key": "baseUrl",
-			"value": "/"
+			"value": "/",
+			"type": "any"
 		}
 	]
 }
