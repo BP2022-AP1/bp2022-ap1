@@ -135,3 +135,7 @@ class TrainPrioFaultConfiguration(Schema):
 
 class TrainSpeedFaultConfiguration(Schema):
     pass
+
+
+class PlatformBlockedFaultConfiguration(Schema):
+    pass

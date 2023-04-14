@@ -280,6 +280,62 @@ def delete_train_speed_fault_configuration(identifier):
     return impl.component.delete_train_speed_fault_configuration(options)
 
 
+@bp.route("/component/fault-injection/platform-blocked-fault", methods=["get"])
+def get_platform_blocked_fault_configuration_ids():
+    """Get all platform blocked fault configuration ids"""
+    options = {}
+    options["simulationId"] = request.args.get("simulationId")
+
+    return impl.component.get_platform_blocked_fault_configuration_ids(options)
+
+
+@bp.route("/component/fault-injection/platform-blocked-fault", methods=["post"])
+def create_platform_blocked_fault_configuration():
+    """Create a platform blocked fault configuration"""
+    schema = model.PlatformBlockedFaultConfiguration()
+
+    body = parser.parse(schema, request, location="json")
+
+    return impl.component.create_platform_blocked_fault_configuration(body)
+
+
+@bp.route(
+    "/component/fault-injection/platform-blocked-fault/<identifier>", methods=["get"]
+)
+def get_platform_blocked_fault_configuration(identifier):
+    """Get a platform blocked fault configuration"""
+    options = {}
+    options["identifier"] = identifier
+
+    return impl.component.get_platform_blocked_fault_configuration(options)
+
+
+@bp.route(
+    "/component/fault-injection/platform-blocked-fault/<identifier>", methods=["put"]
+)
+def update_platform_blocked_fault_configuration(identifier):
+    """Update a platform blocked fault configuration"""
+    options = {}
+    options["identifier"] = identifier
+
+    schema = model.PlatformBlockedFaultConfiguration()
+
+    body = parser.parse(schema, request, location="json")
+
+    return impl.component.update_platform_blocked_fault_configuration(options, body)
+
+
+@bp.route(
+    "/component/fault-injection/platform-blocked-fault/<identifier>", methods=["delete"]
+)
+def delete_platform_blocked_fault_configuration(identifier):
+    """Delete a platform blocked fault configuration"""
+    options = {}
+    options["identifier"] = identifier
+
+    return impl.component.delete_platform_blocked_fault_configuration(options)
+
+
 @bp.route("/component/interlocking", methods=["get"])
 def get_interlocking_configuration_ids():
     """Get all interlocking configuration ids"""
