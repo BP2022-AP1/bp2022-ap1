@@ -453,7 +453,7 @@ class TestLogger:
         assert log_entry.train_prio_fault_configuration is None
 
     @freeze_time()
-    def resolve_platform_blocked_fault(
+    def test_resolve_platform_blocked_fault(
         self,
         run,
         tick,
@@ -493,7 +493,7 @@ class TestLogger:
         assert log_entry.train_speed_fault_configuration is None
 
     @freeze_time()
-    def resolve_track_blocked_fault(
+    def test_resolve_track_blocked_fault(
         self,
         run,
         tick,
@@ -533,7 +533,7 @@ class TestLogger:
         assert log_entry.train_speed_fault_configuration is None
 
     @freeze_time()
-    def resolve_track_speed_limit_fault(
+    def test_resolve_track_speed_limit_fault(
         self,
         run,
         tick,
@@ -572,7 +572,7 @@ class TestLogger:
         assert log_entry.train_speed_fault_configuration is None
 
     @freeze_time()
-    def resolve_schedule_blocked_fault(
+    def test_resolve_schedule_blocked_fault(
         self,
         run,
         tick,
@@ -612,7 +612,7 @@ class TestLogger:
         assert log_entry.train_speed_fault_configuration is None
 
     @freeze_time()
-    def resolve_train_prio_fault(
+    def test_resolve_train_prio_fault(
         self,
         run,
         tick,
@@ -651,7 +651,7 @@ class TestLogger:
         assert log_entry.train_speed_fault_configuration is None
 
     @freeze_time()
-    def resolve_train_speed_fault(
+    def test_resolve_train_speed_fault(
         self,
         run,
         tick,
