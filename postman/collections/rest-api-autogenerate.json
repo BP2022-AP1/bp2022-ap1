@@ -7453,14 +7453,14 @@
 															}
 														],
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7489,14 +7489,14 @@
 															}
 														],
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7525,14 +7525,14 @@
 															}
 														],
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7618,14 +7618,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7668,14 +7668,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7718,14 +7718,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7764,14 +7764,14 @@
 															}
 														},
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7836,14 +7836,14 @@
 															}
 														],
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7878,14 +7878,14 @@
 															}
 														],
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
@@ -7914,14 +7914,14 @@
 															}
 														],
 														"url": {
-															"raw": "{{baseUrl}}/component/fault-injection/schedule-blockedfault/:id",
+															"raw": "{{baseUrl}}/component/fault-injection/schedule-blocked-fault/:id",
 															"host": [
 																"{{baseUrl}}"
 															],
 															"path": [
 																"component",
 																"fault-injection",
-																"schedule-blockedfault",
+																"schedule-blocked-fault",
 																":id"
 															],
 															"variable": [
