@@ -36,14 +36,14 @@ class TestSpawner:
             schedule_type="TrainSchedule",
             strategy_type="RegularScheduleStrategy",
             train_schedule_train_type=self.TRAIN_TYPES[0],
-            regular_strategy_start_tick=self.START_TICKS[0],
+            strategy_start_tick=self.START_TICKS[0],
             regular_strategy_frequency=self.FREQUENCIES[0],
         )
         schedule_configuration1 = ScheduleConfiguration(
             schedule_type="TrainSchedule",
             strategy_type="RegularScheduleStrategy",
             train_schedule_train_type=self.TRAIN_TYPES[1],
-            regular_strategy_start_tick=self.START_TICKS[1],
+            strategy_start_tick=self.START_TICKS[1],
             regular_strategy_frequency=self.FREQUENCIES[1],
         )
         schedule_configuration0.save()

@@ -1,5 +1,5 @@
 import marshmallow as marsh
-from peewee import ForeignKeyField, IntegerField, TextField
+from peewee import FloatField, ForeignKeyField, IntegerField, TextField
 
 from src.base_model import BaseModel
 
@@ -13,10 +13,15 @@ class ScheduleConfiguration(BaseModel):
         schedule_type = marsh.fields.String(required=True)
         strategy_type = marsh.fields.String(required=True)
 
+        strategy_start_tick = marsh.fields.Integer()
+        strategy_end_tick = marsh.fields.Integer()
+
         train_schedule_train_type = marsh.fields.String()
 
-        regular_strategy_start_tick = marsh.fields.Integer()
         regular_strategy_frequency = marsh.fields.Integer()
+
+        random_strategy_trains_per_1000_ticks = marsh.fields.Float()
+        random_strategy_seed = marsh.fields.Integer()
 
         def _make(self, data: dict) -> "ScheduleConfiguration":
             """Constructs a ScheduleConfiguration from a dict
@@ -26,13 +31,18 @@ class ScheduleConfiguration(BaseModel):
             """
             return ScheduleConfiguration(**data)
 
-    schedule_type = TextField(null=False)
-    strategy_type = TextField(null=False)
+    schedule_type = TextField()
+    strategy_type = TextField()
 
-    train_schedule_train_type = TextField()
+    strategy_start_tick = IntegerField(null=True)
+    strategy_end_tick = IntegerField(null=True)
 
-    regular_strategy_start_tick = IntegerField()
-    regular_strategy_frequency = IntegerField()
+    train_schedule_train_type = TextField(null=True)
+
+    regular_strategy_frequency = IntegerField(null=True)
+
+    random_strategy_trains_per_1000_ticks = FloatField(null=True)
+    random_strategy_seed = IntegerField(null=True)
 
 
 class ScheduleConfigurationXSimulationPlatform(BaseModel):

@@ -171,8 +171,8 @@ class InjectFaultLogEntry(LogEntry):
         train_prio_fault_configuration = marsh.fields.UUID(required=False)
         train_speed_fault_configuration = marsh.fields.UUID(required=False)
         affected_element = marsh.fields.String(required=True)
-        value_before = marsh.fields.String()
-        value_after = marsh.fields.String()
+        value_before = marsh.fields.String(required=False)
+        value_after = marsh.fields.String(required=False)
 
         def _make(self, data: dict) -> "InjectFaultLogEntry":
             return InjectFaultLogEntry(**data)

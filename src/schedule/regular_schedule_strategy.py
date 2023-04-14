@@ -6,7 +6,9 @@ class RegularScheduleStrategy(ScheduleStrategy):
     """A schedule strategy that spawns vehicles at regular intervals."""
 
     @classmethod
-    def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
+    def from_schedule_configuration(
+        cls, schedule_configuration: ScheduleConfiguration
+    ) -> "RegularScheduleStrategy":
         """Constructs a RegularScheduleStrategy from a ScheduleConfiguration.
 
         :param schedule_configuration: The ScheduleConfiguration
@@ -14,20 +16,21 @@ class RegularScheduleStrategy(ScheduleStrategy):
         """
         assert schedule_configuration.strategy_type == "RegularScheduleStrategy"
         return cls(
-            start_tick=schedule_configuration.regular_strategy_start_tick,
+            start_tick=schedule_configuration.strategy_start_tick,
+            end_tick=schedule_configuration.strategy_end_tick,
             frequency=schedule_configuration.regular_strategy_frequency,
         )
 
-    start_tick: int
     frequency: int
 
-    def __init__(self, start_tick: int, frequency: int):
+    def __init__(self, start_tick: int, end_tick: int, frequency: int):
         """Initializer for RegularScheduleStrategy
 
         :param start_tick: The tick when train spawning should start
+        :param end_tick: The tick when train spawning should end
         :param frequency: The frquency at which trains should spawn
         """
-        self.start_tick = start_tick
+        super().__init__(start_tick, end_tick)
         self.frequency = frequency
 
     def should_spawn(self, tick: int) -> bool:
@@ -37,5 +40,6 @@ class RegularScheduleStrategy(ScheduleStrategy):
         :return: True if a vehicle should be spawned, False otherwise
         """
         return (
-            tick >= self.start_tick and (tick - self.start_tick) % self.frequency == 0
+            super().should_spawn(tick)
+            and (tick - self.start_tick) % self.frequency == 0
         )
