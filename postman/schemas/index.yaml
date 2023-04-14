@@ -427,7 +427,7 @@ paths:
         Insert a new track-speed-limit-fault component. Returns the id of the
         configuration object.
 
-  /component/fault-injection/track-split-limit-fault/{id}:
+  /component/fault-injection/track-speed-limit-fault/{id}:
     delete:
       operationId: delete_track_speed_limit_fault_configuration
       parameters:
