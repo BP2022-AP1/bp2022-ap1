@@ -27,7 +27,7 @@ def create_schedule_blocked_fault_configuration():
 
 
 @bp.route(
-    "/component/fault-injection/schedule-blockedfault/<identifier>", methods=["get"]
+    "/component/fault-injection/schedule-blocked-fault/<identifier>", methods=["get"]
 )
 def get_schedule_blocked_fault_configuration(identifier):
     """Get a schedule blocked fault configuration"""
@@ -38,7 +38,7 @@ def get_schedule_blocked_fault_configuration(identifier):
 
 
 @bp.route(
-    "/component/fault-injection/schedule-blockedfault/<identifier>", methods=["put"]
+    "/component/fault-injection/schedule-blocked-fault/<identifier>", methods=["put"]
 )
 def update_schedule_blocked_fault_configuration(identifier):
     """Update a schedule blocked fault configuration"""
@@ -53,7 +53,7 @@ def update_schedule_blocked_fault_configuration(identifier):
 
 
 @bp.route(
-    "/component/fault-injection/schedule-blockedfault/<identifier>", methods=["delete"]
+    "/component/fault-injection/schedule-blocked-fault/<identifier>", methods=["delete"]
 )
 def delete_schedule_blocked_fault_configuration(identifier):
     """Delete a schedule blocked fault configuration"""
@@ -139,7 +139,7 @@ def create_track_speed_limit_fault_configuration():
 
 
 @bp.route(
-    "/component/fault-injection/track-split-limit-fault/<identifier>", methods=["get"]
+    "/component/fault-injection/track-speed-limit-fault/<identifier>", methods=["get"]
 )
 def get_track_speed_limit_fault_configuration(identifier):
     """Get a track speed limit fault configuration"""
@@ -150,7 +150,7 @@ def get_track_speed_limit_fault_configuration(identifier):
 
 
 @bp.route(
-    "/component/fault-injection/track-split-limit-fault/<identifier>", methods=["put"]
+    "/component/fault-injection/track-speed-limit-fault/<identifier>", methods=["put"]
 )
 def update_track_speed_limit_fault_configuration(identifier):
     """Update a track speed limit fault configuration"""
@@ -165,7 +165,7 @@ def update_track_speed_limit_fault_configuration(identifier):
 
 
 @bp.route(
-    "/component/fault-injection/track-split-limit-fault/<identifier>",
+    "/component/fault-injection/track-speed-limit-fault/<identifier>",
     methods=["delete"],
 )
 def delete_track_speed_limit_fault_configuration(identifier):

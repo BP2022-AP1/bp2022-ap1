@@ -119,7 +119,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Schedule"
       responses:
-        "204":
+        "200":
           description: Updated schedule.
         "401":
           description: API token missing
@@ -185,7 +185,7 @@ paths:
         Insert a new schedule-blocked-faul component. Returns the id of the
         configuration object.
 
-  /component/fault-injection/schedule-blockedfault/{id}:
+  /component/fault-injection/schedule-blocked-fault/{id}:
     delete:
       operationId: delete_schedule_blocked_fault_configuration
       parameters:
@@ -241,7 +241,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated schedule-blocked-fault configuration
         "401":
           description: API token missing
@@ -362,7 +362,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated track-blocked-fault configuration
         "401":
           description: API token missing
@@ -427,7 +427,7 @@ paths:
         Insert a new track-speed-limit-fault component. Returns the id of the
         configuration object.
 
-  /component/fault-injection/track-split-limit-fault/{id}:
+  /component/fault-injection/track-speed-limit-fault/{id}:
     delete:
       operationId: delete_track_speed_limit_fault_configuration
       parameters:
@@ -483,7 +483,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated track-speed-limit-fault configuration
         "401":
           description: API token missing
@@ -602,7 +602,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrainPrioFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated train-prio-fault configuration
         "401":
           description: API token missing
@@ -721,7 +721,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated train-speed-fault configuration
         "401":
           description: API token missing
@@ -842,7 +842,7 @@ paths:
             schema:
               $ref: "#/components/schemas/InterlockingConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated interlocking configuration
         "401":
           description: API token missing
@@ -963,7 +963,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SpawnerConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated spawner configuration
         "401":
           description: API token missing
@@ -1172,7 +1172,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SimulationConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated simulation configuration
         "401":
           description: API token missing
