@@ -13,7 +13,7 @@ from src.wrapper.simulation_objects import Track
 class TrackSpeedLimitFault(Fault):
     """A fault affecting the speed limit of tracks."""
 
-    configuration: "TrackSpeedLimitFaultConfiguration"
+    configuration: TrackSpeedLimitFaultConfiguration
     old_speed_limit: float
     track: Track
     wrapper: SimulationObjectUpdatingComponent
