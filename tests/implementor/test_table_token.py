@@ -83,7 +83,9 @@ class TestTokenSuccessfulInit:
         for key in expected_dict.keys():
             assert serialized_obj[key] == expected_dict[key]
         with pytest.raises(KeyError):
-            serialized_obj["hashedToken"]  # pylint: disable=pointless-statement
+            # We don't need the value of serialized_obj["hashedToken"] because it throws an error
+            # pylint: disable-next=pointless-statement
+            serialized_obj["hashedToken"]
 
     @pytest.mark.parametrize(
         "init_dict, expected_values",
