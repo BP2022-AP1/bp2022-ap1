@@ -1,0 +1,60 @@
+import pytest
+
+from tests.decorators import recreate_db_setup
+from src.logger.logger import Logger
+from src.schedule.schedule import Schedule, ScheduleConfiguration
+from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule, Spawner
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import ScheduleBlockedFaultConfiguration
+from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
+
+class TestScheduleBlockedFault:
+    """Tests for ScheduleBlockedFault"""
+
+    class MockTraCIWrapper:
+        """Mock class for a TraCI wrapper"""
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
+
+    @pytest.fixture
+    def logger(self, run):
+        return Logger(run.id)
+    
+    @pytest.fixture
+    def schedule(self):
+        schedule_configuration = ScheduleConfiguration(schedule_type="TrainSchedule",
+            strategy_type="RegularScheduleStrategy",
+            train_schedule_train_type="cargo",
+            regular_strategy_start_tick=10,
+            regular_strategy_frequency=100,)
+        schedule_configuration.save()
+        return schedule_configuration
+    
+    @pytest.fixture
+    def spawner_configuration(self, schedule):
+        configuration = SpawnerConfiguration()
+        configuration.save()
+        SpawnerConfigurationXSchedule(spawner_configuration_id=configuration.id, schedule_configuration_id=schedule.id).save()
+        return configuration
+    
+    @pytest.fixture
+    def spawner(self, spawner_configuration, logger):
+        spawner = Spawner(logger=logger, configuration=spawner_configuration, traci_wrapper=self.MockTraCIWrapper())
+        return spawner
+    
+    @pytest.fixture
+    def schedule_blocked_fault_configuration(self, schedule):
+        return ScheduleBlockedFaultConfiguration.create(**{"start_tick": 30, "end_tick": 300, "description": "test ScheduleBlockedFault", "affected_element_id": schedule.id})
+    
+    @pytest.fixture
+    def schedule_blocked_fault(
+        self, 
+        schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration, logger: Logger, spawner: Spawner
+    ):
+        return ScheduleBlockedFault(configuration=schedule_blocked_fault_configuration, logger=logger, spawner=spawner)
+    
+    def test_inject_schedule_blocked_fault(self, tick, schedule_blocked_fault: ScheduleBlockedFault):
+        schedule_blocked_fault.inject_fault(tick)
+
+

@@ -2,14 +2,25 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
     ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.fault import Fault
-from src.spawner.spawner import ISpawnerDisruptor
+from src.spawner.spawner import Spawner
+from src.logger.logger import Logger
+
 
 
 class ScheduleBlockedFault(Fault):
     """A fault that blocks a platform"""
 
     configuration: ScheduleBlockedFaultConfiguration
-    spawner: ISpawnerDisruptor
+    spawner: Spawner
+
+    def __init__(
+        self,
+        configuration,
+        logger: Logger,
+        spawner: Spawner,
+    ):
+        super().__init__(configuration, logger)
+        self.spawner = spawner
 
     def inject_fault(self, tick: int):
         """inject ScheduleBlockedFault into the given component
@@ -19,7 +30,7 @@ class ScheduleBlockedFault(Fault):
         """
         self.spawner.block_schedule(self.configuration.affected_element_id)
         self.logger.inject_schedule_blocked_fault(
-            tick=tick, schedule_blocked_fault_configuration=self.configuration.id
+            tick=tick, schedule_blocked_fault_configuration=self.configuration.id, affected_element=self.configuration.affected_element_id
         )
         # - get schedule by id
         # - mark schedule as blocked
