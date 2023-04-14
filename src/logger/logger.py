@@ -9,6 +9,7 @@ from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     InjectFaultLogEntry,
     RemoveFahrstrasseLogEntry,
+    ResolveFaultLogEntry,
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
@@ -331,7 +332,14 @@ class Logger:
         :param platform_blocked_fault_configuration: The configuration of the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        ResolveFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Platform blocked fault with configuration "
+            f"{platform_blocked_fault_configuration} resolved",
+            run_id=self.run_id,
+            platform_blocked_fault_configuration=platform_blocked_fault_configuration,
+        )
 
     def resolve_track_blocked_fault(
         self, tick: int, track_blocked_fault_configuration: UUID
@@ -343,7 +351,14 @@ class Logger:
         :param track_blocked_fault_configuration: The configuration of the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        ResolveFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Track blocked fault with configuration "
+            f"{track_blocked_fault_configuration} resolved",
+            run_id=self.run_id,
+            track_blocked_fault_configuration=track_blocked_fault_configuration,
+        )
 
     def resolve_track_speed_limit_fault(
         self, tick: int, track_speed_limit_fault_configuration: UUID
@@ -355,7 +370,14 @@ class Logger:
         :param track_speed_limit_fault_configuration: The configuration of the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        ResolveFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Track speed limit fault with configuration "
+            f"{track_speed_limit_fault_configuration} resolved",
+            run_id=self.run_id,
+            track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
+        )
 
     def resolve_schedule_blocked_fault(
         self, tick: int, schedule_blocked_fault_configuration: UUID
@@ -367,9 +389,16 @@ class Logger:
         :param schedule_blocked_fault_configuration: The configuration of the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        ResolveFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Schedule blocked fault with configuration "
+            f"{schedule_blocked_fault_configuration} resolved",
+            run_id=self.run_id,
+            schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
+        )
 
-    def resolve_train_prio_fault_configuration(
+    def resolve_train_prio_fault(
         self, tick: int, train_prio_fault_configuration: UUID
     ) -> Type[None]:
         """
@@ -379,7 +408,14 @@ class Logger:
         :param train_prio_fault_configuration: The configuration of the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        ResolveFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train prio fault with configuration "
+            f"{train_prio_fault_configuration} resolved",
+            run_id=self.run_id,
+            train_prio_fault_configuration=train_prio_fault_configuration,
+        )
 
     def resolve_train_speed_fault(
         self, tick: int, train_speed_fault_configuration: UUID
@@ -391,4 +427,11 @@ class Logger:
         :param train_speed_fault_configuration: The configuration of the fault
         :rtype: None
         """
-        pass  # not implemented yet # pylint: disable=W0107
+        ResolveFaultLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train speed fault with configuration "
+            f"{train_speed_fault_configuration} resolved",
+            run_id=self.run_id,
+            train_speed_fault_configuration=train_speed_fault_configuration,
+        )
