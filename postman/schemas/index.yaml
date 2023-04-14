@@ -185,7 +185,7 @@ paths:
         Insert a new schedule-blocked-faul component. Returns the id of the
         configuration object.
 
-  /component/fault-injection/schedule-blockedfault/{id}:
+  /component/fault-injection/schedule-blocked-fault/{id}:
     delete:
       operationId: delete_schedule_blocked_fault_configuration
       parameters:
