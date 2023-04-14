@@ -61,7 +61,7 @@ def update_schedule(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_schedule(options):
