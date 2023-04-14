@@ -12,7 +12,6 @@ class Token(BaseModel):
 
         permission = marsh.fields.String(required=True)
         name = marsh.fields.String(required=True)
-        hashedToken = marsh.fields.String(required=True)
 
         def _make(self, data: dict) -> "Token":
             return Token(**data)

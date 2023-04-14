@@ -69,7 +69,6 @@ class TestTokenSuccessfulInit:
                 {
                     "name": "Owner",
                     "permission": "admin",
-                    "hashedToken": "hash",
                 },
             ),
         ],
@@ -83,6 +82,10 @@ class TestTokenSuccessfulInit:
         assert isinstance(serialized_obj["id"], str)
         for key in expected_dict.keys():
             assert serialized_obj[key] == expected_dict[key]
+        with pytest.raises(KeyError):
+            # We don't need the value of serialized_obj["hashedToken"] because it throws an error
+            # pylint: disable-next=pointless-statement
+            serialized_obj["hashedToken"]
 
     @pytest.mark.parametrize(
         "init_dict, expected_values",
@@ -91,7 +94,6 @@ class TestTokenSuccessfulInit:
                 {
                     "name": "Owner",
                     "permission": "admin",
-                    "hashedToken": "hash",
                 },
                 {
                     "name": "Owner",
@@ -107,6 +109,18 @@ class TestTokenSuccessfulInit:
             init_dict,
         )
         assert isinstance(obj, Token)
+        obj.hashedToken = "hash"
         assert isinstance(obj.id, UUID)
         for key in expected_values.keys():
             assert getattr(obj, key) == expected_values[key]
+
+    def test_deserialization_with_hashed_token(self):
+        """Test that an object of a class cannot be deserialized."""
+        with pytest.raises(marsh.exceptions.ValidationError):
+            Token.Schema().load(
+                {
+                    "name": "Owner",
+                    "permission": "admin",
+                    "hashedToken": "hash",
+                },
+            )
