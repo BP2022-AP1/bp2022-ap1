@@ -83,7 +83,24 @@ class TestScheduleBlockedFault:
             spawner=spawner,
         )
 
+    # It would be better to test if trains spawn after inject_fault.
+    # As of now this is not really possible, the tests should therefore edited in the future
+    # pylint: disable=protected-access
     def test_inject_schedule_blocked_fault(
         self, tick, schedule_blocked_fault: ScheduleBlockedFault
     ):
         schedule_blocked_fault.inject_fault(tick)
+        assert schedule_blocked_fault.spawner.get_schedule(
+            schedule_blocked_fault.configuration.affected_element_id
+        )._blocked
+
+    def test_resolve_schedule_blocked_fault(
+        self, tick, schedule_blocked_fault: ScheduleBlockedFault
+    ):
+        schedule = schedule_blocked_fault.spawner.get_schedule(
+            schedule_blocked_fault.configuration.affected_element_id
+        )
+        schedule.block()
+        assert schedule._blocked
+        schedule_blocked_fault.resolve_fault(tick=tick)
+        assert not schedule._blocked
