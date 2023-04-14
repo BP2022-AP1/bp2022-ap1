@@ -61,7 +61,7 @@ def update_schedule_blocked_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_schedule_blocked_fault_configuration(options):
@@ -134,7 +134,7 @@ def update_track_blocked_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_track_blocked_fault_configuration(options):
@@ -207,7 +207,7 @@ def update_track_speed_limit_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_track_speed_limit_fault_configuration(options):
@@ -280,7 +280,7 @@ def update_train_prio_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_train_prio_fault_configuration(options):
@@ -353,7 +353,7 @@ def update_train_speed_fault_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_train_speed_fault_configuration(options):
@@ -426,7 +426,7 @@ def update_interlocking_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_interlocking_configuration(options):
@@ -499,7 +499,7 @@ def update_spawner_configuration(options, body):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    return "", 501  # 200
 
 
 def delete_spawner_configuration(options):
