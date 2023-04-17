@@ -37,18 +37,14 @@ class TestCorrectFilledDict:
 
     def test_serialization(self, object_as_dict: dict):
         """Test that an object of a class can be serialized."""
-        obj = InterlockingConfiguration.create(
-            **object_as_dict,
-        )
+        obj_dict = InterlockingConfiguration.create(**object_as_dict).to_dict()
 
         for key in object_as_dict.keys():
-            assert getattr(obj, key) == object_as_dict[key]
+            assert obj_dict[key] == object_as_dict[key]
 
     def test_deserialization_full_dict(self, object_as_dict: dict):
         """Test that an object of a class can be deserialized."""
-        obj = InterlockingConfiguration.Schema().load(
-            object_as_dict,
-        )
+        obj = InterlockingConfiguration.from_dict(object_as_dict)
         assert isinstance(obj, InterlockingConfiguration)
         assert isinstance(obj.id, UUID)
         for key in object_as_dict.keys():
