@@ -35,6 +35,26 @@ class SimulationObject(ABC):
         """
         raise NotImplementedError()
 
+    @classmethod
+    @abstractmethod
+    def from_simulation(simulation_object) -> "SimulationObject":
+        """This method is called to initialize the object from the simulator.
+        When using SUMO, the simulation will not be started when this method is called.
+
+        :param simulation_object: The simulation object to initialize this object from.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def from_running_simulation(self) -> None:
+        """This method is called, when all other simulation-connected objects are initialized.
+        You can establish links between objects in this method (e.g. between two edges).
+
+        When this method is called, the simulation is still not started,
+        but you have access to all the other simulation objects via `self.updater`.
+        """
+        raise NotImplementedError()
+
 
 class Node(SimulationObject):
     """A point somewhere in the simulation where `Track`s meet"""
@@ -166,6 +186,10 @@ class Track(SimulationObject):
 
     def add_subscriptions(self) -> int:
         return constants.VAR_MAXSPEED
+
+    def from_simulation(self, edge) -> "Track":
+        # see: https://sumo.dlr.de/pydoc/sumolib.net.edge.html
+        pass
 
 
 class Platform(SimulationObject):
