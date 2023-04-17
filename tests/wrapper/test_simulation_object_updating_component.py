@@ -29,14 +29,20 @@ class TestSimulationObjectUpdatingComponent:
         self.platform = Platform("fancy-platform")
         self.switch = Switch("fancy-switch")
 
-        component = SimulationObjectUpdatingComponent(
-            sumo_configuration="sumo-config/example.scenario.sumocfg"
-        )
+        component = SimulationObjectUpdatingComponent()
         component.simulation_objects.append(self.signal)
         component.simulation_objects.append(self.track)
         component.simulation_objects.append(self.platform)
         component.simulation_objects.append(self.switch)
 
+        return component
+
+    @pytest.fixture
+    def configured_component(self, traffic_update):
+        # pylint: disable=unused-argument
+        component = SimulationObjectUpdatingComponent(
+            sumo_configuration="sumo-config/example.scenario.sumocfg"
+        )
         return component
 
     def test_tracks(self, component):
@@ -63,5 +69,9 @@ class TestSimulationObjectUpdatingComponent:
         assert self.platform not in component.switches
         assert self.switch in component.switches
 
-    def test_load(self, component):
-        pass
+    def test_load(self, configured_component):
+        # pylint: disable=unused-argument
+        assert len(configured_component.signals) == 8
+        assert len(configured_component.tracks) == 38
+        assert len(configured_component.platforms) == 3
+        assert len(configured_component.switches) == 4

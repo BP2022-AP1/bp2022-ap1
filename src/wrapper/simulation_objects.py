@@ -272,8 +272,9 @@ class Platform(SimulationObject):
     def from_simulation(
         simulation_object, updater: "SimulationObjectUpdatingComponent"
     ) -> "Platform":
-        # Nothing to do (we dont load trains from the sim)
-        pass
+        result = Platform(identifier=simulation_object.id)
+        result.updater = updater
+        return result
 
     def from_running_simulation(self) -> None:
         # Nothing to do (we dont load trains from the sim)

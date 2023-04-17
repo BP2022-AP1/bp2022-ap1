@@ -1,3 +1,4 @@
+from os.path import dirname, join
 from typing import List
 
 import sumolib
@@ -89,9 +90,12 @@ class SimulationObjectUpdatingComponent(Component):
             simulation_object.update(subscription_results[simulation_object.traci_id])
 
     def _fetch_initial_simulation_objects(self):
+        folder = dirname(self._sumo_configuration)
         inputs = next(sumolib.xml.parse(self._sumo_configuration, "input"))
-        net_file = inputs["net-file"][0].getAttribute("value")
-        additional_file = inputs["additional-files"][0].getAttribute("value")
+        net_file = join(folder, inputs["net-file"][0].getAttribute("value"))
+        additional_file = join(
+            folder, inputs["additional-files"][0].getAttribute("value")
+        )
         net = sumolib.net.readNet(net_file)
         platforms = list(sumolib.xml.parse(additional_file, "busStop")) + list(
             sumolib.xml.parse(additional_file, "trainStop")
