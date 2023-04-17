@@ -1,6 +1,11 @@
 import pytest
 
 from src.implementor.models import Run, SimulationConfiguration, Token
+from src.interlocking_component.route_controller import IInterlockingDisruptor
+from src.logger.logger import Logger
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 @pytest.fixture
@@ -21,3 +26,18 @@ def simulation_configuration(token):
 @pytest.fixture
 def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
+
+
+@pytest.fixture
+def logger(run):
+    return Logger(run_id=run.id)
+
+
+@pytest.fixture
+def interlocking():
+    return IInterlockingDisruptor()
+
+
+@pytest.fixture
+def wrapper():
+    return SimulationObjectUpdatingComponent()
