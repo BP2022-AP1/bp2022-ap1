@@ -41,7 +41,7 @@ class TestTrainSchedule:
     @pytest.fixture
     def schedule(self, platform_ids: list[str], schedule_id: str):
         strategy = RegularScheduleStrategy(
-            start_tick=self.START_TICK, frequency=self.FREQUENCY
+            start_tick=self.START_TICK, end_tick=None, frequency=self.FREQUENCY
         )
         return TrainSchedule(
             train_type=self.TRAIN_TYPE,

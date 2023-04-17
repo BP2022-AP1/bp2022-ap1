@@ -8,50 +8,42 @@ class TestRegularScheduleStrategy:
 
     @pytest.fixture
     def regular_strategy(self) -> RegularScheduleStrategy:
-        return RegularScheduleStrategy(start_tick=1000, frequency=100)
+        return RegularScheduleStrategy(start_tick=1000, end_tick=10000, frequency=100)
 
-    @pytest.mark.parametrize(
-        "strategy,tick", (("regular_strategy", tick) for tick in [0, 900])
-    )
+    @pytest.mark.parametrize("tick", [0, 900])
     def test_not_spawning_before_start_tick(
         self,
-        strategy: RegularScheduleStrategy,
+        regular_strategy: RegularScheduleStrategy,
         tick: int,
-        request: pytest.FixtureRequest,
     ):
-        strategy = request.getfixturevalue(strategy)
-        assert not strategy.should_spawn(tick=tick)
+        assert not regular_strategy.should_spawn(tick=tick)
 
-    @pytest.mark.parametrize("strategy,tick", [("regular_strategy", 1000)])
+    @pytest.mark.parametrize("tick", [20000])
+    def test_not_spawning_after_end_tick(
+        self, regular_strategy: RegularScheduleStrategy, tick: int
+    ):
+        assert not regular_strategy.should_spawn(tick=tick)
+
+    @pytest.mark.parametrize("tick", [1000])
     def test_spawning_at_start_tick(
         self,
-        strategy: RegularScheduleStrategy,
+        regular_strategy: RegularScheduleStrategy,
         tick: int,
-        request: pytest.FixtureRequest,
     ):
-        strategy = request.getfixturevalue(strategy)
-        assert strategy.should_spawn(tick=tick)
+        assert regular_strategy.should_spawn(tick=tick)
 
-    @pytest.mark.parametrize(
-        "strategy,tick", (("regular_strategy", tick) for tick in [1100, 1200, 1300])
-    )
+    @pytest.mark.parametrize("tick", [1100, 1200, 1300])
     def test_spawning_regularly(
         self,
-        strategy: RegularScheduleStrategy,
+        regular_strategy: RegularScheduleStrategy,
         tick: int,
-        request: pytest.FixtureRequest,
     ):
-        strategy = request.getfixturevalue(strategy)
-        assert strategy.should_spawn(tick=tick)
+        assert regular_strategy.should_spawn(tick=tick)
 
-    @pytest.mark.parametrize(
-        "strategy,tick", (("regular_strategy", tick) for tick in [1105, 1250, 1355])
-    )
+    @pytest.mark.parametrize("tick", [1105, 1250, 1355])
     def test_not_spawning_in_between(
         self,
-        strategy: RegularScheduleStrategy,
+        regular_strategy: RegularScheduleStrategy,
         tick: int,
-        request: pytest.FixtureRequest,
     ):
-        strategy = request.getfixturevalue(strategy)
-        assert not strategy.should_spawn(tick=tick)
+        assert not regular_strategy.should_spawn(tick=tick)
