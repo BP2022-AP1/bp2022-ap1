@@ -90,7 +90,9 @@ class SimulationObjectUpdatingComponent(Component):
             simulation_object.update(subscription_results[simulation_object.traci_id])
 
     def _fetch_initial_simulation_objects(self):
-        net_file = sumolib.xml.parse(self._sumo_configuration, "net-file")
+        net_file = next(
+            sumolib.xml.parse(self._sumo_configuration, "net-file")
+        ).getAttribute("value")
         net = sumolib.net.readNet(net_file)
 
         # Tracks
@@ -98,16 +100,16 @@ class SimulationObjectUpdatingComponent(Component):
             Track.from_simulation(edge, self) for edge in net.getEdges()
         ]
 
-        self._simulation_objects += [
-            Node.from_simulation(node, self)
-            for node in net.getNodes()
-            if node.getConnections() < 3
-        ]
+        # self._simulation_objects += [
+        #    Node.from_simulation(node, self)
+        #    for node in net.getNodes()
+        #    if len(node.getConnections()) < 3
+        # ]
 
         self._simulation_objects += [
             Switch.from_simulation(node, self)
             for node in net.getNodes()
-            if node.getConnections() >= 3
+            if len(node.getConnections()) >= 3
         ]
 
         # signals
