@@ -1,5 +1,4 @@
 import pytest
-from traci import edge
 
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
@@ -56,9 +55,14 @@ class TestPlatformBlockedFault:
             wrapper=wrapper,
             interlocking=interlocking,
         )
-    
+
     def test_inject_platform_blocked_fault(
-            self, tick, combine, platform_blocked_fault: PlatformBlockedFault, platform: Platform
+        self,
+        tick,
+        # pylint: disable-next=unused-argument
+        combine,
+        platform_blocked_fault: PlatformBlockedFault,
+        platform: Platform,
     ):
         assert not platform.blocked
         with pytest.raises(NotImplementedError):
@@ -66,7 +70,13 @@ class TestPlatformBlockedFault:
         assert platform.blocked
 
     def test_resolve_platform_blocked_fault(
-            self, tick, combine, platform_blocked_fault: PlatformBlockedFault, platform: Platform):
+        self,
+        tick,
+        # pylint: disable-next=unused-argument
+        combine,
+        platform_blocked_fault: PlatformBlockedFault,
+        platform: Platform,
+    ):
         with pytest.raises(NotImplementedError):
             platform_blocked_fault.inject_fault(tick)
         assert platform.blocked

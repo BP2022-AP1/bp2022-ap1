@@ -18,6 +18,8 @@ class PlatformBlockedFault(Fault):
     wrapper: SimulationObjectUpdatingComponent
     interlocking: IInterlockingDisruptor
 
+    # pylint: disable=duplicate-code
+    # Otherwise another inheritance layer would be needed.
     def __init__(
         self,
         configuration,
@@ -29,6 +31,7 @@ class PlatformBlockedFault(Fault):
         self.wrapper = wrapper
         self.interlocking = interlocking
 
+    # pylint: enable=duplicate-code
     def inject_fault(self, tick: int):
         """inject PlatformBlockedFault into the given component
 
