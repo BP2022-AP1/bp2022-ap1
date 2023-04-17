@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
 
 import marshmallow as marsh
+from interlocking import interlockinginterface
 from peewee import BooleanField
 
 from src.base_model import BaseModel
+from src.interlocking_component.router import Router
+from src.wrapper.simulation_objects import Track, Train
 
 
 class InterlockingConfiguration(BaseModel):
@@ -106,16 +109,55 @@ class RouteController(IRouteController):
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    def is_new_fahrstrasse_needed(self, train: "Train", track_segment: "Track"):
+    interlocking: interlockinginterface = None
+    router: Router = None
+
+    def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
         :param train: the train that may need a new fahrstasse
         :type Train: Train
-        :param track_segment: the track_segment it just entered
+        :param track_segment: the track it just entered
         :type Track: Track
         """
-        raise NotImplementedError()
+        route = None
+        for route_candidate in self.interlocking.active_routes:
+            interlocking_track_candidat = route_candidate.contains_segment(
+                track.identifier.split("-re")[0]
+            )
+            # The -re part of the identifier must be cut,
+            # because the interlocking does not know of reverse directions.
+
+            if interlocking_track_candidat is not None:
+                route = route_candidate
+        if route is None or route.get_last_segment_of_route != track.identifier:
+            return
+
+        new_route = self.router.get_route(track, train.timetable[0].track)
+        # new_route contains a list of signals from starting signal to end signal of the new route.
+
+        for end_node_candidat in new_route:
+            for interlocking_route in self.interlocking.routes:
+                if (
+                    interlocking_route.start_signal.name == new_route[0]
+                    and interlocking_route.end_signal.name == end_node_candidat
+                ):
+                    # This sets the route in the interlocking
+                    self.interlocking.set_route(interlocking_route.yaramo_route)
+                    # This does not check if the route can even be set and does not handle,
+                    # if it can not be set this simulation step.
+
+                    # This frees the least route in the interlocking
+                    self.interlocking.free_route(route.yaramo_route)
+                    # This may not be the best place (time) to do so,
+                    # as the route schould be freed when the train leaves the route
+                    # and not when it is still on the last segment.
+
+                    # This sets the route in SUMO.
+                    # The Interlocking Route has the same id as the SUMO route.
+                    train.route = interlocking_route.id
+                    return
 
     def check_all_fahrstrassen_for_failures(self):
         """This method checks for all trains, if their fahrstrassen and routes are still valid."""
