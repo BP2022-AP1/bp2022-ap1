@@ -3,6 +3,7 @@ from enum import Enum
 from typing import List, Tuple
 
 from traci import constants, edge, trafficlight, vehicle
+from sumolib import net
 
 
 class SimulationObject(ABC):
@@ -35,9 +36,11 @@ class SimulationObject(ABC):
         """
         raise NotImplementedError()
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def from_simulation(simulation_object) -> "SimulationObject":
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "SimulationObject":
         """This method is called to initialize the object from the simulator.
         When using SUMO, the simulation will not be started when this method is called.
 
@@ -187,8 +190,16 @@ class Track(SimulationObject):
     def add_subscriptions(self) -> int:
         return constants.VAR_MAXSPEED
 
-    def from_simulation(self, edge) -> "Track":
+    @staticmethod
+    def from_simulation(simulation_object: net.edge, updater) -> "Track":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.edge.html
+        result = Track(simulation_object.getID())
+        result.updater = updater
+
+        return result
+
+    def from_running_simulation(self) -> None:
+        # we don't need references to other nodes
         pass
 
 
