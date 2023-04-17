@@ -25,7 +25,6 @@ class TestTrackSpeedLimitFault:
     def track(self) -> Track:
         return Track("fault injector track")
 
-    @pytest.fixture
     def combine_track_and_wrapper(
         self, track: Track, wrapper: SimulationObjectUpdatingComponent
     ):
@@ -71,29 +70,31 @@ class TestTrackSpeedLimitFault:
     def test_inject_track_speed_limit_fault(
         self,
         tick,
-        combine_track_and_wrapper,
         track_speed_limit_fault: TrackSpeedLimitFault,
         track: Track,
+        wrapper: SimulationObjectUpdatingComponent,
+        # speed_update is needed to be called in order to avoid traci errors
+        # pylint: disable-next=unused-argument
         speed_update,
     ):
-        # pylint: disable=unused-argument
+        self.combine_track_and_wrapper(track=track, wrapper=wrapper)
         track.max_speed = 100
         assert track.max_speed == 100
         with pytest.raises(NotImplementedError):
             track_speed_limit_fault.inject_fault(tick=tick)
-        # comment in following line if `insert_track_speed_limit_changed`
-        # in RouteController is implemented
         assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
 
     def test_resolve_track_speed_limit_fault(
         self,
         tick,
-        combine_track_and_wrapper,
         track_speed_limit_fault: TrackSpeedLimitFault,
         track: Track,
+        wrapper: SimulationObjectUpdatingComponent,
+        # speed_update is needed to be called in order to avoid traci errors
+        # pylint: disable-next=unused-argument
         speed_update,
     ):
-        # pylint: disable=unused-argument
+        self.combine_track_and_wrapper(track=track, wrapper=wrapper)
         track.max_speed = 100
         with pytest.raises(NotImplementedError):
             track_speed_limit_fault.inject_fault(tick=tick)
