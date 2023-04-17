@@ -124,10 +124,10 @@ class RouteController(IRouteController):
         route = None
         for route_candidate in self.interlocking.active_routes:
             interlocking_track_candidat = route_candidate.contains_segment(
-                track.identifier
+                track.identifier.split("-re")[0]
             )
-            # This assumes, that track.identifier does not contain '-re',
-            # as the interlocking does not know of reverse directions.
+            # The -re part of the identifier must be cut,
+            # because the interlocking does not know of reverse directions.
 
             if interlocking_track_candidat is not None:
                 route = route_candidate
