@@ -44,7 +44,7 @@ class Communicator(Thread):
         components: List[Component] = None,
         max_tick: int = 86_400,
         sumo_port: int = None,
-        sumo_configuration: str = "sumo-config/example.scenario.sumocfg",
+        sumo_configuration: str = "data/sumo-config/example.scenario.sumocfg",
     ):
         """Creates a new Communicator object"""
         Thread.__init__(self)

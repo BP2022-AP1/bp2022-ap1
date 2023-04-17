@@ -4,13 +4,13 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
-        <node-files value="sumo-config/example1.nod.xml"/>
-        <edge-files value="sumo-config/example1.edg.xml"/>
-        <connection-files value="sumo-config/example1.con.xml"/>
+        <node-files value="data/sumo-config/example1.nod.xml"/>
+        <edge-files value="data/sumo-config/example1.edg.xml"/>
+        <connection-files value="data/sumo-config/example1.con.xml"/>
     </input>
 
     <output>
-        <output-file value="sumo-config/example1.net.xml"/>
+        <output-file value="data/sumo-config/example1.net.xml"/>
     </output>
 
     <railway>
