@@ -25,7 +25,7 @@ class TestPlatformBlockedFault:
         return Platform("fault injector platform")
 
     @pytest.fixture
-    def combine(self, platform: Platform, wrapper: SimulationObjectUpdatingComponent):
+    def combine_platform_and_wrapper(self, platform: Platform, wrapper: SimulationObjectUpdatingComponent):
         platform.updater = wrapper
         wrapper.simulation_objects.append(platform)
         return platform, wrapper
@@ -59,8 +59,9 @@ class TestPlatformBlockedFault:
     def test_inject_platform_blocked_fault(
         self,
         tick,
+        # combine_platform_and_wrapper is needed to combine both mentioned
         # pylint: disable-next=unused-argument
-        combine,
+        combine_platform_and_wrapper,
         platform_blocked_fault: PlatformBlockedFault,
         platform: Platform,
     ):
@@ -72,8 +73,9 @@ class TestPlatformBlockedFault:
     def test_resolve_platform_blocked_fault(
         self,
         tick,
+        # combine_platform_and_wrapper is needed to combine both mentioned
         # pylint: disable-next=unused-argument
-        combine,
+        combine_platform_and_wrapper,
         platform_blocked_fault: PlatformBlockedFault,
         platform: Platform,
     ):

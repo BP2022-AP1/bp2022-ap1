@@ -56,7 +56,7 @@ class PlatformBlockedFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if Platform is None:
+        if self.platform is None:
             raise ValueError(
                 "Platform not set, probably due to not injecting the fault"
             )

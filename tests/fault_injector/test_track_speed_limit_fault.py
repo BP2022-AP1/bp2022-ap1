@@ -26,7 +26,7 @@ class TestTrackSpeedLimitFault:
         return Track("fault injector track")
 
     @pytest.fixture
-    def combine(self, track: Track, wrapper: SimulationObjectUpdatingComponent):
+    def combine_track_and_wrapper(self, track: Track, wrapper: SimulationObjectUpdatingComponent):
         track.updater = wrapper
         wrapper.simulation_objects.append(track)
         return track, wrapper
@@ -69,7 +69,7 @@ class TestTrackSpeedLimitFault:
     def test_inject_track_speed_limit_fault(
         self,
         tick,
-        combine,
+        combine_track_and_wrapper,
         track_speed_limit_fault: TrackSpeedLimitFault,
         track: Track,
         speed_update,
@@ -86,7 +86,7 @@ class TestTrackSpeedLimitFault:
     def test_resolve_track_speed_limit_fault(
         self,
         tick,
-        combine,
+        combine_track_and_wrapper,
         track_speed_limit_fault: TrackSpeedLimitFault,
         track: Track,
         speed_update,
