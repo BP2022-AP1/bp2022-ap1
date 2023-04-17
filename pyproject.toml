@@ -24,6 +24,11 @@ interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "2be5
 flask = "^2.2.3"
 webargs = "^8.2.0"
 freezegun = "^1.2.2"
+yaramo = { git = "https://github.com/simulate-digital-rail/yaramo" }
+orm-importer = {path = "/mnt/c/Uni/BP/Yaramo/orm-importer"}
+planpro-exporter = { git = "https://github.com/simulate-digital-rail/planpro-exporter" }
+planpro-importer = { git = "https://github.com/simulate-digital-rail/planpro-importer" }
+railway-route-generator = { git = "https://github.com/simulate-digital-rail/railway-route-generator" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
