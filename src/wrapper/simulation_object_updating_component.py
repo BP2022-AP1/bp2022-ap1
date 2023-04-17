@@ -93,17 +93,26 @@ class SimulationObjectUpdatingComponent(Component):
         net_file = sumolib.xml.parse(self._sumo_configuration, "net-file")
         net = sumolib.net.readNet(net_file)
 
-        [Track.from_simulation(edge) for edge in net.getEdges()]
+        # Tracks
+        self._simulation_objects += [
+            Track.from_simulation(edge, self) for edge in net.getEdges()
+        ]
 
-        for node in net.getNodes():
-            # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
-            if node.getConnections() >= 3:
-                Switch.from_simulation(node)
-            else:
-                Node.from_simulation(node)
+        self._simulation_objects += [
+            Node.from_simulation(node, self)
+            for node in net.getNodes()
+            if node.getConnections() < 3
+        ]
 
-        for signal in net.getTrafficLights():
-            # see:
-            Signal.from_config(signal)
+        self._simulation_objects += [
+            Switch.from_simulation(node, self)
+            for node in net.getNodes()
+            if node.getConnections() >= 3
+        ]
+
+        # signals
+        self._simulation_objects += [
+            Signal.from_simulation(signal, self) for signal in net.getTrafficLights()
+        ]
 
         # platforms
