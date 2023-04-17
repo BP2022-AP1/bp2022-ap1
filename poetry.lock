@@ -716,8 +716,10 @@ yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
 zipp = "3.8.1"
 
 [package.source]
-type = "directory"
-url = "../Yaramo/orm-importer"
+type = "git"
+url = "https://github.com/Lietze/orm-importer.git"
+reference = "54cbdd4"
+resolved_reference = "54cbdd429e9a5bf6fd69e562194674131fbe83ae"
 
 [[package]]
 name = "overpy"
@@ -1327,4 +1329,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c88da61d2aecc804242129e174e69c583aa2199ce1bd1ec445a255eb77557a1e"
+content-hash = "2b9f6245bc2ff3a314e9978767c97bb8554a2494ccb7fd2dfcaeea8b1136030c"
