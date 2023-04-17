@@ -24,13 +24,6 @@ class TestPlatformBlockedFault:
     def platform(self) -> Platform:
         return Platform("fault injector platform")
 
-    def combine_platform_and_wrapper(
-        self, platform: Platform, wrapper: SimulationObjectUpdatingComponent
-    ):
-        platform.updater = wrapper
-        wrapper.simulation_objects.append(platform)
-        return platform, wrapper
-
     @pytest.fixture
     def platform_blocked_fault_configuration(self, platform: Platform):
         return PlatformBlockedFaultConfiguration.create(
@@ -62,9 +55,10 @@ class TestPlatformBlockedFault:
         tick,
         platform_blocked_fault: PlatformBlockedFault,
         platform: Platform,
-        wrapper: SimulationObjectUpdatingComponent,
+        # the following argument is a needed fixture
+        # pylint: disable-next=unused-argument
+        combine_platform_and_wrapper,
     ):
-        self.combine_platform_and_wrapper(platform=platform, wrapper=wrapper)
         assert not platform.blocked
         with pytest.raises(NotImplementedError):
             platform_blocked_fault.inject_fault(tick)
@@ -75,9 +69,10 @@ class TestPlatformBlockedFault:
         tick,
         platform_blocked_fault: PlatformBlockedFault,
         platform: Platform,
-        wrapper: SimulationObjectUpdatingComponent,
+        # the following argument is a needed fixture
+        # pylint: disable-next=unused-argument
+        combine_platform_and_wrapper,
     ):
-        self.combine_platform_and_wrapper(platform=platform, wrapper=wrapper)
         with pytest.raises(NotImplementedError):
             platform_blocked_fault.inject_fault(tick)
         assert platform.blocked
