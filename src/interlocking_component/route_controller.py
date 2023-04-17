@@ -1,26 +1,9 @@
 from abc import ABC, abstractmethod
 
-import marshmallow as marsh
 from interlocking import interlockinginterface
-from peewee import BooleanField
 
-from src.base_model import BaseModel
 from src.interlocking_component.router import Router
 from src.wrapper.simulation_objects import Track, Train
-
-
-class InterlockingConfiguration(BaseModel):
-    """This class contains all fields needed to configure the Interlocking and RouteController"""
-
-    class Schema(BaseModel.Schema):
-        """Schema for the InterlockingConfiguration"""
-
-        dynamicRouting = marsh.fields.Boolean()
-
-        def _make(self, data: dict) -> "InterlockingConfiguration":
-            return InterlockingConfiguration(**data)
-
-    dynamicRouting = BooleanField(default=False)
 
 
 class IRouteController(ABC):
