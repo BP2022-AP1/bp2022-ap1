@@ -20,7 +20,9 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration, Token
-from src.interlocking_component.interlocking_configuration import InterlockingConfiguration
+from src.interlocking_component.interlocking_configuration import (
+    InterlockingConfiguration,
+)
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     InjectFaultLogEntry,
