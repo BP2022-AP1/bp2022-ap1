@@ -1,10 +1,10 @@
 import pytest
 from traci import edge
 
-from src.fault_injector.fault_types.track_speed_limit_fault import (
-    TrackSpeedLimitFault,
+from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
+from src.fault_injector.fault_types.track_speed_limit_fault import TrackSpeedLimitFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
@@ -22,23 +22,11 @@ class TestTrackSpeedLimitFault:
         pass
 
     @pytest.fixture
-    def logger(self, run):
-        return Logger(run.id)
-
-    @pytest.fixture
-    def interlocking(self):
-        return IInterlockingDisruptor()
-
-    @pytest.fixture
     def track(self) -> Track:
         return Track("fault injector track")
 
     @pytest.fixture
-    def wrapper(self):
-        return SimulationObjectUpdatingComponent()
-
-    @pytest.fixture
-    def combine(self, track, wrapper):
+    def combine(self, track: Track, wrapper: SimulationObjectUpdatingComponent):
         track.updater = wrapper
         wrapper.simulation_objects.append(track)
         return track, wrapper
@@ -93,7 +81,7 @@ class TestTrackSpeedLimitFault:
             track_speed_limit_fault.inject_fault(tick=tick)
         # comment in following line if `insert_track_speed_limit_changed`
         # in RouteController is implemented
-        # assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
+        assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
 
     def test_resolve_track_speed_limit_fault(
         self,
@@ -109,4 +97,4 @@ class TestTrackSpeedLimitFault:
             track_speed_limit_fault.inject_fault(tick=tick)
         with pytest.raises(NotImplementedError):
             track_speed_limit_fault.resolve_fault(tick=tick)
-        # assert track.max_speed == track_speed_limit_fault.old_speed_limit
+        assert track.max_speed == track_speed_limit_fault.old_speed_limit
