@@ -6,6 +6,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
+from src.wrapper.simulation_objects import Platform, Track
 
 
 @pytest.fixture
@@ -41,3 +42,24 @@ def interlocking():
 @pytest.fixture
 def wrapper():
     return SimulationObjectUpdatingComponent()
+
+
+@pytest.fixture
+def track() -> Track:
+    return Track("fault injector track")
+
+
+@pytest.fixture
+def combine_track_and_wrapper(track: Track, wrapper: SimulationObjectUpdatingComponent):
+    track.updater = wrapper
+    wrapper.simulation_objects.append(track)
+    return track, wrapper
+
+
+@pytest.fixture
+def combine_platform_and_wrapper(
+    platform: Platform, wrapper: SimulationObjectUpdatingComponent
+):
+    platform.updater = wrapper
+    wrapper.simulation_objects.append(platform)
+    return platform, wrapper
