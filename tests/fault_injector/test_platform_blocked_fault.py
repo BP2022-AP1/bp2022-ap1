@@ -25,7 +25,9 @@ class TestPlatformBlockedFault:
         return Platform("fault injector platform")
 
     @pytest.fixture
-    def combine_platform_and_wrapper(self, platform: Platform, wrapper: SimulationObjectUpdatingComponent):
+    def combine_platform_and_wrapper(
+        self, platform: Platform, wrapper: SimulationObjectUpdatingComponent
+    ):
         platform.updater = wrapper
         wrapper.simulation_objects.append(platform)
         return platform, wrapper
