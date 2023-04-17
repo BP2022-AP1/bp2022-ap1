@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List, Tuple
 
-from traci import constants, edge, trafficlight, vehicle
 from sumolib import net
+from traci import constants, edge, trafficlight, vehicle
 
 
 class SimulationObject(ABC):
@@ -110,6 +110,17 @@ class Signal(Node):
     def add_subscriptions(self) -> int:
         return 0
 
+    @staticmethod
+    def from_simulation(
+        simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Signal":
+        result = Signal(simulation_object.getID())
+
+        return result
+
+    def from_running_simulation(self) -> None:
+        pass
+
 
 class Switch(Node):
     """A switch in the simulation which can point either left or right
@@ -154,6 +165,18 @@ class Switch(Node):
 
     def add_subscriptions(self) -> int:
         return 0  # We don't have to update anything from the simulator
+
+    @staticmethod
+    def from_simulation(
+        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Switch":
+        # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
+        result = Switch(simulation_object.getID())
+
+        return result
+
+    def from_running_simulation(self) -> None:
+        pass
 
 
 class Track(SimulationObject):
@@ -245,6 +268,17 @@ class Platform(SimulationObject):
     def add_subscriptions(self) -> int:
         return 0  # We don't have to update anything from the simulator
 
+    @staticmethod
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Platform":
+        # Nothing to do (we dont load trains from the sim)
+        pass
+
+    def from_running_simulation(self) -> None:
+        # Nothing to do (we dont load trains from the sim)
+        pass
+
 
 class Train(SimulationObject):
     """A train driving around in the simulation."""
@@ -319,6 +353,15 @@ class Train(SimulationObject):
 
         def add_subscriptions(self) -> int:
             return constants.VAR_MAXSPEED
+
+        @staticmethod
+        def from_simulation(
+            simulation_object, updater: "SimulationObjectUpdatingComponent"
+        ) -> "Train.TrainType":
+            pass
+
+        def from_running_simulation(self) -> None:
+            pass
 
     _position: Tuple[float, float]
     _route: str
@@ -457,3 +500,14 @@ class Train(SimulationObject):
             + constants.VAR_ROAD_ID
             + constants.VAR_SPEED
         )
+
+    @staticmethod
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Train":
+        # Nothing to do (we dont load trains from the sim)
+        pass
+
+    def from_running_simulation(self) -> None:
+        # Nothing to do (we dont load trains from the sim)
+        pass
