@@ -89,10 +89,13 @@ class SimulationObjectUpdatingComponent(Component):
             simulation_object.update(subscription_results[simulation_object.traci_id])
 
     def _fetch_initial_simulation_objects(self):
-        net_file = next(
-            sumolib.xml.parse(self._sumo_configuration, "net-file")
-        ).getAttribute("value")
+        inputs = next(sumolib.xml.parse(self._sumo_configuration, "input"))
+        net_file = inputs["net-file"][0].getAttribute("value")
+        additional_file = inputs["additional-files"][0].getAttribute("value")
         net = sumolib.net.readNet(net_file)
+        platforms = list(sumolib.xml.parse(additional_file, "busStop")) + list(
+            sumolib.xml.parse(additional_file, "trainStop")
+        )
 
         # Tracks
         self._simulation_objects += [
@@ -105,6 +108,7 @@ class SimulationObjectUpdatingComponent(Component):
         #    if len(node.getConnections()) < 3
         # ]
 
+        # switches
         self._simulation_objects += [
             Switch.from_simulation(node, self)
             for node in net.getNodes()
@@ -117,3 +121,6 @@ class SimulationObjectUpdatingComponent(Component):
         ]
 
         # platforms
+        self._simulation_objects += [
+            Platform.from_simulation(platform, self) for platform in platforms
+        ]

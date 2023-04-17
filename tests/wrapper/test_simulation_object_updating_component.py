@@ -29,7 +29,9 @@ class TestSimulationObjectUpdatingComponent:
         self.platform = Platform("fancy-platform")
         self.switch = Switch("fancy-switch")
 
-        component = SimulationObjectUpdatingComponent()
+        component = SimulationObjectUpdatingComponent(
+            sumo_configuration="sumo-config/example.scenario.sumocfg"
+        )
         component.simulation_objects.append(self.signal)
         component.simulation_objects.append(self.track)
         component.simulation_objects.append(self.platform)
@@ -60,3 +62,6 @@ class TestSimulationObjectUpdatingComponent:
         assert self.track not in component.switches
         assert self.platform not in component.switches
         assert self.switch in component.switches
+
+    def test_load(self, component):
+        pass
