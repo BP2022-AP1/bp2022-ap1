@@ -32,6 +32,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
+    TrainEnterBlockSectionLogEntry,
+    TrainLeaveBlockSectionLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -59,6 +61,8 @@ tables: list[Type[BaseModel]] = [
     CreateFahrstrasseLogEntry,
     RemoveFahrstrasseLogEntry,
     SetSignalLogEntry,
+    TrainEnterBlockSectionLogEntry,
+    TrainLeaveBlockSectionLogEntry,
     InjectFaultLogEntry,
     ResolveFaultLogEntry,
     TrackBlockedFaultConfiguration,

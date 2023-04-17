@@ -85,6 +85,16 @@ def state_after():
 
 
 @pytest.fixture
+def block_section_id():
+    return "Test Block Section id"
+
+
+@pytest.fixture
+def block_section_length():
+    return 101.53
+
+
+@pytest.fixture
 def platform_blocked_fault_configuration():
     return PlatformBlockedFaultConfiguration.create(
         start_tick=1,

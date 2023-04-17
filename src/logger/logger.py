@@ -13,11 +13,14 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
+    TrainEnterBlockSectionLogEntry,
+    TrainLeaveBlockSectionLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
 
 
+# pylint: disable=too-many-public-methods
 class Logger:
     """
     The logger class is used to log the events of the simulation
@@ -151,6 +154,52 @@ class Logger:
             signal_id=signal_id,
             state_before=state_before,
             state_after=state_after,
+        )
+
+    def train_enter_block_section(
+        self, tick: int, train_id: str, block_section_id: str, block_section_length: str
+    ) -> Type[None]:
+        """
+        This function should be called when a train enters a block section. This should include a
+        train identifier, the block section identifier and the length of the block section.
+        :param tick: The current simulation tick
+        :param train_id: The id of the train
+        :param block_section_id: The id of the block section
+        :param block_section_length: The length of the block section
+        :rtype: None
+        """
+        TrainEnterBlockSectionLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} entered block section with ID {block_section_id} "
+            f"with length {block_section_length}",
+            run_id=self.run_id,
+            train_id=train_id,
+            block_section_id=block_section_id,
+            block_section_length=block_section_length,
+        )
+
+    def train_leave_block_section(
+        self, tick: int, train_id: str, block_section_id: str, block_section_length: str
+    ) -> Type[None]:
+        """
+        This function should be called when a train leaves a block section. This should include a
+        train identifier, the block section identifier and the length of the block section.
+        :param tick: The current simulation tick
+        :param train_id: The id of the train
+        :param block_section_id: The id of the block section
+        :param block_section_length: The length of the block section
+        :rtype: None
+        """
+        TrainLeaveBlockSectionLogEntry.create(
+            timestamp=datetime.now(),
+            tick=tick,
+            message=f"Train with ID {train_id} left block section with ID {block_section_id} "
+            f"with length {block_section_length}",
+            run_id=self.run_id,
+            train_id=train_id,
+            block_section_id=block_section_id,
+            block_section_length=block_section_length,
         )
 
     def inject_platform_blocked_fault(
