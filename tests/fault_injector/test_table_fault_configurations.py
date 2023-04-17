@@ -150,7 +150,7 @@ class TestCorrectFilledDict:
             - set(["id", "created_at", "updated_at"])
         )
         for key in none_fields:
-            assert getattr(obj, key) is None
+            assert serialized_obj[key] is None
 
     def test_deserialization_full_dict(
         self, table_class: BaseModel, object_as_dict: dict
