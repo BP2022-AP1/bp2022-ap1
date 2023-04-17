@@ -4,6 +4,7 @@ import marshmallow as marsh
 from peewee import (
     BigIntegerField,
     DateTimeField,
+    FloatField,
     ForeignKeyField,
     IntegerField,
     TextField,
@@ -156,6 +157,42 @@ class SetSignalLogEntry(LogEntry):
     signal_id = UUIDField(null=False)
     state_before = IntegerField(null=False)
     state_after = IntegerField(null=False)
+
+
+class TrainEnterBlockSectionLogEntry(LogEntry):
+    """A LogEntry that represents the entry of a train into a block section."""
+
+    class Schema(LogEntry.Schema):
+        """The marshmallow schema for the TrainEnterBlockSectionLogEntry model."""
+
+        train_id = marsh.fields.String(required=True)
+        block_section_id = marsh.fields.String(required=True)
+        block_section_length = marsh.fields.Float(required=True)
+
+        def _make(self, data: dict) -> "TrainEnterBlockSectionLogEntry":
+            return TrainEnterBlockSectionLogEntry(**data)
+
+    train_id = TextField(null=False)
+    block_section_id = TextField(null=False)
+    block_section_length = FloatField(null=False)
+
+
+class TrainLeaveBlockSectionLogEntry(LogEntry):
+    """A LogEntry that represents the leaving of a train from a block section."""
+
+    class Schema(LogEntry.Schema):
+        """The marshmallow schema for the TrainLeaveBlockSectionLogEntry model."""
+
+        train_id = marsh.fields.String(required=True)
+        block_section_id = marsh.fields.String(required=True)
+        block_section_length = marsh.fields.Float(required=True)
+
+        def _make(self, data: dict) -> "TrainLeaveBlockSectionLogEntry":
+            return TrainLeaveBlockSectionLogEntry(**data)
+
+    train_id = TextField(null=False)
+    block_section_id = TextField(null=False)
+    block_section_length = FloatField(null=False)
 
 
 class InjectFaultLogEntry(LogEntry):

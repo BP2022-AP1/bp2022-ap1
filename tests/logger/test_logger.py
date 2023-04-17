@@ -10,6 +10,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
+    TrainEnterBlockSectionLogEntry,
+    TrainLeaveBlockSectionLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -17,6 +19,7 @@ from src.logger.logger import Logger
 from tests.decorators import recreate_db_setup
 
 
+# pylint: disable=too-many-public-methods
 class TestLogger:
     """Class for testing logger functions."""
 
@@ -165,6 +168,70 @@ class TestLogger:
         assert log_entry.signal_id == signal_id
         assert log_entry.state_before == state_before
         assert log_entry.state_after == state_after
+
+    @freeze_time()
+    def test_train_enter_block_section(
+        self, run, tick, train_id, block_section_id, block_section_length
+    ):
+        logger = Logger(run_id=run.id)
+        logger.train_enter_block_section(
+            tick=tick,
+            train_id=train_id,
+            block_section_id=block_section_id,
+            block_section_length=block_section_length,
+        )
+        log_entry = (
+            TrainEnterBlockSectionLogEntry.select()
+            .where(
+                TrainEnterBlockSectionLogEntry.tick == tick
+                and TrainEnterBlockSectionLogEntry.train_id == train_id
+                and TrainEnterBlockSectionLogEntry.block_section_id == block_section_id
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Train with ID {train_id} entered block section with ID {block_section_id} with "
+            f"length {block_section_length}"
+        )
+        assert log_entry.run_id.id == run.id
+        assert log_entry.train_id == train_id
+        assert log_entry.block_section_id == block_section_id
+        assert log_entry.block_section_length == block_section_length
+
+    @freeze_time()
+    def test_train_leave_block_section(
+        self, run, tick, train_id, block_section_id, block_section_length
+    ):
+        logger = Logger(run_id=run.id)
+        logger.train_leave_block_section(
+            tick=tick,
+            train_id=train_id,
+            block_section_id=block_section_id,
+            block_section_length=block_section_length,
+        )
+        log_entry = (
+            TrainLeaveBlockSectionLogEntry.select()
+            .where(
+                TrainLeaveBlockSectionLogEntry.tick == tick
+                and TrainLeaveBlockSectionLogEntry.train_id == train_id
+                and TrainLeaveBlockSectionLogEntry.block_section_id == block_section_id
+            )
+            .first()
+        )
+        assert log_entry.timestamp == datetime.now()
+        assert log_entry.tick == tick
+        assert (
+            log_entry.message
+            == f"Train with ID {train_id} left block section with ID {block_section_id} with "
+            f"length {block_section_length}"
+        )
+        assert log_entry.run_id.id == run.id
+        assert log_entry.train_id == train_id
+        assert log_entry.block_section_id == block_section_id
+        assert log_entry.block_section_length == block_section_length
 
     @freeze_time()
     def test_inject_platform_blocked_fault(
