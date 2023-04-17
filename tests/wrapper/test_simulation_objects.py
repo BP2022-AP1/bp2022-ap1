@@ -10,7 +10,6 @@ from src.wrapper.simulation_objects import Platform, Signal, Switch, Track, Trai
 @pytest.fixture
 def traffic_update(monkeypatch):
     def set_traffic_light_state(identifier: str, state: str) -> None:
-        assert identifier == "fancy-signal"
         assert state in ("rr", "GG")
 
     monkeypatch.setattr(trafficlight, "setRedYellowGreenState", set_traffic_light_state)
@@ -106,7 +105,7 @@ def platform() -> Platform:
 
 
 @pytest.fixture
-def souc():
+def souc(traffic_update):
     return SimulationObjectUpdatingComponent()
 
 
