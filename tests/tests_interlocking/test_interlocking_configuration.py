@@ -1,10 +1,7 @@
 from uuid import UUID
 
-import marshmallow as marsh
-import peewee
 import pytest
 
-from src.base_model import BaseModel
 from src.interlocking_component.interlocking_configuration import (
     InterlockingConfiguration,
 )
