@@ -5,7 +5,6 @@ import traci
 
 from src.component import Component
 from src.wrapper.simulation_objects import (
-    Node,
     Platform,
     Signal,
     SimulationObject,
