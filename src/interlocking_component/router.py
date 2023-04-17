@@ -21,6 +21,7 @@ class Router:
         """
         start_node = start_track.to_node
         penultimate_node = end_track.from_node
+
         # The next part is dijkstra as a first mvp.
         # This will lead to deadlocks if two trains drive in opposite directions.
         distances = {}
@@ -30,6 +31,9 @@ class Router:
         current_node = start_node
         while True:
             sorted_distances = sorted(distances.items(), key=lambda item: item[1])
+            # This sorts the distances based on the values in the dict.
+            # sorted_distances is a array of the dict with items of the dict as tupels.
+
             last_node = current_node
             current_node = sorted_distances[current_index][0]
             previous_nodes[current_node] = last_node
