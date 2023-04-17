@@ -137,12 +137,12 @@ class TestCorrectFilledDict:
 
     def test_serialization(self, table_class: BaseModel, object_as_dict: dict):
         """Test that an object of a class can be serialized."""
-        obj = table_class.create(
+        serialized_obj = table_class.create(
             **object_as_dict,
-        )
+        ).to_dict()
 
         for key in object_as_dict.keys():
-            assert getattr(obj, key) == object_as_dict[key]
+            assert serialized_obj[key] == object_as_dict[key]
 
         none_fields = (
             set(table_class.Schema().fields.keys())
