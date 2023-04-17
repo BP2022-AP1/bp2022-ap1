@@ -74,13 +74,13 @@ class SimulationObjectUpdatingComponent(Component):
     def __init__(
         self,
         logger=None,
-        sumo_configuration="sumo-config/example.scenario.sumocfg",
+        sumo_configuration=None,
     ):
         super().__init__(priority=10, logger=logger)
         self._simulation_objects = []
         self._sumo_configuration = sumo_configuration
-
-        self._fetch_initial_simulation_objects()
+        if sumo_configuration is not None:
+            self._fetch_initial_simulation_objects()
 
     def next_tick(self, tick: int):
         subscription_results = traci.simulation.getAllSubscriptionResults()
