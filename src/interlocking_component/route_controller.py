@@ -1,5 +1,10 @@
 from abc import ABC, abstractmethod
 
+from interlocking import interlockinginterface
+
+from src.interlocking_component.router import Router
+from src.wrapper.simulation_objects import Track, Train
+
 
 class IRouteController(ABC):
     """An abstract Interface to call funtions on the RouteController."""
