@@ -4,6 +4,7 @@ import marshmallow as marsh
 from peewee import (
     BigIntegerField,
     DateTimeField,
+    FloatField,
     ForeignKeyField,
     IntegerField,
     TextField,
@@ -14,14 +15,14 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
-    TrainCancelledFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -158,6 +159,42 @@ class SetSignalLogEntry(LogEntry):
     state_after = IntegerField(null=False)
 
 
+class TrainEnterBlockSectionLogEntry(LogEntry):
+    """A LogEntry that represents the entry of a train into a block section."""
+
+    class Schema(LogEntry.Schema):
+        """The marshmallow schema for the TrainEnterBlockSectionLogEntry model."""
+
+        train_id = marsh.fields.String(required=True)
+        block_section_id = marsh.fields.String(required=True)
+        block_section_length = marsh.fields.Float(required=True)
+
+        def _make(self, data: dict) -> "TrainEnterBlockSectionLogEntry":
+            return TrainEnterBlockSectionLogEntry(**data)
+
+    train_id = TextField(null=False)
+    block_section_id = TextField(null=False)
+    block_section_length = FloatField(null=False)
+
+
+class TrainLeaveBlockSectionLogEntry(LogEntry):
+    """A LogEntry that represents the leaving of a train from a block section."""
+
+    class Schema(LogEntry.Schema):
+        """The marshmallow schema for the TrainLeaveBlockSectionLogEntry model."""
+
+        train_id = marsh.fields.String(required=True)
+        block_section_id = marsh.fields.String(required=True)
+        block_section_length = marsh.fields.Float(required=True)
+
+        def _make(self, data: dict) -> "TrainLeaveBlockSectionLogEntry":
+            return TrainLeaveBlockSectionLogEntry(**data)
+
+    train_id = TextField(null=False)
+    block_section_id = TextField(null=False)
+    block_section_length = FloatField(null=False)
+
+
 class InjectFaultLogEntry(LogEntry):
     """A LogEntry that represents the injection of a fault."""
 
@@ -167,12 +204,12 @@ class InjectFaultLogEntry(LogEntry):
         platform_blocked_fault_configuration = marsh.fields.UUID(required=False)
         track_blocked_fault_configuration = marsh.fields.UUID(required=False)
         track_speed_limit_fault_configuration = marsh.fields.UUID(required=False)
-        train_cancelled_fault_configuration = marsh.fields.UUID(required=False)
+        schedule_blocked_fault_configuration = marsh.fields.UUID(required=False)
         train_prio_fault_configuration = marsh.fields.UUID(required=False)
         train_speed_fault_configuration = marsh.fields.UUID(required=False)
         affected_element = marsh.fields.String(required=True)
-        value_before = marsh.fields.String()
-        value_after = marsh.fields.String()
+        value_before = marsh.fields.String(required=False)
+        value_after = marsh.fields.String(required=False)
 
         def _make(self, data: dict) -> "InjectFaultLogEntry":
             return InjectFaultLogEntry(**data)
@@ -186,8 +223,8 @@ class InjectFaultLogEntry(LogEntry):
     track_speed_limit_fault_configuration = ForeignKeyField(
         TrackSpeedLimitFaultConfiguration, null=True
     )
-    train_cancelled_fault_configuration = ForeignKeyField(
-        TrainCancelledFaultConfiguration, null=True
+    schedule_blocked_fault_configuration = ForeignKeyField(
+        ScheduleBlockedFaultConfiguration, null=True
     )
     train_prio_fault_configuration = ForeignKeyField(
         TrainPrioFaultConfiguration, null=True
@@ -209,7 +246,7 @@ class ResolveFaultLogEntry(LogEntry):
         platform_blocked_fault_configuration = marsh.fields.UUID(required=False)
         track_blocked_fault_configuration = marsh.fields.UUID(required=False)
         track_speed_limit_fault_configuration = marsh.fields.UUID(required=False)
-        train_cancelled_fault_configuration = marsh.fields.UUID(required=False)
+        schedule_blocked_fault_configuration = marsh.fields.UUID(required=False)
         train_prio_fault_configuration = marsh.fields.UUID(required=False)
         train_speed_fault_configuration = marsh.fields.UUID(required=False)
 
@@ -225,8 +262,8 @@ class ResolveFaultLogEntry(LogEntry):
     track_speed_limit_fault_configuration = ForeignKeyField(
         TrackSpeedLimitFaultConfiguration, null=True
     )
-    train_cancelled_fault_configuration = ForeignKeyField(
-        TrainCancelledFaultConfiguration, null=True
+    schedule_blocked_fault_configuration = ForeignKeyField(
+        ScheduleBlockedFaultConfiguration, null=True
     )
     train_prio_fault_configuration = ForeignKeyField(
         TrainPrioFaultConfiguration, null=True

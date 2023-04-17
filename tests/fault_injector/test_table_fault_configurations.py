@@ -8,14 +8,14 @@ from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
-    TrainCancelledFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -34,7 +34,7 @@ from tests.decorators import recreate_db_setup
     [
         (PlatformBlockedFaultConfiguration, {}),
         (TrainSpeedFaultConfiguration, {}),
-        (TrainCancelledFaultConfiguration, {}),
+        (ScheduleBlockedFaultConfiguration, {}),
         (TrackBlockedFaultConfiguration, {}),
         (TrainPrioFaultConfiguration, {}),
         (TrackSpeedLimitFaultConfiguration, {}),
@@ -82,11 +82,11 @@ class TestFailingDict:
             },
         ),
         (
-            TrainCancelledFaultConfiguration,
+            ScheduleBlockedFaultConfiguration,
             {
                 "start_tick": 1,
                 "end_tick": 100,
-                "description": "TrainCancelledFault",
+                "description": "ScheduleBlockedFault",
                 "affected_element_id": "12345678",
             },
         ),

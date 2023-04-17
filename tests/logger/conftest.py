@@ -6,14 +6,14 @@ import pytest
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.train_cancelled_fault_configuration import (
-    TrainCancelledFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
@@ -85,6 +85,16 @@ def state_after():
 
 
 @pytest.fixture
+def block_section_id():
+    return "Test Block Section id"
+
+
+@pytest.fixture
+def block_section_length():
+    return 101.53
+
+
+@pytest.fixture
 def platform_blocked_fault_configuration():
     return PlatformBlockedFaultConfiguration.create(
         start_tick=1,
@@ -116,11 +126,11 @@ def track_speed_limit_fault_configuration():
 
 
 @pytest.fixture
-def train_cancelled_fault_configuration():
-    return TrainCancelledFaultConfiguration.create(
+def schedule_blocked_fault_configuration():
+    return ScheduleBlockedFaultConfiguration.create(
         start_tick=1,
         end_tick=100,
-        description="TrainCancelledFault",
+        description="ScheduleBlockedFault",
         affected_element_id="12345678",
     )
 

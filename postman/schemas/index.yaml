@@ -119,7 +119,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Schedule"
       responses:
-        "204":
+        "200":
           description: Updated schedule.
         "401":
           description: API token missing
@@ -185,7 +185,7 @@ paths:
         Insert a new schedule-blocked-faul component. Returns the id of the
         configuration object.
 
-  /component/fault-injection/schedule-blockedfault/{id}:
+  /component/fault-injection/schedule-blocked-fault/{id}:
     delete:
       operationId: delete_schedule_blocked_fault_configuration
       parameters:
@@ -241,7 +241,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated schedule-blocked-fault configuration
         "401":
           description: API token missing
@@ -362,7 +362,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated track-blocked-fault configuration
         "401":
           description: API token missing
@@ -427,7 +427,7 @@ paths:
         Insert a new track-speed-limit-fault component. Returns the id of the
         configuration object.
 
-  /component/fault-injection/track-split-limit-fault/{id}:
+  /component/fault-injection/track-speed-limit-fault/{id}:
     delete:
       operationId: delete_track_speed_limit_fault_configuration
       parameters:
@@ -483,7 +483,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated track-speed-limit-fault configuration
         "401":
           description: API token missing
@@ -602,7 +602,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrainPrioFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated train-prio-fault configuration
         "401":
           description: API token missing
@@ -721,7 +721,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated train-speed-fault configuration
         "401":
           description: API token missing
@@ -730,6 +730,125 @@ paths:
         "405":
           description: It's forbidden to edit an already ran simulation
       summary: Edit a train-speed-fault configuration.
+
+  /component/fault-injection/platform-blocked-fault:
+    get:
+      operationId: get_train_platform_blocked_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the platform-blocked-fault
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of platform-blocked-fault configurations connected to a user.
+
+    post:
+      operationId: create_platform_blocked_fault_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlatformBlockedFaultConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
+          description: Successfully created new platform-blocked-fault configuration object
+        "401":
+          description: API token missing
+      summary:
+        Insert a new platform-blocked-fault component. Returns the id of the configuration
+        object.
+
+  /component/fault-injection/platform-blocked-fault/{id}:
+    delete:
+      operationId: delete_platform_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "204":
+          description: Deleted platform-blocked-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Delete a platform-blocked-fault configuration.
+
+    get:
+      operationId: get_platform_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformBlockedFaultConfiguration"
+          description: Successful operation
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+      summary: Get all information about a platform-blocked-fault configuration.
+
+    put:
+      operationId: update_platform_blocked_fault_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlatformBlockedFaultConfiguration"
+      responses:
+        "200":
+          description: Updated platform-blocked-fault configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit a platform-blocked-fault configuration.
 
   /component/interlocking:
     get:
@@ -842,7 +961,7 @@ paths:
             schema:
               $ref: "#/components/schemas/InterlockingConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated interlocking configuration
         "401":
           description: API token missing
@@ -963,7 +1082,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SpawnerConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated spawner configuration
         "401":
           description: API token missing
@@ -1172,7 +1291,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SimulationConfiguration"
       responses:
-        "204":
+        "200":
           description: Updated simulation configuration
         "401":
           description: API token missing
@@ -1225,6 +1344,8 @@ components:
     TrackSpeedLimitFaultConfiguration:
       type: object
     TrackBlockedFaultConfiguration:
+      type: object
+    PlatformBlockedFaultConfiguration:
       type: object
     RunConfiguration:
       type: object
