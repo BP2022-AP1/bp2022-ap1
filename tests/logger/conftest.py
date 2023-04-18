@@ -153,6 +153,7 @@ def train_speed_fault_configuration():
         end_tick=100,
         description="TrainSpeedFault",
         affected_element_id="12345678",
+        new_speed=60,
     )
 
 
