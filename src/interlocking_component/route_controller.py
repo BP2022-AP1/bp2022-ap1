@@ -4,7 +4,7 @@ from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 
 from src.interlocking_component.router import Router
-from src.wrapper.simulation_objects import Track, Train
+from src.wrapper.simulation_objects import Track, Train, Platform
 
 
 class IInterlockingDisruptor:
@@ -94,7 +94,7 @@ class RouteController:
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
-    def set_spawn_route(self, platforms: list("Plattform")) -> str:
+    def set_spawn_route(self, platforms: list(Platform)) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
@@ -105,6 +105,16 @@ class RouteController:
         :rtype: str
         """
         raise NotImplementedError()
+    
+    def update_fahrstrasse(self, train: Train, track: Track):
+        """This method can be called when a train reaches a platform, so that the route to the next platform can be set.
+
+        :param train: the train
+        :type train: Train
+        :param track: the track it is currently on
+        :type track: Track
+        """
+        raise NotImplementedError
 
     def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
