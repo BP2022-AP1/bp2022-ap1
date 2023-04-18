@@ -7,13 +7,13 @@ import traci
 from src.component import Component
 from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
+    Edge,
     Platform,
     Signal,
     SimulationObject,
     Switch,
     Track,
     Train,
-    Edge,
 )
 
 

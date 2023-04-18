@@ -6,7 +6,7 @@ from traci import constants, edge, trafficlight, vehicle
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Platform, Signal, Switch, Track, Train, Edge
+from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
 
 
 @pytest.fixture

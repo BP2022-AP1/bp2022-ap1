@@ -6,7 +6,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Platform, Edge, Track
+from src.wrapper.simulation_objects import Edge, Platform, Track
 
 
 @pytest.fixture

@@ -4,7 +4,7 @@ from traci import trafficlight
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Platform, Signal, Switch, Track, Edge
+from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track
 
 
 class TestSimulationObjectUpdatingComponent:
