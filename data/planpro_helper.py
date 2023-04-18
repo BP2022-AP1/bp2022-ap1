@@ -26,7 +26,7 @@ def generate_planpro():
     # Write PlanPro
     generator = Generator()
     generator.generate(
-        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/test_with_new_yaramo"
+        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/test_with_fixed_points"
     )
 
 

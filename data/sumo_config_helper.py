@@ -8,7 +8,7 @@ from sumoexporter import SUMOExporter
 def generate_sumo():
     # Import from local PlanPro file
     topology = PlanProReader(
-        "data/planpro/test_with_new_yaramo.ppxml"
+        "data/planpro/test_with_fixed_points.ppxml"
     ).read_topology_from_plan_pro_file()
 
     # Generate Routes

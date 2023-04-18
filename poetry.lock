@@ -1327,7 +1327,7 @@ pyproj = "^3.4.1"
 type = "git"
 url = "https://github.com/antonykamp/yaramo"
 reference = "refactor/replace-connected-nodes-with-edges"
-resolved_reference = "ed4e5881dfd39fd58061a9e1bb18b4e2348d04d4"
+resolved_reference = "35afe3b9816039a117ce5f5f73af561bf3abdd56"
 
 [[package]]
 name = "zipp"
