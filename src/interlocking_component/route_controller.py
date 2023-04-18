@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from interlocking.interlockinginterface import Interlocking
 from interlocking.test_interlocking import PrintLineInfrastructureProvider
 from planpro_importer.reader import PlanProReader
@@ -7,28 +5,6 @@ from railwayroutegenerator.routegenerator import RouteGenerator
 
 from src.interlocking_component.router import Router
 from src.wrapper.simulation_objects import Track, Train
-
-
-class IRouteController(ABC):
-    """An abstract Interface to call funtions on the RouteController."""
-
-    @abstractmethod
-    def set_spawn_route(self, platforms: list("Plattform")) -> str:
-        """This method can be called when instanciating a train
-        to get back the first SUMO Route it should drive.
-        This also sets a fahrstrasse for that train.
-
-        :param platforms: A List of the Platforms the train will drive to.
-        :type platforms: list
-        :return: The id of the first SUMO Route.
-        :rtype: str
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def start_interlocking(self):
-        """This method sets up the interlocking"""
-        raise NotImplementedError()
 
 
 class IInterlockingDisruptor:
@@ -89,7 +65,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
 
-class RouteController(IRouteController):
+class RouteController:
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
@@ -99,11 +75,12 @@ class RouteController(IRouteController):
     router: Router = None
 
     def start_interlocking(self):
+        """This method instantiates the interlocking and the infrastructure_provider and must be called before the interlocking can be used."""
         self.router = Router()
 
         # Import from local PlanPro file
         topology = PlanProReader(
-            "data/planpro/test_with_new_yaramo.ppxml"
+            "data/planpro/test_example.ppxml"
         ).read_topology_from_plan_pro_file()
 
         # Generate Routes
@@ -114,6 +91,18 @@ class RouteController(IRouteController):
         # This has to change in the future, as we want our own infrastructure_provider
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
+
+    def set_spawn_route(self, platforms: list("Plattform")) -> str:
+        """This method can be called when instanciating a train
+        to get back the first SUMO Route it should drive.
+        This also sets a fahrstrasse for that train.
+
+        :param platforms: A List of the Platforms the train will drive to.
+        :type platforms: list
+        :return: The id of the first SUMO Route.
+        :rtype: str
+        """
+        raise NotImplementedError()
 
     def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.

@@ -719,7 +719,7 @@ zipp = "3.8.1"
 type = "git"
 url = "https://github.com/antonykamp/orm-importer"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "9e50787b3756af5a9f8ef8115ed13a79c3d31078"
+resolved_reference = "72352f85b404a7c2b2c41661b4074b519524e9f4"
 
 [[package]]
 name = "overpy"
@@ -1327,7 +1327,7 @@ pyproj = "^3.4.1"
 type = "git"
 url = "https://github.com/antonykamp/yaramo"
 reference = "refactor/replace-connected-nodes-with-edges"
-resolved_reference = "befdf8626009ff4d7f3bfa08fe6aa6079a861fae"
+resolved_reference = "ed4e5881dfd39fd58061a9e1bb18b4e2348d04d4"
 
 [[package]]
 name = "zipp"
