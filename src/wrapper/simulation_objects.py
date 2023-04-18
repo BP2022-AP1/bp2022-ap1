@@ -196,6 +196,10 @@ class Edge(SimulationObject):
 
     @property
     def track(self) -> "Track":
+        """Returns the track which this edge is part of
+
+        :return: The track
+        """
         assert self._track is not None
         return self._track
 
@@ -248,6 +252,10 @@ class Track(SimulationObject):
 
     @property
     def edges(self) -> Tuple[Edge, Edge]:
+        """Returns the edges represented by this track
+
+        :return: The edges in both directions
+        """
         return self._edges
 
     def __init__(self, edge1, edge2):
@@ -258,7 +266,7 @@ class Track(SimulationObject):
             assert edge1.identifier == edge2.identifier.split("-re")[0]
             self._edges = (edge2, edge1)
 
-        self.identifier = self._edges[0].identifier
+        super().__init__(identifier=self._edges[0].identifier)
 
         edge1.track = self
         edge2.track = self
@@ -293,19 +301,30 @@ class Track(SimulationObject):
 
     @property
     def blocked(self) -> Tuple[bool, bool] | bool:
+        """Returns if the edge/track is blocked.
+
+        :return: If only one edge is blocked, a tuple is returned;
+        if both edges are blocked / unblocked, a plain bool is returned
+        """
         if self.edges[0].blocked == self.edges[1].blocked:
             return self.edges[0].blocked
         return (self.edges[0].blocked, self.edges[1].blocked)
 
     @blocked.setter
     def blocked(self, blocked: Tuple[bool, bool] | bool) -> None:
+        """Block the edges represented by this track
+
+        :param blocked: Which edge to block (if only one direction should be blocked,
+        use the tuple, else use the plain bool)
+        """
         if not isinstance(blocked, Tuple):
             blocked = (blocked, blocked)
 
         self.edges[0].blocked = blocked[0]
         self.edges[1].blocked = blocked[1]
 
-    def update(self):
+    def update(self, data: dict) -> None:
+        # pylint: disable=unused-argument
         pass
 
     def add_subscriptions(self):
