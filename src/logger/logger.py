@@ -157,7 +157,7 @@ class Logger:
         )
 
     def train_enter_block_section(
-        self, tick: int, train_id: str, block_section_id: str, block_section_length: str
+        self, tick: int, train_id: str, block_section_id: str, block_section_length: float
     ) -> Type[None]:
         """
         This function should be called when a train enters a block section. This should include a
@@ -180,7 +180,7 @@ class Logger:
         )
 
     def train_leave_block_section(
-        self, tick: int, train_id: str, block_section_id: str, block_section_length: str
+        self, tick: int, train_id: str, block_section_id: str, block_section_length: float
     ) -> Type[None]:
         """
         This function should be called when a train leaves a block section. This should include a
