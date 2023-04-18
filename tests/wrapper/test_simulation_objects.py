@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from traci import constants, edge, trafficlight, vehicle
 
@@ -36,7 +38,8 @@ def speed_update(monkeypatch):
 
 
 @pytest.fixture
-def train():
+def train(train_add):
+    # pylint: disable=unused-argument
     created_train = Train(
         identifier="fake-sim-train",
         train_type="fancy-ice",
@@ -84,9 +87,9 @@ def max_speed(monkeypatch):
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, route, train_type):
-        assert identifier == "fancy-rb-001"
-        assert route == "not-implemented"
-        assert train_type == "fancy-rb"
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
@@ -106,9 +109,17 @@ def platform() -> Platform:
 
 
 @pytest.fixture
-def souc(traffic_update):
+def souc(traffic_update) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
     return SimulationObjectUpdatingComponent()
+
+
+@pytest.fixture
+def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
+    # pylint: disable=unused-argument
+    return SimulationObjectUpdatingComponent(
+        sumo_configuration="sumo-config/example.scenario.sumocfg"
+    )
 
 
 class TestSignal:
@@ -241,6 +252,18 @@ class TestTrain:
 
     def test_subscription(self, train):
         assert train.add_subscriptions() > 0
+
+    def test_spawn_loaded_net(self, configured_souc, train_add):
+        # pylint: disable=unused-argument
+        p1_id = "station-1"
+        p2_id = "station-2"
+
+        Train(
+            identifier=f"{uuid4()}_42",
+            timetable=[p1_id, p2_id],
+            train_type="cargo",
+            updater=configured_souc,
+        )
 
 
 class TestSwitch:

@@ -284,6 +284,8 @@ class Platform(SimulationObject):
 class Train(SimulationObject):
     """A train driving around in the simulation."""
 
+    # pylint: disable=too-many-instance-attributes
+
     class TrainType(SimulationObject):
         """Metadata about a specific train"""
 
@@ -443,6 +445,7 @@ class Train(SimulationObject):
         identifier: str = None,
         timetable: List[str] = None,
         train_type: str = None,
+        updater: "SimulationObjectUpdatingComponent" = None,
         from_simulator: bool = False,
     ):
         """Creates a new train from the given parameters.
@@ -457,6 +460,7 @@ class Train(SimulationObject):
         You probably don't need to touch this.
         """
         SimulationObject.__init__(self, identifier=identifier)
+        self.updater = updater
 
         self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
         self._convert_timetable(timetable)
