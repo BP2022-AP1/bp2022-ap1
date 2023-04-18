@@ -1187,9 +1187,9 @@ yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/repla
 
 [package.source]
 type = "git"
-url = "https://github.com/Lietze/track-signal-generator.git"
+url = "https://github.com/antonykamp/track-signal-generator.git"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "6b96fd58aa82ac4901f8cd17d4bdc53dcb8b8a36"
+resolved_reference = "eb19433896ba4beb99dd78811b7d37101bd326b1"
 
 [[package]]
 name = "typing-extensions"
@@ -1346,7 +1346,7 @@ pyproj = "^3.4.1"
 type = "git"
 url = "https://github.com/antonykamp/yaramo"
 reference = "refactor/replace-connected-nodes-with-edges"
-resolved_reference = "7a6def02a61a8921a60f5a3a5c6cb7a7bfa34c54"
+resolved_reference = "65c5a6a2e13007ea07ae0f7087840348303a1086"
 
 [[package]]
 name = "zipp"
@@ -1367,4 +1367,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f7e0962c973d0d6c0668f7cf68cc9c62064a109ded0d8d19150e7fc0e5e4472e"
+content-hash = "d14c5a26e4fbbbde255d88996a7c68cb20c5dcf100b9a7282620afc387196b48"

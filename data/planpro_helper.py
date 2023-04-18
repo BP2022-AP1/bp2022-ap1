@@ -1,7 +1,7 @@
 from orm_importer.importer import ORMImporter
 from planproexporter import Generator
 from railwayroutegenerator.routegenerator import RouteGenerator
-from track_signal_generator import TrackSignalGenerator
+from track_signal_generator.generator import TrackSignalGenerator
 
 
 def generate_planpro():

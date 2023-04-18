@@ -3,7 +3,7 @@ import os
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 from sumoexporter import SUMOExporter
-from track_signal_generator import TrackSignalGenerator
+from track_signal_generator.generator import TrackSignalGenerator
 
 
 def generate_sumo():

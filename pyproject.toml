@@ -38,7 +38,7 @@ planpro-exporter = { git = "https://github.com/antonykamp/planpro-exporter", bra
 planpro-importer = { git = "https://github.com/antonykamp/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
 railway-route-generator = { git = "https://github.com/antonykamp/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
 sumoexporter = { git = "https://github.com/antonykamp/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
-track-signal-generator = { git = "https://github.com/Lietze/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
+track-signal-generator = { git = "https://github.com/antonykamp/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
