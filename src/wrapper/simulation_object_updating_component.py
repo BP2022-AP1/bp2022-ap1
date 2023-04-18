@@ -113,12 +113,6 @@ class SimulationObjectUpdatingComponent(Component):
             Track.from_simulation(edge, self) for edge in net.getEdges()
         ]
 
-        # self._simulation_objects += [
-        #    Node.from_simulation(node, self)
-        #    for node in net.getNodes()
-        #    if len(node.getConnections()) < 3
-        # ]
-
         # switches
         self._simulation_objects += [
             Switch.from_simulation(node, self)
@@ -135,3 +129,6 @@ class SimulationObjectUpdatingComponent(Component):
         self._simulation_objects += [
             Platform.from_simulation(platform, self) for platform in platforms
         ]
+
+        for simulation_object in self._simulation_objects:
+            simulation_object.add_simulation_connections()

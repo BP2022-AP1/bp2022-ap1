@@ -49,7 +49,7 @@ class SimulationObject(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def from_running_simulation(self) -> None:
+    def add_simulation_connections(self) -> None:
         """This method is called, when all other simulation-connected objects are initialized.
         You can establish links between objects in this method (e.g. between two edges).
 
@@ -118,7 +118,7 @@ class Signal(Node):
 
         return result
 
-    def from_running_simulation(self) -> None:
+    def add_simulation_connections(self) -> None:
         pass
 
 
@@ -175,7 +175,7 @@ class Switch(Node):
 
         return result
 
-    def from_running_simulation(self) -> None:
+    def add_simulation_connections(self) -> None:
         pass
 
 
@@ -221,7 +221,7 @@ class Track(SimulationObject):
 
         return result
 
-    def from_running_simulation(self) -> None:
+    def add_simulation_connections(self) -> None:
         # we don't need references to other nodes
         pass
 
@@ -276,7 +276,7 @@ class Platform(SimulationObject):
         result.updater = updater
         return result
 
-    def from_running_simulation(self) -> None:
+    def add_simulation_connections(self) -> None:
         # Nothing to do (we dont load trains from the sim)
         pass
 
@@ -361,7 +361,7 @@ class Train(SimulationObject):
         ) -> "Train.TrainType":
             pass
 
-        def from_running_simulation(self) -> None:
+        def add_simulation_connections(self) -> None:
             pass
 
     _position: Tuple[float, float]
@@ -509,6 +509,6 @@ class Train(SimulationObject):
         # Nothing to do (we dont load trains from the sim)
         pass
 
-    def from_running_simulation(self) -> None:
+    def add_simulation_connections(self) -> None:
         # Nothing to do (we dont load trains from the sim)
         pass
