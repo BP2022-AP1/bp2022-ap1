@@ -34,6 +34,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
+    TrainEnterBlockSectionLogEntry,
+    TrainLeaveBlockSectionLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -1101,601 +1103,946 @@ class TestLogEntry:
             with pytest.raises(ValidationError):
                 SetSignalLogEntry.Schema().load(empty_set_signal_log_entry_as_dict)
 
-    class TestInjectFaultLogEntry:
-        """Tests for InjectFaultLogEntry."""
+    class TestTrainEnterBlockSectionLogEntry:
+        """Tests for TrainEnterBlockSectionLogEntry."""
 
         @pytest.fixture
-        def inject_fault_log_entry_as_dict(
+        def train_enter_block_section_log_entry_as_dict(
             self,
             timestamp,
             tick,
             message,
             run,
-            platform_blocked_fault_configuration,
-            track_blocked_fault_configuration,
-            track_speed_limit_fault_configuration,
-            schedule_blocked_fault_configuration,
-            train_prio_fault_configuration,
-            train_speed_fault_configuration,
-            affected_element,
-            value_before,
-            value_after,
+            train_id,
+            block_section_id,
+            block_section_length,
         ):
-            """InjectFaultLogEntry as dict with all fields set."""
+            """TrainEnterBlockSectionLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp,
                 "tick": tick,
                 "message": message,
                 "run_id": run.id,
-                "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
-                "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
-                "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
-                "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration.id,
-                "train_prio_fault_configuration": train_prio_fault_configuration.id,
-                "train_speed_fault_configuration": train_speed_fault_configuration.id,
-                "affected_element": affected_element,
-                "value_before": value_before,
-                "value_after": value_after,
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
             }
 
         @pytest.fixture
-        def inject_fault_log_entry_as_dict_serialized(
+        def train_enter_block_section_log_entry_as_dict_serialized(
             self,
             timestamp,
             tick,
             message,
             run,
-            platform_blocked_fault_configuration,
-            track_blocked_fault_configuration,
-            track_speed_limit_fault_configuration,
-            schedule_blocked_fault_configuration,
-            train_prio_fault_configuration,
-            train_speed_fault_configuration,
-            affected_element,
-            value_before,
-            value_after,
+            train_id,
+            block_section_id,
+            block_section_length,
         ):
-            """InjectFaultLogEntry as serialized dict with all fields set."""
+            """TrainEnterBlockSectionLogEntry as dict with all fields set."""
             return {
                 "timestamp": timestamp.isoformat(),
                 "tick": tick,
                 "message": message,
                 "run_id": str(run.id),
-                "platform_blocked_fault_configuration": str(
-                    platform_blocked_fault_configuration.id
-                ),
-                "track_blocked_fault_configuration": str(
-                    track_blocked_fault_configuration.id
-                ),
-                "track_speed_limit_fault_configuration": str(
-                    track_speed_limit_fault_configuration.id
-                ),
-                "schedule_blocked_fault_configuration": str(
-                    schedule_blocked_fault_configuration.id
-                ),
-                "train_prio_fault_configuration": str(
-                    train_prio_fault_configuration.id
-                ),
-                "train_speed_fault_configuration": str(
-                    train_speed_fault_configuration.id
-                ),
-                "affected_element": affected_element,
-                "value_before": value_before,
-                "value_after": value_after,
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
             }
 
         @pytest.fixture
-        def empty_inject_fault_log_entry_as_dict(self):
-            """InjectFaultLogEntry as dict with no fields set."""
+        def empty_train_enter_block_section_log_entry_as_dict(self):
+            """TrainEnterBlockSectionLogEntry as dict with no fields set."""
             return {}
 
         @recreate_db_setup
         def setup_method(self):
             pass
 
-        def test_create(self, inject_fault_log_entry_as_dict):
-            """Test that Inject Fault Log Entry can be created."""
-            inject_fault_log_entry = InjectFaultLogEntry.create(
-                **inject_fault_log_entry_as_dict
+        def test_create(self, train_enter_block_section_log_entry_as_dict):
+            """Test that TrainEnterBlockSectionLogEntry can be created."""
+            train_enter_block_section_log_entry = TrainEnterBlockSectionLogEntry.create(
+                **train_enter_block_section_log_entry_as_dict
             )
             assert (
-                InjectFaultLogEntry.select()
-                .where(InjectFaultLogEntry.id == inject_fault_log_entry.id)
-                .first()
-                == inject_fault_log_entry
-            )
-
-        def test_create_empty_fails(self, empty_inject_fault_log_entry_as_dict):
-            """Test that Inject Fault Log Entry cannot be created with no fields set."""
-            with pytest.raises(IntegrityError):
-                InjectFaultLogEntry.create(**empty_inject_fault_log_entry_as_dict)
-
-        def test_serialization(self, inject_fault_log_entry_as_dict):
-            """Test that Inject Fault Log Entry can be serialized."""
-            inject_fault_log_entry = InjectFaultLogEntry.create(
-                **inject_fault_log_entry_as_dict
-            )
-            assert (
-                inject_fault_log_entry.timestamp
-                == inject_fault_log_entry_as_dict["timestamp"]
-            )
-            assert inject_fault_log_entry.tick == inject_fault_log_entry_as_dict["tick"]
-            assert (
-                inject_fault_log_entry.message
-                == inject_fault_log_entry_as_dict["message"]
-            )
-            assert (
-                inject_fault_log_entry.run_id.id
-                == inject_fault_log_entry_as_dict["run_id"]
-            )
-            assert (
-                inject_fault_log_entry.platform_blocked_fault_configuration.id
-                == inject_fault_log_entry_as_dict[
-                    "platform_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                inject_fault_log_entry.track_blocked_fault_configuration.id
-                == inject_fault_log_entry_as_dict["track_blocked_fault_configuration"]
-            )
-            assert (
-                inject_fault_log_entry.track_speed_limit_fault_configuration.id
-                == inject_fault_log_entry_as_dict[
-                    "track_speed_limit_fault_configuration"
-                ]
-            )
-            assert (
-                inject_fault_log_entry.schedule_blocked_fault_configuration.id
-                == inject_fault_log_entry_as_dict[
-                    "schedule_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                inject_fault_log_entry.train_prio_fault_configuration.id
-                == inject_fault_log_entry_as_dict["train_prio_fault_configuration"]
-            )
-            assert (
-                inject_fault_log_entry.train_speed_fault_configuration.id
-                == inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
-            )
-            assert (
-                inject_fault_log_entry.affected_element
-                == inject_fault_log_entry_as_dict["affected_element"]
-            )
-            assert (
-                inject_fault_log_entry.value_before
-                == inject_fault_log_entry_as_dict["value_before"]
-            )
-            assert (
-                inject_fault_log_entry.value_after
-                == inject_fault_log_entry_as_dict["value_after"]
-            )
-
-            assert inject_fault_log_entry.to_dict() == {
-                "id": str(inject_fault_log_entry.id),
-                # pylint: disable=no-member
-                "created_at": inject_fault_log_entry.created_at.isoformat(),
-                "updated_at": inject_fault_log_entry.updated_at.isoformat(),
-                "timestamp": inject_fault_log_entry_as_dict["timestamp"].isoformat(),
-                "tick": inject_fault_log_entry_as_dict["tick"],
-                "message": inject_fault_log_entry_as_dict["message"],
-                "run_id": str(inject_fault_log_entry_as_dict["run_id"]),
-                "platform_blocked_fault_configuration": str(
-                    inject_fault_log_entry_as_dict[
-                        "platform_blocked_fault_configuration"
-                    ]
-                ),
-                "track_blocked_fault_configuration": str(
-                    inject_fault_log_entry_as_dict["track_blocked_fault_configuration"]
-                ),
-                "track_speed_limit_fault_configuration": str(
-                    inject_fault_log_entry_as_dict[
-                        "track_speed_limit_fault_configuration"
-                    ]
-                ),
-                "schedule_blocked_fault_configuration": str(
-                    inject_fault_log_entry_as_dict[
-                        "schedule_blocked_fault_configuration"
-                    ]
-                ),
-                "train_prio_fault_configuration": str(
-                    inject_fault_log_entry_as_dict["train_prio_fault_configuration"]
-                ),
-                "train_speed_fault_configuration": str(
-                    inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
-                ),
-                "affected_element": inject_fault_log_entry_as_dict["affected_element"],
-                "value_before": inject_fault_log_entry_as_dict["value_before"],
-                "value_after": inject_fault_log_entry_as_dict["value_after"],
-            }
-
-        def test_deserialization(self, inject_fault_log_entry_as_dict_serialized):
-            """Test that Inject Fault Log Entry can be deserialized."""
-            inject_fault_log_entry = InjectFaultLogEntry.Schema().load(
-                inject_fault_log_entry_as_dict_serialized
-            )
-            assert isinstance(inject_fault_log_entry, InjectFaultLogEntry)
-            assert isinstance(inject_fault_log_entry.id, UUID)
-            assert isinstance(inject_fault_log_entry.timestamp, datetime)
-            assert isinstance(inject_fault_log_entry.tick, int)
-            assert isinstance(inject_fault_log_entry.message, str)
-            assert isinstance(inject_fault_log_entry.run_id, Run)
-            assert isinstance(
-                inject_fault_log_entry.platform_blocked_fault_configuration,
-                PlatformBlockedFaultConfiguration,
-            )
-            assert isinstance(
-                inject_fault_log_entry.track_blocked_fault_configuration,
-                TrackBlockedFaultConfiguration,
-            )
-            assert isinstance(
-                inject_fault_log_entry.track_speed_limit_fault_configuration,
-                TrackSpeedLimitFaultConfiguration,
-            )
-            assert isinstance(
-                inject_fault_log_entry.schedule_blocked_fault_configuration,
-                ScheduleBlockedFaultConfiguration,
-            )
-            assert isinstance(
-                inject_fault_log_entry.train_prio_fault_configuration,
-                TrainPrioFaultConfiguration,
-            )
-            assert isinstance(
-                inject_fault_log_entry.train_speed_fault_configuration,
-                TrainSpeedFaultConfiguration,
-            )
-            assert isinstance(inject_fault_log_entry.affected_element, str)
-            assert isinstance(inject_fault_log_entry.value_before, str)
-            assert isinstance(inject_fault_log_entry.value_after, str)
-
-            assert (
-                inject_fault_log_entry.timestamp.isoformat()
-                == inject_fault_log_entry_as_dict_serialized["timestamp"]
-            )
-            assert (
-                inject_fault_log_entry.tick
-                == inject_fault_log_entry_as_dict_serialized["tick"]
-            )
-            assert (
-                inject_fault_log_entry.message
-                == inject_fault_log_entry_as_dict_serialized["message"]
-            )
-            assert (
-                str(inject_fault_log_entry.run_id)
-                == inject_fault_log_entry_as_dict_serialized["run_id"]
-            )
-            assert (
-                str(inject_fault_log_entry.platform_blocked_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "platform_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                str(inject_fault_log_entry.track_blocked_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "track_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                str(inject_fault_log_entry.track_speed_limit_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "track_speed_limit_fault_configuration"
-                ]
-            )
-            assert (
-                str(inject_fault_log_entry.schedule_blocked_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "schedule_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                str(inject_fault_log_entry.train_prio_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "train_prio_fault_configuration"
-                ]
-            )
-            assert (
-                str(inject_fault_log_entry.train_speed_fault_configuration)
-                == inject_fault_log_entry_as_dict_serialized[
-                    "train_speed_fault_configuration"
-                ]
-            )
-            assert (
-                inject_fault_log_entry.affected_element
-                == inject_fault_log_entry_as_dict_serialized["affected_element"]
-            )
-            assert (
-                inject_fault_log_entry.value_before
-                == inject_fault_log_entry_as_dict_serialized["value_before"]
-            )
-            assert (
-                inject_fault_log_entry.value_after
-                == inject_fault_log_entry_as_dict_serialized["value_after"]
-            )
-
-        def test_deserialization_empty_fails(
-            self, empty_inject_fault_log_entry_as_dict
-        ):
-            """Test that Inject Fault Log Entry cannot be deserialized with no fields set."""
-            with pytest.raises(ValidationError):
-                InjectFaultLogEntry.Schema().load(empty_inject_fault_log_entry_as_dict)
-
-    class TestResolveFaultLogEntry:
-        """Tests for ResolveFaultLogEntry."""
-
-        @pytest.fixture
-        def resolve_fault_log_entry_as_dict(
-            self,
-            timestamp,
-            tick,
-            message,
-            run,
-            platform_blocked_fault_configuration,
-            track_blocked_fault_configuration,
-            track_speed_limit_fault_configuration,
-            schedule_blocked_fault_configuration,
-            train_prio_fault_configuration,
-            train_speed_fault_configuration,
-        ):
-            """ResolveFaultLogEntry as dict with all fields set."""
-            return {
-                "timestamp": timestamp,
-                "tick": tick,
-                "message": message,
-                "run_id": run.id,
-                "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
-                "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
-                "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
-                "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration.id,
-                "train_prio_fault_configuration": train_prio_fault_configuration.id,
-                "train_speed_fault_configuration": train_speed_fault_configuration.id,
-            }
-
-        @pytest.fixture
-        def resolve_fault_log_entry_as_dict_serialized(
-            self,
-            timestamp,
-            tick,
-            message,
-            run,
-            platform_blocked_fault_configuration,
-            track_blocked_fault_configuration,
-            track_speed_limit_fault_configuration,
-            schedule_blocked_fault_configuration,
-            train_prio_fault_configuration,
-            train_speed_fault_configuration,
-        ):
-            """ResolveFaultLogEntry as serialized dict with all fields set."""
-            return {
-                "timestamp": timestamp.isoformat(),
-                "tick": tick,
-                "message": message,
-                "run_id": str(run.id),
-                "platform_blocked_fault_configuration": str(
-                    platform_blocked_fault_configuration.id
-                ),
-                "track_blocked_fault_configuration": str(
-                    track_blocked_fault_configuration.id
-                ),
-                "track_speed_limit_fault_configuration": str(
-                    track_speed_limit_fault_configuration.id
-                ),
-                "schedule_blocked_fault_configuration": str(
-                    schedule_blocked_fault_configuration.id
-                ),
-                "train_prio_fault_configuration": str(
-                    train_prio_fault_configuration.id
-                ),
-                "train_speed_fault_configuration": str(
-                    train_speed_fault_configuration.id
-                ),
-            }
-
-        @pytest.fixture
-        def empty_resolve_fault_log_entry_as_dict(self):
-            """ResolveFaultLogEntry as dict with no fields set."""
-            return {}
-
-        @recreate_db_setup
-        def setup_method(self):
-            pass
-
-        def test_create(self, resolve_fault_log_entry_as_dict):
-            """Test that Remove Fault Log Entry can be created."""
-            resolve_fault_log_entry = ResolveFaultLogEntry.create(
-                **resolve_fault_log_entry_as_dict
-            )
-            assert (
-                ResolveFaultLogEntry.select()
-                .where(ResolveFaultLogEntry.id == resolve_fault_log_entry.id)
-                .first()
-                == resolve_fault_log_entry
-            )
-
-        def test_create_empty_fails(self, empty_resolve_fault_log_entry_as_dict):
-            """Test that Remove Fault Log Entry cannot be created with no fields set."""
-            with pytest.raises(IntegrityError):
-                ResolveFaultLogEntry.create(**empty_resolve_fault_log_entry_as_dict)
-
-        def test_serialization(self, resolve_fault_log_entry_as_dict):
-            """Test that Remove Fault Log Entry can be serialized."""
-            resolve_fault_log_entry = ResolveFaultLogEntry.create(
-                **resolve_fault_log_entry_as_dict
-            )
-            assert (
-                resolve_fault_log_entry.timestamp
-                == resolve_fault_log_entry_as_dict["timestamp"]
-            )
-            assert (
-                resolve_fault_log_entry.tick == resolve_fault_log_entry_as_dict["tick"]
-            )
-            assert (
-                resolve_fault_log_entry.message
-                == resolve_fault_log_entry_as_dict["message"]
-            )
-            assert (
-                resolve_fault_log_entry.run_id.id
-                == resolve_fault_log_entry_as_dict["run_id"]
-            )
-            assert (
-                resolve_fault_log_entry.platform_blocked_fault_configuration.id
-                == resolve_fault_log_entry_as_dict[
-                    "platform_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                resolve_fault_log_entry.track_blocked_fault_configuration.id
-                == resolve_fault_log_entry_as_dict["track_blocked_fault_configuration"]
-            )
-            assert (
-                resolve_fault_log_entry.track_speed_limit_fault_configuration.id
-                == resolve_fault_log_entry_as_dict[
-                    "track_speed_limit_fault_configuration"
-                ]
-            )
-            assert (
-                resolve_fault_log_entry.schedule_blocked_fault_configuration.id
-                == resolve_fault_log_entry_as_dict[
-                    "schedule_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                resolve_fault_log_entry.train_prio_fault_configuration.id
-                == resolve_fault_log_entry_as_dict["train_prio_fault_configuration"]
-            )
-            assert (
-                resolve_fault_log_entry.train_speed_fault_configuration.id
-                == resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
-            )
-
-            assert resolve_fault_log_entry.to_dict() == {
-                "id": str(resolve_fault_log_entry.id),
-                # pylint: disable=no-member
-                "created_at": resolve_fault_log_entry.created_at.isoformat(),
-                "updated_at": resolve_fault_log_entry.updated_at.isoformat(),
-                "timestamp": resolve_fault_log_entry_as_dict["timestamp"].isoformat(),
-                "tick": resolve_fault_log_entry_as_dict["tick"],
-                "message": resolve_fault_log_entry_as_dict["message"],
-                "run_id": str(resolve_fault_log_entry_as_dict["run_id"]),
-                "platform_blocked_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict[
-                        "platform_blocked_fault_configuration"
-                    ]
-                ),
-                "track_blocked_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict["track_blocked_fault_configuration"]
-                ),
-                "track_speed_limit_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict[
-                        "track_speed_limit_fault_configuration"
-                    ]
-                ),
-                "schedule_blocked_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict[
-                        "schedule_blocked_fault_configuration"
-                    ]
-                ),
-                "train_prio_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict["train_prio_fault_configuration"]
-                ),
-                "train_speed_fault_configuration": str(
-                    resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
-                ),
-            }
-
-        def test_deserialization(self, resolve_fault_log_entry_as_dict_serialized):
-            """Test that Remove Fault Log Entry can be deserialized."""
-            resolve_fault_log_entry = ResolveFaultLogEntry.Schema().load(
-                resolve_fault_log_entry_as_dict_serialized
-            )
-            assert isinstance(resolve_fault_log_entry, ResolveFaultLogEntry)
-            assert isinstance(resolve_fault_log_entry.id, UUID)
-            assert isinstance(resolve_fault_log_entry.timestamp, datetime)
-            assert isinstance(resolve_fault_log_entry.tick, int)
-            assert isinstance(resolve_fault_log_entry.message, str)
-            assert isinstance(resolve_fault_log_entry.run_id, Run)
-            assert isinstance(
-                resolve_fault_log_entry.platform_blocked_fault_configuration,
-                PlatformBlockedFaultConfiguration,
-            )
-            assert isinstance(
-                resolve_fault_log_entry.track_blocked_fault_configuration,
-                TrackBlockedFaultConfiguration,
-            )
-            assert isinstance(
-                resolve_fault_log_entry.track_speed_limit_fault_configuration,
-                TrackSpeedLimitFaultConfiguration,
-            )
-            assert isinstance(
-                resolve_fault_log_entry.schedule_blocked_fault_configuration,
-                ScheduleBlockedFaultConfiguration,
-            )
-            assert isinstance(
-                resolve_fault_log_entry.train_prio_fault_configuration,
-                TrainPrioFaultConfiguration,
-            )
-            assert isinstance(
-                resolve_fault_log_entry.train_speed_fault_configuration,
-                TrainSpeedFaultConfiguration,
-            )
-            assert (
-                resolve_fault_log_entry.timestamp.isoformat()
-                == resolve_fault_log_entry_as_dict_serialized["timestamp"]
-            )
-            assert (
-                resolve_fault_log_entry.tick
-                == resolve_fault_log_entry_as_dict_serialized["tick"]
-            )
-            assert (
-                resolve_fault_log_entry.message
-                == resolve_fault_log_entry_as_dict_serialized["message"]
-            )
-            assert (
-                str(resolve_fault_log_entry.run_id)
-                == resolve_fault_log_entry_as_dict_serialized["run_id"]
-            )
-            assert (
-                str(resolve_fault_log_entry.platform_blocked_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "platform_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                str(resolve_fault_log_entry.track_blocked_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "track_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                str(resolve_fault_log_entry.track_speed_limit_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "track_speed_limit_fault_configuration"
-                ]
-            )
-            assert (
-                str(resolve_fault_log_entry.schedule_blocked_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "schedule_blocked_fault_configuration"
-                ]
-            )
-            assert (
-                str(resolve_fault_log_entry.train_prio_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "train_prio_fault_configuration"
-                ]
-            )
-            assert (
-                str(resolve_fault_log_entry.train_speed_fault_configuration)
-                == resolve_fault_log_entry_as_dict_serialized[
-                    "train_speed_fault_configuration"
-                ]
-            )
-
-        def test_deserialization_empty_fails(
-            self, empty_resolve_fault_log_entry_as_dict
-        ):
-            """Test that Remove Fault Log Entry cannot be deserialized with no fields set."""
-            with pytest.raises(ValidationError):
-                ResolveFaultLogEntry.Schema().load(
-                    empty_resolve_fault_log_entry_as_dict
+                TrainEnterBlockSectionLogEntry.select()
+                .where(
+                    TrainEnterBlockSectionLogEntry.id
+                    == train_enter_block_section_log_entry.id
                 )
+                .first()
+                == train_enter_block_section_log_entry
+            )
+
+        def test_create_empty_fails(
+            self, empty_train_enter_block_section_log_entry_as_dict
+        ):
+            """Tests that TrainEnterBlockSectionLogEntry cannot be created with no fields set."""
+            with pytest.raises(IntegrityError):
+                TrainEnterBlockSectionLogEntry.create(
+                    **empty_train_enter_block_section_log_entry_as_dict
+                )
+
+        def test_serialization(self, train_enter_block_section_log_entry_as_dict):
+            """Test that TrainEnterBlockSectionLogEntry can be serialized."""
+            train_enter_block_section_log_entry = TrainEnterBlockSectionLogEntry.create(
+                **train_enter_block_section_log_entry_as_dict
+            )
+            assert (
+                train_enter_block_section_log_entry.timestamp
+                == train_enter_block_section_log_entry_as_dict["timestamp"]
+            )
+            assert (
+                train_enter_block_section_log_entry.tick
+                == train_enter_block_section_log_entry_as_dict["tick"]
+            )
+            assert (
+                train_enter_block_section_log_entry.message
+                == train_enter_block_section_log_entry_as_dict["message"]
+            )
+            assert (
+                train_enter_block_section_log_entry.run_id.id
+                == train_enter_block_section_log_entry_as_dict["run_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.train_id
+                == train_enter_block_section_log_entry_as_dict["train_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_id
+                == train_enter_block_section_log_entry_as_dict["block_section_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_length
+                == train_enter_block_section_log_entry_as_dict["block_section_length"]
+            )
+            assert train_enter_block_section_log_entry.to_dict() == {
+                "id": str(train_enter_block_section_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_enter_block_section_log_entry.created_at.isoformat(),
+                "updated_at": train_enter_block_section_log_entry.updated_at.isoformat(),
+                "timestamp": train_enter_block_section_log_entry.timestamp.isoformat(),
+                "tick": train_enter_block_section_log_entry.tick,
+                "message": train_enter_block_section_log_entry.message,
+                "run_id": str(train_enter_block_section_log_entry.run_id),
+                "train_id": train_enter_block_section_log_entry.train_id,
+                "block_section_id": train_enter_block_section_log_entry.block_section_id,
+                "block_section_length": train_enter_block_section_log_entry.block_section_length,
+            }
+
+        def test_deserialization(
+            self, train_enter_block_section_log_entry_as_dict_serialized
+        ):
+            """Test that TrainEnterBlockSectionLogEntry can be deserialized."""
+            train_enter_block_section_log_entry = (
+                TrainEnterBlockSectionLogEntry.Schema().load(
+                    train_enter_block_section_log_entry_as_dict_serialized
+                )
+            )
+            assert isinstance(
+                train_enter_block_section_log_entry, TrainEnterBlockSectionLogEntry
+            )
+            assert isinstance(train_enter_block_section_log_entry.id, UUID)
+            assert isinstance(train_enter_block_section_log_entry.timestamp, datetime)
+            assert isinstance(train_enter_block_section_log_entry.tick, int)
+            assert isinstance(train_enter_block_section_log_entry.message, str)
+            assert isinstance(train_enter_block_section_log_entry.run_id, Run)
+            assert isinstance(train_enter_block_section_log_entry.train_id, str)
+            assert isinstance(train_enter_block_section_log_entry.block_section_id, str)
+            assert isinstance(
+                train_enter_block_section_log_entry.block_section_length, float
+            )
+
+            assert (
+                train_enter_block_section_log_entry.timestamp.isoformat()
+                == train_enter_block_section_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_enter_block_section_log_entry.tick
+                == train_enter_block_section_log_entry_as_dict_serialized["tick"]
+            )
+            assert (
+                train_enter_block_section_log_entry.message
+                == train_enter_block_section_log_entry_as_dict_serialized["message"]
+            )
+            assert (
+                str(train_enter_block_section_log_entry.run_id)
+                == train_enter_block_section_log_entry_as_dict_serialized["run_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.train_id
+                == train_enter_block_section_log_entry_as_dict_serialized["train_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_id
+                == train_enter_block_section_log_entry_as_dict_serialized[
+                    "block_section_id"
+                ]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_length
+                == train_enter_block_section_log_entry_as_dict_serialized[
+                    "block_section_length"
+                ]
+            )
+
+        def test_deserialization_empty_fails(
+            self, empty_train_enter_block_section_log_entry_as_dict
+        ):
+            """Test that TrainEnterBlockSectionLogEntry cannot be deserialized
+            with no fields set."""
+            with pytest.raises(ValidationError):
+                TrainEnterBlockSectionLogEntry.Schema().load(
+                    empty_train_enter_block_section_log_entry_as_dict
+                )
+
+    class TestTrainLeaveBlockSectionLogEntry:
+        """Tests for TrainLeaveBlockSectionLogEntry."""
+
+        @pytest.fixture
+        def train_leave_block_section_log_entry_as_dict(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_id,
+            block_section_id,
+            block_section_length,
+        ):
+            """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
+            return {
+                "timestamp": timestamp,
+                "tick": tick,
+                "message": message,
+                "run_id": run.id,
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
+            }
+
+        @pytest.fixture
+        def train_leave_block_section_log_entry_as_dict_serialized(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_id,
+            block_section_id,
+            block_section_length,
+        ):
+            """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
+            return {
+                "timestamp": timestamp.isoformat(),
+                "tick": tick,
+                "message": message,
+                "run_id": str(run.id),
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
+            }
+
+        @pytest.fixture
+        def empty_train_leave_block_section_log_entry_as_dict(self):
+            """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
+            return {}
+
+        @recreate_db_setup
+        def setup_method(self):
+            pass
+
+        def test_create(self, train_leave_block_section_log_entry_as_dict):
+            """Test that TrainLeaveBlockSectionLogEntry can be created."""
+            train_leave_block_section_log_entry = TrainLeaveBlockSectionLogEntry.create(
+                **train_leave_block_section_log_entry_as_dict
+            )
+            assert (
+                TrainLeaveBlockSectionLogEntry.select()
+                .where(
+                    TrainLeaveBlockSectionLogEntry.id
+                    == train_leave_block_section_log_entry.id
+                )
+                .first()
+                == train_leave_block_section_log_entry
+            )
+
+        def test_create_empty_fails(
+            self, empty_train_leave_block_section_log_entry_as_dict
+        ):
+            """Test that TrainLeaveBlockSectionLogEntry cannot be created with empty dict."""
+            with pytest.raises(IntegrityError):
+                TrainLeaveBlockSectionLogEntry.create(
+                    **empty_train_leave_block_section_log_entry_as_dict
+                )
+
+        def test_serialization(self, train_leave_block_section_log_entry_as_dict):
+            """Test that TrainLeaveBlockSectionLogEntry can be serialized."""
+            train_leave_block_section_log_entry = TrainLeaveBlockSectionLogEntry.create(
+                **train_leave_block_section_log_entry_as_dict
+            )
+            assert (
+                train_leave_block_section_log_entry.timestamp
+                == train_leave_block_section_log_entry_as_dict["timestamp"]
+            )
+            assert (
+                train_leave_block_section_log_entry.tick
+                == train_leave_block_section_log_entry_as_dict["tick"]
+            )
+            assert (
+                train_leave_block_section_log_entry.message
+                == train_leave_block_section_log_entry_as_dict["message"]
+            )
+            assert (
+                train_leave_block_section_log_entry.run_id.id
+                == train_leave_block_section_log_entry_as_dict["run_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.train_id
+                == train_leave_block_section_log_entry_as_dict["train_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_id
+                == train_leave_block_section_log_entry_as_dict["block_section_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_length
+                == train_leave_block_section_log_entry_as_dict["block_section_length"]
+            )
+            assert train_leave_block_section_log_entry.to_dict() == {
+                "id": str(train_leave_block_section_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_leave_block_section_log_entry.created_at.isoformat(),
+                "updated_at": train_leave_block_section_log_entry.updated_at.isoformat(),
+                "timestamp": train_leave_block_section_log_entry.timestamp.isoformat(),
+                "tick": train_leave_block_section_log_entry.tick,
+                "message": train_leave_block_section_log_entry.message,
+                "run_id": str(train_leave_block_section_log_entry.run_id),
+                "train_id": train_leave_block_section_log_entry.train_id,
+                "block_section_id": train_leave_block_section_log_entry.block_section_id,
+                "block_section_length": train_leave_block_section_log_entry.block_section_length,
+            }
+
+        def test_deserialization(
+            self, train_leave_block_section_log_entry_as_dict_serialized
+        ):
+            train_leave_block_section_log_entry = (
+                TrainLeaveBlockSectionLogEntry.Schema().load(
+                    train_leave_block_section_log_entry_as_dict_serialized
+                )
+            )
+            assert isinstance(
+                train_leave_block_section_log_entry, TrainLeaveBlockSectionLogEntry
+            )
+            assert isinstance(train_leave_block_section_log_entry.id, UUID)
+            assert isinstance(train_leave_block_section_log_entry.timestamp, datetime)
+            assert isinstance(train_leave_block_section_log_entry.tick, int)
+            assert isinstance(train_leave_block_section_log_entry.message, str)
+            assert isinstance(train_leave_block_section_log_entry.run_id, Run)
+            assert isinstance(train_leave_block_section_log_entry.train_id, str)
+            assert isinstance(train_leave_block_section_log_entry.block_section_id, str)
+            assert isinstance(
+                train_leave_block_section_log_entry.block_section_length, float
+            )
+
+            assert (
+                train_leave_block_section_log_entry.timestamp.isoformat()
+                == train_leave_block_section_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_leave_block_section_log_entry.tick
+                == train_leave_block_section_log_entry_as_dict_serialized["tick"]
+            )
+            assert (
+                train_leave_block_section_log_entry.message
+                == train_leave_block_section_log_entry_as_dict_serialized["message"]
+            )
+            assert (
+                str(train_leave_block_section_log_entry.run_id)
+                == train_leave_block_section_log_entry_as_dict_serialized["run_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.train_id
+                == train_leave_block_section_log_entry_as_dict_serialized["train_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_id
+                == train_leave_block_section_log_entry_as_dict_serialized[
+                    "block_section_id"
+                ]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_length
+                == train_leave_block_section_log_entry_as_dict_serialized[
+                    "block_section_length"
+                ]
+            )
+
+        def test_deserialization_empty_fails(
+            self, empty_train_leave_block_section_log_entry_as_dict
+        ):
+            """Tests that TrainLeaveBlockSectionLogEntry cannot be deserialized
+            with no fields set."""
+            with pytest.raises(ValidationError):
+                TrainLeaveBlockSectionLogEntry.Schema().load(
+                    empty_train_leave_block_section_log_entry_as_dict
+                )
+
+
+class TestInjectFaultLogEntry:
+    """Tests for InjectFaultLogEntry."""
+
+    @pytest.fixture
+    def inject_fault_log_entry_as_dict(
+        self,
+        timestamp,
+        tick,
+        message,
+        run,
+        platform_blocked_fault_configuration,
+        track_blocked_fault_configuration,
+        track_speed_limit_fault_configuration,
+        schedule_blocked_fault_configuration,
+        train_prio_fault_configuration,
+        train_speed_fault_configuration,
+        affected_element,
+        value_before,
+        value_after,
+    ):
+        """InjectFaultLogEntry as dict with all fields set."""
+        return {
+            "timestamp": timestamp,
+            "tick": tick,
+            "message": message,
+            "run_id": run.id,
+            "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
+            "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
+            "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
+            "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration.id,
+            "train_prio_fault_configuration": train_prio_fault_configuration.id,
+            "train_speed_fault_configuration": train_speed_fault_configuration.id,
+            "affected_element": affected_element,
+            "value_before": value_before,
+            "value_after": value_after,
+        }
+
+    @pytest.fixture
+    def inject_fault_log_entry_as_dict_serialized(
+        self,
+        timestamp,
+        tick,
+        message,
+        run,
+        platform_blocked_fault_configuration,
+        track_blocked_fault_configuration,
+        track_speed_limit_fault_configuration,
+        schedule_blocked_fault_configuration,
+        train_prio_fault_configuration,
+        train_speed_fault_configuration,
+        affected_element,
+        value_before,
+        value_after,
+    ):
+        """InjectFaultLogEntry as serialized dict with all fields set."""
+        return {
+            "timestamp": timestamp.isoformat(),
+            "tick": tick,
+            "message": message,
+            "run_id": str(run.id),
+            "platform_blocked_fault_configuration": str(
+                platform_blocked_fault_configuration.id
+            ),
+            "track_blocked_fault_configuration": str(
+                track_blocked_fault_configuration.id
+            ),
+            "track_speed_limit_fault_configuration": str(
+                track_speed_limit_fault_configuration.id
+            ),
+            "schedule_blocked_fault_configuration": str(
+                schedule_blocked_fault_configuration.id
+            ),
+            "train_prio_fault_configuration": str(train_prio_fault_configuration.id),
+            "train_speed_fault_configuration": str(train_speed_fault_configuration.id),
+            "affected_element": affected_element,
+            "value_before": value_before,
+            "value_after": value_after,
+        }
+
+    @pytest.fixture
+    def empty_inject_fault_log_entry_as_dict(self):
+        """InjectFaultLogEntry as dict with no fields set."""
+        return {}
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
+
+    def test_create(self, inject_fault_log_entry_as_dict):
+        """Test that Inject Fault Log Entry can be created."""
+        inject_fault_log_entry = InjectFaultLogEntry.create(
+            **inject_fault_log_entry_as_dict
+        )
+        assert (
+            InjectFaultLogEntry.select()
+            .where(InjectFaultLogEntry.id == inject_fault_log_entry.id)
+            .first()
+            == inject_fault_log_entry
+        )
+
+    def test_create_empty_fails(self, empty_inject_fault_log_entry_as_dict):
+        """Test that Inject Fault Log Entry cannot be created with no fields set."""
+        with pytest.raises(IntegrityError):
+            InjectFaultLogEntry.create(**empty_inject_fault_log_entry_as_dict)
+
+    def test_serialization(self, inject_fault_log_entry_as_dict):
+        """Test that Inject Fault Log Entry can be serialized."""
+        inject_fault_log_entry = InjectFaultLogEntry.create(
+            **inject_fault_log_entry_as_dict
+        )
+        assert (
+            inject_fault_log_entry.timestamp
+            == inject_fault_log_entry_as_dict["timestamp"]
+        )
+        assert inject_fault_log_entry.tick == inject_fault_log_entry_as_dict["tick"]
+        assert (
+            inject_fault_log_entry.message == inject_fault_log_entry_as_dict["message"]
+        )
+        assert (
+            inject_fault_log_entry.run_id.id == inject_fault_log_entry_as_dict["run_id"]
+        )
+        assert (
+            inject_fault_log_entry.platform_blocked_fault_configuration.id
+            == inject_fault_log_entry_as_dict["platform_blocked_fault_configuration"]
+        )
+        assert (
+            inject_fault_log_entry.track_blocked_fault_configuration.id
+            == inject_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+        )
+        assert (
+            inject_fault_log_entry.track_speed_limit_fault_configuration.id
+            == inject_fault_log_entry_as_dict["track_speed_limit_fault_configuration"]
+        )
+        assert (
+            inject_fault_log_entry.schedule_blocked_fault_configuration.id
+            == inject_fault_log_entry_as_dict["schedule_blocked_fault_configuration"]
+        )
+        assert (
+            inject_fault_log_entry.train_prio_fault_configuration.id
+            == inject_fault_log_entry_as_dict["train_prio_fault_configuration"]
+        )
+        assert (
+            inject_fault_log_entry.train_speed_fault_configuration.id
+            == inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
+        )
+        assert (
+            inject_fault_log_entry.affected_element
+            == inject_fault_log_entry_as_dict["affected_element"]
+        )
+        assert (
+            inject_fault_log_entry.value_before
+            == inject_fault_log_entry_as_dict["value_before"]
+        )
+        assert (
+            inject_fault_log_entry.value_after
+            == inject_fault_log_entry_as_dict["value_after"]
+        )
+
+        assert inject_fault_log_entry.to_dict() == {
+            "id": str(inject_fault_log_entry.id),
+            # pylint: disable=no-member
+            "created_at": inject_fault_log_entry.created_at.isoformat(),
+            "updated_at": inject_fault_log_entry.updated_at.isoformat(),
+            "timestamp": inject_fault_log_entry_as_dict["timestamp"].isoformat(),
+            "tick": inject_fault_log_entry_as_dict["tick"],
+            "message": inject_fault_log_entry_as_dict["message"],
+            "run_id": str(inject_fault_log_entry_as_dict["run_id"]),
+            "platform_blocked_fault_configuration": str(
+                inject_fault_log_entry_as_dict["platform_blocked_fault_configuration"]
+            ),
+            "track_blocked_fault_configuration": str(
+                inject_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+            ),
+            "track_speed_limit_fault_configuration": str(
+                inject_fault_log_entry_as_dict["track_speed_limit_fault_configuration"]
+            ),
+            "schedule_blocked_fault_configuration": str(
+                inject_fault_log_entry_as_dict["schedule_blocked_fault_configuration"]
+            ),
+            "train_prio_fault_configuration": str(
+                inject_fault_log_entry_as_dict["train_prio_fault_configuration"]
+            ),
+            "train_speed_fault_configuration": str(
+                inject_fault_log_entry_as_dict["train_speed_fault_configuration"]
+            ),
+            "affected_element": inject_fault_log_entry_as_dict["affected_element"],
+            "value_before": inject_fault_log_entry_as_dict["value_before"],
+            "value_after": inject_fault_log_entry_as_dict["value_after"],
+        }
+
+    def test_deserialization(self, inject_fault_log_entry_as_dict_serialized):
+        """Test that Inject Fault Log Entry can be deserialized."""
+        inject_fault_log_entry = InjectFaultLogEntry.Schema().load(
+            inject_fault_log_entry_as_dict_serialized
+        )
+        assert isinstance(inject_fault_log_entry, InjectFaultLogEntry)
+        assert isinstance(inject_fault_log_entry.id, UUID)
+        assert isinstance(inject_fault_log_entry.timestamp, datetime)
+        assert isinstance(inject_fault_log_entry.tick, int)
+        assert isinstance(inject_fault_log_entry.message, str)
+        assert isinstance(inject_fault_log_entry.run_id, Run)
+        assert isinstance(
+            inject_fault_log_entry.platform_blocked_fault_configuration,
+            PlatformBlockedFaultConfiguration,
+        )
+        assert isinstance(
+            inject_fault_log_entry.track_blocked_fault_configuration,
+            TrackBlockedFaultConfiguration,
+        )
+        assert isinstance(
+            inject_fault_log_entry.track_speed_limit_fault_configuration,
+            TrackSpeedLimitFaultConfiguration,
+        )
+        assert isinstance(
+            inject_fault_log_entry.schedule_blocked_fault_configuration,
+            ScheduleBlockedFaultConfiguration,
+        )
+        assert isinstance(
+            inject_fault_log_entry.train_prio_fault_configuration,
+            TrainPrioFaultConfiguration,
+        )
+        assert isinstance(
+            inject_fault_log_entry.train_speed_fault_configuration,
+            TrainSpeedFaultConfiguration,
+        )
+        assert isinstance(inject_fault_log_entry.affected_element, str)
+        assert isinstance(inject_fault_log_entry.value_before, str)
+        assert isinstance(inject_fault_log_entry.value_after, str)
+
+        assert (
+            inject_fault_log_entry.timestamp.isoformat()
+            == inject_fault_log_entry_as_dict_serialized["timestamp"]
+        )
+        assert (
+            inject_fault_log_entry.tick
+            == inject_fault_log_entry_as_dict_serialized["tick"]
+        )
+        assert (
+            inject_fault_log_entry.message
+            == inject_fault_log_entry_as_dict_serialized["message"]
+        )
+        assert (
+            str(inject_fault_log_entry.run_id)
+            == inject_fault_log_entry_as_dict_serialized["run_id"]
+        )
+        assert (
+            str(inject_fault_log_entry.platform_blocked_fault_configuration)
+            == inject_fault_log_entry_as_dict_serialized[
+                "platform_blocked_fault_configuration"
+            ]
+        )
+        assert (
+            str(inject_fault_log_entry.track_blocked_fault_configuration)
+            == inject_fault_log_entry_as_dict_serialized[
+                "track_blocked_fault_configuration"
+            ]
+        )
+        assert (
+            str(inject_fault_log_entry.track_speed_limit_fault_configuration)
+            == inject_fault_log_entry_as_dict_serialized[
+                "track_speed_limit_fault_configuration"
+            ]
+        )
+        assert (
+            str(inject_fault_log_entry.schedule_blocked_fault_configuration)
+            == inject_fault_log_entry_as_dict_serialized[
+                "schedule_blocked_fault_configuration"
+            ]
+        )
+        assert (
+            str(inject_fault_log_entry.train_prio_fault_configuration)
+            == inject_fault_log_entry_as_dict_serialized[
+                "train_prio_fault_configuration"
+            ]
+        )
+        assert (
+            str(inject_fault_log_entry.train_speed_fault_configuration)
+            == inject_fault_log_entry_as_dict_serialized[
+                "train_speed_fault_configuration"
+            ]
+        )
+        assert (
+            inject_fault_log_entry.affected_element
+            == inject_fault_log_entry_as_dict_serialized["affected_element"]
+        )
+        assert (
+            inject_fault_log_entry.value_before
+            == inject_fault_log_entry_as_dict_serialized["value_before"]
+        )
+        assert (
+            inject_fault_log_entry.value_after
+            == inject_fault_log_entry_as_dict_serialized["value_after"]
+        )
+
+    def test_deserialization_empty_fails(self, empty_inject_fault_log_entry_as_dict):
+        """Test that Inject Fault Log Entry cannot be deserialized with no fields set."""
+        with pytest.raises(ValidationError):
+            InjectFaultLogEntry.Schema().load(empty_inject_fault_log_entry_as_dict)
+
+
+class TestResolveFaultLogEntry:
+    """Tests for ResolveFaultLogEntry."""
+
+    @pytest.fixture
+    def resolve_fault_log_entry_as_dict(
+        self,
+        timestamp,
+        tick,
+        message,
+        run,
+        platform_blocked_fault_configuration,
+        track_blocked_fault_configuration,
+        track_speed_limit_fault_configuration,
+        schedule_blocked_fault_configuration,
+        train_prio_fault_configuration,
+        train_speed_fault_configuration,
+    ):
+        """ResolveFaultLogEntry as dict with all fields set."""
+        return {
+            "timestamp": timestamp,
+            "tick": tick,
+            "message": message,
+            "run_id": run.id,
+            "platform_blocked_fault_configuration": platform_blocked_fault_configuration.id,
+            "track_blocked_fault_configuration": track_blocked_fault_configuration.id,
+            "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration.id,
+            "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration.id,
+            "train_prio_fault_configuration": train_prio_fault_configuration.id,
+            "train_speed_fault_configuration": train_speed_fault_configuration.id,
+        }
+
+    @pytest.fixture
+    def resolve_fault_log_entry_as_dict_serialized(
+        self,
+        timestamp,
+        tick,
+        message,
+        run,
+        platform_blocked_fault_configuration,
+        track_blocked_fault_configuration,
+        track_speed_limit_fault_configuration,
+        schedule_blocked_fault_configuration,
+        train_prio_fault_configuration,
+        train_speed_fault_configuration,
+    ):
+        """ResolveFaultLogEntry as serialized dict with all fields set."""
+        return {
+            "timestamp": timestamp.isoformat(),
+            "tick": tick,
+            "message": message,
+            "run_id": str(run.id),
+            "platform_blocked_fault_configuration": str(
+                platform_blocked_fault_configuration.id
+            ),
+            "track_blocked_fault_configuration": str(
+                track_blocked_fault_configuration.id
+            ),
+            "track_speed_limit_fault_configuration": str(
+                track_speed_limit_fault_configuration.id
+            ),
+            "schedule_blocked_fault_configuration": str(
+                schedule_blocked_fault_configuration.id
+            ),
+            "train_prio_fault_configuration": str(train_prio_fault_configuration.id),
+            "train_speed_fault_configuration": str(train_speed_fault_configuration.id),
+        }
+
+    @pytest.fixture
+    def empty_resolve_fault_log_entry_as_dict(self):
+        """ResolveFaultLogEntry as dict with no fields set."""
+        return {}
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
+
+    def test_create(self, resolve_fault_log_entry_as_dict):
+        """Test that Remove Fault Log Entry can be created."""
+        resolve_fault_log_entry = ResolveFaultLogEntry.create(
+            **resolve_fault_log_entry_as_dict
+        )
+        assert (
+            ResolveFaultLogEntry.select()
+            .where(ResolveFaultLogEntry.id == resolve_fault_log_entry.id)
+            .first()
+            == resolve_fault_log_entry
+        )
+
+    def test_create_empty_fails(self, empty_resolve_fault_log_entry_as_dict):
+        """Test that Remove Fault Log Entry cannot be created with no fields set."""
+        with pytest.raises(IntegrityError):
+            ResolveFaultLogEntry.create(**empty_resolve_fault_log_entry_as_dict)
+
+    def test_serialization(self, resolve_fault_log_entry_as_dict):
+        """Test that Remove Fault Log Entry can be serialized."""
+        resolve_fault_log_entry = ResolveFaultLogEntry.create(
+            **resolve_fault_log_entry_as_dict
+        )
+        assert (
+            resolve_fault_log_entry.timestamp
+            == resolve_fault_log_entry_as_dict["timestamp"]
+        )
+        assert resolve_fault_log_entry.tick == resolve_fault_log_entry_as_dict["tick"]
+        assert (
+            resolve_fault_log_entry.message
+            == resolve_fault_log_entry_as_dict["message"]
+        )
+        assert (
+            resolve_fault_log_entry.run_id.id
+            == resolve_fault_log_entry_as_dict["run_id"]
+        )
+        assert (
+            resolve_fault_log_entry.platform_blocked_fault_configuration.id
+            == resolve_fault_log_entry_as_dict["platform_blocked_fault_configuration"]
+        )
+        assert (
+            resolve_fault_log_entry.track_blocked_fault_configuration.id
+            == resolve_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+        )
+        assert (
+            resolve_fault_log_entry.track_speed_limit_fault_configuration.id
+            == resolve_fault_log_entry_as_dict["track_speed_limit_fault_configuration"]
+        )
+        assert (
+            resolve_fault_log_entry.schedule_blocked_fault_configuration.id
+            == resolve_fault_log_entry_as_dict["schedule_blocked_fault_configuration"]
+        )
+        assert (
+            resolve_fault_log_entry.train_prio_fault_configuration.id
+            == resolve_fault_log_entry_as_dict["train_prio_fault_configuration"]
+        )
+        assert (
+            resolve_fault_log_entry.train_speed_fault_configuration.id
+            == resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
+        )
+
+        assert resolve_fault_log_entry.to_dict() == {
+            "id": str(resolve_fault_log_entry.id),
+            # pylint: disable=no-member
+            "created_at": resolve_fault_log_entry.created_at.isoformat(),
+            "updated_at": resolve_fault_log_entry.updated_at.isoformat(),
+            "timestamp": resolve_fault_log_entry_as_dict["timestamp"].isoformat(),
+            "tick": resolve_fault_log_entry_as_dict["tick"],
+            "message": resolve_fault_log_entry_as_dict["message"],
+            "run_id": str(resolve_fault_log_entry_as_dict["run_id"]),
+            "platform_blocked_fault_configuration": str(
+                resolve_fault_log_entry_as_dict["platform_blocked_fault_configuration"]
+            ),
+            "track_blocked_fault_configuration": str(
+                resolve_fault_log_entry_as_dict["track_blocked_fault_configuration"]
+            ),
+            "track_speed_limit_fault_configuration": str(
+                resolve_fault_log_entry_as_dict["track_speed_limit_fault_configuration"]
+            ),
+            "schedule_blocked_fault_configuration": str(
+                resolve_fault_log_entry_as_dict["schedule_blocked_fault_configuration"]
+            ),
+            "train_prio_fault_configuration": str(
+                resolve_fault_log_entry_as_dict["train_prio_fault_configuration"]
+            ),
+            "train_speed_fault_configuration": str(
+                resolve_fault_log_entry_as_dict["train_speed_fault_configuration"]
+            ),
+        }
+
+    def test_deserialization(self, resolve_fault_log_entry_as_dict_serialized):
+        """Test that Remove Fault Log Entry can be deserialized."""
+        resolve_fault_log_entry = ResolveFaultLogEntry.Schema().load(
+            resolve_fault_log_entry_as_dict_serialized
+        )
+        assert isinstance(resolve_fault_log_entry, ResolveFaultLogEntry)
+        assert isinstance(resolve_fault_log_entry.id, UUID)
+        assert isinstance(resolve_fault_log_entry.timestamp, datetime)
+        assert isinstance(resolve_fault_log_entry.tick, int)
+        assert isinstance(resolve_fault_log_entry.message, str)
+        assert isinstance(resolve_fault_log_entry.run_id, Run)
+        assert isinstance(
+            resolve_fault_log_entry.platform_blocked_fault_configuration,
+            PlatformBlockedFaultConfiguration,
+        )
+        assert isinstance(
+            resolve_fault_log_entry.track_blocked_fault_configuration,
+            TrackBlockedFaultConfiguration,
+        )
+        assert isinstance(
+            resolve_fault_log_entry.track_speed_limit_fault_configuration,
+            TrackSpeedLimitFaultConfiguration,
+        )
+        assert isinstance(
+            resolve_fault_log_entry.schedule_blocked_fault_configuration,
+            ScheduleBlockedFaultConfiguration,
+        )
+        assert isinstance(
+            resolve_fault_log_entry.train_prio_fault_configuration,
+            TrainPrioFaultConfiguration,
+        )
+        assert isinstance(
+            resolve_fault_log_entry.train_speed_fault_configuration,
+            TrainSpeedFaultConfiguration,
+        )
+        assert (
+            resolve_fault_log_entry.timestamp.isoformat()
+            == resolve_fault_log_entry_as_dict_serialized["timestamp"]
+        )
+        assert (
+            resolve_fault_log_entry.tick
+            == resolve_fault_log_entry_as_dict_serialized["tick"]
+        )
+        assert (
+            resolve_fault_log_entry.message
+            == resolve_fault_log_entry_as_dict_serialized["message"]
+        )
+        assert (
+            str(resolve_fault_log_entry.run_id)
+            == resolve_fault_log_entry_as_dict_serialized["run_id"]
+        )
+        assert (
+            str(resolve_fault_log_entry.platform_blocked_fault_configuration)
+            == resolve_fault_log_entry_as_dict_serialized[
+                "platform_blocked_fault_configuration"
+            ]
+        )
+        assert (
+            str(resolve_fault_log_entry.track_blocked_fault_configuration)
+            == resolve_fault_log_entry_as_dict_serialized[
+                "track_blocked_fault_configuration"
+            ]
+        )
+        assert (
+            str(resolve_fault_log_entry.track_speed_limit_fault_configuration)
+            == resolve_fault_log_entry_as_dict_serialized[
+                "track_speed_limit_fault_configuration"
+            ]
+        )
+        assert (
+            str(resolve_fault_log_entry.schedule_blocked_fault_configuration)
+            == resolve_fault_log_entry_as_dict_serialized[
+                "schedule_blocked_fault_configuration"
+            ]
+        )
+        assert (
+            str(resolve_fault_log_entry.train_prio_fault_configuration)
+            == resolve_fault_log_entry_as_dict_serialized[
+                "train_prio_fault_configuration"
+            ]
+        )
+        assert (
+            str(resolve_fault_log_entry.train_speed_fault_configuration)
+            == resolve_fault_log_entry_as_dict_serialized[
+                "train_speed_fault_configuration"
+            ]
+        )
+
+    def test_deserialization_empty_fails(self, empty_resolve_fault_log_entry_as_dict):
+        """Test that Remove Fault Log Entry cannot be deserialized with no fields set."""
+        with pytest.raises(ValidationError):
+            ResolveFaultLogEntry.Schema().load(empty_resolve_fault_log_entry_as_dict)
