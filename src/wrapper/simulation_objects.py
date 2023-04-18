@@ -62,6 +62,34 @@ class SimulationObject(ABC):
 class Node(SimulationObject):
     """A point somewhere in the simulation where `Track`s meet"""
 
+    _edges: List["Edge"] = None
+    _edge_ids: List["str"] = None
+
+    @property
+    def edges(self) -> List["Edge"]:
+        return self._edges
+
+    def update(self, data: dict):
+        pass
+
+    def add_subscriptions(self):
+        pass
+
+    @staticmethod
+    def from_simulation(
+        simulation_object: net.Node, updater: "SimulationObjectUpdatingComponent"
+    ) -> "SimulationObject":
+        result = Node()
+        result.updater = updater
+        result._edge_ids = (
+            simulation_object.getOutgoing() + simulation_object.getIncoming()
+        )
+
+        return result
+
+    def add_simulation_connections(self) -> None:
+        self._edges = [x for x in self.updater.tracks if x.identifier in self._edge_ids]
+
 
 class Signal(Node):
     """A signal in the simulation which can either show stop or go

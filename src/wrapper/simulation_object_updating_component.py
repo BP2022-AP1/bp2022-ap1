@@ -14,6 +14,7 @@ from src.wrapper.simulation_objects import (
     Switch,
     Track,
     Train,
+    Node,
 )
 
 
@@ -137,6 +138,13 @@ class SimulationObjectUpdatingComponent(Component):
             Switch.from_simulation(node, self)
             for node in net.getNodes()
             if len(node.getConnections()) >= 3
+        ]
+
+        # other nodes
+        self._simulation_objects += [
+            Node.from_simulation(node, self)
+            for node in net.getNodes()
+            if len(node.getConnections()) < 3
         ]
 
         # signals
