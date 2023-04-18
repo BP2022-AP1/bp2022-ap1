@@ -2,5 +2,6 @@
 	<input>
 		<net-file value="example.net.xml" />
 		<route-files value="example.routes.xml" />
+		<additional-files value="example.add.xml" />
 	</input>
 </configuration>
