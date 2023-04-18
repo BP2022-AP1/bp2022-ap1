@@ -4,7 +4,7 @@ from traci import trafficlight
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track
+from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch
 
 
 class TestSimulationObjectUpdatingComponent:
@@ -75,3 +75,4 @@ class TestSimulationObjectUpdatingComponent:
         assert len(configured_component.edges) == 38
         assert len(configured_component.platforms) == 3
         assert len(configured_component.switches) == 4
+        assert len(configured_component.tracks) == 19

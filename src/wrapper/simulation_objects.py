@@ -200,12 +200,11 @@ class Edge(SimulationObject):
 
         :return: The track
         """
-        assert self._track is not None
         return self._track
 
     @track.setter
     def track(self, track: "Track") -> None:
-        """Updates the edge to contain the parent Track; may onlx be called once
+        """Updates the edge to contain the parent Track
 
         :param track: The track this edge belongs to
         """

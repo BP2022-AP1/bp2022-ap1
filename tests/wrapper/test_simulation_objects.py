@@ -191,7 +191,7 @@ class TestTrack:
         track.blocked = True
         assert track.edges[0].blocked
         assert track.edges[1].blocked
-        assert track.blocked == True
+        assert track.blocked
 
 
 class TestTrain:

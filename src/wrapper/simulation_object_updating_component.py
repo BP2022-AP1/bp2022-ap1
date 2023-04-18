@@ -123,7 +123,14 @@ class SimulationObjectUpdatingComponent(Component):
         ]
 
         # Tracks
-        self._simulation_objects += []  # TODO
+        for edge in (x for x in self.edges if x.track is None):
+            if edge.identifier.endswith("-re"):
+                identifier = edge.identifier.split("-re")[0]
+            else:
+                identifier = edge.identifier + "-re"
+
+            reverse = [x for x in self.edges if x.identifier == identifier][0]
+            self._simulation_objects.append(Track(edge, reverse))
 
         # switches
         self._simulation_objects += [
