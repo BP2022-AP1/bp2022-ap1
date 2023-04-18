@@ -6,7 +6,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Track
+from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
 @pytest.fixture
@@ -73,3 +73,10 @@ def combine_platform_and_wrapper(
     platform.updater = wrapper
     wrapper.simulation_objects.append(platform)
     return platform, wrapper
+
+
+@pytest.fixture
+def combine_train_and_wrapper(train: Train, wrapper: SimulationObjectUpdatingComponent):
+    train.updater = wrapper
+    wrapper.simulation_objects.append(train)
+    return train, wrapper
