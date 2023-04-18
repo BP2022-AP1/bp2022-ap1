@@ -14,6 +14,7 @@ class TrainSpeedFault(Fault):
     """A fault affecting the speed of trains."""
 
     configuration: TrainSpeedFaultConfiguration
+    old_speed: float
     train: Train
     wrapper: SimulationObjectUpdatingComponent
     interlocking: IInterlockingDisruptor
@@ -39,10 +40,21 @@ class TrainSpeedFault(Fault):
         :param tick: the simulation tick in which inject_fault was called
         :type tick: Integer
         """
-        # - get train object
-        # - save the current speed of the train in old_speed
-        # - set train speed to new_speed
-        raise NotImplementedError()
+        self.train: Train = [
+            train
+            for train in self.wrapper.trains
+            if train.identifier == self.configuration.affected_element_id
+        ][0]
+        self.train.speed = self.configuration.new_speed
+
+        self.interlocking.insert_train_max_speed_changed(self.train.identifier)
+        self.logger.inject_train_speed_fault(
+            tick,
+            self.configuration.id,
+            self.train.identifier,
+            self.old_speed,
+            self.configuration.new_speed,
+        )
 
     def resolve_fault(self, tick: int):
         """resolves the previously injected TrainSpeedFault
@@ -50,7 +62,6 @@ class TrainSpeedFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        # - get train object
-        # - set the train speed to old_speed
-
-        raise NotImplementedError()
+        self.train.speed = self.old_speed
+        self.interlocking.insert_train_max_speed_changed(self.train.identifier)
+        self.logger.resolve_train_speed_fault(tick, self.configuration.id)
