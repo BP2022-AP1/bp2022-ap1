@@ -4,7 +4,12 @@ from railwayroutegenerator.routegenerator import RouteGenerator
 
 
 def generate_planpro():
-    cordinates = [(51.5594,14.3344), (51.5381,14.3794), (51.4829,14.4130), (51.5166,14.3088)]
+    cordinates = [
+        (51.5594, 14.3344),
+        (51.5381, 14.3794),
+        (51.4829, 14.4130),
+        (51.5166, 14.3088),
+    ]
     polygon = ""
     for cord in cordinates:
         polygon += str(cord[0]) + " "
