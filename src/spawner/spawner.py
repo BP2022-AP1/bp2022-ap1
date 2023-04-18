@@ -91,7 +91,7 @@ class Spawner(Component, ISpawnerDisruptor):
         :param tick: The current tick.
         :type tick: int
         """
-        for schedule in self._schedules:
+        for schedule in self._schedules.values():
             schedule.maybe_spawn(tick, self.traci_wrapper)
 
     def __init__(
