@@ -4,7 +4,12 @@ from railwayroutegenerator.routegenerator import RouteGenerator
 
 
 def generate_planpro():
-    polygon = "51.559286255426606 14.22958373936126 51.52956887166332 14.249153136333918 51.547102337669735 14.353866576275324 51.57915827365655 14.286231993755793"
+    cordinates = [(51.5594,14.3344), (51.5381,14.3794), (51.4829,14.4130), (51.5166,14.3088)]
+    polygon = ""
+    for cord in cordinates:
+        polygon += str(cord[0]) + " "
+        polygon += str(cord[1]) + " "
+    polygon = polygon[:-1]
     # This is somewhere west of Schwarze Pumpe.
 
     # Import from OSM/ORM
