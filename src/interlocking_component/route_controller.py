@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from interlocking import interlockinginterface
 
 from src.interlocking_component.router import Router
-from src.wrapper.simulation_objects import Track, Train, Platform
+from src.wrapper.simulation_objects import Platform, Track, Train
 
 
 class IRouteController(ABC):
@@ -84,7 +84,7 @@ class IInterlockingDisruptor:
         :type train: str
         """
         raise NotImplementedError()
-    
+
     def insert_train_priority_changed(self, train: Train):
         """This method is used to notify the interlocking about a changed train priority,
         so that it can recalculate the routing of relevant trains.
