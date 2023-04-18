@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
-from interlocking import interlockinginterface
+from interlocking.interlockinginterface import Interlocking
+from interlocking.test_interlocking import PrintLineInfrastructureProvider
+from planpro_importer.reader import PlanProReader
+from railwayroutegenerator.routegenerator import RouteGenerator
 
 from src.interlocking_component.router import Router
 from src.wrapper.simulation_objects import Track, Train
@@ -92,8 +95,25 @@ class RouteController(IRouteController):
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
 
-    interlocking: interlockinginterface = None
+    interlocking: Interlocking = None
     router: Router = None
+
+    def start_interlocking(self):
+        self.router = Router()
+
+        # Import from local PlanPro file
+        topology = PlanProReader(
+            "data/planpro/test_with_new_yaramo.ppxml"
+        ).read_topology_from_plan_pro_file()
+
+        # Generate Routes
+        # I'm not sure if this is necessary, but better save than sorry.
+        RouteGenerator(topology).generate_routes()
+
+        infrastructure_provider = PrintLineInfrastructureProvider()
+        # This has to change in the future, as we want our own infrastructure_provider
+        self.interlocking = Interlocking(infrastructure_provider)
+        self.interlocking.prepare(topology)
 
     def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
