@@ -74,13 +74,13 @@ class RouteController:
     interlocking: Interlocking = None
     router: Router = None
 
-    def start_interlocking(self):
+    def start_interlocking(self, file_name: str = "test_example.ppxml"):
         """This method instantiates the interlocking and the infrastructure_provider and must be called before the interlocking can be used."""
         self.router = Router()
 
         # Import from local PlanPro file
         topology = PlanProReader(
-            "data/planpro/test_example.ppxml"
+            "data/planpro/" + file_name
         ).read_topology_from_plan_pro_file()
 
         # Generate Routes

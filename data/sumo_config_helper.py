@@ -3,6 +3,7 @@ import os
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 from sumoexporter import SUMOExporter
+from track_signal_generator import TrackSignalGenerator
 
 
 def generate_sumo():
@@ -10,6 +11,10 @@ def generate_sumo():
     topology = PlanProReader(
         "data/planpro/test_with_fixed_points.ppxml"
     ).read_topology_from_plan_pro_file()
+
+    # Generate Signals
+    # I'm not sure if this is necessary, but better save than sorry.
+    TrackSignalGenerator(topology).place_edge_signals()
 
     # Generate Routes
     # I'm not sure if this is necessary, but better save than sorry.

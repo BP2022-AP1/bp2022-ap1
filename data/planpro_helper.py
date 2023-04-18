@@ -1,6 +1,7 @@
 from orm_importer.importer import ORMImporter
 from planproexporter import Generator
 from railwayroutegenerator.routegenerator import RouteGenerator
+from track_signal_generator import TrackSignalGenerator
 
 
 def generate_planpro():
@@ -19,6 +20,9 @@ def generate_planpro():
 
     # Import from OSM/ORM
     topology = ORMImporter().run(polygon)
+
+    # Generate Signals
+    TrackSignalGenerator(topology).place_edge_signals()
 
     # Generate Routes
     RouteGenerator(topology).generate_routes()

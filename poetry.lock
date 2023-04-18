@@ -1173,6 +1173,25 @@ files = [
 sumolib = ">=1.16.0"
 
 [[package]]
+name = "track-signal-generator"
+version = "0.1.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.10"
+files = []
+develop = false
+
+[package.dependencies]
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
+
+[package.source]
+type = "git"
+url = "https://github.com/Lietze/track-signal-generator.git"
+reference = "refactor/replace-connected-nodes-edges"
+resolved_reference = "6b96fd58aa82ac4901f8cd17d4bdc53dcb8b8a36"
+
+[[package]]
 name = "typing-extensions"
 version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1327,7 +1346,7 @@ pyproj = "^3.4.1"
 type = "git"
 url = "https://github.com/antonykamp/yaramo"
 reference = "refactor/replace-connected-nodes-with-edges"
-resolved_reference = "35afe3b9816039a117ce5f5f73af561bf3abdd56"
+resolved_reference = "7a6def02a61a8921a60f5a3a5c6cb7a7bfa34c54"
 
 [[package]]
 name = "zipp"
@@ -1348,4 +1367,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3bdfdd547de0ff12354045146c232ba5d6e4986c90892d5b60c7d855fcb60c77"
+content-hash = "f7e0962c973d0d6c0668f7cf68cc9c62064a109ded0d8d19150e7fc0e5e4472e"

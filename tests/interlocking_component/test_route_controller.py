@@ -12,5 +12,5 @@ class TestRouteController:
         return RouteController()
 
     def test_start_interlocking(self, route_controller):
-        route_controller.start_interlocking()
+        route_controller.start_interlocking("test_example.ppxml")
         assert isinstance(route_controller.interlocking, Interlocking)
