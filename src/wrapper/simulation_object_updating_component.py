@@ -1,10 +1,11 @@
-from os.path import dirname, join
+from os import path
 from typing import List
 
 import sumolib
 import traci
 
 from src.component import Component
+from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
     Platform,
     Signal,
@@ -74,9 +75,15 @@ class SimulationObjectUpdatingComponent(Component):
 
     def __init__(
         self,
-        logger=None,
-        sumo_configuration=None,
+        logger: Logger = None,
+        sumo_configuration: str = None,
     ):
+        """Creates a new SimulationObjectUpdatingComponent.
+
+        :param logger: The logger to send events to, defaults to None
+        :param sumo_configuration: the path to the `.sumocfg` file
+        (relative to the root of the project), defaults to None
+        """
         super().__init__(priority=10, logger=logger)
         self._simulation_objects = []
         self._sumo_configuration = sumo_configuration
@@ -90,10 +97,10 @@ class SimulationObjectUpdatingComponent(Component):
             simulation_object.update(subscription_results[simulation_object.traci_id])
 
     def _fetch_initial_simulation_objects(self):
-        folder = dirname(self._sumo_configuration)
+        folder = path.dirname(self._sumo_configuration)
         inputs = next(sumolib.xml.parse(self._sumo_configuration, "input"))
-        net_file = join(folder, inputs["net-file"][0].getAttribute("value"))
-        additional_file = join(
+        net_file = path.join(folder, inputs["net-file"][0].getAttribute("value"))
+        additional_file = path.join(
             folder, inputs["additional-files"][0].getAttribute("value")
         )
         net = sumolib.net.readNet(net_file)
