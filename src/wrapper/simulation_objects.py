@@ -75,15 +75,20 @@ class Node(SimulationObject):
     def add_subscriptions(self):
         pass
 
+    def _set_edge_ids(self, simulation_object: net.node) -> None:
+        self._edge_ids = [
+            edge.getID()
+            for edge in simulation_object.getOutgoing()
+            + simulation_object.getIncoming()
+        ]
+
     @staticmethod
     def from_simulation(
-        simulation_object: net.Node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
         result = Node()
         result.updater = updater
-        result._edge_ids = (
-            simulation_object.getOutgoing() + simulation_object.getIncoming()
-        )
+        result._set_edge_ids(simulation_object)
 
         return result
 
@@ -138,16 +143,18 @@ class Signal(Node):
     def add_subscriptions(self) -> int:
         return 0
 
+    def _set_edge_ids(self, simulation_object: net.TLS) -> None:
+        self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
+
     @staticmethod
     def from_simulation(
         simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
     ) -> "Signal":
         result = Signal(simulation_object.getID())
+        result.updater = updater
+        result._set_edge_ids(simulation_object)
 
         return result
-
-    def add_simulation_connections(self) -> None:
-        pass
 
 
 class Switch(Node):
@@ -200,11 +207,10 @@ class Switch(Node):
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
         result = Switch(simulation_object.getID())
+        result.updater = updater
+        result._set_edge_ids(simulation_object)
 
         return result
-
-    def add_simulation_connections(self) -> None:
-        pass
 
 
 class Edge(SimulationObject):
