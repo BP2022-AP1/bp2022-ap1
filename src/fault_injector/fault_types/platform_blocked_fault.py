@@ -30,8 +30,8 @@ class PlatformBlockedFault(Fault):
         super().__init__(configuration, logger)
         self.wrapper = wrapper
         self.interlocking = interlocking
-
     # pylint: enable=duplicate-code
+
     def inject_fault(self, tick: int):
         """inject PlatformBlockedFault into the given component
 

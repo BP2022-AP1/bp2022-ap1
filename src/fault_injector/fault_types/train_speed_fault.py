@@ -1,8 +1,36 @@
+from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
+    TrainSpeedFaultConfiguration,
+)
 from src.fault_injector.fault_types.fault import Fault
+from src.interlocking_component.route_controller import IInterlockingDisruptor
+from src.logger.logger import Logger
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
+from src.wrapper.simulation_objects import Train
 
 
 class TrainSpeedFault(Fault):
     """A fault affecting the speed of trains."""
+
+    configuration: TrainSpeedFaultConfiguration
+    train: Train
+    wrapper: SimulationObjectUpdatingComponent
+    interlocking: IInterlockingDisruptor
+
+    # pylint: disable=duplicate-code
+    # Otherwise another inheritance layer would be needed.
+    def __init__(
+        self,
+        configuration,
+        logger: Logger,
+        wrapper: SimulationObjectUpdatingComponent,
+        interlocking: IInterlockingDisruptor,
+    ):
+        super().__init__(configuration, logger)
+        self.wrapper = wrapper
+        self.interlocking = interlocking
+    # pylint: enable=duplicate-code
 
     def inject_fault(self, tick: int):
         """inject TrainSpeedFault into the given component
