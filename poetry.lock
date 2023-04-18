@@ -1102,6 +1102,25 @@ files = [
 ]
 
 [[package]]
+name = "sumoexporter"
+version = "2.0.0"
+description = "An exporter to a SUMO scenario from a yaramo model"
+category = "main"
+optional = false
+python-versions = "^3.10"
+files = []
+develop = false
+
+[package.dependencies]
+yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+
+[package.source]
+type = "git"
+url = "https://github.com/simulate-digital-rail/sumo-exporter"
+reference = "HEAD"
+resolved_reference = "4735e007810f85cf9617f08f7de40f6e994c2ba9"
+
+[[package]]
 name = "sumolib"
 version = "1.16.0"
 description = "Python helper modules to read networks, parse output data and do other useful stuff related to the traffic simulation Eclipse SUMO"
@@ -1329,4 +1348,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2b9f6245bc2ff3a314e9978767c97bb8554a2494ccb7fd2dfcaeea8b1136030c"
+content-hash = "546077a3b5a52531e75ba9d275330d6959d49a77adbbdfd78df527dc5c53547e"
