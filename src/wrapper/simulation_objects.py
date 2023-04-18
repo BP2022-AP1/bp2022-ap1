@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import List, Tuple
 
+from sumolib import net
 from traci import constants, edge, trafficlight, vehicle
 
 
@@ -32,6 +33,28 @@ class SimulationObject(ABC):
         The return value should be compatible with
          the xxx in the following call `traci.subscribe(self._id, xxx)`.
         See <https://sumo.dlr.de/pydoc/traci.domain.html#Domain-subscribe>.
+        """
+        raise NotImplementedError()
+
+    @staticmethod
+    @abstractmethod
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "SimulationObject":
+        """This method is called to initialize the object from the simulator.
+        When using SUMO, the simulation will not be started when this method is called.
+
+        :param simulation_object: The simulation object to initialize this object from.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def add_simulation_connections(self) -> None:
+        """This method is called, when all other simulation-connected objects are initialized.
+        You can establish links between objects in this method (e.g. between two edges).
+
+        When this method is called, the simulation is still not started,
+        but you have access to all the other simulation objects via `self.updater`.
         """
         raise NotImplementedError()
 
@@ -87,6 +110,17 @@ class Signal(Node):
     def add_subscriptions(self) -> int:
         return 0
 
+    @staticmethod
+    def from_simulation(
+        simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Signal":
+        result = Signal(simulation_object.getID())
+
+        return result
+
+    def add_simulation_connections(self) -> None:
+        pass
+
 
 class Switch(Node):
     """A switch in the simulation which can point either left or right
@@ -132,6 +166,18 @@ class Switch(Node):
     def add_subscriptions(self) -> int:
         return 0  # We don't have to update anything from the simulator
 
+    @staticmethod
+    def from_simulation(
+        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Switch":
+        # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
+        result = Switch(simulation_object.getID())
+
+        return result
+
+    def add_simulation_connections(self) -> None:
+        pass
+
 
 class Track(SimulationObject):
     """A track in the simulation where trains can drive along"""
@@ -166,6 +212,18 @@ class Track(SimulationObject):
 
     def add_subscriptions(self) -> int:
         return constants.VAR_MAXSPEED
+
+    @staticmethod
+    def from_simulation(simulation_object: net.edge, updater) -> "Track":
+        # see: https://sumo.dlr.de/pydoc/sumolib.net.edge.html
+        result = Track(simulation_object.getID())
+        result.updater = updater
+
+        return result
+
+    def add_simulation_connections(self) -> None:
+        # we don't need references to other nodes
+        pass
 
 
 class Platform(SimulationObject):
@@ -209,6 +267,18 @@ class Platform(SimulationObject):
 
     def add_subscriptions(self) -> int:
         return 0  # We don't have to update anything from the simulator
+
+    @staticmethod
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Platform":
+        result = Platform(identifier=simulation_object.id)
+        result.updater = updater
+        return result
+
+    def add_simulation_connections(self) -> None:
+        # Nothing to do (we dont load trains from the sim)
+        pass
 
 
 class Train(SimulationObject):
@@ -284,6 +354,15 @@ class Train(SimulationObject):
 
         def add_subscriptions(self) -> int:
             return constants.VAR_MAXSPEED
+
+        @staticmethod
+        def from_simulation(
+            simulation_object, updater: "SimulationObjectUpdatingComponent"
+        ) -> "Train.TrainType":
+            pass
+
+        def add_simulation_connections(self) -> None:
+            pass
 
     _position: Tuple[float, float]
     _route: str
@@ -422,3 +501,14 @@ class Train(SimulationObject):
             + constants.VAR_ROAD_ID
             + constants.VAR_SPEED
         )
+
+    @staticmethod
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "Train":
+        # Nothing to do (we dont load trains from the sim)
+        pass
+
+    def add_simulation_connections(self) -> None:
+        # Nothing to do (we dont load trains from the sim)
+        pass
