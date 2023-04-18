@@ -6,7 +6,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Platform, Track
+from src.wrapper.simulation_objects import Platform, Edge, Track
 
 
 @pytest.fixture
@@ -45,8 +45,18 @@ def wrapper():
 
 
 @pytest.fixture
-def track() -> Track:
-    return Track("fault injector track")
+def edge() -> Edge:
+    return Edge("fault injector track")
+
+
+@pytest.fixture
+def edge_re() -> Edge:
+    return Edge("fault injector track-re")
+
+
+@pytest.fixture
+def track(edge, edge_re):
+    return Track(edge, edge_re)
 
 
 @pytest.fixture

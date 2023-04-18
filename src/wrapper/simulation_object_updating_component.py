@@ -13,6 +13,7 @@ from src.wrapper.simulation_objects import (
     Switch,
     Track,
     Train,
+    Edge,
 )
 
 
@@ -66,6 +67,14 @@ class SimulationObjectUpdatingComponent(Component):
         return [x for x in self._simulation_objects if isinstance(x, Platform)]
 
     @property
+    def edges(self) -> List[Edge]:
+        """Returns all tracks in the simulation
+
+        :return: The tracks in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Edge)]
+
+    @property
     def tracks(self) -> List[Track]:
         """Returns all tracks in the simulation
 
@@ -108,10 +117,13 @@ class SimulationObjectUpdatingComponent(Component):
             sumolib.xml.parse(additional_file, "trainStop")
         )
 
-        # Tracks
+        # Edges
         self._simulation_objects += [
-            Track.from_simulation(edge, self) for edge in net.getEdges()
+            Edge.from_simulation(edge, self) for edge in net.getEdges()
         ]
+
+        # Tracks
+        self._simulation_objects += []  # TODO
 
         # switches
         self._simulation_objects += [
