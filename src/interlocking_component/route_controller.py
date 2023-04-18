@@ -75,7 +75,9 @@ class RouteController:
     router: Router = None
 
     def start_interlocking(self, file_name: str = "test_example.ppxml"):
-        """This method instantiates the interlocking and the infrastructure_provider and must be called before the interlocking can be used."""
+        """This method instantiates the interlocking and the infrastructure_provider
+        and must be called before the interlocking can be used.
+        """
         self.router = Router()
 
         # Import from local PlanPro file
