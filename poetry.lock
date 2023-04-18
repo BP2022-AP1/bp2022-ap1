@@ -315,16 +315,16 @@ files = []
 develop = false
 
 [package.dependencies]
-planpro-exporter = {git = "https://github.com/simulate-digital-rail/planpro-exporter"}
-planpro-importer = {git = "https://github.com/simulate-digital-rail/planpro-importer"}
-railway-route-generator = {git = "https://github.com/simulate-digital-rail/railway-route-generator"}
-yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+planpro-exporter = {git = "https://github.com/antonykamp/planpro-exporter", branch = "refactor/replace-connected-nodes-edges"}
+planpro-importer = {git = "https://github.com/antonykamp/planpro-importer", branch = "refactor/replace-connected-nodes-edges"}
+railway-route-generator = {git = "https://github.com/antonykamp/railway-route-generator", branch = "refactor/replace-connected-nodes-edges"}
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
 
 [package.source]
 type = "git"
 url = "https://github.com/Lietze/interlocking.git"
-reference = "2be51e6"
-resolved_reference = "2be51e63e0f542e213bf8bcd5e0a94986437f041"
+reference = "d6d32b4"
+resolved_reference = "d6d32b4be8e739a99a7f4195e341e0f8292b4016"
 
 [[package]]
 name = "isort"
@@ -712,14 +712,14 @@ pyparsing = "3.0.9"
 pytest = "^7.2.2"
 six = "^1.16.0"
 tomli = "2.0.1"
-yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
 zipp = "3.8.1"
 
 [package.source]
 type = "git"
-url = "https://github.com/Lietze/orm-importer.git"
-reference = "54cbdd4"
-resolved_reference = "54cbdd429e9a5bf6fd69e562194674131fbe83ae"
+url = "https://github.com/antonykamp/orm-importer"
+reference = "refactor/replace-connected-nodes-edges"
+resolved_reference = "9e50787b3756af5a9f8ef8115ed13a79c3d31078"
 
 [[package]]
 name = "overpy"
@@ -806,13 +806,13 @@ files = []
 develop = false
 
 [package.dependencies]
-yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
 
 [package.source]
 type = "git"
-url = "https://github.com/simulate-digital-rail/planpro-exporter"
-reference = "HEAD"
-resolved_reference = "a2a9b210a408a8917246894dba96322b3e5d4603"
+url = "https://github.com/antonykamp/planpro-exporter"
+reference = "refactor/replace-connected-nodes-edges"
+resolved_reference = "3c203d1222dc944782a90400915bcfb71e88dbc6"
 
 [[package]]
 name = "planpro-importer"
@@ -827,13 +827,13 @@ develop = false
 [package.dependencies]
 lxml = "^4.9"
 six = "^1.16.0"
-yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
 
 [package.source]
 type = "git"
-url = "https://github.com/simulate-digital-rail/planpro-importer"
-reference = "HEAD"
-resolved_reference = "e3eec08f8bbd9d0fda0b03d8d2a4fad1edfbf8b7"
+url = "https://github.com/antonykamp/planpro-importer"
+reference = "refactor/replace-connected-nodes-edges"
+resolved_reference = "724a960057a768f3fa01b7b7c8ae1b73a6500603"
 
 [[package]]
 name = "platformdirs"
@@ -1081,13 +1081,13 @@ files = []
 develop = false
 
 [package.dependencies]
-yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
 
 [package.source]
 type = "git"
-url = "https://github.com/simulate-digital-rail/railway-route-generator"
-reference = "HEAD"
-resolved_reference = "b43e28561cd5a5fcb9fbe3ab87766ce1bc3626bb"
+url = "https://github.com/antonykamp/railway-route-generator"
+reference = "refactor/replace-connected-nodes-edges"
+resolved_reference = "d13e82d853bff24ff7da78722ae578471f610a1c"
 
 [[package]]
 name = "six"
@@ -1112,13 +1112,13 @@ files = []
 develop = false
 
 [package.dependencies]
-yaramo = {git = "https://github.com/simulate-digital-rail/yaramo"}
+yaramo = {git = "https://github.com/antonykamp/yaramo", branch = "refactor/replace-connected-nodes-with-edges"}
 
 [package.source]
 type = "git"
-url = "https://github.com/simulate-digital-rail/sumo-exporter"
-reference = "HEAD"
-resolved_reference = "4735e007810f85cf9617f08f7de40f6e994c2ba9"
+url = "https://github.com/antonykamp/sumo-exporter"
+reference = "refactor/replace-connected-nodes-edges"
+resolved_reference = "025b2fa9ecac295800d0e59d76a0f6177c721188"
 
 [[package]]
 name = "sumolib"
@@ -1325,9 +1325,9 @@ pyproj = "^3.4.1"
 
 [package.source]
 type = "git"
-url = "https://github.com/simulate-digital-rail/yaramo"
-reference = "HEAD"
-resolved_reference = "f94b06c551bbbd527129448cd9bf5eb5a4575097"
+url = "https://github.com/antonykamp/yaramo"
+reference = "refactor/replace-connected-nodes-with-edges"
+resolved_reference = "befdf8626009ff4d7f3bfa08fe6aa6079a861fae"
 
 [[package]]
 name = "zipp"
@@ -1348,4 +1348,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "546077a3b5a52531e75ba9d275330d6959d49a77adbbdfd78df527dc5c53547e"
+content-hash = "3bdfdd547de0ff12354045146c232ba5d6e4986c90892d5b60c7d855fcb60c77"
