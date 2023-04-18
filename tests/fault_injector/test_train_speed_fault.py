@@ -83,7 +83,6 @@ class TestTrainSpeedFault:
         # pylint: enable=unused-argument
     ):
         train.train_type.max_speed = 100
-        assert train.train_type.max_speed == 100
         with pytest.raises(NotImplementedError):
             train_speed_fault.inject_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
