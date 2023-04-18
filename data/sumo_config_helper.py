@@ -12,10 +12,12 @@ def generate_sumo():
     # I'm not sure if this is necessary, but better save than sorry.
     RouteGenerator(topology).generate_routes()
 
+    # Generate the Sumo files
+    # chdir is necessary, because sumo_exporter.write_output() is hardcoded to always wirte to the path "sumo-config"
     current_directory = os.getcwd()
-    os.chdir("data")
-    os.mkdir(topology.name.split("/")[-1])
-    topology.name = topology.name.split("/")[-1]+"/"+topology.name.split("/")[-1]
+    os.makedirs("data/sumo/"+topology.name.split("/")[-1], exist_ok=True)
+    os.chdir("data/sumo/"+topology.name.split("/")[-1])
+    topology.name = topology.name.split("/")[-1]
     sumo_exporter = SUMOExporter(topology)
     sumo_exporter.convert()
     sumo_exporter.write_output()
