@@ -284,6 +284,8 @@ class Platform(SimulationObject):
 class Train(SimulationObject):
     """A train driving around in the simulation."""
 
+    # pylint: disable=too-many-instance-attributes
+
     class TrainType(SimulationObject):
         """Metadata about a specific train"""
 

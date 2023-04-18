@@ -1,6 +1,7 @@
+from uuid import uuid4
+
 import pytest
 from traci import constants, edge, trafficlight, vehicle
-from uuid import uuid4
 
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
