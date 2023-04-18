@@ -45,7 +45,8 @@ class TrainSpeedFault(Fault):
             for train in self.wrapper.trains
             if train.identifier == self.configuration.affected_element_id
         ][0]
-        self.train.speed = self.configuration.new_speed
+        self.old_speed = self.train.train_type.max_speed
+        self.train.train_type.max_speed = self.configuration.new_speed
 
         self.interlocking.insert_train_max_speed_changed(self.train.identifier)
         self.logger.inject_train_speed_fault(
@@ -62,6 +63,6 @@ class TrainSpeedFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        self.train.speed = self.old_speed
+        self.train.train_type.max_speed = self.old_speed
         self.interlocking.insert_train_max_speed_changed(self.train.identifier)
         self.logger.resolve_train_speed_fault(tick, self.configuration.id)
