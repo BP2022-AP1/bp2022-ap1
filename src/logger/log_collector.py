@@ -48,7 +48,8 @@ class LogCollector:
             TrainDepartureLogEntry.run_id == run_id
             and TrainDepartureLogEntry.train_id == train_id
         )
-        # pylint: disable=not-an-iterable pylint will not recognize that peewee results are iterable
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         departures_df = pd.DataFrame(
             [[d.tick, d.station_id] for d in departures], columns=["tick", "station_id"]
         )
@@ -67,7 +68,8 @@ class LogCollector:
             TrainArrivalLogEntry.run_id == run_id
             and TrainArrivalLogEntry.train_id == train_id
         )
-        # pylint: disable=not-an-iterable pylint will not recognize that peewee results are iterable
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         arrivals_df = pd.DataFrame(
             [[a.tick, a.station_id] for a in arrivals], columns=["tick", "station_id"]
         )
@@ -175,7 +177,8 @@ class LogCollector:
         :return: A DataFrame containing all block section times of the
         given train in the given run."""
 
-        # pylint: disable=not-an-iterable pylint will not recognize that peewee results are iterable
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         train_enter_df = pd.DataFrame(
             [
                 [e.tick, e.block_section_id, e.block_section_length]
@@ -186,7 +189,8 @@ class LogCollector:
             ],
             columns=["tick", "block_section_id", "block_section_length"],
         )
-        # pylint: disable=not-an-iterable pylint will not recognize that peewee results are iterable
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         train_leave_df = pd.DataFrame(
             [
                 [e.tick, e.block_section_id, e.block_section_length]
