@@ -148,25 +148,6 @@ class LogCollector:
         train_ids = train_ids.union({t.train_id for t in trains_leave})
         return list(train_ids)
 
-    def get_block_section_times_all_trains(self, run_id: UUID) -> pd.DataFrame:
-        """Returns a DataFrame containing all block section times of all
-        trains in the given run.
-        :param run_id: The id of the run.
-        :return: A DataFrame containing all block section times of all
-        trains in the given run."""
-
-        df_list = []
-        for train_id in self._get_trains_block_section(run_id):
-            block_section_times_df = self.get_block_section_times_of_train(
-                run_id, train_id
-            )
-            block_section_times_df["train_id"] = train_id
-            df_list += [block_section_times_df]
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.sort_values(["train_id", "leave_tick"], inplace=True)
-        block_section_times_df = block_section_times_df.reset_index(drop=True)
-        return block_section_times_df
-
     def get_block_section_times_of_train(
         self, run_id: UUID, train_id: str
     ) -> pd.DataFrame:
@@ -229,4 +210,23 @@ class LogCollector:
                 "block_section_length",
             ],
         )
+        return block_section_times_df
+
+    def get_block_section_times_all_trains(self, run_id: UUID) -> pd.DataFrame:
+        """Returns a DataFrame containing all block section times of all
+        trains in the given run.
+        :param run_id: The id of the run.
+        :return: A DataFrame containing all block section times of all
+        trains in the given run."""
+
+        df_list = []
+        for train_id in self._get_trains_block_section(run_id):
+            block_section_times_df = self.get_block_section_times_of_train(
+                run_id, train_id
+            )
+            block_section_times_df["train_id"] = train_id
+            df_list += [block_section_times_df]
+        block_section_times_df = pd.concat(df_list, axis=0)
+        block_section_times_df.sort_values(["train_id", "leave_tick"], inplace=True)
+        block_section_times_df = block_section_times_df.reset_index(drop=True)
         return block_section_times_df
