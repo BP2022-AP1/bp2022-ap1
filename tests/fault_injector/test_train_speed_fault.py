@@ -22,20 +22,6 @@ class TestTrainSpeedFault:
         pass
 
     @pytest.fixture
-    def train_add(self, monkeypatch):
-        def add_train(identifier, route, train_type):
-            assert identifier is not None
-            assert route is not None
-            assert train_type is not None
-
-        monkeypatch.setattr(vehicle, "add", add_train)
-
-    @pytest.fixture
-    # pylint: disable-next=unused-argument
-    def train(self, train_add) -> Train:
-        return Train(identifier="fault injector train", train_type="cargo")
-
-    @pytest.fixture
     def train_speed_fault_configuration(self, train: Train):
         return TrainSpeedFaultConfiguration.create(
             **{
