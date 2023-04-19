@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from pandas._testing import assert_frame_equal
+from pandas.testing import assert_frame_equal
 
 from src.logger.log_collector import LogCollector
 from tests.decorators import recreate_db_setup
