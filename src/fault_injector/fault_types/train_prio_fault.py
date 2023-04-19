@@ -44,11 +44,8 @@ class TrainPrioFault(Fault):
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio
 
-        
-        # - get train object
-        # - save the current prio of the train in old_prio
-        # - set train prio to new_prio
-        raise NotImplementedError()
+        self.interlocking.insert_train_priority_changed(self.train.identifier)
+        self.logger.inject_train_prio_fault(tick, self.configuration.id, self.train.identifier, self.old_prio, self.configuration.new_prio)
 
     def resolve_fault(self, tick: int):
         """resolves the previously injected TrainPrioFault
@@ -56,7 +53,6 @@ class TrainPrioFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        # - get train object
-        # - set the train prio to old_prio
-
-        raise NotImplementedError()
+        self.train.train_type.priority = self.old_prio
+        self.interlocking.insert_train_priority_changed(self.train.identifier)
+        self.logger.resolve_train_prio_fault(tick, self.configuration.id)
