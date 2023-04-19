@@ -32,20 +32,29 @@ class TrainPrioFault(Fault):
         self.wrapper = wrapper
         self.interlocking = interlocking
 
-    # pylint: enable=duplicate-code
-
     def inject_fault(self, tick: int):
         """inject TrainPrioFault into the given component
 
         :param tick: the simulation tick in which inject_fault was called
         :type tick: Integer
         """
-        self.train: Train = [train for train in self.wrapper.trains if train.identifier == self.configuration.affected_element_id][0]
+        self.train: Train = [
+            train
+            for train in self.wrapper.trains
+            if train.identifier == self.configuration.affected_element_id
+        ][0]
+        # pylint: enable=duplicate-code
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio
 
         self.interlocking.insert_train_priority_changed(self.train.identifier)
-        self.logger.inject_train_prio_fault(tick, self.configuration.id, self.train.identifier, self.old_prio, self.configuration.new_prio)
+        self.logger.inject_train_prio_fault(
+            tick,
+            self.configuration.id,
+            self.train.identifier,
+            self.old_prio,
+            self.configuration.new_prio,
+        )
 
     def resolve_fault(self, tick: int):
         """resolves the previously injected TrainPrioFault
