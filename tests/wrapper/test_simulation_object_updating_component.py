@@ -77,7 +77,32 @@ class TestSimulationObjectUpdatingComponent:
         assert len(configured_component.tracks) == 19
 
         for node in configured_component.switches:
-            assert len(node.edges) == 3
+            assert len(node.edges) == 6
 
         for node in configured_component.signals:
-            assert 1 <= len(node.edges) <= 2
+            assert 1 <= len(node.edges) <= 4
+
+    def test_edge_refs(self, configured_component: SimulationObjectUpdatingComponent):
+        for edge in configured_component.edges:
+            assert edge.from_node is not None
+            assert edge.to_node is not None
+
+            assert edge in edge.from_node.edges
+
+    def test_node_refs(self, configured_component: SimulationObjectUpdatingComponent):
+        for node in configured_component.nodes:
+            assert len(node.edges) >= 1
+
+            for edge in node.edges:
+                if node not in (edge.to_node, edge.from_node):
+                    print(
+                        node.identifier,
+                        edge.to_node.identifier,
+                        edge.from_node.identifier,
+                    )
+                    print(
+                        node.identifier == edge.to_node.identifier,
+                        edge.to_node.identifier == edge.from_node.identifier,
+                    )
+
+                    assert node in (edge.to_node, edge.from_node)
