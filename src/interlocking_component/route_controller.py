@@ -1,3 +1,5 @@
+import os
+
 from interlocking.interlockinginterface import Interlocking
 from interlocking.test_interlocking import PrintLineInfrastructureProvider
 from planpro_importer.reader import PlanProReader
@@ -83,16 +85,16 @@ class RouteController:
     interlocking: Interlocking = None
     router: Router = None
 
-    def start_interlocking(self, file_name: str = "test_example.ppxml"):
+    def __init__(
+        self, path_name: str = os.path.join("data", "planpro", "test_example.ppxml")
+    ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
         self.router = Router()
 
         # Import from local PlanPro file
-        topology = PlanProReader(
-            "data/planpro/" + file_name
-        ).read_topology_from_plan_pro_file()
+        topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
 
         # Generate Routes
         # I'm not sure if this is necessary, but better save than sorry.

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from threading import Thread
 from typing import List
 
@@ -44,7 +45,9 @@ class Communicator(Thread):
         components: List[Component] = None,
         max_tick: int = 86_400,
         sumo_port: int = None,
-        sumo_configuration: str = "data/sumo/example/sumo-config/example.scenario.sumocfg",
+        sumo_configuration: str = os.path.join(
+            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+        ),
     ):
         """Creates a new Communicator object"""
         Thread.__init__(self)
