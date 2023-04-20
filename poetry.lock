@@ -770,13 +770,13 @@ files = [
 
 [[package]]
 name = "peewee"
-version = "3.16.0"
+version = "3.16.1"
 description = "a little orm"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "peewee-3.16.0.tar.gz", hash = "sha256:1800c0a04962ee99d161c07f5a12fc49549caf5cfcda426a9103e34e37f854ba"},
+    {file = "peewee-3.16.1.tar.gz", hash = "sha256:03ba808b96bb3366fc7e949d669804d79059e01d472f0dfaddc2da5fa1614ee7"},
 ]
 
 [[package]]
