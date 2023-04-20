@@ -229,24 +229,26 @@ class Track(SimulationObject):
 class Platform(SimulationObject):
     """A platform where trains can arrive, load and unload passengers and depart"""
 
-    _track: Track = None
-    _track_id: str
+    _edge: Track = None
+    _edge_id: str
     _platform_id: str
     blocked: bool
 
     @property
     def track(self) -> Track:
+        return self.edge.track
+
+    @property
+    def edge(self) -> "Edge":
         """The track on which the stop is located
 
         :return: The track
         """
-        if self._track is None or self._track.identifier != self._track_id:
-            self._track = next(
-                item
-                for item in self.updater.tracks
-                if item.identifier == self._track_id
+        if self._edge is None or self._edge.identifier != self._edge_id:
+            self._edge = next(
+                item for item in self.updater.edges if item.identifier == self._edge_id
             )
-        return self._track
+        return self._edge
 
     @property
     def platform_id(self) -> str:
@@ -256,11 +258,11 @@ class Platform(SimulationObject):
         """
         return self._platform_id
 
-    def __init__(self, identifier, platform_id: str = None, track_id=None):
+    def __init__(self, identifier, platform_id: str = None, edge_id=None):
         super().__init__(identifier)
         self._platform_id = platform_id
         self.blocked = False
-        self._track_id = track_id
+        self._edge_id = edge_id
 
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
@@ -443,7 +445,7 @@ class Train(SimulationObject):
     def __init__(
         self,
         identifier: str = None,
-        timetable: List[str] = None,
+        timetable: List[Platform] = None,
         train_type: str = None,
         updater: "SimulationObjectUpdatingComponent" = None,
         from_simulator: bool = False,
@@ -463,26 +465,12 @@ class Train(SimulationObject):
         self.updater = updater
 
         self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
-        self._convert_timetable(timetable)
+        self._timetable = timetable
 
         if not from_simulator:
             self._add_to_simulation(identifier, timetable, train_type)
 
-    def _convert_timetable(self, timetable: List[str]):
-        converted = []
-        timetable = [] if timetable is None else timetable
-        for item in timetable:
-            converted.append(
-                next(x for x in self.updater.platforms if x.identifier == item)
-            )
-
-        self._timetable = converted
-
-    def _add_to_simulation(
-        self, identifier: str, timetable: List[Platform], train_type: str
-    ):
-        self._timetable = timetable
-        route = "not-implemented"  # TODO: fetch the first route from the list of platforms #pylint: disable=fixme
+    def _add_to_simulation(self, identifier: str, train_type: str, route: str):
         vehicle.add(identifier, route, train_type)
 
     def update(self, data: dict):
