@@ -14,7 +14,7 @@ def generate_sumo():
 
     # Generate Signals
     # I'm not sure if this is necessary, but better save than sorry.
-    #TrackSignalGenerator(topology).place_edge_signals()
+    # TrackSignalGenerator(topology).place_edge_signals()
 
     # Generate Routes
     # I'm not sure if this is necessary, but better save than sorry.

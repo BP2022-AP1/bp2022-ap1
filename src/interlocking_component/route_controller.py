@@ -4,7 +4,7 @@ from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 
 from src.interlocking_component.router import Router
-from src.wrapper.simulation_objects import Track, Train, Platform
+from src.wrapper.simulation_objects import Platform, Track, Train
 
 
 class IInterlockingDisruptor:
@@ -105,7 +105,7 @@ class RouteController:
         :rtype: str
         """
         raise NotImplementedError()
-    
+
     def update_fahrstrasse(self, train: Train, track: Track):
         """This method can be called when a train reaches a platform, so that the route to the next platform can be set.
 
