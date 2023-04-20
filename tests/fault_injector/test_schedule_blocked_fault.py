@@ -79,7 +79,7 @@ class TestScheduleBlockedFault:
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
         spawner: Spawner,
     ):
@@ -87,7 +87,7 @@ class TestScheduleBlockedFault:
             configuration=schedule_blocked_fault_configuration,
             logger=logger,
             spawner=spawner,
-            wrapper=wrapper,
+            simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
 

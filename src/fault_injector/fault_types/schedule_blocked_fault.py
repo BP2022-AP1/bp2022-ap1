@@ -20,11 +20,11 @@ class ScheduleBlockedFault(Fault):
         self,
         configuration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
         spawner: Spawner,
     ):
-        super().__init__(configuration, logger, wrapper, interlocking)
+        super().__init__(configuration, logger, simulation_object_updater, interlocking)
         self.spawner = spawner
 
     def inject_fault(self, tick: int):

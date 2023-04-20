@@ -19,7 +19,7 @@ class TrainPrioFault(Fault, TrainMixIn):
         :type tick: Integer
         """
         self.train: Train = self.get_train(
-            self.wrapper, self.configuration.affected_element_id
+            self.simulation_object_updater, self.configuration.affected_element_id
         )
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio

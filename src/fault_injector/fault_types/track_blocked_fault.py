@@ -18,7 +18,7 @@ class TrackBlockedFault(Fault, TrackMixIn):
         :type tick: Integer
         """
         self.track: Track = self.get_track(
-            self.wrapper, self.configuration.affected_element_id
+            self.simulation_object_updater, self.configuration.affected_element_id
         )
         self.track.blocked = True
 

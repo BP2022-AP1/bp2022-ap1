@@ -19,7 +19,7 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
         :type tick: Integer
         """
         self.track: Track = self.get_track(
-            self.wrapper, self.configuration.affected_element_id
+            self.simulation_object_updater, self.configuration.affected_element_id
         )
         self.old_speed_limit = self.track.max_speed
         self.track.max_speed = self.configuration.new_speed_limit

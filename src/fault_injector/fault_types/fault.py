@@ -16,19 +16,19 @@ class Fault(ABC):
 
     configuration: FaultConfiguration
     logger: Logger
-    wrapper: SimulationObjectUpdatingComponent
+    simulation_object_updater: SimulationObjectUpdatingComponent
     interlocking: IInterlockingDisruptor
 
     def __init__(
         self,
         configuration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         self.configuration = configuration
         self.logger = logger
-        self.wrapper = wrapper
+        self.simulation_object_updater = simulation_object_updater
         self.interlocking = interlocking
 
     @abstractmethod
@@ -67,19 +67,23 @@ class TrainMixIn:
     """adds the functionality to get the train in which the fault should be injected"""
 
     def get_train(
-        self, wrapper: SimulationObjectUpdatingComponent, affected_element_id: str
+        self,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
+        affected_element_id: str,
     ) -> Train:
         """returns the train in which the requested fault
 
-        :param wrapper: wrapper component
-        :type wrapper: SimulationObjectUpdatingComponent
+        :param simulation_object_updater: wrapper component
+        :type simulation_object_updater: SimulationObjectUpdatingComponent
         :param affected_element_id: id of the train in which the fault should be injected into
         :type affected_element_id: str
         :return: the train with the requested id
         :rtype: Train
         """
         return [
-            train for train in wrapper.trains if train.identifier == affected_element_id
+            train
+            for train in simulation_object_updater.trains
+            if train.identifier == affected_element_id
         ][0]
 
 
@@ -87,17 +91,21 @@ class TrackMixIn:
     """adds the functionality to get the track in which the fault should be injected"""
 
     def get_track(
-        self, wrapper: SimulationObjectUpdatingComponent, affected_element_id: str
+        self,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
+        affected_element_id: str,
     ) -> Track:
         """returns the track in which the requested fault
 
-        :param wrapper: wrapper component
-        :type wrapper: SimulationObjectUpdatingComponent
+        :param simulation_object_updater: wrapper component
+        :type simulation_object_updater: SimulationObjectUpdatingComponent
         :param affected_element_id: id of the track in which the fault should be injected into
         :type affected_element_id: str
         :return: the track with the requested id
         :rtype: Track
         """
         return [
-            track for track in wrapper.tracks if track.identifier == affected_element_id
+            track
+            for track in simulation_object_updater.tracks
+            if track.identifier == affected_element_id
         ][0]

@@ -19,7 +19,7 @@ class PlatformBlockedFault(Fault):
         """
         self.platform: Platform = [
             platform
-            for platform in self.wrapper.platforms
+            for platform in self.simulation_object_updater.platforms
             if platform.identifier == self.configuration.affected_element_id
         ][0]
         self.platform.blocked = True
