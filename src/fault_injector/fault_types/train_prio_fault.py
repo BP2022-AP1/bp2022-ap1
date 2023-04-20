@@ -24,7 +24,7 @@ class TrainPrioFault(Fault, TrainMixIn):
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio
 
-        self.interlocking.insert_train_priority_changed(self.train.identifier)
+        self.interlocking.insert_train_priority_changed(self.train)
         self.logger.inject_train_prio_fault(
             tick,
             self.configuration.id,
@@ -40,5 +40,5 @@ class TrainPrioFault(Fault, TrainMixIn):
         :type tick: Integer
         """
         self.train.train_type.priority = self.old_prio
-        self.interlocking.insert_train_priority_changed(self.train.identifier)
+        self.interlocking.insert_train_priority_changed(self.train)
         self.logger.resolve_train_prio_fault(tick, self.configuration.id)

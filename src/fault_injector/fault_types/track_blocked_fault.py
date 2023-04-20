@@ -22,7 +22,7 @@ class TrackBlockedFault(Fault, TrackMixIn):
         )
         self.track.blocked = True
 
-        self.interlocking.insert_track_blocked(self.track.identifier)
+        self.interlocking.insert_track_blocked(self.track)
         self.logger.inject_track_blocked_fault(
             tick, self.configuration.id, self.track.identifier
         )
@@ -37,6 +37,6 @@ class TrackBlockedFault(Fault, TrackMixIn):
             raise ValueError("Track not set, probably due to not injecting the fault")
 
         self.track.blocked = False
-        self.interlocking.insert_track_unblocked(self.track.identifier)
+        self.interlocking.insert_track_unblocked(self.track)
 
         self.logger.resolve_track_blocked_fault(tick, self.configuration.id)

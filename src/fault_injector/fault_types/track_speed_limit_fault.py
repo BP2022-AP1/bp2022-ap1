@@ -24,7 +24,7 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
         self.old_speed_limit = self.track.max_speed
         self.track.max_speed = self.configuration.new_speed_limit
 
-        self.interlocking.insert_track_speed_limit_changed(self.track.identifier)
+        self.interlocking.insert_track_speed_limit_changed(self.track)
         self.logger.inject_track_speed_limit_fault(
             tick,
             self.configuration.id,
@@ -40,6 +40,6 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
         :type tick: Integer
         """
         self.track.max_speed = self.old_speed_limit
-        self.interlocking.insert_track_speed_limit_changed(self.track.identifier)
+        self.interlocking.insert_track_speed_limit_changed(self.track)
 
         self.logger.resolve_track_speed_limit_fault(tick, self.configuration.id)
