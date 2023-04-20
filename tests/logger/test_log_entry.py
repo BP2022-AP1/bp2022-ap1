@@ -34,6 +34,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
+    TrainEnterBlockSectionLogEntry,
+    TrainLeaveBlockSectionLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -1100,6 +1102,391 @@ class TestLogEntry:
             """Test that Set Signal Log Entry cannot be deserialized with no fields set."""
             with pytest.raises(ValidationError):
                 SetSignalLogEntry.Schema().load(empty_set_signal_log_entry_as_dict)
+
+    class TestTrainEnterBlockSectionLogEntry:
+        """Tests for TrainEnterBlockSectionLogEntry."""
+
+        @pytest.fixture
+        def train_enter_block_section_log_entry_as_dict(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_id,
+            block_section_id,
+            block_section_length,
+        ):
+            """TrainEnterBlockSectionLogEntry as dict with all fields set."""
+            return {
+                "timestamp": timestamp,
+                "tick": tick,
+                "message": message,
+                "run_id": run.id,
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
+            }
+
+        @pytest.fixture
+        def train_enter_block_section_log_entry_as_dict_serialized(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_id,
+            block_section_id,
+            block_section_length,
+        ):
+            """TrainEnterBlockSectionLogEntry as dict with all fields set."""
+            return {
+                "timestamp": timestamp.isoformat(),
+                "tick": tick,
+                "message": message,
+                "run_id": str(run.id),
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
+            }
+
+        @pytest.fixture
+        def empty_train_enter_block_section_log_entry_as_dict(self):
+            """TrainEnterBlockSectionLogEntry as dict with no fields set."""
+            return {}
+
+        @recreate_db_setup
+        def setup_method(self):
+            pass
+
+        def test_create(self, train_enter_block_section_log_entry_as_dict):
+            """Test that TrainEnterBlockSectionLogEntry can be created."""
+            train_enter_block_section_log_entry = TrainEnterBlockSectionLogEntry.create(
+                **train_enter_block_section_log_entry_as_dict
+            )
+            assert (
+                TrainEnterBlockSectionLogEntry.select()
+                .where(
+                    TrainEnterBlockSectionLogEntry.id
+                    == train_enter_block_section_log_entry.id
+                )
+                .first()
+                == train_enter_block_section_log_entry
+            )
+
+        def test_create_empty_fails(
+            self, empty_train_enter_block_section_log_entry_as_dict
+        ):
+            """Tests that TrainEnterBlockSectionLogEntry cannot be created with no fields set."""
+            with pytest.raises(IntegrityError):
+                TrainEnterBlockSectionLogEntry.create(
+                    **empty_train_enter_block_section_log_entry_as_dict
+                )
+
+        def test_serialization(self, train_enter_block_section_log_entry_as_dict):
+            """Test that TrainEnterBlockSectionLogEntry can be serialized."""
+            train_enter_block_section_log_entry = TrainEnterBlockSectionLogEntry.create(
+                **train_enter_block_section_log_entry_as_dict
+            )
+            assert (
+                train_enter_block_section_log_entry.timestamp
+                == train_enter_block_section_log_entry_as_dict["timestamp"]
+            )
+            assert (
+                train_enter_block_section_log_entry.tick
+                == train_enter_block_section_log_entry_as_dict["tick"]
+            )
+            assert (
+                train_enter_block_section_log_entry.message
+                == train_enter_block_section_log_entry_as_dict["message"]
+            )
+            assert (
+                train_enter_block_section_log_entry.run_id.id
+                == train_enter_block_section_log_entry_as_dict["run_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.train_id
+                == train_enter_block_section_log_entry_as_dict["train_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_id
+                == train_enter_block_section_log_entry_as_dict["block_section_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_length
+                == train_enter_block_section_log_entry_as_dict["block_section_length"]
+            )
+            assert train_enter_block_section_log_entry.to_dict() == {
+                "id": str(train_enter_block_section_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_enter_block_section_log_entry.created_at.isoformat(),
+                "updated_at": train_enter_block_section_log_entry.updated_at.isoformat(),
+                "timestamp": train_enter_block_section_log_entry.timestamp.isoformat(),
+                "tick": train_enter_block_section_log_entry.tick,
+                "message": train_enter_block_section_log_entry.message,
+                "run_id": str(train_enter_block_section_log_entry.run_id),
+                "train_id": train_enter_block_section_log_entry.train_id,
+                "block_section_id": train_enter_block_section_log_entry.block_section_id,
+                "block_section_length": train_enter_block_section_log_entry.block_section_length,
+            }
+
+        def test_deserialization(
+            self, train_enter_block_section_log_entry_as_dict_serialized
+        ):
+            """Test that TrainEnterBlockSectionLogEntry can be deserialized."""
+            train_enter_block_section_log_entry = (
+                TrainEnterBlockSectionLogEntry.Schema().load(
+                    train_enter_block_section_log_entry_as_dict_serialized
+                )
+            )
+            assert isinstance(
+                train_enter_block_section_log_entry, TrainEnterBlockSectionLogEntry
+            )
+            assert isinstance(train_enter_block_section_log_entry.id, UUID)
+            assert isinstance(train_enter_block_section_log_entry.timestamp, datetime)
+            assert isinstance(train_enter_block_section_log_entry.tick, int)
+            assert isinstance(train_enter_block_section_log_entry.message, str)
+            assert isinstance(train_enter_block_section_log_entry.run_id, Run)
+            assert isinstance(train_enter_block_section_log_entry.train_id, str)
+            assert isinstance(train_enter_block_section_log_entry.block_section_id, str)
+            assert isinstance(
+                train_enter_block_section_log_entry.block_section_length, float
+            )
+
+            assert (
+                train_enter_block_section_log_entry.timestamp.isoformat()
+                == train_enter_block_section_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_enter_block_section_log_entry.tick
+                == train_enter_block_section_log_entry_as_dict_serialized["tick"]
+            )
+            assert (
+                train_enter_block_section_log_entry.message
+                == train_enter_block_section_log_entry_as_dict_serialized["message"]
+            )
+            assert (
+                str(train_enter_block_section_log_entry.run_id)
+                == train_enter_block_section_log_entry_as_dict_serialized["run_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.train_id
+                == train_enter_block_section_log_entry_as_dict_serialized["train_id"]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_id
+                == train_enter_block_section_log_entry_as_dict_serialized[
+                    "block_section_id"
+                ]
+            )
+            assert (
+                train_enter_block_section_log_entry.block_section_length
+                == train_enter_block_section_log_entry_as_dict_serialized[
+                    "block_section_length"
+                ]
+            )
+
+        def test_deserialization_empty_fails(
+            self, empty_train_enter_block_section_log_entry_as_dict
+        ):
+            """Test that TrainEnterBlockSectionLogEntry cannot be deserialized
+            with no fields set."""
+            with pytest.raises(ValidationError):
+                TrainEnterBlockSectionLogEntry.Schema().load(
+                    empty_train_enter_block_section_log_entry_as_dict
+                )
+
+    class TestTrainLeaveBlockSectionLogEntry:
+        """Tests for TrainLeaveBlockSectionLogEntry."""
+
+        @pytest.fixture
+        def train_leave_block_section_log_entry_as_dict(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_id,
+            block_section_id,
+            block_section_length,
+        ):
+            """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
+            return {
+                "timestamp": timestamp,
+                "tick": tick,
+                "message": message,
+                "run_id": run.id,
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
+            }
+
+        @pytest.fixture
+        def train_leave_block_section_log_entry_as_dict_serialized(
+            self,
+            timestamp,
+            tick,
+            message,
+            run,
+            train_id,
+            block_section_id,
+            block_section_length,
+        ):
+            """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
+            return {
+                "timestamp": timestamp.isoformat(),
+                "tick": tick,
+                "message": message,
+                "run_id": str(run.id),
+                "train_id": train_id,
+                "block_section_id": block_section_id,
+                "block_section_length": block_section_length,
+            }
+
+        @pytest.fixture
+        def empty_train_leave_block_section_log_entry_as_dict(self):
+            """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
+            return {}
+
+        @recreate_db_setup
+        def setup_method(self):
+            pass
+
+        def test_create(self, train_leave_block_section_log_entry_as_dict):
+            """Test that TrainLeaveBlockSectionLogEntry can be created."""
+            train_leave_block_section_log_entry = TrainLeaveBlockSectionLogEntry.create(
+                **train_leave_block_section_log_entry_as_dict
+            )
+            assert (
+                TrainLeaveBlockSectionLogEntry.select()
+                .where(
+                    TrainLeaveBlockSectionLogEntry.id
+                    == train_leave_block_section_log_entry.id
+                )
+                .first()
+                == train_leave_block_section_log_entry
+            )
+
+        def test_create_empty_fails(
+            self, empty_train_leave_block_section_log_entry_as_dict
+        ):
+            """Test that TrainLeaveBlockSectionLogEntry cannot be created with empty dict."""
+            with pytest.raises(IntegrityError):
+                TrainLeaveBlockSectionLogEntry.create(
+                    **empty_train_leave_block_section_log_entry_as_dict
+                )
+
+        def test_serialization(self, train_leave_block_section_log_entry_as_dict):
+            """Test that TrainLeaveBlockSectionLogEntry can be serialized."""
+            train_leave_block_section_log_entry = TrainLeaveBlockSectionLogEntry.create(
+                **train_leave_block_section_log_entry_as_dict
+            )
+            assert (
+                train_leave_block_section_log_entry.timestamp
+                == train_leave_block_section_log_entry_as_dict["timestamp"]
+            )
+            assert (
+                train_leave_block_section_log_entry.tick
+                == train_leave_block_section_log_entry_as_dict["tick"]
+            )
+            assert (
+                train_leave_block_section_log_entry.message
+                == train_leave_block_section_log_entry_as_dict["message"]
+            )
+            assert (
+                train_leave_block_section_log_entry.run_id.id
+                == train_leave_block_section_log_entry_as_dict["run_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.train_id
+                == train_leave_block_section_log_entry_as_dict["train_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_id
+                == train_leave_block_section_log_entry_as_dict["block_section_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_length
+                == train_leave_block_section_log_entry_as_dict["block_section_length"]
+            )
+            assert train_leave_block_section_log_entry.to_dict() == {
+                "id": str(train_leave_block_section_log_entry.id),
+                # pylint: disable=no-member
+                "created_at": train_leave_block_section_log_entry.created_at.isoformat(),
+                "updated_at": train_leave_block_section_log_entry.updated_at.isoformat(),
+                "timestamp": train_leave_block_section_log_entry.timestamp.isoformat(),
+                "tick": train_leave_block_section_log_entry.tick,
+                "message": train_leave_block_section_log_entry.message,
+                "run_id": str(train_leave_block_section_log_entry.run_id),
+                "train_id": train_leave_block_section_log_entry.train_id,
+                "block_section_id": train_leave_block_section_log_entry.block_section_id,
+                "block_section_length": train_leave_block_section_log_entry.block_section_length,
+            }
+
+        def test_deserialization(
+            self, train_leave_block_section_log_entry_as_dict_serialized
+        ):
+            train_leave_block_section_log_entry = (
+                TrainLeaveBlockSectionLogEntry.Schema().load(
+                    train_leave_block_section_log_entry_as_dict_serialized
+                )
+            )
+            assert isinstance(
+                train_leave_block_section_log_entry, TrainLeaveBlockSectionLogEntry
+            )
+            assert isinstance(train_leave_block_section_log_entry.id, UUID)
+            assert isinstance(train_leave_block_section_log_entry.timestamp, datetime)
+            assert isinstance(train_leave_block_section_log_entry.tick, int)
+            assert isinstance(train_leave_block_section_log_entry.message, str)
+            assert isinstance(train_leave_block_section_log_entry.run_id, Run)
+            assert isinstance(train_leave_block_section_log_entry.train_id, str)
+            assert isinstance(train_leave_block_section_log_entry.block_section_id, str)
+            assert isinstance(
+                train_leave_block_section_log_entry.block_section_length, float
+            )
+
+            assert (
+                train_leave_block_section_log_entry.timestamp.isoformat()
+                == train_leave_block_section_log_entry_as_dict_serialized["timestamp"]
+            )
+            assert (
+                train_leave_block_section_log_entry.tick
+                == train_leave_block_section_log_entry_as_dict_serialized["tick"]
+            )
+            assert (
+                train_leave_block_section_log_entry.message
+                == train_leave_block_section_log_entry_as_dict_serialized["message"]
+            )
+            assert (
+                str(train_leave_block_section_log_entry.run_id)
+                == train_leave_block_section_log_entry_as_dict_serialized["run_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.train_id
+                == train_leave_block_section_log_entry_as_dict_serialized["train_id"]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_id
+                == train_leave_block_section_log_entry_as_dict_serialized[
+                    "block_section_id"
+                ]
+            )
+            assert (
+                train_leave_block_section_log_entry.block_section_length
+                == train_leave_block_section_log_entry_as_dict_serialized[
+                    "block_section_length"
+                ]
+            )
+
+        def test_deserialization_empty_fails(
+            self, empty_train_leave_block_section_log_entry_as_dict
+        ):
+            """Tests that TrainLeaveBlockSectionLogEntry cannot be deserialized
+            with no fields set."""
+            with pytest.raises(ValidationError):
+                TrainLeaveBlockSectionLogEntry.Schema().load(
+                    empty_train_leave_block_section_log_entry_as_dict
+                )
 
     class TestInjectFaultLogEntry:
         """Tests for InjectFaultLogEntry."""
