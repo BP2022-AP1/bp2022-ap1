@@ -47,20 +47,6 @@ def get_simulation_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_simulation_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_simulation_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations

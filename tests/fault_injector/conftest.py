@@ -1,4 +1,5 @@
 import pytest
+from traci import vehicle
 
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
@@ -80,3 +81,19 @@ def combine_train_and_wrapper(train: Train, wrapper: SimulationObjectUpdatingCom
     train.updater = wrapper
     wrapper.simulation_objects.append(train)
     return train, wrapper
+
+
+@pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
+# pylint: disable-next=unused-argument
+def train(train_add) -> Train:
+    return Train(identifier="fault injector train", train_type="cargo")
