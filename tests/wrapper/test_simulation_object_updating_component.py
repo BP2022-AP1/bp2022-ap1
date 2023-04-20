@@ -41,7 +41,7 @@ class TestSimulationObjectUpdatingComponent:
     def configured_component(self, traffic_update):
         # pylint: disable=unused-argument
         component = SimulationObjectUpdatingComponent(
-            sumo_configuration="data/sumo/example.scenario.sumocfg"
+            sumo_configuration="data/sumo/example/sumo-config/example.scenario.sumocfg"
         )
         return component
 
