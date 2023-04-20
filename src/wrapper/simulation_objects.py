@@ -12,8 +12,8 @@ class SimulationObject(ABC):
     and can manipulate the simualtion directly.
     """
 
-    identifier = None
-    updater = None
+    identifier: str = None
+    updater: "SimulationObjectUpdatingComponent" = None
 
     def __init__(self, identifier=None):
         self.identifier = identifier
@@ -94,7 +94,7 @@ class Node(SimulationObject):
     def from_simulation(
         simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
-        result = Node()
+        result = Node(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
 
@@ -158,7 +158,7 @@ class Signal(Node):
     def from_simulation(
         simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
     ) -> "Signal":
-        result = Signal(simulation_object.getID())
+        result = Signal(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
 
@@ -214,7 +214,7 @@ class Switch(Node):
         simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
-        result = Switch(simulation_object.getID())
+        result = Switch(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
 
@@ -227,6 +227,28 @@ class Edge(SimulationObject):
     blocked: bool
     _max_speed: float
     _track: "Track" = None
+    _from: Node | str = None
+    _to: Node | str = None
+
+    @property
+    def to_node(self) -> Node:
+        """The node which is it at the end of the edge
+
+        :return: The end-node
+        """
+        assert not isinstance(self._to, str)
+
+        return self._to
+
+    @property
+    def from_node(self) -> Node:
+        """The node which is at the beginning of the edge
+
+        :return: The start-node
+        """
+        assert not isinstance(self._from, str)
+
+        return self._from
 
     @property
     def max_speed(self) -> float:
@@ -279,11 +301,22 @@ class Edge(SimulationObject):
         result = Edge(simulation_object.getID())
         result.updater = updater
 
+        print(simulation_object.getFromNode().getID())
+
+        # pylint: disable=protected-access
+        result._from = simulation_object.getFromNode().getID()
+        result._to = simulation_object.getToNode().getID()
+
         return result
 
     def add_simulation_connections(self) -> None:
-        # we don't need references to other nodes
-        pass
+        print("----\n", self._from)
+        self._from = [
+            node for node in self.updater.nodes if node.identifier == self._from
+        ][0]
+        self._to = [node for node in self.updater.nodes if node.identifier == self._to][
+            0
+        ]
 
 
 class Track(SimulationObject):

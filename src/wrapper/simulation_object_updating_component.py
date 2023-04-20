@@ -44,6 +44,14 @@ class SimulationObjectUpdatingComponent(Component):
         return [x for x in self._simulation_objects if isinstance(x, Train)]
 
     @property
+    def nodes(self) -> List[Node]:
+        """Returns all nodes in the simulation
+
+        :return: The nodes in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Node)]
+
+    @property
     def switches(self) -> List[Switch]:
         """Returns all switches in the simulation
 
@@ -156,6 +164,8 @@ class SimulationObjectUpdatingComponent(Component):
         self._simulation_objects += [
             Platform.from_simulation(platform, self) for platform in platforms
         ]
+
+        print([x.identifier for x in self.nodes])
 
         for simulation_object in self._simulation_objects:
             simulation_object.add_simulation_connections()
