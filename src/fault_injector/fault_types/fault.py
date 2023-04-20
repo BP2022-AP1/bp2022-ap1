@@ -3,18 +3,32 @@ from abc import ABC, abstractmethod
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
+from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 class Fault(ABC):
     """An abstract fault for the fault injection"""
 
-    configuration: "FaultConfiguration"
+    configuration: FaultConfiguration
     logger: Logger
+    wrapper: SimulationObjectUpdatingComponent
+    interlocking: IInterlockingDisruptor
 
-    def __init__(self, configuration, logger: Logger):
+    def __init__(
+        self,
+        configuration,
+        logger: Logger,
+        wrapper: SimulationObjectUpdatingComponent,
+        interlocking: IInterlockingDisruptor,
+    ):
         self.configuration = configuration
         self.logger = logger
+        self.wrapper = wrapper
+        self.interlocking = interlocking
 
     @abstractmethod
     def inject_fault(self, tick: int):

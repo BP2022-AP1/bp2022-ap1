@@ -2,11 +2,6 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_types.fault import Fault
-from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
 from src.wrapper.simulation_objects import Track
 
 
@@ -16,19 +11,6 @@ class TrackSpeedLimitFault(Fault):
     configuration: TrackSpeedLimitFaultConfiguration
     old_speed_limit: float
     track: Track
-    wrapper: SimulationObjectUpdatingComponent
-    interlocking: IInterlockingDisruptor
-
-    def __init__(
-        self,
-        configuration,
-        logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
-    ):
-        super().__init__(configuration, logger)
-        self.wrapper = wrapper
-        self.interlocking = interlocking
 
     def inject_fault(self, tick: int):
         """inject TrackSpeedLimitFault into the given component
