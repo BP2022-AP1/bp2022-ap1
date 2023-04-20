@@ -1,6 +1,7 @@
 import os
 
 from interlocking.interlockinginterface import Interlocking
+from interlocking.model.route import Route
 from interlocking.test_interlocking import PrintLineInfrastructureProvider
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
@@ -142,17 +143,6 @@ class RouteController:
         # If the no interlocking route is found an error is raised
         raise KeyError()
 
-    def update_fahrstrasse(self, train: Train, track: Track):
-        """This method can be called when a train reaches a platform,
-        so that the route to the next platform can be set.
-
-        :param train: the train
-        :type train: Train
-        :param track: the track it is currently on
-        :type track: Track
-        """
-        raise NotImplementedError
-
     def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
@@ -162,19 +152,21 @@ class RouteController:
         :param track_segment: the track it just entered
         :type Track: Track
         """
-        route = None
-        for route_candidate in self.interlocking.active_routes:
-            interlocking_track_candidat = route_candidate.contains_segment(
-                track.identifier.split("-re")[0]
-            )
-            # The -re part of the identifier must be cut,
-            # because the interlocking does not know of reverse directions.
-
-            if interlocking_track_candidat is not None:
-                route = route_candidate
+        route = self._get_interlocking_route_for_track(track)
         if route is None or route.get_last_segment_of_route != track.identifier:
             return
 
+        self.update_fahrstrasse(train, track)
+
+    def update_fahrstrasse(self, train: Train, track: Track):
+        """This method can be called when a train reaches a platform,
+        so that the route to the next platform can be set.
+
+        :param train: the train
+        :type train: Train
+        :param track: the track it is currently on
+        :type track: Track
+        """
         new_route = self.router.get_route(track, train.timetable[0].track)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
@@ -190,15 +182,46 @@ class RouteController:
                     # if it can not be set this simulation step.
 
                     # This frees the least route in the interlocking
-                    self.interlocking.free_route(route.yaramo_route)
+                    self._free_route(track)
                     # This may not be the best place (time) to do so,
                     # as the route schould be freed when the train leaves the route
-                    # and not when it is still on the last segment.
+                    # and not when it is still on it.
 
                     # This sets the route in SUMO.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return
+
+    def _free_route(self, track: Track):
+        """This method frees the route corresponding to the given track.
+
+        :param track: One track of the active Route
+        :type track: Track
+        """
+        route = self._get_interlocking_route_for_track(track)
+
+        if route is not None:
+            # This frees the least route in the interlocking
+            self.interlocking.free_route(route.yaramo_route)
+
+    def _get_interlocking_route_for_track(self, track: Track) -> Route:
+        """This method returns the interlocking route corresponding to the given track.
+
+        :param track: The track to which the route is searched
+        :type track: Track
+        :return: The interlocking Route corresponding to the track
+        :rtype: Route
+        """
+        for route_candidate in self.interlocking.active_routes:
+            interlocking_track_candidat = route_candidate.contains_segment(
+                track.identifier.split("-re")[0]
+            )
+            # The -re part of the identifier must be cut,
+            # because the interlocking does not know of reverse directions.
+
+            if interlocking_track_candidat is not None:
+                return route_candidate
+        return None
 
     def check_all_fahrstrassen_for_failures(self):
         """This method checks for all trains, if their fahrstrassen and routes are still valid."""
