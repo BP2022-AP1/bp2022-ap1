@@ -4,12 +4,16 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
     ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
+from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
 from src.schedule.schedule import ScheduleConfiguration
 from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
+)
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
 )
 from tests.decorators import recreate_db_setup
 
@@ -75,12 +79,16 @@ class TestScheduleBlockedFault:
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
         logger: Logger,
+        wrapper: SimulationObjectUpdatingComponent,
+        interlocking: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
             configuration=schedule_blocked_fault_configuration,
             logger=logger,
             spawner=spawner,
+            wrapper=wrapper,
+            interlocking=interlocking,
         )
 
     # It would be better to test if trains spawn after inject_fault.
