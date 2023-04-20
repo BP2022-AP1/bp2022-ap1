@@ -107,7 +107,8 @@ class RouteController:
         raise NotImplementedError()
 
     def update_fahrstrasse(self, train: Train, track: Track):
-        """This method can be called when a train reaches a platform, so that the route to the next platform can be set.
+        """This method can be called when a train reaches a platform,
+        so that the route to the next platform can be set.
 
         :param train: the train
         :type train: Train
