@@ -8,9 +8,9 @@ bp = Blueprint("simulation", __name__)
 
 
 @bp.route("/simulation", methods=["get"])
-def get_all_simulation_id():
+def get_all_simulation_ids():
     """Get all simulation id"""
-    return impl.simulation.get_all_simulation_id()
+    return impl.simulation.get_all_simulation_ids()
 
 
 @bp.route("/simulation", methods=["post"])
