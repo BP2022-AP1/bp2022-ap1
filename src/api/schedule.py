@@ -35,19 +35,6 @@ def get_schedule(identifier):
     return impl.schedule.get_schedule(options)
 
 
-@bp.route("/schedule/<identifier>", methods=["put"])
-def update_schedule(identifier):
-    """Update a schedule"""
-    options = {}
-    options["identifier"] = identifier
-
-    schema = model.Schedule()
-
-    body = parser.parse(schema, request, location="json")
-
-    return impl.schedule.update_schedule(options, body)
-
-
 @bp.route("/schedule/<identifier>", methods=["delete"])
 def delete_schedule(identifier):
     """Delete a schedule"""
