@@ -1,4 +1,5 @@
 import pytest
+import os
 from interlocking.interlockinginterface import Interlocking
 
 from src.interlocking_component.route_controller import RouteController
@@ -9,8 +10,7 @@ class TestRouteController:
 
     @pytest.fixture
     def route_controller(self) -> RouteController:
-        return RouteController()
+        return RouteController(os.path.join("data", "planpro", "test_example.ppxml"))
 
     def test_start_interlocking(self, route_controller):
-        route_controller.start_interlocking("test_example.ppxml")
         assert isinstance(route_controller.interlocking, Interlocking)
