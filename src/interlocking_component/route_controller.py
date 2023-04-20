@@ -105,17 +105,42 @@ class RouteController:
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
-    def set_spawn_route(self, platforms: list[Platform]) -> str:
+    def set_spawn_route(self, start_track: Track, end_track: Track) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
 
-        :param platforms: A List of the Platforms the train will drive to.
-        :type platforms: list
+        :param start_track: The track from where the route should start
+        :type start_track: Track
+        :param end_track: The track where the route should end
+        :type end_track: Track
+        :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
         :rtype: str
         """
-        raise NotImplementedError()
+        new_route = self.router.get_route(start_track, end_track)
+        # new_route contains a list of signals from starting signal to end signal of the new route.
+
+        for end_node_candidat in new_route:
+            for interlocking_route in self.interlocking.routes:
+                if (
+                    interlocking_route.start_signal.name == new_route[0]
+                    and interlocking_route.end_signal.name == end_node_candidat
+                ):
+                    # This sets the route in the interlocking
+                    was_set = self.interlocking.set_route(
+                        interlocking_route.yaramo_route
+                    )
+
+                    if was_set:
+                        # The Interlocking Route has the same id as the SUMO route.
+                        # So this is also the id of the SUMO route.
+                        return interlocking_route.id
+                    # If the route can not be set in the interlocking None is returned,
+                    # so that the spawner can try again next tick.
+                    return None
+        # If the no interlocking route is found an error is raised
+        raise KeyError()
 
     def update_fahrstrasse(self, train: Train, track: Track):
         """This method can be called when a train reaches a platform,
