@@ -1049,6 +1049,31 @@ paths:
       summary:
         "Get all information about a simulation, including the ids of connected\
         \ components and runs."
+    
+    put:
+      operationId: update_simulation_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SimulationConfigurationUpdate"
+      responses:
+        "200":
+          description: Updated simulation configuration
+        "401":
+          description: API token missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary: Edit the component configurations connected to the simulation configuration.
 
   /token:
     post:
@@ -1079,6 +1104,8 @@ components:
     Token:
       type: object
     SimulationConfiguration:
+      type: object
+    SimulationConfigurationUpdate:
       type: object
     InterlockingConfiguration:
       type: object
