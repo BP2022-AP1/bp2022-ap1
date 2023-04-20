@@ -24,7 +24,7 @@ class TrainSpeedFault(Fault, TrainMixIn):
         self.old_speed = self.train.train_type.max_speed
         self.train.train_type.max_speed = self.configuration.new_speed
 
-        self.interlocking.insert_train_max_speed_changed(self.train.identifier)
+        self.interlocking.insert_train_max_speed_changed(self.train)
         self.logger.inject_train_speed_fault(
             tick,
             self.configuration.id,
@@ -40,5 +40,5 @@ class TrainSpeedFault(Fault, TrainMixIn):
         :type tick: Integer
         """
         self.train.train_type.max_speed = self.old_speed
-        self.interlocking.insert_train_max_speed_changed(self.train.identifier)
+        self.interlocking.insert_train_max_speed_changed(self.train)
         self.logger.resolve_train_speed_fault(tick, self.configuration.id)
