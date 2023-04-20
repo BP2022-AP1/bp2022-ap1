@@ -4,7 +4,7 @@
 import json
 
 
-def get_all_simulation_id():
+def get_all_simulation_ids():
     """
     Get all simulation ids
     """

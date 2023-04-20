@@ -8,12 +8,12 @@ bp = Blueprint("component", __name__)
 
 
 @bp.route("/component/fault-injection/schedule-blocked-fault", methods=["get"])
-def get_schedule_blocked_fault_configuration_ids():
+def get_all_schedule_blocked_fault_configuration_ids():
     """Get all schedule blocked fault configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_schedule_blocked_fault_configuration_ids(options)
+    return impl.component.get_all_schedule_blocked_fault_configuration_ids(options)
 
 
 @bp.route("/component/fault-injection/schedule-blocked-fault", methods=["post"])
@@ -49,12 +49,12 @@ def delete_schedule_blocked_fault_configuration(identifier):
 
 
 @bp.route("/component/fault-injection/track-blocked-fault", methods=["get"])
-def get_track_blocked_fault_configuration_ids():
+def get_all_track_blocked_fault_configuration_ids():
     """Get all track blocked fault configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_track_blocked_fault_configuration_ids(options)
+    return impl.component.get_all_track_blocked_fault_configuration_ids(options)
 
 
 @bp.route("/component/fault-injection/track-blocked-fault", methods=["post"])
@@ -90,12 +90,12 @@ def delete_track_blocked_fault_configuration(identifier):
 
 
 @bp.route("/component/fault-injection/track-speed-limit-fault", methods=["get"])
-def get_track_speed_limit_fault_configuration_ids():
+def get_all_track_speed_limit_fault_configuration_ids():
     """Get all track speed limit fault configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_track_speed_limit_fault_configuration_ids(options)
+    return impl.component.get_all_track_speed_limit_fault_configuration_ids(options)
 
 
 @bp.route("/component/fault-injection/track-speed-limit-fault", methods=["post"])
@@ -132,12 +132,12 @@ def delete_track_speed_limit_fault_configuration(identifier):
 
 
 @bp.route("/component/fault-injection/train-prio-fault", methods=["get"])
-def get_train_prio_fault_configuration_ids():
+def get_all_train_prio_fault_configuration_ids():
     """Get all train prio fault configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_train_prio_fault_configuration_ids(options)
+    return impl.component.get_all_train_prio_fault_configuration_ids(options)
 
 
 @bp.route("/component/fault-injection/train-prio-fault", methods=["post"])
@@ -171,12 +171,12 @@ def delete_train_prio_fault_configuration(identifier):
 
 
 @bp.route("/component/fault-injection/train-speed-fault", methods=["get"])
-def get_train_speed_fault_configuration_ids():
+def get_all_train_speed_fault_configuration_ids():
     """Get all train speed fault configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_train_speed_fault_configuration_ids(options)
+    return impl.component.get_all_train_speed_fault_configuration_ids(options)
 
 
 @bp.route("/component/fault-injection/train-speed-fault", methods=["post"])
@@ -210,12 +210,12 @@ def delete_train_speed_fault_configuration(identifier):
 
 
 @bp.route("/component/fault-injection/platform-blocked-fault", methods=["get"])
-def get_platform_blocked_fault_configuration_ids():
+def get_all_platform_blocked_fault_configuration_ids():
     """Get all platform blocked fault configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_platform_blocked_fault_configuration_ids(options)
+    return impl.component.get_all_platform_blocked_fault_configuration_ids(options)
 
 
 @bp.route("/component/fault-injection/platform-blocked-fault", methods=["post"])
@@ -251,12 +251,12 @@ def delete_platform_blocked_fault_configuration(identifier):
 
 
 @bp.route("/component/interlocking", methods=["get"])
-def get_interlocking_configuration_ids():
+def get_all_interlocking_configuration_ids():
     """Get all interlocking configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_interlocking_configuration_ids(options)
+    return impl.component.get_all_interlocking_configuration_ids(options)
 
 
 @bp.route("/component/interlocking", methods=["post"])
@@ -288,12 +288,12 @@ def delete_interlocking_configuration(identifier):
 
 
 @bp.route("/component/spawner", methods=["get"])
-def get_spawner_configuration_ids():
+def get_all_spawner_configuration_ids():
     """Get all spawner configuration ids"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_spawner_configuration_ids(options)
+    return impl.component.get_all_spawner_configuration_ids(options)
 
 
 @bp.route("/component/spawner", methods=["post"])
