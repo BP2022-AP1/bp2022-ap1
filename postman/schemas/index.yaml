@@ -4,11 +4,12 @@ info:
     A REST API for simulations and analysis of train traffic on the LEAG rail
     network. Create one of many component configurations,
     for example, for defining the interlocking, train schedules, and faults.
-    You can't edit an already specified component configuration but can delete it,
-    after deleting every connection to a simulation configurations.
+    You can't edit an already specified component configuration but can delete it
+    if it's no longer connected to a simulation configuration.
     Simulation configurations hold connections to the component configuration.
-    You could add and remove connections to component configurations if you didn't start a run.
+    You could add connections to component configurations and remove it if it's not connected to a run.
     A run is the execution of the defined simulation.
+    After deleting every run, you can delete the simulation configuration.
   title: BP2022-API1 API
   version: 1.0.0
 servers:
