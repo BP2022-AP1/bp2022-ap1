@@ -75,7 +75,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
-    cmd = "pytest --cov=src --cov-report xml"
+    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml"
 
     [tool.poe.tasks.ci]
     help = "Run formatting, linting and testing in preparation for CI"
@@ -96,11 +96,11 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"
-    cmd = "pytest --co --cov=src"
+    cmd = "pytest --co --cov=src --cov-config=.coveragerc"
 
     [tool.poe.tasks.cov-xml]
     help = "Run coverage report and write to XML file"
-    cmd = "pytest --co --cov=src --cov-report xml"
+    cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
 
 [tool.isort]
 profile = "black"
