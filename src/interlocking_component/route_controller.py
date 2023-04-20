@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from interlocking import interlockinginterface
 
 from src.interlocking_component.router import Router
-from src.wrapper.simulation_objects import Track, Train
+from src.wrapper.simulation_objects import Platform, Track, Train
 
 
 class IRouteController(ABC):
@@ -33,55 +33,64 @@ class IInterlockingDisruptor:
     as well as to notify the Interlocking faults that occur in other parts of the simulation.
     """
 
-    def insert_track_blocked(self, track: "Track"):
+    def insert_track_blocked(self, track: Track):
         """This method is used to block a track and recalculate the routes of relevant trains.
 
-        :param track_id: the id of the blocked track
-        :type track_id: str
+        :param track: the blocked track
+        :type track: Track
         """
         raise NotImplementedError()
 
-    def insert_track_unblocked(self, track: "Track"):
+    def insert_track_unblocked(self, track: Track):
         """This method is used to unblock a track and recalculate the routes of relevant trains.
 
-        :param track_id: the id of the unblocked track
-        :type track_id: str
+        :param track: the unblocked track
+        :type track: Track
         """
         raise NotImplementedError()
 
-    def insert_platform_blocked(self, platform: "Platform"):
+    def insert_platform_blocked(self, platform: Platform):
         """This method is used to block a platform and recalculate the routes
         and stops of relevant trains.
 
-        :param platform_id: the id of the blocked platform
-        :type platform_id: str
+        :param platform: the blocked platform
+        :type platform: Platform
         """
         raise NotImplementedError()
 
-    def insert_platform_unblocked(self, platform: "Platform"):
+    def insert_platform_unblocked(self, platform: Platform):
         """This method is used to unblock a platform and recalculate the routes
         and stops of relevant trains.
 
-        :param platform_id: the id of the unblocked platform
-        :type platform_id: str
+        :param platform: the unblocked platform
+        :type platform: Platform
         """
         raise NotImplementedError()
 
-    def insert_track_speed_limit_changed(self, track: "Track"):
+    def insert_track_speed_limit_changed(self, track: Track):
         """This method is used to notify the interlocking about a changed track speed limit,
         so that it can recalculate the routing of relevant trains.
 
-        :param track_id: the id of the track, which speedlimit changed
-        :type track_id: str
+        :param track: the track, which speedlimit changed
+        :type track: Track
         """
         raise NotImplementedError()
 
-    def insert_train_max_speed_changed(self, train: "Train"):
+    def insert_train_max_speed_changed(self, train: Train):
         """This method is used to notify the interlocking about a changed train speed limit,
         so that it can recalculate the routing of relevant trains.
 
-        :param train_id: the id of the train, which speed limit changed
-        :type train_id: str
+        :param train: the train, which speed limit changed
+        :type train: Train
+        """
+        raise NotImplementedError()
+
+    def insert_train_priority_changed(self, train: Train):
+        """This method is used to notify the interlocking about a changed train priority,
+        so that it can recalculate the routing of relevant trains.
+
+        :param train: the train, which priority changed
+        :type train: Train
         """
         raise NotImplementedError()
 
