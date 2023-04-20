@@ -8,13 +8,13 @@ from src.component import Component
 from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
     Edge,
+    Node,
     Platform,
     Signal,
     SimulationObject,
     Switch,
     Track,
     Train,
-    Node,
 )
 
 

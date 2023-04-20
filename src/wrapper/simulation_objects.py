@@ -67,6 +67,10 @@ class Node(SimulationObject):
 
     @property
     def edges(self) -> List["Edge"]:
+        """Returns the edges this node is connected to
+
+        :return: The connected edges
+        """
         return self._edges
 
     def update(self, data: dict):
@@ -75,7 +79,11 @@ class Node(SimulationObject):
     def add_subscriptions(self):
         pass
 
-    def _set_edge_ids(self, simulation_object: net.node) -> None:
+    def set_edges(self, simulation_object: net.node) -> None:
+        """Sets the edges that are connected to this node
+
+        :param simulation_object: the current node as a sumo net.node
+        """
         self._edge_ids = [
             edge.getID()
             for edge in simulation_object.getOutgoing()
@@ -88,7 +96,7 @@ class Node(SimulationObject):
     ) -> "SimulationObject":
         result = Node()
         result.updater = updater
-        result._set_edge_ids(simulation_object)
+        result.set_edges(simulation_object)
 
         return result
 
@@ -143,7 +151,7 @@ class Signal(Node):
     def add_subscriptions(self) -> int:
         return 0
 
-    def _set_edge_ids(self, simulation_object: net.TLS) -> None:
+    def set_edges(self, simulation_object: net.TLS) -> None:
         self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
 
     @staticmethod
@@ -152,7 +160,7 @@ class Signal(Node):
     ) -> "Signal":
         result = Signal(simulation_object.getID())
         result.updater = updater
-        result._set_edge_ids(simulation_object)
+        result.set_edges(simulation_object)
 
         return result
 
@@ -208,7 +216,7 @@ class Switch(Node):
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
         result = Switch(simulation_object.getID())
         result.updater = updater
-        result._set_edge_ids(simulation_object)
+        result.set_edges(simulation_object)
 
         return result
 
