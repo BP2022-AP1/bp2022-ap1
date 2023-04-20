@@ -8,6 +8,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
+from src.wrapper.simulation_objects import Track, Train
 
 
 class Fault(ABC):
@@ -60,3 +61,43 @@ class Fault(ABC):
             self.inject_fault(tick=tick)
         elif tick == self.configuration.end_tick:
             self.resolve_fault(tick=tick)
+
+
+class TrainMixIn:
+    """adds the functionality to get the train in which the fault should be injected"""
+
+    def get_train(
+        self, wrapper: SimulationObjectUpdatingComponent, affected_element_id: str
+    ) -> Train:
+        """returns the train in which the requested fault
+
+        :param wrapper: wrapper component
+        :type wrapper: SimulationObjectUpdatingComponent
+        :param affected_element_id: id of the train in which the fault should be injected into
+        :type affected_element_id: str
+        :return: the train with the requested id
+        :rtype: Train
+        """
+        return [
+            train for train in wrapper.trains if train.identifier == affected_element_id
+        ][0]
+
+
+class TrackMixIn:
+    """adds the functionality to get the track in which the fault should be injected"""
+
+    def get_track(
+        self, wrapper: SimulationObjectUpdatingComponent, affected_element_id: str
+    ) -> Track:
+        """returns the track in which the requested fault
+
+        :param wrapper: wrapper component
+        :type wrapper: SimulationObjectUpdatingComponent
+        :param affected_element_id: id of the track in which the fault should be injected into
+        :type affected_element_id: str
+        :return: the track with the requested id
+        :rtype: Track
+        """
+        return [
+            track for track in wrapper.tracks if track.identifier == affected_element_id
+        ][0]
