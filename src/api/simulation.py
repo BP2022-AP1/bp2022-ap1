@@ -32,6 +32,19 @@ def get_simulation_configuration(identifier):
     return impl.simulation.get_simulation_configuration(options)
 
 
+@bp.route("/simulation/<identifier>", methods=["put"])
+def update_simulation_configuration(identifier):
+    """Update a simulation configuration"""
+    options = {}
+    options["identifier"] = identifier
+
+    schema = model.SimulationConfiguration()
+
+    body = parser.parse(schema, request, location="json")
+
+    return impl.simulation.update_simulation_configuration(options, body)
+
+
 @bp.route("/simulation/<identifier>", methods=["delete"])
 def delete_simulation_configuration(identifier):
     """Delete a simulation configuration"""

@@ -325,6 +325,242 @@
 						},
 						{
 							"name": "/simulation/:id",
+							"id": "b3095852-9cf1-45f9-851e-a2d60b27412c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/simulation/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"simulation",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "<uuid>"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"id": "a9e33649-a4e4-499c-b72c-96cec8b11b6c",
+									"name": "Updated simulation configuration",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "bp2022-ap1-api-key",
+												"value": "<API Key>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/simulation/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"simulation",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "833d3386-79e5-413d-a465-1e9eb421141e",
+									"name": "API token missing",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "bp2022-ap1-api-key",
+												"value": "<API Key>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/simulation/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"simulation",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Unauthorized",
+									"code": 401,
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "c32b2502-3fd0-46b9-973f-141dd4061887",
+									"name": "Id not found",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "bp2022-ap1-api-key",
+												"value": "<API Key>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/simulation/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"simulation",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": []
+								},
+								{
+									"id": "56630523-937f-4c21-866c-726b05977bee",
+									"name": "It's forbidden to edit an already ran simulation",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"description": "Added as a part of security scheme: apikey",
+												"key": "bp2022-ap1-api-key",
+												"value": "<API Key>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/simulation/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"simulation",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "Text",
+									"header": [],
+									"cookie": []
+								}
+							]
+						},
+						{
+							"name": "/simulation/:id",
 							"id": "a602de61-8874-4110-9d87-0c32c85f3fc7",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
