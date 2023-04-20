@@ -104,7 +104,6 @@ class RouteController:
         # This has to change in the future, as we want our own infrastructure_provider
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
-        
 
     def set_spawn_route(self, start_track: Track, end_track: Track) -> str:
         """This method can be called when instanciating a train
@@ -115,7 +114,7 @@ class RouteController:
         :type start_track: Track
         :param end_track: The track where the route should end
         :type end_track: Track
-        :raises KeyError: _description_
+        :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
         :rtype: str
         """
@@ -142,7 +141,6 @@ class RouteController:
                     return None
         # If the no interlocking route is found an error is raised
         raise KeyError()
-    
 
     def update_fahrstrasse(self, train: Train, track: Track):
         """This method can be called when a train reaches a platform,
@@ -154,7 +152,6 @@ class RouteController:
         :type track: Track
         """
         raise NotImplementedError
-
 
     def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
