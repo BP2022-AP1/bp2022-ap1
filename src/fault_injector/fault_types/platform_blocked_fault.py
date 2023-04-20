@@ -3,6 +3,7 @@ from src.fault_injector.fault_configurations.platform_blocked_fault_configuratio
 )
 from src.fault_injector.fault_types.fault import Fault
 from src.wrapper.simulation_objects import Platform
+from src.wrapper.simulation_object_updating_component import SimulationObjectUpdatingComponent
 
 
 class PlatformBlockedFault(Fault):
@@ -11,17 +12,22 @@ class PlatformBlockedFault(Fault):
     configuration: PlatformBlockedFaultConfiguration
     platform: Platform
 
+    def _get_platform(self) -> Platform:
+        return [
+            platform
+            for platform in self.simulation_object_updater.platforms
+            if platform.identifier == self.configuration.affected_element_id
+        ][0]
+
     def inject_fault(self, tick: int):
         """inject PlatformBlockedFault into the given component
 
         :param tick: the simulation tick in which inject_fault was called
         :type tick: Integer
         """
-        self.platform: Platform = [
-            platform
-            for platform in self.simulation_object_updater.platforms
-            if platform.identifier == self.configuration.affected_element_id
-        ][0]
+        self.platform: Platform = self._get_platform()
+        if self.platform is None:
+            raise ValueError("platform does not exist")
         self.platform.blocked = True
 
         self.interlocking.insert_platform_blocked(self.platform)
@@ -35,9 +41,9 @@ class PlatformBlockedFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if self.platform is None:
+        if self.platform is None or self.platform is not self._get_platform:
             raise ValueError(
-                "Platform not set, probably due to not injecting the fault"
+                "Platform does not exist or fault not injected"
             )
         self.platform.blocked = False
 
