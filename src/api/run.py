@@ -8,12 +8,12 @@ bp = Blueprint("run", __name__)
 
 
 @bp.route("/run", methods=["get"])
-def get_all_run_id():
+def get_all_run_ids():
     """Get all run id"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.run.get_all_run_id(options)
+    return impl.run.get_all_run_ids(options)
 
 
 @bp.route("/run", methods=["post"])
