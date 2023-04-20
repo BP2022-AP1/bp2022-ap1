@@ -94,7 +94,7 @@ class RouteController:
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
-    def set_spawn_route(self, platforms: list(Platform)) -> str:
+    def set_spawn_route(self, platforms: list[Platform]) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
