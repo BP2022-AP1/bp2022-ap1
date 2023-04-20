@@ -10,7 +10,7 @@ class IRouteController(ABC):
     """An abstract Interface to call funtions on the RouteController."""
 
     @abstractmethod
-    def set_spawn_route(self, platforms: list("Plattform")) -> str:
+    def set_spawn_route(self, start_track: Track, end_track: Track) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
@@ -132,10 +132,11 @@ class RouteController(IRouteController):
                         # The Interlocking Route has the same id as the SUMO route.
                         # So this is also the id of the SUMO route.
                         return interlocking_route.id
-                    else:
-                        # If the route can not be set in the interlocking None is returned,
-                        # so that the spawner can try again next tick.
-                        return None
+                    # If the route can not be set in the interlocking None is returned,
+                    # so that the spawner can try again next tick.
+                    return None
+        # If the no interlocking route is found an error is raised
+        raise KeyError()
 
     def maybe_update_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
