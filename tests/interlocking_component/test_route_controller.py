@@ -1,5 +1,6 @@
-import pytest
 import os
+
+import pytest
 from interlocking.interlockinginterface import Interlocking
 
 from src.interlocking_component.route_controller import RouteController
