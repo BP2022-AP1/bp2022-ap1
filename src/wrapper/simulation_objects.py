@@ -12,8 +12,8 @@ class SimulationObject(ABC):
     and can manipulate the simualtion directly.
     """
 
-    identifier = None
-    updater = None
+    identifier: str = None
+    updater: "SimulationObjectUpdatingComponent" = None
 
     def __init__(self, identifier=None):
         self.identifier = identifier
@@ -61,6 +61,62 @@ class SimulationObject(ABC):
 
 class Node(SimulationObject):
     """A point somewhere in the simulation where `Track`s meet"""
+
+    _edges: List["Edge"] = None
+    _edge_ids: List["str"] = None
+
+    @property
+    def edges(self) -> List["Edge"]:
+        """Returns the edges this node is connected to
+
+        :return: The connected edges
+        """
+
+        return self._edges
+
+    def update(self, data: dict):
+        pass
+
+    def add_subscriptions(self):
+        pass
+
+    def set_edges(self, simulation_object: net.node) -> None:
+        """Sets the edges that are connected to this node
+
+        :param simulation_object: the current node as a sumo net.node
+        """
+        self._edge_ids = [
+            edge.getID()
+            for edge in simulation_object.getOutgoing()
+            + simulation_object.getIncoming()
+        ]
+
+    @staticmethod
+    def from_simulation(
+        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+    ) -> "SimulationObject":
+        if simulation_object.getID() in [x.identifier for x in updater.signals]:
+            # We need to update the signal with our data
+            signal: "Signal" = [
+                signal
+                for signal in updater.signals
+                if signal.identifier == simulation_object.getID()
+            ][0]
+
+            signal.add_edges(simulation_object)
+
+            return None
+
+        # we need to create a new node
+
+        result = Node(identifier=simulation_object.getID())
+        result.updater = updater
+        result.set_edges(simulation_object)
+
+        return result
+
+    def add_simulation_connections(self) -> None:
+        self._edges = [x for x in self.updater.edges if x.identifier in self._edge_ids]
 
 
 class Signal(Node):
@@ -110,16 +166,29 @@ class Signal(Node):
     def add_subscriptions(self) -> int:
         return 0
 
+    def set_edges(self, simulation_object: net.TLS) -> None:
+        self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
+
+    def add_edges(self, node: net.node) -> None:
+        """Adds more edges to the signal (coming from the passed node)
+
+        :param node: The node from which to load the additional edges
+        """
+        assert node.getID() == self.identifier
+
+        self._edge_ids += [
+            edge.getID() for edge in node.getOutgoing() + node.getIncoming()
+        ]
+
     @staticmethod
     def from_simulation(
         simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
     ) -> "Signal":
-        result = Signal(simulation_object.getID())
+        result = Signal(identifier=simulation_object.getID())
+        result.updater = updater
+        result.set_edges(simulation_object)
 
         return result
-
-    def add_simulation_connections(self) -> None:
-        pass
 
 
 class Switch(Node):
@@ -171,19 +240,41 @@ class Switch(Node):
         simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
-        result = Switch(simulation_object.getID())
+        result = Switch(identifier=simulation_object.getID())
+        result.updater = updater
+        result.set_edges(simulation_object)
 
         return result
 
-    def add_simulation_connections(self) -> None:
-        pass
 
-
-class Track(SimulationObject):
-    """A track in the simulation where trains can drive along"""
+class Edge(SimulationObject):
+    """A track in the simulation where trains can drive along, only in one direction"""
 
     blocked: bool
     _max_speed: float
+    _track: "Track" = None
+    _from: Node | str = None
+    _to: Node | str = None
+
+    @property
+    def to_node(self) -> Node:
+        """The node which is it at the end of the edge
+
+        :return: The end-node
+        """
+        assert not isinstance(self._to, str)
+
+        return self._to
+
+    @property
+    def from_node(self) -> Node:
+        """The node which is at the beginning of the edge
+
+        :return: The start-node
+        """
+        assert not isinstance(self._from, str)
+
+        return self._from
 
     @property
     def max_speed(self) -> float:
@@ -192,6 +283,23 @@ class Track(SimulationObject):
         :return: the speed in m/s
         """
         return self._max_speed
+
+    @property
+    def track(self) -> "Track":
+        """Returns the track which this edge is part of
+
+        :return: The track
+        """
+        return self._track
+
+    @track.setter
+    def track(self, track: "Track") -> None:
+        """Updates the edge to contain the parent Track
+
+        :param track: The track this edge belongs to
+        """
+        assert self._track is None and track is not None
+        self._track = track
 
     @max_speed.setter
     def max_speed(self, max_speed: float) -> None:
@@ -216,20 +324,131 @@ class Track(SimulationObject):
     @staticmethod
     def from_simulation(simulation_object: net.edge, updater) -> "Track":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.edge.html
-        result = Track(simulation_object.getID())
+        result = Edge(simulation_object.getID())
         result.updater = updater
+
+        # pylint: disable=protected-access
+        result._from = simulation_object.getFromNode().getID()
+        result._to = simulation_object.getToNode().getID()
 
         return result
 
     def add_simulation_connections(self) -> None:
-        # we don't need references to other nodes
+        self._from = [
+            node for node in self.updater.nodes if node.identifier == self._from
+        ][0]
+        self._to = [node for node in self.updater.nodes if node.identifier == self._to][
+            0
+        ]
+
+
+class Track(SimulationObject):
+    "A track on which trains can drive both directions"
+
+    _edges = Tuple[Edge, Edge]
+
+    @property
+    def edges(self) -> Tuple[Edge, Edge]:
+        """Returns the edges represented by this track
+
+        :return: The edges in both directions
+        """
+        return self._edges
+
+    @property
+    def nodes(self) -> Tuple[Node, Node]:
+        """Returns the nodes the edges run between
+
+        :return: The nodes
+        """
+        return (self._edges[0].from_node, self._edges[0].to_node)
+
+    def __init__(self, edge1, edge2):
+        if edge1.identifier.endswith("-re"):
+            assert edge1.identifier.split("-re")[0] == edge2.identifier
+            self._edges = (edge1, edge2)
+        else:
+            assert edge1.identifier == edge2.identifier.split("-re")[0]
+            self._edges = (edge2, edge1)
+
+        super().__init__(identifier=self._edges[0].identifier)
+
+        edge1.track = self
+        edge2.track = self
+
+    @property
+    def max_speed(self) -> Tuple[float, float] | float:
+        """Returns the max_speed of the track
+
+        :return: If both edges have the same speed, a float is returned,
+        if the edges have different speeds, a tuple is returned
+        """
+        speed0 = self.edges[0].max_speed
+        speed1 = self.edges[1].max_speed
+
+        if speed0 == speed1:
+            return speed0
+
+        return (speed0, speed1)
+
+    @max_speed.setter
+    def max_speed(self, speed: Tuple[float, float] | float) -> None:
+        """Updates the max_speed of the track
+
+        :param speed: If both edges should have the same speed, a floatshould be passed,
+        if the edges should have different speeds, pass a tuple
+        """
+        if not isinstance(speed, Tuple):
+            speed = (speed, speed)
+
+        self.edges[0].max_speed = speed[0]
+        self.edges[1].max_speed = speed[1]
+
+    @property
+    def blocked(self) -> Tuple[bool, bool] | bool:
+        """Returns if the edge/track is blocked.
+
+        :return: If only one edge is blocked, a tuple is returned;
+        if both edges are blocked / unblocked, a plain bool is returned
+        """
+        if self.edges[0].blocked == self.edges[1].blocked:
+            return self.edges[0].blocked
+        return (self.edges[0].blocked, self.edges[1].blocked)
+
+    @blocked.setter
+    def blocked(self, blocked: Tuple[bool, bool] | bool) -> None:
+        """Block the edges represented by this track
+
+        :param blocked: Which edge to block (if only one direction should be blocked,
+        use the tuple, else use the plain bool)
+        """
+        if not isinstance(blocked, Tuple):
+            blocked = (blocked, blocked)
+
+        self.edges[0].blocked = blocked[0]
+        self.edges[1].blocked = blocked[1]
+
+    def update(self, data: dict) -> None:
+        # pylint: disable=unused-argument
+        pass
+
+    def add_subscriptions(self):
+        pass
+
+    @staticmethod
+    def from_simulation(
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
+    ) -> "SimulationObject":
+        pass
+
+    def add_simulation_connections(self) -> None:
         pass
 
 
 class Platform(SimulationObject):
     """A platform where trains can arrive, load and unload passengers and depart"""
 
-    _edge: Track = None
+    _edge: Edge = None
     _edge_id: str
     _platform_id: str
     blocked: bool
@@ -239,7 +458,7 @@ class Platform(SimulationObject):
         return self.edge.track
 
     @property
-    def edge(self) -> "Edge":
+    def edge(self) -> Edge:
         """The track on which the stop is located
 
         :return: The track
@@ -370,25 +589,31 @@ class Train(SimulationObject):
 
     _position: Tuple[float, float]
     _route: str
-    _track: Track = None
-    _track_id: str
+    _edge: Edge = None
+    _edge_id: str
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
 
     @property
-    def track(self) -> Track:
-        """Returns the current track the train is on
+    def edge(self) -> Edge:
+        """Returns the current edge the train is on
 
         :return: The current track the train is on
         """
-        if self._track is None or self._track.identifier != self._track_id:
-            self._track = next(
-                item
-                for item in self.updater.tracks
-                if item.identifier == self._track_id
+        if self._edge is None or self._edge.identifier != self._edge_id:
+            self._edge = next(
+                item for item in self.updater.edges if item.identifier == self._edge_id
             )
-        return self._track
+        return self._edge
+
+    @property
+    def track(self) -> Track:
+        """Returns the track (bidirectional) on which the train is currently
+
+        :return: The track the train is dirving on
+        """
+        return self.edge.track
 
     @property
     def position(self) -> Tuple[float, float]:
@@ -478,7 +703,7 @@ class Train(SimulationObject):
         :param updates: The updated values for the synchronized properties
         """
         self._position = data[constants.VAR_POSITION]
-        self._track_id = data[constants.VAR_ROAD_ID]
+        self._edge_id = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
 
