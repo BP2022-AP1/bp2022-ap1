@@ -124,7 +124,9 @@ class RouteController(IRouteController):
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
                     # This sets the route in the interlocking
-                    was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
+                    was_set = self.interlocking.set_route(
+                        interlocking_route.yaramo_route
+                    )
 
                     if was_set:
                         # The Interlocking Route has the same id as the SUMO route.
