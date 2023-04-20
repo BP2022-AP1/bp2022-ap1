@@ -126,6 +126,30 @@ class SimulationObjectUpdatingComponent(Component):
             sumolib.xml.parse(additional_file, "trainStop")
         )
 
+        # signals
+        self._simulation_objects += [
+            Signal.from_simulation(signal, self) for signal in net.getTrafficLights()
+        ]
+
+        # switches
+        self._simulation_objects += [
+            Switch.from_simulation(node, self)
+            for node in net.getNodes()
+            if len(node.getConnections()) >= 3
+        ]
+
+        # other nodes
+        self._simulation_objects += list(
+            filter(
+                lambda x: x is not None,
+                (
+                    Node.from_simulation(node, self)
+                    for node in net.getNodes()
+                    if len(node.getConnections()) < 3
+                ),
+            )
+        )
+
         # Edges
         self._simulation_objects += [
             Edge.from_simulation(edge, self) for edge in net.getEdges()
@@ -141,31 +165,10 @@ class SimulationObjectUpdatingComponent(Component):
             reverse = [x for x in self.edges if x.identifier == identifier][0]
             self._simulation_objects.append(Track(edge, reverse))
 
-        # switches
-        self._simulation_objects += [
-            Switch.from_simulation(node, self)
-            for node in net.getNodes()
-            if len(node.getConnections()) >= 3
-        ]
-
-        # other nodes
-        self._simulation_objects += [
-            Node.from_simulation(node, self)
-            for node in net.getNodes()
-            if len(node.getConnections()) < 3
-        ]
-
-        # signals
-        self._simulation_objects += [
-            Signal.from_simulation(signal, self) for signal in net.getTrafficLights()
-        ]
-
         # platforms
         self._simulation_objects += [
             Platform.from_simulation(platform, self) for platform in platforms
         ]
-
-        print([x.identifier for x in self.nodes])
 
         for simulation_object in self._simulation_objects:
             simulation_object.add_simulation_connections()
