@@ -22,6 +22,8 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration, Token
+from src.logger.log_collector import LogCollector
+from src.logger.logger import Logger
 
 
 @pytest.fixture
@@ -52,6 +54,16 @@ def simulation_configuration(token):
 @pytest.fixture
 def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
+
+
+@pytest.fixture
+def logger(run):
+    return Logger(run_id=run.id)
+
+
+@pytest.fixture
+def log_collector():
+    return LogCollector()
 
 
 @pytest.fixture
@@ -153,6 +165,7 @@ def train_speed_fault_configuration():
         end_tick=100,
         description="TrainSpeedFault",
         affected_element_id="12345678",
+        new_speed=60,
     )
 
 
