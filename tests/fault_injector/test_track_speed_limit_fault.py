@@ -39,12 +39,12 @@ class TestTrackSpeedLimitFault:
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
         logger: Logger,
         interlocking: IInterlockingDisruptor,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
     ):
         return TrackSpeedLimitFault(
             configuration=track_speed_limit_fault_configuration,
             logger=logger,
-            wrapper=wrapper,
+            simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
 

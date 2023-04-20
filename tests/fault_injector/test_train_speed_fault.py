@@ -38,13 +38,13 @@ class TestTrainSpeedFault:
         self,
         train_speed_fault_configuration: TrainSpeedFaultConfiguration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrainSpeedFault(
             configuration=train_speed_fault_configuration,
             logger=logger,
-            wrapper=wrapper,
+            simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
 
