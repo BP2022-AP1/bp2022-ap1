@@ -109,8 +109,11 @@ class RouteController(IRouteController):
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
 
-        :param platforms: A List of the Platforms the train will drive to.
-        :type platforms: list
+        :param start_track: The track from where the route should start
+        :type start_track: Track
+        :param end_track: The track where the route should end
+        :type end_track: Track
+        :raises KeyError: _description_
         :return: The id of the first SUMO Route.
         :rtype: str
         """
