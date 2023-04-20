@@ -71,6 +71,7 @@ class Node(SimulationObject):
 
         :return: The connected edges
         """
+
         return self._edges
 
     def update(self, data: dict):
@@ -94,6 +95,20 @@ class Node(SimulationObject):
     def from_simulation(
         simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
+        if simulation_object.getID() in [x.identifier for x in updater.signals]:
+            # We need to update the signal with our data
+            signal: "Signal" = [
+                signal
+                for signal in updater.signals
+                if signal.identifier == simulation_object.getID()
+            ][0]
+
+            signal.add_edges(simulation_object)
+
+            return None
+
+        # we need to create a new node
+
         result = Node(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
@@ -101,7 +116,7 @@ class Node(SimulationObject):
         return result
 
     def add_simulation_connections(self) -> None:
-        self._edges = [x for x in self.updater.tracks if x.identifier in self._edge_ids]
+        self._edges = [x for x in self.updater.edges if x.identifier in self._edge_ids]
 
 
 class Signal(Node):
@@ -153,6 +168,17 @@ class Signal(Node):
 
     def set_edges(self, simulation_object: net.TLS) -> None:
         self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
+
+    def add_edges(self, node: net.node) -> None:
+        """Adds more edges to the signal (coming from the passed node)
+
+        :param node: The node from which to load the additional edges
+        """
+        assert node.getID() == self.identifier
+
+        self._edge_ids += [
+            edge.getID() for edge in node.getOutgoing() + node.getIncoming()
+        ]
 
     @staticmethod
     def from_simulation(
@@ -301,8 +327,6 @@ class Edge(SimulationObject):
         result = Edge(simulation_object.getID())
         result.updater = updater
 
-        print(simulation_object.getFromNode().getID())
-
         # pylint: disable=protected-access
         result._from = simulation_object.getFromNode().getID()
         result._to = simulation_object.getToNode().getID()
@@ -310,7 +334,6 @@ class Edge(SimulationObject):
         return result
 
     def add_simulation_connections(self) -> None:
-        print("----\n", self._from)
         self._from = [
             node for node in self.updater.nodes if node.identifier == self._from
         ][0]
@@ -331,6 +354,14 @@ class Track(SimulationObject):
         :return: The edges in both directions
         """
         return self._edges
+
+    @property
+    def nodes(self) -> Tuple[Node, Node]:
+        """Returns the nodes the edges run between
+
+        :return: The nodes
+        """
+        return (self._edges[0].from_node, self._edges[0].to_node)
 
     def __init__(self, edge1, edge2):
         if edge1.identifier.endswith("-re"):
