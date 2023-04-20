@@ -37,7 +37,7 @@ class IInterlockingDisruptor:
         """This method is used to block a track and recalculate the routes of relevant trains.
 
         :param track: the blocked track
-        :type track: str
+        :type track: Track
         """
         raise NotImplementedError()
 
@@ -45,7 +45,7 @@ class IInterlockingDisruptor:
         """This method is used to unblock a track and recalculate the routes of relevant trains.
 
         :param track: the unblocked track
-        :type track: str
+        :type track: Track
         """
         raise NotImplementedError()
 
@@ -54,7 +54,7 @@ class IInterlockingDisruptor:
         and stops of relevant trains.
 
         :param platform: the blocked platform
-        :type platform: str
+        :type platform: Platform
         """
         raise NotImplementedError()
 
@@ -63,7 +63,7 @@ class IInterlockingDisruptor:
         and stops of relevant trains.
 
         :param platform: the unblocked platform
-        :type platform: str
+        :type platform: Platform
         """
         raise NotImplementedError()
 
@@ -72,7 +72,7 @@ class IInterlockingDisruptor:
         so that it can recalculate the routing of relevant trains.
 
         :param track: the track, which speedlimit changed
-        :type track: str
+        :type track: Track
         """
         raise NotImplementedError()
 
@@ -81,7 +81,7 @@ class IInterlockingDisruptor:
         so that it can recalculate the routing of relevant trains.
 
         :param train: the train, which speed limit changed
-        :type train: str
+        :type train: Train
         """
         raise NotImplementedError()
 
@@ -90,7 +90,7 @@ class IInterlockingDisruptor:
         so that it can recalculate the routing of relevant trains.
 
         :param train: the train, which priority changed
-        :type train: str
+        :type train: Train
         """
         raise NotImplementedError()
 
