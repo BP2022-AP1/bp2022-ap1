@@ -1,11 +1,11 @@
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, TrainMixIn
 from src.wrapper.simulation_objects import Train
 
 
-class TrainSpeedFault(Fault):
+class TrainSpeedFault(Fault, TrainMixIn):
     """A fault affecting the speed of trains."""
 
     configuration: TrainSpeedFaultConfiguration
@@ -18,11 +18,9 @@ class TrainSpeedFault(Fault):
         :param tick: the simulation tick in which inject_fault was called
         :type tick: Integer
         """
-        self.train: Train = [
-            train
-            for train in self.wrapper.trains
-            if train.identifier == self.configuration.affected_element_id
-        ][0]
+        self.train: Train = self.get_train(
+            self.wrapper, self.configuration.affected_element_id
+        )
         self.old_speed = self.train.train_type.max_speed
         self.train.train_type.max_speed = self.configuration.new_speed
 

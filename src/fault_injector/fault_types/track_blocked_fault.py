@@ -1,11 +1,11 @@
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, TrackMixIn
 from src.wrapper.simulation_objects import Track
 
 
-class TrackBlockedFault(Fault):
+class TrackBlockedFault(Fault, TrackMixIn):
     """A fault that blocks a track"""
 
     configuration: TrackBlockedFaultConfiguration
@@ -17,12 +17,9 @@ class TrackBlockedFault(Fault):
         :param tick: the simulation tick in which inject_fault was called
         :type tick: Integer
         """
-        # pylint: disable-next=duplicate-code
-        self.track: Track = [
-            track
-            for track in self.wrapper.tracks
-            if track.identifier == self.configuration.affected_element_id
-        ][0]
+        self.track: Track = self.get_track(
+            self.wrapper, self.configuration.affected_element_id
+        )
         self.track.blocked = True
 
         self.interlocking.insert_track_blocked(self.track.identifier)

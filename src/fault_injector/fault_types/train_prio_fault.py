@@ -1,11 +1,11 @@
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
 )
-from src.fault_injector.fault_types.fault import Fault
+from src.fault_injector.fault_types.fault import Fault, TrainMixIn
 from src.wrapper.simulation_objects import Train
 
 
-class TrainPrioFault(Fault):
+class TrainPrioFault(Fault, TrainMixIn):
     """A fault affecting the priority of trains."""
 
     configuration: TrainPrioFaultConfiguration
@@ -18,11 +18,9 @@ class TrainPrioFault(Fault):
         :param tick: the simulation tick in which inject_fault was called
         :type tick: Integer
         """
-        self.train: Train = [
-            train
-            for train in self.wrapper.trains
-            if train.identifier == self.configuration.affected_element_id
-        ][0]
+        self.train: Train = self.get_train(
+            self.wrapper, self.configuration.affected_element_id
+        )
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio
 
