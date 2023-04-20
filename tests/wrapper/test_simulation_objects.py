@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 
 import pytest
@@ -118,7 +119,9 @@ def souc(traffic_update) -> SimulationObjectUpdatingComponent:
 def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
     return SimulationObjectUpdatingComponent(
-        sumo_configuration="sumo-config/example.scenario.sumocfg"
+        sumo_configuration=os.path.join(
+            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+        )
     )
 
 

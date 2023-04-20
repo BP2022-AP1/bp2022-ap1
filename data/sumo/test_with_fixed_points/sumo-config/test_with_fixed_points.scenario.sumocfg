@@ -1,0 +1,6 @@
+<configuration>
+	<input>
+		<net-file value="test_with_fixed_points.net.xml" />
+		<route-files value="test_with_fixed_points.routes.xml" />
+	</input>
+</configuration>
