@@ -41,6 +41,9 @@ railway-route-generator = { git = "https://github.com/antonykamp/railway-route-g
 sumoexporter = { git = "https://github.com/antonykamp/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
 track-signal-generator = { git = "https://github.com/antonykamp/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
+matplotlib = "^3.7.1"
+scipy = "1.9.2"
+requests = "^2.28.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
@@ -90,7 +93,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
-    cmd = "pytest --cov=src --cov-report xml"
+    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml"
 
     [tool.poe.tasks.ci]
     help = "Run formatting, linting and testing in preparation for CI"
@@ -111,11 +114,11 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"
-    cmd = "pytest --co --cov=src"
+    cmd = "pytest --co --cov=src --cov-config=.coveragerc"
 
     [tool.poe.tasks.cov-xml]
     help = "Run coverage report and write to XML file"
-    cmd = "pytest --co --cov=src --cov-report xml"
+    cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
 
 [tool.isort]
 profile = "black"

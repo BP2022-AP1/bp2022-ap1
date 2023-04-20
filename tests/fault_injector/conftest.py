@@ -1,4 +1,5 @@
 import pytest
+from traci import vehicle
 
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
@@ -40,7 +41,7 @@ def interlocking():
 
 
 @pytest.fixture
-def wrapper():
+def simulation_object_updater():
     return SimulationObjectUpdatingComponent()
 
 
@@ -50,23 +51,43 @@ def track() -> Track:
 
 
 @pytest.fixture
-def combine_track_and_wrapper(track: Track, wrapper: SimulationObjectUpdatingComponent):
-    track.updater = wrapper
-    wrapper.simulation_objects.append(track)
-    return track, wrapper
+def combine_track_and_wrapper(
+    track: Track, simulation_object_updater: SimulationObjectUpdatingComponent
+):
+    track.updater = simulation_object_updater
+    simulation_object_updater.simulation_objects.append(track)
+    return track, simulation_object_updater
 
 
 @pytest.fixture
 def combine_platform_and_wrapper(
-    platform: Platform, wrapper: SimulationObjectUpdatingComponent
+    platform: Platform, simulation_object_updater: SimulationObjectUpdatingComponent
 ):
-    platform.updater = wrapper
-    wrapper.simulation_objects.append(platform)
-    return platform, wrapper
+    platform.updater = simulation_object_updater
+    simulation_object_updater.simulation_objects.append(platform)
+    return platform, simulation_object_updater
 
 
 @pytest.fixture
-def combine_train_and_wrapper(train: Train, wrapper: SimulationObjectUpdatingComponent):
-    train.updater = wrapper
-    wrapper.simulation_objects.append(train)
-    return train, wrapper
+def combine_train_and_wrapper(
+    train: Train, simulation_object_updater: SimulationObjectUpdatingComponent
+):
+    train.updater = simulation_object_updater
+    simulation_object_updater.simulation_objects.append(train)
+    return train, simulation_object_updater
+
+
+@pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
+# pylint: disable-next=unused-argument
+def train(train_add) -> Train:
+    return Train(identifier="fault injector train", train_type="cargo")

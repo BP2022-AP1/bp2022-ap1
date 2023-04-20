@@ -4,7 +4,7 @@
 import json
 
 
-def get_all_run_id(options):
+def get_all_run_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]
