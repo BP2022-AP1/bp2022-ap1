@@ -5,7 +5,9 @@ import peewee
 import pytest
 
 from src.base_model import BaseModel
-from src.implementor.models import SimulationConfiguration
+from src.fault_injector.fault_configurations.fault_configuration import (
+    FaultConfiguration,
+)
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
     PlatformBlockedFaultConfigurationXSimulationConfiguration,
@@ -30,10 +32,8 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
     TrainSpeedFaultConfigurationXSimulationConfiguration,
 )
+from src.implementor.models import SimulationConfiguration
 from tests.decorators import recreate_db_setup
-from src.fault_injector.fault_configurations.fault_configuration import (
-    FaultConfiguration,
-)
 
 # pylint: disable=duplicate-code
 # will change, when adding foreign keys

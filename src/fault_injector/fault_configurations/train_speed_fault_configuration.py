@@ -1,10 +1,10 @@
 import marshmallow as marsh
-from peewee import FloatField, TextField, ForeignKeyField
+from peewee import FloatField, ForeignKeyField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
-from src.base_model import BaseModel
 from src.implementor.models import SimulationConfiguration
 
 

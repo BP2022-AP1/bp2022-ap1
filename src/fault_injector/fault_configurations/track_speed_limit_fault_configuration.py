@@ -1,10 +1,10 @@
 import marshmallow as marsh
-from peewee import IntegerField, TextField, ForeignKeyField
+from peewee import ForeignKeyField, IntegerField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
-from src.base_model import BaseModel
 from src.implementor.models import SimulationConfiguration
 
 
@@ -37,7 +37,8 @@ class TrackSpeedLimitFaultConfigurationXSimulationConfiguration(BaseModel):
         def _make(
             self, data: dict
         ) -> "TrackSpeedLimitFaultConfigurationXSimulationConfiguration":
-            """Constructs a TrackSpeedLimitFaultConfigurationXSimulationConfiguration from a dictionary.
+            """Constructs a TrackSpeedLimitFaultConfigurationXSimulationConfiguration
+            from a dictionary.
 
             :param data: The dictionary.
             :return: A TrackSpeedLimitFaultConfigurationXSimulationConfiguration.

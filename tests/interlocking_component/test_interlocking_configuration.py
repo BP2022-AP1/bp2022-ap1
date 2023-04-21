@@ -2,10 +2,10 @@ from uuid import UUID
 
 import pytest
 
+from src.implementor.models import SimulationConfiguration
 from src.interlocking_component.interlocking_configuration import (
     InterlockingConfiguration,
 )
-from src.implementor.models import SimulationConfiguration
 from tests.decorators import recreate_db_setup
 
 

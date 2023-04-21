@@ -1,9 +1,8 @@
 import marshmallow as marsh
 from peewee import BooleanField, ForeignKeyField
 
-from src.implementor.models import SimulationConfiguration
-
 from src.base_model import BaseModel
+from src.implementor.models import SimulationConfiguration
 
 
 class InterlockingConfiguration(BaseModel):

@@ -1,10 +1,10 @@
 import marshmallow as marsh
-from peewee import TextField, ForeignKeyField
+from peewee import ForeignKeyField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
-from src.base_model import BaseModel
 from src.implementor.models import SimulationConfiguration
 
 
@@ -35,7 +35,8 @@ class TrackBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
         def _make(
             self, data: dict
         ) -> "TrackBlockedFaultConfigurationXSimulationConfiguration":
-            """Constructs a TrackBlockedFaultConfigurationXSimulationConfiguration from a dictionary.
+            """Constructs a TrackBlockedFaultConfigurationXSimulationConfiguration
+            from a dictionary.
 
             :param data: The dictionary.
             :return: A TrackBlockedFaultConfigurationXSimulationConfiguration.
