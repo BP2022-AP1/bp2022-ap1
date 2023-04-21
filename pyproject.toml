@@ -123,5 +123,17 @@ build-backend = "poetry.core.masonry.api"
     help = "Run coverage report and write to XML file"
     cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
 
+    [tool.poe.tasks.docs-build]
+    help = "Build the documentation with sphinx"
+    cmd = "sphinx-build -b html docs/source/ docs/build/html"
+
+    [tool.poe.tasks.docs-open]
+    help = "Open the built documentation"
+    cmd = "open docs/build/html/index.html"
+
+    [tool.poe.tasks.docs]
+    help = "Build and open the documentation of the REST API"
+    sequence = ["docs-build", "docs-open"]
+
 [tool.isort]
 profile = "black"
