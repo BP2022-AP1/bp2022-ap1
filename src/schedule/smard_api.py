@@ -45,6 +45,7 @@ class SmardApiEntry(BaseModel):
 
         timestamp = marsh.fields.DateTime(required=True)
         value = marsh.fields.Float(required=True)
+        index_id = marsh.fields.UUID(required=True)
 
         def _make(self, data: dict) -> "SmardApiEntry":
             """Constructs a SmardApiEntry from a dict
