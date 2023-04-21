@@ -97,14 +97,9 @@ class SmardApi:
     REGION: str = "50Hertz"  # name of the electricity grid company in eastern Germany
     BASE_URL: str = f"https://www.smard.de/app/chart_data/{FILTER}/{REGION}"
 
-    _timezone: str
-
-    def __init__(self, timezone: str = "Europe/Berlin"):
+    def __init__(self):
         """Constructs a SmardApi
-
-        :param timezone: The timezone to use for the timestamps
         """
-        self._timezone = timezone
         self._update_indices()
 
     def timestamp_to_dt(self, timestamp: int) -> datetime:
@@ -113,9 +108,15 @@ class SmardApi:
         :param timestamp: The timestamp
         :return: The datetime object
         """
-        return datetime.fromtimestamp(
-            timestamp / 1000, tz=pytz.timezone(self._timezone)
-        )
+        return datetime.fromtimestamp(timestamp / 1000)
+
+    def dt_to_timestamp(self, dt: datetime) -> int:
+        """Converts a datetime object to a timestamp
+
+        :param dt: The datetime object
+        :return: The timestamp
+        """
+        return int(dt.timestamp() * 1000)
 
     def _request(self, url: str) -> dict:
         """Sends a get request to the given url and returns the response as a dict
@@ -123,6 +124,7 @@ class SmardApi:
         :param url: The url
         :return: The response as a dict
         """
+        print("URL: ", url)
         response = requests.get(
             url,
             timeout=10,
@@ -138,7 +140,7 @@ class SmardApi:
         """
         url = (
             f"{self.BASE_URL}/{self.FILTER}_{self.REGION}"
-            f"_{self.RESOLUTION}_{index.timestamp}.json"
+            f"_{self.RESOLUTION}_{self.dt_to_timestamp(index.timestamp)}.json"
         )
         for timestamp, value in self._request(url)["series"]:
             SmardApiEntry.get_or_create(
