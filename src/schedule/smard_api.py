@@ -226,7 +226,7 @@ class SmardApi:
         # But it obiously is, the code works fine.
         # pylint: disable=not-an-iterable
         for index in indices:
-            if len(index.entries) == 0 or self._is_last_index(index):
+            if self._is_last_index(index) or len(index.entries) == 0:
                 self._request_data(index)
 
     def _get_data(self, start: datetime, end: datetime) -> list[SmardApiEntry]:
