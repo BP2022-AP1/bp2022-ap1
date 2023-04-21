@@ -395,7 +395,7 @@ class Track(SimulationObject):
     def max_speed(self, speed: Tuple[float, float] | float) -> None:
         """Updates the max_speed of the track
 
-        :param speed: If both edges should have the same speed, a floatshould be passed,
+        :param speed: If both edges should have the same speed, a float should be passed,
         if the edges should have different speeds, pass a tuple
         """
         if not isinstance(speed, Tuple):
@@ -615,7 +615,7 @@ class Train(SimulationObject):
     def track(self) -> Track:
         """Returns the track (bidirectional) on which the train is currently
 
-        :return: The track the train is dirving on
+        :return: The track the train is driving on
         """
         return self.edge.track
 
