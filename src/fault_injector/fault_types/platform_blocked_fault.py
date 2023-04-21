@@ -9,14 +9,17 @@ class PlatformBlockedFault(Fault):
     """A fault that blocks a platform"""
 
     configuration: PlatformBlockedFaultConfiguration
-    platform: Platform
+    platform: Platform = None
 
     def _get_platform(self) -> Platform:
-        return [
+        platforms: list[Platform] = [
             platform
             for platform in self.simulation_object_updater.platforms
             if platform.identifier == self.configuration.affected_element_id
-        ][0]
+        ]
+        if len(platforms) < 1:
+            raise ValueError("platform does not exist")
+        return platforms[0]
 
     def inject_fault(self, tick: int):
         """inject PlatformBlockedFault into the given component
@@ -25,8 +28,6 @@ class PlatformBlockedFault(Fault):
         :type tick: Integer
         """
         self.platform: Platform = self._get_platform()
-        if self.platform is None:
-            raise ValueError("platform does not exist")
         self.platform.blocked = True
 
         self.interlocking.insert_platform_blocked(self.platform)

@@ -10,7 +10,7 @@ class TrainSpeedFault(Fault, TrainMixIn):
 
     configuration: TrainSpeedFaultConfiguration
     old_speed: float
-    train: Train
+    train: Train = None
 
     def inject_fault(self, tick: int):
         """inject TrainSpeedFault into the given component

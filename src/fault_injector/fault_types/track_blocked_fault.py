@@ -9,7 +9,7 @@ class TrackBlockedFault(Fault, TrackMixIn):
     """A fault that blocks a track"""
 
     configuration: TrackBlockedFaultConfiguration
-    track: Track
+    track: Track = None
 
     def inject_fault(self, tick: int):
         """inject TrackBlockedFault into the given component

@@ -10,7 +10,7 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
 
     configuration: TrackSpeedLimitFaultConfiguration
     old_speed_limit: float
-    track: Track
+    track: Track = None
 
     def inject_fault(self, tick: int):
         """inject TrackSpeedLimitFault into the given component

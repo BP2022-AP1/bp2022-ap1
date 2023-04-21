@@ -10,7 +10,7 @@ class TrainPrioFault(Fault, TrainMixIn):
 
     configuration: TrainPrioFaultConfiguration
     old_prio: int
-    train: Train
+    train: Train = None
 
     def inject_fault(self, tick: int):
         """inject TrainPrioFault into the given component
