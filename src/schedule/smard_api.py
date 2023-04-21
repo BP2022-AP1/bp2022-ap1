@@ -2,9 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import marshmallow as marsh
-import pytz
 import requests
-from peewee import DateTimeField, FloatField, ForeignKeyField, DoesNotExist
+from peewee import DateTimeField, DoesNotExist, FloatField, ForeignKeyField
 
 from src.base_model import BaseModel
 
@@ -98,8 +97,7 @@ class SmardApi:
     BASE_URL: str = f"https://www.smard.de/app/chart_data/{FILTER}/{REGION}"
 
     def __init__(self):
-        """Constructs a SmardApi
-        """
+        """Constructs a SmardApi"""
         self._update_indices()
 
     def timestamp_to_dt(self, timestamp: int) -> datetime:
@@ -110,13 +108,13 @@ class SmardApi:
         """
         return datetime.fromtimestamp(timestamp / 1000)
 
-    def dt_to_timestamp(self, dt: datetime) -> int:
+    def dt_to_timestamp(self, date_time: datetime) -> int:
         """Converts a datetime object to a timestamp
 
         :param dt: The datetime object
         :return: The timestamp
         """
-        return int(dt.timestamp() * 1000)
+        return int(date_time.timestamp() * 1000)
 
     def _request(self, url: str) -> dict:
         """Sends a get request to the given url and returns the response as a dict
@@ -125,11 +123,7 @@ class SmardApi:
         :return: The response as a dict
         """
         print("URL: ", url)
-        response = requests.get(
-            url,
-            timeout=10,
-            headers={"Accept": "application/json"}
-        )
+        response = requests.get(url, timeout=10, headers={"Accept": "application/json"})
         return response.json()
 
     def _request_data(self, index: SmardApiIndex):
@@ -227,7 +221,9 @@ class SmardApi:
             SmardApiIndex.timestamp >= start_index.timestamp,
             SmardApiIndex.timestamp <= end_index.timestamp,
         )
-        # I don't now why the linter complains here
+        # I don't now why the linter complains here.
+        # It says that indices is not iterable.
+        # But it obiously is, the code works fine.
         # pylint: disable=not-an-iterable
         for index in indices:
             if len(index.entries) == 0 or self._is_last_index(index):
