@@ -21,10 +21,29 @@ peewee = "^3.16.0"
 peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
 psycopg2 = "^2.9.5"
-interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "2be51e6" }
+#interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "2be51e6" }
+interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "d6d32b4" }
 flask = "^2.2.3"
 webargs = "^8.2.0"
 freezegun = "^1.2.2"
+#yaramo = { git = "https://github.com/simulate-digital-rail/yaramo" }
+#orm-importer = { git = "https://github.com/Lietze/orm-importer.git", rev = "54cbdd4" }
+#planpro-exporter = { git = "https://github.com/simulate-digital-rail/planpro-exporter" }
+#planpro-importer = { git = "https://github.com/simulate-digital-rail/planpro-importer" }
+#railway-route-generator = { git = "https://github.com/simulate-digital-rail/railway-route-generator" }
+#sumoexporter = { git = "https://github.com/simulate-digital-rail/sumo-exporter" }
+#track-signal-generator = { git = "https://github.com/simulate-digital-rail/track-signal-generator.git" }
+yaramo = { git = "https://github.com/antonykamp/yaramo", branch="refactor/replace-connected-nodes-with-edges" }
+orm-importer = { git = "https://github.com/antonykamp/orm-importer", branch = "refactor/replace-connected-nodes-edges" }
+planpro-exporter = { git = "https://github.com/antonykamp/planpro-exporter", branch = "refactor/replace-connected-nodes-edges" }
+planpro-importer = { git = "https://github.com/antonykamp/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
+railway-route-generator = { git = "https://github.com/antonykamp/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
+sumoexporter = { git = "https://github.com/antonykamp/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
+track-signal-generator = { git = "https://github.com/antonykamp/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
+pandas = "^2.0.0"
+matplotlib = "^3.7.1"
+scipy = "1.9.2"
+requests = "^2.28.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
@@ -74,7 +93,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
-    cmd = "pytest --cov=src --cov-report xml"
+    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml"
 
     [tool.poe.tasks.ci]
     help = "Run formatting, linting and testing in preparation for CI"
@@ -95,11 +114,11 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"
-    cmd = "pytest --co --cov=src"
+    cmd = "pytest --co --cov=src --cov-config=.coveragerc"
 
     [tool.poe.tasks.cov-xml]
     help = "Run coverage report and write to XML file"
-    cmd = "pytest --co --cov=src --cov-report xml"
+    cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
 
 [tool.isort]
 profile = "black"

@@ -4,7 +4,7 @@
 import json
 
 
-def get_all_simulation_id():
+def get_all_simulation_ids():
     """
     Get all simulation ids
     """
@@ -51,7 +51,6 @@ def update_simulation_configuration(options, body):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
-
     :param body: The parsed body of the request
     """
 

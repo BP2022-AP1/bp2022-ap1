@@ -1,0 +1,6 @@
+<configuration>
+	<input>
+		<net-file value="test_with_new_yaramo.net.xml" />
+		<route-files value="test_with_new_yaramo.routes.xml" />
+	</input>
+</configuration>

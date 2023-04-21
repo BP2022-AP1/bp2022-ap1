@@ -4,7 +4,7 @@
 import json
 
 
-def get_schedule_blocked_fault_configuration_ids(options):
+def get_all_schedule_blocked_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -50,20 +50,6 @@ def get_schedule_blocked_fault_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_schedule_blocked_fault_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_schedule_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -77,7 +63,7 @@ def delete_schedule_blocked_fault_configuration(options):
     return "", 501  # 204
 
 
-def get_track_blocked_fault_configuration_ids(options):
+def get_all_track_blocked_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -123,20 +109,6 @@ def get_track_blocked_fault_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_track_blocked_fault_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_track_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -150,7 +122,7 @@ def delete_track_blocked_fault_configuration(options):
     return "", 501  # 204
 
 
-def get_track_speed_limit_fault_configuration_ids(options):
+def get_all_track_speed_limit_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -196,20 +168,6 @@ def get_track_speed_limit_fault_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_track_speed_limit_fault_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_track_speed_limit_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -223,7 +181,7 @@ def delete_track_speed_limit_fault_configuration(options):
     return "", 501  # 204
 
 
-def get_train_prio_fault_configuration_ids(options):
+def get_all_train_prio_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -269,20 +227,6 @@ def get_train_prio_fault_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_train_prio_fault_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_train_prio_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -296,7 +240,7 @@ def delete_train_prio_fault_configuration(options):
     return "", 501  # 204
 
 
-def get_train_speed_fault_configuration_ids(options):
+def get_all_train_speed_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -342,20 +286,6 @@ def get_train_speed_fault_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_train_speed_fault_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_train_speed_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -369,7 +299,7 @@ def delete_train_speed_fault_configuration(options):
     return "", 501  # 204
 
 
-def get_platform_blocked_fault_configuration_ids(options):
+def get_all_platform_blocked_fault_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -415,20 +345,6 @@ def get_platform_blocked_fault_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_platform_blocked_fault_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_platform_blocked_fault_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -442,7 +358,7 @@ def delete_platform_blocked_fault_configuration(options):
     return "", 501  # 204
 
 
-def get_interlocking_configuration_ids(options):
+def get_all_interlocking_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -488,20 +404,6 @@ def get_interlocking_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_interlocking_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
-
-
 def delete_interlocking_configuration(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
@@ -515,7 +417,7 @@ def delete_interlocking_configuration(options):
     return "", 501  # 204
 
 
-def get_spawner_configuration_ids(options):
+def get_all_spawner_configuration_ids(options):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]: Specify id of simulation
@@ -559,20 +461,6 @@ def get_spawner_configuration(options):
     # All the parameters are present in the options argument
 
     return json.dumps("<map>"), 501  # 200
-
-
-def update_spawner_configuration(options, body):
-    """
-    :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
-
-    :param body: The parsed body of the request
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return "", 501  # 200
 
 
 def delete_spawner_configuration(options):
