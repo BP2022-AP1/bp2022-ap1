@@ -3,7 +3,7 @@ from datetime import datetime
 
 import marshmallow as marsh
 import requests
-from peewee import DateTimeField, DoesNotExist, FloatField, ForeignKeyField
+from peewee import DateTimeField, FloatField, ForeignKeyField
 
 from src.base_model import BaseModel
 
@@ -159,20 +159,20 @@ class SmardApi:
         :param end: The end timestamp
         :return: The index timestamp and the boolean
         """
-        try:
-            return (
-                SmardApiIndex.select()
-                .where(SmardApiIndex.timestamp <= start)
-                .order_by(SmardApiIndex.timestamp.desc())
-                .first()
-            ), False
-        except DoesNotExist:
-            start_index = (
-                SmardApiIndex.select().order_by(SmardApiIndex.timestamp.asc()).first()
-            )
-            if start_index.timestamp > end:
-                return None, True
-            return start_index, True
+        start_index = (
+            SmardApiIndex.select()
+            .where(SmardApiIndex.timestamp <= start)
+            .order_by(SmardApiIndex.timestamp.desc())
+            .first()
+        )
+        if start_index is not None:
+            return start_index, False
+        start_index = (
+            SmardApiIndex.select().order_by(SmardApiIndex.timestamp.asc()).first()
+        )
+        if start_index.timestamp > end:
+            return None, True
+        return start_index, True
 
     def _end_index_from_timestamp(
         self, start: datetime, end: datetime
@@ -184,20 +184,20 @@ class SmardApi:
         :param end: The end timestamp
         :return: The index timestamp and the boolean
         """
-        try:
-            return (
-                SmardApiIndex.select()
-                .where(SmardApiIndex.timestamp >= end)
-                .order_by(SmardApiIndex.timestamp.asc())
-                .first()
-            ), False
-        except DoesNotExist:
-            end_index = (
-                SmardApiIndex.select().order_by(SmardApiIndex.timestamp.desc()).first()
-            )
-            if end_index.timestamp < start:
-                return None, True
-            return end_index, True
+        end_index = (
+            SmardApiIndex.select()
+            .where(SmardApiIndex.timestamp >= end)
+            .order_by(SmardApiIndex.timestamp.asc())
+            .first()
+        )
+        if end_index is not None:
+            return end_index, False
+        end_index = (
+            SmardApiIndex.select().order_by(SmardApiIndex.timestamp.desc()).first()
+        )
+        if end_index.timestamp < start:
+            return None, True
+        return end_index, True
 
     def _is_last_index(self, index: SmardApiIndex) -> bool:
         """Returns True if the given index is the last index timestamp
