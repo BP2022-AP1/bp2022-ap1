@@ -6,8 +6,17 @@ from src.schedule.smard_api import SmardApi
 
 
 class DemandScheduleStrategy(ScheduleStrategy):
+    """A schedule strategy that spawns trains based on the demand of coal
+    for electricity production.
+    """
+
     @classmethod
     def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
+        """Creates a new instance of this class from a schedule configuration.
+
+        :param schedule_configuration: The schedule configuration to create the instance from.
+        :return: The new instance.
+        """
         assert schedule_configuration.strategy_type == "DemandScheduleStrategy"
         return cls(
             start_tick=schedule_configuration.strategy_start_tick,
@@ -54,6 +63,14 @@ class DemandScheduleStrategy(ScheduleStrategy):
         scaling_factor: float,
         start_datetime: datetime,
     ):
+        """Creates a new instance of this class.
+
+        :param start_tick: The tick at which the schedule strategy starts.
+        :param end_tick: The tick at which the schedule strategy ends.
+        :param power_station: The power station to use for the calculation.
+        :param scaling_factor: The scaling factor to multiply the coal consumption with.
+        :param start_datetime: The start datetime for the used data.
+        """
         super().__init__(start_tick, end_tick)
         self.power_station = power_station
         self.scaling_factor = scaling_factor
@@ -62,12 +79,19 @@ class DemandScheduleStrategy(ScheduleStrategy):
         self._calculate_spawn_ticks()
 
     def _compute_coal_consumption(self, produced_electrical_energy: float) -> float:
+        """Computes the coal consumption for the given amount of electrical energy
+        for the given power station multiplied by the scaling factor.
+
+        :param produced_electrical_energy: The amount of electrical energy produced.
+        :return: The coal consumption.
+        """
         max_electrical_power = self.POWER_STATIONS[self.power_station][
             "electrical_power"
         ]
         max_thermal_power = self.POWER_STATIONS[self.power_station]["thermal_power"]
         efficiency = self.POWER_STATIONS[self.power_station]["efficiency"]
-        # the time in hours all stations on the grid have to run to produce the given amount of electrical energy
+        # the time in hours all stations on the grid have to run to produce
+        # the given amount of electrical energy
         time = produced_electrical_energy / self.TOTAL_ELECTRICAL_POWER  # hours
         # that was copilot, exactly the formula I developed on my whiteboard... impressive
         coal_mass = (
@@ -78,10 +102,16 @@ class DemandScheduleStrategy(ScheduleStrategy):
         return coal_mass * self.scaling_factor  # tons
 
     def _compute_trains_to_spawn(self, produced_electrical_power: float) -> float:
+        """Computes the amount of trains to spawn for the given amount of electrical power.
+
+        :param produced_electrical_power: The amount of electrical power produced.
+        :return: The amount of trains to spawn.
+        """
         coal_consumption = self._compute_coal_consumption(produced_electrical_power)
         return coal_consumption / self.COAL_PER_TRAIN
 
     def _calculate_spawn_ticks(self):
+        """Calculates the ticks at which trains should spawn."""
         end_datetime = self.start_datetime + datetime.timedelta(
             seconds=self.end_tick - self.start_tick
         )
@@ -96,4 +126,5 @@ class DemandScheduleStrategy(ScheduleStrategy):
                 tick += 1
 
     def should_spawn(self, tick: int) -> bool:
+        """Returns whether a train should spawn at the given tick."""
         return super().should_spawn(tick) and tick in self._spawn_ticks
