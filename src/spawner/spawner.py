@@ -62,8 +62,8 @@ class SpawnerConfigurationXSimulationConfiguration(BaseModel):
     class Schema(BaseModel.Schema):
         """Marshmallow schema for SpawnerConfigurationXSimulationConfiguration"""
 
-        spawner_configuration = marsh.fields.UUID(required=True)
         simulation_configuration = marsh.fields.UUID(required=True)
+        spawner_configuration = marsh.fields.UUID(required=True)
 
         def _make(self, data: dict) -> "SpawnerConfigurationXSimulationConfiguration":
             """Constructs a SpawnerConfigurationXSimulationConfiguration from a dictionary.
@@ -73,15 +73,15 @@ class SpawnerConfigurationXSimulationConfiguration(BaseModel):
             """
             return SpawnerConfigurationXSimulationConfiguration(**data)
 
-    spawner_configuration = ForeignKeyField(
-        SpawnerConfiguration,
-        null=False,
-        backref="simulation_configuration_references",
-    )
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
         backref="spawner_configuration_references",
+    )
+    spawner_configuration = ForeignKeyField(
+        SpawnerConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
     )
 
 

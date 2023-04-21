@@ -31,8 +31,8 @@ class TrackSpeedLimitFaultConfigurationXSimulationConfiguration(BaseModel):
     class Schema(BaseModel.Schema):
         """Marshmallow schema for TrackSpeedLimitFaultConfigurationXSimulationConfiguration"""
 
-        track_speed_limit_fault_configuration = marsh.fields.UUID(required=True)
         simulation_configuration = marsh.fields.UUID(required=True)
+        track_speed_limit_fault_configuration = marsh.fields.UUID(required=True)
 
         def _make(
             self, data: dict
@@ -45,13 +45,13 @@ class TrackSpeedLimitFaultConfigurationXSimulationConfiguration(BaseModel):
             """
             return TrackSpeedLimitFaultConfigurationXSimulationConfiguration(**data)
 
-    track_speed_limit_fault_configuration = ForeignKeyField(
-        TrackSpeedLimitFaultConfiguration,
-        null=False,
-        backref="simulation_configuration_references",
-    )
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
         backref="track_speed_limit_fault_configuration_references",
+    )
+    track_speed_limit_fault_configuration = ForeignKeyField(
+        TrackSpeedLimitFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
     )

@@ -29,8 +29,8 @@ class ScheduleBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
     class Schema(BaseModel.Schema):
         """Marshmallow schema for ScheduleBlockedFaultConfigurationXSimulationConfiguration"""
 
-        schedule_blocked_fault_configuration = marsh.fields.UUID(required=True)
         simulation_configuration = marsh.fields.UUID(required=True)
+        schedule_blocked_fault_configuration = marsh.fields.UUID(required=True)
 
         def _make(
             self, data: dict
@@ -43,13 +43,13 @@ class ScheduleBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
             """
             return ScheduleBlockedFaultConfigurationXSimulationConfiguration(**data)
 
-    schedule_blocked_fault_configuration = ForeignKeyField(
-        ScheduleBlockedFaultConfiguration,
-        null=False,
-        backref="simulation_configuration_references",
-    )
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
         backref="schedule_blocked_fault_configuration_references",
+    )
+    schedule_blocked_fault_configuration = ForeignKeyField(
+        ScheduleBlockedFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
     )

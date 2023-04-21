@@ -31,8 +31,8 @@ class TrainSpeedFaultConfigurationXSimulationConfiguration(BaseModel):
     class Schema(BaseModel.Schema):
         """Marshmallow schema for TrainSpeedFaultConfigurationXSimulationConfiguration"""
 
-        train_speed_fault_configuration = marsh.fields.UUID(required=True)
         simulation_configuration = marsh.fields.UUID(required=True)
+        train_speed_fault_configuration = marsh.fields.UUID(required=True)
 
         def _make(
             self, data: dict
@@ -44,13 +44,13 @@ class TrainSpeedFaultConfigurationXSimulationConfiguration(BaseModel):
             """
             return TrainSpeedFaultConfigurationXSimulationConfiguration(**data)
 
-    train_speed_fault_configuration = ForeignKeyField(
-        TrainSpeedFaultConfiguration,
-        null=False,
-        backref="simulation_configuration_references",
-    )
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
         backref="train_speed_fault_configuration_references",
+    )
+    train_speed_fault_configuration = ForeignKeyField(
+        TrainSpeedFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
     )

@@ -29,8 +29,8 @@ class PlatformBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
     class Schema(BaseModel.Schema):
         """Marshmallow schema for PlatformBlockedFaultConfigurationXSimulationConfiguration"""
 
-        platform_blocked_fault_configuration = marsh.fields.UUID(required=True)
         simulation_configuration = marsh.fields.UUID(required=True)
+        platform_blocked_fault_configuration = marsh.fields.UUID(required=True)
 
         def _make(
             self, data: dict
@@ -43,13 +43,13 @@ class PlatformBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
             """
             return PlatformBlockedFaultConfigurationXSimulationConfiguration(**data)
 
-    platform_blocked_fault_configuration = ForeignKeyField(
-        PlatformBlockedFaultConfiguration,
-        null=False,
-        backref="simulation_configuration_references",
-    )
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
         backref="platform_blocked_fault_configuration_references",
+    )
+    platform_blocked_fault_configuration = ForeignKeyField(
+        PlatformBlockedFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
     )

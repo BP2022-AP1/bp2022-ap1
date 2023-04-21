@@ -29,8 +29,8 @@ class TrackBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
     class Schema(BaseModel.Schema):
         """Marshmallow schema for TrackBlockedFaultConfigurationXSimulationConfiguration"""
 
-        track_blocked_fault_configuration = marsh.fields.UUID(required=True)
         simulation_configuration = marsh.fields.UUID(required=True)
+        track_blocked_fault_configuration = marsh.fields.UUID(required=True)
 
         def _make(
             self, data: dict
@@ -43,13 +43,13 @@ class TrackBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
             """
             return TrackBlockedFaultConfigurationXSimulationConfiguration(**data)
 
-    track_blocked_fault_configuration = ForeignKeyField(
-        TrackBlockedFaultConfiguration,
-        null=False,
-        backref="simulation_configuration_references",
-    )
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
         backref="track_blocked_fault_configuration_references",
+    )
+    track_blocked_fault_configuration = ForeignKeyField(
+        TrackBlockedFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
     )
