@@ -1,5 +1,6 @@
 import pytest
 
+from src.implementor.models import SimulationConfiguration, Token
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule_configuration import (
@@ -305,3 +306,17 @@ def spawner(
         logger=mock_logger,
         traci_wrapper=mock_traci_wrapper,
     )
+
+
+@pytest.fixture
+def token() -> Token:
+    token = Token(name="owner", permission="admin", hashedToken="hash")
+    token.save()
+    return token
+
+
+@pytest.fixture
+def simulation_configuration(token) -> SimulationConfiguration:
+    config = SimulationConfiguration(token=token)
+    config.save()
+    return config

@@ -1,5 +1,6 @@
 import pytest
 
+from src.implementor.models import SimulationConfiguration
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
@@ -197,3 +198,83 @@ class TestSpawnerConfigurationXSchedule:
             spawner_configuration_x_schedule.schedule_configuration_id
             == regular_train_schedule_configuration
         )
+
+
+class SpawnerConfigurationXSimulationConfiguration:
+    """Tests for the SpawnerConfigurationXSimulationConfiguration"""
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
+
+    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
+    def test_creation(
+        self,
+        simulation_configuration: SimulationConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+    ):
+        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
+            spawner_configuration=spawner_configuration,
+            schedule_configuration=simulation_configuration,
+        )
+        spawner_x_simulation.save()
+        assert spawner_x_simulation.spawner_configuration == spawner_configuration
+        assert spawner_x_simulation.schedule_configuration == simulation_configuration
+
+    def test_back_references(
+        self,
+        simulation_configuration: SimulationConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+    ):
+        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
+            spawner_configuration=spawner_configuration,
+            schedule_configuration=simulation_configuration,
+        )
+        spawner_x_simulation.save()
+        assert len(simulation_configuration.spawner_configuration_references) == 1
+        assert (
+            simulation_configuration.spawner_configuration_references[0]
+            == spawner_x_simulation
+        )
+        assert len(spawner_configuration.simulation_configuration_references) == 1
+        assert (
+            spawner_configuration.simulation_configuration_references[0]
+            == spawner_x_simulation
+        )
+
+    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
+    def test_serialization(
+        self,
+        simulation_configuration: SimulationConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+    ):
+        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
+            spawner_configuration=spawner_configuration,
+            simulation_configuration=simulation_configuration,
+        )
+        spawner_x_simulation.save()
+        obj_dict = spawner_x_simulation.to_dict()
+        del obj_dict["created_at"]
+        del obj_dict["updated_at"]
+
+        assert obj_dict == {
+            "id": str(spawner_x_simulation.id),
+            "spawner_configuration": str(spawner_x_simulation.id),
+            "schedule_configuration": str(spawner_x_simulation.id),
+        }
+
+    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
+    def test_deserialization(
+        self,
+        simulation_configuration: SimulationConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+    ):
+        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration.from_dict(
+            {
+                "spawner_configuration": str(spawner_configuration.id),
+                "schedule_configuration": str(simulation_configuration.id),
+            }
+        )
+        spawner_x_simulation.save()
+        assert spawner_x_simulation.spawner_configuration == spawner_configuration
+        assert spawner_x_simulation.schedule_configuration == simulation_configuration
