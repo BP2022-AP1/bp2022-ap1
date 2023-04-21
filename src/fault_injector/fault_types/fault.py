@@ -80,11 +80,14 @@ class TrainMixIn:
         :return: the train with the requested id
         :rtype: Train
         """
-        return [
+        train: Train = [
             train
             for train in simulation_object_updater.trains
             if train.identifier == affected_element_id
         ][0]
+        if train is None:
+            raise ValueError("Train does not exist")
+        return train
 
 
 class TrackMixIn:
@@ -104,8 +107,11 @@ class TrackMixIn:
         :return: the track with the requested id
         :rtype: Track
         """
-        return [
+        track: Track = [
             track
             for track in simulation_object_updater.tracks
             if track.identifier == affected_element_id
         ][0]
+        if track is None:
+            raise ValueError("Track does not exist")
+        return track

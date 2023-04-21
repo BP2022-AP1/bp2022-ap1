@@ -21,9 +21,7 @@ class TrainPrioFault(Fault, TrainMixIn):
         self.train: Train = self.get_train(
             self.simulation_object_updater, self.configuration.affected_element_id
         )
-        if self.train is None:
-            raise ValueError("Train does not exist")
-        
+
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio
 
@@ -42,7 +40,9 @@ class TrainPrioFault(Fault, TrainMixIn):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if self.train is None or self.train is not self.get_train(self.simulation_object_updater, self.train.identifier):
+        if self.train is None or self.train is not self.get_train(
+            self.simulation_object_updater, self.train.identifier
+        ):
             raise ValueError("Train does not exist or fault not injected")
 
         self.train.train_type.priority = self.old_prio

@@ -20,8 +20,7 @@ class TrackBlockedFault(Fault, TrackMixIn):
         self.track: Track = self.get_track(
             self.simulation_object_updater, self.configuration.affected_element_id
         )
-        if self.track is None:
-            raise ValueError("Track does not exist.")
+        print(self.track)
         self.track.blocked = True
 
         self.interlocking.insert_track_blocked(self.track)
@@ -35,7 +34,9 @@ class TrackBlockedFault(Fault, TrackMixIn):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if self.track is None or self.track is not self.get_track(self.simulation_object_updater, self.track.identifier):
+        if self.track is None or self.track is not self.get_track(
+            self.simulation_object_updater, self.track.identifier
+        ):
             raise ValueError("Track does not exist or fault not injected")
 
         self.track.blocked = False

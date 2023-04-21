@@ -3,7 +3,6 @@ from src.fault_injector.fault_configurations.platform_blocked_fault_configuratio
 )
 from src.fault_injector.fault_types.fault import Fault
 from src.wrapper.simulation_objects import Platform
-from src.wrapper.simulation_object_updating_component import SimulationObjectUpdatingComponent
 
 
 class PlatformBlockedFault(Fault):
@@ -41,10 +40,8 @@ class PlatformBlockedFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if self.platform is None or self.platform is not self._get_platform:
-            raise ValueError(
-                "Platform does not exist or fault not injected"
-            )
+        if self.platform is None or self.platform is not self._get_platform():
+            raise ValueError("Platform does not exist or fault not injected")
         self.platform.blocked = False
 
         self.interlocking.insert_platform_unblocked(self.platform)
