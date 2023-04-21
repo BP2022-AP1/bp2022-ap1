@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
@@ -112,14 +112,14 @@ class DemandScheduleStrategy(ScheduleStrategy):
 
     def _calculate_spawn_ticks(self):
         """Calculates the ticks at which trains should spawn."""
-        end_datetime = self.start_datetime + datetime.timedelta(
+        end_datetime = self.start_datetime + timedelta(
             seconds=self.end_tick - self.start_tick
         )
         data = SmardApi().get_data(self.start_datetime, end_datetime)
         train_accumulator = 0.0
         for quarter_hour, entry in enumerate(data):
             train_accumulator += self._compute_trains_to_spawn(entry.value)
-            tick = quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_tick
+            tick = int(quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_tick)
             while train_accumulator >= 1.0:
                 self._spawn_ticks.append(tick)
                 train_accumulator -= 1.0
