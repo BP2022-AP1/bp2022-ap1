@@ -35,6 +35,7 @@ from src.fault_injector.fault_types.train_prio_fault import TrainPrioFault
 from src.fault_injector.fault_types.train_speed_fault import TrainSpeedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
+from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -143,3 +144,49 @@ class TestAffectedElementDoesNotExist:
     def test_resolve_without_inject(self, tick, fault: Fault):
         with pytest.raises(ValueError):
             fault.resolve_fault(tick)
+
+
+class TestAffectedElementDoesNotExistScheduleBlockedFault:
+    """Tests cases where the requested element for injecting a schedule blocked fault does not exist (in the simulation)"""
+
+    @recreate_db_setup
+    def setup_method(self):
+        pass
+
+    @pytest.fixture
+    def schedule_blocked_fault_configuration(self):
+        return ScheduleBlockedFaultConfiguration(
+            **{
+                "start_tick": 1,
+                "end_tick": 100,
+                "description": "ScheduleBlockedFault",
+                "affected_element_id": "12345678",
+            }
+        )
+
+    @pytest.fixture
+    def schedule_blocked_fault(
+        self,
+        schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
+        logger: Logger,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
+        interlocking: IInterlockingDisruptor,
+        spawner: Spawner,
+    ):
+        return ScheduleBlockedFault(
+            configuration=schedule_blocked_fault_configuration,
+            logger=logger,
+            simulation_object_updater=simulation_object_updater,
+            interlocking=interlocking,
+            spawner=spawner,
+        )
+
+    def test_injection(self, tick, schedule_blocked_fault: ScheduleBlockedFault):
+        with pytest.raises(KeyError):
+            schedule_blocked_fault.inject_fault(tick)
+
+    def test_resolve_without_inject(
+        self, tick, schedule_blocked_fault: ScheduleBlockedFault
+    ):
+        with pytest.raises(KeyError):
+            schedule_blocked_fault.resolve_fault(tick)
