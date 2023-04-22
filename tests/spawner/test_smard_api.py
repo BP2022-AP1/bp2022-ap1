@@ -146,6 +146,42 @@ class TestSmardApi:
         availability = SmardApi().data_availability(end, start)
         assert not availability.available
 
+    @pytest.mark.usefixtures("demand_strategy_start_not_available_interval")
+    def test_start_not_available(
+        self, demand_strategy_start_not_available_interval: tuple[datetime, datetime]
+    ):
+        start, end = demand_strategy_start_not_available_interval
+        availability = SmardApi().data_availability(start, end)
+        assert availability.available
+        assert availability.interval_altered
+        assert availability.start >= start
+        assert availability.start <= end
+        assert availability.end >= start
+        assert availability.end <= end
+        assert availability.start <= availability.end
+
+    @pytest.mark.usefixtures("demand_strategy_end_not_available_interval")
+    def test_end_not_available(
+        self, demand_strategy_end_not_available_interval: tuple[datetime, datetime]
+    ):
+        start, end = demand_strategy_end_not_available_interval
+        availability = SmardApi().data_availability(start, end)
+        assert availability.available
+        assert availability.interval_altered
+        assert availability.start >= start
+        assert availability.start <= end
+        assert availability.end >= start
+        assert availability.end <= end
+        assert availability.start <= availability.end
+
+    @pytest.mark.usefixtures("demand_strategy_all_none_interval")
+    def test_all_none(
+        self, demand_strategy_all_none_interval: tuple[datetime, datetime]
+    ):
+        start, end = demand_strategy_all_none_interval
+        availability = SmardApi().data_availability(start, end)
+        assert not availability.available
+
     @pytest.mark.usefixtures("demand_strategy_available_interval")
     def test_get_data(
         self, demand_strategy_available_interval: tuple[datetime, datetime]

@@ -652,6 +652,30 @@ def demand_strategy_not_available_interval() -> tuple[datetime, datetime]:
 
 
 @pytest.fixture
+def demand_strategy_start_not_available_interval() -> datetime:
+    return (
+        datetime.fromtimestamp(1417807500),
+        datetime.fromtimestamp(1420412400),
+    )
+
+
+@pytest.fixture
+def demand_strategy_end_not_available_interval() -> datetime:
+    return (
+        datetime.fromtimestamp(1681682400),
+        datetime.fromtimestamp(1781682400),
+    )
+
+
+@pytest.fixture
+def demand_strategy_all_none_interval() -> tuple[datetime, datetime]:
+    return (
+        datetime.fromtimestamp(1419807600),
+        datetime.fromtimestamp(1419878700),
+    )
+
+
+@pytest.fixture
 def regular_train_schedule_data(
     strategy_start_tick: int, strategy_end_tick: int, regular_strategy_frequency: int
 ) -> dict[str, any]:
