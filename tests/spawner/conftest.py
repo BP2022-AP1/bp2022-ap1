@@ -644,10 +644,18 @@ def demand_strategy_available_interval() -> tuple[datetime, datetime]:
 
 
 @pytest.fixture
-def demand_strategy_not_available_interval() -> tuple[datetime, datetime]:
+def demand_strategy_not_available_past_interval() -> tuple[datetime, datetime]:
     return (
         datetime.fromtimestamp(1417807500),
         datetime.fromtimestamp(1419807500),
+    )
+
+
+@pytest.fixture
+def demand_strategy_not_available_future_interval() -> tuple[datetime, datetime]:
+    return (
+        datetime.fromtimestamp(1981682400),
+        datetime.fromtimestamp(2081682400),
     )
 
 
@@ -663,7 +671,7 @@ def demand_strategy_start_not_available_interval() -> datetime:
 def demand_strategy_end_not_available_interval() -> datetime:
     return (
         datetime.fromtimestamp(1681682400),
-        datetime.fromtimestamp(1781682400),
+        datetime.fromtimestamp(2081682400),
     )
 
 
