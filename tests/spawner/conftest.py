@@ -637,6 +637,7 @@ def demand_strategy_scaling_factor() -> float:
 
 @pytest.fixture
 def demand_strategy_available_interval() -> tuple[datetime, datetime]:
+    # an interval where data is available
     return (
         datetime.fromtimestamp(1678057300),
         datetime.fromtimestamp(1678663000),
@@ -645,6 +646,8 @@ def demand_strategy_available_interval() -> tuple[datetime, datetime]:
 
 @pytest.fixture
 def demand_strategy_not_available_past_interval() -> tuple[datetime, datetime]:
+    # an interval where no data is available and the interval lies before
+    # any other interval where data is available
     return (
         datetime.fromtimestamp(1417807500),
         datetime.fromtimestamp(1419807500),
@@ -653,6 +656,8 @@ def demand_strategy_not_available_past_interval() -> tuple[datetime, datetime]:
 
 @pytest.fixture
 def demand_strategy_not_available_future_interval() -> tuple[datetime, datetime]:
+    # an interval where no data is available and the interval lies after
+    # any other interval where data is available
     return (
         datetime.fromtimestamp(1981682400),
         datetime.fromtimestamp(2081682400),
@@ -661,6 +666,8 @@ def demand_strategy_not_available_future_interval() -> tuple[datetime, datetime]
 
 @pytest.fixture
 def demand_strategy_start_not_available_interval() -> datetime:
+    # an interval where data is available but some is
+    # missing at the start of the interval
     return (
         datetime.fromtimestamp(1417807500),
         datetime.fromtimestamp(1420412400),
@@ -669,6 +676,8 @@ def demand_strategy_start_not_available_interval() -> datetime:
 
 @pytest.fixture
 def demand_strategy_end_not_available_interval() -> datetime:
+    # an interval where data is available but some is
+    # missing at the end of the interval
     return (
         datetime.fromtimestamp(1681682400),
         datetime.fromtimestamp(2081682400),
@@ -677,6 +686,7 @@ def demand_strategy_end_not_available_interval() -> datetime:
 
 @pytest.fixture
 def demand_strategy_all_none_interval() -> tuple[datetime, datetime]:
+    # an interval where data is available but all values are None
     return (
         datetime.fromtimestamp(1419807600),
         datetime.fromtimestamp(1419878700),
