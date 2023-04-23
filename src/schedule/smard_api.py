@@ -147,7 +147,9 @@ class SmardApi:
         url = f"{self.BASE_URL}/index_{self.RESOLUTION}.json"
         index_timestamps = self._request(url)["timestamps"]
         for index_timestamp in index_timestamps:
-            SmardApiIndex.get_or_create(timestamp=self._timestamp_to_dt(index_timestamp))
+            SmardApiIndex.get_or_create(
+                timestamp=self._timestamp_to_dt(index_timestamp)
+            )
 
     def _start_index_from_timestamp(
         self, start: datetime, end: datetime
