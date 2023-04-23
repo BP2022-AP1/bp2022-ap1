@@ -101,7 +101,7 @@ class SmardApi:
         """Constructs a SmardApi"""
         self._update_indices()
 
-    def timestamp_to_dt(self, timestamp: int) -> datetime:
+    def _timestamp_to_dt(self, timestamp: int) -> datetime:
         """Converts a timestamp to a datetime object
 
         :param timestamp: The timestamp
@@ -109,7 +109,7 @@ class SmardApi:
         """
         return datetime.fromtimestamp(timestamp / 1000)
 
-    def dt_to_timestamp(self, date_time: datetime) -> int:
+    def _dt_to_timestamp(self, date_time: datetime) -> int:
         """Converts a datetime object to a timestamp
 
         :param dt: The datetime object
@@ -135,11 +135,11 @@ class SmardApi:
         """
         url = (
             f"{self.BASE_URL}/{self.FILTER}_{self.REGION}"
-            f"_{self.RESOLUTION}_{self.dt_to_timestamp(index.timestamp)}.json"
+            f"_{self.RESOLUTION}_{self._dt_to_timestamp(index.timestamp)}.json"
         )
         for timestamp, value in self._request(url)["series"]:
             SmardApiEntry.get_or_create(
-                timestamp=self.timestamp_to_dt(timestamp), value=value, index_id=index
+                timestamp=self._timestamp_to_dt(timestamp), value=value, index_id=index
             )
 
     def _update_indices(self):
@@ -147,7 +147,7 @@ class SmardApi:
         url = f"{self.BASE_URL}/index_{self.RESOLUTION}.json"
         index_timestamps = self._request(url)["timestamps"]
         for index_timestamp in index_timestamps:
-            SmardApiIndex.get_or_create(timestamp=self.timestamp_to_dt(index_timestamp))
+            SmardApiIndex.get_or_create(timestamp=self._timestamp_to_dt(index_timestamp))
 
     def _start_index_from_timestamp(
         self, start: datetime, end: datetime
