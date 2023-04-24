@@ -497,8 +497,10 @@ class Platform(SimulationObject):
     def from_simulation(
         simulation_object, updater: "SimulationObjectUpdatingComponent"
     ) -> "Platform":
-        result = Platform(identifier=simulation_object.id)
-        result._edge_id = "_".join(simulation_object.lane.split("_")[:-1])
+        result = Platform(
+            identifier=simulation_object.id,
+            edge_id="_".join(simulation_object.lane.split("_")[:-1]),
+        )
         result.updater = updater
         return result
 
