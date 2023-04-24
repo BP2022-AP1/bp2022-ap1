@@ -41,10 +41,11 @@ class PlatformBlockedFault(Fault):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if self.platform is None or self.platform is not self._get_platform():
-            raise ValueError("Platform does not exist or fault not injected")
+        if self.platform is None:
+            raise ValueError("Fault not injected")
+        if self.platform is not self._get_platform():
+            raise ValueError("Platform does not exist")
+
         self.platform.blocked = False
-
         self.interlocking.insert_platform_unblocked(self.platform)
-
         self.logger.resolve_platform_blocked_fault(tick, self.configuration.id)

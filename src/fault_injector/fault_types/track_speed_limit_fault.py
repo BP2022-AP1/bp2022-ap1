@@ -39,10 +39,12 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        if self.track is None or self.track is not self.get_track(
+        if self.track is None:
+            raise ValueError("TrackSpeedLimitFault not injected")
+        if self.track is not self.get_track(
             self.simulation_object_updater, self.track.identifier
         ):
-            raise ValueError("Track does not exist or fault not injected")
+            raise ValueError("Track does not exist")
 
         self.track.max_speed = self.old_speed_limit
         self.interlocking.insert_track_speed_limit_changed(self.track)

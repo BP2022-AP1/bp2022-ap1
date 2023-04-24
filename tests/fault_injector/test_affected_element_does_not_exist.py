@@ -66,16 +66,6 @@ from tests.decorators import recreate_db_setup
                 "affected_element_id": "12345678",
             },
         ],
-        # [
-        #     ScheduleBlockedFaultConfiguration,
-        #     ScheduleBlockedFault,
-        #     {
-        #         "start_tick": 1,
-        #         "end_tick": 100,
-        #         "description": "ScheduleBlockedFault",
-        #         "affected_element_id": "12345678",
-        #     },
-        # ],
         [
             TrackBlockedFaultConfiguration,
             TrackBlockedFault,
