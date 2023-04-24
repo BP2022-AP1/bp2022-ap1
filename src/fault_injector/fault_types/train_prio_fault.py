@@ -41,9 +41,9 @@ class TrainPrioFault(Fault, TrainMixIn):
         :type tick: Integer
         """
         if self.train is None:
-            raise ValueError("Fault not injected")
+            raise ValueError("TrainPrioFault not injected")
 
-        if self.train is self.get_train(
+        if self.train is self.get_train_or_none(
             self.simulation_object_updater, self.train.identifier
         ):
             self.train.train_type.priority = self.old_prio
