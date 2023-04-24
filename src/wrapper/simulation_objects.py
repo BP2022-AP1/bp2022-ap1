@@ -614,12 +614,7 @@ class Train(SimulationObject):
     @property
     def track(self) -> Track:
         """Returns the track (bidirectional) on which the train is currently
-
-        <<<<<<< HEAD
-                :return: The track the train is dirving on
-        =======
-                :return: The track the train is driving on
-        >>>>>>> dev
+        :return: The track the train is driving on
         """
         return self.edge.track
 
