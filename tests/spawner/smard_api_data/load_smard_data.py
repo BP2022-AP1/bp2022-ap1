@@ -17,7 +17,7 @@ timestamps: list[int] = indices["timestamps"]
 
 for idx, timestamp in enumerate(timestamps):
     url: str = data_url.format(base_url=base_url, timestamp=timestamp)
-    respone = requests.get(url)
+    response = requests.get(url)
     data: list[list[int, float]] = response.json()
     filename = os.path.join(directory, f"data_{timestamp}.json")
     with open(filename, "w") as file:

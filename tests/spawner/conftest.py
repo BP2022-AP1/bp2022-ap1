@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 import pytest
@@ -9,6 +10,7 @@ from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
 )
+from src.schedule.smard_api import SmardApi
 from src.schedule.train_schedule import TrainSchedule
 from src.spawner.spawner import (
     Spawner,
@@ -827,12 +829,31 @@ def random_strategy(
 
 
 @pytest.fixture
+def monkeypatched_smard_api(monkeypatch) -> object:
+    def _request_patch(self: object, url: str) -> dict:
+        if "index" in url:
+            filename = "tests/spawner/smard_api_data/index.json"
+        else:
+            timestamp = url.split("_")[-1].split(".")[0]
+            filename = f"tests/spawner/smard_api_data/data_{timestamp}.json"
+        with open(filename, "r") as file:
+            return json.load(file)
+
+    monkeypatch.setattr(SmardApi, "_request", _request_patch)
+    return SmardApi()
+
+
+@pytest.fixture
 def demand_strategy(
+    monkeypatch,
     demand_train_schedule_configuration: DemandScheduleStrategy,
+    monkeypatched_smard_api: object,
 ) -> DemandScheduleStrategy:
-    return DemandScheduleStrategy.from_schedule_configuration(
+    strategy = DemandScheduleStrategy.from_schedule_configuration(
         demand_train_schedule_configuration
     )
+    monkeypatch.setattr(strategy, "_api", monkeypatched_smard_api)
+    return strategy
 
 
 @pytest.fixture

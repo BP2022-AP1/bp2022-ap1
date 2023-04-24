@@ -54,6 +54,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
     scaling_factor: float
     start_datetime: datetime
     _spawn_ticks: list[int]
+    _api: SmardApi
 
     def __init__(
         self,
@@ -76,6 +77,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         self.scaling_factor = scaling_factor
         self.start_datetime = start_datetime
         self._spawn_ticks = []
+        self._api = SmardApi()
         self._calculate_spawn_ticks()
 
     def _compute_coal_consumption(self, produced_electrical_energy: float) -> float:
@@ -115,7 +117,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         end_datetime = self.start_datetime + timedelta(
             seconds=self.end_tick - self.start_tick
         )
-        data = SmardApi().get_data(self.start_datetime, end_datetime)
+        data = self._api.get_data(self.start_datetime, end_datetime)
         train_accumulator = 0.0
         for quarter_hour, entry in enumerate(data):
             train_accumulator += self._compute_trains_to_spawn(entry.value)
