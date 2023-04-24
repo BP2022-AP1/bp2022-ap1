@@ -697,6 +697,9 @@ class Train(SimulationObject):
         SimulationObject.__init__(self, identifier=identifier)
         self.updater = updater
 
+        if timetable is None:
+            timetable = "unset-timetable"
+
         self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
         self._timetable = timetable
 
