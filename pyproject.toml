@@ -53,6 +53,13 @@ pylint = "^2.17.0"
 poethepoet = "^0.19.0"
 pytest-cov = "^4.0.0"
 
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "6.2.0"
+sphinx-book-theme = "1.0.1"
+sphinxcontrib-openapi = "0.8.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -119,6 +126,18 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.cov-xml]
     help = "Run coverage report and write to XML file"
     cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
+
+    [tool.poe.tasks.docs-build]
+    help = "Build the documentation with sphinx"
+    cmd = "sphinx-build -b html docs/source/ docs/build/html"
+
+    [tool.poe.tasks.docs-open]
+    help = "Open the built documentation"
+    cmd = "open docs/build/html/index.html"
+
+    [tool.poe.tasks.docs]
+    help = "Build and open the documentation of the REST API"
+    sequence = ["docs-build", "docs-open"]
 
 [tool.isort]
 profile = "black"
