@@ -34,10 +34,12 @@ class TrainSpawner:
 
         route = self._get_first_route(timetable[0], timetable[1])
 
-        if route is None:
+        if not route:
             return False
 
-        Train(identifier, timetable, train_type, self._updater)
+        self._updater.simulation_objects.append(
+            Train(identifier, timetable, train_type, self._updater)
+        )
 
         return True
 

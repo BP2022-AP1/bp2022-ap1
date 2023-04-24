@@ -1,4 +1,5 @@
 import os
+from typing import Tuple
 
 import pytest
 from traci import constants, edge, trafficlight, vehicle
@@ -136,17 +137,16 @@ def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
 
 
 class MockRouteController:
-    def set_spawn_route(self, start, end):
-        if start == "1":
+    def set_spawn_route(self, start: Track, end: Track):
+        print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")
+        if start.identifier == "7df3b-1-re":
             return True
         return False
 
 
 @pytest.fixture
-def spawner(configured_souc: SimulationObjectUpdatingComponent) -> TrainSpawner:
-    return TrainSpawner(configured_souc, MockRouteController())
-
-
-@pytest.fixture
-def spawner2(configured_souc: SimulationObjectUpdatingComponent) -> TrainSpawner:
-    return TrainSpawner(configured_souc, MockRouteController())
+def spawner(
+    configured_souc: SimulationObjectUpdatingComponent, train_add
+) -> Tuple[SimulationObjectUpdatingComponent, TrainSpawner]:
+    # pylint: disable=unused-argument
+    return (configured_souc, TrainSpawner(configured_souc, MockRouteController()))
