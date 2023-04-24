@@ -30,7 +30,7 @@ class TestSmardApiIndexFail:
             SmardApiIndex.Schema().load(obj)
 
 
-@pytest.mark.parametrize("obj", [({"timestamp": datetime.now().isoformat()})])
+@pytest.mark.parametrize("obj", [({"timestamp": "2015-01-19T00:00:00"})])
 class TestSmardApiIndexModel:
     @recreate_db_setup
     def setup_method(self):
@@ -77,14 +77,14 @@ class TestSmardApiEntryFail:
 
 
 @pytest.mark.parametrize(
-    "obj", [({"timestamp": datetime.now().isoformat(), "value": 42.0})]
+    "obj", [({"timestamp": "2015-01-19T00:00:00", "value": 42.0})]
 )
 class TestSmardApiEntryModel:
     _index: SmardApiIndex
 
     @recreate_db_setup
     def setup_method(self):
-        self._index = SmardApiIndex.create(timestamp=datetime.now())
+        self._index = SmardApiIndex.create(timestamp=datetime.fromtimestamp(1421622000))
 
     def test_deserialization(self, obj: dict):
         obj["index_id"] = self._index.id
