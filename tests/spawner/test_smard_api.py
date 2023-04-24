@@ -76,9 +76,7 @@ class TestSmardApiEntryFail:
             SmardApiEntry.Schema().load(obj)
 
 
-@pytest.mark.parametrize(
-    "obj", [({"timestamp": "2015-01-19T00:00:00", "value": 42.0})]
-)
+@pytest.mark.parametrize("obj", [({"timestamp": "2015-01-19T00:00:00", "value": 42.0})])
 class TestSmardApiEntryModel:
     _index: SmardApiIndex
 

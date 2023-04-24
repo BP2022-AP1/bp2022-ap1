@@ -24,9 +24,9 @@ for idx, timestamp in enumerate(timestamps):
 
     series = [
         (timestamp, random.random() if value else None)
-        for timestamp, value in data['series']
+        for timestamp, value in data["series"]
     ]
-    data['series'] = series
+    data["series"] = series
 
     filename = os.path.join(directory, f"data_{timestamp}.json")
     with open(filename, "w") as file:

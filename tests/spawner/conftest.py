@@ -1,6 +1,6 @@
 import json
-from datetime import datetime
 import os
+from datetime import datetime
 
 import pytest
 
@@ -832,6 +832,7 @@ def random_strategy(
 @pytest.fixture
 def monkeypatched_smard_api(monkeypatch) -> object:
     data_directory = "data/spawner/mock_smard_api_data"
+
     def _request_patch(_: object, url: str) -> dict:
         if "index" in url:
             filename = os.path.join(data_directory, "index.json")
