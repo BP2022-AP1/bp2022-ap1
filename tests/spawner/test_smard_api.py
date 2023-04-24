@@ -109,7 +109,6 @@ class TestSmardApiEntryModel:
             assert str(serialized[key]) == str(value)
 
 
-# @pytest.mark.usefixtures("monkeypatched_smard_api")
 class TestSmardApi:
     """Test the SMARD API"""
 
