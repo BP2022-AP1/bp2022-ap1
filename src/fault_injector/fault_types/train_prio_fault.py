@@ -48,4 +48,4 @@ class TrainPrioFault(Fault, TrainMixIn):
         ):
             self.train.train_type.priority = self.old_prio
             self.interlocking.insert_train_priority_changed(self.train)
-            self.logger.resolve_train_prio_fault(tick, self.configuration.id)
+        self.logger.resolve_train_prio_fault(tick, self.configuration.id)
