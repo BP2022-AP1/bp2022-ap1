@@ -96,6 +96,7 @@ class SmardApi:
     FILTER: str = "1223"  # Braunkohle
     REGION: str = "50Hertz"  # name of the electricity grid company in eastern Germany
     BASE_URL: str = f"https://www.smard.de/app/chart_data/{FILTER}/{REGION}"
+    MILLISECONDS_PER_SECOND: int = 1000
 
     def __init__(self):
         """Constructs a SmardApi"""
@@ -107,7 +108,7 @@ class SmardApi:
         :param timestamp: The timestamp
         :return: The datetime object
         """
-        return datetime.fromtimestamp(timestamp / 1000)
+        return datetime.fromtimestamp(timestamp / self.MILLISECONDS_PER_SECOND)
 
     def _dt_to_timestamp(self, date_time: datetime) -> int:
         """Converts a datetime object to a timestamp
@@ -115,7 +116,7 @@ class SmardApi:
         :param dt: The datetime object
         :return: The timestamp
         """
-        return int(date_time.timestamp() * 1000)
+        return int(date_time.timestamp() * self.MILLISECONDS_PER_SECOND)
 
     def _request(self, url: str) -> dict:
         """Sends a get request to the given url and returns the response as a dict
