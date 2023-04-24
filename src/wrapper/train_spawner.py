@@ -8,6 +8,8 @@ from src.wrapper.simulation_objects import Platform, Train
 
 
 class TrainSpawner:
+    """A factory to construct trains wich drive through the simulation"""
+
     def __init__(
         self,
         updater: SimulationObjectUpdatingComponent,
@@ -19,9 +21,18 @@ class TrainSpawner:
     def spawn_train(
         self, identifier: str, timetable: List[str], train_type: str
     ) -> bool:
+        """Spawns a new train in the simulation
+
+        :param identifier: The id of the new train
+        :param timetable: The stations the train drives along (as string-ids)
+        :param train_type: the type of the train (corresponds to a sumo train type)
+        :return: if the spawning was successful
+        """
         timetable = self._convert_timetable(timetable)
 
-        route = self._get_first_route()
+        assert len(timetable) >= 2
+
+        route = self._get_first_route(timetable[0], timetable[1])
 
         if route is None:
             return False
@@ -40,7 +51,7 @@ class TrainSpawner:
         timetable = [] if timetable is None else timetable
         for item in timetable:
             converted.append(
-                next(x for x in self.updater.platforms if x.identifier == item)
+                next(x for x in self._updater.platforms if x.identifier == item)
             )
 
         return converted

@@ -455,6 +455,10 @@ class Platform(SimulationObject):
 
     @property
     def track(self) -> Track:
+        """The track the train is on
+
+        :return: The track
+        """
         return self.edge.track
 
     @property
