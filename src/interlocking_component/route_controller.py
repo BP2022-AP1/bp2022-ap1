@@ -201,7 +201,7 @@ class RouteController:
         route = self._get_interlocking_route_for_track(track)
 
         if route is not None:
-            # This frees the least route in the interlocking
+            # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)
 
     def _get_interlocking_route_for_track(self, track: Track) -> Route:
@@ -218,6 +218,7 @@ class RouteController:
             )
             # The -re part of the identifier must be cut,
             # because the interlocking does not know of reverse directions.
+            # A track can be part of many routes, but only ever part of one active route.
 
             if interlocking_track_candidat is not None:
                 return route_candidate
