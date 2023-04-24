@@ -3,8 +3,8 @@ from time import sleep
 import pytest
 import traci
 
+from src.communicator.communicator import Communicator
 from src.component import Component
-from src.wrapper.communicator import Communicator
 
 
 @pytest.fixture
