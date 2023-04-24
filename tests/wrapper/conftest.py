@@ -20,6 +20,15 @@ def traffic_update(monkeypatch):
 
 
 @pytest.fixture
+def max_speed(monkeypatch):
+    def set_max_speed(train_id: str, speed: float):
+        assert train_id is not None
+        assert speed > 0
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
+@pytest.fixture
 def speed_update(monkeypatch):
     def set_max_speed(identifier: str, speed: float) -> None:
         assert identifier is not None
@@ -38,15 +47,6 @@ def vehicle_route(monkeypatch):
 
 
 @pytest.fixture
-def max_speed(monkeypatch):
-    def set_max_speed(train_id: str, speed: float):
-        assert train_id is not None
-        assert speed > 0
-
-    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, route, train_type):
         assert identifier is not None
@@ -57,17 +57,17 @@ def train_add(monkeypatch):
 
 
 @pytest.fixture
-def edge1():
+def edge1() -> Edge:
     return Edge("edge")
 
 
 @pytest.fixture
-def edge_re():
+def edge_re() -> Edge:
     return Edge("edge-re")
 
 
 @pytest.fixture
-def edge2():
+def edge2() -> Edge:
     return Edge("edge2")
 
 
@@ -101,7 +101,7 @@ def train(train_add) -> Train:
 
 
 @pytest.fixture
-def track(edge1, edge_re) -> Track:
+def track(edge1: Edge, edge_re: Edge) -> Track:
     return Track(edge1, edge_re)
 
 
@@ -135,11 +135,18 @@ def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
     )
 
 
-@pytest.fixture
-def spawner(self) -> TrainSpawner:
-    pass
+class MockRouteController:
+    def set_spawn_route(self, start, end):
+        if start == "1":
+            return True
+        return False
 
 
 @pytest.fixture
-def spawner2(self) -> TrainSpawner:
-    pass
+def spawner(configured_souc: SimulationObjectUpdatingComponent) -> TrainSpawner:
+    return TrainSpawner(configured_souc, MockRouteController())
+
+
+@pytest.fixture
+def spawner2(configured_souc: SimulationObjectUpdatingComponent) -> TrainSpawner:
+    return TrainSpawner(configured_souc, MockRouteController())
