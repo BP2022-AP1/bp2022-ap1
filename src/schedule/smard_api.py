@@ -276,7 +276,7 @@ class SmardApi:
         )
         if found_start is None or found_end is None:
             return SmardDataAvailability.none()
-        altered_interval = (
+        altered_interval = altered_interval or (
             found_start != data[0].timestamp or found_end != data[-1].timestamp
         )
         return SmardDataAvailability(True, altered_interval, found_start, found_end)

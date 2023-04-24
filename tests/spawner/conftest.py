@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import os
 
 import pytest
 
@@ -641,8 +642,8 @@ def demand_strategy_scaling_factor() -> float:
 def demand_strategy_available_interval() -> tuple[datetime, datetime]:
     # an interval where data is available
     return (
-        datetime.fromtimestamp(1678057300),
-        datetime.fromtimestamp(1678663000),
+        datetime.fromtimestamp(1420412400),
+        datetime.fromtimestamp(1421622000),
     )
 
 
@@ -681,7 +682,7 @@ def demand_strategy_end_not_available_interval() -> datetime:
     # an interval where data is available but some is
     # missing at the end of the interval
     return (
-        datetime.fromtimestamp(1681682400),
+        datetime.fromtimestamp(1424646000),
         datetime.fromtimestamp(2081682400),
     )
 
@@ -830,12 +831,13 @@ def random_strategy(
 
 @pytest.fixture
 def monkeypatched_smard_api(monkeypatch) -> object:
-    def _request_patch(self: object, url: str) -> dict:
+    data_directory = "data/spawner/mock_smard_api_data"
+    def _request_patch(_: object, url: str) -> dict:
         if "index" in url:
-            filename = "tests/spawner/smard_api_data/index.json"
+            filename = os.path.join(data_directory, "index.json")
         else:
             timestamp = url.split("_")[-1].split(".")[0]
-            filename = f"tests/spawner/smard_api_data/data_{timestamp}.json"
+            filename = os.path.join(data_directory, f"data_{timestamp}.json")
         with open(filename, "r") as file:
             return json.load(file)
 
