@@ -21,17 +21,17 @@ peewee = "^3.16.0"
 peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
 psycopg2 = "^2.9.5"
-interlocking = { git = "https://github.com/BP2022-AP1/interlocking.git", branch = "add-Poetry-support" }
+interlocking = { git = "https://github.com/bp2022-ap1/interlocking.git", branch = "add-Poetry-support" }
 flask = "^2.2.3"
 webargs = "^8.2.0"
 freezegun = "^1.2.2"
-yaramo = { git = "https://github.com/BP2022-AP1/yaramo", branch = "refactor/replace-connected-nodes-with-edges" }
-orm-importer = { git = "https://github.com/BP2022-AP1/orm-importer", branch = "refactor/replace-connected-nodes-edges" }
-planpro-exporter = { git = "https://github.com/BP2022-AP1/planpro-exporter", branch = "refactor/replace-connected-nodes-edges" }
-planpro-importer = { git = "https://github.com/BP2022-AP1/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
-railway-route-generator = { git = "https://github.com/BP2022-AP1/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
-sumoexporter = { git = "https://github.com/BP2022-AP1/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
-track-signal-generator = { git = "https://github.com/BP2022-AP1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
+yaramo = { git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/replace-connected-nodes-with-edges" }
+orm-importer = { git = "https://github.com/bp2022-ap1/orm-importer", branch = "refactor/replace-connected-nodes-edges" }
+planpro-exporter = { git = "https://github.com/bp2022-ap1/planpro-exporter", branch = "refactor/replace-connected-nodes-edges" }
+planpro-importer = { git = "https://github.com/bp2022-ap1/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
+railway-route-generator = { git = "https://github.com/bp2022-ap1/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
+sumoexporter = { git = "https://github.com/bp2022-ap1/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
+track-signal-generator = { git = "https://github.com/bp2022-ap1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
 matplotlib = "^3.7.1"
 scipy = "1.9.2"
