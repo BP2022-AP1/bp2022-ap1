@@ -38,7 +38,7 @@ jobs:
       - name: Install poetry
         run: pipx install poetry
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --with docs
       - name: Build documentation
         run: |
           poetry run poe docs-build
