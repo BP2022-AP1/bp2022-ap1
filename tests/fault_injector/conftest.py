@@ -41,7 +41,7 @@ def interlocking():
 
 
 @pytest.fixture
-def wrapper():
+def simulation_object_updater():
     return SimulationObjectUpdatingComponent()
 
 
@@ -61,26 +61,40 @@ def track(edge, edge_re):
 
 
 @pytest.fixture
-def combine_track_and_wrapper(track: Track, wrapper: SimulationObjectUpdatingComponent):
-    track.updater = wrapper
-    wrapper.simulation_objects.append(track)
-    return track, wrapper
+def edge_re() -> Edge:
+    return Edge("fault injector track-re")
+
+
+@pytest.fixture
+def track(edge, edge_re):
+    return Track(edge, edge_re)
+
+
+@pytest.fixture
+def combine_track_and_wrapper(
+    track: Track, simulation_object_updater: SimulationObjectUpdatingComponent
+):
+    track.updater = simulation_object_updater
+    simulation_object_updater.simulation_objects.append(track)
+    return track, simulation_object_updater
 
 
 @pytest.fixture
 def combine_platform_and_wrapper(
-    platform: Platform, wrapper: SimulationObjectUpdatingComponent
+    platform: Platform, simulation_object_updater: SimulationObjectUpdatingComponent
 ):
-    platform.updater = wrapper
-    wrapper.simulation_objects.append(platform)
-    return platform, wrapper
+    platform.updater = simulation_object_updater
+    simulation_object_updater.simulation_objects.append(platform)
+    return platform, simulation_object_updater
 
 
 @pytest.fixture
-def combine_train_and_wrapper(train: Train, wrapper: SimulationObjectUpdatingComponent):
-    train.updater = wrapper
-    wrapper.simulation_objects.append(train)
-    return train, wrapper
+def combine_train_and_wrapper(
+    train: Train, simulation_object_updater: SimulationObjectUpdatingComponent
+):
+    train.updater = simulation_object_updater
+    simulation_object_updater.simulation_objects.append(train)
+    return train, simulation_object_updater
 
 
 @pytest.fixture

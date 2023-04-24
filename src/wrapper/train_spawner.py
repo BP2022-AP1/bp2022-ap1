@@ -1,9 +1,10 @@
 from typing import List
-from src.wrapper.simulation_objects import Train, Platform
+
+from src.interlocking_component.route_controller import RouteController
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.interlocking_component.route_controller import RouteController
+from src.wrapper.simulation_objects import Platform, Train
 
 
 class TrainSpawner:

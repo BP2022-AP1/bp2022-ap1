@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from traci import trafficlight
 
@@ -41,7 +43,9 @@ class TestSimulationObjectUpdatingComponent:
     def configured_component(self, traffic_update) -> SimulationObjectUpdatingComponent:
         # pylint: disable=unused-argument
         component = SimulationObjectUpdatingComponent(
-            sumo_configuration="sumo-config/example.scenario.sumocfg"
+            sumo_configuration=os.path.join(
+                "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            )
         )
         return component
 
