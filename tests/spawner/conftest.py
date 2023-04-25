@@ -919,10 +919,12 @@ def mock_train_spawner() -> object:
         identifier: str
         timetable: list[str]
         train_type: str
+        spawn_history: list[int]
         _next_spawn_fails: bool
 
         def __init__(self):
             self._next_spawn_fails = False
+            self.spawn_history = []
 
         def spawn_train(
             self, identifier: str, timetable: list[str], train_type: str
@@ -930,6 +932,7 @@ def mock_train_spawner() -> object:
             if self._next_spawn_fails:
                 self._next_spawn_fails = False
                 return False
+            self.spawn_history.append(int(identifier.split("_")[-1]))
             self.identifier = identifier
             self.timetable = timetable
             self.train_type = train_type
