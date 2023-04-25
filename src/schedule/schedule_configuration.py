@@ -1,5 +1,5 @@
 import marshmallow as marsh
-from peewee import FloatField, ForeignKeyField, IntegerField, TextField
+from peewee import DateTimeField, FloatField, ForeignKeyField, IntegerField, TextField
 
 from src.base_model import BaseModel
 
@@ -23,6 +23,10 @@ class ScheduleConfiguration(BaseModel):
         random_strategy_trains_per_1000_ticks = marsh.fields.Float()
         random_strategy_seed = marsh.fields.Integer()
 
+        demand_strategy_power_station = marsh.fields.String()
+        demand_strategy_scaling_factor = marsh.fields.Float()
+        demand_strategy_start_datetime = marsh.fields.DateTime()
+
         def _make(self, data: dict) -> "ScheduleConfiguration":
             """Constructs a ScheduleConfiguration from a dict
 
@@ -43,6 +47,10 @@ class ScheduleConfiguration(BaseModel):
 
     random_strategy_trains_per_1000_ticks = FloatField(null=True)
     random_strategy_seed = IntegerField(null=True)
+
+    demand_strategy_power_station = TextField(null=True)
+    demand_strategy_scaling_factor = FloatField(null=True)
+    demand_strategy_start_datetime = DateTimeField(null=True)
 
 
 class ScheduleConfigurationXSimulationPlatform(BaseModel):

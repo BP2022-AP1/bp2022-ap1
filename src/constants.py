@@ -41,6 +41,7 @@ from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
 )
+from src.schedule.smard_api import SmardApiEntry, SmardApiIndex
 from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
 
 # Add classes that should be created as tables to this list
@@ -71,4 +72,6 @@ tables: list[Type[BaseModel]] = [
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
     InterlockingConfiguration,
+    SmardApiIndex,
+    SmardApiEntry,
 ]
