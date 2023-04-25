@@ -628,7 +628,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/interlocking.git"
 reference = "add-Poetry-support"
-resolved_reference = "180af3544a18ac519655e14defdb08b810cdada0"
+resolved_reference = "44a9f5e5eefc32ffe0dd3fca71506b5c22453cff"
 
 [[package]]
 name = "isort"
@@ -1447,7 +1447,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/planpro-exporter"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "19968800279237e0588b8ca1b1adaf7d1449cf1f"
+resolved_reference = "012462ca6496c15d1f8ae3e7217e09fa61e6629e"
 
 [[package]]
 name = "planpro-importer"
@@ -1863,7 +1863,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/railway-route-generator"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "d69b79fdceb2b68e47b45246375a0c31d3f63fd6"
+resolved_reference = "e386fb184c283dba9d0a194a78824d31dda012be"
 
 [[package]]
 name = "requests"
@@ -2184,7 +2184,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/sumo-exporter"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "9a1d2dfce05f987e71852f209a4f772dc0647bb5"
+resolved_reference = "f45650a0bdffdfa9f3ff7caeb44c9e47672a01c4"
 
 [[package]]
 name = "sumolib"
@@ -2441,7 +2441,7 @@ pyproj = "^3.4.1"
 type = "git"
 url = "https://github.com/bp2022-ap1/yaramo"
 reference = "refactor/replace-connected-nodes-with-edges"
-resolved_reference = "65c5a6a2e13007ea07ae0f7087840348303a1086"
+resolved_reference = "e2aba3ba2d7d84b17afc8b3686b45cf364138a7c"
 
 [[package]]
 name = "zipp"
