@@ -6,7 +6,6 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
-from src.schedule.schedule import ScheduleConfiguration
 from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
@@ -31,37 +30,6 @@ class TestScheduleBlockedFault:
     @pytest.fixture
     def logger(self, run):
         return Logger(run.id)
-
-    @pytest.fixture
-    def schedule(self):
-        schedule_configuration = ScheduleConfiguration(
-            schedule_type="TrainSchedule",
-            strategy_type="RegularScheduleStrategy",
-            train_schedule_train_type="cargo",
-            regular_strategy_start_tick=10,
-            regular_strategy_frequency=100,
-        )
-        schedule_configuration.save()
-        return schedule_configuration
-
-    @pytest.fixture
-    def spawner_configuration(self, schedule):
-        configuration = SpawnerConfiguration()
-        configuration.save()
-        SpawnerConfigurationXSchedule(
-            spawner_configuration_id=configuration.id,
-            schedule_configuration_id=schedule.id,
-        ).save()
-        return configuration
-
-    @pytest.fixture
-    def spawner(self, spawner_configuration, logger):
-        spawner = Spawner(
-            logger=logger,
-            configuration=spawner_configuration,
-            traci_wrapper=self.MockTraCIWrapper(),
-        )
-        return spawner
 
     @pytest.fixture
     def schedule_blocked_fault_configuration(self, schedule):
