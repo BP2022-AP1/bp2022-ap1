@@ -910,6 +910,7 @@ def mock_logger() -> object:
 
     return MockLogger()
 
+
 @pytest.fixture
 def mock_train_spawner() -> object:
     class MockTrainSpawner:
@@ -918,11 +919,20 @@ def mock_train_spawner() -> object:
         identifier: str
         timetable: list[str]
         train_type: str
+        _next_spawn_fails: bool
+
+        def __init__(self):
+            self._next_spawn_fails = False
 
         def spawn_train(self, identifier: str, timetable: list[str], train_type: str):
             self.identifier = identifier
             self.timetable = timetable
             self.train_type = train_type
+            self._next_spawn_fails = False
+
+        def let_next_spawn_fail(self):
+            self._next_spawn_fails = True
+
     return MockTrainSpawner()
 
 
