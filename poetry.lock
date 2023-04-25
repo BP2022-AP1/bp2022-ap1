@@ -1600,18 +1600,18 @@ plugins = ["importlib-metadata"]
 
 [[package]]
 name = "pylint"
-version = "2.17.2"
+version = "2.17.3"
 description = "python code static checker"
 category = "dev"
 optional = false
 python-versions = ">=3.7.2"
 files = [
-    {file = "pylint-2.17.2-py3-none-any.whl", hash = "sha256:001cc91366a7df2970941d7e6bbefcbf98694e00102c1f121c531a814ddc2ea8"},
-    {file = "pylint-2.17.2.tar.gz", hash = "sha256:1b647da5249e7c279118f657ca28b6aaebb299f86bf92affc632acf199f7adbb"},
+    {file = "pylint-2.17.3-py3-none-any.whl", hash = "sha256:a6cbb4c6e96eab4a3c7de7c6383c512478f58f88d95764507d84c899d656a89a"},
+    {file = "pylint-2.17.3.tar.gz", hash = "sha256:761907349e699f8afdcd56c4fe02f3021ab5b3a0fc26d19a9bfdc66c7d0d5cd5"},
 ]
 
 [package.dependencies]
-astroid = ">=2.15.2,<=2.17.0-dev0"
+astroid = ">=2.15.4,<=2.17.0-dev0"
 colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
 dill = [
     {version = ">=0.2", markers = "python_version < \"3.11\""},
@@ -1863,7 +1863,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/railway-route-generator"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "0be62bf9d495b1e98530874c2d492a4bd8c5d7b2"
+resolved_reference = "d69b79fdceb2b68e47b45246375a0c31d3f63fd6"
 
 [[package]]
 name = "requests"
@@ -2188,13 +2188,13 @@ resolved_reference = "9a1d2dfce05f987e71852f209a4f772dc0647bb5"
 
 [[package]]
 name = "sumolib"
-version = "1.16.0"
+version = "1.17.0"
 description = "Python helper modules to read networks, parse output data and do other useful stuff related to the traffic simulation Eclipse SUMO"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "sumolib-1.16.0-py3-none-any.whl", hash = "sha256:eb311bb07985cdcf9efc57a2148fbafe3f8a3a7447cc0dec5757a80945386fdc"},
+    {file = "sumolib-1.17.0-py3-none-any.whl", hash = "sha256:f52b5669f2355e51c4f2f336015e79062ef5c3b74a8bfbf648edf388827ea807"},
 ]
 
 [package.extras]
@@ -2226,17 +2226,17 @@ files = [
 
 [[package]]
 name = "traci"
-version = "1.16.0"
+version = "1.17.0"
 description = "The pure python version of the TraCI API to communicate with the traffic simulation Eclipse SUMO"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "traci-1.16.0-py3-none-any.whl", hash = "sha256:12f8d795a1a53b5a78b9f5fb28791d3b17ff0cb7dc46ce2fccb5a22e1ebb1b44"},
+    {file = "traci-1.17.0-py3-none-any.whl", hash = "sha256:c91651492b71c8249cec122708d15b7c64156123ea66ef0e6c84eb2e8f92f246"},
 ]
 
 [package.dependencies]
-sumolib = ">=1.16.0"
+sumolib = ">=1.17.0"
 
 [[package]]
 name = "track-signal-generator"

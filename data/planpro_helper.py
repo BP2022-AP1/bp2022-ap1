@@ -22,7 +22,7 @@ def generate_planpro():
     topology = ORMImporter().run(polygon)
 
     # Generate Signals
-    # TrackSignalGenerator(topology).place_edge_signals()
+    TrackSignalGenerator(topology).place_edge_signals()
 
     # Generate Routes
     RouteGenerator(topology).generate_routes()
