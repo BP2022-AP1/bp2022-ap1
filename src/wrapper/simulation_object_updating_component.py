@@ -112,7 +112,7 @@ class SimulationObjectUpdatingComponent(Component):
         subscription_results = traci.simulation.getAllSubscriptionResults()
 
         for simulation_object in self._simulation_objects:
-            simulation_object.update(subscription_results[simulation_object.traci_id])
+            simulation_object.update(subscription_results[simulation_object.identifier])
 
         self._remove_stale_vehicles()
 

@@ -6,7 +6,7 @@ from traci import trafficlight
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch
+from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Train
 
 
 class TestSimulationObjectUpdatingComponent:
@@ -110,3 +110,15 @@ class TestSimulationObjectUpdatingComponent:
                     )
 
                     assert node in (edge.to_node, edge.from_node)
+
+    def test_stale_train_is_removed(
+        self,
+        configured_component: SimulationObjectUpdatingComponent,
+        train: Train,
+        results,
+        all_trains,
+    ):
+        configured_component.next_tick(1)
+        configured_component.next_tick(2)
+
+        assert len(configured_component.trains) == 0
