@@ -69,9 +69,17 @@ class TestSpawner:
         "strategy_start_tick",
         "strategy_end_tick",
         "regular_strategy_frequency",
-        "random_strategy_spawn_ticks"
+        "random_strategy_spawn_ticks",
     )
-    def test_next_tick(self, spawner: Spawner, mock_train_spawner: object, strategy_start_tick: int, strategy_end_tick: int, regular_strategy_frequency: int, random_strategy_spawn_ticks: list[int]):
+    def test_next_tick(
+        self,
+        spawner: Spawner,
+        mock_train_spawner: object,
+        strategy_start_tick: int,
+        strategy_end_tick: int,
+        regular_strategy_frequency: int,
+        random_strategy_spawn_ticks: list[int],
+    ):
         regular_spawn_ticks = list(
             range(
                 strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
