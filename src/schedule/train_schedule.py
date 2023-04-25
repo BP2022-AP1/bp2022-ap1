@@ -1,7 +1,6 @@
-from src.schedule.schedule import Schedule
+from src.schedule.schedule import Schedule, SpawnerProtocol
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
-from src.wrapper.simulation_objects import Train
 
 
 class TrainSchedule(Schedule):
@@ -48,11 +47,13 @@ class TrainSchedule(Schedule):
         self.platform_ids = platform_ids
         super().__init__(strategy, id_)
 
-    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
-        """Spawns a train.
+    def _spawn(self, spawner: SpawnerProtocol, tick: int) -> bool:
+        """Spawns a vehicle.
 
-        :param traci_wrapper: The TraCi wrapper to give the train to.
+        :param spawner: The calling Spawner.
         :param tick: The current tick
+        :return: if the spawning was successful
         """
-        train = Train(f"{self.id}_{tick}", self.platform_ids, self.train_type)
-        traci_wrapper.spawn_train(train)
+        spawner.train_spawner.spawn_train(
+            f"{self.id}_{tick}", self.platform_ids, self.train_type
+        )
