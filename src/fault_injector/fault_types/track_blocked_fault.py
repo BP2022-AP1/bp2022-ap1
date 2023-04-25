@@ -9,7 +9,7 @@ class TrackBlockedFault(Fault, TrackMixIn):
     """A fault that blocks a track"""
 
     configuration: TrackBlockedFaultConfiguration
-    track: Track
+    track: Track = None
 
     def inject_fault(self, tick: int):
         """inject TrackBlockedFault into the given component
@@ -34,7 +34,11 @@ class TrackBlockedFault(Fault, TrackMixIn):
         :type tick: Integer
         """
         if self.track is None:
-            raise ValueError("Track not set, probably due to not injecting the fault")
+            raise ValueError("TrackBlockedFault not injected")
+        if self.track is not self.get_track(
+            self.simulation_object_updater, self.track.identifier
+        ):
+            raise ValueError("Track does not exist")
 
         self.track.blocked = False
         self.interlocking.insert_track_unblocked(self.track)

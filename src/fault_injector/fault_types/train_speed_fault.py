@@ -10,7 +10,7 @@ class TrainSpeedFault(Fault, TrainMixIn):
 
     configuration: TrainSpeedFaultConfiguration
     old_speed: float
-    train: Train
+    train: Train = None
 
     def inject_fault(self, tick: int):
         """inject TrainSpeedFault into the given component
@@ -21,6 +21,7 @@ class TrainSpeedFault(Fault, TrainMixIn):
         self.train: Train = self.get_train(
             self.simulation_object_updater, self.configuration.affected_element_id
         )
+
         self.old_speed = self.train.train_type.max_speed
         self.train.train_type.max_speed = self.configuration.new_speed
 
@@ -39,6 +40,12 @@ class TrainSpeedFault(Fault, TrainMixIn):
         :param tick: the simulation tick in which resolve_fault was called
         :type tick: Integer
         """
-        self.train.train_type.max_speed = self.old_speed
-        self.interlocking.insert_train_max_speed_changed(self.train)
+        if self.train is None:
+            raise ValueError("TrainSpeedFault not injected")
+
+        if self.train is self.get_train_or_none(
+            self.simulation_object_updater, self.train.identifier
+        ):
+            self.train.train_type.max_speed = self.old_speed
+            self.interlocking.insert_train_max_speed_changed(self.train)
         self.logger.resolve_train_speed_fault(tick, self.configuration.id)

@@ -81,11 +81,37 @@ class TrainMixIn:
         :return: the train with the requested id
         :rtype: Train
         """
-        return [
+        trains: list[Train] = [
             train
             for train in simulation_object_updater.trains
             if train.identifier == affected_element_id
-        ][0]
+        ]
+        if len(trains) < 1:
+            raise ValueError(f"Train {affected_element_id} does not exist")
+        return trains[0]
+
+    def get_train_or_none(
+        self,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
+        affected_element_id: str,
+    ):
+        """Returns the requested train or None, if the train is not in the simulation
+
+        :param simulation_object_updater: wrapper component
+        :type simulation_object_updater: SimulationObjectUpdatingComponent
+        :param affected_element_id: id of the train in which the fault should be injected into
+        :type affected_element_id: str
+        :return: the train or None
+        :rtype: Train or None
+        """
+        simulation_train: Train
+        try:
+            simulation_train = self.get_train(
+                simulation_object_updater, affected_element_id
+            )
+        except ValueError:
+            simulation_train = None
+        return simulation_train
 
 
 class TrackMixIn:
@@ -105,8 +131,11 @@ class TrackMixIn:
         :return: the track with the requested id
         :rtype: Track
         """
-        return [
+        tracks: list[Track] = [
             track
             for track in simulation_object_updater.tracks
             if track.identifier == affected_element_id
-        ][0]
+        ]
+        if len(tracks) < 1:
+            raise ValueError(f"Track {affected_element_id} does not exist")
+        return tracks[0]
