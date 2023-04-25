@@ -91,7 +91,7 @@ class TestSpawner:
         for tick in range(strategy_start_tick, strategy_end_tick + 1):
             spawner.next_tick(tick)
         assert all(
-            len(schedule._delayed_spawn_ticks) == 0
+            len(schedule._ticks_to_be_spawned) == 0
             for schedule in spawner._schedules.values()
         )
         assert all(
