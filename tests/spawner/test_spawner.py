@@ -1,3 +1,5 @@
+from itertools import zip_longest
+
 import pytest
 
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
@@ -88,7 +90,18 @@ class TestSpawner:
         spawn_ticks = sorted(regular_spawn_ticks + random_strategy_spawn_ticks)
         for tick in range(strategy_start_tick, strategy_end_tick + 1):
             spawner.next_tick(tick)
-        assert set(mock_train_spawner.spawn_history) == set(spawn_ticks)
+        assert all(
+            len(schedule._delayed_spawn_ticks) == 0
+            for schedule in spawner._schedules.values()
+        )
+        assert all(
+            history_tick == spawn_tick
+            for history_tick, spawn_tick in zip_longest(
+                sorted(mock_train_spawner.spawn_history),
+                sorted(spawn_ticks),
+                fillvalue=None,
+            )
+        )
 
 
 class TestSpawnerConfiguration:
