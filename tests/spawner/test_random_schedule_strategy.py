@@ -22,5 +22,4 @@ class TestRandomScheduleStrategy:
     ):
         for tick in range(0, strategy_end_tick * 2):
             if random_strategy.should_spawn(tick):
-                print(tick)
                 assert tick in random_strategy_spawn_ticks

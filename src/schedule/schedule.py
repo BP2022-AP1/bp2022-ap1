@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
@@ -16,6 +17,7 @@ class Schedule(ABC):
     STRATEGY_CLASSES: dict[str, type] = {
         "RegularScheduleStrategy": RegularScheduleStrategy,
         "RandomScheduleStrategy": RandomScheduleStrategy,
+        "DemandScheduleStrategy": DemandScheduleStrategy,
     }
 
     @classmethod
