@@ -51,7 +51,7 @@ class Schedule(ABC):
         self.id = id_  # pylint: disable=invalid-name
 
     @abstractmethod
-    def _spawn(self, spawner: SpawnerProtocol, tick: int):
+    def _spawn(self, spawner: SpawnerProtocol, tick: int) -> bool:
         """Spawns a vehicle.
 
         :param spawner: The calling Spawner.
