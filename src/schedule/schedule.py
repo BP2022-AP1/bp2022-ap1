@@ -1,10 +1,16 @@
 from abc import ABC, abstractmethod
+from typing import Protocol
 
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
+from src.wrapper.train_spawner import TrainSpawner
+
+
+class SpawnerProtocol(Protocol):
+    train_spawner: TrainSpawner
 
 
 class Schedule(ABC):
@@ -12,6 +18,7 @@ class Schedule(ABC):
 
     id: str
     _blocked: bool
+    _delayed_spawn_ticks: list[int]
     strategy: ScheduleStrategy
 
     STRATEGY_CLASSES: dict[str, type] = {
@@ -37,26 +44,31 @@ class Schedule(ABC):
     def __init__(self, strategy: ScheduleStrategy, id_: str):
         """Constructs a Schedule."""
         self._blocked = False
+        self._delayed_spawn_ticks = []
         self.strategy = strategy
         self.id = id_  # pylint: disable=invalid-name
 
     @abstractmethod
-    def _spawn(self, traci_wrapper: "ITraCiWrapper", tick: int):
+    def _spawn(self, spawner: SpawnerProtocol, tick: int):
         """Spawns a vehicle.
 
-        :param traci_wrapper: The TraCi wrapper to give the vehicle to.
+        :param spawner: The calling Spawner.
         :param tick: The current tick
         """
         raise NotImplementedError()
 
-    def maybe_spawn(self, tick: int, traci_wrapper: "ITraCiWrapper"):
+    def maybe_spawn(self, tick: int, spawner: SpawnerProtocol):
         """Spawns a vehicle if the schedule strategy allows it.
 
         :param tick: The current tick
-        :param traci_wrapper: The TraCi wrapper to give the spawned vehicle to.
+        :param spawner: The calling spawner.
         """
         if not self._blocked and self.strategy.should_spawn(tick):
-            self._spawn(traci_wrapper, tick)
+            if not self._spawn(spawner, tick):
+                self._delayed_spawn_ticks.insert(0, tick)
+        elif len(self._delayed_spawn_ticks) > 0:
+            if self._spawn(spawner, self._delayed_spawn_ticks[0]):
+                self._delayed_spawn_ticks.pop(0)
 
     def block(self):
         """Blocks the schedule.
