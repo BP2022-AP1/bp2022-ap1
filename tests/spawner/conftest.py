@@ -924,11 +924,14 @@ def mock_train_spawner() -> object:
         def __init__(self):
             self._next_spawn_fails = False
 
-        def spawn_train(self, identifier: str, timetable: list[str], train_type: str):
+        def spawn_train(self, identifier: str, timetable: list[str], train_type: str) -> bool:
+            if self._next_spawn_fails:
+                self._next_spawn_fails = False
+                return False
             self.identifier = identifier
             self.timetable = timetable
             self.train_type = train_type
-            self._next_spawn_fails = False
+            return True
 
         def let_next_spawn_fail(self):
             self._next_spawn_fails = True
