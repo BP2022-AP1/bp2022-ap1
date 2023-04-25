@@ -20,7 +20,7 @@ class Schedule(ABC):
 
     id: str
     _blocked: bool
-    _delayed_spawn_ticks: list[int]
+    _ticks_to_be_spawned: list[int]
     strategy: ScheduleStrategy
 
     STRATEGY_CLASSES: dict[str, type] = {
@@ -46,7 +46,7 @@ class Schedule(ABC):
     def __init__(self, strategy: ScheduleStrategy, id_: str):
         """Constructs a Schedule."""
         self._blocked = False
-        self._delayed_spawn_ticks = []
+        self._ticks_to_be_spawned = []
         self.strategy = strategy
         self.id = id_  # pylint: disable=invalid-name
 
@@ -66,11 +66,11 @@ class Schedule(ABC):
         :param spawner: The calling spawner.
         """
         if not self._blocked and self.strategy.should_spawn(tick):
-            if not self._spawn(spawner, tick):
-                self._delayed_spawn_ticks.insert(0, tick)
-        elif len(self._delayed_spawn_ticks) > 0:
-            if self._spawn(spawner, self._delayed_spawn_ticks[0]):
-                self._delayed_spawn_ticks.pop(0)
+            self._ticks_to_be_spawned.append(tick)
+
+        if len(self._ticks_to_be_spawned) > 0:
+            if self._spawn(spawner, self._ticks_to_be_spawned[-1]):
+                self._ticks_to_be_spawned.pop()
 
     def block(self):
         """Blocks the schedule.
