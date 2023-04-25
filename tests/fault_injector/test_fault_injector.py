@@ -33,9 +33,9 @@ class TestFaultInjector:
         self, fault_injector: FaultInjector, fault_1: MockFault, fault_2: MockFault
     ):
         assert len(fault_injector._faults) == 0
-        fault_injector._faults.append(fault_1)
+        fault_injector.add_fault(fault_1)
         assert len(fault_injector._faults) == 1
-        fault_injector._faults.append(fault_2)
+        fault_injector.add_fault(fault_2)
         assert len(fault_injector._faults) == 2
         assert fault_1 in fault_injector._faults
         assert fault_2 in fault_injector._faults
