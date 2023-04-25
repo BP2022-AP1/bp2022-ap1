@@ -62,7 +62,7 @@ def edge_re() -> Edge:
 
 
 @pytest.fixture
-def edge(edge, edge_re):
+def track(edge, edge_re):
     return Track(edge, edge_re)
 
 
@@ -72,7 +72,7 @@ def edge_re() -> Edge:
 
 
 @pytest.fixture
-def edge(edge, edge_re):
+def track(edge, edge_re):
     return Track(edge, edge_re)
 
 

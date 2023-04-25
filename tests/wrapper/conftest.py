@@ -102,7 +102,7 @@ def train(train_add) -> Train:
 
 
 @pytest.fixture
-def edge(edge1: Edge, edge_re: Edge) -> Track:
+def track(edge1: Edge, edge_re: Edge) -> Track:
     return Track(edge1, edge_re)
 
 
