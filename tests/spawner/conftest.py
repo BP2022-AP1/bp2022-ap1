@@ -910,28 +910,30 @@ def mock_logger() -> object:
 
     return MockLogger()
 
-
 @pytest.fixture
-def mock_traci_wrapper() -> object:
-    class MockTraciWrapper:
-        """Mocks the TraCiWrapper."""
+def mock_train_spawner() -> object:
+    class MockTrainSpawner:
+        """Mocks the TrainSpawner."""
 
-        train: Train
+        identifier: str
+        timetable: list[str]
+        train_type: str
 
-        def spawn_train(self, train: Train):
-            self.train = train
-
-    return MockTraciWrapper()
+        def spawn_train(self, identifier: str, timetable: list[str], train_type: str):
+            self.identifier = identifier
+            self.timetable = timetable
+            self.train_type = train_type
+    return MockTrainSpawner()
 
 
 @pytest.fixture
 def spawner(
     spawner_configuration: SpawnerConfiguration,
     mock_logger: object,
-    mock_traci_wrapper: object,
+    mock_train_spawner: object,
 ) -> Spawner:
     return Spawner(
         configuration=spawner_configuration,
         logger=mock_logger,
-        traci_wrapper=mock_traci_wrapper,
+        train_spawner=mock_train_spawner,
     )
