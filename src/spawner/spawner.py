@@ -93,7 +93,7 @@ class Spawner(Component, ISpawnerDisruptor):
         :type tick: int
         """
         for schedule in self._schedules.values():
-            schedule.maybe_spawn(tick, self.traci_wrapper)
+            schedule.maybe_spawn(tick, self)
 
     def __init__(
         self,
