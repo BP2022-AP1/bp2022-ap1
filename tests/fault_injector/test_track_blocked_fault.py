@@ -28,6 +28,7 @@ class TestTrackBlockedFault:
                 "end_tick": 300,
                 "description": "test TrackBlockedFault",
                 "affected_element_id": track.identifier,
+                "strategy": "regular",
             }
         )
 

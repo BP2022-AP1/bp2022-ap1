@@ -12,9 +12,9 @@ class TrackBlockedFaultConfiguration(FaultConfiguration):
     class Schema(FaultConfiguration.Schema):
         """Schema for TrackBlockedFaultConfiguration"""
 
-        affected_element_id = marsh.fields.String()
+        affected_element_id = marsh.fields.String(required=True)
 
         def _make(self, data: dict) -> "TrackBlockedFaultConfiguration":
             return TrackBlockedFaultConfiguration(**data)
 
-    affected_element_id = TextField()
+    affected_element_id = TextField(null=False)
