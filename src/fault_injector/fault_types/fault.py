@@ -14,6 +14,7 @@ from src.wrapper.simulation_objects import Track, Train
 class Fault(ABC):
     """An abstract fault for the fault injection"""
 
+    injected: bool = False
     configuration: FaultConfiguration
     logger: Logger
     simulation_object_updater: SimulationObjectUpdatingComponent
