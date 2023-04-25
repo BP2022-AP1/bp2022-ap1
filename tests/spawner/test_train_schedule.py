@@ -1,6 +1,7 @@
 import pytest
 
 from src.schedule.train_schedule import TrainSchedule
+from src.spawner.spawner import Spawner
 from tests.decorators import recreate_db_setup
 
 
@@ -11,13 +12,42 @@ class TestTrainSchedule:
     def setup_method(self):
         pass
 
-    # Currently Trains are not instantiable.
-    # This test will be implemented when Trains are fixed.
-    @pytest.mark.usefixtures("regular_train_schedule", "strategy_start_tick")
     def test_spawning(
-        self, regular_train_schedule: TrainSchedule, strategy_start_tick: int
+        self,
+        spawner: Spawner,
+        regular_train_schedule: TrainSchedule,
+        mock_train_spawner: object,
+        strategy_start_tick: int,
     ):
-        pass
+        regular_train_schedule.maybe_spawn(strategy_start_tick, spawner)
+        assert mock_train_spawner.spawn_history == [strategy_start_tick]
+        assert mock_train_spawner.identifier.endswith(f"_{strategy_start_tick}")
+
+    def test_delayed_spawning(
+        self,
+        spawner: Spawner,
+        regular_train_schedule: TrainSchedule,
+        mock_train_spawner: object,
+        strategy_start_tick: int,
+        strategy_end_tick: int,
+        regular_strategy_frequency: int,
+    ):
+        tick1, tick2, tick3 = list(
+            range(
+                strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
+            )
+        )[0:3]
+        regular_train_schedule.maybe_spawn(tick1, spawner)
+        assert mock_train_spawner.spawn_history == [tick1]
+        mock_train_spawner.let_next_spawn_fail()
+        regular_train_schedule.maybe_spawn(tick2, spawner)
+        assert mock_train_spawner.spawn_history == [tick1]
+        regular_train_schedule.maybe_spawn(tick3, spawner)
+        assert mock_train_spawner.spawn_history == [tick1, tick3]
+        regular_train_schedule.maybe_spawn(
+            tick3 + regular_strategy_frequency - 1, spawner
+        )
+        assert mock_train_spawner.spawn_history == [tick1, tick3, tick2]
 
     @pytest.mark.usefixtures("regular_train_schedule")
     def test_block_blocked_fails(self, regular_train_schedule: TrainSchedule):
