@@ -11,6 +11,7 @@ from src.wrapper.train_spawner import TrainSpawner
 
 class SpawnerProtocol(Protocol):
     """Protocol for the Spawner"""
+
     train_spawner: TrainSpawner
 
 
