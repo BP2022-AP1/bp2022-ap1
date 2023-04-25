@@ -63,35 +63,24 @@ class TestSpawner:
                     == configuration.random_strategy_trains_per_1000_ticks
                 )
 
-    # This test fails due to unfixed bug #260
-    # It will be uncommented when the bug is fixed.
-
-    # @pytest.mark.usefixtures(
-    #     "spawner",
-    #     "strategy_start_tick",
-    #     "strategy_end_tick",
-    #     "regular_strategy_frequency",
-    #     "random_strategy_spawn_ticks",
-    #     "mock_traci_wrapper",
-    # )
-    # def test_next_tick(
-    #     self,
-    #     spawner: Spawner,
-    #     strategy_start_tick: int,
-    #     strategy_end_tick: int,
-    #     regular_strategy_frequency: int,
-    #     random_strategy_spawn_ticks: list[int],
-    #     mock_traci_wrapper: object,
-    # ):
-    #     regular_spawn_ticks = list(
-    #         range(
-    #             strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
-    #         )
-    #     )
-    #     spawn_ticks = sorted(regular_spawn_ticks + random_strategy_spawn_ticks)
-    #     for tick in range(strategy_start_tick, strategy_end_tick + 1):
-    #         spawner.next_tick(tick)
-    #     assert mock_traci_wrapper.spawn_history == spawn_ticks
+    @pytest.mark.usefixtures(
+        "spawner",
+        "mock_train_spawner",
+        "strategy_start_tick",
+        "strategy_end_tick",
+        "regular_strategy_frequency",
+        "random_strategy_spawn_ticks"
+    )
+    def test_next_tick(self, spawner: Spawner, mock_train_spawner: object, strategy_start_tick: int, strategy_end_tick: int, regular_strategy_frequency: int, random_strategy_spawn_ticks: list[int]):
+        regular_spawn_ticks = list(
+            range(
+                strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
+            )
+        )
+        spawn_ticks = sorted(regular_spawn_ticks + random_strategy_spawn_ticks)
+        for tick in range(strategy_start_tick, strategy_end_tick + 1):
+            spawner.next_tick(tick)
+        assert set(mock_train_spawner.spawn_history) == set(spawn_ticks)
 
 
 class TestSpawnerConfiguration:
