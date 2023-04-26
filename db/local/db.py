@@ -1,6 +1,5 @@
 import argparse
 import os
-import subprocess
 
 from peewee_migrate import Router
 
@@ -8,51 +7,6 @@ from src.base_model import db
 from src.constants import tables
 
 MIGRATION_DIRECTORY: str = "db/local/migrations"
-
-
-def run(args: argparse.Namespace):
-    """Run the database
-
-    :param args: parsed arguments containing the string `database_name`
-    :type args: argparse.Namespace
-    """
-    name = args.database_name
-    print("Running database...")
-    print(os.getcwd())
-    subprocess.run(
-        [
-            "docker",
-            "compose",
-            "-f",
-            "db/local/docker-compose.yml",
-            "up",
-            "-d",
-            "-".join(["postgres", name]),
-        ],
-        check=True,
-    )
-
-
-def stop(args: argparse.Namespace):
-    """Stop the database
-
-    :param args: parsed arguments containing the string `database_name`
-    :type args: argparse.Namespace
-    """
-    name = args.database_name
-    print("Stopping database...")
-    subprocess.run(
-        [
-            "docker",
-            "compose",
-            "-f",
-            "db/local/docker-compose.yml",
-            "stop",
-            "-".join(["postgres", name]),
-        ],
-        check=True,
-    )
-
 
 def create(_: argparse.Namespace):
     """Create database tables"""
