@@ -119,10 +119,12 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.dev]
     help = "Run flask app in development mode and run db"
     cmd = "docker compose up dev"
+    envfile = ".env.secret"
 
     [tool.poe.tasks.prod]
     help = "Run flask app in development mode and run db"
     cmd = "docker compose up prod"
+    envfile = ".env.secret"
 
 
     [tool.poe.tasks.cov]
