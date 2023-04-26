@@ -75,18 +75,6 @@ def execute_on_args():
     parser = argparse.ArgumentParser(description="Manage database")
     subparsers = parser.add_subparsers(dest="action", help="Action to perform")
 
-    run_parser = subparsers.add_parser("run", help="Run the database")
-    run_parser.add_argument(
-        "database_name", type=str, help="Name of the database", choices=["dev", "test"]
-    )
-    run_parser.set_defaults(func=run)
-
-    stop_parser = subparsers.add_parser("stop", help="Stop the database")
-    stop_parser.add_argument(
-        "database_name", type=str, help="Name of the database", choices=["dev", "test"]
-    )
-    stop_parser.set_defaults(func=stop)
-
     create_parser = subparsers.add_parser("create", help="Create database tables")
     create_parser.set_defaults(func=create)
 
