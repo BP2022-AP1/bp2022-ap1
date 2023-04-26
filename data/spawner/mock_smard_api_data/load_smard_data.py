@@ -22,7 +22,7 @@ for idx, timestamp in enumerate(timestamps):
     response = requests.get(url)
     data: list[list[int, float]] = response.json()
 
-    random_value = lambda: random.random() * 2000 + 1000
+    random_value = lambda: random.random() * 1000 + 100
 
     series = [
         (timestamp, random_value() if value else None)
