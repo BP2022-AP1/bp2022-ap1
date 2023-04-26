@@ -9,6 +9,7 @@ from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
+from src.wrapper.train_spawner import TrainSpawner
 
 
 class SpawnerConfiguration(BaseModel):
@@ -80,8 +81,8 @@ class Spawner(Component, ISpawnerDisruptor):
     """
 
     configuration: SpawnerConfiguration
-    traci_wrapper: "ITraCiWrapper"
     _schedules: dict[str, Schedule]
+    train_spawner: TrainSpawner
 
     PRIORITY: int = 0  # This will need to be set to the correct value
 
@@ -92,19 +93,19 @@ class Spawner(Component, ISpawnerDisruptor):
         :type tick: int
         """
         for schedule in self._schedules.values():
-            schedule.maybe_spawn(tick, self.traci_wrapper)
+            schedule.maybe_spawn(tick, self)
 
     def __init__(
         self,
         logger: Logger,
         configuration: SpawnerConfiguration,
-        traci_wrapper: "ITraCiWrapper",
+        train_spawner: TrainSpawner,
     ):
         """Initializes the spawner.
 
         :param logger: The logger.
         :param configuration: The configuration.
-        :param traci_wrapper: The TraCiWrapper.
+        :param train_spawner: The TrainSpawner.
         """
         # Method resolution order (MRO) is:
         # Spawner -> Component -> ISpawner -> ISpawnerDisruptor -> ABC -> object
@@ -113,7 +114,7 @@ class Spawner(Component, ISpawnerDisruptor):
         # pylint: disable=super-with-arguments
         super(Spawner, self).__init__(logger, self.PRIORITY)  # calls Component.__init__
         self.configuration = configuration
-        self.traci_wrapper = traci_wrapper
+        self.train_spawner = train_spawner
         self._load_schedules()
 
     SCHEDULE_SUBCLASS_MAPPINGS: dict[str, type[Schedule]] = {
