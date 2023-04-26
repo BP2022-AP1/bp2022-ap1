@@ -116,6 +116,8 @@ class RouteController(Component):
 
     def next_tick(self, tick: int):
         for interlocking_route in self.routes_to_be_set:
+            # This sets the fahrstrasse in the interlocking.
+            # The Sumo SUMO route was already set.
             was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
 
             if was_set:
