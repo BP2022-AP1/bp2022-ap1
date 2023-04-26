@@ -185,8 +185,14 @@ class RouteController:
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return
-                
+
     def maybe_free_fahrstrasse(self, track: Track):
+        """This method checks if the given track is the last segment of a activ route
+        and frees it if so.
+
+        :param track: the track the train drove off of
+        :type track: Track
+        """
         route = self._get_interlocking_route_for_track(track)
         if route is None or route.get_last_segment_of_route != track.identifier:
             return
