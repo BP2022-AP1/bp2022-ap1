@@ -126,7 +126,6 @@ class SmardApi:
         :param url: The url
         :return: The response as a dict
         """
-        print("URL: ", url)
         response = requests.get(url, timeout=10, headers={"Accept": "application/json"})
         return response.json()
 
