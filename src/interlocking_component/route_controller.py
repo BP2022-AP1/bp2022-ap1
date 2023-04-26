@@ -106,7 +106,7 @@ class RouteController:
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
-    def set_spawn_route(self, start_track: Track, end_track: Track) -> str:
+    def set_spawn_fahrstrasse(self, start_track: Track, end_track: Track) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
@@ -143,7 +143,7 @@ class RouteController:
         # If the no interlocking route is found an error is raised
         raise KeyError()
 
-    def maybe_update_fahrstrasse(self, train: Train, track: Track):
+    def maybe_set_fahrstrasse(self, train: Train, track: Track):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
@@ -156,9 +156,9 @@ class RouteController:
         if route is None or route.get_last_segment_of_route != track.identifier:
             return
 
-        self.update_fahrstrasse(train, track)
+        self.set_fahrstrasse(train, track)
 
-    def update_fahrstrasse(self, train: Train, track: Track):
+    def set_fahrstrasse(self, train: Train, track: Track):
         """This method can be called when a train reaches a platform,
         so that the route to the next platform can be set.
 
@@ -181,25 +181,30 @@ class RouteController:
                     # This does not check if the route can even be set and does not handle,
                     # if it can not be set this simulation step.
 
-                    # This frees the least route in the interlocking
-                    self._free_route(track)
-                    # This may not be the best place (time) to do so,
-                    # as the route schould be freed when the train leaves the route
-                    # and not when it is still on it.
-
                     # This sets the route in SUMO.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return
 
-    def _free_route(self, track: Track):
-        """This method frees the route corresponding to the given track.
+    def maybe_free_fahrstrasse(self, track: Track):
+        """This method checks if the given track is the last segment of a activ route
+        and frees it if so.
 
-        :param track: One track of the active Route
+        :param track: the track the train drove off of
         :type track: Track
         """
         route = self._get_interlocking_route_for_track(track)
+        if route is None or route.get_last_segment_of_route != track.identifier:
+            return
 
+        self.free_fahrstrasse(route)
+
+    def free_fahrstrasse(self, route: Route):
+        """This method frees the given interlocking route.
+
+        :param route: The active route
+        :type route: Route
+        """
         if route is not None:
             # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)

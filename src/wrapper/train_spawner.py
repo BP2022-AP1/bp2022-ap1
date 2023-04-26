@@ -44,7 +44,7 @@ class TrainSpawner:
         return True
 
     def _get_first_route(self, from_platform: Platform, to_platform: Platform) -> str:
-        return self.route_controller.set_spawn_route(
+        return self.route_controller.set_spawn_fahrstrasse(
             from_platform.track, to_platform.track
         )
 
