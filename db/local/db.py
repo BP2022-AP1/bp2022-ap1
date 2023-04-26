@@ -8,6 +8,7 @@ from src.constants import tables
 
 MIGRATION_DIRECTORY: str = "db/local/migrations"
 
+
 def create(_: argparse.Namespace):
     """Create database tables"""
     db.create_tables(tables)
