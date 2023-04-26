@@ -18,7 +18,6 @@ from src.spawner.spawner import (
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
 )
-from src.wrapper.simulation_objects import Train
 
 
 @pytest.fixture

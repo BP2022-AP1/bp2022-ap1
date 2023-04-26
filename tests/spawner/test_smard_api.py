@@ -4,7 +4,7 @@ import marshmallow as marsh
 import peewee
 import pytest
 
-from src.schedule.smard_api import SmardApi, SmardApiEntry, SmardApiIndex
+from src.schedule.smard_api import SmardApiEntry, SmardApiIndex
 from tests.decorators import recreate_db_setup
 
 
