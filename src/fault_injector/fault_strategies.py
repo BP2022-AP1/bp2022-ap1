@@ -1,5 +1,5 @@
-import random
 from abc import ABC, abstractmethod
+from random import Random
 
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
@@ -62,12 +62,24 @@ class RandomFaultStrategy(FaultStrategy):
     """Faults that use this class as their strategy get injected and resolved at
     random simulation ticks, controlled by probabilities"""
 
+    random_number_generator: Random = Random()
+
+    def __init__(self, seed: int = None) -> None:
+        if seed is not None:
+            self.random_number_generator = Random(seed)
+
     def should_inject(
         self, tick: int, configuration: FaultConfiguration, injected: bool
     ) -> bool:
-        return random.random() < configuration.inject_probability and not injected
+        return (
+            self.random_number_generator.random() < configuration.inject_probability
+            and not injected
+        )
 
     def should_resolve(
         self, tick: int, configuration: FaultConfiguration, injected: bool
     ) -> bool:
-        return random.random() < configuration.resolve_probability and injected
+        return (
+            self.random_number_generator.random() < configuration.resolve_probability
+            and injected
+        )
