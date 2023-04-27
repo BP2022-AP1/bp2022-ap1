@@ -113,6 +113,7 @@ def platform_blocked_fault_configuration():
         end_tick=100,
         description="PlatformBlockedFault",
         affected_element_id="12345678",
+        strategy="regular",
     )
 
 
@@ -123,6 +124,7 @@ def track_blocked_fault_configuration():
         end_tick=100,
         description="TrackBlockedFault",
         affected_element_id="12345678",
+        strategy="regular",
     )
 
 
@@ -134,6 +136,7 @@ def track_speed_limit_fault_configuration():
         description="TrackSpeedLimitFault",
         affected_element_id="12345678",
         new_speed_limit=60,
+        strategy="regular",
     )
 
 
@@ -144,6 +147,7 @@ def schedule_blocked_fault_configuration():
         end_tick=100,
         description="ScheduleBlockedFault",
         affected_element_id="12345678",
+        strategy="regular",
     )
 
 
@@ -155,6 +159,7 @@ def train_prio_fault_configuration():
         description="TrainPrioFault",
         affected_element_id="12345678",
         new_prio=1,
+        strategy="regular",
     )
 
 
@@ -166,6 +171,7 @@ def train_speed_fault_configuration():
         description="TrainSpeedFault",
         affected_element_id="12345678",
         new_speed=60,
+        strategy="regular",
     )
 
 
