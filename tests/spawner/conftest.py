@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pytest
 
+from src.implementor.models import SimulationConfiguration, Token
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
@@ -769,3 +770,17 @@ def spawner(
         logger=mock_logger,
         train_spawner=mock_train_spawner,
     )
+
+
+@pytest.fixture
+def token() -> Token:
+    token = Token(name="owner", permission="admin", hashedToken="hash")
+    token.save()
+    return token
+
+
+@pytest.fixture
+def simulation_configuration(token) -> SimulationConfiguration:
+    config = SimulationConfiguration(token=token)
+    config.save()
+    return config
