@@ -82,7 +82,7 @@ class TestTrain:
         train.updater = souc
         edge1.updater = souc
 
-        assert train.edge == edge1
+        assert train.edge.identifier == edge1.identifier
 
     def test_position(self, train):
         assert train.position == (
@@ -143,7 +143,7 @@ class TestTrain:
                     110,
                     90,
                 ),
-                constants.VAR_ROAD_ID: "edge2",
+                constants.VAR_ROAD_ID: "cfc57-1",
                 constants.VAR_ROUTE: "ending-route",
                 constants.VAR_SPEED: 10,
             }
@@ -154,7 +154,7 @@ class TestTrain:
             }
         )
 
-        assert train.edge == edge2
+        assert train.edge.identifier == edge2.identifier
         assert train.position == (
             110,
             90,

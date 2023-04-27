@@ -9,6 +9,7 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_spawner import TrainSpawner
+from src.interlocking_component.infrastructure_provider import SumoInfrastructureProvider
 
 
 @pytest.fixture
@@ -59,21 +60,21 @@ def train_add(monkeypatch):
 
 @pytest.fixture
 def edge1() -> Edge:
-    return Edge("edge")
+    return Edge("cfc57-0")
 
 
 @pytest.fixture
 def edge_re() -> Edge:
-    return Edge("edge-re")
+    return Edge("cfc57-0-re")
 
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("edge2")
+    return Edge("cfc57-1")
 
 
 @pytest.fixture
-def train(train_add) -> Train:
+def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
         identifier="fake-sim-train",
@@ -81,13 +82,14 @@ def train(train_add) -> Train:
         timetable=[],
         from_simulator=True,
     )
+    created_train.updater = configured_souc
     created_train.update(
         {
             constants.VAR_POSITION: (
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "edge",
+            constants.VAR_ROAD_ID: "cfc57-0",
             constants.VAR_ROUTE: "testing-route",
             constants.VAR_SPEED: 10.2,
         }
@@ -127,13 +129,24 @@ def souc(traffic_update) -> SimulationObjectUpdatingComponent:
 
 
 @pytest.fixture
-def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
+def configured_souc(traffic_update, infrastructure_provider) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
-    return SimulationObjectUpdatingComponent(
+    souc = SimulationObjectUpdatingComponent(
         sumo_configuration=os.path.join(
             "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
         )
     )
+    souc.infrastructure_provider = infrastructure_provider
+    return souc
+
+@pytest.fixture
+def infrastructure_provider() -> SumoInfrastructureProvider:
+    class IPMock:
+        def train_drove_onto_track(self, train: Train, edge: Edge):
+            pass
+        def train_drove_off_track(self, edge: Edge):
+            pass
+    return IPMock()
 
 
 class MockRouteController:
