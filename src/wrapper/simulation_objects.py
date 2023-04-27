@@ -715,7 +715,9 @@ class Train(SimulationObject):
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )
-            self.updater.infrastructure_provider.train_drove_onto_track(self, self._edge)
+            self.updater.infrastructure_provider.train_drove_onto_track(
+                self, self._edge
+            )
 
     def add_subscriptions(self) -> int:
         """Gets called when this object is created to allow

@@ -4,12 +4,14 @@ from typing import Tuple
 import pytest
 from traci import constants, edge, trafficlight, vehicle
 
+from src.interlocking_component.infrastructure_provider import (
+    SumoInfrastructureProvider,
+)
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_spawner import TrainSpawner
-from src.interlocking_component.infrastructure_provider import SumoInfrastructureProvider
 
 
 @pytest.fixture
@@ -129,7 +131,9 @@ def souc(traffic_update) -> SimulationObjectUpdatingComponent:
 
 
 @pytest.fixture
-def configured_souc(traffic_update, infrastructure_provider) -> SimulationObjectUpdatingComponent:
+def configured_souc(
+    traffic_update, infrastructure_provider
+) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
     souc = SimulationObjectUpdatingComponent(
         sumo_configuration=os.path.join(
@@ -139,13 +143,16 @@ def configured_souc(traffic_update, infrastructure_provider) -> SimulationObject
     souc.infrastructure_provider = infrastructure_provider
     return souc
 
+
 @pytest.fixture
 def infrastructure_provider() -> SumoInfrastructureProvider:
     class IPMock:
         def train_drove_onto_track(self, train: Train, edge: Edge):
             pass
+
         def train_drove_off_track(self, edge: Edge):
             pass
+
     return IPMock()
 
 
