@@ -118,7 +118,7 @@ def platform() -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="edge",
+        edge_id="cfc57-0",
     )
 
 

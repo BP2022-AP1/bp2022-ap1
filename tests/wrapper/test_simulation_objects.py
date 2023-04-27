@@ -130,12 +130,12 @@ class TestTrain:
         # pylint: disable=unused-argument
         Train(identifier="fancy-rb-001", train_type="fancy-rb")
 
-    def test_update(self, souc, train, edge2):
-        train.updater = souc
-        edge2.updater = souc
+    def test_update(self, configured_souc, train, edge2):
+        train.updater = configured_souc
+        edge2.updater = configured_souc
 
-        souc.simulation_objects.append(train)
-        souc.simulation_objects.append(edge2)
+        configured_souc.simulation_objects.append(train)
+        configured_souc.simulation_objects.append(edge2)
 
         train.update(
             {
@@ -207,14 +207,14 @@ class TestSwitch:
 class TestPlatform:
     """Tests for the platform object"""
 
-    def test_edge(self, souc, platform, edge1):
-        souc.simulation_objects.append(edge1)
-        souc.simulation_objects.append(platform)
+    def test_edge(self, configured_souc, platform, edge1):
+        configured_souc.simulation_objects.append(edge1)
+        configured_souc.simulation_objects.append(platform)
 
-        edge1.updater = souc
-        platform.updater = souc
+        edge1.updater = configured_souc
+        platform.updater = configured_souc
 
-        assert platform.edge == edge1
+        assert platform.edge.identifier == edge1.identifier
 
     def test_platform_id(self, platform):
         assert platform.platform_id == "fancy-city-platform-1"
