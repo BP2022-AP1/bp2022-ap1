@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 import marshmallow as marsh
 from peewee import IntegerField, TextField
 
@@ -14,8 +16,9 @@ class FaultConfiguration(BaseModel):
         end_tick = marsh.fields.Integer(required=True)
         description = marsh.fields.String()
 
+        @abstractmethod
         def _make(self, data: dict) -> "FaultConfiguration":
-            return FaultConfiguration(**data)
+            raise NotImplementedError()
 
     start_tick = IntegerField(null=False)
     end_tick = IntegerField(null=False)
