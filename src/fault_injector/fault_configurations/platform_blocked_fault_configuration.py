@@ -1,9 +1,11 @@
 import marshmallow as marsh
-from peewee import TextField
+from peewee import ForeignKeyField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
+from src.implementor.models import SimulationConfiguration
 
 
 class PlatformBlockedFaultConfiguration(FaultConfiguration):
@@ -18,3 +20,36 @@ class PlatformBlockedFaultConfiguration(FaultConfiguration):
             return PlatformBlockedFaultConfiguration(**data)
 
     affected_element_id = TextField(null=False)
+
+
+class PlatformBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between PlatformBlockedFaultConfiguration and SimulationConfiguration."""
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for PlatformBlockedFaultConfigurationXSimulationConfiguration"""
+
+        simulation_configuration = marsh.fields.UUID(required=True)
+        platform_blocked_fault_configuration = marsh.fields.UUID(required=True)
+
+        def _make(
+            self, data: dict
+        ) -> "PlatformBlockedFaultConfigurationXSimulationConfiguration":
+            """Constructs a PlatformBlockedFaultConfigurationXSimulationConfiguration
+            from a dictionary.
+
+            :param data: The dictionary.
+            :return: A PlatformBlockedFaultConfigurationXSimulationConfiguration.
+            """
+            return PlatformBlockedFaultConfigurationXSimulationConfiguration(**data)
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="platform_blocked_fault_configuration_references",
+    )
+    platform_blocked_fault_configuration = ForeignKeyField(
+        PlatformBlockedFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )
