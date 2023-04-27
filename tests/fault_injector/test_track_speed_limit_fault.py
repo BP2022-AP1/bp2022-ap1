@@ -30,6 +30,7 @@ class TestTrackSpeedLimitFault:
                 "description": "test TrackSpeedLimitFault",
                 "affected_element_id": track.identifier,
                 "new_speed_limit": 60,
+                "strategy": "regular",
             }
         )
 

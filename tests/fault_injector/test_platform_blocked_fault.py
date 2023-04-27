@@ -32,6 +32,7 @@ class TestPlatformBlockedFault:
                 "end_tick": 200,
                 "description": "test PlatformBlockedFault",
                 "affected_element_id": platform.identifier,
+                "strategy": "regular",
             }
         )
 
