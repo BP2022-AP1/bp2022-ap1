@@ -21,7 +21,7 @@ class TestTrainSchedule:
     ):
         regular_train_schedule.maybe_spawn(strategy_start_tick, spawner)
         assert mock_train_spawner.spawn_history == [strategy_start_tick]
-        assert mock_train_spawner.identifier.endswith(f"_{strategy_start_tick}")
+        assert mock_train_spawner.identifier.split("_")[1] == str(strategy_start_tick)
 
     def test_delayed_spawning(
         self,
