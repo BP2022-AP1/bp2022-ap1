@@ -193,6 +193,7 @@ class TestCorrectFilledDict:
                     "description": "TrainSpeedFault",
                     "affected_element_id": "12345678",
                     "new_speed": 40,
+                    "strategy": "regular",
                 }
             ),
             TrainSpeedFaultConfigurationXSimulationConfiguration,
@@ -205,6 +206,7 @@ class TestCorrectFilledDict:
                     "end_tick": 100,
                     "description": "PlatformBlockedFault",
                     "affected_element_id": "12345678",
+                    "strategy": "regular",
                 }
             ),
             PlatformBlockedFaultConfigurationXSimulationConfiguration,
@@ -217,6 +219,7 @@ class TestCorrectFilledDict:
                     "end_tick": 100,
                     "description": "ScheduleBlockedFault",
                     "affected_element_id": "12345678",
+                    "strategy": "regular",
                 }
             ),
             ScheduleBlockedFaultConfigurationXSimulationConfiguration,
@@ -229,6 +232,7 @@ class TestCorrectFilledDict:
                     "end_tick": 100,
                     "description": "TrackBlockedFault",
                     "affected_element_id": "12345678",
+                    "strategy": "regular",
                 }
             ),
             TrackBlockedFaultConfigurationXSimulationConfiguration,
@@ -242,6 +246,7 @@ class TestCorrectFilledDict:
                     "description": "TrainPrioFault",
                     "affected_element_id": "12345678",
                     "new_prio": 1,
+                    "strategy": "regular",
                 }
             ),
             TrainPrioFaultConfigurationXSimulationConfiguration,
@@ -255,6 +260,7 @@ class TestCorrectFilledDict:
                     "description": "TrackSpeedLimitFault",
                     "affected_element_id": "12345678",
                     "new_speed_limit": 60,
+                    "strategy": "regular",
                 }
             ),
             TrackSpeedLimitFaultConfigurationXSimulationConfiguration,
