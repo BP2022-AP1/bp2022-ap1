@@ -29,6 +29,7 @@ class TestTrainPrioFault:
                 "description": "test TrainPrioFault",
                 "affected_element_id": train.identifier,
                 "new_prio": 3,
+                "strategy": "regular",
             }
         )
 
