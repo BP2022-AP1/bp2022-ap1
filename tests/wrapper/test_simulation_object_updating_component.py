@@ -118,6 +118,8 @@ class TestSimulationObjectUpdatingComponent:
         results,
         all_trains,
     ):
+        # pylint: disable=unused-argument
+        configured_component.simulation_objects.append(train)
         configured_component.next_tick(1)
         configured_component.next_tick(2)
 
