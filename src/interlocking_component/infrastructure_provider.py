@@ -47,7 +47,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 break
         if target_state == "halt":
             signal.state = Signal.State.HALT
-        elif target_state == "right":
+        elif target_state == "go":
             signal.state = Signal.State.GO
 
     def train_drove_onto_track(self, train: Train, edge: Edge):
