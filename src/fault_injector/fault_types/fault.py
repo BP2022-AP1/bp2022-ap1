@@ -54,7 +54,7 @@ class Fault(ABC):
         :return: the FaultStrategy for this fault
         :rtype: FaultStrategy
         """
-        return self.STRATEGY_CLASSES[configuration.strategy]
+        return self.STRATEGY_CLASSES[configuration.strategy]()
 
     @abstractmethod
     def inject_fault(self, tick: int):
