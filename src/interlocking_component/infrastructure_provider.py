@@ -2,10 +2,6 @@ from interlocking.infrastructureprovider.infrastructureprovider import (
     InfrastructureProvider,
 )
 
-from src.interlocking_component.route_controller import RouteController
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
 from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
@@ -14,22 +10,24 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     It also notifies the Interlocking and the RouteController about the movement of trains.
     """
 
-    simulation_object_updating_component: SimulationObjectUpdatingComponent
-    route_controller: RouteController
+    route_controller: "RouteController"
 
     def __init__(
         self,
-        simulation_object_updating_component: SimulationObjectUpdatingComponent,
-        route_controller: RouteController,
+        route_controller: "RouteController",
     ):
         super().__init__()
-        self.simulation_object_updating_component = simulation_object_updating_component
         self.route_controller = route_controller
+        self.route_controller.simulation_object_updating_component.infrastructur_provider = (
+            self
+        )
 
     def turn_point(self, yaramo_point, target_orientation):
         super().turn_point(yaramo_point, target_orientation)
         switch = None
-        for potencial_switch in self.simulation_object_updating_component.switches:
+        for (
+            potencial_switch
+        ) in self.route_controller.simulation_object_updating_component.switches:
             if potencial_switch.identifier == yaramo_point.point_id:
                 switch = potencial_switch
                 break
@@ -41,7 +39,9 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     def set_signal_state(self, yaramo_signal, target_state):
         super().set_signal_state(yaramo_signal, target_state)
         signal = None
-        for potencial_signal in self.simulation_object_updating_component.signals:
+        for (
+            potencial_signal
+        ) in self.route_controller.simulation_object_updating_component.signals:
             if potencial_signal.identifier == yaramo_signal.name:
                 signal = potencial_signal
                 break

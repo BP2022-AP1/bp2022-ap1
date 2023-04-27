@@ -2,11 +2,16 @@ import os
 
 from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
-from interlocking.test_interlocking import PrintLineInfrastructureProvider
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 
+from src.interlocking_component.infrastructure_provider import (
+    SumoInfrastructureProvider,
+)
 from src.interlocking_component.router import Router
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
@@ -85,13 +90,17 @@ class RouteController:
 
     interlocking: Interlocking = None
     router: Router = None
+    simulation_object_updating_component: SimulationObjectUpdatingComponent = None
 
     def __init__(
-        self, path_name: str = os.path.join("data", "planpro", "test_example.ppxml")
+        self,
+        simulation_object_updating_component: SimulationObjectUpdatingComponent,
+        path_name: str = os.path.join("data", "planpro", "test_example.ppxml"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
+        self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
         # Import from local PlanPro file
@@ -101,7 +110,7 @@ class RouteController:
         # I'm not sure if this is necessary, but better save than sorry.
         RouteGenerator(topology).generate_routes()
 
-        infrastructure_provider = PrintLineInfrastructureProvider()
+        infrastructure_provider = SumoInfrastructureProvider(self)
         # This has to change in the future, as we want our own infrastructure_provider
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
