@@ -5,10 +5,12 @@ from peewee import ForeignKeyField
 
 from src.base_model import BaseModel
 from src.component import Component
+from src.implementor.models import SimulationConfiguration
 from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
+from src.wrapper.train_spawner import TrainSpawner
 
 
 class SpawnerConfiguration(BaseModel):
@@ -54,6 +56,36 @@ class SpawnerConfigurationXSchedule(BaseModel):
     schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
 
 
+class SpawnerConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between SpawnerConfiguration and SimulationConfiguration."""
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for SpawnerConfigurationXSimulationConfiguration"""
+
+        simulation_configuration = marsh.fields.UUID(required=True)
+        spawner_configuration = marsh.fields.UUID(required=True)
+
+        def _make(self, data: dict) -> "SpawnerConfigurationXSimulationConfiguration":
+            """Constructs a SpawnerConfigurationXSimulationConfiguration from a dictionary.
+
+            :param data: The dictionary.
+            :return: A SpawnerConfigurationXSimulationConfiguration.
+            """
+            return SpawnerConfigurationXSimulationConfiguration(**data)
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="spawner_configuration_references",
+    )
+    spawner_configuration = ForeignKeyField(
+        SpawnerConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )
+
+
 class ISpawnerDisruptor(ABC):
     """Interface for the FaultInjector to block and unblock schedules"""
 
@@ -80,8 +112,8 @@ class Spawner(Component, ISpawnerDisruptor):
     """
 
     configuration: SpawnerConfiguration
-    traci_wrapper: "ITraCiWrapper"
     _schedules: dict[str, Schedule]
+    train_spawner: TrainSpawner
 
     PRIORITY: int = 0  # This will need to be set to the correct value
 
@@ -92,19 +124,19 @@ class Spawner(Component, ISpawnerDisruptor):
         :type tick: int
         """
         for schedule in self._schedules.values():
-            schedule.maybe_spawn(tick, self.traci_wrapper)
+            schedule.maybe_spawn(tick, self)
 
     def __init__(
         self,
         logger: Logger,
         configuration: SpawnerConfiguration,
-        traci_wrapper: "ITraCiWrapper",
+        train_spawner: TrainSpawner,
     ):
         """Initializes the spawner.
 
         :param logger: The logger.
         :param configuration: The configuration.
-        :param traci_wrapper: The TraCiWrapper.
+        :param train_spawner: The TrainSpawner.
         """
         # Method resolution order (MRO) is:
         # Spawner -> Component -> ISpawner -> ISpawnerDisruptor -> ABC -> object
@@ -113,7 +145,7 @@ class Spawner(Component, ISpawnerDisruptor):
         # pylint: disable=super-with-arguments
         super(Spawner, self).__init__(logger, self.PRIORITY)  # calls Component.__init__
         self.configuration = configuration
-        self.traci_wrapper = traci_wrapper
+        self.train_spawner = train_spawner
         self._load_schedules()
 
     SCHEDULE_SUBCLASS_MAPPINGS: dict[str, type[Schedule]] = {

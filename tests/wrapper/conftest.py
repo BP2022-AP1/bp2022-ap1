@@ -159,7 +159,7 @@ def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
 
 
 class MockRouteController:
-    def set_spawn_route(self, start: Track, end: Track):
+    def set_spawn_fahrstrasse(self, start: Track, end: Track):
         print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")
         if start.identifier == "7df3b-1-re":
             return True
