@@ -1,9 +1,11 @@
 import marshmallow as marsh
-from peewee import IntegerField, TextField
+from peewee import ForeignKeyField, IntegerField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
+from src.implementor.models import SimulationConfiguration
 
 
 class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
@@ -20,3 +22,36 @@ class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
 
     affected_element_id = TextField()
     new_speed_limit = IntegerField(null=False)
+
+
+class TrackSpeedLimitFaultConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between TrackSpeedLimitFaultConfiguration and SimulationConfiguration."""
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for TrackSpeedLimitFaultConfigurationXSimulationConfiguration"""
+
+        simulation_configuration = marsh.fields.UUID(required=True)
+        track_speed_limit_fault_configuration = marsh.fields.UUID(required=True)
+
+        def _make(
+            self, data: dict
+        ) -> "TrackSpeedLimitFaultConfigurationXSimulationConfiguration":
+            """Constructs a TrackSpeedLimitFaultConfigurationXSimulationConfiguration
+            from a dictionary.
+
+            :param data: The dictionary.
+            :return: A TrackSpeedLimitFaultConfigurationXSimulationConfiguration.
+            """
+            return TrackSpeedLimitFaultConfigurationXSimulationConfiguration(**data)
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="track_speed_limit_fault_configuration_references",
+    )
+    track_speed_limit_fault_configuration = ForeignKeyField(
+        TrackSpeedLimitFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )
