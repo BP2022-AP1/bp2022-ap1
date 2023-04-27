@@ -48,6 +48,7 @@ from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
 )
+from src.schedule.smard_api import SmardApiEntry, SmardApiIndex
 from src.spawner.spawner import (
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
@@ -90,4 +91,6 @@ tables: list[Type[BaseModel]] = [
     ScheduleBlockedFaultConfigurationXSimulationConfiguration,
     PlatformBlockedFaultConfigurationXSimulationConfiguration,
     TrackBlockedFaultConfigurationXSimulationConfiguration,
+    SmardApiIndex,
+    SmardApiEntry,
 ]

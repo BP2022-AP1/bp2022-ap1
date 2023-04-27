@@ -21,25 +21,17 @@ peewee = "^3.16.0"
 peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
 psycopg2 = "^2.9.5"
-#interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "2be51e6" }
-interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "d6d32b4" }
+interlocking = { git = "https://github.com/bp2022-ap1/interlocking.git", branch = "add-Poetry-support" }
 flask = "^2.2.3"
 webargs = "^8.2.0"
 freezegun = "^1.2.2"
-#yaramo = { git = "https://github.com/simulate-digital-rail/yaramo" }
-#orm-importer = { git = "https://github.com/Lietze/orm-importer.git", rev = "54cbdd4" }
-#planpro-exporter = { git = "https://github.com/simulate-digital-rail/planpro-exporter" }
-#planpro-importer = { git = "https://github.com/simulate-digital-rail/planpro-importer" }
-#railway-route-generator = { git = "https://github.com/simulate-digital-rail/railway-route-generator" }
-#sumoexporter = { git = "https://github.com/simulate-digital-rail/sumo-exporter" }
-#track-signal-generator = { git = "https://github.com/simulate-digital-rail/track-signal-generator.git" }
-yaramo = { git = "https://github.com/antonykamp/yaramo", branch="refactor/replace-connected-nodes-with-edges" }
-orm-importer = { git = "https://github.com/antonykamp/orm-importer", branch = "refactor/replace-connected-nodes-edges" }
-planpro-exporter = { git = "https://github.com/antonykamp/planpro-exporter", branch = "refactor/replace-connected-nodes-edges" }
-planpro-importer = { git = "https://github.com/antonykamp/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
-railway-route-generator = { git = "https://github.com/antonykamp/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
-sumoexporter = { git = "https://github.com/antonykamp/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
-track-signal-generator = { git = "https://github.com/antonykamp/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
+yaramo = { git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/replace-connected-nodes-with-edges" }
+orm-importer = { git = "https://github.com/bp2022-ap1/orm-importer", branch = "refactor/replace-connected-nodes-edges" }
+planpro-exporter = { git = "https://github.com/bp2022-ap1/planpro-exporter", branch = "refactor/replace-connected-nodes-edges" }
+planpro-importer = { git = "https://github.com/bp2022-ap1/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
+railway-route-generator = { git = "https://github.com/bp2022-ap1/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
+sumoexporter = { git = "https://github.com/bp2022-ap1/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
+track-signal-generator = { git = "https://github.com/bp2022-ap1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
 matplotlib = "^3.7.1"
 scipy = "1.9.2"
@@ -53,6 +45,13 @@ pylint = "^2.17.0"
 poethepoet = "^0.19.0"
 pytest-cov = "^4.0.0"
 
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "6.2.0"
+sphinx-book-theme = "1.0.1"
+sphinxcontrib-openapi = "0.8.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -119,6 +118,18 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.cov-xml]
     help = "Run coverage report and write to XML file"
     cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
+
+    [tool.poe.tasks.docs-build]
+    help = "Build the documentation with sphinx"
+    cmd = "sphinx-build -b html docs/source/ docs/build/html"
+
+    [tool.poe.tasks.docs-open]
+    help = "Open the built documentation"
+    cmd = "open docs/build/html/index.html"
+
+    [tool.poe.tasks.docs]
+    help = "Build and open the documentation of the REST API"
+    sequence = ["docs-build", "docs-open"]
 
 [tool.isort]
 profile = "black"
