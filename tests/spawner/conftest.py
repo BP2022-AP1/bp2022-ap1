@@ -932,7 +932,7 @@ def mock_train_spawner() -> object:
             if self._next_spawn_fails:
                 self._next_spawn_fails = False
                 return False
-            self.spawn_history.append(int(identifier.split("_")[-1]))
+            self.spawn_history.append(int(identifier.split("_")[1]))
             self.identifier = identifier
             self.timetable = timetable
             self.train_type = train_type
