@@ -143,8 +143,8 @@ def spawner_configuration(schedule):
     return configuration
 
 
-class MockTraCIWrapper:
-    """Mock class for a TraCI wrapper"""
+class MockTrainSpawner:
+    """Mock class for a TrainSpawner"""
 
 
 @pytest.fixture
@@ -152,6 +152,6 @@ def spawner(spawner_configuration, logger):
     spawner = Spawner(
         logger=logger,
         configuration=spawner_configuration,
-        traci_wrapper=MockTraCIWrapper(),
+        train_spawner=MockTrainSpawner(),
     )
     return spawner
