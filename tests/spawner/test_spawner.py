@@ -21,9 +21,6 @@ class TestSpawner:
     def setup_method(self):
         pass
 
-    @pytest.mark.usefixtures(
-        "spawner", "spawner_configuration", "mock_logger", "mock_train_spawner"
-    )
     def test_creation_from_configuration(
         self,
         spawner: Spawner,
@@ -35,11 +32,6 @@ class TestSpawner:
         assert spawner.logger == mock_logger
         assert spawner.train_spawner == mock_train_spawner
 
-    @pytest.mark.usefixtures(
-        "spawner",
-        "regular_train_schedule_configuration",
-        "random_train_schedule_configuration",
-    )
     def test_get_schedules(
         self,
         spawner: Spawner,
@@ -66,14 +58,6 @@ class TestSpawner:
                     == configuration.random_strategy_trains_per_1000_ticks
                 )
 
-    @pytest.mark.usefixtures(
-        "spawner",
-        "mock_train_spawner",
-        "strategy_start_tick",
-        "strategy_end_tick",
-        "regular_strategy_frequency",
-        "random_strategy_spawn_ticks",
-    )
     def test_next_tick(
         self,
         spawner: Spawner,
@@ -112,14 +96,12 @@ class TestSpawnerConfiguration:
     def setup_method(self):
         pass
 
-    @pytest.mark.usefixtures("spawner_configuration")
     def test_creation(self, spawner_configuration: SpawnerConfiguration):
         assert (
             SpawnerConfiguration.get_by_id(spawner_configuration.id)
             == spawner_configuration
         )
 
-    @pytest.mark.usefixtures("spawner_configuration")
     def test_serialization(self, spawner_configuration: SpawnerConfiguration):
         obj_dict = spawner_configuration.to_dict()
         del obj_dict["created_at"]
@@ -144,7 +126,6 @@ class TestSpawnerConfigurationXSchedule:
     def setup_method(self):
         pass
 
-    @pytest.mark.usefixtures("regular_train_schedule_configuration")
     def test_creation(
         self, regular_train_schedule_configuration: RegularScheduleStrategy
     ):
@@ -164,7 +145,6 @@ class TestSpawnerConfigurationXSchedule:
             == regular_train_schedule_configuration
         )
 
-    @pytest.mark.usefixtures("regular_train_schedule_configuration")
     def test_serialization(
         self, regular_train_schedule_configuration: RegularScheduleStrategy
     ):
@@ -185,7 +165,6 @@ class TestSpawnerConfigurationXSchedule:
             "schedule_configuration_id": str(regular_train_schedule_configuration.id),
         }
 
-    @pytest.mark.usefixtures("regular_train_schedule_configuration")
     def test_deserialization(
         self, regular_train_schedule_configuration: RegularScheduleStrategy
     ):

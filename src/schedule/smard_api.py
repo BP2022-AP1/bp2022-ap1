@@ -120,13 +120,12 @@ class SmardApi:
         """
         return int(date_time.timestamp() * MILLISECONDS_PER_SECOND)
 
-    def _request(self, url: str) -> dict:
+    def _request(self, url: str) -> dict:  # pragma: no cover
         """Sends a get request to the given url and returns the response as a dict
 
         :param url: The url
         :return: The response as a dict
         """
-        print("URL: ", url)
         response = requests.get(url, timeout=10, headers={"Accept": "application/json"})
         return response.json()
 
