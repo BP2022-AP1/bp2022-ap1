@@ -4,10 +4,11 @@
 import json
 
 
-def create_token(body):
+def create_token(body, token):
     """
 
     :param body: The parsed body of the request
+    :param token: Token object of the current user
     """
 
     # Implement your business logic here
