@@ -57,8 +57,18 @@ def run(simulation_configuration):
 
 
 @pytest.fixture
+def run2(simulation_configuration):
+    return Run.create(simulation_configuration=simulation_configuration.id)
+
+
+@pytest.fixture
 def logger(run):
     return Logger(run_id=run.id)
+
+
+@pytest.fixture
+def logger2(run2):
+    return Logger(run_id=run2.id)
 
 
 @pytest.fixture
