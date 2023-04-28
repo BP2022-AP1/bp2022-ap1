@@ -3,12 +3,14 @@ from uuid import UUID
 import numpy as np
 import pandas as pd
 
-from src.implementor.models import SimulationConfiguration, Run
+from src.implementor.models import Run, SimulationConfiguration
 from src.logger.log_entry import (
+    InjectFaultLogEntry,
+    ResolveFaultLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
     TrainEnterBlockSectionLogEntry,
-    TrainLeaveBlockSectionLogEntry, InjectFaultLogEntry, ResolveFaultLogEntry,
+    TrainLeaveBlockSectionLogEntry,
 )
 
 
@@ -43,26 +45,21 @@ class LogCollector:
         :return: A list of all trains.
         """
 
-        trains_arrivals = (
-            TrainArrivalLogEntry.select(TrainArrivalLogEntry.train_id)
-            .distinct()
+        trains_arrivals = TrainArrivalLogEntry.select(
+            TrainArrivalLogEntry.train_id
+        ).distinct()
+        trains_departures = TrainDepartureLogEntry.select(
+            TrainDepartureLogEntry.train_id
         )
-        trains_departures = (
-            TrainDepartureLogEntry.select(TrainDepartureLogEntry.train_id)
-        )
-        trains_enter = (
-            TrainEnterBlockSectionLogEntry.select(
-                TrainEnterBlockSectionLogEntry.train_id
-            )
-            .distinct()
-        )
-        trains_leave = (
-            TrainLeaveBlockSectionLogEntry.select(
-                TrainLeaveBlockSectionLogEntry.train_id
-            )
-            .distinct()
-        )
+        trains_enter = TrainEnterBlockSectionLogEntry.select(
+            TrainEnterBlockSectionLogEntry.train_id
+        ).distinct()
+        trains_leave = TrainLeaveBlockSectionLogEntry.select(
+            TrainLeaveBlockSectionLogEntry.train_id
+        ).distinct()
 
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         trains = {t.train_id for t in trains_arrivals}
         trains = trains.union({t.train_id for t in trains_departures})
         trains = trains.union({t.train_id for t in trains_enter})
@@ -74,14 +71,14 @@ class LogCollector:
         :return: A list of all stations.
         """
 
-        stations_arrivals = (
-            TrainArrivalLogEntry.select(TrainArrivalLogEntry.station_id)
-            .distinct()
-        )
-        stations_departures = (
-            TrainDepartureLogEntry.select(TrainDepartureLogEntry.station_id)
-            .distinct()
-        )
+        stations_arrivals = TrainArrivalLogEntry.select(
+            TrainArrivalLogEntry.station_id
+        ).distinct()
+        stations_departures = TrainDepartureLogEntry.select(
+            TrainDepartureLogEntry.station_id
+        ).distinct()
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         station_ids = {t.station_id for t in stations_arrivals}
         station_ids = station_ids.union({t.station_id for t in stations_departures})
         return list(station_ids)
@@ -90,6 +87,8 @@ class LogCollector:
         """Returns a list of all run ids.
         :return: A list of all run ids.
         """
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
         run_ids = [r.id for r in Run.select(Run.id).distinct()]
         return list(run_ids)
 
@@ -98,7 +97,14 @@ class LogCollector:
         :return: A list of all config ids.
         """
 
-        config_ids = [c.id for c in SimulationConfiguration.select(SimulationConfiguration.id).distinct()]
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
+        config_ids = [
+            c.id
+            for c in SimulationConfiguration.select(
+                SimulationConfiguration.id
+            ).distinct()
+        ]
         return list(config_ids)
 
     def _get_departures_of_train(self, run_id: UUID, train_id: str) -> pd.DataFrame:
@@ -142,7 +148,7 @@ class LogCollector:
         return arrivals_df
 
     def get_departures_arrivals_of_train(
-            self, run_id: UUID, train_id: str
+        self, run_id: UUID, train_id: str
     ) -> pd.DataFrame:
         """Returns a DataFrame containing all departures and arrivals of the
         given train in the given run.
@@ -169,8 +175,12 @@ class LogCollector:
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departures_arrivals_df = departures_arrivals_df.replace(np.nan, None)
-        departures_arrivals_df['arrival_tick'] = departures_arrivals_df['arrival_tick'].astype('Int64')
-        departures_arrivals_df['departure_tick'] = departures_arrivals_df['departure_tick'].astype('Int64')
+        departures_arrivals_df.loc["arrival_tick"] = departures_arrivals_df.loc[
+            "arrival_tick"
+        ].astype("Int64")
+        departures_arrivals_df.loc["departure_tick"] = departures_arrivals_df.loc[
+            "departure_tick"
+        ].astype("Int64")
         return departures_arrivals_df
 
     def get_departures_arrivals_all_trains(self, run_id: UUID) -> pd.DataFrame:
@@ -185,10 +195,12 @@ class LogCollector:
             departures_arrivals_df = self.get_departures_arrivals_of_train(
                 run_id, train_id
             )
-            departures_arrivals_df["train_id"] = train_id
+            departures_arrivals_df.loc["train_id"] = train_id
             df_list += [departures_arrivals_df]
         if len(df_list) == 0:
-            return pd.DataFrame(columns=["train_id", "station_id", "arrival_tick", "departure_tick"])
+            return pd.DataFrame(
+                columns=["train_id", "station_id", "arrival_tick", "departure_tick"]
+            )
         if len(df_list) > 1:
             departures_arrivals_df = pd.concat(df_list, axis=0)
         else:
@@ -222,7 +234,7 @@ class LogCollector:
         return list(train_ids)
 
     def get_block_section_times_of_train(
-            self, run_id: UUID, train_id: str
+        self, run_id: UUID, train_id: str
     ) -> pd.DataFrame:
         """Returns a DataFrame containing all block section times of the
         given train in the given run.
@@ -237,9 +249,9 @@ class LogCollector:
             [
                 [e.tick, e.block_section_id, e.block_section_length]
                 for e in TrainEnterBlockSectionLogEntry.select().where(
-                (TrainEnterBlockSectionLogEntry.run_id == run_id)
-                & (TrainEnterBlockSectionLogEntry.train_id == train_id)
-            )
+                    (TrainEnterBlockSectionLogEntry.run_id == run_id)
+                    & (TrainEnterBlockSectionLogEntry.train_id == train_id)
+                )
             ],
             columns=["tick", "block_section_id", "block_section_length"],
         )
@@ -249,9 +261,9 @@ class LogCollector:
             [
                 [e.tick, e.block_section_id, e.block_section_length]
                 for e in TrainLeaveBlockSectionLogEntry.select().where(
-                (TrainLeaveBlockSectionLogEntry.run_id == run_id)
-                & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
-            )
+                    (TrainLeaveBlockSectionLogEntry.run_id == run_id)
+                    & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
+                )
             ],
             columns=["tick", "block_section_id", "block_section_length"],
         )
@@ -367,14 +379,38 @@ class LogCollector:
         """Returns a DataFrame containing all faults in the given run.
         :param run_id: The id of the run.
         :return: A DataFrame containing all faults in the given run."""
-        fault_df = pd.DataFrame([self._parse_inject_log_entry(fault) for fault in
-                                 InjectFaultLogEntry.select().where(InjectFaultLogEntry.run_id == run_id)],
-                                columns=["begin_tick", "fault_type", "fault_id", "affected_element",
-                                         "value_before", "value_after"])
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
+        fault_df = pd.DataFrame(
+            [
+                self._parse_inject_log_entry(fault)
+                for fault in InjectFaultLogEntry.select().where(
+                    InjectFaultLogEntry.run_id == run_id
+                )
+            ],
+            columns=[
+                "begin_tick",
+                "fault_type",
+                "fault_id",
+                "affected_element",
+                "value_before",
+                "value_after",
+            ],
+        )
 
-        resolve_df = pd.DataFrame([self._parse_resolve_log_entry(fault) for fault in
-                                   ResolveFaultLogEntry.select().where(ResolveFaultLogEntry.run_id == run_id)],
-                                  columns=["end_tick", "fault_type", "fault_id"])
-        faults_df = pd.merge(fault_df, resolve_df, on=["fault_type", "fault_id"], how="outer")
-        faults_df["fault_id"] = faults_df["fault_id"].astype('string')
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
+        resolve_df = pd.DataFrame(
+            [
+                self._parse_resolve_log_entry(fault)
+                for fault in ResolveFaultLogEntry.select().where(
+                    ResolveFaultLogEntry.run_id == run_id
+                )
+            ],
+            columns=["end_tick", "fault_type", "fault_id"],
+        )
+        faults_df = pd.merge(
+            fault_df, resolve_df, on=["fault_type", "fault_id"], how="outer"
+        )
+        faults_df["fault_id"] = faults_df["fault_id"].astype("string")
         return faults_df
