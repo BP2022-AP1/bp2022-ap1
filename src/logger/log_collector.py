@@ -175,12 +175,10 @@ class LogCollector:
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departures_arrivals_df = departures_arrivals_df.replace(np.nan, None)
-        departures_arrivals_df.loc["arrival_tick"] = departures_arrivals_df.loc[
-            "arrival_tick"
-        ].astype("Int64")
-        departures_arrivals_df.loc["departure_tick"] = departures_arrivals_df.loc[
-            "departure_tick"
-        ].astype("Int64")
+        departures_arrivals_df = departures_arrivals_df.astype({
+            "arrival_tick": "Int64",
+            "departure_tick": "Int64"
+        })
         return departures_arrivals_df
 
     def get_departures_arrivals_all_trains(self, run_id: UUID) -> pd.DataFrame:
@@ -195,7 +193,7 @@ class LogCollector:
             departures_arrivals_df = self.get_departures_arrivals_of_train(
                 run_id, train_id
             )
-            departures_arrivals_df.loc["train_id"] = train_id
+            departures_arrivals_df.loc[:, "train_id"] = train_id
             df_list += [departures_arrivals_df]
         if len(df_list) == 0:
             return pd.DataFrame(
