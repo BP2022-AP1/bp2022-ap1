@@ -175,10 +175,9 @@ class LogCollector:
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departures_arrivals_df = departures_arrivals_df.replace(np.nan, None)
-        departures_arrivals_df = departures_arrivals_df.astype({
-            "arrival_tick": "Int64",
-            "departure_tick": "Int64"
-        })
+        departures_arrivals_df = departures_arrivals_df.astype(
+            {"arrival_tick": "Int64", "departure_tick": "Int64"}
+        )
         return departures_arrivals_df
 
     def get_departures_arrivals_all_trains(self, run_id: UUID) -> pd.DataFrame:
