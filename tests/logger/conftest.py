@@ -47,8 +47,8 @@ def token():
 
 
 @pytest.fixture
-def simulation_configuration(token):
-    return SimulationConfiguration.create(token=token.id)
+def simulation_configuration():
+    return SimulationConfiguration.create()
 
 
 @pytest.fixture
