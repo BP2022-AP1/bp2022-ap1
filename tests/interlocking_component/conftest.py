@@ -14,8 +14,8 @@ def token() -> Token:
 
 
 @pytest.fixture
-def simulation_configuration(token) -> SimulationConfiguration:
-    config = SimulationConfiguration(token=token)
+def simulation_configuration() -> SimulationConfiguration:
+    config = SimulationConfiguration()
     config.save()
     return config
 
