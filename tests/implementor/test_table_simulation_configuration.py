@@ -22,7 +22,7 @@ class TestSimulationConfigurationFailingInit:
     def test_create(self, init_dict: dict):
         """Test that an object of a class cannot be saved."""
         with pytest.raises(peewee.IntegrityError):
-            SimulationConfiguration(init_dict).save(force_insert=True)
+            SimulationConfiguration(**init_dict).save(force_insert=True)
 
     @pytest.mark.parametrize(
         "init_dict",
@@ -31,7 +31,7 @@ class TestSimulationConfigurationFailingInit:
     def test_deserialization(self, init_dict: dict):
         """Test that an object of a class cannot be deserialized."""
         with pytest.raises(marsh.exceptions.ValidationError):
-            SimulationConfiguration.Schema().load({**init_dict})
+            SimulationConfiguration.Schema().load(**init_dict)
 
 
 class TestSimulationConfigurationSuccessfulInit:
