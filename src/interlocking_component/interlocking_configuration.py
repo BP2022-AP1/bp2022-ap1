@@ -1,7 +1,8 @@
 import marshmallow as marsh
-from peewee import BooleanField
+from peewee import BooleanField, ForeignKeyField
 
 from src.base_model import BaseModel
+from src.implementor.models import SimulationConfiguration
 
 
 class InterlockingConfiguration(BaseModel):
@@ -17,3 +18,35 @@ class InterlockingConfiguration(BaseModel):
 
     dynamicRouting = BooleanField(null=True)
     # null=True because this is not implemented yet
+
+
+class InterlockingConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between InterlockingConfiguration and SimulationConfiguration."""
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for InterlockingConfigurationXSimulationConfiguration"""
+
+        simulation_configuration = marsh.fields.UUID(required=True)
+        interlocking_configuration = marsh.fields.UUID(required=True)
+
+        def _make(
+            self, data: dict
+        ) -> "InterlockingConfigurationXSimulationConfiguration":
+            """Constructs a InterlockingConfigurationXSimulationConfiguration from a dictionary.
+
+            :param data: The dictionary.
+            :return: A InterlockingConfigurationXSimulationConfiguration.
+            """
+            return InterlockingConfigurationXSimulationConfiguration(**data)
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="interlocking_configuration_references",
+    )
+    spawner_configuration = ForeignKeyField(
+        InterlockingConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )

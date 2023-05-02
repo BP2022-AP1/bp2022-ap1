@@ -4,7 +4,7 @@ import marshmallow as marsh
 import peewee
 import pytest
 
-from src.schedule.smard_api import SmardApi, SmardApiEntry, SmardApiIndex
+from src.schedule.smard_api import SmardApiEntry, SmardApiIndex
 from tests.decorators import recreate_db_setup
 
 
@@ -114,9 +114,6 @@ class TestSmardApi:
     def setup_method(self):
         pass
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_available_interval"
-    )
     def test_data_available(
         self,
         monkeypatched_smard_api: object,
@@ -132,9 +129,6 @@ class TestSmardApi:
         assert availability.end <= end
         assert availability.start <= availability.end
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_not_available_past_interval"
-    )
     def test_no_data_available(
         self,
         monkeypatched_smard_api: object,
@@ -144,9 +138,6 @@ class TestSmardApi:
         availability = monkeypatched_smard_api.data_availability(start, end)
         assert not availability.available
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_not_available_future_interval"
-    )
     def test_no_data_available(
         self,
         monkeypatched_smard_api: object,
@@ -156,9 +147,6 @@ class TestSmardApi:
         availability = monkeypatched_smard_api.data_availability(start, end)
         assert not availability.available
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_available_interval"
-    )
     def test_negative_length_interval(
         self,
         monkeypatched_smard_api: object,
@@ -168,9 +156,6 @@ class TestSmardApi:
         availability = monkeypatched_smard_api.data_availability(end, start)
         assert not availability.available
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_start_not_available_interval"
-    )
     def test_start_not_available(
         self,
         monkeypatched_smard_api: object,
@@ -186,9 +171,6 @@ class TestSmardApi:
         assert availability.end <= end
         assert availability.start <= availability.end
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_end_not_available_interval"
-    )
     def test_end_not_available(
         self,
         monkeypatched_smard_api: object,
@@ -204,9 +186,6 @@ class TestSmardApi:
         assert availability.end <= end
         assert availability.start <= availability.end
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_all_none_interval"
-    )
     def test_all_none(
         self,
         monkeypatched_smard_api: object,
@@ -216,9 +195,6 @@ class TestSmardApi:
         availability = monkeypatched_smard_api.data_availability(start, end)
         assert not availability.available
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_available_interval"
-    )
     def test_get_data(
         self,
         monkeypatched_smard_api: object,
@@ -230,9 +206,6 @@ class TestSmardApi:
         assert data[0].timestamp >= start
         assert data[-1].timestamp <= end
 
-    @pytest.mark.usefixtures(
-        "monkeypatched_smard_api", "demand_strategy_not_available_past_interval"
-    )
     def test_dont_get_data(
         self,
         monkeypatched_smard_api: object,

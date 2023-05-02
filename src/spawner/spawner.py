@@ -5,6 +5,7 @@ from peewee import ForeignKeyField
 
 from src.base_model import BaseModel
 from src.component import Component
+from src.implementor.models import SimulationConfiguration
 from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
@@ -53,6 +54,36 @@ class SpawnerConfigurationXSchedule(BaseModel):
         SpawnerConfiguration, null=False, backref="schedule_configuration_references"
     )
     schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
+
+
+class SpawnerConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between SpawnerConfiguration and SimulationConfiguration."""
+
+    class Schema(BaseModel.Schema):
+        """Marshmallow schema for SpawnerConfigurationXSimulationConfiguration"""
+
+        simulation_configuration = marsh.fields.UUID(required=True)
+        spawner_configuration = marsh.fields.UUID(required=True)
+
+        def _make(self, data: dict) -> "SpawnerConfigurationXSimulationConfiguration":
+            """Constructs a SpawnerConfigurationXSimulationConfiguration from a dictionary.
+
+            :param data: The dictionary.
+            :return: A SpawnerConfigurationXSimulationConfiguration.
+            """
+            return SpawnerConfigurationXSimulationConfiguration(**data)
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="spawner_configuration_references",
+    )
+    spawner_configuration = ForeignKeyField(
+        SpawnerConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )
 
 
 class ISpawnerDisruptor(ABC):

@@ -1,25 +1,33 @@
 import uuid
 
+TOKEN_HEADER = "bp2022-ap1-api-key"
+
 
 class TestApiSpawner:
     """
     Test the /component/spawner endpoint
     """
 
-    def test_get_all(self, client):
-        response = client.get("/component/spawner")
+    def test_get_all(self, client, clear_token):
+        response = client.get("/component/spawner", headers={TOKEN_HEADER: clear_token})
         assert response.status_code == 501
 
-    def test_post(self, client):
-        response = client.post("/component/spawner")
+    def test_post(self, client, clear_token):
+        response = client.post(
+            "/component/spawner", headers={TOKEN_HEADER: clear_token}
+        )
         assert response.status_code == 501
 
-    def test_get_single(self, client):
+    def test_get_single(self, client, clear_token):
         object_id = uuid.uuid4()
-        response = client.get(f"/component/spawner/{object_id}")
+        response = client.get(
+            f"/component/spawner/{object_id}", headers={TOKEN_HEADER: clear_token}
+        )
         assert response.status_code == 501
 
-    def test_delete(self, client):
+    def test_delete(self, client, clear_token):
         object_id = uuid.uuid4()
-        response = client.delete(f"/component/spawner/{object_id}")
+        response = client.delete(
+            f"/component/spawner/{object_id}", headers={TOKEN_HEADER: clear_token}
+        )
         assert response.status_code == 501

@@ -4,9 +4,11 @@
 import json
 
 
-def get_all_simulation_ids():
+def get_all_simulation_ids(token):
     """
     Get all simulation ids
+
+    :param token: Token object of the current user
     """
 
     # Implement your business logic here
@@ -15,10 +17,11 @@ def get_all_simulation_ids():
     return json.dumps(""), 501  # 200
 
 
-def create_simulation_configuration(body):
+def create_simulation_configuration(body, token):
     """
 
     :param body: The parsed body of the request
+    :param token: Token object of the current user
     """
 
     # Implement your business logic here
@@ -34,10 +37,11 @@ def create_simulation_configuration(body):
     )
 
 
-def get_simulation_configuration(options):
+def get_simulation_configuration(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
+    :param token: Token object of the current user
 
     """
 
@@ -47,11 +51,12 @@ def get_simulation_configuration(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def update_simulation_configuration(options, body):
+def update_simulation_configuration(options, body, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
     :param body: The parsed body of the request
+    :param token: Token object of the current user
     """
 
     # Implement your business logic here
@@ -60,10 +65,11 @@ def update_simulation_configuration(options, body):
     return "", 501  # 200
 
 
-def delete_simulation_configuration(options):
+def delete_simulation_configuration(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
+    :param token: Token object of the current user
 
     """
 
