@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import marshmallow as marsh
 import peewee
 import pytest
 
@@ -24,34 +23,19 @@ class TestSmardApiIndexFail:
                 **obj,
             )
 
-    def test_deserialization(self, obj: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            SmardApiIndex.Schema().load(obj)
 
-
-@pytest.mark.parametrize("obj", [({"timestamp": "2015-01-19T00:00:00"})])
+@pytest.mark.parametrize("obj", [({"timestamp": datetime(2015, 1, 19, 0, 0)})])
 class TestSmardApiIndexModel:
     @recreate_db_setup
     def setup_method(self):
         pass
 
-    def test_deserialization(self, obj: dict):
-        index = SmardApiIndex.from_dict(obj)
-        assert index.timestamp.isoformat() == obj["timestamp"]
-
     def test_db_interaction(self, obj: dict):
-        index = SmardApiIndex.from_dict(obj)
+        index = SmardApiIndex(**obj)
         index.save()
         fetched = SmardApiIndex.select().where(SmardApiIndex.id == index.id).first()
         for key in obj:
             assert getattr(index, key) == getattr(fetched, key)
-
-    def test_serialization(self, obj: dict):
-        index = SmardApiIndex.from_dict(obj)
-        serialized = index.to_dict()
-        for key, value in obj.items():
-            assert serialized[key] == value
 
 
 @pytest.mark.parametrize(
@@ -70,13 +54,10 @@ class TestSmardApiEntryFail:
                 **obj,
             )
 
-    def test_deserialization(self, obj: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            SmardApiEntry.Schema().load(obj)
 
-
-@pytest.mark.parametrize("obj", [({"timestamp": "2015-01-19T00:00:00", "value": 42.0})])
+@pytest.mark.parametrize(
+    "obj", [({"timestamp": datetime(2015, 1, 19, 0, 0), "value": 42.0})]
+)
 class TestSmardApiEntryModel:
     _index: SmardApiIndex
 
@@ -84,27 +65,13 @@ class TestSmardApiEntryModel:
     def setup_method(self):
         self._index = SmardApiIndex.create(timestamp=datetime.fromtimestamp(1421622000))
 
-    def test_deserialization(self, obj: dict):
-        obj["index_id"] = self._index.id
-        entry = SmardApiEntry.from_dict(obj)
-        assert entry.timestamp.isoformat() == obj["timestamp"]
-        assert entry.value == obj["value"]
-        assert entry.index_id == self._index
-
     def test_db_interaction(self, obj: dict):
         obj["index_id"] = self._index.id
-        entry = SmardApiEntry.from_dict(obj)
+        entry = SmardApiEntry(**obj)
         entry.save()
         fetched = SmardApiEntry.select().where(SmardApiEntry.id == entry.id).first()
         for key in obj:
             assert getattr(entry, key) == getattr(fetched, key)
-
-    def test_serialization(self, obj: dict):
-        obj["index_id"] = self._index.id
-        entry = SmardApiEntry.from_dict(obj)
-        serialized = entry.to_dict()
-        for key, value in obj.items():
-            assert str(serialized[key]) == str(value)
 
 
 class TestSmardApi:
