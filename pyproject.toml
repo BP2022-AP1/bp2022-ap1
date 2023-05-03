@@ -22,7 +22,7 @@ peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
 psycopg2 = "^2.9.5"
 interlocking = { git = "https://github.com/bp2022-ap1/interlocking.git", branch = "add-Poetry-support" }
-flask = "^2.2.3"
+flask = "^2.2.5"
 webargs = "^8.2.0"
 freezegun = "^1.2.2"
 yaramo = { git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/replace-connected-nodes-with-edges" }
