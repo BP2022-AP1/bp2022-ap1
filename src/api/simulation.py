@@ -3,7 +3,7 @@ from webargs.flaskparser import parser
 
 from src import implementor as impl
 from src.api.decorators import token_required
-from src.schemas import model
+from src.api import schemas
 
 bp = Blueprint("simulation", __name__)
 
@@ -19,7 +19,7 @@ def get_all_simulation_ids(token):
 @token_required
 def create_simulation_configuration(token):
     """Create a simulation configuration"""
-    schema = model.SimulationConfiguration()
+    schema = schemas.SimulationConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -43,7 +43,7 @@ def update_simulation_configuration(identifier, token):
     options = {}
     options["identifier"] = identifier
 
-    schema = model.SimulationConfiguration()
+    schema = schemas.SimulationConfiguration()
 
     body = parser.parse(schema, request, location="json")
 

@@ -3,7 +3,7 @@ from webargs.flaskparser import parser
 
 from src import implementor as impl
 from src.api.decorators import token_required
-from src.schemas import model
+from src.api import schemas
 
 bp = Blueprint("token", __name__)
 
@@ -12,7 +12,7 @@ bp = Blueprint("token", __name__)
 @token_required
 def create_token(token):
     """Create a token"""
-    schema = model.TokenConfiguration()
+    schema = schemas.TokenConfiguration()
 
     body = parser.parse(schema, request, location="json")
 

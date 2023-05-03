@@ -3,7 +3,7 @@ from webargs.flaskparser import parser
 
 from src import implementor as impl
 from src.api.decorators import token_required
-from src.schemas import model
+from src.api import schemas
 
 bp = Blueprint("component", __name__)
 
@@ -24,7 +24,7 @@ def get_all_schedule_blocked_fault_configuration_ids(token):
 @token_required
 def create_schedule_blocked_fault_configuration(token):
     """Create a schedule blocked fault configuration"""
-    schema = model.ScheduleBlockedFaultConfiguration()
+    schema = schemas.ScheduleBlockedFaultConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -69,7 +69,7 @@ def get_all_track_blocked_fault_configuration_ids(token):
 @token_required
 def create_track_blocked_fault_configuration(token):
     """Create a track blocked fault configuration"""
-    schema = model.TrackBlockedFaultConfiguration()
+    schema = schemas.TrackBlockedFaultConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -116,7 +116,7 @@ def get_all_track_speed_limit_fault_configuration_ids(token):
 @token_required
 def create_track_speed_limit_fault_configuration(token):
     """Create a track speed limit fault configuration"""
-    schema = model.TrackSpeedLimitFaultConfiguration()
+    schema = schemas.TrackSpeedLimitFaultConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -162,7 +162,7 @@ def get_all_train_prio_fault_configuration_ids(token):
 @token_required
 def create_train_prio_fault_configuration(token):
     """Create a train prio fault configuration"""
-    schema = model.TrainPrioFaultConfiguration()
+    schema = schemas.TrainPrioFaultConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -205,7 +205,7 @@ def get_all_train_speed_fault_configuration_ids(token):
 @token_required
 def create_train_speed_fault_configuration(token):
     """Create a train speed fault configuration"""
-    schema = model.TrainSpeedFaultConfiguration()
+    schema = schemas.TrainSpeedFaultConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -250,7 +250,7 @@ def get_all_platform_blocked_fault_configuration_ids(token):
 @token_required
 def create_platform_blocked_fault_configuration(token):
     """Create a platform blocked fault configuration"""
-    schema = model.PlatformBlockedFaultConfiguration()
+    schema = schemas.PlatformBlockedFaultConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -295,7 +295,7 @@ def get_all_interlocking_configuration_ids(token):
 @token_required
 def create_interlocking_configuration(token):
     """Create a interlocking configuration"""
-    schema = model.InterlockingConfiguration()
+    schema = schemas.InterlockingConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
@@ -336,7 +336,7 @@ def get_all_spawner_configuration_ids(token):
 @token_required
 def create_spawner_configuration(token):
     """Create a spawner configuration"""
-    schema = model.SpawnerConfiguration()
+    schema = schemas.SpawnerConfiguration()
 
     body = parser.parse(schema, request, location="json")
 

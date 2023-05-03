@@ -3,7 +3,7 @@ from webargs.flaskparser import parser
 
 from src import implementor as impl
 from src.api.decorators import token_required
-from src.schemas import model
+from src.api import schemas
 
 bp = Blueprint("schedule", __name__)
 
@@ -22,7 +22,7 @@ def get_all_schedule_ids(token):
 @token_required
 def create_schedule(token):
     """Create a schedule"""
-    schema = model.Schedule()
+    schema = schemas.Schedule()
 
     body = parser.parse(schema, request, location="json")
 
