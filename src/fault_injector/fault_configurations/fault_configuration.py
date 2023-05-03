@@ -3,13 +3,13 @@ from abc import abstractmethod
 import marshmallow as marsh
 from peewee import FloatField, IntegerField, TextField
 
-from src.base_model import BaseModel
+from src.base_model import SerializableBaseModel
 
 
-class FaultConfiguration(BaseModel):
+class FaultConfiguration(SerializableBaseModel):
     """Class that contains the attributes of the Fault class"""
 
-    class Schema(BaseModel.Schema):
+    class Schema(SerializableBaseModel.Schema):
         """Schema for the FaultConfiguration"""
 
         start_tick = marsh.fields.Integer(required=False)

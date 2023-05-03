@@ -26,23 +26,6 @@ class PlatformBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between PlatformBlockedFaultConfiguration and SimulationConfiguration."""
 
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for PlatformBlockedFaultConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        platform_blocked_fault_configuration = marsh.fields.UUID(required=True)
-
-        def _make(
-            self, data: dict
-        ) -> "PlatformBlockedFaultConfigurationXSimulationConfiguration":
-            """Constructs a PlatformBlockedFaultConfigurationXSimulationConfiguration
-            from a dictionary.
-
-            :param data: The dictionary.
-            :return: A PlatformBlockedFaultConfigurationXSimulationConfiguration.
-            """
-            return PlatformBlockedFaultConfigurationXSimulationConfiguration(**data)
-
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,

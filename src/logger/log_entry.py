@@ -11,7 +11,7 @@ from peewee import (
     UUIDField,
 )
 
-from src.base_model import BaseModel
+from src.base_model import SerializableBaseModel
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -33,10 +33,10 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
 from src.implementor.models import Run
 
 
-class LogEntry(BaseModel):
+class LogEntry(SerializableBaseModel):
     """Represents a single log entry. Used to log messages from the simulation."""
 
-    class Schema(BaseModel.Schema):
+    class Schema(SerializableBaseModel.Schema):
         """The marshmallow schema for the LogEntry model."""
 
         timestamp = marsh.fields.DateTime(required=True)

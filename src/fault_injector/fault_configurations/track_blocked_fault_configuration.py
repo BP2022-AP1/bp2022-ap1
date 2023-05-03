@@ -26,23 +26,6 @@ class TrackBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between TrackBlockedFaultConfiguration and SimulationConfiguration."""
 
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for TrackBlockedFaultConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        track_blocked_fault_configuration = marsh.fields.UUID(required=True)
-
-        def _make(
-            self, data: dict
-        ) -> "TrackBlockedFaultConfigurationXSimulationConfiguration":
-            """Constructs a TrackBlockedFaultConfigurationXSimulationConfiguration
-            from a dictionary.
-
-            :param data: The dictionary.
-            :return: A TrackBlockedFaultConfigurationXSimulationConfiguration.
-            """
-            return TrackBlockedFaultConfigurationXSimulationConfiguration(**data)
-
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,

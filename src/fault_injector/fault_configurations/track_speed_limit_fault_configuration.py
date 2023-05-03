@@ -28,23 +28,6 @@ class TrackSpeedLimitFaultConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between TrackSpeedLimitFaultConfiguration and SimulationConfiguration."""
 
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for TrackSpeedLimitFaultConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        track_speed_limit_fault_configuration = marsh.fields.UUID(required=True)
-
-        def _make(
-            self, data: dict
-        ) -> "TrackSpeedLimitFaultConfigurationXSimulationConfiguration":
-            """Constructs a TrackSpeedLimitFaultConfigurationXSimulationConfiguration
-            from a dictionary.
-
-            :param data: The dictionary.
-            :return: A TrackSpeedLimitFaultConfigurationXSimulationConfiguration.
-            """
-            return TrackSpeedLimitFaultConfigurationXSimulationConfiguration(**data)
-
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,

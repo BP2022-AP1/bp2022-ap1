@@ -23,23 +23,6 @@ class BaseModel(Model):
 
         database: SqliteDatabase = db
 
-    class Schema(marsh.Schema):
-        """The marshmallow schema all model schemas have to inherit from."""
-
-        id = marsh.fields.UUID(dump_only=True)
-        created_at = marsh.fields.DateTime(format="iso", dump_only=True)
-        updated_at = marsh.fields.DateTime(format="iso", dump_only=True)
-
-        @abc.abstractmethod
-        def _make(self, data: dict) -> "BaseModel":
-            """Constructs a model object from a dictionary."""
-            raise NotImplementedError()
-
-        @marsh.post_load
-        def make(self, data: dict, **_) -> "BaseModel":
-            """Constructs a model object from a dictionary."""
-            return self._make(data)
-
     id = UUIDField(primary_key=True, default=uuid4)
     created_at = DateTimeField(default=datetime.now)
     updated_at = DateTimeField(default=datetime.now)
@@ -54,6 +37,11 @@ class BaseModel(Model):
         # As `save` is called from `create`, `updated_at` will also be set  when calling `create`.
         self.updated_at = datetime.now()
         super().save(force_insert, only)
+
+
+class SerializableBaseModel(BaseModel):
+    """All model classes have to inherit from this base class
+    if they want to have additional serialization and deserialization features."""
 
     @classmethod
     def from_dict(cls, data: dict) -> "BaseModel":
@@ -70,3 +58,20 @@ class BaseModel(Model):
         :return: the dictionary
         """
         return self.Schema().dump(self)
+
+    class Schema(marsh.Schema):
+        """The marshmallow schema all model schemas have to inherit from."""
+
+        id = marsh.fields.UUID(dump_only=True)
+        created_at = marsh.fields.DateTime(format="iso", dump_only=True)
+        updated_at = marsh.fields.DateTime(format="iso", dump_only=True)
+
+        @abc.abstractmethod
+        def _make(self, data: dict) -> "BaseModel":
+            """Constructs a model object from a dictionary."""
+            raise NotImplementedError()
+
+        @marsh.post_load
+        def make(self, data: dict, **_) -> "BaseModel":
+            """Constructs a model object from a dictionary."""
+            return self._make(data)

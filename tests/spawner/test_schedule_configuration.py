@@ -87,11 +87,6 @@ class TestScheduleConfigurationXSimulationPlatformFail:
                 **obj,
             )
 
-    def test_deserialization(self, obj: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            ScheduleConfigurationXSimulationPlatform.Schema().load(obj)
-
 
 class TestScheduleConfigurationXSimulationPlatformModel:
     """Test (de)serialization and database access of ScheduleConfigurationXSimulationPlatform"""
@@ -104,7 +99,7 @@ class TestScheduleConfigurationXSimulationPlatformModel:
     def schedule_configuration(
         self, regular_train_schedule_data: dict
     ) -> ScheduleConfiguration:
-        configuration = ScheduleConfiguration.from_dict(regular_train_schedule_data)
+        configuration = ScheduleConfiguration(**regular_train_schedule_data)
         configuration.save()
         return configuration
 
@@ -120,13 +115,7 @@ class TestScheduleConfigurationXSimulationPlatformModel:
 
     @pytest.fixture
     def obj(self, object_dict: dict) -> ScheduleConfigurationXSimulationPlatform:
-        return ScheduleConfigurationXSimulationPlatform.from_dict(object_dict)
-
-    def test_deserialization(
-        self, object_dict: dict, obj: ScheduleConfigurationXSimulationPlatform
-    ):
-        for key, value in object_dict.items():
-            assert str(getattr(obj, key)) == str(value)
+        return ScheduleConfigurationXSimulationPlatform(**object_dict)
 
     def test_db_interaction(
         self, object_dict: dict, obj: ScheduleConfigurationXSimulationPlatform
@@ -139,10 +128,3 @@ class TestScheduleConfigurationXSimulationPlatformModel:
         )
         for key in object_dict:
             assert str(getattr(obj, key)) == str(getattr(fetched, key))
-
-    def test_serialization(
-        self, object_dict: dict, obj: ScheduleConfigurationXSimulationPlatform
-    ):
-        serialized = obj.to_dict()
-        for key, value in object_dict.items():
-            assert str(serialized[key]) == str(value)

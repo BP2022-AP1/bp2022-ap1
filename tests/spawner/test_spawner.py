@@ -145,49 +145,6 @@ class TestSpawnerConfigurationXSchedule:
             == regular_train_schedule_configuration
         )
 
-    def test_serialization(
-        self, regular_train_schedule_configuration: RegularScheduleStrategy
-    ):
-        spawner_configuration = SpawnerConfiguration()
-        spawner_configuration.save()
-        spawner_configuration_x_schedule = SpawnerConfigurationXSchedule(
-            spawner_configuration_id=spawner_configuration,
-            schedule_configuration_id=regular_train_schedule_configuration,
-        )
-        spawner_configuration_x_schedule.save()
-        obj_dict = spawner_configuration_x_schedule.to_dict()
-        del obj_dict["created_at"]
-        del obj_dict["updated_at"]
-
-        assert obj_dict == {
-            "id": str(spawner_configuration_x_schedule.id),
-            "spawner_configuration_id": str(spawner_configuration.id),
-            "schedule_configuration_id": str(regular_train_schedule_configuration.id),
-        }
-
-    def test_deserialization(
-        self, regular_train_schedule_configuration: RegularScheduleStrategy
-    ):
-        spawner_configuration = SpawnerConfiguration()
-        spawner_configuration.save()
-        spawner_configuration_x_schedule = SpawnerConfigurationXSchedule.from_dict(
-            {
-                "spawner_configuration_id": str(spawner_configuration.id),
-                "schedule_configuration_id": str(
-                    regular_train_schedule_configuration.id
-                ),
-            }
-        )
-        spawner_configuration_x_schedule.save()
-        assert (
-            spawner_configuration_x_schedule.spawner_configuration_id
-            == spawner_configuration
-        )
-        assert (
-            spawner_configuration_x_schedule.schedule_configuration_id
-            == regular_train_schedule_configuration
-        )
-
 
 class SpawnerConfigurationXSimulationConfiguration:
     """Tests for the SpawnerConfigurationXSimulationConfiguration"""

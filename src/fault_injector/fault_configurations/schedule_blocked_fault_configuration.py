@@ -26,23 +26,6 @@ class ScheduleBlockedFaultConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between ScheduleBlockedFaultConfiguration and SimulationConfiguration."""
 
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for ScheduleBlockedFaultConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        schedule_blocked_fault_configuration = marsh.fields.UUID(required=True)
-
-        def _make(
-            self, data: dict
-        ) -> "ScheduleBlockedFaultConfigurationXSimulationConfiguration":
-            """Constructs a ScheduleBlockedFaultConfigurationXSimulationConfiguration
-            from a dictionary.
-
-                :param data: The dictionary.
-                :return: A ScheduleBlockedFaultConfigurationXSimulationConfiguration.
-            """
-            return ScheduleBlockedFaultConfigurationXSimulationConfiguration(**data)
-
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
