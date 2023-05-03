@@ -7,11 +7,11 @@ import marshmallow as marsh
 from peewee import DateTimeField, Model, PostgresqlDatabase, SqliteDatabase, UUIDField
 
 db: PostgresqlDatabase = PostgresqlDatabase(
-    database=os.getenv("DATABASE_NAME") or "postgres",
-    user=os.getenv("DATABASE_USER") or "postgres",
-    password=os.getenv("DATABASE_PASSWORD") or "root",
-    host=os.getenv("DATABASE_HOST") or "localhost",
-    port=os.getenv("DATABASE_PORT") or 5432,
+    database=os.getenv("DATABASE_NAME"),
+    user=os.getenv("DATABASE_USER"),
+    password=os.getenv("DATABASE_PASSWORD"),
+    host=os.getenv("DATABASE_HOST"),
+    port=os.getenv("DATABASE_PORT"),
 )
 
 
