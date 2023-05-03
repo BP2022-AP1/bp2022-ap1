@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 
-import marshmallow as marsh
 from peewee import ForeignKeyField
 
-from src.base_model import BaseModel
+from src.base_model import BaseModel, SerializableBaseModel
 from src.component import Component
 from src.implementor.models import SimulationConfiguration
 from src.logger.logger import Logger
@@ -13,13 +12,13 @@ from src.schedule.train_schedule import TrainSchedule
 from src.wrapper.train_spawner import TrainSpawner
 
 
-class SpawnerConfiguration(BaseModel):
+class SpawnerConfiguration(SerializableBaseModel):
     """Class representing a spawner configuration. It holds a list of
     Schedules which are handled in the reference table class `SpawnerConfigurationXSchedule`.
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
 
-    class Schema(BaseModel.Schema):
+    class Schema(SerializableBaseModel.Schema):
         """Marshmallow schema for SpawnerConfiguration"""
 
         def _make(self, data: dict) -> "SpawnerConfiguration":
@@ -36,20 +35,6 @@ class SpawnerConfigurationXSchedule(BaseModel):
     between SpawnerConfiguration and Schedule.
     """
 
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for SpawnerConfigurationXSchedule"""
-
-        spawner_configuration_id = marsh.fields.UUID(required=True)
-        schedule_configuration_id = marsh.fields.UUID(required=True)
-
-        def _make(self, data: dict) -> "SpawnerConfigurationXSchedule":
-            """Constructs a SpawnerConfigurationXSchedule from a dictionary.
-
-            :param data: The dictionary.
-            :return: A SpawnerConfigurationXSchedule.
-            """
-            return SpawnerConfigurationXSchedule(**data)
-
     spawner_configuration_id = ForeignKeyField(
         SpawnerConfiguration, null=False, backref="schedule_configuration_references"
     )
@@ -59,20 +44,6 @@ class SpawnerConfigurationXSchedule(BaseModel):
 class SpawnerConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between SpawnerConfiguration and SimulationConfiguration."""
-
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for SpawnerConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        spawner_configuration = marsh.fields.UUID(required=True)
-
-        def _make(self, data: dict) -> "SpawnerConfigurationXSimulationConfiguration":
-            """Constructs a SpawnerConfigurationXSimulationConfiguration from a dictionary.
-
-            :param data: The dictionary.
-            :return: A SpawnerConfigurationXSimulationConfiguration.
-            """
-            return SpawnerConfigurationXSimulationConfiguration(**data)
 
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,

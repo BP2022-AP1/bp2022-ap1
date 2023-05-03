@@ -1,14 +1,14 @@
 import marshmallow as marsh
 from peewee import BooleanField, ForeignKeyField
 
-from src.base_model import BaseModel
+from src.base_model import BaseModel, SerializableBaseModel
 from src.implementor.models import SimulationConfiguration
 
 
-class InterlockingConfiguration(BaseModel):
+class InterlockingConfiguration(SerializableBaseModel):
     """This class contains all fields needed to configure the Interlocking and RouteController"""
 
-    class Schema(BaseModel.Schema):
+    class Schema(SerializableBaseModel.Schema):
         """Schema for the InterlockingConfiguration"""
 
         dynamicRouting = marsh.fields.Boolean()
@@ -23,22 +23,6 @@ class InterlockingConfiguration(BaseModel):
 class InterlockingConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between InterlockingConfiguration and SimulationConfiguration."""
-
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for InterlockingConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        interlocking_configuration = marsh.fields.UUID(required=True)
-
-        def _make(
-            self, data: dict
-        ) -> "InterlockingConfigurationXSimulationConfiguration":
-            """Constructs a InterlockingConfigurationXSimulationConfiguration from a dictionary.
-
-            :param data: The dictionary.
-            :return: A InterlockingConfigurationXSimulationConfiguration.
-            """
-            return InterlockingConfigurationXSimulationConfiguration(**data)
 
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,

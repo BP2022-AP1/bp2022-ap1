@@ -28,22 +28,6 @@ class TrainSpeedFaultConfigurationXSimulationConfiguration(BaseModel):
     """Reference table class for m:n relation
     between TrainSpeedFaultConfiguration and SimulationConfiguration."""
 
-    class Schema(BaseModel.Schema):
-        """Marshmallow schema for TrainSpeedFaultConfigurationXSimulationConfiguration"""
-
-        simulation_configuration = marsh.fields.UUID(required=True)
-        train_speed_fault_configuration = marsh.fields.UUID(required=True)
-
-        def _make(
-            self, data: dict
-        ) -> "TrainSpeedFaultConfigurationXSimulationConfiguration":
-            """Constructs a TrainSpeedFaultConfigurationXSimulationConfiguration from a dictionary.
-
-            :param data: The dictionary.
-            :return: A TrainSpeedFaultConfigurationXSimulationConfiguration.
-            """
-            return TrainSpeedFaultConfigurationXSimulationConfiguration(**data)
-
     simulation_configuration = ForeignKeyField(
         SimulationConfiguration,
         null=False,
