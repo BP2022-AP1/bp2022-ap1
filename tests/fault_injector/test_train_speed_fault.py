@@ -30,6 +30,7 @@ class TestTrainSpeedFault:
                 "description": "test TrainSpeedFault",
                 "affected_element_id": train.identifier,
                 "new_speed": 30,
+                "strategy": "regular",
             }
         )
 

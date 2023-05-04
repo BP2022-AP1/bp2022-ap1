@@ -4,14 +4,14 @@ from uuid import UUID
 import marshmallow as marsh
 from peewee import IntegerField
 
-from src.base_model import BaseModel, db
+from src.base_model import BaseModel, SerializableBaseModel, db
 from tests.decorators import recreate_db_setup
 
 
-class ModelTest(BaseModel):
+class ModelTest(SerializableBaseModel):
     """Model for testing purposes"""
 
-    class Schema(BaseModel.Schema):
+    class Schema(SerializableBaseModel.Schema):
         """Schema for testing purposes"""
 
         test_value = marsh.fields.Integer(required=True)

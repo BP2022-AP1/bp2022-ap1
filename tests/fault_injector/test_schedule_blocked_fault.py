@@ -39,6 +39,7 @@ class TestScheduleBlockedFault:
                 "end_tick": 300,
                 "description": "test ScheduleBlockedFault",
                 "affected_element_id": schedule.id,
+                "strategy": "regular",
             }
         )
 
