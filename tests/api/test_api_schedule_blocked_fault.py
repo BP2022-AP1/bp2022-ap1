@@ -1,5 +1,7 @@
 import uuid
 
+import pytest
+
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
 
@@ -15,12 +17,37 @@ class TestApiScheduleBlockedFault:
         )
         assert response.status_code == 501
 
-    def test_post(self, client, clear_token):
+    @pytest.mark.parametrize(
+        "data",
+        [
+            {"affected_element_id": "test"},
+            {
+                "affected_element_id": "test",
+                "start_tick": 1,
+                "end_tick": 2,
+                "inject_probability": 0.5,
+                "resolve_probability": 0.5,
+                "description": "test",
+                "strategy": "test",
+            },
+        ],
+    )
+    def test_post(self, client, clear_token, data):
         response = client.post(
             "/component/fault-injection/schedule-blocked-fault",
             headers={TOKEN_HEADER: clear_token},
+            json=data,
         )
-        assert response.status_code == 501
+        assert response.status_code != 422
+
+    @pytest.mark.parametrize("data", [{}])
+    def test_post_invalid(self, client, clear_token, data):
+        response = client.post(
+            "/component/fault-injection/schedule-blocked-fault",
+            headers={TOKEN_HEADER: clear_token},
+            json=data,
+        )
+        assert response.status_code == 422
 
     def test_get_single(self, client, clear_token):
         object_id = uuid.uuid4()

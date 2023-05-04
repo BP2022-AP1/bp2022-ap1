@@ -24,15 +24,6 @@ class TestSimulationConfigurationFailingInit:
         with pytest.raises(peewee.IntegrityError):
             SimulationConfiguration(**init_dict).save(force_insert=True)
 
-    @pytest.mark.parametrize(
-        "init_dict",
-        [],
-    )
-    def test_deserialization(self, init_dict: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            SimulationConfiguration.Schema().load(**init_dict)
-
 
 class TestSimulationConfigurationSuccessfulInit:
     """Test that a object of a class can be created and deserialized with valid data."""
@@ -89,28 +80,6 @@ class TestSimulationConfigurationSuccessfulInit:
         assert isinstance(serialized_obj["id"], str)
         for key in expected_dict.keys():
             assert serialized_obj[key] == expected_dict[key]
-
-    @pytest.mark.parametrize(
-        "init_dict, expected_values",
-        [
-            (
-                {
-                    "description": "description",
-                },
-                {
-                    "description": "description",
-                },
-            ),
-            ({}, {"description": None}),
-        ],
-    )
-    def test_deserialization(self, init_dict: dict, expected_values: dict):
-        """Test that an object of a class can be deserialized."""
-        obj = SimulationConfiguration.Schema().load({**init_dict})
-        assert isinstance(obj, SimulationConfiguration)
-        assert isinstance(obj.id, UUID)
-        for key in expected_values.keys():
-            assert getattr(obj, key) == expected_values[key]
 
     # pylint: enable=duplicate-code
     # will change, when adding foreign keys

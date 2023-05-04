@@ -84,8 +84,10 @@ class Fault(ABC):
         """
         if self.strategy.should_inject(tick, self.configuration, self.injected):
             self.inject_fault(tick)
+            self.injected = True
         elif self.strategy.should_resolve(tick, self.configuration, self.injected):
             self.resolve_fault(tick)
+            self.injected = False
 
 
 class TrainMixIn:
