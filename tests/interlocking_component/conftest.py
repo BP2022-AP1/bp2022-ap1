@@ -2,23 +2,22 @@ import os
 from typing import List
 
 import pytest
-
-from src.implementor.models import SimulationConfiguration, Token
-from src.interlocking_component.interlocking_configuration import (
-    InterlockingConfiguration,
-)
 from interlocking.interlockinginterface import Interlocking
 from traci import trafficlight
 
+from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
+from src.interlocking_component.interlocking_configuration import (
+    InterlockingConfiguration,
+)
 from src.interlocking_component.route_controller import RouteController
+from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Signal, Train
-from src.logger.logger import Logger
+from src.wrapper.simulation_objects import Edge, Train
 
 
 @pytest.fixture
@@ -86,16 +85,18 @@ def traffic_update(monkeypatch):
 
     return (get_rr_count, get_gg_count)
 
+
 @pytest.fixture
 def mock_logger() -> Logger:
     class LoggerMock:
         pass
+
     return LoggerMock()
+
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent,
-    mock_logger: Logger
+    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
 ) -> RouteController:
     return RouteController(
         logger=mock_logger,

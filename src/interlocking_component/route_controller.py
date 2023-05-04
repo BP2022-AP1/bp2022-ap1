@@ -6,15 +6,15 @@ from interlocking.model.route import Route
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 
+from src.component import Component
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
-from src.component import Component
 from src.interlocking_component.router import Router
+from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.logger.logger import Logger
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
