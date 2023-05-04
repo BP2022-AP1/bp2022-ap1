@@ -128,14 +128,14 @@ def config_ids(simulation_configuration):
 @pytest.fixture
 def platform_blocked_fault_configuration():
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="station_1"
+        start_tick=10, end_tick=20, affected_element_id="station_1", strategy="regular"
     )
 
 
 @pytest.fixture
 def track_blocked_fault_configuration():
     return TrackBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="section_1"
+        start_tick=10, end_tick=20, affected_element_id="section_1", strategy="regular"
     )
 
 
@@ -146,27 +146,36 @@ def track_speed_limit_fault_configuration():
         end_tick=20,
         affected_element_id="section_1",
         new_speed_limit=10,
+        strategy="regular",
     )
 
 
 @pytest.fixture
 def schedule_blocked_fault_configuration():
     return ScheduleBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="ice_1"
+        start_tick=10, end_tick=20, affected_element_id="ice_1", strategy="regular"
     )
 
 
 @pytest.fixture
 def train_prio_fault_configuration():
     return TrainPrioFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="ice_1", new_prio=1
+        start_tick=10,
+        end_tick=20,
+        affected_element_id="ice_1",
+        new_prio=1,
+        strategy="regular",
     )
 
 
 @pytest.fixture
 def train_speed_fault_configuration():
     return TrainSpeedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="ice_1", new_speed=10
+        start_tick=10,
+        end_tick=20,
+        affected_element_id="ice_1",
+        new_speed=10,
+        strategy="regular",
     )
 
 

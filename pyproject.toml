@@ -34,7 +34,6 @@ sumoexporter = { git = "https://github.com/bp2022-ap1/sumo-exporter", branch = "
 track-signal-generator = { git = "https://github.com/bp2022-ap1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
 grafana-pandas-datasource = { git = "https://github.com/BP2022-AP1/grafana-pandas-datasource.git" }
-requests = "^2.28.2"
 matplotlib = "^3.7.1"
 scipy = "1.9.2"
 requests = "^2.28.2"
@@ -120,7 +119,6 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.dev]
     help = "Run flask app in development mode and run db"
-    sequence = ["docker compose up dev"]
     cmd = "docker compose up dev"
     envfile = ".env.secret"
 
