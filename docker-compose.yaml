@@ -25,7 +25,6 @@ services:
       - 5010:5000
     env_file:
       - .env.shared
-      - .env.secret
     environment:
       - GRAFANA_HOST=grafana-dev
     depends_on:
