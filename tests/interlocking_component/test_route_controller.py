@@ -1,5 +1,4 @@
 import os
-from uuid import uuid1
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
