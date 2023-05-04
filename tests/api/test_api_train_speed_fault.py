@@ -20,7 +20,7 @@ class TestApiTrainSpeedFault:
             "/component/fault-injection/train-speed-fault",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 422
 
     def test_get_single(self, client, clear_token):
         object_id = uuid.uuid4()

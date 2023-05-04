@@ -10,7 +10,7 @@ class TestApiToken:
 
     def test_post(self, client, clear_token):
         response = client.post("/token", headers={TOKEN_HEADER: clear_token})
-        assert response.status_code == 501
+        assert response.status_code == 422
 
     def test_get_all(self, client, clear_token):
         response = client.get("/token", headers={TOKEN_HEADER: clear_token})
