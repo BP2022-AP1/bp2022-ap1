@@ -22,15 +22,8 @@ def results(monkeypatch):
             return defaultdict(int)
 
         dict = defaultdict(subscription_results)
-        edge_dict = {
-            constants.VAR_POSITION: (
-                100,
-                100,
-            ),
-            constants.VAR_ROAD_ID: "cfc57-0",
-            constants.VAR_ROUTE: "testing-route",
-            constants.VAR_SPEED: 10.2,
-        }
+        edge_dict = defaultdict(int)
+        edge_dict[constants.VAR_ROAD_ID] = "cfc57-0"
         dict["fake-sim-train"] = edge_dict
         return dict
 
