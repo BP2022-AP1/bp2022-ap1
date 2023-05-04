@@ -229,7 +229,7 @@ class RouteController(Component):
 
         self.free_fahrstrasse(route)
 
-    def free_fahrstrasse(self, route: Route):
+    def _free_fahrstrasse(self, route: Route):
         """This method frees the given interlocking route.
 
         :param route: The active route
