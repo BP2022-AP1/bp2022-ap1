@@ -11,7 +11,7 @@ from src.interlocking_component.infrastructure_provider import (
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train, Signal
+from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
 from src.wrapper.train_spawner import TrainSpawner
 
 
@@ -20,6 +20,7 @@ def results(monkeypatch):
     def get_subscription_result():
         def subscription_results():
             return defaultdict(int)
+
         dict = defaultdict(subscription_results)
         edge_dict = {
             constants.VAR_POSITION: (
