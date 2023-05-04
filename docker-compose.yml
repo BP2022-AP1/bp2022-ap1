@@ -27,3 +27,21 @@ services:
       POSTGRES_PASSWORD: root
     ports:
       - 5432:5432
+
+  grafana-test:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,natel-plotly-panel
+    env_file:
+      - .env.test
+
+  grafana-dev:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,natel-plotly-panel
+    env_file:
+      - .env.secret

@@ -72,7 +72,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test]
     help = "Run DB and test with pytest"
-    sequence  = ["db run test", "sleep", "db recreate", "test-pytest", "db stop test"]
+    sequence  = ["grafana-test", "db run test", "sleep", "db recreate", "test-pytest", "db stop test"]
     envfile=".env.test"
 
     [tool.poe.tasks.test-pytest]
@@ -89,12 +89,22 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.dev]
     help = "Run flask app in development mode and run db"
-    sequence = ["db run dev", "dev-flask"]
+    sequence = ["grafana-dev", "sleep","sleep", "db run dev", "dev-flask"]
     envfile=[".env.shared", ".env.secret"]
 
     [tool.poe.tasks.dev-flask]
     help = "Run flask app in development mode"
-    cmd = "flask --app src run"
+    cmd = "flask --app src run --debug"
+
+    [tool.poe.tasks.grafana-test]
+    help = "Run grafana"
+    cmd = "docker-compose -f docker-compose.yml up -d grafana-test"
+    envfile=".env.test"
+
+    [tool.poe.tasks.grafana-dev]
+    help = "Run grafana"
+    cmd = "docker-compose -f docker-compose.yml up -d grafana-dev"
+    envfile=[".env.shared", ".env.secret"]
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"
