@@ -1,4 +1,3 @@
-import marshmallow as marsh
 from peewee import BooleanField, ForeignKeyField
 
 from src.base_model import BaseModel, SerializableBaseModel
@@ -8,16 +7,12 @@ from src.implementor.models import SimulationConfiguration
 class InterlockingConfiguration(SerializableBaseModel):
     """This class contains all fields needed to configure the Interlocking and RouteController"""
 
-    class Schema(SerializableBaseModel.Schema):
-        """Schema for the InterlockingConfiguration"""
-
-        dynamicRouting = marsh.fields.Boolean()
-
-        def _make(self, data: dict) -> "InterlockingConfiguration":
-            return InterlockingConfiguration(**data)
-
     dynamicRouting = BooleanField(null=True)
     # null=True because this is not implemented yet
+
+    def to_dict(self):
+        data = super().to_dict()
+        return {"dynamicRouting": self.dynamicRouting, **data}
 
 
 class InterlockingConfigurationXSimulationConfiguration(BaseModel):

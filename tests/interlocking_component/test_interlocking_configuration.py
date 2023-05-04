@@ -43,14 +43,6 @@ class TestCorrectFilledDict:
         for key in object_as_dict.keys():
             assert obj_dict[key] == object_as_dict[key]
 
-    def test_deserialization_full_dict(self, object_as_dict: dict):
-        """Test that an object of a class can be deserialized."""
-        obj = InterlockingConfiguration.from_dict(object_as_dict)
-        assert isinstance(obj, InterlockingConfiguration)
-        assert isinstance(obj.id, UUID)
-        for key in object_as_dict.keys():
-            assert getattr(obj, key) == object_as_dict[key]
-
 
 class InterlockingConfigurationXSimulationConfiguration:
     """Tests for the InterlockingConfigurationXSimulationConfiguration"""
@@ -123,26 +115,3 @@ class InterlockingConfigurationXSimulationConfiguration:
             "interlocking_configuration": str(interlocking_x_simulation.id),
             "schedule_configuration": str(interlocking_x_simulation.id),
         }
-
-    @pytest.mark.usefixtures("simulation_configuration, interlocking_configuration")
-    def test_deserialization(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        interlocking_configuration: InterlockingConfiguration,
-    ):
-        interlocking_x_simulation = (
-            InterlockingConfigurationXSimulationConfiguration.from_dict(
-                {
-                    "interlocking_configuration": str(interlocking_configuration.id),
-                    "schedule_configuration": str(simulation_configuration.id),
-                }
-            )
-        )
-        interlocking_x_simulation.save()
-        assert (
-            interlocking_x_simulation.interlocking_configuration
-            == interlocking_configuration
-        )
-        assert (
-            interlocking_x_simulation.schedule_configuration == simulation_configuration
-        )

@@ -2,8 +2,8 @@ from flask import Blueprint, request
 from webargs.flaskparser import parser
 
 from src import implementor as impl
+from src.api import schemas
 from src.api.decorators import token_required
-from src.schemas import model
 
 bp = Blueprint("run", __name__)
 
@@ -22,7 +22,7 @@ def get_all_run_ids(token):
 @token_required
 def create_run(token):
     """Create a run"""
-    schema = model.RunConfiguration()
+    schema = schemas.RunConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
