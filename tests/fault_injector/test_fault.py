@@ -45,11 +45,6 @@ class TestFault:
 
     def test_next_tick(self, fault: MockSpecialFault):
         for tick in range(50):
-            print("-------------------------")
             fault.next_tick(tick)
-            print(tick)
-            print(fault.configuration.start_tick)
-            print(fault.tick_injected)
-            print(fault.injected)
         assert fault.tick_injected == 3
         assert fault.tick_resolved == 30
