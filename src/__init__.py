@@ -34,7 +34,9 @@ def initialize_grafana():
     """Initialize Grafana"""
     with open("grafana/local/datasource.json", "r", encoding="UTF-8") as file:
         data_source = json.load(file)
-    result = _post_data(f"http://{os.environ['GRAFANA_HOST']}:3000/api/datasources", data_source)
+    result = _post_data(
+        f"http://{os.environ['GRAFANA_HOST']}:3000/api/datasources", data_source
+    )
     if result is None:
         return
     try:
@@ -55,7 +57,10 @@ def initialize_grafana():
             data_dashboard = {
                 "dashboard": data_dashboard,
             }
-            _post_data(f"http://{os.environ['GRAFANA_HOST']}:3000/api/dashboards/db", data_dashboard)
+            _post_data(
+                f"http://{os.environ['GRAFANA_HOST']}:3000/api/dashboards/db",
+                data_dashboard,
+            )
 
 
 def create_app(test_config=None) -> Flask:
