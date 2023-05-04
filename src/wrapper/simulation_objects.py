@@ -711,7 +711,8 @@ class Train(SimulationObject):
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
         if self._edge is None or self._edge.identifier != edge_id:
-            self.updater.infrastructure_provider.train_drove_off_track(self._edge)
+            if self._edge is not None:
+                self.updater.infrastructure_provider.train_drove_off_track(self._edge)
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )
