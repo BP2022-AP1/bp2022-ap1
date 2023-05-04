@@ -2,24 +2,6 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
-    PlatformBlockedFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
-    ScheduleBlockedFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
-    TrackBlockedFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
-    TrackSpeedLimitFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
-    TrainPrioFaultConfiguration,
-)
-from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
-    TrainSpeedFaultConfiguration,
-)
 from src.implementor.models import Run
 from src.logger.log_collector import LogCollector
 from src.logger.logger import Logger
@@ -241,74 +223,8 @@ class TestLogCollector:
             ],
         )
 
-    @pytest.fixture
-    def _platform_blocked_fault_configuration(self):
-        return PlatformBlockedFaultConfiguration.create(
-            start_tick=10, end_tick=20, affected_element_id="station_1"
-        )
-
-    @pytest.fixture
-    def _track_blocked_fault_configuration(self):
-        return TrackBlockedFaultConfiguration.create(
-            start_tick=10, end_tick=20, affected_element_id="section_1"
-        )
-
-    @pytest.fixture
-    def _track_speed_limit_fault_configuration(self):
-        return TrackSpeedLimitFaultConfiguration.create(
-            start_tick=10,
-            end_tick=20,
-            affected_element_id="section_1",
-            new_speed_limit=10,
-        )
-
-    @pytest.fixture
-    def _schedule_blocked_fault_configuration(self):
-        return ScheduleBlockedFaultConfiguration.create(
-            start_tick=10, end_tick=20, affected_element_id="ice_1"
-        )
-
-    @pytest.fixture
-    def _train_prio_fault_configuration(self):
-        return TrainPrioFaultConfiguration.create(
-            start_tick=10, end_tick=20, affected_element_id="ice_1", new_prio=1
-        )
-
-    @pytest.fixture
-    def _train_speed_fault_configuration(self):
-        return TrainSpeedFaultConfiguration.create(
-            start_tick=10, end_tick=20, affected_element_id="ice_1", new_speed=10
-        )
-
-    @pytest.fixture
-    def _faults_df(self):
-        return pd.DataFrame(
-            {
-                "begin_tick": [10, 10, 10, 10, 10, 10],
-                "fault_type": [
-                    "platform_blocked",
-                    "track_blocked",
-                    "track_speed_limit",
-                    "schedule_blocked",
-                    "train_prio",
-                    "train_speed",
-                ],
-                "fault_id": [None, None, None, None, None, None],
-                "affected_element": [
-                    "station_1",
-                    "section_1",
-                    "section_1",
-                    "ice_1",
-                    "ice_1",
-                    "ice_1",
-                ],
-                "value_before": [None, None, "100", None, "2", "100"],
-                "value_after": [None, None, "10", None, "1", "10"],
-                "end_tick": [20, 20, 20, 20, 20, 20],
-            }
-        )
-
-    def setup_departure_arrival_1(self, logger):
+    @staticmethod
+    def setup_departure_arrival_1(logger):
         logger.arrival_train(10, "ice_1", "station_1")
         logger.departure_train(20, "ice_1", "station_1")
         logger.arrival_train(30, "ice_1", "station_2")
@@ -316,27 +232,63 @@ class TestLogCollector:
         logger.arrival_train(50, "ice_1", "station_3")
         logger.departure_train(60, "ice_1", "station_3")
 
-    def setup_departure_arrival_2(self, logger):
+    @staticmethod
+    def setup_departure_arrival_2(logger):
         logger.arrival_train(10, "ice_2", "station_1")
         logger.departure_train(20, "ice_2", "station_1")
         logger.arrival_train(30, "ice_2", "station_2")
         logger.departure_train(40, "ice_2", "station_2")
         logger.arrival_train(50, "ice_2", "station_3")
 
-    def setup_departure_arrival_3(self, logger):
+    @staticmethod
+    def setup_departure_arrival_3(logger):
         logger.departure_train(20, "ice_3", "station_1")
         logger.arrival_train(30, "ice_3", "station_2")
         logger.departure_train(40, "ice_3", "station_2")
         logger.arrival_train(50, "ice_3", "station_3")
         logger.departure_train(60, "ice_3", "station_3")
 
-    def setup_departure_arrival_4(self, logger):
+    @staticmethod
+    def setup_departure_arrival_4(logger):
         logger.departure_train(20, "ice_4", "station_1")
         logger.arrival_train(30, "ice_4", "station_2")
         logger.departure_train(40, "ice_4", "station_2")
         logger.arrival_train(50, "ice_4", "station_3")
 
-    def setup_enter_leave_block_section_1(self, logger):
+    @staticmethod
+    def setup_departure_arrival_1_alt(logger):
+        logger.arrival_train(20, "ice_1", "station_1")
+        logger.departure_train(30, "ice_1", "station_1")
+        logger.arrival_train(40, "ice_1", "station_2")
+        logger.departure_train(50, "ice_1", "station_2")
+        logger.arrival_train(60, "ice_1", "station_3")
+        logger.departure_train(70, "ice_1", "station_3")
+
+    @staticmethod
+    def setup_departure_arrival_2_alt(logger):
+        logger.arrival_train(20, "ice_2", "station_1")
+        logger.departure_train(30, "ice_2", "station_1")
+        logger.arrival_train(40, "ice_2", "station_2")
+        logger.departure_train(50, "ice_2", "station_2")
+        logger.arrival_train(60, "ice_2", "station_3")
+
+    @staticmethod
+    def setup_departure_arrival_3_alt(logger):
+        logger.departure_train(30, "ice_3", "station_1")
+        logger.arrival_train(40, "ice_3", "station_2")
+        logger.departure_train(50, "ice_3", "station_2")
+        logger.arrival_train(60, "ice_3", "station_3")
+        logger.departure_train(70, "ice_3", "station_3")
+
+    @staticmethod
+    def setup_departure_arrival_4_alt(logger):
+        logger.departure_train(30, "ice_4", "station_1")
+        logger.arrival_train(40, "ice_4", "station_2")
+        logger.departure_train(50, "ice_4", "station_2")
+        logger.arrival_train(60, "ice_4", "station_3")
+
+    @staticmethod
+    def setup_enter_leave_block_section_1(logger):
         logger.train_enter_block_section(10, "ice_1", "section_1", 10.5)
         logger.train_leave_block_section(20, "ice_1", "section_1", 10.5)
         logger.train_enter_block_section(30, "ice_1", "section_2", 20.5)
@@ -344,67 +296,70 @@ class TestLogCollector:
         logger.train_enter_block_section(50, "ice_1", "section_3", 30.5)
         logger.train_leave_block_section(60, "ice_1", "section_3", 30.5)
 
-    def setup_enter_leave_block_section_2(self, logger):
+    @staticmethod
+    def setup_enter_leave_block_section_2(logger):
         logger.train_enter_block_section(10, "ice_2", "section_1", 10.5)
         logger.train_leave_block_section(20, "ice_2", "section_1", 10.5)
         logger.train_enter_block_section(30, "ice_2", "section_2", 20.5)
         logger.train_leave_block_section(40, "ice_2", "section_2", 20.5)
         logger.train_enter_block_section(50, "ice_2", "section_3", 30.5)
 
-    def setup_enter_leave_block_section_3(self, logger):
+    @staticmethod
+    def setup_enter_leave_block_section_3(logger):
         logger.train_leave_block_section(20, "ice_3", "section_1", 10.5)
         logger.train_enter_block_section(30, "ice_3", "section_2", 20.5)
         logger.train_leave_block_section(40, "ice_3", "section_2", 20.5)
         logger.train_enter_block_section(50, "ice_3", "section_3", 30.5)
         logger.train_leave_block_section(60, "ice_3", "section_3", 30.5)
 
-    def setup_enter_leave_block_section_4(self, logger):
+    @staticmethod
+    def setup_enter_leave_block_section_4(logger):
         logger.train_leave_block_section(20, "ice_4", "section_1", 10.5)
         logger.train_enter_block_section(30, "ice_4", "section_2", 20.5)
         logger.train_leave_block_section(40, "ice_4", "section_2", 20.5)
         logger.train_enter_block_section(50, "ice_4", "section_3", 30.5)
 
+    @staticmethod
     def setup_faults(
-        self,
         logger: Logger,
-        _platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
-        _track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
-        _track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
-        _schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
-        _train_prio_fault_configuration: TrainPrioFaultConfiguration,
-        _train_speed_fault_configuration: TrainSpeedFaultConfiguration,
+        platform_blocked_fault_configuration,
+        track_blocked_fault_configuration,
+        track_speed_limit_fault_configuration,
+        schedule_blocked_fault_configuration,
+        train_prio_fault_configuration,
+        train_speed_fault_configuration,
     ):
         logger.inject_platform_blocked_fault(
-            10, _platform_blocked_fault_configuration, "station_1"
+            10, platform_blocked_fault_configuration, "station_1"
         )
-        logger.resolve_platform_blocked_fault(20, _platform_blocked_fault_configuration)
+        logger.resolve_platform_blocked_fault(20, platform_blocked_fault_configuration)
 
         logger.inject_track_blocked_fault(
-            10, _track_blocked_fault_configuration, "section_1"
+            10, track_blocked_fault_configuration, "section_1"
         )
-        logger.resolve_track_blocked_fault(20, _track_blocked_fault_configuration)
+        logger.resolve_track_blocked_fault(20, track_blocked_fault_configuration)
 
         logger.inject_track_speed_limit_fault(
-            10, _track_speed_limit_fault_configuration, "section_1", "100", "10"
+            10, track_speed_limit_fault_configuration, "section_1", "100", "10"
         )
         logger.resolve_track_speed_limit_fault(
-            20, _track_speed_limit_fault_configuration
+            20, track_speed_limit_fault_configuration
         )
 
         logger.inject_schedule_blocked_fault(
-            10, _schedule_blocked_fault_configuration, "ice_1"
+            10, schedule_blocked_fault_configuration, "ice_1"
         )
-        logger.resolve_schedule_blocked_fault(20, _schedule_blocked_fault_configuration)
+        logger.resolve_schedule_blocked_fault(20, schedule_blocked_fault_configuration)
 
         logger.inject_train_prio_fault(
-            10, _train_prio_fault_configuration, "ice_1", "2", "1"
+            10, train_prio_fault_configuration, "ice_1", "2", "1"
         )
-        logger.resolve_train_prio_fault(20, _train_prio_fault_configuration)
+        logger.resolve_train_prio_fault(20, train_prio_fault_configuration)
 
         logger.inject_train_speed_fault(
-            10, _train_speed_fault_configuration, "ice_1", "100", "10"
+            10, train_speed_fault_configuration, "ice_1", "100", "10"
         )
-        logger.resolve_train_speed_fault(20, _train_speed_fault_configuration)
+        logger.resolve_train_speed_fault(20, train_speed_fault_configuration)
 
     def test_get_trains(self, _trains, logger, log_collector: LogCollector):
         self.setup_departure_arrival_1(logger)
@@ -584,33 +539,28 @@ class TestLogCollector:
 
     def test_get_faults(
         self,
-        _faults_df,
+        faults_log_collector_df,
         logger,
-        _platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
-        _track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
-        _track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
-        _schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
-        _train_prio_fault_configuration: TrainPrioFaultConfiguration,
-        _train_speed_fault_configuration: TrainSpeedFaultConfiguration,
+        platform_blocked_fault_configuration,
+        track_blocked_fault_configuration,
+        track_speed_limit_fault_configuration,
+        schedule_blocked_fault_configuration,
+        train_prio_fault_configuration,
+        train_speed_fault_configuration,
         log_collector: LogCollector,
     ):
+        # pylint: disable=R0801
         self.setup_faults(
             logger,
-            _platform_blocked_fault_configuration,
-            _track_blocked_fault_configuration,
-            _track_speed_limit_fault_configuration,
-            _schedule_blocked_fault_configuration,
-            _train_prio_fault_configuration,
-            _train_speed_fault_configuration,
+            platform_blocked_fault_configuration,
+            track_blocked_fault_configuration,
+            track_speed_limit_fault_configuration,
+            schedule_blocked_fault_configuration,
+            train_prio_fault_configuration,
+            train_speed_fault_configuration,
         )
-        _faults_df["fault_id"] = [
-            _platform_blocked_fault_configuration.id,
-            _track_blocked_fault_configuration.id,
-            _track_speed_limit_fault_configuration.id,
-            _schedule_blocked_fault_configuration.id,
-            _train_prio_fault_configuration.id,
-            _train_speed_fault_configuration.id,
-        ]
-        _faults_df["fault_id"] = _faults_df["fault_id"].astype("string")
-        faults_df = log_collector.get_faults(logger.run_id)
-        assert_frame_equal(faults_df, _faults_df)
+        faults_log_collector_df["fault_id"] = faults_log_collector_df[
+            "fault_id"
+        ].astype("string")
+        generated_faults_df = log_collector.get_faults(logger.run_id)
+        assert_frame_equal(generated_faults_df, faults_log_collector_df)
