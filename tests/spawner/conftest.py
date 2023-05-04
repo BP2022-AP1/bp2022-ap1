@@ -561,9 +561,7 @@ def demand_train_schedule_data(
         "train_schedule_train_type": "cargo",
         "demand_strategy_power_station": demand_strategy_power_station,
         "demand_strategy_scaling_factor": demand_strategy_scaling_factor,
-        "demand_strategy_start_datetime": demand_strategy_available_interval[
-            0
-        ].isoformat(),
+        "demand_strategy_start_datetime": demand_strategy_available_interval[0],
     }
 
 
@@ -585,7 +583,7 @@ def platform_ids() -> list[str]:
 def regular_train_schedule_configuration(
     regular_train_schedule_data: dict[str, any], platform_ids: list[str]
 ) -> RegularScheduleStrategy:
-    configuration = ScheduleConfiguration.from_dict(regular_train_schedule_data)
+    configuration = ScheduleConfiguration(**regular_train_schedule_data)
     configuration.save()
     for index, platform_id in enumerate(platform_ids):
         ScheduleConfigurationXSimulationPlatform(
@@ -600,7 +598,7 @@ def regular_train_schedule_configuration(
 def random_train_schedule_configuration(
     random_train_schedule_data: dict[str, any], platform_ids: list[str]
 ) -> RandomScheduleStrategy:
-    configuration = ScheduleConfiguration.from_dict(random_train_schedule_data)
+    configuration = ScheduleConfiguration(**random_train_schedule_data)
     configuration.save()
     for index, platform_id in enumerate(platform_ids):
         ScheduleConfigurationXSimulationPlatform(
@@ -615,7 +613,7 @@ def random_train_schedule_configuration(
 def demand_train_schedule_configuration(
     demand_train_schedule_data: dict[str, any], platform_ids: list[str]
 ) -> DemandScheduleStrategy:
-    configuration = ScheduleConfiguration.from_dict(demand_train_schedule_data)
+    configuration = ScheduleConfiguration(**demand_train_schedule_data)
     configuration.save()
     for index, platform_id in enumerate(platform_ids):
         ScheduleConfigurationXSimulationPlatform(

@@ -27,11 +27,6 @@ class TestScheduleConfigurationFail:
                 **obj,
             )
 
-    def test_deserialization(self, obj: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            ScheduleConfiguration.Schema().load(obj)
-
 
 @pytest.mark.parametrize(
     "schedule_data", [("regular_train_schedule_data"), ("random_train_schedule_data")]
@@ -43,15 +38,9 @@ class TestScheduleConfigurationModel:
     def setup_method(self):
         pass
 
-    def test_deserialization(self, schedule_data: dict, request: pytest.FixtureRequest):
-        schedule_data = request.getfixturevalue(schedule_data)
-        schedule_configuration = ScheduleConfiguration.from_dict(schedule_data)
-        for key, value in schedule_data.items():
-            assert getattr(schedule_configuration, key) == value
-
     def test_db_interaction(self, schedule_data: dict, request: pytest.FixtureRequest):
         schedule_data = request.getfixturevalue(schedule_data)
-        schedule_configuration = ScheduleConfiguration.from_dict(schedule_data)
+        schedule_configuration = ScheduleConfiguration(**schedule_data)
         schedule_configuration.save(force_insert=True)
         fetched = (
             ScheduleConfiguration.select()
@@ -63,7 +52,7 @@ class TestScheduleConfigurationModel:
 
     def test_serialization(self, schedule_data: dict, request: pytest.FixtureRequest):
         schedule_data = request.getfixturevalue(schedule_data)
-        schedule_configuration = ScheduleConfiguration.from_dict(schedule_data)
+        schedule_configuration = ScheduleConfiguration(**schedule_data)
         serialized = schedule_configuration.to_dict()
         for key, value in schedule_data.items():
             assert serialized[key] == value
