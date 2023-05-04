@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
@@ -8,10 +9,12 @@ from railwayroutegenerator.routegenerator import RouteGenerator
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
+from src.component import Component
 from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
+from src.logger.logger import Logger
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
@@ -82,7 +85,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
 
-class RouteController:
+class RouteController(Component):
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
@@ -91,15 +94,19 @@ class RouteController:
     interlocking: Interlocking = None
     router: Router = None
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
+    routes_to_be_set: List[Route] = []
 
     def __init__(
         self,
+        logger: Logger,
+        priority: int,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
         path_name: str = os.path.join("data", "planpro", "test_example.ppxml"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
+        super().__init__(logger, priority)
         self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
@@ -114,6 +121,15 @@ class RouteController:
         # This has to change in the future, as we want our own infrastructure_provider
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
+
+    def next_tick(self, tick: int):
+        for interlocking_route in self.routes_to_be_set:
+            # This sets the fahrstrasse in the interlocking.
+            # The Sumo SUMO route was already set.
+            was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
+
+            if was_set:
+                self.routes_to_be_set.remove(interlocking_route)
 
     def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
         """This method can be called when instanciating a train
@@ -131,7 +147,7 @@ class RouteController:
         new_route = self.router.get_route(start_edge, end_edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        for end_node_candidat in new_route:
+        for end_node_candidat in new_route[1:]:
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
@@ -179,18 +195,23 @@ class RouteController:
         new_route = self.router.get_route(edge, train.timetable[0].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        for end_node_candidat in new_route:
+        for end_node_candidat in new_route[1:]:
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
                     # This sets the route in the interlocking
-                    self.interlocking.set_route(interlocking_route.yaramo_route)
-                    # This does not check if the route can even be set and does not handle,
-                    # if it can not be set this simulation step.
+                    was_set = self.interlocking.set_route(
+                        interlocking_route.yaramo_route
+                    )
+
+                    if not was_set:
+                        self.routes_to_be_set.append(interlocking_route)
 
                     # This sets the route in SUMO.
+                    # The SUMO route is also set when the interlocking fahrstrasse could not be set,
+                    # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return

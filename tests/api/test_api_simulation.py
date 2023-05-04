@@ -1,30 +1,38 @@
 import uuid
 
+TOKEN_HEADER = "bp2022-ap1-api-key"
+
 
 class TestApiSimulation:
     """
     Test the /simulation endpoint
     """
 
-    def test_get_all(self, client):
-        response = client.get("/simulation")
+    def test_get_all(self, client, clear_token):
+        response = client.get("/simulation", headers={TOKEN_HEADER: clear_token})
         assert response.status_code == 501
 
-    def test_post(self, client):
-        response = client.post("/simulation")
+    def test_post(self, client, clear_token):
+        response = client.post("/simulation", headers={TOKEN_HEADER: clear_token})
         assert response.status_code == 501
 
-    def test_get_single(self, client):
+    def test_get_single(self, client, clear_token):
         object_id = uuid.uuid4()
-        response = client.get(f"/simulation/{object_id}")
+        response = client.get(
+            f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
+        )
         assert response.status_code == 501
 
-    def test_update(self, client):
+    def test_update(self, client, clear_token):
         object_id = uuid.uuid4()
-        response = client.put(f"/simulation/{object_id}")
+        response = client.put(
+            f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
+        )
         assert response.status_code == 501
 
-    def test_delete(self, client):
+    def test_delete(self, client, clear_token):
         object_id = uuid.uuid4()
-        response = client.delete(f"/simulation/{object_id}")
+        response = client.delete(
+            f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
+        )
         assert response.status_code == 501

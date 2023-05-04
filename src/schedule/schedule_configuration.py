@@ -1,13 +1,13 @@
 import marshmallow as marsh
 from peewee import DateTimeField, FloatField, ForeignKeyField, IntegerField, TextField
 
-from src.base_model import BaseModel
+from src.base_model import BaseModel, SerializableBaseModel
 
 
-class ScheduleConfiguration(BaseModel):
+class ScheduleConfiguration(SerializableBaseModel):
     """Holds information to construct a schedule and its corresponding strategy"""
 
-    class Schema(BaseModel.Schema):
+    class Schema(SerializableBaseModel.Schema):
         """The marshmallow schema for ScheduleConfiguration"""
 
         schedule_type = marsh.fields.String(required=True)
@@ -55,21 +55,6 @@ class ScheduleConfiguration(BaseModel):
 
 class ScheduleConfigurationXSimulationPlatform(BaseModel):
     """Represents the m:n relation betwwen ScheduleConfiguration and SimulationPlatform"""
-
-    class Schema(BaseModel.Schema):
-        """The marshmallow schema for ScheduleConfigurationXSimulationPlatform"""
-
-        schedule_configuration_id = marsh.fields.UUID(required=True)
-        simulation_platform_id = marsh.fields.UUID(required=True)
-        index = marsh.fields.Integer(required=True)
-
-        def _make(self, data: dict) -> "ScheduleConfigurationXSimulationPlatform":
-            """Constructs a ScheduleConfigurationXSimulationPlatform from a dict
-
-            :param data: The dict
-            :return: A ScheduleConfigurationXSimulationPlatform
-            """
-            return ScheduleConfigurationXSimulationPlatform(**data)
 
     schedule_configuration_id = ForeignKeyField(
         ScheduleConfiguration, null=False, backref="train_schedule_platform_references"

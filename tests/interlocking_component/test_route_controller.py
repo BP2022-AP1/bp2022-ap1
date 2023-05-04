@@ -3,9 +3,6 @@ import os
 from interlocking.interlockinginterface import Interlocking
 
 from src.interlocking_component.route_controller import RouteController
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
 
 
 class TestRouteController:

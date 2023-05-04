@@ -1,8 +1,9 @@
 import os
+from collections import defaultdict
 from typing import Tuple
 
 import pytest
-from traci import constants, edge, trafficlight, vehicle
+from traci import constants, edge, simulation, trafficlight, vehicle
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
@@ -12,6 +13,27 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_spawner import TrainSpawner
+
+
+@pytest.fixture
+def results(monkeypatch):
+    def get_subscription_result():
+        def subscription_results():
+            return defaultdict(int)
+
+        return defaultdict(subscription_results)
+
+    monkeypatch.setattr(
+        simulation, "getAllSubscriptionResults", get_subscription_result
+    )
+
+
+@pytest.fixture
+def all_trains(monkeypatch):
+    def get_id_list():
+        return []
+
+    monkeypatch.setattr(vehicle, "getIDList", get_id_list)
 
 
 @pytest.fixture

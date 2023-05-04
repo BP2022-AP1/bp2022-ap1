@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  prod:
+    build:
+      context: .
+      dockerfile: ./compose/waitress/Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8090:8080"
+    env_file:
+      - .env.shared
+    depends_on:
+      - postgresql
+      - celery-worker
+
+  dev:
+    build:
+      context: .
+      dockerfile: ./compose/flask/Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 5010:5000
+    env_file:
+      - .env.shared
+    depends_on:
+      - postgresql
+      - celery-worker
+
+  postgresql:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432
+
+  postgresql-test:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5430:5432
+
+  redis:
+    image: redis:7-alpine
+
+  celery-worker:
+    build:
+      context: .
+      dockerfile: ./compose/celery/Dockerfile
+    env_file:
+      - .env.shared
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - postgresql
+
+volumes:
+  postgres_data:

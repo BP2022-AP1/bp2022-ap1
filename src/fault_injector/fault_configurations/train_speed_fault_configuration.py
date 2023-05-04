@@ -1,9 +1,11 @@
 import marshmallow as marsh
-from peewee import FloatField, TextField
+from peewee import FloatField, ForeignKeyField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
+from src.implementor.models import SimulationConfiguration
 
 
 class TrainSpeedFaultConfiguration(FaultConfiguration):
@@ -20,3 +22,19 @@ class TrainSpeedFaultConfiguration(FaultConfiguration):
 
     affected_element_id = TextField(null=False)
     new_speed = FloatField(null=False)
+
+
+class TrainSpeedFaultConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between TrainSpeedFaultConfiguration and SimulationConfiguration."""
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="train_speed_fault_configuration_references",
+    )
+    train_speed_fault_configuration = ForeignKeyField(
+        TrainSpeedFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )

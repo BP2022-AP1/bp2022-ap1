@@ -1,9 +1,11 @@
 import marshmallow as marsh
-from peewee import IntegerField, TextField
+from peewee import ForeignKeyField, IntegerField, TextField
 
+from src.base_model import BaseModel
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
+from src.implementor.models import SimulationConfiguration
 
 
 class TrainPrioFaultConfiguration(FaultConfiguration):
@@ -20,3 +22,19 @@ class TrainPrioFaultConfiguration(FaultConfiguration):
 
     affected_element_id = TextField()
     new_prio = IntegerField(null=False)
+
+
+class TrainPrioFaultConfigurationXSimulationConfiguration(BaseModel):
+    """Reference table class for m:n relation
+    between TrainPrioFaultConfiguration and SimulationConfiguration."""
+
+    simulation_configuration = ForeignKeyField(
+        SimulationConfiguration,
+        null=False,
+        backref="train_prio_fault_configuration_references",
+    )
+    train_prio_fault_configuration = ForeignKeyField(
+        TrainPrioFaultConfiguration,
+        null=False,
+        backref="simulation_configuration_references",
+    )

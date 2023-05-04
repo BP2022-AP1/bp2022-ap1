@@ -21,7 +21,7 @@ class TestTrainSchedule:
     ):
         regular_train_schedule.maybe_spawn(strategy_start_tick, spawner)
         assert mock_train_spawner.spawn_history == [strategy_start_tick]
-        assert mock_train_spawner.identifier.endswith(f"_{strategy_start_tick}")
+        assert mock_train_spawner.identifier.split("_")[1] == str(strategy_start_tick)
 
     def test_delayed_spawning(
         self,
@@ -49,13 +49,11 @@ class TestTrainSchedule:
         )
         assert mock_train_spawner.spawn_history == [tick1, tick3, tick2]
 
-    @pytest.mark.usefixtures("regular_train_schedule")
     def test_block_blocked_fails(self, regular_train_schedule: TrainSchedule):
         regular_train_schedule.block()
         with pytest.raises(RuntimeError):
             regular_train_schedule.block()
 
-    @pytest.mark.usefixtures("regular_train_schedule")
     def test_unblock_unblocked_fails(self, regular_train_schedule: TrainSchedule):
         regular_train_schedule.block()
         regular_train_schedule.unblock()

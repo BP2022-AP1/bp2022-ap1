@@ -55,5 +55,5 @@ class TrainSchedule(Schedule):
         :return: if the spawning was successful
         """
         return spawner.train_spawner.spawn_train(
-            f"{self.id}_{tick}", self.platform_ids, self.train_type
+            f"{self.id}_{tick}_{self.train_type}", self.platform_ids, self.train_type
         )
