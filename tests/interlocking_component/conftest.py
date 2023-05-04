@@ -2,17 +2,17 @@ import os
 from typing import List
 
 import pytest
+from interlocking.interlockinginterface import Interlocking
 from traci import trafficlight
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
 from src.interlocking_component.route_controller import RouteController
-from interlocking.interlockinginterface import Interlocking
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Signal, Train, Edge
+from src.wrapper.simulation_objects import Edge, Signal, Train
 
 
 @pytest.fixture
@@ -76,6 +76,7 @@ def sumo_mock_infrastructure_provider(
     sumo_mock_infrastructure_provider = SumoInfrastructureProvider(route_controller)
     return sumo_mock_infrastructure_provider
 
+
 @pytest.fixture
 def mock_interlocking() -> Interlocking:
     class InterlockingMock:
@@ -86,29 +87,40 @@ def mock_interlocking() -> Interlocking:
             self.tds_count_in_count += 1
 
         def set_tds_count_in_callback(self, infrastructure_provider):
-            infrastructure_provider.set_tds_count_in_callback(self.increment_tds_count_in_count)
+            infrastructure_provider.set_tds_count_in_callback(
+                self.increment_tds_count_in_count
+            )
 
         def increment_tds_count_out_count(self, track_segment_id):
             self.tds_count_out_count += 1
 
         def set_tds_count_out_callback(self, infrastructure_provider):
-            infrastructure_provider.set_tds_count_out_callback(self.increment_tds_count_out_count)
+            infrastructure_provider.set_tds_count_out_callback(
+                self.increment_tds_count_out_count
+            )
 
     return InterlockingMock()
+
 
 @pytest.fixture
 def mock_simulation_object_updating_component() -> SimulationObjectUpdatingComponent:
     class SOUCMock:
         infrastructur_provider = None
+
     return SOUCMock()
 
+
 @pytest.fixture
-def mock_route_controller(mock_interlocking: Interlocking, mock_simulation_object_updating_component: SimulationObjectUpdatingComponent) -> RouteController:
+def mock_route_controller(
+    mock_interlocking: Interlocking,
+    mock_simulation_object_updating_component: SimulationObjectUpdatingComponent,
+) -> RouteController:
     class RouteControllerMock:
         interlocking: Interlocking = mock_interlocking
         simulation_object_updating_component = mock_simulation_object_updating_component
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
+
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
@@ -119,12 +131,19 @@ def mock_route_controller(mock_interlocking: Interlocking, mock_simulation_objec
 
 
 @pytest.fixture
-def interlocking_mock_infrastructure_provider(mock_route_controller: RouteController) -> SumoInfrastructureProvider:
-    interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(mock_route_controller)
-    mock_route_controller.interlocking.set_tds_count_in_callback(interlocking_mock_infrastructure_provider)
-    mock_route_controller.interlocking.set_tds_count_out_callback(interlocking_mock_infrastructure_provider)
+def interlocking_mock_infrastructure_provider(
+    mock_route_controller: RouteController,
+) -> SumoInfrastructureProvider:
+    interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
+        mock_route_controller
+    )
+    mock_route_controller.interlocking.set_tds_count_in_callback(
+        interlocking_mock_infrastructure_provider
+    )
+    mock_route_controller.interlocking.set_tds_count_out_callback(
+        interlocking_mock_infrastructure_provider
+    )
     return interlocking_mock_infrastructure_provider
-
 
 
 @pytest.fixture
@@ -144,14 +163,18 @@ def yaramo_signal():
 
     return SignalMock()
 
+
 @pytest.fixture
 def SUMO_train():
     class TrainMock:
         identifier = "Test_Train"
+
     return TrainMock()
+
 
 @pytest.fixture
 def SUMO_edge():
     class EdgeMock:
         identifier = "test_id-re"
+
     return EdgeMock()
