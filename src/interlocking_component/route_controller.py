@@ -226,7 +226,7 @@ class RouteController(Component):
         if route is None or route.get_last_segment_of_route != edge.identifier:
             return
 
-        self.free_fahrstrasse(route)
+        self._free_fahrstrasse(route)
 
     def _free_fahrstrasse(self, route: Route):
         """This method frees the given interlocking route.
