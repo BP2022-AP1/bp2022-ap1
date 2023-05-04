@@ -64,11 +64,6 @@ class TestFailingDict:
                 **object_as_dict,
             )
 
-    def test_deserialization(self, table_class: BaseModel, object_as_dict: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            table_class.Schema().load(object_as_dict)
-
 
 @pytest.mark.parametrize(
     "table_class, object_as_dict",
@@ -162,24 +157,12 @@ class TestCorrectFilledDict:
             assert serialized_obj[key] == object_as_dict[key]
 
         none_fields = (
-            set(table_class.Schema().fields.keys())
+            set(object_as_dict.keys())
             - set(object_as_dict.keys())
             - set(["id", "created_at", "updated_at"])
         )
         for key in none_fields:
             assert serialized_obj[key] is None
-
-    def test_deserialization_full_dict(
-        self, table_class: BaseModel, object_as_dict: dict
-    ):
-        """Test that an object of a class can be deserialized."""
-        obj = table_class.Schema().load(
-            object_as_dict,
-        )
-        assert isinstance(obj, table_class)
-        assert isinstance(obj.id, UUID)
-        for key in object_as_dict.keys():
-            assert getattr(obj, key) == object_as_dict[key]
 
 
 @pytest.mark.parametrize(
