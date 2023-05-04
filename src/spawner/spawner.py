@@ -18,17 +18,6 @@ class SpawnerConfiguration(SerializableBaseModel):
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
 
-    class Schema(SerializableBaseModel.Schema):
-        """Marshmallow schema for SpawnerConfiguration"""
-
-        def _make(self, data: dict) -> "SpawnerConfiguration":
-            """Constructs a SpawnerConfiguration from a dictionary.
-
-            :param data: The dictionary.
-            :return: A SpawnerConfiguration.
-            """
-            return SpawnerConfiguration(**data)
-
 
 class SpawnerConfigurationXSchedule(BaseModel):
     """Reference table class for m:n relation

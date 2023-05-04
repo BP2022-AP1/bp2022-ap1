@@ -111,13 +111,6 @@ class TestSpawnerConfiguration:
             "id": str(spawner_configuration.id),
         }
 
-    # SpawnerConfiguration currently has no own fields. It only inherits fields
-    # from BaseModel. Therefore you can only deserialze an empty dict to
-    # crate an instance of SpawnerConfiguration.
-    def test_deserialization(self):
-        spawner_configuration = SpawnerConfiguration.from_dict({})
-        assert spawner_configuration.id is not None
-
 
 class TestSpawnerConfigurationXSchedule:
     """Tests for the SpawnerConfigurationXSchedule"""
@@ -208,19 +201,3 @@ class SpawnerConfigurationXSimulationConfiguration:
             "spawner_configuration": str(spawner_x_simulation.id),
             "schedule_configuration": str(spawner_x_simulation.id),
         }
-
-    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
-    def test_deserialization(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        spawner_configuration: SpawnerConfiguration,
-    ):
-        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration.from_dict(
-            {
-                "spawner_configuration": str(spawner_configuration.id),
-                "schedule_configuration": str(simulation_configuration.id),
-            }
-        )
-        spawner_x_simulation.save()
-        assert spawner_x_simulation.spawner_configuration == spawner_configuration
-        assert spawner_x_simulation.schedule_configuration == simulation_configuration

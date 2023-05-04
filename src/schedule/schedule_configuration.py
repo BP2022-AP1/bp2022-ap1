@@ -1,4 +1,3 @@
-import marshmallow as marsh
 from peewee import DateTimeField, FloatField, ForeignKeyField, IntegerField, TextField
 
 from src.base_model import BaseModel, SerializableBaseModel
@@ -6,34 +5,6 @@ from src.base_model import BaseModel, SerializableBaseModel
 
 class ScheduleConfiguration(SerializableBaseModel):
     """Holds information to construct a schedule and its corresponding strategy"""
-
-    class Schema(SerializableBaseModel.Schema):
-        """The marshmallow schema for ScheduleConfiguration"""
-
-        schedule_type = marsh.fields.String(required=True)
-        strategy_type = marsh.fields.String(required=True)
-
-        strategy_start_tick = marsh.fields.Integer()
-        strategy_end_tick = marsh.fields.Integer()
-
-        train_schedule_train_type = marsh.fields.String()
-
-        regular_strategy_frequency = marsh.fields.Integer()
-
-        random_strategy_trains_per_1000_ticks = marsh.fields.Float()
-        random_strategy_seed = marsh.fields.Integer()
-
-        demand_strategy_power_station = marsh.fields.String()
-        demand_strategy_scaling_factor = marsh.fields.Float()
-        demand_strategy_start_datetime = marsh.fields.DateTime()
-
-        def _make(self, data: dict) -> "ScheduleConfiguration":
-            """Constructs a ScheduleConfiguration from a dict
-
-            :param data: The dict
-            :return: A ScheduleConfiguration
-            """
-            return ScheduleConfiguration(**data)
 
     schedule_type = TextField()
     strategy_type = TextField()
@@ -51,6 +22,23 @@ class ScheduleConfiguration(SerializableBaseModel):
     demand_strategy_power_station = TextField(null=True)
     demand_strategy_scaling_factor = FloatField(null=True)
     demand_strategy_start_datetime = DateTimeField(null=True)
+
+    def to_dict(self):
+        data = super().to_dict()
+        return {
+            "schedule_type": self.schedule_type,
+            "strategy_type": self.strategy_type,
+            "strategy_start_tick": self.strategy_start_tick,
+            "strategy_end_tick": self.strategy_end_tick,
+            "train_schedule_train_type": self.train_schedule_train_type,
+            "regular_strategy_frequency": self.regular_strategy_frequency,
+            "random_strategy_trains_per_1000_ticks": self.random_strategy_trains_per_1000_ticks,
+            "random_strategy_seed": self.random_strategy_seed,
+            "demand_strategy_power_station": self.demand_strategy_power_station,
+            "demand_strategy_scaling_factor": self.demand_strategy_scaling_factor,
+            "demand_strategy_start_datetime": self.demand_strategy_start_datetime,
+            **data,
+        }
 
 
 class ScheduleConfigurationXSimulationPlatform(BaseModel):
