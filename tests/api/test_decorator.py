@@ -6,7 +6,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
 @pytest.mark.parametrize(
     "route, response_code",
     [
-        ("/run", 501),
+        ("/run", 200),
         ("/schedule", 501),
         ("/simulation", 501),
         ("/component/interlocking", 501),
