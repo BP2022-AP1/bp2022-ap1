@@ -18,6 +18,7 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Signal, Train
+from src.logger.logger import Logger
 
 
 @pytest.fixture
@@ -85,12 +86,20 @@ def traffic_update(monkeypatch):
 
     return (get_rr_count, get_gg_count)
 
+@pytest.fixture
+def mock_logger() -> Logger:
+    class LoggerMock:
+        pass
+    return LoggerMock()
 
 @pytest.fixture
 def route_controller(
     configured_souc: SimulationObjectUpdatingComponent,
+    mock_logger: Logger
 ) -> RouteController:
     return RouteController(
+        logger=mock_logger,
+        priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),
     )
