@@ -11,17 +11,16 @@ from src.implementor.models import SimulationConfiguration
 class TrainSpeedFaultConfiguration(FaultConfiguration):
     """Class that contains the configuration attributes of the TrainSpeedFault class"""
 
-    class Schema(FaultConfiguration.Schema):
-        """Schema for TrainSpeedFaultConfiguration"""
-
-        affected_element_id = marsh.fields.String(required=True)
-        new_speed = marsh.fields.Float(required=True)
-
-        def _make(self, data: dict) -> "TrainSpeedFaultConfiguration":
-            return TrainSpeedFaultConfiguration(**data)
-
     affected_element_id = TextField(null=False)
     new_speed = FloatField(null=False)
+
+    def to_dict(self):
+        data = super().to_dict()
+        return {
+            **data,
+            "affected_element_id": self.affected_element_id,
+            "new_speed": self.new_speed,
+        }
 
 
 class TrainSpeedFaultConfigurationXSimulationConfiguration(BaseModel):

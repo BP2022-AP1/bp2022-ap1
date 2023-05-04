@@ -11,15 +11,14 @@ from src.implementor.models import SimulationConfiguration
 class ScheduleBlockedFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the ScheduleBlockedFault class"""
 
-    class Schema(FaultConfiguration.Schema):
-        """Schema for ScheduleBlockedFaultConfiguration"""
-
-        affected_element_id = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "ScheduleBlockedFaultConfiguration":
-            return ScheduleBlockedFaultConfiguration(**data)
-
     affected_element_id = TextField(null=False)
+
+    def to_dict(self):
+        data = super().to_dict()
+        return {
+            **data,
+            "affected_element_id": self.affected_element_id,
+        }
 
 
 class ScheduleBlockedFaultConfigurationXSimulationConfiguration(BaseModel):

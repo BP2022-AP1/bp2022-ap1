@@ -11,17 +11,16 @@ from src.implementor.models import SimulationConfiguration
 class TrainPrioFaultConfiguration(FaultConfiguration):
     """Class that contains the attributes of the TrainPrioFault class"""
 
-    class Schema(FaultConfiguration.Schema):
-        """Schema for TrainPrioFaultConfiguration"""
-
-        affected_element_id = marsh.fields.String()
-        new_prio = marsh.fields.Integer(required=True)
-
-        def _make(self, data: dict) -> "TrainPrioFaultConfiguration":
-            return TrainPrioFaultConfiguration(**data)
-
     affected_element_id = TextField()
     new_prio = IntegerField(null=False)
+
+    def to_dict(self):
+        data = super().to_dict()
+        return {
+            **data,
+            "affected_element_id": self.affected_element_id,
+            "new_prio": self.new_prio,
+        }
 
 
 class TrainPrioFaultConfigurationXSimulationConfiguration(BaseModel):
