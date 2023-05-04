@@ -1,4 +1,3 @@
-import marshmallow as marsh
 from peewee import ForeignKeyField, TextField
 
 from src.base_model import BaseModel
@@ -13,12 +12,18 @@ class TrackBlockedFaultConfiguration(FaultConfiguration):
 
     affected_element_id = TextField(null=False)
 
+    # Will be fixed with a refactoring in the future
+    # pylint: disable=duplicate-code
     def to_dict(self):
+        """Serializes PlatformBlockedFaultConfiguration objects"""
+
         data = super().to_dict()
         return {
             **data,
             "affected_element_id": self.affected_element_id,
         }
+
+    # pylint: enable=duplicate-code
 
 
 class TrackBlockedFaultConfigurationXSimulationConfiguration(BaseModel):

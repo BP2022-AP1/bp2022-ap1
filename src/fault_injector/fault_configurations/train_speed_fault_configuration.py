@@ -1,4 +1,3 @@
-import marshmallow as marsh
 from peewee import FloatField, ForeignKeyField, TextField
 
 from src.base_model import BaseModel
@@ -15,6 +14,8 @@ class TrainSpeedFaultConfiguration(FaultConfiguration):
     new_speed = FloatField(null=False)
 
     def to_dict(self):
+        """Serializes TrainSpeedFaultConfiguration objects"""
+
         data = super().to_dict()
         return {
             **data,

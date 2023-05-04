@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import marshmallow as marsh
 from peewee import (
     BigIntegerField,
     DateTimeField,

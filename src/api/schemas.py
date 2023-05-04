@@ -41,7 +41,7 @@ class SimulationConfiguration(Schema):
 
 
 class SpawnerConfiguration(Schema):
-    pass
+    """The marshmallow schema for the spawner configuration model."""
 
 
 class TokenConfiguration(Schema):

@@ -2,8 +2,8 @@ from flask import Blueprint, request
 from webargs.flaskparser import parser
 
 from src import implementor as impl
-from src.api.decorators import token_required
 from src.api import schemas
+from src.api.decorators import token_required
 
 bp = Blueprint("token", __name__)
 

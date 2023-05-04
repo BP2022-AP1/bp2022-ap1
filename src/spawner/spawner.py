@@ -18,9 +18,6 @@ class SpawnerConfiguration(SerializableBaseModel):
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
 
-    def to_dict(self):
-        return super().to_dict()
-
 
 class SpawnerConfigurationXSchedule(BaseModel):
     """Reference table class for m:n relation

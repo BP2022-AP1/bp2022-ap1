@@ -1,4 +1,3 @@
-import marshmallow as marsh
 from peewee import DateTimeField, FloatField, ForeignKeyField, IntegerField, TextField
 
 from src.base_model import BaseModel, SerializableBaseModel

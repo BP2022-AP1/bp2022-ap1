@@ -1,4 +1,3 @@
-import marshmallow as marsh
 from peewee import ForeignKeyField, IntegerField, TextField
 
 from src.base_model import BaseModel
@@ -15,6 +14,8 @@ class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
     new_speed_limit = IntegerField(null=False)
 
     def to_dict(self):
+        """Serializes TrackSpeedLimitFaultConfiguration objects"""
+
         data = super().to_dict()
         return {
             **data,
