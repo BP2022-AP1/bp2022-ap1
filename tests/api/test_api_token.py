@@ -1,5 +1,7 @@
 import uuid
 
+import pytest
+
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
 
@@ -8,9 +10,15 @@ class TestApiToken:
     Test the /token endpoint
     """
 
-    def test_post(self, client, clear_token):
-        response = client.post("/token", headers={TOKEN_HEADER: clear_token})
+    @pytest.mark.parametrize("data", [{"name": "user", "permission": "admin"}])
+    def test_post(self, client, clear_token, data):
+        response = client.post("/token", headers={TOKEN_HEADER: clear_token}, json=data)
         assert response.status_code == 501
+
+    @pytest.mark.parametrize("data", [{}])
+    def test_post_invalid(self, client, clear_token, data):
+        response = client.post("/token", headers={TOKEN_HEADER: clear_token}, json=data)
+        assert response.status_code == 422
 
     def test_get_all(self, client, clear_token):
         response = client.get("/token", headers={TOKEN_HEADER: clear_token})
