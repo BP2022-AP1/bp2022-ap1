@@ -557,7 +557,7 @@ def demand_train_schedule_data(
         "schedule_type": "TrainSchedule",
         "strategy_type": "DemandScheduleStrategy",
         "strategy_start_tick": strategy_start_tick,
-        "strategy_end_tick": strategy_start_tick + ticks,
+        "strategy_end_tick": strategy_start_tick + int(ticks),
         "train_schedule_train_type": "cargo",
         "demand_strategy_power_station": demand_strategy_power_station,
         "demand_strategy_scaling_factor": demand_strategy_scaling_factor,
