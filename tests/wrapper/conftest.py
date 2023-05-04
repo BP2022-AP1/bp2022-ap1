@@ -11,7 +11,7 @@ from src.interlocking_component.infrastructure_provider import (
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train, Signal
 from src.wrapper.train_spawner import TrainSpawner
 
 
@@ -20,8 +20,18 @@ def results(monkeypatch):
     def get_subscription_result():
         def subscription_results():
             return defaultdict(int)
-
-        return defaultdict(subscription_results)
+        dict = defaultdict(subscription_results)
+        edge_dict = {
+            constants.VAR_POSITION: (
+                100,
+                100,
+            ),
+            constants.VAR_ROAD_ID: "cfc57-0",
+            constants.VAR_ROUTE: "testing-route",
+            constants.VAR_SPEED: 10.2,
+        }
+        dict["fake-sim-train"] = edge_dict
+        return dict
 
     monkeypatch.setattr(
         simulation, "getAllSubscriptionResults", get_subscription_result
