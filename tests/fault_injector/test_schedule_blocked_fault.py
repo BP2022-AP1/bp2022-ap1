@@ -4,12 +4,15 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
     ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
+from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
-from src.schedule.schedule import ScheduleConfiguration
 from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
+)
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
 )
 from tests.decorators import recreate_db_setup
 
@@ -29,37 +32,6 @@ class TestScheduleBlockedFault:
         return Logger(run.id)
 
     @pytest.fixture
-    def schedule(self):
-        schedule_configuration = ScheduleConfiguration(
-            schedule_type="TrainSchedule",
-            strategy_type="RegularScheduleStrategy",
-            train_schedule_train_type="cargo",
-            regular_strategy_start_tick=10,
-            regular_strategy_frequency=100,
-        )
-        schedule_configuration.save()
-        return schedule_configuration
-
-    @pytest.fixture
-    def spawner_configuration(self, schedule):
-        configuration = SpawnerConfiguration()
-        configuration.save()
-        SpawnerConfigurationXSchedule(
-            spawner_configuration_id=configuration.id,
-            schedule_configuration_id=schedule.id,
-        ).save()
-        return configuration
-
-    @pytest.fixture
-    def spawner(self, spawner_configuration, logger):
-        spawner = Spawner(
-            logger=logger,
-            configuration=spawner_configuration,
-            traci_wrapper=self.MockTraCIWrapper(),
-        )
-        return spawner
-
-    @pytest.fixture
     def schedule_blocked_fault_configuration(self, schedule):
         return ScheduleBlockedFaultConfiguration.create(
             **{
@@ -67,6 +39,7 @@ class TestScheduleBlockedFault:
                 "end_tick": 300,
                 "description": "test ScheduleBlockedFault",
                 "affected_element_id": schedule.id,
+                "strategy": "regular",
             }
         )
 
@@ -75,12 +48,16 @@ class TestScheduleBlockedFault:
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
         logger: Logger,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
+        interlocking: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
             configuration=schedule_blocked_fault_configuration,
             logger=logger,
             spawner=spawner,
+            simulation_object_updater=simulation_object_updater,
+            interlocking=interlocking,
         )
 
     # It would be better to test if trains spawn after inject_fault.

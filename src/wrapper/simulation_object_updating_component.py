@@ -7,6 +7,8 @@ import traci
 from src.component import Component
 from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
+    Edge,
+    Node,
     Platform,
     Signal,
     SimulationObject,
@@ -42,6 +44,14 @@ class SimulationObjectUpdatingComponent(Component):
         return [x for x in self._simulation_objects if isinstance(x, Train)]
 
     @property
+    def nodes(self) -> List[Node]:
+        """Returns all nodes in the simulation
+
+        :return: The nodes in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Node)]
+
+    @property
     def switches(self) -> List[Switch]:
         """Returns all switches in the simulation
 
@@ -64,6 +74,14 @@ class SimulationObjectUpdatingComponent(Component):
         :return: The platforms in the simulation
         """
         return [x for x in self._simulation_objects if isinstance(x, Platform)]
+
+    @property
+    def edges(self) -> List[Edge]:
+        """Returns all tracks in the simulation
+
+        :return: The tracks in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Edge)]
 
     @property
     def tracks(self) -> List[Track]:
@@ -94,7 +112,20 @@ class SimulationObjectUpdatingComponent(Component):
         subscription_results = traci.simulation.getAllSubscriptionResults()
 
         for simulation_object in self._simulation_objects:
-            simulation_object.update(subscription_results[simulation_object.traci_id])
+            simulation_object.update(subscription_results[simulation_object.identifier])
+
+        self._remove_stale_vehicles()
+
+    def _remove_stale_vehicles(self):
+        simulation_vehicles = set(traci.vehicle.getIDList())
+        stored_vehicles = set((train.identifier for train in self.trains))
+
+        vehicles_to_remove = stored_vehicles - simulation_vehicles
+
+        for vehicle in vehicles_to_remove:
+            self._simulation_objects.remove(
+                next(train for train in self.trains if train.identifier == vehicle)
+            )
 
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)
@@ -108,9 +139,9 @@ class SimulationObjectUpdatingComponent(Component):
             sumolib.xml.parse(additional_file, "trainStop")
         )
 
-        # Tracks
+        # signals
         self._simulation_objects += [
-            Track.from_simulation(edge, self) for edge in net.getEdges()
+            Signal.from_simulation(signal, self) for signal in net.getTrafficLights()
         ]
 
         # switches
@@ -120,10 +151,32 @@ class SimulationObjectUpdatingComponent(Component):
             if len(node.getConnections()) >= 3
         ]
 
-        # signals
+        # other nodes
+        self._simulation_objects += list(
+            filter(
+                lambda x: x is not None,
+                (
+                    Node.from_simulation(node, self)
+                    for node in net.getNodes()
+                    if len(node.getConnections()) < 3
+                ),
+            )
+        )
+
+        # Edges
         self._simulation_objects += [
-            Signal.from_simulation(signal, self) for signal in net.getTrafficLights()
+            Edge.from_simulation(edge, self) for edge in net.getEdges()
         ]
+
+        # Tracks
+        for edge in (x for x in self.edges if x.track is None):
+            if edge.identifier.endswith("-re"):
+                identifier = edge.identifier.split("-re")[0]
+            else:
+                identifier = edge.identifier + "-re"
+
+            reverse = [x for x in self.edges if x.identifier == identifier][0]
+            self._simulation_objects.append(Track(edge, reverse))
 
         # platforms
         self._simulation_objects += [

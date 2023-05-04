@@ -22,20 +22,6 @@ class TestTrainSpeedFault:
         pass
 
     @pytest.fixture
-    def train_add(self, monkeypatch):
-        def add_train(identifier, route, train_type):
-            assert identifier is not None
-            assert route is not None
-            assert train_type is not None
-
-        monkeypatch.setattr(vehicle, "add", add_train)
-
-    @pytest.fixture
-    # pylint: disable-next=unused-argument
-    def train(self, train_add) -> Train:
-        return Train(identifier="fault injector train", train_type="cargo")
-
-    @pytest.fixture
     def train_speed_fault_configuration(self, train: Train):
         return TrainSpeedFaultConfiguration.create(
             **{
@@ -44,6 +30,7 @@ class TestTrainSpeedFault:
                 "description": "test TrainSpeedFault",
                 "affected_element_id": train.identifier,
                 "new_speed": 30,
+                "strategy": "regular",
             }
         )
 
@@ -52,13 +39,13 @@ class TestTrainSpeedFault:
         self,
         train_speed_fault_configuration: TrainSpeedFaultConfiguration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrainSpeedFault(
             configuration=train_speed_fault_configuration,
             logger=logger,
-            wrapper=wrapper,
+            simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
 
@@ -106,3 +93,19 @@ class TestTrainSpeedFault:
         with pytest.raises(NotImplementedError):
             train_speed_fault.resolve_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.old_speed == 50
+
+    def test_resolve_train_not_in_simulation(
+        self, tick, train_speed_fault: TrainSpeedFault, train: Train
+    ):
+        """tests that nothing happens when resolving the TrainSpeedFault while the affected train is not in the simulation"""
+        train_speed_fault.train = train
+        train_speed_fault.old_speed = 3
+        train.train_type._max_speed = 5
+        assert (
+            train_speed_fault.get_train_or_none(
+                train_speed_fault.simulation_object_updater, train.identifier
+            )
+            == None
+        )
+        train_speed_fault.resolve_fault(tick)
+        assert train.train_type.max_speed == 5

@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import marshmallow as marsh
 from peewee import (
     BigIntegerField,
     DateTimeField,
@@ -36,17 +35,6 @@ from src.implementor.models import Run
 class LogEntry(BaseModel):
     """Represents a single log entry. Used to log messages from the simulation."""
 
-    class Schema(BaseModel.Schema):
-        """The marshmallow schema for the LogEntry model."""
-
-        timestamp = marsh.fields.DateTime(required=True)
-        tick = marsh.fields.Integer(required=True)
-        message = marsh.fields.String(required=True)
-        run_id = marsh.fields.UUID(required=True)
-
-        def _make(self, data: dict) -> "LogEntry":
-            return LogEntry(**data)
-
     timestamp = DateTimeField(null=False, default=datetime.now())
     tick = BigIntegerField(null=False)
     message = TextField(null=False)
@@ -56,42 +44,17 @@ class LogEntry(BaseModel):
 class TrainSpawnLogEntry(LogEntry):
     """A LogEntry that represents the spawning of a train."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the TrainSpawnLogEntry model."""
-
-        train_id = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "TrainSpawnLogEntry":
-            return TrainSpawnLogEntry(**data)
-
     train_id = TextField(null=False)
 
 
 class TrainRemoveLogEntry(LogEntry):
     """A LogEntry that represents the removal of a train."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the TrainRemoveLogEntry model."""
-
-        train_id = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "TrainRemoveLogEntry":
-            return TrainRemoveLogEntry(**data)
-
     train_id = TextField(null=False)
 
 
 class TrainArrivalLogEntry(LogEntry):
     """A LogEntry that represents the arrival of a train at a station."""
-
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the TrainArrivalLogEntry model."""
-
-        train_id = marsh.fields.String(required=True)
-        station_id = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "TrainArrivalLogEntry":
-            return TrainArrivalLogEntry(**data)
 
     train_id = TextField(null=False)
     station_id = TextField(null=False)
@@ -100,15 +63,6 @@ class TrainArrivalLogEntry(LogEntry):
 class TrainDepartureLogEntry(LogEntry):
     """A LogEntry that represents the departure of a train from a station."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the TrainDepartureLogEntry model."""
-
-        train_id = marsh.fields.String(required=True)
-        station_id = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "TrainDepartureLogEntry":
-            return TrainDepartureLogEntry(**data)
-
     train_id = TextField(null=False)
     station_id = TextField(null=False)
 
@@ -116,43 +70,17 @@ class TrainDepartureLogEntry(LogEntry):
 class CreateFahrstrasseLogEntry(LogEntry):
     """A LogEntry that represents the creation of a fahrstrasse."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the CreateFahrstrasseLogEntry model."""
-
-        fahrstrasse = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "CreateFahrstrasseLogEntry":
-            return CreateFahrstrasseLogEntry(**data)
-
     fahrstrasse = TextField(null=False)
 
 
 class RemoveFahrstrasseLogEntry(LogEntry):
     """A LogEntry that represents the removal of a fahrstrasse."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the RemoveFahrstrasseLogEntry model."""
-
-        fahrstrasse = marsh.fields.String(required=True)
-
-        def _make(self, data: dict) -> "RemoveFahrstrasseLogEntry":
-            return RemoveFahrstrasseLogEntry(**data)
-
     fahrstrasse = TextField(null=False)
 
 
 class SetSignalLogEntry(LogEntry):
     """A LogEntry that represents the setting of a signal."""
-
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the SetSignalLogEntry model."""
-
-        signal_id = marsh.fields.UUID(required=True)
-        state_before = marsh.fields.Integer(required=True)
-        state_after = marsh.fields.Integer(required=True)
-
-        def _make(self, data: dict) -> "SetSignalLogEntry":
-            return SetSignalLogEntry(**data)
 
     signal_id = UUIDField(null=False)
     state_before = IntegerField(null=False)
@@ -162,16 +90,6 @@ class SetSignalLogEntry(LogEntry):
 class TrainEnterBlockSectionLogEntry(LogEntry):
     """A LogEntry that represents the entry of a train into a block section."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the TrainEnterBlockSectionLogEntry model."""
-
-        train_id = marsh.fields.String(required=True)
-        block_section_id = marsh.fields.String(required=True)
-        block_section_length = marsh.fields.Float(required=True)
-
-        def _make(self, data: dict) -> "TrainEnterBlockSectionLogEntry":
-            return TrainEnterBlockSectionLogEntry(**data)
-
     train_id = TextField(null=False)
     block_section_id = TextField(null=False)
     block_section_length = FloatField(null=False)
@@ -180,16 +98,6 @@ class TrainEnterBlockSectionLogEntry(LogEntry):
 class TrainLeaveBlockSectionLogEntry(LogEntry):
     """A LogEntry that represents the leaving of a train from a block section."""
 
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the TrainLeaveBlockSectionLogEntry model."""
-
-        train_id = marsh.fields.String(required=True)
-        block_section_id = marsh.fields.String(required=True)
-        block_section_length = marsh.fields.Float(required=True)
-
-        def _make(self, data: dict) -> "TrainLeaveBlockSectionLogEntry":
-            return TrainLeaveBlockSectionLogEntry(**data)
-
     train_id = TextField(null=False)
     block_section_id = TextField(null=False)
     block_section_length = FloatField(null=False)
@@ -197,22 +105,6 @@ class TrainLeaveBlockSectionLogEntry(LogEntry):
 
 class InjectFaultLogEntry(LogEntry):
     """A LogEntry that represents the injection of a fault."""
-
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the InjectFaultLogEntry model."""
-
-        platform_blocked_fault_configuration = marsh.fields.UUID(required=False)
-        track_blocked_fault_configuration = marsh.fields.UUID(required=False)
-        track_speed_limit_fault_configuration = marsh.fields.UUID(required=False)
-        schedule_blocked_fault_configuration = marsh.fields.UUID(required=False)
-        train_prio_fault_configuration = marsh.fields.UUID(required=False)
-        train_speed_fault_configuration = marsh.fields.UUID(required=False)
-        affected_element = marsh.fields.String(required=True)
-        value_before = marsh.fields.String(required=False)
-        value_after = marsh.fields.String(required=False)
-
-        def _make(self, data: dict) -> "InjectFaultLogEntry":
-            return InjectFaultLogEntry(**data)
 
     platform_blocked_fault_configuration = ForeignKeyField(
         PlatformBlockedFaultConfiguration, null=True
@@ -239,19 +131,6 @@ class InjectFaultLogEntry(LogEntry):
 
 class ResolveFaultLogEntry(LogEntry):
     """A LogEntry that represents the resolving of a fault."""
-
-    class Schema(LogEntry.Schema):
-        """The marshmallow schema for the ResolveFaultLogEntry model."""
-
-        platform_blocked_fault_configuration = marsh.fields.UUID(required=False)
-        track_blocked_fault_configuration = marsh.fields.UUID(required=False)
-        track_speed_limit_fault_configuration = marsh.fields.UUID(required=False)
-        schedule_blocked_fault_configuration = marsh.fields.UUID(required=False)
-        train_prio_fault_configuration = marsh.fields.UUID(required=False)
-        train_speed_fault_configuration = marsh.fields.UUID(required=False)
-
-        def _make(self, data: dict) -> "ResolveFaultLogEntry":
-            return ResolveFaultLogEntry(**data)
 
     platform_blocked_fault_configuration = ForeignKeyField(
         PlatformBlockedFaultConfiguration, null=True

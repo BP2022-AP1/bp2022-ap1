@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 
 import pytest
@@ -6,120 +7,7 @@ from traci import constants, edge, trafficlight, vehicle
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Platform, Signal, Switch, Track, Train
-
-
-@pytest.fixture
-def traffic_update(monkeypatch):
-    def set_traffic_light_state(identifier: str, state: str) -> None:
-        # pylint: disable=unused-argument
-        assert state in ("rr", "GG")
-
-    monkeypatch.setattr(trafficlight, "setRedYellowGreenState", set_traffic_light_state)
-
-
-@pytest.fixture
-def track():
-    return Track("track")
-
-
-@pytest.fixture
-def track2():
-    return Track("track2")
-
-
-@pytest.fixture
-def speed_update(monkeypatch):
-    def set_max_speed(identifier: str, speed: float) -> None:
-        assert identifier == "track"
-        assert speed == 100
-
-    monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
-def train(train_add):
-    # pylint: disable=unused-argument
-    created_train = Train(
-        identifier="fake-sim-train",
-        train_type="fancy-ice",
-        timetable=[],
-        from_simulator=True,
-    )
-    created_train.update(
-        {
-            constants.VAR_POSITION: (
-                100,
-                100,
-            ),
-            constants.VAR_ROAD_ID: "track",
-            constants.VAR_ROUTE: "testing-route",
-            constants.VAR_SPEED: 10.2,
-        }
-    )
-    created_train.train_type.update(
-        {
-            constants.VAR_MAXSPEED: 11,
-        }
-    )
-
-    return created_train
-
-
-@pytest.fixture
-def vehicle_route(monkeypatch):
-    def set_route_id(train_id: str, route_id: str):
-        assert train_id == "fake-sim-train"
-        assert route_id == "testing-route-beta"
-
-    monkeypatch.setattr(vehicle, "setRouteID", set_route_id)
-
-
-@pytest.fixture
-def max_speed(monkeypatch):
-    def set_max_speed(train_id: str, speed: float):
-        assert train_id == "fake-sim-train"
-        assert speed == 100
-
-    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
-        assert identifier is not None
-        assert route is not None
-        assert train_type is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-def switch():
-    return Switch(identifier="fancy-switch")
-
-
-@pytest.fixture
-def platform() -> Platform:
-    return Platform(
-        identifier="fancy-city-platform-1",
-        platform_id="fancy-city-platform-1",
-        track_id="track",
-    )
-
-
-@pytest.fixture
-def souc(traffic_update) -> SimulationObjectUpdatingComponent:
-    # pylint: disable=unused-argument
-    return SimulationObjectUpdatingComponent()
-
-
-@pytest.fixture
-def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
-    # pylint: disable=unused-argument
-    return SimulationObjectUpdatingComponent(
-        sumo_configuration="sumo-config/example.scenario.sumocfg"
-    )
+from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
 
 
 class TestSignal:
@@ -138,35 +26,63 @@ class TestSignal:
         assert signal.state == Signal.State.GO
 
 
+class TestEdge:
+    """Tests for the edge component"""
+
+    def test_update_speed(self, edge1, speed_update):
+        # pylint: disable=unused-argument
+        edge1.max_speed = 100
+
+        assert edge1.max_speed == 100
+
+    def test_default_blocked(self, edge1):
+        assert not edge1.blocked
+
+    def test_update_blocked(self, edge1):
+        edge1.blocked = True
+
+        assert edge1.blocked
+
+
 class TestTrack:
-    """Tests for the track component"""
+    """Tests the track component"""
 
     def test_update_speed(self, track, speed_update):
         # pylint: disable=unused-argument
-        track.max_speed = 100
 
-        assert track.max_speed == 100
+        track.max_speed = (100, 200)
+        assert track.edges[0].max_speed == 100
+        assert track.edges[1].max_speed == 200
+        assert track.max_speed == (100, 200)
 
-    def test_default_blocked(self, track):
-        assert not track.blocked
+        track.max_speed = 150
+        assert track.edges[0].max_speed == 150
+        assert track.edges[1].max_speed == 150
+        assert track.max_speed == 150
 
-    def test_update_blocked(self, track):
+    def test_blocked(self, track):
+        track.blocked = (True, False)
+        assert track.edges[0].blocked
+        assert not track.edges[1].blocked
+        assert track.blocked == (True, False)
+
         track.blocked = True
-
+        assert track.edges[0].blocked
+        assert track.edges[1].blocked
         assert track.blocked
 
 
 class TestTrain:
     """Tests for the train object"""
 
-    def test_track(self, train, souc, track):
+    def test_edge(self, train, souc, edge1):
         souc.simulation_objects.append(train)
-        souc.simulation_objects.append(track)
+        souc.simulation_objects.append(edge1)
 
         train.updater = souc
-        track.updater = souc
+        edge1.updater = souc
 
-        assert train.track == track
+        assert train.edge == edge1
 
     def test_position(self, train):
         assert train.position == (
@@ -214,12 +130,12 @@ class TestTrain:
         # pylint: disable=unused-argument
         Train(identifier="fancy-rb-001", train_type="fancy-rb")
 
-    def test_update(self, souc, train, track2):
+    def test_update(self, souc, train, edge2):
         train.updater = souc
-        track2.updater = souc
+        edge2.updater = souc
 
         souc.simulation_objects.append(train)
-        souc.simulation_objects.append(track2)
+        souc.simulation_objects.append(edge2)
 
         train.update(
             {
@@ -227,7 +143,7 @@ class TestTrain:
                     110,
                     90,
                 ),
-                constants.VAR_ROAD_ID: "track2",
+                constants.VAR_ROAD_ID: "edge2",
                 constants.VAR_ROUTE: "ending-route",
                 constants.VAR_SPEED: 10,
             }
@@ -238,7 +154,7 @@ class TestTrain:
             }
         )
 
-        assert train.track == track2
+        assert train.edge == edge2
         assert train.position == (
             110,
             90,
@@ -291,14 +207,14 @@ class TestSwitch:
 class TestPlatform:
     """Tests for the platform object"""
 
-    def test_track(self, souc, platform, track):
-        souc.simulation_objects.append(track)
+    def test_edge(self, souc, platform, edge1):
+        souc.simulation_objects.append(edge1)
         souc.simulation_objects.append(platform)
 
-        track.updater = souc
+        edge1.updater = souc
         platform.updater = souc
 
-        assert platform.track == track
+        assert platform.edge == edge1
 
     def test_platform_id(self, platform):
         assert platform.platform_id == "fancy-city-platform-1"

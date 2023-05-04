@@ -4,10 +4,11 @@
 import json
 
 
-def get_all_run_id(options):
+def get_all_run_ids(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["simulationId"]
+    :param token: Token object of the current user
 
     """
 
@@ -17,10 +18,11 @@ def get_all_run_id(options):
     return json.dumps(""), 501  # 200
 
 
-def create_run(body):
+def create_run(body, token):
     """
 
     :param body: The parsed body of the request
+    :param token: Token object of the current user
     """
 
     # Implement your business logic here
@@ -36,10 +38,11 @@ def create_run(body):
     )
 
 
-def get_run(options):
+def get_run(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
+    :param token: Token object of the current user
 
     """
 
@@ -49,10 +52,11 @@ def get_run(options):
     return json.dumps("<map>"), 501  # 200
 
 
-def delete_run(options):
+def delete_run(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
         options["id"]
+    :param token: Token object of the current user
 
     """
 

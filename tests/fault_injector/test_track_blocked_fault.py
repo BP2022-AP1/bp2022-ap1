@@ -28,6 +28,7 @@ class TestTrackBlockedFault:
                 "end_tick": 300,
                 "description": "test TrackBlockedFault",
                 "affected_element_id": track.identifier,
+                "strategy": "regular",
             }
         )
 
@@ -36,13 +37,13 @@ class TestTrackBlockedFault:
         self,
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrackBlockedFault(
             configuration=track_blocked_fault_configuration,
             logger=logger,
-            wrapper=wrapper,
+            simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
 

@@ -21,13 +21,24 @@ peewee = "^3.16.0"
 peewee-migrate = "^1.6.6"
 marshmallow = "^3.19.0"
 psycopg2 = "^2.9.5"
-interlocking = { git = "https://github.com/Lietze/interlocking.git", rev = "2be51e6" }
+interlocking = { git = "https://github.com/bp2022-ap1/interlocking.git", branch = "add-Poetry-support" }
 flask = "^2.2.3"
 webargs = "^8.2.0"
 freezegun = "^1.2.2"
+yaramo = { git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/replace-connected-nodes-with-edges" }
+orm-importer = { git = "https://github.com/bp2022-ap1/orm-importer", branch = "refactor/replace-connected-nodes-edges" }
+planpro-exporter = { git = "https://github.com/bp2022-ap1/planpro-exporter", branch = "refactor/replace-connected-nodes-edges" }
+planpro-importer = { git = "https://github.com/bp2022-ap1/planpro-importer", branch = "refactor/replace-connected-nodes-edges" }
+railway-route-generator = { git = "https://github.com/bp2022-ap1/railway-route-generator", branch = "refactor/replace-connected-nodes-edges" }
+sumoexporter = { git = "https://github.com/bp2022-ap1/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
+track-signal-generator = { git = "https://github.com/bp2022-ap1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
 grafana-pandas-datasource = { git = "https://github.com/BP2022-AP1/grafana-pandas-datasource.git" }
 requests = "^2.28.2"
+matplotlib = "^3.7.1"
+scipy = "1.9.2"
+requests = "^2.28.2"
+celery = "^5.2.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
@@ -36,7 +47,17 @@ isort = "^5.12.0"
 pylint = "^2.17.0"
 poethepoet = "^0.19.0"
 pytest-cov = "^4.0.0"
+python-dotenv = "^1.0.0"
+redis = "^3.5.3"
+waitress = "^2.1.2"
 
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "6.2.0"
+sphinx-book-theme = "1.0.1"
+sphinxcontrib-openapi = "0.8.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -70,49 +91,63 @@ build-backend = "poetry.core.masonry.api"
     help = "Run lint in /src and /tests directory"
     sequence  = ["lint-src", "lint-tests"]
 
+    [tool.poe.tasks.db-test]
+    help = "Call DB utilities for test database"
+    cmd = "python3 db/local/db.py"
+    envfile = ".env.test"
+
+    [tool.poe.tasks.db]
+    help = "Call DB utilities for dev and prod database"
+    cmd = "python3 db/local/db.py"
+    envfile = [".env.shared", ".env.secret"]
+
     [tool.poe.tasks.test]
     help = "Run DB and test with pytest"
-    sequence  = ["grafana-test", "db run test", "sleep", "db recreate", "test-pytest", "db stop test"]
-    envfile=".env.test"
+    sequence = ["test-deps", "sleep", "db-test recreate", "test-pytest"]
+    envfile = [".env.shared", ".env.test"]
+
+    [tool.poe.tasks.test-deps]
+    help = "Initializes needed components for tests"
+    cmd = "docker compose up -d grafana-test celery-worker postgresql-test"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
-    cmd = "pytest --cov=src --cov-report xml"
+    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml"
 
     [tool.poe.tasks.ci]
     help = "Run formatting, linting and testing in preparation for CI"
     sequence = ["format", "lint", "test"]
 
-    [tool.poe.tasks.db]
-    help = "Call DB utilities"
-    cmd = "python3 db/local/db.py"
-
     [tool.poe.tasks.dev]
     help = "Run flask app in development mode and run db"
-    sequence = ["grafana-dev", "sleep","sleep", "db run dev", "dev-flask"]
-    envfile=[".env.shared", ".env.secret"]
+    sequence = ["docker compose up dev"]
+    cmd = "docker compose up dev"
+    envfile = ".env.secret"
 
-    [tool.poe.tasks.dev-flask]
-    help = "Run flask app in development mode"
-    cmd = "flask --app src run --debug"
-
-    [tool.poe.tasks.grafana-test]
-    help = "Run grafana"
-    cmd = "docker-compose -f docker-compose.yml up -d grafana-test"
-    envfile=".env.test"
-
-    [tool.poe.tasks.grafana-dev]
-    help = "Run grafana"
-    cmd = "docker-compose -f docker-compose.yml up -d grafana-dev"
-    envfile=[".env.shared", ".env.secret"]
+    [tool.poe.tasks.prod]
+    help = "Run flask app in development mode and run db"
+    cmd = "docker compose up prod"
+    envfile = ".env.secret"
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"
-    cmd = "pytest --co --cov=src"
+    cmd = "pytest --co --cov=src --cov-config=.coveragerc"
 
     [tool.poe.tasks.cov-xml]
     help = "Run coverage report and write to XML file"
-    cmd = "pytest --co --cov=src --cov-report xml"
+    cmd = "pytest --co --cov=src  --cov-config=.coveragerc --cov-report xml"
+
+    [tool.poe.tasks.docs-build]
+    help = "Build the documentation with sphinx"
+    cmd = "sphinx-build -b html docs/source/ docs/build/html"
+
+    [tool.poe.tasks.docs-open]
+    help = "Open the built documentation"
+    cmd = "open docs/build/html/index.html"
+
+    [tool.poe.tasks.docs]
+    help = "Build and open the documentation of the REST API"
+    sequence = ["docs-build", "docs-open"]
 
 [tool.isort]
 profile = "black"

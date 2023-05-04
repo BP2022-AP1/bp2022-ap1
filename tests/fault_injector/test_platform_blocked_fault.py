@@ -32,6 +32,7 @@ class TestPlatformBlockedFault:
                 "end_tick": 200,
                 "description": "test PlatformBlockedFault",
                 "affected_element_id": platform.identifier,
+                "strategy": "regular",
             }
         )
 
@@ -40,13 +41,13 @@ class TestPlatformBlockedFault:
         self,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
         logger: Logger,
-        wrapper: SimulationObjectUpdatingComponent,
+        simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return PlatformBlockedFault(
             configuration=platform_blocked_fault_configuration,
             logger=logger,
-            wrapper=wrapper,
+            simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
 

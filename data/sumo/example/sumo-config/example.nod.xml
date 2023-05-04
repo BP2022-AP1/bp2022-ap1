@@ -1,0 +1,21 @@
+<nodes>
+<node id="8c7f3" x="-4533770.0" y="-5625770.0" type="priority"/>
+<node id="3e5bb" x="-4533520.0" y="-5625770.0" type="priority"/>
+<node id="65550" x="-4533520.0" y="-5625760.0" type="priority"/>
+<node id="3cdb8" x="-4533520.0" y="-5625750.0" type="priority"/>
+<node id="1a095" x="-4533420.0" y="-5625760.0" type="priority"/>
+<node id="ccc1c" x="-4533695.0" y="-5625770.0" type="priority"/>
+<node id="13bb4" x="-4533770.0" y="-5625780.0" type="priority"/>
+<node id="c2569" x="-4533720.0" y="-5625770.0" type="priority"/>
+<node id="3b2ee" x="-4533670.0" y="-5625760.0" type="priority"/>
+<node id="73093" x="-4533670.0" y="-5625770.0" type="priority"/>
+<node id="61322" x="-4533470.0" y="-5625760.0" type="priority"/>
+<node id="637cdc98-0b49-4eff-bd2f-b9549becfc57-km-25" x="-4533745.0" y="-5625770.0" type="rail_signal"/>
+<node id="3ca2dedd-2ffc-4b75-9083-3ab21f1460b0-km-25" x="-4533693.211917272" y="-5625779.284766909" type="rail_signal"/>
+<node id="6d449885-ff8d-4b6e-9b72-38530eb8f1ba-km-25" x="-4533645.0" y="-5625770.0" type="rail_signal"/>
+<node id="d9205287-7ce7-45c9-8cb2-e2579327df3b-km-25" x="-4533645.0" y="-5625760.0" type="rail_signal"/>
+<node id="aeebf46c-cdd8-48df-be4a-8fcd265e5339-km-25" x="-4533646.788082728" y="-5625750.715233091" type="rail_signal"/>
+<node id="851172f3-4321-412f-96e8-b992d129c244-km-25" x="-4533495.0" y="-5625750.0" type="rail_signal"/>
+<node id="4f8ce8a3-eeba-498b-a787-6bbc635faa47-km-25" x="-4533495.0" y="-5625760.0" type="rail_signal"/>
+<node id="01ff1b08-fb63-457e-9823-c523938b2e35-km-25" x="-4533445.0" y="-5625760.0" type="rail_signal"/>
+</nodes>

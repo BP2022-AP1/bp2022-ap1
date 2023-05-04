@@ -24,11 +24,6 @@ class TestTokenFailingInit:
         with pytest.raises(peewee.IntegrityError):
             Token(**init_dict).save(force_insert=True)
 
-    def test_deserialization(self, init_dict: dict):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            Token.Schema().load(init_dict)
-
 
 class TestTokenSuccessfulInit:
     """Test that a object of a class can be created and deserialized with valid data."""
@@ -86,41 +81,3 @@ class TestTokenSuccessfulInit:
             # We don't need the value of serialized_obj["hashedToken"] because it throws an error
             # pylint: disable-next=pointless-statement
             serialized_obj["hashedToken"]
-
-    @pytest.mark.parametrize(
-        "init_dict, expected_values",
-        [
-            (
-                {
-                    "name": "Owner",
-                    "permission": "admin",
-                },
-                {
-                    "name": "Owner",
-                    "permission": "admin",
-                    "hashedToken": "hash",
-                },
-            ),
-        ],
-    )
-    def test_deserialization(self, init_dict: dict, expected_values: dict):
-        """Test that an object of a class can be deserialized."""
-        obj = Token.Schema().load(
-            init_dict,
-        )
-        assert isinstance(obj, Token)
-        obj.hashedToken = "hash"
-        assert isinstance(obj.id, UUID)
-        for key in expected_values.keys():
-            assert getattr(obj, key) == expected_values[key]
-
-    def test_deserialization_with_hashed_token(self):
-        """Test that an object of a class cannot be deserialized."""
-        with pytest.raises(marsh.exceptions.ValidationError):
-            Token.Schema().load(
-                {
-                    "name": "Owner",
-                    "permission": "admin",
-                    "hashedToken": "hash",
-                },
-            )

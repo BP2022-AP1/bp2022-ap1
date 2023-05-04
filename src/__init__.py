@@ -1,7 +1,9 @@
 import json
+import abc
 import os
 from os.path import join
 
+from celery import Celery, Task
 from flask import Flask
 from grafana_pandas_datasource.service import pandas_component
 from requests import RequestException, post
@@ -63,11 +65,22 @@ def create_app(test_config=None) -> Flask:
     :return: A flask app
     """
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(SECRET_KEY="dev")
+
+    app.config.from_mapping(
+        CELERY={
+            "broker_url": os.environ["CELERY_BROKER_URL"],
+            "result_backend": os.environ["CELERY_RESULT_BACKEND"],
+            "task_ignore_result": True,
+        }
+    )
+
     if test_config is None:
         app.config.from_pyfile("config.py", silent=True)
     else:
         app.config.from_mapping(test_config)
+
+    app.config.from_prefixed_env()
+    celery_init_app(app)
 
     try:
         print(f"Instance path = {app.instance_path}")
@@ -87,3 +100,21 @@ def create_app(test_config=None) -> Flask:
     initialize_grafana()
 
     return app
+
+
+def celery_init_app(app: Flask) -> Celery:
+    """Initialize celery instance and wrap around flask app"""
+
+    class FlaskTask(Task):
+        """Wrap celery task around flask app"""
+
+        @abc.abstractmethod
+        def __call__(self, *args: object, **kwargs: object) -> object:
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery_app = Celery(app.name, task_cls=FlaskTask)
+    celery_app.config_from_object(app.config["CELERY"])
+    celery_app.set_default()
+    app.extensions["celery"] = celery_app
+    return celery_app
