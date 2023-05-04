@@ -22,7 +22,7 @@ def get_all_schedule_ids(token):
 @token_required
 def create_schedule(token):
     """Create a schedule"""
-    schema = schemas.Schedule()
+    schema = schemas.ScheduleConfiguration()
 
     body = parser.parse(schema, request, location="json")
 

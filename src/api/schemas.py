@@ -1,141 +1,101 @@
 from marshmallow import Schema, fields
 
-# ------------------------------- #
-# THIS FILE WILL BE REMOVED LATER #
-# ------------------------------- #
-
-
-class CreateInterlockingConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateRunInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateScheduleBlockedFaultConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateScheduleInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateSimulationConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateSpawnerConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateTrackBlockedFaultConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateTrackSpeedLimitFaultConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateTrainPrioFaultConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class CreateTrainSpeedFaultConfigurationInlineResp(Schema):
-    id = fields.UUID()
-
-
-class GetAllRunIdInlineResp(Schema):
-    pass
-
-
-class GetAllScheduleIdsInlineResp(Schema):
-    pass
-
-
-class GetAllSimulationIdInlineResp(Schema):
-    pass
-
-
-class GetInterlockingConfigurationIdsInlineResp(Schema):
-    pass
-
-
-class GetScheduleBlockedFaultConfigurationIdsInlineResp(Schema):
-    pass
-
-
-class GetSpawnerConfigurationIdsInlineResp(Schema):
-    pass
-
-
-class GetTrackBlockedFaultConfigurationIdsInlineResp(Schema):
-    pass
-
-
-class GetTrackSpeedLimitFaultConfigurationIdsInlineResp(Schema):
-    pass
-
-
-class GetTrainPrioFaultConfigurationIdsInlineResp(Schema):
-    pass
-
-
-class GetTrainSpeedFaultConfigurationIdsInlineResp(Schema):
-    pass
-
 
 class InterlockingConfiguration(Schema):
-    pass
+    """Schema for the InterlockingConfiguration"""
+
+    dynamicRouting = fields.Boolean()
 
 
 class RunConfiguration(Schema):
-    pass
+    """The marshmallow schema for the run model."""
+
+    simulation_configuration = fields.UUID(required=True)
 
 
-class RunStatus(Schema):
-    pass
+class ScheduleConfiguration(Schema):
+    """The marshmallow schema for ScheduleConfiguration"""
 
+    schedule_type = fields.String(required=True)
+    strategy_type = fields.String(required=True)
 
-class Schedule(Schema):
-    pass
+    strategy_start_tick = fields.Integer()
+    strategy_end_tick = fields.Integer()
 
+    train_schedule_train_type = fields.String()
 
-class ScheduleBlockedFaultConfiguration(Schema):
-    pass
+    regular_strategy_frequency = fields.Integer()
+
+    random_strategy_trains_per_1000_ticks = fields.Float()
+    random_strategy_seed = fields.Integer()
+
+    demand_strategy_power_station = fields.String()
+    demand_strategy_scaling_factor = fields.Float()
+    demand_strategy_start_datetime = fields.DateTime()
 
 
 class SimulationConfiguration(Schema):
-    pass
+    """The marshmallow schema for the simulation configuration model."""
+
+    description = fields.String()
 
 
 class SpawnerConfiguration(Schema):
     pass
 
 
-class Token(Schema):
-    pass
-
-
 class TokenConfiguration(Schema):
-    permission = fields.String()
+    """The marshmallow schema for the token model."""
+
+    permission = fields.String(required=True)
+    name = fields.String(required=True)
 
 
-class TrackBlockedFaultConfiguration(Schema):
-    pass
+class FaultConfiguration(Schema):
+    """Schema for the FaultConfiguration"""
+
+    start_tick = fields.Integer(required=False)
+    end_tick = fields.Integer(required=False)
+    inject_probability = fields.Float(required=False)
+    resolve_probability = fields.Float(required=False)
+    description = fields.String()
+    strategy = fields.String()
 
 
-class TrackSpeedLimitFaultConfiguration(Schema):
-    pass
+class TrackBlockedFaultConfiguration(FaultConfiguration):
+    """Schema for TrackBlockedFaultConfiguration"""
+
+    affected_element_id = fields.String(required=True)
 
 
-class TrainPrioFaultConfiguration(Schema):
-    pass
+class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
+    """Schema for TrackSpeedLimitFaultConfiguration"""
+
+    affected_element_id = fields.String()
+    new_speed_limit = fields.Integer(required=True)
 
 
-class TrainSpeedFaultConfiguration(Schema):
-    pass
+class TrainPrioFaultConfiguration(FaultConfiguration):
+    """Schema for TrainPrioFaultConfiguration"""
+
+    affected_element_id = fields.String()
+    new_prio = fields.Integer(required=True)
 
 
-class PlatformBlockedFaultConfiguration(Schema):
-    pass
+class TrainSpeedFaultConfiguration(FaultConfiguration):
+    """Schema for TrainSpeedFaultConfiguration"""
+
+    affected_element_id = fields.String(required=True)
+    new_speed = fields.Float(required=True)
+
+
+class PlatformBlockedFaultConfiguration(FaultConfiguration):
+    """Schema for PlatformBlockedFaultConfiguration"""
+
+    affected_element_id = fields.String(required=True)
+
+
+class ScheduleBlockedFaultConfiguration(FaultConfiguration):
+    """Schema for ScheduleBlockedFaultConfiguration"""
+
+    affected_element_id = fields.String(required=True)
