@@ -1,13 +1,29 @@
 #!/usr/bin/env python3
-
 import os
-from threading import Thread
+import pickle
 from typing import List
+from uuid import UUID
 
 import traci
+from celery import Celery, Task
+from celery.result import AsyncResult
 from sumolib import checkBinary
 
 from src.component import Component
+
+celery = Celery(
+    "proj",
+    broker=os.environ["CELERY_BROKER_URL"],
+    backend=os.environ["CELERY_RESULT_BACKEND"],
+)
+celery.conf.event_serializer = "pickle"  # this event_serializer is optional. somehow i missed this when writing this solution and it still worked without.
+celery.conf.task_serializer = "pickle"
+celery.conf.result_serializer = "pickle"
+celery.conf.accept_content = [
+    "application/json",
+    "application/x-python-serialize",
+    "pickle",
+]
 
 
 class Communicator(Thread):
