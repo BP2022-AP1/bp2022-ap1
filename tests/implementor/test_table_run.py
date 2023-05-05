@@ -51,9 +51,7 @@ class TestRunSuccessfulInit:
 
     @pytest.mark.parametrize(
         "init_dict",
-        [
-            {},
-        ],
+        [{}, {"process_id": "00000000-0000-0000-0000-000000000000"}],
     )
     def test_create(
         self, init_dict: dict, simulation_configuration: SimulationConfiguration
@@ -76,6 +74,10 @@ class TestRunSuccessfulInit:
         "init_values, expected_dict",
         [
             ({}, {}),
+            (
+                {"process_id": "00000000-0000-0000-0000-000000000000"},
+                {"process_id": "00000000-0000-0000-0000-000000000000"},
+            ),
         ],
     )
     def test_serialization(
@@ -92,6 +94,7 @@ class TestRunSuccessfulInit:
         serialized_obj = obj.to_dict()
         assert isinstance(serialized_obj["id"], str)
         assert isinstance(serialized_obj["simulation"], str)
+        assert isinstance(serialized_obj["process_id"], str)
         assert serialized_obj["simulation"] == str(simulation_configuration.id)
         for key in expected_dict.keys():
             assert serialized_obj[key] == expected_dict[key]
