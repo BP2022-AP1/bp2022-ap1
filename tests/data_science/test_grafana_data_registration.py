@@ -39,24 +39,6 @@ class TestGrafanaDataRegistration:
     def setup_method(self):
         pass
 
-    # def setup_logs_departure_arrival(self, logger):
-    #     TestLogCollector.setup_departure_arrival_1(logger)
-    #     TestLogCollector.setup_departure_arrival_2(logger)
-    #     TestLogCollector.setup_departure_arrival_3(logger)
-    #     TestLogCollector.setup_departure_arrival_4(logger)
-    #
-    # def setup_logs_departure_arrival_alt(self, logger2):
-    #     TestLogCollector.setup_departure_arrival_1_alt(logger2)
-    #     TestLogCollector.setup_departure_arrival_2_alt(logger2)
-    #     TestLogCollector.setup_departure_arrival_3_alt(logger2)
-    #     TestLogCollector.setup_departure_arrival_4_alt(logger2)
-    #
-    # def setup_logs_block_sections(self, logger):
-    #     TestLogCollector.setup_enter_leave_block_section_1(logger)
-    #     TestLogCollector.setup_enter_leave_block_section_2(logger)
-    #     TestLogCollector.setup_enter_leave_block_section_3(logger)
-    #     TestLogCollector.setup_enter_leave_block_section_4(logger)
-
     @pytest.fixture
     def _run_id(self, run):
         return str(run.id)
@@ -100,7 +82,7 @@ class TestGrafanaDataRegistration:
         faults_df: pd.DataFrame,
         grafana_data_registrator: GrafanaDataRegistrator,
     ):
-        # pylint: disable=R0801
+        # pylint: disable=duplicate-code
         TestLogCollector.setup_faults(
             logger,
             platform_blocked_fault_configuration,

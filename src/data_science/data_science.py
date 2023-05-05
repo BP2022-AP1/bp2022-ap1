@@ -13,6 +13,7 @@ class DataScience:
     operations on it."""
 
     log_collector: LogCollector
+    unix_2020: int = 1577836800
 
     def __init__(self):
         """Constructor of DataScience"""
@@ -74,13 +75,16 @@ class DataScience:
         :param run_id: the run id
         :return: a dataframe of faults
         """
-        unix_2020 = 1577836800
         faults_df = self.log_collector.get_faults(run_id)
-        faults_df["begin_time"] = faults_df["begin_tick"].apply(lambda x: x + unix_2020)
+        faults_df["begin_time"] = faults_df["begin_tick"].apply(
+            lambda x: x + self.unix_2020
+        )
         faults_df["begin_time"] = faults_df["begin_time"].apply(
             pd.to_datetime, unit="s"
         )
-        faults_df["end_time"] = faults_df["end_tick"].apply(lambda x: x + unix_2020)
+        faults_df["end_time"] = faults_df["end_tick"].apply(
+            lambda x: x + self.unix_2020
+        )
         faults_df["end_time"] = faults_df["end_time"].apply(pd.to_datetime, unit="s")
         faults_df.set_index("begin_time", inplace=True)
         faults_df["fault_id"] = faults_df["fault_id"].astype("string")
@@ -90,7 +94,7 @@ class DataScience:
         )
         return faults_df
 
-    def _get_section_length_by_tick(
+    def _get_interpolate_passed_section_length_by_tick(
         self,
         enter_tick: int,
         leave_tick: int,
@@ -125,7 +129,7 @@ class DataScience:
             block_section_times_df[block_section_times_df["enter_tick"] > tick].index
         )
         source_df["dist"] = source_df.apply(
-            lambda row: self._get_section_length_by_tick(
+            lambda row: self._get_interpolate_passed_section_length_by_tick(
                 row["enter_tick"], row["leave_tick"], row["block_section_length"], tick
             ),
             axis=1,
@@ -142,7 +146,6 @@ class DataScience:
         :param delta_tick: delta tick
         :return: dataframe of verkehrsleistung
         """
-        unix_2020 = 1577836800
         block_section_times_df = self.log_collector.get_block_section_times_all_trains(
             run_id
         )
@@ -168,7 +171,7 @@ class DataScience:
             axis=1,
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["tick"].apply(
-            lambda x: x + unix_2020
+            lambda x: x + self.unix_2020
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["time"].apply(
             pd.to_datetime, unit="s"
@@ -230,7 +233,6 @@ class DataScience:
         :return: dataframe of verkehrsleistung
         """
 
-        unix_2020 = 1577836800
         block_section_times_df = self.log_collector.get_block_section_times_all_trains(
             run_id
         )
@@ -254,7 +256,7 @@ class DataScience:
             axis=1,
         )
 
-        verkehrsleistung_df["time"] = verkehrsleistung_df["tick"] + unix_2020
+        verkehrsleistung_df["time"] = verkehrsleistung_df["tick"] + self.unix_2020
         verkehrsleistung_df["time"] = pd.to_datetime(
             verkehrsleistung_df["time"], unit="s"
         )
@@ -377,7 +379,6 @@ class DataScience:
         :param delta_tick: delta tick
         :return: dataframe of verkehrsleistung time
         """
-        unix_2020 = 1577836800
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
             block_section_times_df = (
@@ -403,7 +404,7 @@ class DataScience:
             axis=1,
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["tick"].apply(
-            lambda x: x + unix_2020
+            lambda x: x + self.unix_2020
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["time"].apply(
             pd.to_datetime, unit="s"

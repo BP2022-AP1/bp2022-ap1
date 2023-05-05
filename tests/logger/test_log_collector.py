@@ -549,7 +549,7 @@ class TestLogCollector:
         train_speed_fault_configuration,
         log_collector: LogCollector,
     ):
-        # pylint: disable=R0801
+        # pylint: disable=duplicate-code
         self.setup_faults(
             logger,
             platform_blocked_fault_configuration,

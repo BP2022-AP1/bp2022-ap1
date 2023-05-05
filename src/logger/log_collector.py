@@ -50,7 +50,7 @@ class LogCollector:
         ).distinct()
         trains_departures = TrainDepartureLogEntry.select(
             TrainDepartureLogEntry.train_id
-        )
+        ).distinct()
         trains_enter = TrainEnterBlockSectionLogEntry.select(
             TrainEnterBlockSectionLogEntry.train_id
         ).distinct()

@@ -82,7 +82,7 @@ class TestDataScience:
         train_speed_fault_configuration: TrainSpeedFaultConfiguration,
         faults_df: pd.DataFrame,
     ):
-        # pylint: disable=R0801
+        # pylint: disable=duplicate-code
         TestLogCollector.setup_faults(
             logger,
             platform_blocked_fault_configuration,
