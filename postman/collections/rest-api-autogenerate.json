@@ -1931,7 +1931,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{}",
+							"raw": "{\n    \"simulation_configuration\": \"<uuid>\"\n}",
 							"options": {
 								"raw": {
 									"headerFamily": "json",
