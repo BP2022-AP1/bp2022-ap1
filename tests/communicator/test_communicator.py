@@ -40,7 +40,7 @@ def test_simulation_runs(mock_traci):  # pylint: disable=unused-argument
     assert Communicator.progress(run_id) > 0
 
 
-@patch("src.communicator.mock_communicator.MockComponent.next_tick")
+@patch("src.component.MockComponent.next_tick")
 def test_component_next_tick_is_called(
     next_tick_mock,
     mock_traci,
@@ -54,7 +54,7 @@ def test_component_next_tick_is_called(
     assert next_tick_mock.assert_called
 
 
-@patch("src.communicator.mock_communicator.MockComponent.next_tick")
+@patch("src.component.MockComponent.next_tick")
 def test_component_next_tick_is_called_late_add(
     next_tick_mock,
     mock_traci,
