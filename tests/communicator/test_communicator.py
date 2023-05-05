@@ -1,10 +1,11 @@
 from time import sleep
+from unittest.mock import patch
 
 import pytest
 import traci
 
 from src.communicator.communicator import Communicator
-from src.component import Component
+from src.component import MockComponent
 
 
 @pytest.fixture
@@ -29,46 +30,40 @@ def mock_traci(monkeypatch):
     monkeypatch.setattr(traci, "close", close)
 
 
-class MockComponent(Component):
-    """Mock for a simple component to check if next tick is called"""
-
-    call_count = 0
-
-    def __init__(self):
-        Component.__init__(self, None, 1)
-
-    def next_tick(self, tick: int):
-        self.call_count += 1
-
-
-def test_simulation_runs(
-    mock_traci,
-):  # pylint: disable=unused-argument
+def test_simulation_runs(mock_traci):  # pylint: disable=unused-argument
     communicator = Communicator()
-    communicator.start()
-    sleep(0.1)
-    communicator.stop()
-    assert communicator.progress > 0
+    run_id = communicator.run()
+
+    while Communicator.state(run_id) != "PROGRESS":
+        sleep(1)
+    Communicator.stop(run_id)
+    assert Communicator.progress(run_id) > 0
 
 
+@patch("src.communicator.mock_communicator.MockComponent.next_tick")
 def test_component_next_tick_is_called(
+    next_tick_mock,
     mock_traci,
 ):  # pylint: disable=unused-argument
     mock = MockComponent()
     communicator = Communicator(components=[mock])
-    communicator.start()
-    sleep(0.1)
-    communicator.stop()
-    assert mock.call_count > 0
+    run_id = communicator.run()
+    while Communicator.state(run_id) != "PROGRESS":
+        sleep(1)
+    Communicator.stop(run_id)
+    assert next_tick_mock.assert_called
 
 
+@patch("src.communicator.mock_communicator.MockComponent.next_tick")
 def test_component_next_tick_is_called_late_add(
+    next_tick_mock,
     mock_traci,
 ):  # pylint: disable=unused-argument
     mock = MockComponent()
     communicator = Communicator()
-    communicator.start()
     communicator.add_component(mock)
-    sleep(0.1)
-    communicator.stop()
-    assert mock.call_count > 0
+    run_id = communicator.run()
+    while Communicator.state(run_id) != "PROGRESS":
+        sleep(1)
+    Communicator.stop(run_id)
+    assert next_tick_mock.assert_called
