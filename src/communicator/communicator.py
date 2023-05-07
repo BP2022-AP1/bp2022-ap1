@@ -16,7 +16,7 @@ celery = Celery(
     broker=os.environ["CELERY_BROKER_URL"],
     backend=os.environ["CELERY_RESULT_BACKEND"],
 )
-celery.conf.event_serializer = "pickle"  # this event_serializer is optional. somehow i missed this when writing this solution and it still worked without.
+celery.conf.event_serializer = "pickle"
 celery.conf.task_serializer = "pickle"
 celery.conf.result_serializer = "pickle"
 celery.conf.accept_content = [
@@ -59,6 +59,13 @@ class Communicator:
         self._max_tick = max_tick
 
     def run(self) -> str:
+        """
+        This function starts the simulation and returns the id of the celery task.
+        Therefore it collects and serializes the configuration and starts a new celery process.
+        The id can be used to stop the simulation or to get the current progress.
+
+        :return: The id of the celery task
+        """
         process = self._run.delay(
             max_tick=self._max_tick,
             components_pickle=pickle.dumps(self._components),
@@ -75,7 +82,16 @@ class Communicator:
         configuration: str,
         port: int,
     ):
-        """Starts sumo (no gui) and connects using traci. The connection has the `default` label."""
+        """
+        Starts sumo (no gui) and connects using traci.
+        This function is called by celery and should not be called directly.
+        It runs inside a celery process and therefore can be stopped using the celery task id.
+
+        :param max_tick: The maximum number of ticks to simulate
+        :param components_pickle: The serialized components
+        :param configuration: The sumo configuration file location
+        :param port: The port to use for the sumo simulation
+        """
 
         components = pickle.loads(components_pickle)
         traci.start([checkBinary("sumo"), "-c", configuration], port=port)
@@ -109,8 +125,11 @@ class Communicator:
 
     @classmethod
     def stop(cls, process_id: str):
-        """Stopps the simulation requesting a simulation step.
-        At most, one simulation step will happen after this request"""
+        """
+        Stopps the celery process.
+
+        :param process_id: The id of the celery task
+        """
         process = AsyncResult(process_id)
         process.revoke()
 
@@ -126,5 +145,12 @@ class Communicator:
 
     @classmethod
     def state(cls, progress_id: str) -> str:
+        """
+        Get the current state of the simulation.
+        Possible states are: PENDING, STARTED, RETRY, FAILURE, SUCCESS.
+
+        :param progress_id: The id of the celery task
+        :return: The current state of the simulation
+        """
         process = AsyncResult(progress_id)
         return process.status
