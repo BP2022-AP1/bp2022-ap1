@@ -174,6 +174,7 @@ def schedule_blocked_fault_configuration(
 
 # ------------- TrackBlockedFaultConfiguration ----------------
 
+
 @pytest.fixture
 def edge() -> Edge:
     return Edge("fault injector track")
@@ -224,6 +225,7 @@ def track_speed_limit_fault_configuration(
 ) -> TrackSpeedLimitFaultConfiguration:
     return TrackSpeedLimitFaultConfiguration.create(
         track_speed_limit_fault_configuration_data
+    )
 
 
 # ------------- TrainPrioFault ----------------
