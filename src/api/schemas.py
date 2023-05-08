@@ -54,12 +54,12 @@ class TokenConfiguration(Schema):
 class FaultConfiguration(Schema):
     """Schema for the FaultConfiguration"""
 
-    start_tick = fields.Integer(required=False)
-    end_tick = fields.Integer(required=False)
-    inject_probability = fields.Float(required=False)
-    resolve_probability = fields.Float(required=False)
-    description = fields.String()
-    strategy = fields.String()
+    start_tick = fields.Integer()
+    end_tick = fields.Integer()
+    inject_probability = fields.Float()
+    resolve_probability = fields.Float()
+    description = fields.String(required=True)
+    strategy = fields.String(required=True)
 
 
 class TrackBlockedFaultConfiguration(FaultConfiguration):
@@ -71,7 +71,7 @@ class TrackBlockedFaultConfiguration(FaultConfiguration):
 class TrackSpeedLimitFaultConfiguration(FaultConfiguration):
     """Schema for TrackSpeedLimitFaultConfiguration"""
 
-    affected_element_id = fields.String()
+    affected_element_id = fields.String(required=True)
     new_speed_limit = fields.Integer(required=True)
 
 

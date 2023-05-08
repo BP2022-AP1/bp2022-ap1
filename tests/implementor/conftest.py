@@ -43,20 +43,6 @@ def token():
     return Token.create(name=name, permission=permission, hashedToken=hashed_token)
 
 
-@pytest.fixture
-def empty_simulation_configuration():
-    simulation = SimulationConfiguration()
-    simulation.save()
-    return simulation
-
-
-@pytest.fixture
-def another_empty_simulation_configuration():
-    simulation = SimulationConfiguration()
-    simulation.save()
-    return simulation
-
-
 # ------------- InterlockingConfiguration ----------------
 @pytest.fixture
 def interlocking_configuration():
@@ -187,6 +173,7 @@ def schedule_blocked_fault_configuration(
 
 
 # ------------- TrackBlockedFaultConfiguration ----------------
+
 @pytest.fixture
 def edge() -> Edge:
     return Edge("fault injector track")
@@ -218,18 +205,25 @@ def track_blocked_fault_configuration(
 # ------------- TrackSpeedLimitFaultConfiguration ----------------
 
 
+def track_speed_limit_fault_configuration_data(
+    track: Track,
+) -> dict:
+    return {
+        "start_tick": 4,
+        "end_tick": 130,
+        "description": "test TrackSpeedLimitFault",
+        "affected_element_id": track.identifier,
+        "new_speed_limit": 60,
+        "strategy": "regular",
+    }
+
+
 @pytest.fixture
 def track_speed_limit_fault_configuration(
-    track: Track,
+    track_speed_limit_fault_configuration_data: dict,
 ) -> TrackSpeedLimitFaultConfiguration:
     return TrackSpeedLimitFaultConfiguration.create(
-        start_tick=4,
-        end_tick=130,
-        description="test TrackSpeedLimitFault",
-        affected_element_id=track.identifier,
-        new_speed_limit=60,
-        strategy="regular",
-    )
+        track_speed_limit_fault_configuration_data
 
 
 # ------------- TrainPrioFault ----------------
@@ -316,3 +310,17 @@ def simulation_configuration_full(
     configuration = SimulationConfiguration(**simulation_configuration_data)
     configuration.save()
     return configuration
+
+
+@pytest.fixture
+def empty_simulation_configuration():
+    simulation = SimulationConfiguration()
+    simulation.save()
+    return simulation
+
+
+@pytest.fixture
+def another_empty_simulation_configuration():
+    simulation = SimulationConfiguration()
+    simulation.save()
+    return simulation

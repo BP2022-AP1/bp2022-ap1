@@ -1123,6 +1123,36 @@ components:
       type: object
     TrackSpeedLimitFaultConfiguration:
       type: object
+      required:
+        - new_speed_limit
+        - description
+        - strategy
+      properties:
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        description:
+          type: string
+        affected_element_id:
+          type: string
+          format: uuid
+        new_speed_limit:
+          type: integer
+          format: int32
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
     TrackBlockedFaultConfiguration:
       type: object
     PlatformBlockedFaultConfiguration:
