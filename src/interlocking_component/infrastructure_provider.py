@@ -56,7 +56,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
 
         :param train: The train
         :type train: Train
-        :param edge: The edge the train drov onto
+        :param edge: The edge the train drove onto
         :type edge: Edge
         """
         track_segment_id = edge.identifier.split("-re")[0]

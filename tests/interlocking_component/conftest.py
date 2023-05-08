@@ -43,14 +43,6 @@ def interlocking_configuration() -> InterlockingConfiguration:
 
 
 @pytest.fixture
-def mock_logger():
-    class LoggerMock:
-        pass
-
-    return LoggerMock()
-
-
-@pytest.fixture
 def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
     souc = SimulationObjectUpdatingComponent(
@@ -87,19 +79,11 @@ def traffic_update(monkeypatch):
 
 
 @pytest.fixture
-def mock_logger() -> Logger:
-    class LoggerMock:
-        pass
-
-    return LoggerMock()
-
-
-@pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
+    configured_souc: SimulationObjectUpdatingComponent, logger: Logger
 ) -> RouteController:
     return RouteController(
-        logger=mock_logger,
+        logger=logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),

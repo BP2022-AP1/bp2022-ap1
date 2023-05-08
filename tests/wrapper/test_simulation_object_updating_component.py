@@ -39,12 +39,6 @@ class TestSimulationObjectUpdatingComponent:
 
         return component
 
-    def test_tracks(self, souc: SimulationObjectUpdatingComponent):
-        assert self.signal not in souc.edges
-        assert self.edge in souc.edges
-        assert self.platform not in souc.edges
-        assert self.switch not in souc.edges
-
     def test_tracks(self, component: SimulationObjectUpdatingComponent):
         assert self.signal not in component.edges
         assert self.edge in component.edges
