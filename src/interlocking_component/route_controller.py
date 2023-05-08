@@ -199,8 +199,8 @@ class RouteController(Component):
 
         route_length = 0
 
-        for i in range(new_route -1):
-            end_node_candidat = new_route[i+1]
+        for i in range(new_route - 1):
+            end_node_candidat = new_route[i + 1]
             route_length += new_route[i].get_edge_to(end_node_candidat).length
 
             for interlocking_route in self.interlocking.routes:
@@ -214,7 +214,12 @@ class RouteController(Component):
                     )
                     if was_set:
                         self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
-                        self.logger.train_enter_block_section(self.tick, train.identifier, interlocking_route.id, route_length)
+                        self.logger.train_enter_block_section(
+                            self.tick,
+                            train.identifier,
+                            interlocking_route.id,
+                            route_length,
+                        )
                         # Right now a fahrstrasse is always from one Signal to the next.
                         # Because of this the fahrstrasse is identical to the block section the train drives into.
                     else:
