@@ -15,12 +15,17 @@ class TestApiTrackSpeedLimitFault:
             "/component/fault-injection/track-speed-limit-fault",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "data",
         [
-            {"new_speed_limit": 1},
+            {
+                "new_speed_limit": 1,
+                "description": "test",
+                "strategy": "test",
+                "affected_element_id": "test",
+            },
             {
                 "affected_element_id": "test",
                 "new_speed_limit": 1,

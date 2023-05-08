@@ -20,7 +20,12 @@ class TestApiTrainSpeedFault:
     @pytest.mark.parametrize(
         "data",
         [
-            {"new_speed": 0.1, "affected_element_id": "test"},
+            {
+                "new_speed": 0.1,
+                "affected_element_id": "test",
+                "description": "test",
+                "strategy": "test",
+            },
             {
                 "affected_element_id": "test",
                 "new_speed": 0.1,

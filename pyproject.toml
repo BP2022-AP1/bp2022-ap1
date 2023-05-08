@@ -33,6 +33,7 @@ railway-route-generator = { git = "https://github.com/bp2022-ap1/railway-route-g
 sumoexporter = { git = "https://github.com/bp2022-ap1/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
 track-signal-generator = { git = "https://github.com/bp2022-ap1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
+grafana-pandas-datasource = { git = "https://github.com/BP2022-AP1/grafana-pandas-datasource.git" }
 matplotlib = "^3.7.1"
 scipy = "1.9.2"
 requests = "^2.28.2"
@@ -46,7 +47,7 @@ pylint = "^2.17.0"
 poethepoet = "^0.19.0"
 pytest-cov = "^4.0.0"
 python-dotenv = "^1.0.0"
-redis = "^3.5.3"
+redis = "^4.4.4"
 waitress = "^2.1.2"
 
 [tool.poetry.group.docs]
@@ -106,7 +107,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-deps]
     help = "Initializes needed components for tests"
-    cmd = "docker compose up -d celery-worker postgresql-test"
+    cmd = "docker compose up -d grafana-test celery-worker postgresql-test"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
@@ -125,7 +126,6 @@ build-backend = "poetry.core.masonry.api"
     help = "Run flask app in development mode and run db"
     cmd = "docker compose up prod"
     envfile = ".env.secret"
-
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"

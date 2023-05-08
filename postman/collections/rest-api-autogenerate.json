@@ -4731,7 +4731,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{}",
+											"raw": "{\n    \"start_tick\": 4,\n    \"end_tick\": 130,\n    \"description\": \"\",\n    \"affected_element_id\": \"<uuid>\",\n    \"new_speed_limit\": 60,\n    \"strategy\": \"regular\",\n    \"inject_probability\": 0.9,\n    \"resolve_probability\": 0.9\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -5061,7 +5061,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{}"
+											"body": "{\n  \"new_speed_limit\": \"<integer>\",\n  \"description\": \"<string>\",\n  \"strategy\": \"random\"\n}"
 										},
 										{
 											"id": "73c3eadc-3911-45c9-930e-bb5fefc1aa14",
