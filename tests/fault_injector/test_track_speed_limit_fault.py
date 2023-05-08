@@ -97,7 +97,7 @@ class TestTrackSpeedLimitFault:
         tick,
         empty_simulation_object_updater: SimulationObjectUpdatingComponent,
         track_speed_limit_fault: TrackSpeedLimitFault,
-        track: Track
+        track: Track,
         # the following arguments are needed fixtures
         # pylint: disable=unused-argument
         speed_update,
