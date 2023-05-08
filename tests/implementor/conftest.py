@@ -281,9 +281,6 @@ def train_speed_fault_configuration(
     )
 
 
-# ------------- TrainSpeedFaultConfiguration ----------------
-
-
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, route, train_type):
@@ -298,6 +295,29 @@ def train_add(monkeypatch):
 # pylint: disable-next=unused-argument
 def train(train_add) -> Train:
     return Train(identifier="fault injector train", train_type="cargo")
+
+
+# ------------- TrainPrioFaultConfiguration ----------------
+
+
+@pytest.fixture
+def train_prio_fault_configuration_data(train: Train) -> dict:
+    return {
+        "start_tick": 50,
+        "end_tick": 500,
+        "description": "test TrainPrioFault",
+        "affected_element_id": train.identifier,
+        "new_prio": 3,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def train_prio_fault_configuration(train_prio_fault_configuration_data):
+    return TrainPrioFaultConfiguration.create(train_prio_fault_configuration_data)
+
+
+# ------------- TrainSpeedFaultConfiguration ----------------
 
 
 @pytest.fixture
