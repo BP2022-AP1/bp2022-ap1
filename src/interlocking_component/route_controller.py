@@ -90,8 +90,6 @@ class RouteController(Component):
     router: Router = None
     routes_to_be_set: List[Route] = []
 
-    test = False
-
     def __init__(
         self,
         logger: Logger,
