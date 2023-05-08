@@ -26,10 +26,10 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         super().turn_point(yaramo_point, target_orientation)
         switch = None
         for (
-            potencial_switch
+            potential_switch
         ) in self.route_controller.simulation_object_updating_component.switches:
-            if potencial_switch.identifier == yaramo_point.point_id:
-                switch = potencial_switch
+            if potential_switch.identifier == yaramo_point.point_id:
+                switch = potential_switch
                 break
         if target_orientation == "left":
             switch.state = Switch.State.LEFT
@@ -40,10 +40,10 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         super().set_signal_state(yaramo_signal, target_state)
         signal = None
         for (
-            potencial_signal
+            potential_signal
         ) in self.route_controller.simulation_object_updating_component.signals:
-            if potencial_signal.identifier == yaramo_signal.name:
-                signal = potencial_signal
+            if potential_signal.identifier == yaramo_signal.name:
+                signal = potential_signal
                 break
         if target_state == "halt":
             signal.state = Signal.State.HALT

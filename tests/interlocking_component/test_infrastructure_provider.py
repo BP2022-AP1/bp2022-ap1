@@ -19,12 +19,12 @@ class TestInfrastructurProvider:
     ):
         switch: Switch = None
         for (
-            potencial_switch
+            potential_switch
         ) in (
             sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component.switches
         ):
-            if potencial_switch.identifier == yaramo_point.point_id:
-                switch = potencial_switch
+            if potential_switch.identifier == yaramo_point.point_id:
+                switch = potential_switch
                 break
         sumo_mock_infrastructure_provider.turn_point(yaramo_point, "right")
         assert switch.state == Switch.State.RIGHT
@@ -42,12 +42,12 @@ class TestInfrastructurProvider:
         gg_count = get_gg_count()  # Count for setting go
         signal: Signal = None
         for (
-            potencial_signal
+            potential_signal
         ) in (
             sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component.signals
         ):
-            if potencial_signal.identifier == yaramo_signal.name:
-                signal = potencial_signal
+            if potential_signal.identifier == yaramo_signal.name:
+                signal = potential_signal
                 break
         sumo_mock_infrastructure_provider.set_signal_state(yaramo_signal, "go")
         assert signal.state == Signal.State.GO
