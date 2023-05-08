@@ -13,9 +13,7 @@ class TestTrainSpeedFaultConfiguration:
             **train_prio_fault_configuration_data
         )
 
-        response = impl.component.get_all_train_prio_fault_configuration_ids(
-            {}, token
-        )
+        response = impl.component.get_all_train_prio_fault_configuration_ids({}, token)
         (result, status) = response
         assert status == 200
         assert str(config.id) in result
@@ -61,6 +59,4 @@ class TestTrainSpeedFaultConfiguration:
         assert configs.exists()
         config = configs.get()
         for key in train_prio_fault_configuration_data:
-            assert (
-                getattr(config, key) == train_prio_fault_configuration_data[key]
-            )
+            assert getattr(config, key) == train_prio_fault_configuration_data[key]
