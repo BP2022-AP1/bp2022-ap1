@@ -55,6 +55,16 @@ def track_speed_limit_fault_configuration(
 
 
 @pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
 # pylint: disable-next=unused-argument
 def train(train_add) -> Train:
     return Train(identifier="fault injector train", train_type="cargo")
