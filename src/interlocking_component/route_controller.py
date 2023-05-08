@@ -15,7 +15,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Track, Train, Node
 
 
 class IInterlockingDisruptor:
@@ -95,6 +95,7 @@ class RouteController(Component):
     router: Router = None
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
+    tick: int = None
 
     def __init__(
         self,
@@ -122,9 +123,11 @@ class RouteController(Component):
         self.interlocking.prepare(topology)
 
     def next_tick(self, tick: int):
+        self.tick = tick
         for interlocking_route in self.routes_to_be_set:
             # This sets the fahrstrasse in the interlocking.
             # The Sumo SUMO route was already set.
+
             was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
 
             if was_set:
@@ -204,8 +207,9 @@ class RouteController(Component):
                     was_set = self.interlocking.set_route(
                         interlocking_route.yaramo_route
                     )
-
-                    if not was_set:
+                    if was_set:
+                        self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
+                    else:
                         self.routes_to_be_set.append(interlocking_route)
 
                     # This sets the route in SUMO.
@@ -237,6 +241,7 @@ class RouteController(Component):
         if route is not None:
             # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)
+            self.logger.remove_fahrstrasse(self.tick, route.id)
 
     def _get_interlocking_route_for_edge(self, edge: Edge) -> Route:
         """This method returns the interlocking route corresponding to the given edge.
