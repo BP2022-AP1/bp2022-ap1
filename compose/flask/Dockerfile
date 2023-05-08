@@ -1,6 +1,8 @@
 FROM python
 WORKDIR /app
 
+RUN apt-get update
+
 RUN pip install poetry
 
 COPY . /app

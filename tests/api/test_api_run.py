@@ -12,7 +12,7 @@ class TestApiRun:
 
     def test_get_all(self, client, clear_token):
         response = client.get("/run", headers={TOKEN_HEADER: clear_token})
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize("data", [{"simulation_configuration": str(uuid.uuid4())}])
     def test_post(self, client, clear_token, data):
