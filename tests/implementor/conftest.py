@@ -5,7 +5,9 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
-    TrainPrioFaultConfiguration,
+    TrainPrioFaultConfiguration,)
+from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
+    TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import SimulationConfiguration
 from src.wrapper.simulation_objects import Edge, Track, Train
@@ -52,6 +54,7 @@ def track_speed_limit_fault_configuration(
 
 
 # ------------- FaultConfiguration ----------------
+# ------------- TrainSpeedFaultConfiguration ----------------
 
 
 @pytest.fixture
@@ -78,6 +81,16 @@ def train_prio_fault_configuration_data(train: Train) -> dict:
         "description": "test TrainPrioFault",
         "affected_element_id": train.identifier,
         "new_prio": 3,
+        "strategy": "regular"}
+        
+        
+def train_speed_fault_configuration_data(train: Train) -> dict:
+    return {
+        "start_tick": 40,
+        "end_tick": 400,
+        "description": "test TrainSpeedFault",
+        "affected_element_id": train.identifier,
+        "new_speed": 30,
         "strategy": "regular",
     }
 
@@ -85,6 +98,11 @@ def train_prio_fault_configuration_data(train: Train) -> dict:
 @pytest.fixture
 def train_prio_fault_configuration(train_prio_fault_configuration_data):
     return TrainPrioFaultConfiguration.create(train_prio_fault_configuration_data)
+    
+@pytest.fixture
+def train_speed_fault_configuration(
+    track_speed_limit_fault_configuration_data):
+    return TrainSpeedFaultConfiguration.create(train_speed_fault_configuration_data)
 
 
 # ------------- SimulationConfiguration ----------------
