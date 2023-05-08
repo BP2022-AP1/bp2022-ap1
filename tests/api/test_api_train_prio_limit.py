@@ -20,7 +20,12 @@ class TestApiTrainPrioFault:
     @pytest.mark.parametrize(
         "data",
         [
-            {"new_prio": 1, "description": "test", "strategy": "test"},
+            {
+                "affected_element_id": "test",
+                "new_prio": 1,
+                "description": "test",
+                "strategy": "test",
+            },
             {
                 "affected_element_id": "test",
                 "new_prio": 1,

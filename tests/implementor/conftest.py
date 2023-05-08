@@ -83,9 +83,7 @@ def train_prio_fault_configuration_data(train: Train) -> dict:
 
 
 @pytest.fixture
-def train_prio_fault_configuration(
-    self, train_prio_fault_configuration_data, train: Train
-):
+def train_prio_fault_configuration(train_prio_fault_configuration_data):
     return TrainPrioFaultConfiguration.create(train_prio_fault_configuration_data)
 
 

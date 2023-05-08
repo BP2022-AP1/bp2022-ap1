@@ -243,7 +243,7 @@ def get_all_train_prio_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 501  # 200
+    return json.dumps(""), 200
 
 
 def create_train_prio_fault_configuration(body, token):
