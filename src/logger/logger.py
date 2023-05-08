@@ -188,7 +188,6 @@ class Logger:
         tick: int,
         train_id: str,
         block_section_id: str,
-        block_section_length: float,
     ) -> Type[None]:
         """
         This function should be called when a train leaves a block section. This should include a
@@ -196,18 +195,16 @@ class Logger:
         :param tick: The current simulation tick
         :param train_id: The id of the train
         :param block_section_id: The id of the block section
-        :param block_section_length: The length of the block section
         :rtype: None
         """
         TrainLeaveBlockSectionLogEntry.create(
             timestamp=datetime.now(),
             tick=tick,
-            message=f"Train with ID {train_id} left block section with ID {block_section_id} "
-            f"with length {block_section_length}",
+            message=f"Train with ID {train_id} left block section with ID {block_section_id}.",
             run_id=self.run_id,
             train_id=train_id,
             block_section_id=block_section_id,
-            block_section_length=block_section_length,
+            block_section_length=0,
         )
 
     def inject_platform_blocked_fault(

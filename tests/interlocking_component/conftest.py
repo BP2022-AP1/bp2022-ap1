@@ -148,7 +148,7 @@ def mock_route_controller(
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
-        def maybe_free_fahrstrasse(self, edge: Edge):
+        def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
 
     return RouteControllerMock()

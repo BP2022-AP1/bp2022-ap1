@@ -91,6 +91,11 @@ class Node(SimulationObject):
             + simulation_object.getIncoming()
         ]
 
+    def get_edge_to(self, other_node: "Node") -> "Edge":
+        for potential_edge in self.edges:
+            if potential_edge.to_node == other_node: 
+                return potential_edge
+
     @staticmethod
     def from_simulation(
         simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
@@ -712,7 +717,7 @@ class Train(SimulationObject):
         self._speed = data[constants.VAR_SPEED]
         if self._edge is None or self._edge.identifier != edge_id:
             if self._edge is not None:
-                self.updater.infrastructure_provider.train_drove_off_track(self._edge)
+                self.updater.infrastructure_provider.train_drove_off_track(self, self._edge)
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )

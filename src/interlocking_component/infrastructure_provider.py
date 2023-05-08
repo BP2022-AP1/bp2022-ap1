@@ -81,7 +81,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
 
         self.route_controller.maybe_set_fahrstrasse(train, edge)
 
-    def train_drove_off_track(self, edge: Edge):
+    def train_drove_off_track(self, train: Train, edge: Edge):
         """This method calls tds_count_out with the track_segment_id of the given edge.
 
         :param edge: The edge the train drove off of
@@ -91,4 +91,4 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_out(track_segment_id)
 
-        self.route_controller.maybe_free_fahrstrasse(edge)
+        self.route_controller.maybe_free_fahrstrasse(train, edge)
