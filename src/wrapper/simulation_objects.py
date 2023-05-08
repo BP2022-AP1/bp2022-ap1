@@ -597,7 +597,6 @@ class Train(SimulationObject):
     _position: Tuple[float, float]
     _route: str
     _edge: Edge = None
-    _edge_id: str
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
@@ -608,10 +607,6 @@ class Train(SimulationObject):
 
         :return: The current track the train is on
         """
-        if self._edge is None or self._edge.identifier != self._edge_id:
-            self._edge = next(
-                item for item in self.updater.edges if item.identifier == self._edge_id
-            )
         return self._edge
 
     @property
@@ -712,9 +707,18 @@ class Train(SimulationObject):
         :param updates: The updated values for the synchronized properties
         """
         self._position = data[constants.VAR_POSITION]
-        self._edge_id = data[constants.VAR_ROAD_ID]
+        edge_id = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
+        if self._edge is None or self._edge.identifier != edge_id:
+            if self._edge is not None:
+                self.updater.infrastructure_provider.train_drove_off_track(self._edge)
+            self._edge = next(
+                item for item in self.updater.edges if item.identifier == edge_id
+            )
+            self.updater.infrastructure_provider.train_drove_onto_track(
+                self, self._edge
+            )
 
     def add_subscriptions(self) -> int:
         """Gets called when this object is created to allow

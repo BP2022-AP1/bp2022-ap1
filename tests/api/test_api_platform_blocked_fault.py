@@ -20,7 +20,7 @@ class TestApiPlatformBlockedFault:
     @pytest.mark.parametrize(
         "data",
         [
-            {"affected_element_id": "test"},
+            {"affected_element_id": "test", "description": "test", "strategy": "test"},
             {
                 "affected_element_id": "test",
                 "start_tick": 1,

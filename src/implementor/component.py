@@ -3,6 +3,14 @@
 
 import json
 
+from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
+    TrackSpeedLimitFaultConfiguration,
+)
+from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
+    TrainSpeedFaultConfiguration,
+)
+from src.implementor.models import SimulationConfiguration
+
 
 def get_all_schedule_blocked_fault_configuration_ids(options, token):
     """
@@ -139,10 +147,29 @@ def get_all_track_speed_limit_fault_configuration_ids(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    # Return all track speed limit fault configurations of a single simulation configuration
+    if options["simulationId"] is not None:
+        simulation_id = options["simulationId"]
+        simulation_configurations = SimulationConfiguration.select().where(
+            SimulationConfiguration.id == simulation_id
+        )
+        if not simulation_configurations.exists():
+            return "Simulation not found", 404
 
-    return json.dumps(""), 501  # 200
+        simulation_configuration = simulation_configurations.get()
+        references = (
+            simulation_configuration.track_speed_limit_fault_configuration_references
+        )
+
+        configs = [
+            str(reference.track_speed_limit_fault_configuration.id)
+            for reference in references
+        ]
+        return configs, 200
+
+    # Return all track speed limit fault configurations
+    configs = [str(config.id) for config in TrackSpeedLimitFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_track_speed_limit_fault_configuration(body, token):
@@ -154,14 +181,12 @@ def create_track_speed_limit_fault_configuration(body, token):
 
     # Implement your business logic here
     # All the parameters are present in the options argument
-
+    config = TrackSpeedLimitFaultConfiguration.create(**body)
     return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
+        {
+            "id": config.id,
+        },
+        201,
     )
 
 
@@ -265,10 +290,26 @@ def get_all_train_speed_fault_configuration_ids(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    # Return all train speed fault configurations of a single simulation configuration
+    if options["simulationId"] is not None:
+        simulation_id = options["simulationId"]
+        simulation_configurations = SimulationConfiguration.select().where(
+            SimulationConfiguration.id == simulation_id
+        )
+        if not simulation_configurations.exists():
+            return "Simulation not found", 404
+        simulation_configuration = simulation_configurations.get()
+        references = simulation_configuration.train_speed_fault_configuration_references
 
-    return json.dumps(""), 501  # 200
+        configs = [
+            str(reference.train_speed_fault_configuration.id)
+            for reference in references
+        ]
+        return configs, 200
+
+    # Return all train speed fault configurations
+    configs = [str(config.id) for config in TrainSpeedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_train_speed_fault_configuration(body, token):
@@ -280,14 +321,12 @@ def create_train_speed_fault_configuration(body, token):
 
     # Implement your business logic here
     # All the parameters are present in the options argument
-
+    config = TrainSpeedFaultConfiguration.create(**body)
     return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
+        {
+            "id": config.id,
+        },
+        201,
     )
 
 

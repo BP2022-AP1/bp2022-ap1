@@ -15,12 +15,17 @@ class TestApiTrainSpeedFault:
             "/component/fault-injection/train-speed-fault",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "data",
         [
-            {"new_speed": 0.1, "affected_element_id": "test"},
+            {
+                "new_speed": 0.1,
+                "affected_element_id": "test",
+                "description": "test",
+                "strategy": "test",
+            },
             {
                 "affected_element_id": "test",
                 "new_speed": 0.1,

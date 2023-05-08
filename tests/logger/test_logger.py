@@ -64,9 +64,9 @@ class TestLogger:
         log_entry = (
             TrainArrivalLogEntry.select()
             .where(
-                TrainArrivalLogEntry.tick == tick
-                and TrainArrivalLogEntry.train_id == train_id
-                and TrainArrivalLogEntry.station_id == station_id
+                (TrainArrivalLogEntry.tick == tick)
+                & (TrainArrivalLogEntry.train_id == train_id)
+                & (TrainArrivalLogEntry.station_id == station_id)
             )
             .first()
         )
@@ -87,9 +87,9 @@ class TestLogger:
         log_entry = (
             TrainDepartureLogEntry.select()
             .where(
-                TrainRemoveLogEntry.tick == tick
-                and TrainDepartureLogEntry.train_id == train_id
-                and TrainDepartureLogEntry.station_id == station_id
+                (TrainDepartureLogEntry.tick == tick)
+                & (TrainDepartureLogEntry.train_id == train_id)
+                & (TrainDepartureLogEntry.station_id == station_id)
             )
             .first()
         )
@@ -110,8 +110,8 @@ class TestLogger:
         log_entry = (
             CreateFahrstrasseLogEntry.select()
             .where(
-                CreateFahrstrasseLogEntry.tick == tick
-                and CreateFahrstrasseLogEntry.fahrstrasse == fahrstrasse
+                (CreateFahrstrasseLogEntry.tick == tick)
+                & (CreateFahrstrasseLogEntry.fahrstrasse == fahrstrasse)
             )
             .first()
         )
@@ -128,8 +128,8 @@ class TestLogger:
         log_entry = (
             RemoveFahrstrasseLogEntry.select()
             .where(
-                RemoveFahrstrasseLogEntry.tick == tick
-                and RemoveFahrstrasseLogEntry.fahrstrasse == fahrstrasse
+                (RemoveFahrstrasseLogEntry.tick == tick)
+                & (RemoveFahrstrasseLogEntry.fahrstrasse == fahrstrasse)
             )
             .first()
         )
@@ -151,10 +151,10 @@ class TestLogger:
         log_entry = (
             SetSignalLogEntry.select()
             .where(
-                SetSignalLogEntry.tick == tick
-                and SetSignalLogEntry.signal_id == signal_id
-                and SetSignalLogEntry.state_before == state_before
-                and SetSignalLogEntry.state_after == state_after
+                (SetSignalLogEntry.tick == tick)
+                & (SetSignalLogEntry.signal_id == signal_id)
+                & (SetSignalLogEntry.state_before == state_before)
+                & (SetSignalLogEntry.state_after == state_after)
             )
             .first()
         )
@@ -183,9 +183,9 @@ class TestLogger:
         log_entry = (
             TrainEnterBlockSectionLogEntry.select()
             .where(
-                TrainEnterBlockSectionLogEntry.tick == tick
-                and TrainEnterBlockSectionLogEntry.train_id == train_id
-                and TrainEnterBlockSectionLogEntry.block_section_id == block_section_id
+                (TrainEnterBlockSectionLogEntry.tick == tick)
+                & (TrainEnterBlockSectionLogEntry.train_id == train_id)
+                & (TrainEnterBlockSectionLogEntry.block_section_id == block_section_id)
             )
             .first()
         )
@@ -215,9 +215,9 @@ class TestLogger:
         log_entry = (
             TrainLeaveBlockSectionLogEntry.select()
             .where(
-                TrainLeaveBlockSectionLogEntry.tick == tick
-                and TrainLeaveBlockSectionLogEntry.train_id == train_id
-                and TrainLeaveBlockSectionLogEntry.block_section_id == block_section_id
+                (TrainLeaveBlockSectionLogEntry.tick == tick)
+                & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
+                & (TrainLeaveBlockSectionLogEntry.block_section_id == block_section_id)
             )
             .first()
         )
@@ -250,10 +250,12 @@ class TestLogger:
         log_entry = (
             InjectFaultLogEntry.select()
             .where(
-                InjectFaultLogEntry.tick == tick
-                and InjectFaultLogEntry.platform_blocked_fault_configuration
-                == platform_blocked_fault_configuration
-                and InjectFaultLogEntry.affected_element == affected_element
+                (InjectFaultLogEntry.tick == tick)
+                & (
+                    InjectFaultLogEntry.platform_blocked_fault_configuration
+                    == platform_blocked_fault_configuration
+                )
+                & (InjectFaultLogEntry.affected_element == affected_element)
             )
             .first()
         )
@@ -294,10 +296,12 @@ class TestLogger:
         log_entry = (
             InjectFaultLogEntry.select()
             .where(
-                InjectFaultLogEntry.tick == tick
-                and InjectFaultLogEntry.track_blocked_fault_configuration
-                == track_blocked_fault_configuration
-                and InjectFaultLogEntry.affected_element == affected_element
+                (InjectFaultLogEntry.tick == tick)
+                & (
+                    InjectFaultLogEntry.track_blocked_fault_configuration
+                    == track_blocked_fault_configuration
+                )
+                & (InjectFaultLogEntry.affected_element == affected_element)
             )
             .first()
         )
@@ -342,12 +346,14 @@ class TestLogger:
         log_entry = (
             InjectFaultLogEntry.select()
             .where(
-                InjectFaultLogEntry.tick == tick
-                and InjectFaultLogEntry.track_speed_limit_fault_configuration
-                == track_speed_limit_fault_configuration
-                and InjectFaultLogEntry.affected_element == affected_element
-                and InjectFaultLogEntry.value_before == value_before
-                and InjectFaultLogEntry.value_after == value_after
+                (InjectFaultLogEntry.tick == tick)
+                & (
+                    InjectFaultLogEntry.track_speed_limit_fault_configuration
+                    == track_speed_limit_fault_configuration
+                )
+                & (InjectFaultLogEntry.affected_element == affected_element)
+                & (InjectFaultLogEntry.value_before == value_before)
+                & (InjectFaultLogEntry.value_after == value_after)
             )
             .first()
         )
@@ -390,10 +396,12 @@ class TestLogger:
         log_entry = (
             InjectFaultLogEntry.select()
             .where(
-                InjectFaultLogEntry.tick == tick
-                and InjectFaultLogEntry.schedule_blocked_fault_configuration
-                == schedule_blocked_fault_configuration
-                and InjectFaultLogEntry.affected_element == affected_element
+                (InjectFaultLogEntry.tick == tick)
+                & (
+                    InjectFaultLogEntry.schedule_blocked_fault_configuration
+                    == schedule_blocked_fault_configuration
+                )
+                & (InjectFaultLogEntry.affected_element == affected_element)
             )
             .first()
         )
@@ -438,12 +446,14 @@ class TestLogger:
         log_entry = (
             InjectFaultLogEntry.select()
             .where(
-                InjectFaultLogEntry.tick == tick
-                and InjectFaultLogEntry.train_prio_fault_configuration
-                == train_prio_fault_configuration
-                and InjectFaultLogEntry.affected_element == affected_element
-                and InjectFaultLogEntry.value_before == value_before
-                and InjectFaultLogEntry.value_after == value_after
+                (InjectFaultLogEntry.tick == tick)
+                & (
+                    InjectFaultLogEntry.train_prio_fault_configuration
+                    == train_prio_fault_configuration
+                )
+                & (InjectFaultLogEntry.affected_element == affected_element)
+                & (InjectFaultLogEntry.value_before == value_before)
+                & (InjectFaultLogEntry.value_after == value_after)
             )
             .first()
         )
@@ -489,12 +499,14 @@ class TestLogger:
         log_entry = (
             InjectFaultLogEntry.select()
             .where(
-                InjectFaultLogEntry.tick == tick
-                and InjectFaultLogEntry.train_speed_fault_configuration
-                == train_speed_fault_configuration
-                and InjectFaultLogEntry.affected_element == affected_element
-                and InjectFaultLogEntry.value_before == value_before
-                and InjectFaultLogEntry.value_after == value_after
+                (InjectFaultLogEntry.tick == tick)
+                & (
+                    InjectFaultLogEntry.train_speed_fault_configuration
+                    == train_speed_fault_configuration
+                )
+                & (InjectFaultLogEntry.affected_element == affected_element)
+                & (InjectFaultLogEntry.value_before == value_before)
+                & (InjectFaultLogEntry.value_after == value_after)
             )
             .first()
         )
@@ -534,9 +546,11 @@ class TestLogger:
         log_entry = (
             ResolveFaultLogEntry.select()
             .where(
-                ResolveFaultLogEntry.tick == tick
-                and ResolveFaultLogEntry.platform_blocked_fault_configuration
-                == platform_blocked_fault_configuration
+                (ResolveFaultLogEntry.tick == tick)
+                & (
+                    ResolveFaultLogEntry.platform_blocked_fault_configuration
+                    == platform_blocked_fault_configuration
+                )
             )
             .first()
         )
@@ -574,9 +588,11 @@ class TestLogger:
         log_entry = (
             ResolveFaultLogEntry.select()
             .where(
-                ResolveFaultLogEntry.tick == tick
-                and ResolveFaultLogEntry.track_blocked_fault_configuration
-                == track_blocked_fault_configuration
+                (ResolveFaultLogEntry.tick == tick)
+                & (
+                    ResolveFaultLogEntry.track_blocked_fault_configuration
+                    == track_blocked_fault_configuration
+                )
             )
             .first()
         )
@@ -614,9 +630,11 @@ class TestLogger:
         log_entry = (
             ResolveFaultLogEntry.select()
             .where(
-                ResolveFaultLogEntry.tick == tick
-                and ResolveFaultLogEntry.track_speed_limit_fault_configuration
-                == track_speed_limit_fault_configuration
+                (ResolveFaultLogEntry.tick == tick)
+                & (
+                    ResolveFaultLogEntry.track_speed_limit_fault_configuration
+                    == track_speed_limit_fault_configuration
+                )
             )
             .first()
         )
@@ -653,9 +671,11 @@ class TestLogger:
         log_entry = (
             ResolveFaultLogEntry.select()
             .where(
-                ResolveFaultLogEntry.tick == tick
-                and ResolveFaultLogEntry.schedule_blocked_fault_configuration
-                == schedule_blocked_fault_configuration
+                (ResolveFaultLogEntry.tick == tick)
+                & (
+                    ResolveFaultLogEntry.schedule_blocked_fault_configuration
+                    == schedule_blocked_fault_configuration
+                )
             )
             .first()
         )
@@ -693,9 +713,11 @@ class TestLogger:
         log_entry = (
             ResolveFaultLogEntry.select()
             .where(
-                ResolveFaultLogEntry.tick == tick
-                and ResolveFaultLogEntry.train_prio_fault_configuration
-                == train_prio_fault_configuration
+                (ResolveFaultLogEntry.tick == tick)
+                & (
+                    ResolveFaultLogEntry.train_prio_fault_configuration
+                    == train_prio_fault_configuration
+                )
             )
             .first()
         )
@@ -732,9 +754,11 @@ class TestLogger:
         log_entry = (
             ResolveFaultLogEntry.select()
             .where(
-                ResolveFaultLogEntry.tick == tick
-                and ResolveFaultLogEntry.train_speed_fault_configuration
-                == train_speed_fault_configuration
+                (ResolveFaultLogEntry.tick == tick)
+                & (
+                    ResolveFaultLogEntry.train_speed_fault_configuration
+                    == train_speed_fault_configuration
+                )
             )
             .first()
         )
