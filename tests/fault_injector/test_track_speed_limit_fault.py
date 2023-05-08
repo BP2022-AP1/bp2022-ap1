@@ -97,12 +97,14 @@ class TestTrackSpeedLimitFault:
         tick,
         empty_simulation_object_updater: SimulationObjectUpdatingComponent,
         track_speed_limit_fault: TrackSpeedLimitFault,
+        track: Track
         # the following arguments are needed fixtures
         # pylint: disable=unused-argument
         speed_update,
         combine_track_and_wrapper,
         # pylint: enable=unused-argument
     ):
+        track.max_speed = 100
         with pytest.raises(NotImplementedError):
             track_speed_limit_fault.inject_fault(tick)
         track_speed_limit_fault.simulation_object_updater = (
