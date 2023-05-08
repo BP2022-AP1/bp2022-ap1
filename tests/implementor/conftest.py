@@ -206,6 +206,7 @@ def track_blocked_fault_configuration(
 # ------------- TrackSpeedLimitFaultConfiguration ----------------
 
 
+@pytest.fixture
 def track_speed_limit_fault_configuration_data(
     track: Track,
 ) -> dict:
