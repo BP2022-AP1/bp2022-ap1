@@ -5,7 +5,7 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 )
 
 
-class TestRunImplementor:
+class TestTrainSpeedFaultConfiguration:
     def test_get_all_train_prio_fault_configuration_ids(
         self, token, train_prio_fault_configuration_data
     ):
