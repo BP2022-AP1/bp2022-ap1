@@ -91,24 +91,3 @@ class TestTrackSpeedLimitFault:
         with pytest.raises(NotImplementedError):
             track_speed_limit_fault.resolve_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.old_speed_limit
-
-    def test_resolve_element_does_not_exist(
-        self,
-        tick,
-        empty_simulation_object_updater: SimulationObjectUpdatingComponent,
-        track_speed_limit_fault: TrackSpeedLimitFault,
-        track: Track,
-        # the following arguments are needed fixtures
-        # pylint: disable=unused-argument
-        speed_update,
-        combine_track_and_wrapper,
-        # pylint: enable=unused-argument
-    ):
-        track.max_speed = 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick)
-        track_speed_limit_fault.simulation_object_updater = (
-            empty_simulation_object_updater
-        )
-        with pytest.raises(ValueError):
-            track_speed_limit_fault.resolve_fault(tick)

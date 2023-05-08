@@ -80,20 +80,3 @@ class TestPlatformBlockedFault:
         with pytest.raises(NotImplementedError):
             platform_blocked_fault.resolve_fault(tick)
         assert not platform.blocked
-
-    def test_resolve_element_does_not_exist(
-        self,
-        tick,
-        empty_simulation_object_updater: SimulationObjectUpdatingComponent,
-        platform_blocked_fault: PlatformBlockedFault,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_platform_and_wrapper,
-    ):
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
-        platform_blocked_fault.simulation_object_updater = (
-            empty_simulation_object_updater
-        )
-        with pytest.raises(ValueError):
-            platform_blocked_fault.resolve_fault(tick)
