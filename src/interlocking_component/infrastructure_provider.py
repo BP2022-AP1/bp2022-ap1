@@ -50,8 +50,20 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 signal = potential_signal
                 break
         if target_state == "halt":
+            self.logger.set_signal(
+                self.route_controller.tick,
+                signal.identifier,
+                signal.state,
+                Signal.State.HALT,
+            )
             signal.state = Signal.State.HALT
         elif target_state == "go":
+            self.logger.set_signal(
+                self.route_controller.tick,
+                signal.identifier,
+                signal.state,
+                Signal.State.GO,
+            )
             signal.state = Signal.State.GO
 
     def train_drove_onto_track(self, train: Train, edge: Edge):

@@ -118,7 +118,7 @@ class RouteController(Component):
         # I'm not sure if this is necessary, but better save than sorry.
         RouteGenerator(topology).generate_routes()
 
-        infrastructure_provider = SumoInfrastructureProvider(self)
+        infrastructure_provider = SumoInfrastructureProvider(self, logger)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
