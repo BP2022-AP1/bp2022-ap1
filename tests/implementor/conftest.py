@@ -92,6 +92,7 @@ def train_prio_fault_configuration(train_prio_fault_configuration_data):
 
 # ------------- TrainSpeedFaultConfiguration ----------------
 
+
 @pytest.fixture
 def train_speed_fault_configuration_data(train: Train) -> dict:
     return {
