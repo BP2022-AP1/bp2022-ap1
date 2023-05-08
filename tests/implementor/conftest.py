@@ -225,7 +225,7 @@ def track_speed_limit_fault_configuration(
     track_speed_limit_fault_configuration_data: dict,
 ) -> TrackSpeedLimitFaultConfiguration:
     return TrackSpeedLimitFaultConfiguration.create(
-        track_speed_limit_fault_configuration_data
+        **track_speed_limit_fault_configuration_data
     )
 
 
