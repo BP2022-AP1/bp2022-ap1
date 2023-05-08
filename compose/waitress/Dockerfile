@@ -1,12 +1,7 @@
 FROM python
 WORKDIR /app
 
-# RUN apt-get update
-# RUN apt-get install -y software-properties-common
-
-#RUN add-apt-repository ppa:sumo/stable
 RUN apt-get update
-RUN apt-get install -y sumo
 
 RUN pip install poetry
 
