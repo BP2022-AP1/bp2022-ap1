@@ -202,9 +202,7 @@ class TestLogger:
         assert log_entry.block_section_length == block_section_length
 
     @freeze_time()
-    def test_train_leave_block_section(
-        self, run, tick, train_id, block_section_id
-    ):
+    def test_train_leave_block_section(self, run, tick, train_id, block_section_id):
         logger = Logger(run_id=run.id)
         logger.train_leave_block_section(
             tick=tick,
