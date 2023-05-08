@@ -93,8 +93,11 @@ def route_controller(
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
     route_controller: RouteController,
+    logger,
 ) -> SumoInfrastructureProvider:
-    sumo_mock_infrastructure_provider = SumoInfrastructureProvider(route_controller)
+    sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
+        route_controller, logger
+    )
     return sumo_mock_infrastructure_provider
 
 
@@ -153,10 +156,10 @@ def mock_route_controller(
 
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
-    mock_route_controller: RouteController,
+    mock_route_controller: RouteController, logger
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
-        mock_route_controller
+        mock_route_controller, logger
     )
     mock_route_controller.interlocking.set_tds_count_in_callback(
         interlocking_mock_infrastructure_provider

@@ -2,6 +2,7 @@ from interlocking.infrastructureprovider.infrastructureprovider import (
     InfrastructureProvider,
 )
 
+from src.logger.logger import Logger
 from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
@@ -11,16 +12,19 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     """
 
     route_controller: "RouteController"
+    logger: Logger
 
     def __init__(
         self,
         route_controller: "RouteController",
+        logger: Logger,
     ):
         super().__init__()
         self.route_controller = route_controller
         self.route_controller.simulation_object_updating_component.infrastructur_provider = (
             self
         )
+        self.logger = logger
 
     def turn_point(self, yaramo_point, target_orientation):
         super().turn_point(yaramo_point, target_orientation)
