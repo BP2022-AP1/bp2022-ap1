@@ -15,7 +15,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Track, Train, Node
+from src.wrapper.simulation_objects import Edge, Node, Platform, Track, Train
 
 
 class IInterlockingDisruptor:
