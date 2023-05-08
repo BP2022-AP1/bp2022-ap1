@@ -76,3 +76,18 @@ class TestTrackBlockedFault:
         with pytest.raises(NotImplementedError):
             track_blocked_fault.resolve_fault(tick)
         assert not track.blocked
+
+    def test_resolve_element_does_not_exist(
+        self,
+        tick,
+        empty_simulation_object_updater: SimulationObjectUpdatingComponent,
+        track_blocked_fault: TrackBlockedFault,
+        # the following argument is a needed fixture
+        # pylint: disable-next=unused-argument
+        combine_track_and_wrapper,
+    ):
+        with pytest.raises(NotImplementedError):
+            track_blocked_fault.inject_fault(tick)
+        track_blocked_fault.simulation_object_updater = empty_simulation_object_updater
+        with pytest.raises(ValueError):
+            track_blocked_fault.resolve_fault(tick)

@@ -160,3 +160,8 @@ def spawner(spawner_configuration, logger):
         train_spawner=MockTrainSpawner(),
     )
     return spawner
+
+
+@pytest.fixture
+def empty_simulation_object_updater():
+    return SimulationObjectUpdatingComponent()
