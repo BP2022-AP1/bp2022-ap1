@@ -155,4 +155,3 @@ def spawner(spawner_configuration, logger):
         train_spawner=MockTrainSpawner(),
     )
     return spawner
-
