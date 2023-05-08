@@ -20,7 +20,12 @@ class TestApiTrackSpeedLimitFault:
     @pytest.mark.parametrize(
         "data",
         [
-            {"new_speed_limit": 1},
+            {
+                "new_speed_limit": 1,
+                "description": "test",
+                "strategy": "test",
+                "affected_element_id": "test",
+            },
             {
                 "affected_element_id": "test",
                 "new_speed_limit": 1,
