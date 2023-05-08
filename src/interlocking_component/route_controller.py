@@ -15,7 +15,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Node, Platform, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
 class IInterlockingDisruptor:
@@ -221,7 +221,8 @@ class RouteController(Component):
                             route_length,
                         )
                         # Right now a fahrstrasse is always from one Signal to the next.
-                        # Because of this the fahrstrasse is identical to the block section the train drives into.
+                        # Because of this the fahrstrasse is identical
+                        # to the block section the train drives into.
                     else:
                         self.routes_to_be_set.append(interlocking_route)
 

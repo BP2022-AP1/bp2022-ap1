@@ -92,9 +92,16 @@ class Node(SimulationObject):
         ]
 
     def get_edge_to(self, other_node: "Node") -> "Edge":
+        """This method returns the edge between the node this is called on and the given node.
+
+        :param other_node: The node this node is connected to
+        :return: The edge between the two nodes
+        :rtype: Edge
+        """
         for potential_edge in self.edges:
             if potential_edge.to_node == other_node:
                 return potential_edge
+        raise ValueError("The two nodes are not connected.")
 
     @staticmethod
     def from_simulation(

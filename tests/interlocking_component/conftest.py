@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
-from traci import trafficlight
+from traci import constants, trafficlight
 
 from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.infrastructure_provider import (
@@ -202,3 +202,33 @@ def SUMO_edge():
         identifier = "test_id-re"
 
     return EdgeMock()
+
+
+@pytest.fixture
+def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
+    # pylint: disable=unused-argument
+    created_train = Train(
+        identifier="fake-sim-train",
+        train_type="fancy-ice",
+        timetable=[],
+        from_simulator=True,
+    )
+    created_train.updater = configured_souc
+    created_train.update(
+        {
+            constants.VAR_POSITION: (
+                100,
+                100,
+            ),
+            constants.VAR_ROAD_ID: "cfc57-0",
+            constants.VAR_ROUTE: "testing-route",
+            constants.VAR_SPEED: 10.2,
+        }
+    )
+    created_train.train_type.update(
+        {
+            constants.VAR_MAXSPEED: 11,
+        }
+    )
+
+    return created_train
