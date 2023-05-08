@@ -16,7 +16,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ("/component/fault-injection/track-blocked-fault", 501),
         ("/component/fault-injection/train-prio-fault", 501),
         ("/component/fault-injection/train-speed-fault", 501),
-        ("/component/fault-injection/track-speed-limit-fault", 501),
+        ("/component/fault-injection/track-speed-limit-fault", 200),
         ("/run/1", 501),
         ("/schedule/1", 501),
         ("/simulation/1", 501),
