@@ -39,16 +39,6 @@ class TestSimulationObjectUpdatingComponent:
 
         return component
 
-    @pytest.fixture
-    def configured_component(self, traffic_update) -> SimulationObjectUpdatingComponent:
-        # pylint: disable=unused-argument
-        component = SimulationObjectUpdatingComponent(
-            sumo_configuration=os.path.join(
-                "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
-            )
-        )
-        return component
-
     def test_tracks(self, component: SimulationObjectUpdatingComponent):
         assert self.signal not in component.edges
         assert self.edge in component.edges
@@ -73,28 +63,28 @@ class TestSimulationObjectUpdatingComponent:
         assert self.platform not in component.switches
         assert self.switch in component.switches
 
-    def test_load(self, configured_component: SimulationObjectUpdatingComponent):
-        assert len(configured_component.signals) == 8
-        assert len(configured_component.edges) == 38
-        assert len(configured_component.platforms) == 3
-        assert len(configured_component.switches) == 4
-        assert len(configured_component.tracks) == 19
+    def test_load(self, configured_souc: SimulationObjectUpdatingComponent):
+        assert len(configured_souc.signals) == 8
+        assert len(configured_souc.edges) == 38
+        assert len(configured_souc.platforms) == 3
+        assert len(configured_souc.switches) == 4
+        assert len(configured_souc.tracks) == 19
 
-        for node in configured_component.switches:
+        for node in configured_souc.switches:
             assert len(node.edges) == 6
 
-        for node in configured_component.signals:
+        for node in configured_souc.signals:
             assert 1 <= len(node.edges) <= 4
 
-    def test_edge_refs(self, configured_component: SimulationObjectUpdatingComponent):
-        for edge in configured_component.edges:
+    def test_edge_refs(self, configured_souc: SimulationObjectUpdatingComponent):
+        for edge in configured_souc.edges:
             assert edge.from_node is not None
             assert edge.to_node is not None
 
             assert edge in edge.from_node.edges
 
-    def test_node_refs(self, configured_component: SimulationObjectUpdatingComponent):
-        for node in configured_component.nodes:
+    def test_node_refs(self, configured_souc: SimulationObjectUpdatingComponent):
+        for node in configured_souc.nodes:
             assert len(node.edges) >= 1
 
             for edge in node.edges:
@@ -113,14 +103,14 @@ class TestSimulationObjectUpdatingComponent:
 
     def test_stale_train_is_removed(
         self,
-        configured_component: SimulationObjectUpdatingComponent,
+        configured_souc: SimulationObjectUpdatingComponent,
         train: Train,
         results,
         all_trains,
     ):
         # pylint: disable=unused-argument
-        configured_component.simulation_objects.append(train)
-        configured_component.next_tick(1)
-        configured_component.next_tick(2)
+        configured_souc.simulation_objects.append(train)
+        configured_souc.next_tick(1)
+        configured_souc.next_tick(2)
 
-        assert len(configured_component.trains) == 0
+        assert len(configured_souc.trains) == 0
