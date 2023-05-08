@@ -1,6 +1,7 @@
 import hashlib
 
 import pytest
+from traci import vehicle
 
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
@@ -278,6 +279,44 @@ def train_speed_fault_configuration(
         new_speed=30,
         strategy="regular",
     )
+
+
+# ------------- TrainSpeedFaultConfiguration ----------------
+
+
+@pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
+# pylint: disable-next=unused-argument
+def train(train_add) -> Train:
+    return Train(identifier="fault injector train", train_type="cargo")
+
+
+@pytest.fixture
+def train_speed_fault_configuration_data(train: Train) -> dict:
+    return {
+        "start_tick": 40,
+        "end_tick": 400,
+        "description": "test TrainSpeedFault",
+        "affected_element_id": train.identifier,
+        "new_speed": 30,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def train_speed_fault_configuration(
+    track_speed_limit_fault_configuration_data, train: Train
+):
+    return TrainSpeedFaultConfiguration.create(train_speed_fault_configuration_data)
 
 
 # ------------- SimulationConfiguration ----------------
