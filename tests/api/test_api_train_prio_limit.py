@@ -15,12 +15,17 @@ class TestApiTrainPrioFault:
             "/component/fault-injection/train-prio-fault",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "data",
         [
-            {"new_prio": 1, "description": "test", "strategy": "test"},
+            {
+                "affected_element_id": "test",
+                "new_prio": 1,
+                "description": "test",
+                "strategy": "test",
+            },
             {
                 "affected_element_id": "test",
                 "new_prio": 1,
