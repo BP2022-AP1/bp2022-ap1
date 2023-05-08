@@ -5,7 +5,8 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
-    TrainPrioFaultConfiguration,)
+    TrainPrioFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
@@ -53,10 +54,6 @@ def track_speed_limit_fault_configuration(
     )
 
 
-# ------------- FaultConfiguration ----------------
-# ------------- TrainSpeedFaultConfiguration ----------------
-
-
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, route, train_type):
@@ -73,6 +70,9 @@ def train(train_add) -> Train:
     return Train(identifier="fault injector train", train_type="cargo")
 
 
+# ------------- TrainPrioFaultConfiguration ----------------
+
+
 @pytest.fixture
 def train_prio_fault_configuration_data(train: Train) -> dict:
     return {
@@ -81,9 +81,18 @@ def train_prio_fault_configuration_data(train: Train) -> dict:
         "description": "test TrainPrioFault",
         "affected_element_id": train.identifier,
         "new_prio": 3,
-        "strategy": "regular"}
-        
-        
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def train_prio_fault_configuration(train_prio_fault_configuration_data):
+    return TrainPrioFaultConfiguration.create(train_prio_fault_configuration_data)
+
+
+# ------------- TrainSpeedFaultConfiguration ----------------
+
+@pytest.fixture
 def train_speed_fault_configuration_data(train: Train) -> dict:
     return {
         "start_tick": 40,
@@ -96,12 +105,7 @@ def train_speed_fault_configuration_data(train: Train) -> dict:
 
 
 @pytest.fixture
-def train_prio_fault_configuration(train_prio_fault_configuration_data):
-    return TrainPrioFaultConfiguration.create(train_prio_fault_configuration_data)
-    
-@pytest.fixture
-def train_speed_fault_configuration(
-    track_speed_limit_fault_configuration_data):
+def train_speed_fault_configuration(train_speed_fault_configuration_data):
     return TrainSpeedFaultConfiguration.create(train_speed_fault_configuration_data)
 
 
