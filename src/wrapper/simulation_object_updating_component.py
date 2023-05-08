@@ -5,6 +5,9 @@ import sumolib
 import traci
 
 from src.component import Component
+from src.interlocking_component.infrastructure_provider import (
+    SumoInfrastructureProvider,
+)
 from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
     Edge,
@@ -26,6 +29,7 @@ class SimulationObjectUpdatingComponent(Component):
 
     _simulation_objects = None
     _sumo_configuration = None
+    infrastructure_provider: SumoInfrastructureProvider = None
 
     @property
     def simulation_objects(self) -> List[SimulationObject]:
