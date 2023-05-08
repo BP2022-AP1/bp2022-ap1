@@ -313,10 +313,8 @@ def train_speed_fault_configuration_data(train: Train) -> dict:
 
 
 @pytest.fixture
-def train_speed_fault_configuration(
-    track_speed_limit_fault_configuration_data, train: Train
-):
-    return TrainSpeedFaultConfiguration.create(train_speed_fault_configuration_data)
+def train_speed_fault_configuration(train_speed_fault_configuration_data):
+    return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
 
 
 # ------------- SimulationConfiguration ----------------

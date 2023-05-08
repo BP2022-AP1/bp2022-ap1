@@ -89,7 +89,7 @@ def create_run(body, token):
     #    interlocking_component = RouteController(logger, interlocking_configuration)
     #    communicator.add_component(interlocking_component)
 
-    route_controller = RouteController(logger, 1)
+    route_controller = RouteController(logger, 1, object_updater)
     communicator.add_component(route_controller)
 
     # The todo will be replaces in other PR when the interlocking component is implemented
