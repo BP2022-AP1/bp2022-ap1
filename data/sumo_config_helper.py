@@ -9,7 +9,7 @@ from track_signal_generator.generator import TrackSignalGenerator
 def generate_sumo():
     # Import from local PlanPro file
     topology = PlanProReader(
-        "data/planpro/test_with_fixed_points.ppxml"
+        "data/planpro/v0905.ppxml"
     ).read_topology_from_plan_pro_file()
 
     # Generate Signals
