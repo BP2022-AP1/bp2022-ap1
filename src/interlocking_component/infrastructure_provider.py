@@ -54,7 +54,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 self.route_controller.tick,
                 signal.identifier,
                 signal.state,
-                1,
+                Signal.State.HALT,
             )
             signal.state = Signal.State.HALT
         elif target_state == "go":
@@ -62,7 +62,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 self.route_controller.tick,
                 signal.identifier,
                 signal.state,
-                2,
+                Signal.State.GO,
             )
             signal.state = Signal.State.GO
 

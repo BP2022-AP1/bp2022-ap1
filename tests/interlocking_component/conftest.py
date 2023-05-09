@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
-from traci import constants, trafficlight
+from traci import constants, trafficlight, vehicle
 
 from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.infrastructure_provider import (

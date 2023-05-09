@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from enum import Enum
+from enum import IntEnum
 from typing import List, Tuple
 
 from sumolib import net
@@ -136,7 +136,7 @@ class Signal(Node):
     (See `ISimulationSignal.State`)
     """
 
-    class State(Enum):
+    class State(IntEnum):
         """The possible states of the signal"""
 
         HALT = 1
