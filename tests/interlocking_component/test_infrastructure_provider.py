@@ -1,5 +1,3 @@
-import pytest
-
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
@@ -61,11 +59,11 @@ class TestInfrastructurProvider:
     def test_train_drove_onto_track(
         self,
         interlocking_mock_infrastructure_provider: SumoInfrastructureProvider,
-        SUMO_train: Train,
-        SUMO_edge: Edge,
+        sumo_train: Train,
+        sumo_edge: Edge,
     ):
         interlocking_mock_infrastructure_provider.train_drove_onto_track(
-            SUMO_train, SUMO_edge
+            sumo_train, sumo_edge
         )
         assert (
             interlocking_mock_infrastructure_provider.route_controller.maybe_set_fahrstrasse_count
@@ -79,9 +77,9 @@ class TestInfrastructurProvider:
     def test_train_drove_off_track(
         self,
         interlocking_mock_infrastructure_provider: SumoInfrastructureProvider,
-        SUMO_edge: Edge,
+        sumo_edge: Edge,
     ):
-        interlocking_mock_infrastructure_provider.train_drove_off_track(SUMO_edge)
+        interlocking_mock_infrastructure_provider.train_drove_off_track(sumo_edge)
         assert (
             interlocking_mock_infrastructure_provider.route_controller.maybe_free_fahrstrasse_count
             == 1

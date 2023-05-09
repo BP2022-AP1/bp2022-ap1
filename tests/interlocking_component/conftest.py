@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
@@ -101,19 +100,24 @@ def sumo_mock_infrastructure_provider(
 @pytest.fixture
 def mock_interlocking() -> Interlocking:
     class InterlockingMock:
+        """This mocks the interlocking and counts how often tds_count_in_count and tds_count_out_count was called.
+        """
         tds_count_in_count = 0
         tds_count_out_count = 0
 
+        # In the infrastructureProvieder the callbacks are called with track_segment_id as an argument. This is why they need to be here.
+        # pylint: disable=unused-argument
         def increment_tds_count_in_count(self, track_segment_id):
             self.tds_count_in_count += 1
+
+        def increment_tds_count_out_count(self, track_segment_id):
+            self.tds_count_out_count += 1
+        # pylint: enable=unused-argument
 
         def set_tds_count_in_callback(self, infrastructure_provider):
             infrastructure_provider.set_tds_count_in_callback(
                 self.increment_tds_count_in_count
             )
-
-        def increment_tds_count_out_count(self, track_segment_id):
-            self.tds_count_out_count += 1
 
         def set_tds_count_out_callback(self, infrastructure_provider):
             infrastructure_provider.set_tds_count_out_callback(
@@ -126,6 +130,8 @@ def mock_interlocking() -> Interlocking:
 @pytest.fixture
 def mock_simulation_object_updating_component() -> SimulationObjectUpdatingComponent:
     class SOUCMock:
+        """This mocks a simulation object updating component with a infrastructur_provider that may be set.
+        """
         infrastructur_provider = None
 
     return SOUCMock()
@@ -137,16 +143,21 @@ def mock_route_controller(
     mock_simulation_object_updating_component: SimulationObjectUpdatingComponent,
 ) -> RouteController:
     class RouteControllerMock:
+        """This mocks the route controller in a way, that counts how often each method was called.
+        """
         interlocking: Interlocking = mock_interlocking
         simulation_object_updating_component = mock_simulation_object_updating_component
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
 
+        # The following methods must implemt the interface of those methods in the real classes
+        # pylint: disable=unused-argument
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
         def maybe_free_fahrstrasse(self, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
+        # pylint: enable=unused-argument
 
     return RouteControllerMock()
 
@@ -170,6 +181,8 @@ def interlocking_mock_infrastructure_provider(
 @pytest.fixture
 def yaramo_point():
     class PointMock:
+        """This mocks a point (or switch) coming from yaramo/the interlocking with the same attributes, but not the functionality.
+        """
         point_id = "73093"
         state = None
 
@@ -179,6 +192,8 @@ def yaramo_point():
 @pytest.fixture
 def yaramo_signal():
     class SignalMock:
+        """This mocks a signal coming from yaramo/the interlocking with the same attributes, but not the functionality.
+        """
         name = "637cdc98-0b49-4eff-bd2f-b9549becfc57-km-25"
         state = None
 
@@ -186,16 +201,20 @@ def yaramo_signal():
 
 
 @pytest.fixture
-def SUMO_train():
+def sumo_train() -> Train:
     class TrainMock:
+        """This mocks a train coming from SUMO with the same attributes, but not the functionality.
+        """
         identifier = "Test_Train"
 
     return TrainMock()
 
 
 @pytest.fixture
-def SUMO_edge():
+def sumo_edge() -> Edge:
     class EdgeMock:
+        """This mocks an edge coming from SUMO with the same attributes, but not the functionality.
+        """
         identifier = "test_id-re"
 
     return EdgeMock()

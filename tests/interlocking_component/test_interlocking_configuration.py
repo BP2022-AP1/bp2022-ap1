@@ -1,5 +1,3 @@
-from uuid import UUID
-
 import pytest
 
 from src.implementor.models import SimulationConfiguration
