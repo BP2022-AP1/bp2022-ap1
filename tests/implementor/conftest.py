@@ -352,7 +352,7 @@ def schedule_blocked_fault_configuration(
     schedule_blocked_fault_configuration_data: dict,
 ) -> ScheduleBlockedFaultConfiguration:
     return ScheduleBlockedFaultConfiguration.create(
-        schedule_blocked_fault_configuration_data
+        **schedule_blocked_fault_configuration_data
     )
 
 
