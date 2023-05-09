@@ -17,7 +17,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Train
+from src.wrapper.simulation_objects import Edge, Train, Signal
 
 
 @pytest.fixture
@@ -25,17 +25,21 @@ def mock_logger() -> Logger:
     class LoggerMock:
         create_fahrstrasse_count = 0
         remove_fahrstrasse_count = 0
-        set_signal_count = 0
+        set_signal_go_count = 0
+        set_signal_halt_count = 0
         train_enter_block_section_count = 0
         train_leave_block_section_count = 0
         def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
-            pass
+            self.create_fahrstrasse_count += 1
         def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
-            pass
+            self.remove_fahrstrasse_count += 1
         def set_signal(
             self, tick: int, signal_id: str, state_before: int, state_after: int
         ) -> Type[None]:
-            pass
+            if state_after == Signal.State.GO:
+                self.set_signal_go_count += 1
+            elif state_after == Signal.State.HALT:
+                self.set_signal_halt_count += 1
         def train_enter_block_section(
             self,
             tick: int,
@@ -43,7 +47,7 @@ def mock_logger() -> Logger:
             block_section_id: str,
             block_section_length: float,
         ) -> Type[None]:
-            pass
+            self.train_enter_block_section_count += 1
         def train_leave_block_section(
             self,
             tick: int,
@@ -51,7 +55,7 @@ def mock_logger() -> Logger:
             block_section_id: str,
             block_section_length: float = 0,
         ) -> Type[None]:
-            pass
+            self.train_leave_block_section_count += 1
     return LoggerMock()
 
 

@@ -53,10 +53,14 @@ class TestInfrastructurProvider:
         assert signal.state == Signal.State.GO
         assert get_rr_count() == rr_count
         assert get_gg_count() == gg_count + 1
+        assert sumo_mock_infrastructure_provider.logger.set_signal_go_count == 1
+        assert sumo_mock_infrastructure_provider.logger.set_signal_halt_count == 0
         sumo_mock_infrastructure_provider.set_signal_state(yaramo_signal, "halt")
         assert signal.state == Signal.State.HALT
         assert get_rr_count() == rr_count + 1
         assert get_gg_count() == gg_count + 1
+        assert sumo_mock_infrastructure_provider.logger.set_signal_go_count == 1
+        assert sumo_mock_infrastructure_provider.logger.set_signal_halt_count == 1
 
     def test_train_drove_onto_track(
         self,
