@@ -79,11 +79,11 @@ class TestInfrastructurProvider:
     def test_train_drove_off_track(
         self,
         interlocking_mock_infrastructure_provider: SumoInfrastructureProvider,
-        sumo_train: Train,
+        SUMO_train: Train,
         SUMO_edge: Edge,
     ):
         interlocking_mock_infrastructure_provider.train_drove_off_track(
-            sumo_train, SUMO_edge
+            SUMO_train, SUMO_edge
         )
         assert (
             interlocking_mock_infrastructure_provider.route_controller.maybe_free_fahrstrasse_count

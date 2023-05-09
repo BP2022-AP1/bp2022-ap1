@@ -23,6 +23,11 @@ from src.wrapper.simulation_objects import Edge, Train
 @pytest.fixture
 def mock_logger() -> Logger:
     class LoggerMock:
+        create_fahrstrasse_count = 0
+        remove_fahrstrasse_count = 0
+        set_signal_count = 0
+        train_enter_block_section_count = 0
+        train_leave_block_section_count = 0
         def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
             pass
         def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
@@ -186,7 +191,7 @@ def mock_route_controller(
 
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
-    mock_route_controller: RouteController, mock_logger: Logger, sumo_train: Train
+    mock_route_controller: RouteController, mock_logger: Logger,
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
         mock_route_controller, mock_logger
@@ -196,24 +201,6 @@ def interlocking_mock_infrastructure_provider(
     )
     mock_route_controller.interlocking.set_tds_count_out_callback(
         interlocking_mock_infrastructure_provider
-    )
-    created_train = sumo_train
-    created_train.updater = mock_route_controller.simulation_object_updating_component
-    created_train.update(
-        {
-            constants.VAR_POSITION: (
-                100,
-                100,
-            ),
-            constants.VAR_ROAD_ID: "cfc57-0",
-            constants.VAR_ROUTE: "testing-route",
-            constants.VAR_SPEED: 10.2,
-        }
-    )
-    created_train.train_type.update(
-        {
-            constants.VAR_MAXSPEED: 11,
-        }
     )
     return interlocking_mock_infrastructure_provider
 
@@ -261,13 +248,3 @@ def train_add(monkeypatch):
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
-
-@pytest.fixture
-def sumo_train(train_add) -> Train:
-    # pylint: disable=unused-argument
-    return Train(
-        identifier="fake-sim-train",
-        train_type="fancy-ice",
-        timetable=[],
-        from_simulator=True,
-    )
