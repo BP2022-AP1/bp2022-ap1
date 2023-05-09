@@ -25,6 +25,7 @@ services:
       - 5010:5000
     env_file:
       - .env.shared
+      - .env.secret
     environment:
       - GRAFANA_HOST=grafana-dev
     depends_on:
@@ -55,6 +56,9 @@ services:
       dockerfile: ./compose/celery/Dockerfile
     env_file:
       - .env.shared
+      - .env.secret
+    environment:
+      - GRAFANA_HOST=grafana-dev
     volumes:
       - .:/app
     depends_on:
