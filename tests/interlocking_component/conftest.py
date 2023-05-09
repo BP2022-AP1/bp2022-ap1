@@ -1,9 +1,9 @@
 import os
-from typing import List, Type
+from typing import Type
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
-from traci import constants, trafficlight, vehicle
+from traci import trafficlight, vehicle
 
 from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.infrastructure_provider import (
@@ -23,6 +23,8 @@ from src.wrapper.simulation_objects import Edge, Signal, Train
 @pytest.fixture
 def mock_logger() -> Logger:
     class LoggerMock:
+        """This mocks the Logger and counts how often the logging methods are called."""
+
         create_fahrstrasse_count = 0
         remove_fahrstrasse_count = 0
         set_signal_go_count = 0
@@ -30,6 +32,8 @@ def mock_logger() -> Logger:
         train_enter_block_section_count = 0
         train_leave_block_section_count = 0
 
+        # The following methods must implement the interface of those methods in the real classes
+        # pylint: disable=unused-argument
         def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
             self.create_fahrstrasse_count += 1
 
@@ -61,6 +65,8 @@ def mock_logger() -> Logger:
             block_section_length: float = 0,
         ) -> Type[None]:
             self.train_leave_block_section_count += 1
+
+        # pylint: enable=unused-argument
 
     return LoggerMock()
 
@@ -155,7 +161,7 @@ def sumo_mock_infrastructure_provider(
 def mock_interlocking() -> Interlocking:
     class InterlockingMock:
         """This mocks the interlocking and counts how often
-        tds_count_in_count and tds_count_out_count was called.
+        tds_count_in_count and tds_count_out_count are called.
         """
 
         tds_count_in_count = 0
@@ -212,7 +218,7 @@ def mock_route_controller(
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
 
-        # The following methods must implemt the interface of those methods in the real classes
+        # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
