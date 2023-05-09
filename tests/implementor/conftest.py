@@ -30,7 +30,6 @@ from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
 )
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import ScheduleBlockedFaultConfiguration
 from src.schedule.train_schedule import TrainSchedule
 from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
@@ -323,6 +322,7 @@ def train_speed_fault_configuration(train_speed_fault_configuration_data):
 
 # ------------- ScheduleBlockedFaultConfiguration ----------------
 
+
 @pytest.fixture
 def schedule():
     schedule_configuration = ScheduleConfiguration(
@@ -335,22 +335,25 @@ def schedule():
     schedule_configuration.save()
     return schedule_configuration
 
+
 @pytest.fixture
 def schedule_blocked_fault_configuration_data(schedule) -> dict:
     return {
-            "start_tick": 30,
-            "end_tick": 300,
-            "description": "test ScheduleBlockedFault",
-            "affected_element_id": schedule.id,
-            "strategy": "regular",
-        }
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test ScheduleBlockedFault",
+        "affected_element_id": schedule.id,
+        "strategy": "regular",
+    }
+
 
 @pytest.fixture
-def schedule_blocked_fault_configuration(schedule_blocked_fault_configuration_data: dict) -> ScheduleBlockedFaultConfiguration:
+def schedule_blocked_fault_configuration(
+    schedule_blocked_fault_configuration_data: dict,
+) -> ScheduleBlockedFaultConfiguration:
     return ScheduleBlockedFaultConfiguration.create(
         schedule_blocked_fault_configuration_data
     )
-
 
 
 # ------------- SimulationConfiguration ----------------

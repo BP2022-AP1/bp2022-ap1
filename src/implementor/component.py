@@ -3,6 +3,9 @@
 
 import json
 
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
@@ -12,7 +15,6 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import ScheduleBlockedFaultConfiguration
 from src.implementor.models import SimulationConfiguration
 
 
