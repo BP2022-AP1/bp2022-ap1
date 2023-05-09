@@ -35,10 +35,6 @@ class TrackBlockedFault(Fault, TrackMixIn):
         """
         if self.track is None:
             raise ValueError("TrackBlockedFault not injected")
-        if self.track is not self.get_track(
-            self.simulation_object_updater, self.track.identifier
-        ):
-            raise ValueError("Track does not exist")
 
         self.track.blocked = False
         self.interlocking.insert_track_unblocked(self.track)

@@ -41,10 +41,6 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
         """
         if self.track is None:
             raise ValueError("TrackSpeedLimitFault not injected")
-        if self.track is not self.get_track(
-            self.simulation_object_updater, self.track.identifier
-        ):
-            raise ValueError("Track does not exist")
 
         self.track.max_speed = self.old_speed_limit
         self.interlocking.insert_track_speed_limit_changed(self.track)
