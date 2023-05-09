@@ -345,7 +345,15 @@ class DataScience:
         :param run_id: run id
         :return: dataframe of spawn events
         """
-        raise NotImplementedError()
+        spawn_df = self.log_collector.get_train_spawn_times(run_id)
+        spawn_df["time"] = spawn_df["tick"] + self.unix_2020
+        spawn_df["time"] = pd.to_datetime(spawn_df["time"], unit="s")
+        spawn_df["title"] = f"Spawn train {spawn_df['train_id']}"
+        spawn_df["title"] = spawn_df["train_id"].apply(lambda e: f"Spawn train {e}")
+        spawn_df.set_index("time", inplace=True)
+        del spawn_df["tick"]
+        del spawn_df["train_id"]
+        return spawn_df
 
     # --- SCALARS
     def get_verkehrsmenge_by_run_id(self, run_id: UUID) -> pd.DataFrame:

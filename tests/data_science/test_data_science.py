@@ -151,9 +151,18 @@ class TestDataScience:
         coal_demand_df = data_science.get_coal_demand_by_run_id(run).head(10)
         assert_frame_equal(coal_demand_df, coal_demand_by_run_id_head_df)
 
-    def test_get_spawn_events_by_run_id(self, run: Run, data_science: DataScience):
-        with pytest.raises(NotImplementedError):
-            data_science.get_spawn_events_by_run_id(run)
+    def test_get_spawn_events_by_run_id(
+        self,
+        run: Run,
+        data_science: DataScience,
+        logger: Logger,
+        spawn_events_by_run_id_head_df: pd.DataFrame,
+    ):
+        TestLogCollector.setup_logs_spawn_trains(logger)
+        assert_frame_equal(
+            spawn_events_by_run_id_head_df,
+            data_science.get_spawn_events_by_run_id(run).head(5),
+        )
 
     def test_get_verkehrsmenge_by_run_id(
         self, logger: Logger, data_science: DataScience, verkehrsmenge_df: pd.DataFrame
