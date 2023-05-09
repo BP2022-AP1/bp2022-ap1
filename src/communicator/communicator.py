@@ -5,25 +5,12 @@ from typing import List
 from uuid import UUID
 
 import traci
-from celery import Celery, Task
+from celery import Task
 from celery.result import AsyncResult
 from sumolib import checkBinary
 
+from src.communicator.celery import celery
 from src.component import Component
-
-celery = Celery(
-    "proj",
-    broker=os.environ["CELERY_BROKER_URL"],
-    backend=os.environ["CELERY_RESULT_BACKEND"],
-)
-celery.conf.event_serializer = "pickle"
-celery.conf.task_serializer = "pickle"
-celery.conf.result_serializer = "pickle"
-celery.conf.accept_content = [
-    "application/json",
-    "application/x-python-serialize",
-    "pickle",
-]
 
 
 class Communicator:
