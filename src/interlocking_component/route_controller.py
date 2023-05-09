@@ -198,11 +198,9 @@ class RouteController(Component):
 
         route_length = 0
 
-        for i in range(len(new_route) - 1):
-            end_node_candidat = new_route[i + 1]
-            # This is the same as 'for end_node_candidat in new_route[1:]:'
+        for i, end_node_candidat in enumerate(new_route[1:], start=1):
 
-            route_length += new_route[i].get_edge_to(end_node_candidat).length
+            route_length += new_route[i-1].get_edge_to(end_node_candidat).length
 
             for interlocking_route in self.interlocking.routes:
                 if (
