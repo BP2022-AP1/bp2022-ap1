@@ -34,6 +34,22 @@
           "tags": [],
           "type": "dashboard"
         }
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "DATASOURCE_UID"
+        },
+        "enable": true,
+        "iconColor": "orange",
+        "name": "Train Spawns",
+        "query": "test_get_spawn_events_by_run_id:${run_id}",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        }
       }
     ]
   },

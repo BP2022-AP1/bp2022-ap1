@@ -206,6 +206,9 @@ def define_and_register_data():
     dg.add_annotation_reader(
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
     )
+    dg.add_annotation_reader(
+        "test_get_spawn_events_by_run_id", grafana_data_registrator.get_spawn_events_by_run_id
+    )
     dg.add_metric_reader(
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
     )
