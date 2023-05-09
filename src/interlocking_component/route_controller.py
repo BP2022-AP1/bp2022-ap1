@@ -198,7 +198,7 @@ class RouteController(Component):
 
         route_length = 0
 
-        for i in range(new_route - 1):
+        for i in range(len(new_route) - 1):
             end_node_candidat = new_route[i + 1]
             # This is the same as 'for end_node_candidat in new_route[1:]:'
 
