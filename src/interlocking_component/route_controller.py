@@ -95,6 +95,7 @@ class RouteController(Component):
     router: Router = None
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
+    tick: int = 0
 
     def __init__(
         self,
@@ -117,11 +118,12 @@ class RouteController(Component):
         # I'm not sure if this is necessary, but better save than sorry.
         RouteGenerator(topology).generate_routes()
 
-        infrastructure_provider = SumoInfrastructureProvider(self)
+        infrastructure_provider = SumoInfrastructureProvider(self, logger)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
     def next_tick(self, tick: int):
+        self.tick = tick
         for interlocking_route in self.routes_to_be_set:
             # This sets the fahrstrasse in the interlocking.
             # The Sumo SUMO route was already set.
@@ -194,7 +196,11 @@ class RouteController(Component):
         new_route = self.router.get_route(edge, train.timetable[0].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        for end_node_candidat in new_route[1:]:
+        route_length = 0
+
+        for i, end_node_candidat in enumerate(new_route[1:], start=1):
+            route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
+
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
@@ -204,8 +210,18 @@ class RouteController(Component):
                     was_set = self.interlocking.set_route(
                         interlocking_route.yaramo_route
                     )
-
-                    if not was_set:
+                    if was_set:
+                        self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
+                        self.logger.train_enter_block_section(
+                            self.tick,
+                            train.identifier,
+                            interlocking_route.id,
+                            route_length,
+                        )
+                        # Right now a fahrstrasse is always from one Signal to the next.
+                        # Because of this the fahrstrasse is identical
+                        # to the block section the train drives into.
+                    else:
                         self.routes_to_be_set.append(interlocking_route)
 
                     # This sets the route in SUMO.
@@ -215,28 +231,34 @@ class RouteController(Component):
                     train.route = interlocking_route.id
                     return
 
-    def maybe_free_fahrstrasse(self, edge: Edge):
+    def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
         """This method checks if the given edge is the last segment of a activ route
         and frees it if so.
 
-        :param edge: the edge the train drove off of
+        :param train: The train that drove of an edge
+        :type train: Train
+        :param edge: The edge the train drove off of
         :type edge: Edge
         """
         route = self._get_interlocking_route_for_edge(edge)
         if route is None or route.get_last_segment_of_route != edge.identifier:
             return
 
-        self._free_fahrstrasse(route)
+        self._free_fahrstrasse(train, route)
 
-    def _free_fahrstrasse(self, route: Route):
+    def _free_fahrstrasse(self, train: Train, route: Route):
         """This method frees the given interlocking route.
 
+        :param train: The train that drove of an edge
+        :type train: Train
         :param route: The active route
         :type route: Route
         """
         if route is not None:
             # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)
+            self.logger.remove_fahrstrasse(self.tick, route.id)
+            self.logger.train_leave_block_section(self.tick, train.identifier, route.id)
 
     def _get_interlocking_route_for_edge(self, edge: Edge) -> Route:
         """This method returns the interlocking route corresponding to the given edge.
