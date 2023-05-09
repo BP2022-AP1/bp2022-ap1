@@ -50,19 +50,14 @@ class TestInterlockingConfigurationXSimulationConfiguration:
     def setup_method(self):
         pass
 
-    @pytest.fixture
-    def simulation_configuration(self) -> SimulationConfiguration:
-        return SimulationConfiguration.create()
-
-    @pytest.mark.usefixtures("simulation_configuration, interlocking_configuration")
     def test_creation(
         self,
-        simulation_configuration: SimulationConfiguration,
+        unsaved_simulation_configuration: SimulationConfiguration,
         interlocking_configuration: InterlockingConfiguration,
     ):
         interlocking_x_simulation = InterlockingConfigurationXSimulationConfiguration(
             interlocking_configuration=interlocking_configuration,
-            schedule_configuration=simulation_configuration,
+            simulation_configuration=unsaved_simulation_configuration,
         )
         interlocking_x_simulation.save()
         assert (
@@ -71,7 +66,7 @@ class TestInterlockingConfigurationXSimulationConfiguration:
         )
         assert (
             interlocking_x_simulation.simulation_configuration
-            == simulation_configuration
+            == unsaved_simulation_configuration
         )
 
     def test_back_references(
