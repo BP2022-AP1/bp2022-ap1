@@ -208,7 +208,7 @@ class Switch(Node):
     (see `ISimulationSwitch.State`)
     """
 
-    class State(Enum):
+    class State(IntEnum):
         """The possible states of the switch"""
 
         LEFT = 1
