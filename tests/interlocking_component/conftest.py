@@ -17,7 +17,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Train, Signal
+from src.wrapper.simulation_objects import Edge, Signal, Train
 
 
 @pytest.fixture
@@ -29,10 +29,13 @@ def mock_logger() -> Logger:
         set_signal_halt_count = 0
         train_enter_block_section_count = 0
         train_leave_block_section_count = 0
+
         def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
             self.create_fahrstrasse_count += 1
+
         def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
             self.remove_fahrstrasse_count += 1
+
         def set_signal(
             self, tick: int, signal_id: str, state_before: int, state_after: int
         ) -> Type[None]:
@@ -40,6 +43,7 @@ def mock_logger() -> Logger:
                 self.set_signal_go_count += 1
             elif state_after == Signal.State.HALT:
                 self.set_signal_halt_count += 1
+
         def train_enter_block_section(
             self,
             tick: int,
@@ -48,6 +52,7 @@ def mock_logger() -> Logger:
             block_section_length: float,
         ) -> Type[None]:
             self.train_enter_block_section_count += 1
+
         def train_leave_block_section(
             self,
             tick: int,
@@ -56,6 +61,7 @@ def mock_logger() -> Logger:
             block_section_length: float = 0,
         ) -> Type[None]:
             self.train_leave_block_section_count += 1
+
     return LoggerMock()
 
 
@@ -195,7 +201,8 @@ def mock_route_controller(
 
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
-    mock_route_controller: RouteController, mock_logger: Logger,
+    mock_route_controller: RouteController,
+    mock_logger: Logger,
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
         mock_route_controller, mock_logger
@@ -251,4 +258,3 @@ def train_add(monkeypatch):
         assert train_type is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
-

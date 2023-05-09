@@ -7,7 +7,6 @@ from peewee import (
     ForeignKeyField,
     IntegerField,
     TextField,
-    UUIDField,
 )
 
 from src.base_model import BaseModel
