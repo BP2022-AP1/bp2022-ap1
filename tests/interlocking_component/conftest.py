@@ -205,6 +205,16 @@ def SUMO_edge():
 
 
 @pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
 def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
