@@ -5,7 +5,7 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
 )
 
 
-class TestRunImplementor:
+class TestScheduleBlockedFaultConfiguration:
     def test_get_all_schedule_blocked_fault_configuration_ids(
         self, token, schedule_blocked_fault_configuration_data
     ):
