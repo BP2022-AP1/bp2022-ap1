@@ -43,8 +43,6 @@ class PlatformBlockedFault(Fault):
         """
         if self.platform is None:
             raise ValueError("Fault not injected")
-        if self.platform is not self._get_platform():
-            raise ValueError("Platform does not exist")
 
         self.platform.blocked = False
         self.interlocking.insert_platform_unblocked(self.platform)

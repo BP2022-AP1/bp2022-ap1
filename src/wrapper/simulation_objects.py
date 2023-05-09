@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from enum import Enum
+from enum import IntEnum
 from typing import List, Tuple
 
 from sumolib import net
@@ -91,6 +91,18 @@ class Node(SimulationObject):
             + simulation_object.getIncoming()
         ]
 
+    def get_edge_to(self, other_node: "Node") -> "Edge":
+        """This method returns the edge between the node this is called on and the given node.
+
+        :param other_node: The node this node is connected to
+        :return: The edge between the two nodes
+        :rtype: Edge
+        """
+        for potential_edge in self.edges:
+            if potential_edge.to_node == other_node:
+                return potential_edge
+        raise ValueError("The two nodes are not connected.")
+
     @staticmethod
     def from_simulation(
         simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
@@ -124,7 +136,7 @@ class Signal(Node):
     (See `ISimulationSignal.State`)
     """
 
-    class State(Enum):
+    class State(IntEnum):
         """The possible states of the signal"""
 
         HALT = 1
@@ -196,7 +208,7 @@ class Switch(Node):
     (see `ISimulationSwitch.State`)
     """
 
-    class State(Enum):
+    class State(IntEnum):
         """The possible states of the switch"""
 
         LEFT = 1
@@ -597,7 +609,6 @@ class Train(SimulationObject):
     _position: Tuple[float, float]
     _route: str
     _edge: Edge = None
-    _edge_id: str
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
@@ -608,10 +619,6 @@ class Train(SimulationObject):
 
         :return: The current track the train is on
         """
-        if self._edge is None or self._edge.identifier != self._edge_id:
-            self._edge = next(
-                item for item in self.updater.edges if item.identifier == self._edge_id
-            )
         return self._edge
 
     @property
@@ -712,9 +719,20 @@ class Train(SimulationObject):
         :param updates: The updated values for the synchronized properties
         """
         self._position = data[constants.VAR_POSITION]
-        self._edge_id = data[constants.VAR_ROAD_ID]
+        edge_id = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
+        if self._edge is None or self._edge.identifier != edge_id:
+            if self._edge is not None:
+                self.updater.infrastructure_provider.train_drove_off_track(
+                    self, self._edge
+                )
+            self._edge = next(
+                item for item in self.updater.edges if item.identifier == edge_id
+            )
+            self.updater.infrastructure_provider.train_drove_onto_track(
+                self, self._edge
+            )
 
     def add_subscriptions(self) -> int:
         """Gets called when this object is created to allow

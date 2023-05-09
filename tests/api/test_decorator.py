@@ -6,7 +6,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
 @pytest.mark.parametrize(
     "route, response_code",
     [
-        ("/run", 501),
+        ("/run", 200),
         ("/schedule", 501),
         ("/simulation", 501),
         ("/component/interlocking", 501),
@@ -14,8 +14,8 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ("/component/fault-injection/schedule-blocked-fault", 501),
         ("/component/fault-injection/platform-blocked-fault", 501),
         ("/component/fault-injection/track-blocked-fault", 501),
-        ("/component/fault-injection/train-prio-fault", 501),
-        ("/component/fault-injection/train-speed-fault", 501),
+        ("/component/fault-injection/train-prio-fault", 200),
+        ("/component/fault-injection/train-speed-fault", 200),
         ("/component/fault-injection/track-speed-limit-fault", 200),
         ("/run/1", 501),
         ("/schedule/1", 501),

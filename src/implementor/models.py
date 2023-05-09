@@ -1,4 +1,4 @@
-from peewee import CharField, ForeignKeyField
+from peewee import CharField, ForeignKeyField, UUIDField
 
 from src.base_model import SerializableBaseModel
 
@@ -29,10 +29,12 @@ class Run(SerializableBaseModel):
     """Represents the configuration of a single execution of a simulation configuration."""
 
     simulation_configuration = ForeignKeyField(SimulationConfiguration, backref="runs")
+    process_id = UUIDField(null=True)
 
     def to_dict(self):
         data = super().to_dict()
         return {
             "simulation": str(self.simulation_configuration.id),
+            "process_id": str(self.process_id),
             **data,
         }

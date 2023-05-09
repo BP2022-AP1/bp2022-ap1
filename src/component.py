@@ -26,3 +26,13 @@ class Component(ABC):
         :rtype: None
         """
         raise NotImplementedError()
+
+
+class MockComponent(Component):
+    """Mock for a simple component to check if next tick is called"""
+
+    def __init__(self):
+        Component.__init__(self, None, 1)
+
+    def next_tick(self, tick: int):
+        pass
