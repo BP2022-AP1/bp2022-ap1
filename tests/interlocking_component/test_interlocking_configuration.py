@@ -70,7 +70,8 @@ class TestInterlockingConfigurationXSimulationConfiguration:
             == interlocking_configuration
         )
         assert (
-            interlocking_x_simulation.simulation_configuration == simulation_configuration
+            interlocking_x_simulation.simulation_configuration
+            == simulation_configuration
         )
 
     def test_back_references(
