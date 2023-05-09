@@ -1,9 +1,9 @@
 import os
-from typing import List
+from typing import List, Type
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
-from traci import trafficlight
+from traci import constants, trafficlight, vehicle
 
 from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.infrastructure_provider import (
@@ -17,7 +17,52 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Train
+from src.wrapper.simulation_objects import Edge, Signal, Train
+
+
+@pytest.fixture
+def mock_logger() -> Logger:
+    class LoggerMock:
+        create_fahrstrasse_count = 0
+        remove_fahrstrasse_count = 0
+        set_signal_go_count = 0
+        set_signal_halt_count = 0
+        train_enter_block_section_count = 0
+        train_leave_block_section_count = 0
+
+        def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
+            self.create_fahrstrasse_count += 1
+
+        def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
+            self.remove_fahrstrasse_count += 1
+
+        def set_signal(
+            self, tick: int, signal_id: str, state_before: int, state_after: int
+        ) -> Type[None]:
+            if state_after == Signal.State.GO:
+                self.set_signal_go_count += 1
+            elif state_after == Signal.State.HALT:
+                self.set_signal_halt_count += 1
+
+        def train_enter_block_section(
+            self,
+            tick: int,
+            train_id: str,
+            block_section_id: str,
+            block_section_length: float,
+        ) -> Type[None]:
+            self.train_enter_block_section_count += 1
+
+        def train_leave_block_section(
+            self,
+            tick: int,
+            train_id: str,
+            block_section_id: str,
+            block_section_length: float = 0,
+        ) -> Type[None]:
+            self.train_leave_block_section_count += 1
+
+    return LoggerMock()
 
 
 @pytest.fixture
@@ -80,10 +125,10 @@ def traffic_update(monkeypatch):
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, logger: Logger
+    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
 ) -> RouteController:
     return RouteController(
-        logger=logger,
+        logger=mock_logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),
@@ -93,8 +138,11 @@ def route_controller(
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
     route_controller: RouteController,
+    mock_logger: Logger,
 ) -> SumoInfrastructureProvider:
-    sumo_mock_infrastructure_provider = SumoInfrastructureProvider(route_controller)
+    sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
+        route_controller, mock_logger
+    )
     return sumo_mock_infrastructure_provider
 
 
@@ -134,18 +182,18 @@ def mock_simulation_object_updating_component() -> SimulationObjectUpdatingCompo
 @pytest.fixture
 def mock_route_controller(
     mock_interlocking: Interlocking,
-    mock_simulation_object_updating_component: SimulationObjectUpdatingComponent,
+    configured_souc: SimulationObjectUpdatingComponent,
 ) -> RouteController:
     class RouteControllerMock:
         interlocking: Interlocking = mock_interlocking
-        simulation_object_updating_component = mock_simulation_object_updating_component
+        simulation_object_updating_component = configured_souc
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
 
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
-        def maybe_free_fahrstrasse(self, edge: Edge):
+        def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
 
     return RouteControllerMock()
@@ -154,9 +202,10 @@ def mock_route_controller(
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
     mock_route_controller: RouteController,
+    mock_logger: Logger,
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
-        mock_route_controller
+        mock_route_controller, mock_logger
     )
     mock_route_controller.interlocking.set_tds_count_in_callback(
         interlocking_mock_infrastructure_provider
@@ -199,3 +248,13 @@ def SUMO_edge():
         identifier = "test_id-re"
 
     return EdgeMock()
+
+
+@pytest.fixture
+def train_add(monkeypatch):
+    def add_train(identifier, route, train_type):
+        assert identifier is not None
+        assert route is not None
+        assert train_type is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
