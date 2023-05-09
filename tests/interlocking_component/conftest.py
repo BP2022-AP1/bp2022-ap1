@@ -33,6 +33,11 @@ def simulation_configuration() -> SimulationConfiguration:
     return config
 
 
+@pytest.fixture
+def unsaved_simulation_configuration() -> SimulationConfiguration:
+    return SimulationConfiguration.create()
+
+
 def interlocking_configuration() -> InterlockingConfiguration:
     config = InterlockingConfiguration(
         dynamicRouting=True,
