@@ -13,7 +13,7 @@
   "secureJsonFields": {},
   "type": "grafana-simple-json-datasource",
   "typeLogoUrl": "",
-  "url": "http://host.docker.internal:5000/pandas-component/",
+  "url": "http://host.docker.internal:5010/pandas-component/",
   "user": "",
   "withCredentials": false
 }
