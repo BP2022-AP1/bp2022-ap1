@@ -42,6 +42,14 @@ class GrafanaDataRegistrator:
         run_id = UUID(param)
         return self.data_science.get_verkehrsleistung_momentarily_time_by_run_id(run_id)
 
+    def get_coal_demand_by_run_id(self, param, _) -> pd.DataFrame:
+        """Returns the coal demand over time by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of coal demand over time"""
+        run_id = UUID(param)
+        return self.data_science.get_coal_demand_by_run_id(run_id)
+
     def get_verkehrsmenge_by_run_id(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsmenge by grafana params
         :param param: Grafana params
@@ -167,6 +175,7 @@ class GrafanaDataRegistrator:
             "get_faults_by_run_id:${run_id}",
             "get_verkehrsleistung_time_by_run_id:${run_id}",
             "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
+            "get_coal_demand_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
@@ -197,6 +206,10 @@ def define_and_register_data():
     dg.add_metric_reader(
         "get_verkehrsleistung_momentarily_time_by_run_id",
         grafana_data_registrator.get_verkehrsleistung_momentarily_time_by_run_id,
+    )
+    dg.add_metric_reader(
+        "get_coal_demand_by_run_id",
+        grafana_data_registrator.get_coal_demand_by_run_id,
     )
     dg.add_metric_reader(
         "get_verkehrsmenge_by_run_id",

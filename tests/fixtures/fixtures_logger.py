@@ -27,6 +27,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
 from src.implementor.models import Run
 from src.logger.log_collector import LogCollector
 from src.logger.logger import Logger
+from src.schedule.schedule_configuration import ScheduleConfiguration
 from tests.logger.test_log_collector import TestLogCollector
 
 
@@ -283,6 +284,36 @@ def verkehrsleistung_momentarily_time_df():
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
     return verkehrsleistung_time_df
+
+
+@pytest.fixture
+def coal_demand_by_run_id_head_df(
+    demand_train_schedule_configuration: ScheduleConfiguration,
+):
+    coal_demand_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, int((16 + i * 15) / 60), (16 + i * 15) % 60, 40)
+                for i in range(0, 10)
+            ],
+            f"value_{demand_train_schedule_configuration.id}": pd.Series(
+                [
+                    110.926498,
+                    219.041547,
+                    61.140221,
+                    69.72047,
+                    184.767735,
+                    257.978718,
+                    25.506843,
+                    192.085535,
+                    257.341683,
+                    35.686849,
+                ]
+            ),
+        }
+    )
+    coal_demand_by_run_id_head_df.set_index("time", inplace=True)
+    return coal_demand_by_run_id_head_df
 
 
 @pytest.fixture

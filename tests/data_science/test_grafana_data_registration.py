@@ -21,7 +21,15 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
+from src.implementor.models import SimulationConfiguration
 from src.logger.logger import Logger
+from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
+from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.spawner.spawner import (
+    SpawnerConfiguration,
+    SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
+)
 from tests.decorators import recreate_db_setup
 from tests.fixtures.fixtures_logger import (
     setup_logs_block_sections,
@@ -122,6 +130,29 @@ class TestGrafanaDataRegistration:
                 _run_id, None
             ),
             verkehrsleistung_momentarily_time_df,
+        )
+
+    def test_get_coal_demand_by_run_id(
+        self,
+        _run_id: str,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        simulation_configuration: SimulationConfiguration,
+        coal_demand_by_run_id_head_df: pd.DataFrame,
+    ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        assert_frame_equal(
+            grafana_data_registrator.get_coal_demand_by_run_id(_run_id, None).head(10),
+            coal_demand_by_run_id_head_df,
         )
 
     def test_get_verkehrsmenge_by_run_id(
