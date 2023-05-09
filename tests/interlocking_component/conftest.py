@@ -93,7 +93,7 @@ def route_controller(
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
     route_controller: RouteController,
-    logger,
+    logger: Logger,
 ) -> SumoInfrastructureProvider:
     sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
         route_controller, logger
@@ -156,7 +156,7 @@ def mock_route_controller(
 
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
-    mock_route_controller: RouteController, logger
+    mock_route_controller: RouteController, logger: Logger
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
         mock_route_controller, logger

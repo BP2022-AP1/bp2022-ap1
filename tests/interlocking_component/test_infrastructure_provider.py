@@ -79,7 +79,7 @@ class TestInfrastructurProvider:
     def test_train_drove_off_track(
         self,
         interlocking_mock_infrastructure_provider: SumoInfrastructureProvider,
-        train,
+        train: Train,
         SUMO_edge: Edge,
     ):
         interlocking_mock_infrastructure_provider.train_drove_off_track(

@@ -95,7 +95,7 @@ class RouteController(Component):
     router: Router = None
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
-    tick: int = None
+    tick: int = 0
 
     def __init__(
         self,
@@ -127,7 +127,6 @@ class RouteController(Component):
         for interlocking_route in self.routes_to_be_set:
             # This sets the fahrstrasse in the interlocking.
             # The Sumo SUMO route was already set.
-
             was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
 
             if was_set:
@@ -201,6 +200,8 @@ class RouteController(Component):
 
         for i in range(new_route - 1):
             end_node_candidat = new_route[i + 1]
+            # This is the same as 'for end_node_candidat in new_route[1:]:'
+
             route_length += new_route[i].get_edge_to(end_node_candidat).length
 
             for interlocking_route in self.interlocking.routes:
@@ -237,7 +238,9 @@ class RouteController(Component):
         """This method checks if the given edge is the last segment of a activ route
         and frees it if so.
 
-        :param edge: the edge the train drove off of
+        :param train: The train that drove of an edge
+        :type train: Train
+        :param edge: The edge the train drove off of
         :type edge: Edge
         """
         route = self._get_interlocking_route_for_edge(edge)
@@ -249,6 +252,8 @@ class RouteController(Component):
     def _free_fahrstrasse(self, train: Train, route: Route):
         """This method frees the given interlocking route.
 
+        :param train: The train that drove of an edge
+        :type train: Train
         :param route: The active route
         :type route: Route
         """
