@@ -41,7 +41,8 @@ def initialize_grafana():
         return
     try:
         data_source_uid = result.json()["datasource"]["uid"]
-    except KeyError:
+    except KeyError as exception:
+        print("An exception while initializing Grafana occurred\n", exception)
         return
 
     dashboard_list = [
