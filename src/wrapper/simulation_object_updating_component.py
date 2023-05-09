@@ -5,6 +5,9 @@ import sumolib
 import traci
 
 from src.component import Component
+from src.interlocking_component.infrastructure_provider import (
+    SumoInfrastructureProvider,
+)
 from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
     Edge,
@@ -26,6 +29,7 @@ class SimulationObjectUpdatingComponent(Component):
 
     _simulation_objects = None
     _sumo_configuration = None
+    infrastructure_provider: SumoInfrastructureProvider = None
 
     @property
     def simulation_objects(self) -> List[SimulationObject]:
@@ -112,7 +116,20 @@ class SimulationObjectUpdatingComponent(Component):
         subscription_results = traci.simulation.getAllSubscriptionResults()
 
         for simulation_object in self._simulation_objects:
-            simulation_object.update(subscription_results[simulation_object.traci_id])
+            simulation_object.update(subscription_results[simulation_object.identifier])
+
+        self._remove_stale_vehicles()
+
+    def _remove_stale_vehicles(self):
+        simulation_vehicles = set(traci.vehicle.getIDList())
+        stored_vehicles = set((train.identifier for train in self.trains))
+
+        vehicles_to_remove = stored_vehicles - simulation_vehicles
+
+        for vehicle in vehicles_to_remove:
+            self._simulation_objects.remove(
+                next(train for train in self.trains if train.identifier == vehicle)
+            )
 
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)

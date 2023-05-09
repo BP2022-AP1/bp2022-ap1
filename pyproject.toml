@@ -33,9 +33,11 @@ railway-route-generator = { git = "https://github.com/bp2022-ap1/railway-route-g
 sumoexporter = { git = "https://github.com/bp2022-ap1/sumo-exporter", branch = "refactor/replace-connected-nodes-edges" }
 track-signal-generator = { git = "https://github.com/bp2022-ap1/track-signal-generator.git", branch = "refactor/replace-connected-nodes-edges" }
 pandas = "^2.0.0"
+grafana-pandas-datasource = { git = "https://github.com/BP2022-AP1/grafana-pandas-datasource.git" }
 matplotlib = "^3.7.1"
 scipy = "1.9.2"
 requests = "^2.28.2"
+celery = "^5.2.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
@@ -44,6 +46,9 @@ isort = "^5.12.0"
 pylint = "^2.17.0"
 poethepoet = "^0.19.0"
 pytest-cov = "^4.0.0"
+python-dotenv = "^1.0.0"
+redis = "^4.4.4"
+waitress = "^2.1.2"
 
 [tool.poetry.group.docs]
 optional = true
@@ -85,10 +90,24 @@ build-backend = "poetry.core.masonry.api"
     help = "Run lint in /src and /tests directory"
     sequence  = ["lint-src", "lint-tests"]
 
+    [tool.poe.tasks.db-test]
+    help = "Call DB utilities for test database"
+    cmd = "python3 db/local/db.py"
+    envfile = ".env.test"
+
+    [tool.poe.tasks.db]
+    help = "Call DB utilities for dev and prod database"
+    cmd = "python3 db/local/db.py"
+    envfile = [".env.shared", ".env.secret"]
+
     [tool.poe.tasks.test]
     help = "Run DB and test with pytest"
-    sequence  = ["db run test", "sleep", "db recreate", "test-pytest", "db stop test"]
-    envfile=".env.test"
+    sequence = ["test-deps", "sleep", "db-test recreate", "test-pytest"]
+    envfile = [".env.shared", ".env.test"]
+
+    [tool.poe.tasks.test-deps]
+    help = "Initializes needed components for tests"
+    cmd = "docker compose up -d grafana-test celery-worker postgresql-test"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
@@ -98,18 +117,15 @@ build-backend = "poetry.core.masonry.api"
     help = "Run formatting, linting and testing in preparation for CI"
     sequence = ["format", "lint", "test"]
 
-    [tool.poe.tasks.db]
-    help = "Call DB utilities"
-    cmd = "python3 db/local/db.py"
-
     [tool.poe.tasks.dev]
     help = "Run flask app in development mode and run db"
-    sequence = ["db run dev", "dev-flask"]
-    envfile=[".env.shared", ".env.secret"]
+    cmd = "docker compose up dev"
+    envfile = ".env.secret"
 
-    [tool.poe.tasks.dev-flask]
-    help = "Run flask app in development mode"
-    cmd = "flask --app src run"
+    [tool.poe.tasks.prod]
+    help = "Run flask app in development mode and run db"
+    cmd = "docker compose up prod"
+    envfile = ".env.secret"
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"

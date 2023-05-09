@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-import marshmallow as marsh
 import requests
 from peewee import DateTimeField, FloatField, ForeignKeyField
 
@@ -17,19 +16,6 @@ class SmardApiIndex(BaseModel):
     to request the data of the batch.
     """
 
-    class Schema(BaseModel.Schema):
-        """marshmallow schema for SmardApiIndex"""
-
-        timestamp = marsh.fields.DateTime(required=True)
-
-        def _make(self, data: dict) -> "SmardApiIndex":
-            """Constructs a SmardApiIndex from a dict
-
-            :param data: The dict
-            :return: A SmardApiIndex
-            """
-            return SmardApiIndex(**data)
-
     timestamp = DateTimeField(unique=True)
 
 
@@ -39,21 +25,6 @@ class SmardApiEntry(BaseModel):
     The value is the amount of electricity produced from coal in
     a quarter hour in megawatt hours.
     """
-
-    class Schema(BaseModel.Schema):
-        """marshmallow schema for SmardApiEntry"""
-
-        timestamp = marsh.fields.DateTime(required=True)
-        value = marsh.fields.Float(required=True)
-        index_id = marsh.fields.UUID(required=True)
-
-        def _make(self, data: dict) -> "SmardApiEntry":
-            """Constructs a SmardApiEntry from a dict
-
-            :param data: The dict
-            :return: A SmardApiEntry
-            """
-            return SmardApiEntry(**data)
 
     timestamp = DateTimeField(unique=True)
     value = FloatField(null=True)
@@ -120,13 +91,12 @@ class SmardApi:
         """
         return int(date_time.timestamp() * MILLISECONDS_PER_SECOND)
 
-    def _request(self, url: str) -> dict:
+    def _request(self, url: str) -> dict:  # pragma: no cover
         """Sends a get request to the given url and returns the response as a dict
 
         :param url: The url
         :return: The response as a dict
         """
-        print("URL: ", url)
         response = requests.get(url, timeout=10, headers={"Accept": "application/json"})
         return response.json()
 

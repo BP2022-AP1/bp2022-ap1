@@ -1,5 +1,3 @@
-import pytest
-
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from tests.decorators import recreate_db_setup
 
@@ -11,7 +9,6 @@ class TestDemandScheduleStrategy:
     def setup_method(self):
         pass
 
-    @pytest.mark.usefixtures("demand_strategy", "demand_strategy_spawn_ticks")
     def test_spawn_at_right_ticks(
         self,
         demand_strategy: DemandScheduleStrategy,

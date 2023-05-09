@@ -43,7 +43,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of schedules connected to a user.
+      summary: Get ids of schedules.
 
     post:
       operationId: create_schedule
@@ -134,7 +134,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of schedule-blocked-faul configurations connected to a user.
+      summary: Get ids of schedule-blocked-faul configurations.
 
     post:
       operationId: create_schedule_blocked_fault_configuration
@@ -230,7 +230,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of track-blocked-fault configurations connected to a user.
+      summary: Get ids of track-blocked-fault configurations.
 
     post:
       operationId: create_track_blocked_fault_configuration
@@ -326,7 +326,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of track-speed-limit-fault configurations connected to a user.
+      summary: Get ids of track-speed-limit-fault configurations.
 
     post:
       operationId: create_track_speed_limit_fault_configuration
@@ -422,7 +422,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of train-prio-fault configurations connected to a user.
+      summary: Get ids of train-prio-fault configurations.
 
     post:
       operationId: create_train_prio_fault_configuration
@@ -516,7 +516,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of train-speed-fault configurations connected to a user.
+      summary: Get ids of train-speed-fault configurations.
 
     post:
       operationId: create_train_speed_fault_configuration
@@ -610,7 +610,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of platform-blocked-fault configurations connected to a user.
+      summary: Get ids of platform-blocked-fault configurations.
 
     post:
       operationId: create_platform_blocked_fault_configuration
@@ -704,7 +704,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of interlocking configurations connected to a user.
+      summary: Get ids of interlocking configurations.
 
     post:
       operationId: create_interlocking_configuration
@@ -800,7 +800,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation not found
-      summary: Get ids of spawner configurations connected to a user.
+      summary: Get ids of spawner configurations.
 
     post:
       operationId: create_spawner_configuration
@@ -893,7 +893,7 @@ paths:
           description: API token missing
         "404":
           description: Simulation id not found
-      summary: Get all ids of runs connected to a user and a simulation.
+      summary: Get all ids of runs and a simulation.
 
     post:
       operationId: create_run
@@ -982,7 +982,7 @@ paths:
           description: Successful operation
         "401":
           description: API token missing
-      summary: Get all ids of simulation configurations connected to a user.
+      summary: Get all ids of simulation configurations.
 
     post:
       operationId: create_simulation_configuration
@@ -1053,7 +1053,7 @@ paths:
       summary:
         "Get all information about a simulation, including the ids of connected\
         \ components and runs."
-    
+
     put:
       operationId: update_simulation_configuration
       parameters:
@@ -1123,12 +1123,46 @@ components:
       type: object
     TrackSpeedLimitFaultConfiguration:
       type: object
+      required:
+        - new_speed_limit
+        - description
+        - strategy
+      properties:
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        description:
+          type: string
+        affected_element_id:
+          type: string
+          format: uuid
+        new_speed_limit:
+          type: integer
+          format: int32
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
     TrackBlockedFaultConfiguration:
       type: object
     PlatformBlockedFaultConfiguration:
       type: object
     RunConfiguration:
       type: object
+      properties:
+        simulation_configuration:
+            type: string
+            format: uuid
     RunStatus:
       type: object
     Schedule:

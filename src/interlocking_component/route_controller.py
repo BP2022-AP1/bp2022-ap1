@@ -1,13 +1,21 @@
 import os
+from typing import List
 
 from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
-from interlocking.test_interlocking import PrintLineInfrastructureProvider
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
 
+from src.component import Component
+from src.interlocking_component.infrastructure_provider import (
+    SumoInfrastructureProvider,
+)
 from src.interlocking_component.router import Router
-from src.wrapper.simulation_objects import Platform, Track, Train
+from src.logger.logger import Logger
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
+from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
 class IInterlockingDisruptor:
@@ -77,7 +85,7 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
 
-class RouteController:
+class RouteController(Component):
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
@@ -85,13 +93,21 @@ class RouteController:
 
     interlocking: Interlocking = None
     router: Router = None
+    simulation_object_updating_component: SimulationObjectUpdatingComponent = None
+    routes_to_be_set: List[Route] = []
 
     def __init__(
-        self, path_name: str = os.path.join("data", "planpro", "test_example.ppxml")
+        self,
+        logger: Logger,
+        priority: int,
+        simulation_object_updating_component: SimulationObjectUpdatingComponent,
+        path_name: str = os.path.join("data", "planpro", "test_example.ppxml"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
+        super().__init__(logger, priority)
+        self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
         # Import from local PlanPro file
@@ -101,28 +117,36 @@ class RouteController:
         # I'm not sure if this is necessary, but better save than sorry.
         RouteGenerator(topology).generate_routes()
 
-        infrastructure_provider = PrintLineInfrastructureProvider()
-        # This has to change in the future, as we want our own infrastructure_provider
+        infrastructure_provider = SumoInfrastructureProvider(self)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
 
-    def set_spawn_route(self, start_track: Track, end_track: Track) -> str:
+    def next_tick(self, tick: int):
+        for interlocking_route in self.routes_to_be_set:
+            # This sets the fahrstrasse in the interlocking.
+            # The Sumo SUMO route was already set.
+            was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
+
+            if was_set:
+                self.routes_to_be_set.remove(interlocking_route)
+
+    def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
 
-        :param start_track: The track from where the route should start
-        :type start_track: Track
-        :param end_track: The track where the route should end
-        :type end_track: Track
+        :param start_edge: The edge from where the route should start
+        :type start_edge: Edge
+        :param end_edge: The edge where the route should end
+        :type end_edge: Edge
         :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
         :rtype: str
         """
-        new_route = self.router.get_route(start_track, end_track)
+        new_route = self.router.get_route(start_edge, end_edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        for end_node_candidat in new_route:
+        for end_node_candidat in new_route[1:]:
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
@@ -143,78 +167,88 @@ class RouteController:
         # If the no interlocking route is found an error is raised
         raise KeyError()
 
-    def maybe_update_fahrstrasse(self, train: Train, track: Track):
+    def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
         :param train: the train that may need a new fahrstasse
-        :type Train: Train
-        :param track_segment: the track it just entered
-        :type Track: Track
+        :type train: Train
+        :param edge: the edge it just entered
+        :type edge: Edge
         """
-        route = self._get_interlocking_route_for_track(track)
-        if route is None or route.get_last_segment_of_route != track.identifier:
+        route = self._get_interlocking_route_for_edge(edge)
+        if route is None or route.get_last_segment_of_route != edge.identifier:
             return
 
-        self.update_fahrstrasse(train, track)
+        self.set_fahrstrasse(train, edge)
 
-    def update_fahrstrasse(self, train: Train, track: Track):
+    def set_fahrstrasse(self, train: Train, edge: Edge):
         """This method can be called when a train reaches a platform,
         so that the route to the next platform can be set.
 
         :param train: the train
         :type train: Train
-        :param track: the track it is currently on
-        :type track: Track
+        :param edge: the edge it is currently on
+        :type edge: Edge
         """
-        new_route = self.router.get_route(track, train.timetable[0].track)
+        new_route = self.router.get_route(edge, train.timetable[0].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        for end_node_candidat in new_route:
+        for end_node_candidat in new_route[1:]:
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.name == new_route[0]
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
                     # This sets the route in the interlocking
-                    self.interlocking.set_route(interlocking_route.yaramo_route)
-                    # This does not check if the route can even be set and does not handle,
-                    # if it can not be set this simulation step.
+                    was_set = self.interlocking.set_route(
+                        interlocking_route.yaramo_route
+                    )
 
-                    # This frees the least route in the interlocking
-                    self._free_route(track)
-                    # This may not be the best place (time) to do so,
-                    # as the route schould be freed when the train leaves the route
-                    # and not when it is still on it.
+                    if not was_set:
+                        self.routes_to_be_set.append(interlocking_route)
 
                     # This sets the route in SUMO.
+                    # The SUMO route is also set when the interlocking fahrstrasse could not be set,
+                    # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return
 
-    def _free_route(self, track: Track):
-        """This method frees the route corresponding to the given track.
+    def maybe_free_fahrstrasse(self, edge: Edge):
+        """This method checks if the given edge is the last segment of a activ route
+        and frees it if so.
 
-        :param track: One track of the active Route
-        :type track: Track
+        :param edge: the edge the train drove off of
+        :type edge: Edge
         """
-        route = self._get_interlocking_route_for_track(track)
+        route = self._get_interlocking_route_for_edge(edge)
+        if route is None or route.get_last_segment_of_route != edge.identifier:
+            return
 
+        self._free_fahrstrasse(route)
+
+    def _free_fahrstrasse(self, route: Route):
+        """This method frees the given interlocking route.
+
+        :param route: The active route
+        :type route: Route
+        """
         if route is not None:
             # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)
 
-    def _get_interlocking_route_for_track(self, track: Track) -> Route:
-        """This method returns the interlocking route corresponding to the given track.
+    def _get_interlocking_route_for_edge(self, edge: Edge) -> Route:
+        """This method returns the interlocking route corresponding to the given edge.
 
-        :param track: The track to which the route is searched
-        :type track: Track
-        :return: The interlocking Route corresponding to the track
+        :param edge: The edge to which the route is searched
+        :type edge: Edge
+        :return: The interlocking Route corresponding to the edge
         :rtype: Route
         """
         for route_candidate in self.interlocking.active_routes:
             interlocking_track_candidat = route_candidate.contains_segment(
-                track.identifier.split("-re")[0]
+                edge.identifier.split("-re")[0]
             )
             # The -re part of the identifier must be cut,
             # because the interlocking does not know of reverse directions.
