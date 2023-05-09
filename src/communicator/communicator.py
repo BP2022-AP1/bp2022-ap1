@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import pickle
-from typing import List
+from typing import Callable, List
 from uuid import UUID
 
 import traci
@@ -53,13 +53,38 @@ class Communicator:
 
         :return: The id of the celery task
         """
-        process = self._run.delay(
-            max_tick=self._max_tick,
-            components_pickle=pickle.dumps(self._components),
-            configuration=self._configuration,
+        celery_disabled = os.getenv("DISABLE_CELERY", False)
+
+        if not celery_disabled:
+            process = self._run.delay(
+                max_tick=self._max_tick,
+                components_pickle=pickle.dumps(self._components),
+                configuration=self._configuration,
+                port=self._port,
+            )
+            return process.id
+        else:
+            self._run_with_gui()
+            return "no id available"
+
+    def _run_with_gui(self):
+        delay = os.getenv("SUMO_GUI_DELAY", 10)
+        traci.start(
+            [
+                checkBinary("sumo-gui"),
+                "-c",
+                self._configuration,
+                "--start",
+                "--quit-on-end",
+                "--delay",
+                delay,
+            ],
             port=self._port,
         )
-        return process.id
+
+        run_simulation_steps(self._components, self._max_tick)
+
+        traci.close(wait=False)
 
     @celery.task(bind=True, ignore_result=False)
     def _run(
@@ -83,10 +108,7 @@ class Communicator:
         components = pickle.loads(components_pickle)
         traci.start([checkBinary("sumo"), "-c", configuration], port=port)
 
-        sumo_running = True
-        current_tick = 1
-
-        def update_state():
+        def update_state(max_tick: int, current_tick: int, sumo_running: bool):
             self.update_state(
                 state="PROGRESS",
                 meta={
@@ -96,19 +118,9 @@ class Communicator:
                 },
             )
 
-        update_state()
-
-        while current_tick <= max_tick:
-            for component in components:
-                component.next_tick(current_tick)
-            traci.simulationStep()
-            current_tick += 1
-            update_state()
+        run_simulation_steps(components, max_tick, update_state)
 
         traci.close(wait=False)
-
-        sumo_running = False
-        update_state()
 
     @classmethod
     def stop(cls, process_id: str):
@@ -141,3 +153,36 @@ class Communicator:
         """
         process = AsyncResult(progress_id)
         return process.status
+
+
+def dummy_update_state(current_tick: int, max_tick: int, sumo_running: bool):
+    return None
+
+
+def run_simulation_steps(
+    components: list[Component],
+    max_tick: int,
+    update_state: Callable[[int, int, bool], None] = dummy_update_state,
+):
+    """
+    Function to run the simulation steps.
+    This function requires traci and sumo to be started and connected.
+
+    :param components: The components to run
+    :param max_tick: The maximum number of ticks to simulate
+    :param update_state: A function to update the state of the simulation
+    """
+    sumo_running = True
+    current_tick = 1
+
+    update_state(current_tick, max_tick, sumo_running)
+
+    while current_tick <= max_tick:
+        for component in components:
+            component.next_tick(current_tick)
+        traci.simulationStep()
+        current_tick += 1
+        update_state(current_tick, max_tick, sumo_running)
+
+    sumo_running = False
+    update_state(current_tick, max_tick, sumo_running)
