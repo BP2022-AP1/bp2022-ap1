@@ -2,6 +2,7 @@ from interlocking.infrastructureprovider.infrastructureprovider import (
     InfrastructureProvider,
 )
 
+from src.logger.logger import Logger
 from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
@@ -11,16 +12,19 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     """
 
     route_controller: "RouteController"
+    logger: Logger
 
     def __init__(
         self,
         route_controller: "RouteController",
+        logger: Logger,
     ):
         super().__init__()
         self.route_controller = route_controller
-        self.route_controller.simulation_object_updating_component.infrastructur_provider = (
+        self.route_controller.simulation_object_updating_component.infrastructure_provider = (
             self
         )
+        self.logger = logger
 
     def turn_point(self, yaramo_point, target_orientation):
         super().turn_point(yaramo_point, target_orientation)
@@ -46,8 +50,20 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 signal = potential_signal
                 break
         if target_state == "halt":
+            self.logger.set_signal(
+                self.route_controller.tick,
+                signal.identifier,
+                signal.state,
+                Signal.State.HALT,
+            )
             signal.state = Signal.State.HALT
         elif target_state == "go":
+            self.logger.set_signal(
+                self.route_controller.tick,
+                signal.identifier,
+                signal.state,
+                Signal.State.GO,
+            )
             signal.state = Signal.State.GO
 
     def train_drove_onto_track(self, train: Train, edge: Edge):
@@ -65,7 +81,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
 
         self.route_controller.maybe_set_fahrstrasse(train, edge)
 
-    def train_drove_off_track(self, edge: Edge):
+    def train_drove_off_track(self, train: Train, edge: Edge):
         """This method calls tds_count_out with the track_segment_id of the given edge.
 
         :param edge: The edge the train drove off of
@@ -75,4 +91,4 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_out(track_segment_id)
 
-        self.route_controller.maybe_free_fahrstrasse(edge)
+        self.route_controller.maybe_free_fahrstrasse(train, edge)
