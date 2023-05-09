@@ -1159,6 +1159,10 @@ components:
       type: object
     RunConfiguration:
       type: object
+      properties:
+        simulation_configuration:
+            type: string
+            format: uuid
     RunStatus:
       type: object
     Schedule:

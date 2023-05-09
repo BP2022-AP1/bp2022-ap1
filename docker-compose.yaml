@@ -48,6 +48,8 @@ services:
 
   redis:
     image: redis:7-alpine
+    ports:
+      - 6379:6379
 
   celery-worker:
     build:
@@ -57,11 +59,11 @@ services:
       - .env.shared
     environment:
       - GRAFANA_HOST=grafana-dev
+      - C_FORCE_ROOT=true
     volumes:
       - .:/app
     depends_on:
       - redis
-      - postgresql
 
   grafana-test:
     image: grafana/grafana

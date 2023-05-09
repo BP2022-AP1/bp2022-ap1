@@ -1,35 +1,38 @@
 #!/usr/bin/env python3
-
 import os
-from threading import Thread
+import pickle
 from typing import List
+from uuid import UUID
 
 import traci
+from celery import Celery, Task
+from celery.result import AsyncResult
 from sumolib import checkBinary
 
 from src.component import Component
 
+celery = Celery(
+    "proj",
+    broker=os.environ["CELERY_BROKER_URL"],
+    backend=os.environ["CELERY_RESULT_BACKEND"],
+)
+celery.conf.event_serializer = "pickle"
+celery.conf.task_serializer = "pickle"
+celery.conf.result_serializer = "pickle"
+celery.conf.accept_content = [
+    "application/json",
+    "application/x-python-serialize",
+    "pickle",
+]
 
-class Communicator(Thread):
+
+class Communicator:
     """Component used for communicating with a sumo simulation using traci."""
 
     _configuration = None
     _port = None
     _components = None
-    _current_tick = 1
     _max_tick = None
-
-    _stopped = False
-    sumo_running = False
-
-    @property
-    def progress(self):
-        """Get the current simulation progress as a float between 0 and 1
-
-        :return: The current simulation progress
-        :rtype: float
-        """
-        return self._current_tick / self._max_tick
 
     def add_component(self, component: Component):
         """Add the given component to the simulation.
@@ -50,34 +53,104 @@ class Communicator(Thread):
         ),
     ):
         """Creates a new Communicator object"""
-        Thread.__init__(self)
         self._configuration = sumo_configuration
         self._port = sumo_port
         self._components = components if components is not None else []
         self._max_tick = max_tick
 
-    def run(self):
-        """Starts sumo (no gui) and connects using traci. The connection has the `default` label."""
+    def run(self) -> str:
+        """
+        This function starts the simulation and returns the id of the celery task.
+        Therefore it collects and serializes the configuration and starts a new celery process.
+        The id can be used to stop the simulation or to get the current progress.
 
-        traci.start([checkBinary("sumo"), "-c", self._configuration], port=self._port)
+        :return: The id of the celery task
+        """
+        process = self._run.delay(
+            max_tick=self._max_tick,
+            components_pickle=pickle.dumps(self._components),
+            configuration=self._configuration,
+            port=self._port,
+        )
+        return process.id
 
-        self.sumo_running = True
+    @celery.task(bind=True, ignore_result=False)
+    def _run(
+        self: Task,
+        max_tick: int,
+        components_pickle: bytes,
+        configuration: str,
+        port: int,
+    ):
+        """
+        Starts sumo (no gui) and connects using traci.
+        This function is called by celery and should not be called directly.
+        It runs inside a celery process and therefore can be stopped using the celery task id.
 
-        while not self._stopped and self._current_tick <= self._max_tick:
-            for component in self._components:
-                component.next_tick(self._current_tick)
-            self._simulation_step()
-            self._current_tick += 1
+        :param max_tick: The maximum number of ticks to simulate
+        :param components_pickle: The serialized components
+        :param configuration: The sumo configuration file location
+        :param port: The port to use for the sumo simulation
+        """
+
+        components = pickle.loads(components_pickle)
+        traci.start([checkBinary("sumo"), "-c", configuration], port=port)
+
+        sumo_running = True
+        current_tick = 1
+
+        def update_state():
+            self.update_state(
+                state="PROGRESS",
+                meta={
+                    "sumo_running": sumo_running,
+                    "current": current_tick,
+                    "total": max_tick,
+                },
+            )
+
+        update_state()
+
+        while current_tick <= max_tick:
+            for component in components:
+                component.next_tick(current_tick)
+            traci.simulationStep()
+            current_tick += 1
+            update_state()
 
         traci.close(wait=False)
 
-        self.sumo_running = False
+        sumo_running = False
+        update_state()
 
-    def stop(self):
-        """Stopps the simulation requesting a simulation step.
-        At most, one simulation step will happen after this request"""
-        self._stopped = True
+    @classmethod
+    def stop(cls, process_id: str):
+        """
+        Stopps the celery process.
 
-    def _simulation_step(self):
-        """Advances the simulation by one step"""
-        traci.simulationStep()
+        :param process_id: The id of the celery task
+        """
+        process = AsyncResult(process_id)
+        process.revoke()
+
+    @classmethod
+    def progress(cls, process_id: str) -> float:
+        """Get the current simulation progress as a float between 0 and 1
+
+        :return: The current simulation progress
+        :rtype: float
+        """
+        process = AsyncResult(str(process_id))
+        return process.info.get("current") / process.info.get("total")
+
+    @classmethod
+    def state(cls, progress_id: str) -> str:
+        """
+        Get the current state of the simulation.
+        Possible states are: PENDING, STARTED, RETRY, FAILURE, SUCCESS.
+
+        :param progress_id: The id of the celery task
+        :return: The current state of the simulation
+        """
+        process = AsyncResult(progress_id)
+        return process.status

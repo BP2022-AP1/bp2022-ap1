@@ -5,7 +5,7 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
 )
 
 
-class TestRunImplementor:
+class TestTrackSpeedLimitFaultConfiguration:
     def test_get_all_track_speed_limit_fault_configuration_ids(
         self, token, track_speed_limit_fault_configuration_data
     ):

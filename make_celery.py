@@ -1,4 +1,4 @@
-from src import create_app
+from src.communicator.communicator import celery
 
-flask_app = create_app()
-celery_app = flask_app.extensions["celery"]
+if __name__ == "__main__":
+    celery.start()
