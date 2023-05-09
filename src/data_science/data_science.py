@@ -1,3 +1,4 @@
+from datetime import timedelta
 from uuid import UUID
 
 import numpy as np
@@ -5,6 +6,13 @@ import pandas as pd
 
 from src.implementor.models import Run
 from src.logger.log_collector import LogCollector
+from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
+from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.schedule.smard_api import SmardApi
+from src.spawner.spawner import (
+    SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
+)
 
 
 # pylint: disable=too-many-public-methods
@@ -269,7 +277,68 @@ class DataScience:
         :param run_id: run id
         :return: dataframe of coal demand
         """
-        raise NotImplementedError()
+        simulation_configuration = (
+            Run.select().where(Run.id == run_id).get().simulation_configuration
+        )
+        spawner_configurations = list(
+            SpawnerConfigurationXSimulationConfiguration.select().where(
+                SpawnerConfigurationXSimulationConfiguration.simulation_configuration
+                == simulation_configuration
+            )
+        )
+        demand_schedule_strategies_configurations = [
+            [
+                config.schedule_configuration_id
+                for config in SpawnerConfigurationXSchedule.select().where(
+                    SpawnerConfigurationXSchedule.spawner_configuration_id
+                    == spawner_config.spawner_configuration_id
+                )
+            ]
+            for spawner_config in spawner_configurations
+        ]
+        demand_schedule_strategies_configurations = [
+            item
+            for sublist in demand_schedule_strategies_configurations
+            for item in sublist
+        ]
+        demand_schedule_strategies_configurations = list(
+            ScheduleConfiguration.select().where(
+                (ScheduleConfiguration.id << demand_schedule_strategies_configurations)
+                & (ScheduleConfiguration.strategy_type == "DemandScheduleStrategy")
+            )
+        )
+        demand_schedule_strategies = [
+            (DemandScheduleStrategy.from_schedule_configuration(config), config.id)
+            for config in demand_schedule_strategies_configurations
+        ]
+        smard_api = SmardApi()
+        dataframes = []
+        for strategy, config_id in demand_schedule_strategies:
+            data = [
+                entry.value
+                for entry in smard_api.get_data(
+                    strategy.start_datetime,
+                    strategy.start_datetime
+                    + timedelta(seconds=strategy.end_tick - strategy.start_tick),
+                )
+            ]
+            data = map(strategy.compute_coal_consumption, data)
+            smard_df = pd.DataFrame(data, columns=[f"value_{config_id}"])
+
+            smard_df["tick"] = pd.Series(
+                range(strategy.start_tick, strategy.end_tick + 1, 900), dtype="int64"
+            )
+            smard_df.set_index("tick", inplace=True)
+
+            dataframes.append(smard_df)
+
+        result_df = pd.concat(dataframes)
+        result_df.reset_index(inplace=True)
+        result_df["time"] = result_df["tick"] + self.unix_2020
+        result_df["time"] = pd.to_datetime(result_df["time"], unit="s")
+        result_df.set_index("time", inplace=True)
+        del result_df["tick"]
+        return result_df
 
     def get_spawn_events_by_run_id(self, run_id: UUID) -> pd.DataFrame:
         """Returns the spawn events by a given run id
