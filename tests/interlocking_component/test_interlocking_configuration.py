@@ -2,7 +2,8 @@ import pytest
 
 from src.implementor.models import SimulationConfiguration
 from src.interlocking_component.interlocking_configuration import (
-    InterlockingConfiguration, InterlockingConfigurationXSimulationConfiguration
+    InterlockingConfiguration,
+    InterlockingConfigurationXSimulationConfiguration,
 )
 from tests.decorators import recreate_db_setup
 
