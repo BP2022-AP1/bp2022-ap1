@@ -21,7 +21,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     ):
         super().__init__()
         self.route_controller = route_controller
-        self.route_controller.simulation_object_updating_component.infrastructur_provider = (
+        self.route_controller.simulation_object_updating_component.infrastructure_provider = (
             self
         )
         self.logger = logger

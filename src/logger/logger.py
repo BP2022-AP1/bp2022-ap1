@@ -135,7 +135,7 @@ class Logger:
         )
 
     def set_signal(
-        self, tick: int, signal_id: UUID, state_before: int, state_after: int
+        self, tick: int, signal_id: str, state_before: int, state_after: int
     ) -> Type[None]:
         """
         This function is being called when setting a signal or changing its state. This should

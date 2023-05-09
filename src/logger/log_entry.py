@@ -82,7 +82,7 @@ class RemoveFahrstrasseLogEntry(LogEntry):
 class SetSignalLogEntry(LogEntry):
     """A LogEntry that represents the setting of a signal."""
 
-    signal_id = UUIDField(null=False)
+    signal_id = TextField(null=False)
     state_before = IntegerField(null=False)
     state_after = IntegerField(null=False)
 

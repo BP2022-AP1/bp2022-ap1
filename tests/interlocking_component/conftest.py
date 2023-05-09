@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Type
 
 import pytest
 from interlocking.interlockinginterface import Interlocking
@@ -18,6 +18,36 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Train
+
+
+@pytest.fixture
+def mock_logger() -> Logger:
+    class LoggerMock:
+        def create_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
+            pass
+        def remove_fahrstrasse(self, tick: int, fahrstrasse: str) -> Type[None]:
+            pass
+        def set_signal(
+            self, tick: int, signal_id: str, state_before: int, state_after: int
+        ) -> Type[None]:
+            pass
+        def train_enter_block_section(
+            self,
+            tick: int,
+            train_id: str,
+            block_section_id: str,
+            block_section_length: float,
+        ) -> Type[None]:
+            pass
+        def train_leave_block_section(
+            self,
+            tick: int,
+            train_id: str,
+            block_section_id: str,
+            block_section_length: float = 0,
+        ) -> Type[None]:
+            pass
+    return LoggerMock()
 
 
 @pytest.fixture
@@ -80,10 +110,10 @@ def traffic_update(monkeypatch):
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, logger: Logger
+    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
 ) -> RouteController:
     return RouteController(
-        logger=logger,
+        logger=mock_logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),
@@ -93,10 +123,10 @@ def route_controller(
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
     route_controller: RouteController,
-    logger: Logger,
+    mock_logger: Logger,
 ) -> SumoInfrastructureProvider:
     sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
-        route_controller, logger
+        route_controller, mock_logger
     )
     return sumo_mock_infrastructure_provider
 
@@ -137,11 +167,11 @@ def mock_simulation_object_updating_component() -> SimulationObjectUpdatingCompo
 @pytest.fixture
 def mock_route_controller(
     mock_interlocking: Interlocking,
-    mock_simulation_object_updating_component: SimulationObjectUpdatingComponent,
+    configured_souc: SimulationObjectUpdatingComponent,
 ) -> RouteController:
     class RouteControllerMock:
         interlocking: Interlocking = mock_interlocking
-        simulation_object_updating_component = mock_simulation_object_updating_component
+        simulation_object_updating_component = configured_souc
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
 
@@ -156,16 +186,34 @@ def mock_route_controller(
 
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
-    mock_route_controller: RouteController, logger: Logger
+    mock_route_controller: RouteController, mock_logger: Logger, sumo_train: Train
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
-        mock_route_controller, logger
+        mock_route_controller, mock_logger
     )
     mock_route_controller.interlocking.set_tds_count_in_callback(
         interlocking_mock_infrastructure_provider
     )
     mock_route_controller.interlocking.set_tds_count_out_callback(
         interlocking_mock_infrastructure_provider
+    )
+    created_train = sumo_train
+    created_train.updater = mock_route_controller.simulation_object_updating_component
+    created_train.update(
+        {
+            constants.VAR_POSITION: (
+                100,
+                100,
+            ),
+            constants.VAR_ROAD_ID: "cfc57-0",
+            constants.VAR_ROUTE: "testing-route",
+            constants.VAR_SPEED: 10.2,
+        }
+    )
+    created_train.train_type.update(
+        {
+            constants.VAR_MAXSPEED: 11,
+        }
     )
     return interlocking_mock_infrastructure_provider
 
@@ -215,30 +263,11 @@ def train_add(monkeypatch):
 
 
 @pytest.fixture
-def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
+def sumo_train(train_add) -> Train:
     # pylint: disable=unused-argument
-    created_train = Train(
+    return Train(
         identifier="fake-sim-train",
         train_type="fancy-ice",
         timetable=[],
         from_simulator=True,
     )
-    created_train.updater = configured_souc
-    created_train.update(
-        {
-            constants.VAR_POSITION: (
-                100,
-                100,
-            ),
-            constants.VAR_ROAD_ID: "cfc57-0",
-            constants.VAR_ROUTE: "testing-route",
-            constants.VAR_SPEED: 10.2,
-        }
-    )
-    created_train.train_type.update(
-        {
-            constants.VAR_MAXSPEED: 11,
-        }
-    )
-
-    return created_train
