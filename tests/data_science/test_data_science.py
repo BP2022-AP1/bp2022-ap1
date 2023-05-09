@@ -144,10 +144,10 @@ class TestDataScience:
             simulation_configuration=simulation_configuration,
             spawner_configuration=spawner_configuration,
         )
-        SpawnerConfigurationXSchedule(
+        SpawnerConfigurationXSchedule.create(
             spawner_configuration_id=spawner_configuration.id,
             schedule_configuration_id=demand_train_schedule_configuration.id,
-        ).save()
+        )
         coal_demand_df = data_science.get_coal_demand_by_run_id(run).head(10)
         assert_frame_equal(coal_demand_df, coal_demand_by_run_id_head_df)
 
