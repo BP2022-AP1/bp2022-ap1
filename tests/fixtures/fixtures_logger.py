@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import uuid4
 
 import pandas as pd
 import pytest
@@ -314,6 +313,41 @@ def coal_demand_by_run_id_head_df(
     )
     coal_demand_by_run_id_head_df.set_index("time", inplace=True)
     return coal_demand_by_run_id_head_df
+
+
+@pytest.fixture
+def train_spawn_times_df():
+    train_spawn_times_df = pd.DataFrame(
+        {
+            "tick": [
+                4600,
+                7300,
+                10900,
+                13600,
+                17200,
+            ],
+            f"train_id": [f"Kohlezug {i}" for i in range(1, 6)],
+        }
+    )
+    return train_spawn_times_df
+
+
+@pytest.fixture
+def spawn_events_by_run_id_head_df():
+    spawn_events_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 1, 16, 40),
+                datetime(2020, 1, 1, 2, 1, 40),
+                datetime(2020, 1, 1, 3, 1, 40),
+                datetime(2020, 1, 1, 3, 46, 40),
+                datetime(2020, 1, 1, 4, 46, 40),
+            ],
+            f"title": [f"Spawn train Kohlezug {i}" for i in range(1, 6)],
+        }
+    )
+    spawn_events_by_run_id_head_df.set_index("time", inplace=True)
+    return spawn_events_by_run_id_head_df
 
 
 @pytest.fixture
