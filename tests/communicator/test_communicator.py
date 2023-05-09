@@ -1,3 +1,4 @@
+import os
 from time import sleep
 from unittest.mock import patch
 
@@ -55,7 +56,7 @@ def test_component_next_tick_is_called(
 
 
 @patch("src.component.MockComponent.next_tick")
-def test_component_next_tick_is_called_late_add(
+def test_component_next_tick_is_called_add(
     next_tick_mock,
     mock_traci,
 ):  # pylint: disable=unused-argument
@@ -67,3 +68,34 @@ def test_component_next_tick_is_called_late_add(
         sleep(1)
     Communicator.stop(run_id)
     assert next_tick_mock.assert_called
+
+
+@patch("src.communicator.communicator.Communicator._run_with_gui")
+def test_run_with_gui_is_called(
+    run_with_gui_mock,
+):  # pylint: disable=unused-argument
+    """
+    This test verifies that not the run method connected to celery is executed.
+    Instead we should call _run_with_gui.
+    """
+    os.environ["DISABLE_CELERY"] = "True"
+    communicator = Communicator()
+    communicator.run()
+    del os.environ["DISABLE_CELERY"]
+    assert run_with_gui_mock.assert_called
+
+
+@patch("src.communicator.communicator.run_simulation_steps")
+def test_run_simulation_step_is_called_with_gui(
+    run_with_gui_mock,
+    mock_traci,
+):  # pylint: disable=unused-argument
+    """
+    This test verifies that we call run_simulation_steps when running the simulation in gui mode.
+    That run_simulation_steps works correctly is tested in test_component_next_tick_is_called.
+    """
+    os.environ["DISABLE_CELERY"] = "True"
+    communicator = Communicator()
+    communicator.run()
+    del os.environ["DISABLE_CELERY"]
+    assert run_with_gui_mock.assert_called
