@@ -66,6 +66,7 @@ class TestGrafanaDataRegistration:
             "get_verkehrsleistung_time_by_run_id:${run_id}",
             "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
             "get_coal_demand_by_run_id:${run_id}",
+            "test_get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
@@ -154,6 +155,19 @@ class TestGrafanaDataRegistration:
         assert_frame_equal(
             grafana_data_registrator.get_coal_demand_by_run_id(_run_id, None).head(10),
             coal_demand_by_run_id_head_df,
+        )
+
+    def test_get_spawn_events_by_run_id(
+        self,
+        _run_id: str,
+        logger: Logger,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        spawn_events_by_run_id_head_df: pd.DataFrame,
+    ):
+        TestLogCollector.setup_logs_spawn_trains(logger)
+        assert_frame_equal(
+            grafana_data_registrator.get_spawn_events_by_run_id(_run_id, None).head(5),
+            spawn_events_by_run_id_head_df,
         )
 
     def test_get_verkehrsmenge_by_run_id(
