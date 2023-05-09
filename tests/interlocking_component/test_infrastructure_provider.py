@@ -5,6 +5,8 @@ from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
 class TestInfrastructurProvider:
+    """This tests the InfrastructureProvieder."""
+
     def test_initialization(
         self, sumo_mock_infrastructure_provider: SumoInfrastructureProvider
     ):
@@ -16,11 +18,10 @@ class TestInfrastructurProvider:
         yaramo_point,
     ):
         switch: Switch = None
-        for (
-            potential_switch
-        ) in (
-            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component.switches
-        ):
+        souc = (
+            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component
+        )
+        for potential_switch in souc.switches:
             if potential_switch.identifier == yaramo_point.point_id:
                 switch = potential_switch
                 break
@@ -39,11 +40,10 @@ class TestInfrastructurProvider:
         rr_count = get_rr_count()  # Count for setting halt
         gg_count = get_gg_count()  # Count for setting go
         signal: Signal = None
-        for (
-            potential_signal
-        ) in (
-            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component.signals
-        ):
+        souc = (
+            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component
+        )
+        for potential_signal in souc.signals:
             if potential_signal.identifier == yaramo_signal.name:
                 signal = potential_signal
                 break

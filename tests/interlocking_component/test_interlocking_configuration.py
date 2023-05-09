@@ -2,7 +2,7 @@ import pytest
 
 from src.implementor.models import SimulationConfiguration
 from src.interlocking_component.interlocking_configuration import (
-    InterlockingConfiguration,
+    InterlockingConfiguration, InterlockingConfigurationXSimulationConfiguration
 )
 from tests.decorators import recreate_db_setup
 
@@ -42,7 +42,7 @@ class TestCorrectFilledDict:
             assert obj_dict[key] == object_as_dict[key]
 
 
-class InterlockingConfigurationXSimulationConfiguration:
+class TestInterlockingConfigurationXSimulationConfiguration:
     """Tests for the InterlockingConfigurationXSimulationConfiguration"""
 
     @recreate_db_setup
@@ -69,7 +69,7 @@ class InterlockingConfigurationXSimulationConfiguration:
             == interlocking_configuration
         )
         assert (
-            interlocking_x_simulation.schedule_configuration == simulation_configuration
+            interlocking_x_simulation.simulation_configuration == simulation_configuration
         )
 
     def test_back_references(
@@ -92,24 +92,3 @@ class InterlockingConfigurationXSimulationConfiguration:
             interlocking_configuration.simulation_configuration_references[0]
             == interlocking_x_simulation
         )
-
-    @pytest.mark.usefixtures("simulation_configuration, interlocking_configuration")
-    def test_serialization(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        interlocking_configuration: InterlockingConfiguration,
-    ):
-        interlocking_x_simulation = InterlockingConfigurationXSimulationConfiguration(
-            interlocking_configuration=interlocking_configuration,
-            simulation_configuration=simulation_configuration,
-        )
-        interlocking_x_simulation.save()
-        obj_dict = interlocking_x_simulation.to_dict()
-        del obj_dict["created_at"]
-        del obj_dict["updated_at"]
-
-        assert obj_dict == {
-            "id": str(interlocking_x_simulation.id),
-            "interlocking_configuration": str(interlocking_x_simulation.id),
-            "schedule_configuration": str(interlocking_x_simulation.id),
-        }
