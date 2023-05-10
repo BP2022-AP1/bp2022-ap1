@@ -1,5 +1,4 @@
 from datetime import datetime
-from uuid import uuid4
 
 import pandas as pd
 import pytest
@@ -27,6 +26,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
 from src.implementor.models import Run
 from src.logger.log_collector import LogCollector
 from src.logger.logger import Logger
+from src.schedule.schedule_configuration import ScheduleConfiguration
 from tests.logger.test_log_collector import TestLogCollector
 
 
@@ -67,7 +67,7 @@ def fahrstrasse():
 
 @pytest.fixture
 def signal_id():
-    return uuid4()
+    return "Test-Signal"
 
 
 @pytest.fixture
@@ -283,6 +283,71 @@ def verkehrsleistung_momentarily_time_df():
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
     return verkehrsleistung_time_df
+
+
+@pytest.fixture
+def coal_demand_by_run_id_head_df(
+    demand_train_schedule_configuration: ScheduleConfiguration,
+):
+    coal_demand_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, int((16 + i * 15) / 60), (16 + i * 15) % 60, 40)
+                for i in range(0, 10)
+            ],
+            f"value_{demand_train_schedule_configuration.id}": pd.Series(
+                [
+                    110.926498,
+                    219.041547,
+                    61.140221,
+                    69.72047,
+                    184.767735,
+                    257.978718,
+                    25.506843,
+                    192.085535,
+                    257.341683,
+                    35.686849,
+                ]
+            ),
+        }
+    )
+    coal_demand_by_run_id_head_df.set_index("time", inplace=True)
+    return coal_demand_by_run_id_head_df
+
+
+@pytest.fixture
+def train_spawn_times_df():
+    train_spawn_times_df = pd.DataFrame(
+        {
+            "tick": [
+                4600,
+                7300,
+                10900,
+                13600,
+                17200,
+            ],
+            f"train_id": [f"Kohlezug {i}" for i in range(1, 6)],
+        }
+    )
+    return train_spawn_times_df
+
+
+@pytest.fixture
+def spawn_events_by_run_id_head_df():
+    spawn_events_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 1, 16, 40),
+                datetime(2020, 1, 1, 2, 1, 40),
+                datetime(2020, 1, 1, 3, 1, 40),
+                datetime(2020, 1, 1, 3, 46, 40),
+                datetime(2020, 1, 1, 4, 46, 40),
+            ],
+            f"title": [f"Spawn train Kohlezug {i}" for i in range(1, 6)],
+        }
+    )
+    spawn_events_by_run_id_head_df.set_index("time", inplace=True)
+    return spawn_events_by_run_id_head_df
 
 
 @pytest.fixture

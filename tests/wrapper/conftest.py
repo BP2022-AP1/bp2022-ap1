@@ -176,7 +176,7 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
         def train_drove_onto_track(self, train: Train, edge: Edge):
             pass
 
-        def train_drove_off_track(self, edge: Edge):
+        def train_drove_off_track(self, train: Train, edge: Edge):
             pass
 
     return IPMock()
