@@ -344,7 +344,7 @@ def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
 
 
 @pytest.fixture
-def platform(self) -> Platform:
+def platform() -> Platform:
     return Platform("fault injector platform")
 
 
