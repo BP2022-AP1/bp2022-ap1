@@ -36,6 +36,8 @@ def test_simulation_runs(mock_traci):  # pylint: disable=unused-argument
 
     while Communicator.state(run_id) != "PROGRESS":
         sleep(1)
+        if Communicator.state(run_id) == "FAILURE":
+            assert False
     Communicator.stop(run_id)
     assert Communicator.progress(run_id) > 0
 
@@ -50,6 +52,8 @@ def test_component_next_tick_is_called(
     run_id = communicator.run()
     while Communicator.state(run_id) != "PROGRESS":
         sleep(1)
+        if Communicator.state(run_id) == "FAILURE":
+            assert False
     Communicator.stop(run_id)
     assert next_tick_mock.assert_called
 
@@ -65,5 +69,7 @@ def test_component_next_tick_is_called_late_add(
     run_id = communicator.run()
     while Communicator.state(run_id) != "PROGRESS":
         sleep(1)
+        if Communicator.state(run_id) == "FAILURE":
+            assert False
     Communicator.stop(run_id)
     assert next_tick_mock.assert_called
