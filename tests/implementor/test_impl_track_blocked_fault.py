@@ -61,6 +61,4 @@ class TestTrackBlockedFaultConfiguration:
         assert configs.exists()
         config = configs.get()
         for key in track_blocked_fault_configuration_data:
-            assert (
-                getattr(config, key) == track_blocked_fault_configuration_data[key]
-            )
+            assert getattr(config, key) == track_blocked_fault_configuration_data[key]

@@ -3,6 +3,9 @@
 
 import json
 
+from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
+    TrackBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
@@ -12,7 +15,6 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
-from src.fault_injector.fault_configurations.track_blocked_fault_configuration import TrackBlockedFaultConfiguration
 from src.implementor.models import SimulationConfiguration
 
 
@@ -97,10 +99,13 @@ def get_all_track_blocked_fault_configuration_ids(options, token):
         if not simulation_configurations.exists():
             return "Simulation not found", 404
         simulation_configuration = simulation_configurations.get()
-        references = simulation_configuration.track_blocked_fault_configuration_references
+        references = (
+            simulation_configuration.track_blocked_fault_configuration_references
+        )
         # Return all train prio fault configurations
         configs = [
-            str(reference.track_blocked_fault_configuration.id) for reference in references
+            str(reference.track_blocked_fault_configuration.id)
+            for reference in references
         ]
         return configs, 200
 
@@ -118,9 +123,9 @@ def create_track_blocked_fault_configuration(body, token):
     # All the parameters are present in the options argument
     config = TrackBlockedFaultConfiguration.create(**body)
     return (
-            {
-                "id": config.id,
-            },
+        {
+            "id": config.id,
+        },
         201,
     )
 

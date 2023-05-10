@@ -322,15 +322,17 @@ def train_speed_fault_configuration(train_speed_fault_configuration_data):
 
 # ------------- TrainSpeedFaultConfiguration ----------------
 
+
 @pytest.fixture
 def track_blocked_fault_configuration_data(track: Track) -> dict:
     return {
-            "start_tick": 30,
-            "end_tick": 300,
-            "description": "test TrackBlockedFault",
-            "affected_element_id": track.identifier,
-            "strategy": "regular",
-        }
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test TrackBlockedFault",
+        "affected_element_id": track.identifier,
+        "strategy": "regular",
+    }
+
 
 @pytest.fixture
 def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
