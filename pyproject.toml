@@ -130,6 +130,20 @@ build-backend = "poetry.core.masonry.api"
     cmd = "docker compose up prod"
     envfile = ".env.secret"
 
+    [tool.poe.tasks.gui]
+    help = "Run flask app in development mode with gui"
+    sequence = ["gui-deps", "sleep", "gui-flask"]
+    envfile = [".env.shared", ".env.secret"]
+
+    [tool.poe.tasks.gui-deps]
+    help = "Run database and grafana for gui"
+    cmd = "docker compose up postgresql grafana-dev -d"
+
+    [tool.poe.tasks.gui-flask]
+    help = "Run flask app in development mode with gui"
+    cmd = "flask -A src run --debug"
+    env = { "DISABLE_CELERY" = "true" }
+
     [tool.poe.tasks.cov]
     help = "Run coverage report"
     cmd = "pytest --co --cov=src --cov-config=.coveragerc"
