@@ -320,7 +320,7 @@ def train_speed_fault_configuration(train_speed_fault_configuration_data):
     return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
 
 
-# ------------- TrainSpeedFaultConfiguration ----------------
+# ------------- TrackBlockedFaultConfiguration ----------------
 
 
 @pytest.fixture
@@ -341,7 +341,7 @@ def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
     )
 
 
-# ------------- TrainSpeedFaultConfiguration ----------------
+# ------------- PlatformBlockedFaultConfiguration ----------------
 
 @pytest.fixture
 def platform(self) -> Platform:
