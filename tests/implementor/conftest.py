@@ -231,7 +231,7 @@ def track_speed_limit_fault_configuration(
 
 
 # ------------- TrainPrioFault ----------------
-from traci import vehicle
+
 
 
 @pytest.fixture
@@ -338,6 +338,29 @@ def track_blocked_fault_configuration_data(track: Track) -> dict:
 def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
     return TrackBlockedFaultConfiguration.create(
         **track_blocked_fault_configuration_data
+    )
+
+
+# ------------- TrainSpeedFaultConfiguration ----------------
+
+@pytest.fixture
+def platform(self) -> Platform:
+    return Platform("fault injector platform")
+
+@pytest.fixture
+def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
+    return {
+            "start_tick": 20,
+            "end_tick": 200,
+            "description": "test PlatformBlockedFault",
+            "affected_element_id": platform.identifier,
+            "strategy": "regular",
+        }
+
+@pytest.fixture
+def platform_blocked_fault_configuration(platform_blocked_fault_configuration_data) -> PlatformBlockedFaultConfiguration:
+    return PlatformBlockedFaultConfiguration.create(
+        **platform_blocked_fault_configuration_data
     )
 
 
