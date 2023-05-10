@@ -39,7 +39,6 @@ jobs:
         poetry run poe lint-tests
 
   test:
-
     runs-on: ubuntu-latest
 
     strategy:
