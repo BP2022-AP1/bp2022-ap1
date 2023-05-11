@@ -192,15 +192,20 @@ def track(edge, edge_re):
 
 
 @pytest.fixture
-def track_blocked_fault_configuration(
-    track: Track,
-) -> TrackBlockedFaultConfiguration:
+def track_blocked_fault_configuration_data(track: Track) -> dict:
+    return {
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test TrackBlockedFault",
+        "affected_element_id": track.identifier,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
     return TrackBlockedFaultConfiguration.create(
-        start_tick=30,
-        end_tick=300,
-        description="test TrackBlockedFault",
-        affected_element_id=track.identifier,
-        strategy="regular",
+        **track_blocked_fault_configuration_data
     )
 
 
@@ -267,7 +272,7 @@ def train_prio_fault_configuration(train_prio_fault_configuration_data):
     return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
 
 
-# ------------- TrainSpeedLimitFault ----------------
+# ------------- TrainSpeedLimitFaultConfiguration ----------------
 
 
 @pytest.fixture
