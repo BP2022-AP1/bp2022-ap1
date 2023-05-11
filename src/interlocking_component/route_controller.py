@@ -1,5 +1,4 @@
 import os
-import zipfile
 from typing import List
 
 from interlocking.interlockinginterface import Interlocking
@@ -113,8 +112,6 @@ class RouteController(Component):
         self.router = Router()
 
         # Import from local PlanPro file
-        if(not os.path.exists(path_name)):
-            zipfile.ZipFile(path_name + ".zip", 'r').extractall(path_name)
         topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
 
         # Generate Routes

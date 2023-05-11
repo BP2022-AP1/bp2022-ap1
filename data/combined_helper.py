@@ -4,7 +4,6 @@ from railwayroutegenerator.routegenerator import RouteGenerator
 from track_signal_generator.generator import TrackSignalGenerator
 
 import os
-import zipfile
 from sumoexporter.sumoexporter import SUMOExporter
 
 
@@ -39,9 +38,6 @@ def generate_planpro():
     generator.generate(
         topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/" + topology.name
     )
-
-    # Zip PlanPro
-    zipfile.ZipFile(f"data/planpro/{topology.name}.ppxml.zip", "w").write(f"data/planpro/{topology.name}.ppxml")
     
     current_directory = os.getcwd()
     os.makedirs("data/sumo/" + topology.name.split("/")[-1], exist_ok=True)
