@@ -61,6 +61,6 @@ class TestScheduleBlockedFaultConfiguration:
         assert configs.exists()
         config = configs.get()
         for key in schedule_blocked_fault_configuration_data:
-            assert (
-                getattr(config, key) == schedule_blocked_fault_configuration_data[key]
+            assert getattr(config, key) == str(
+                schedule_blocked_fault_configuration_data[key]
             )
