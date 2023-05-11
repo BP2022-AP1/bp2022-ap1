@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from enum import StrEnum, auto
+from enum import Enum, auto
 
 
-class EventType(StrEnum):
+class EventType(Enum):
     TrainSpawn = auto()
     TrainRemove = auto()
     TrainArrival = auto()
