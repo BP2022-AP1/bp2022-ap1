@@ -12,7 +12,7 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
-from src.wrapper.train_spawner import TrainSpawner
+from src.wrapper.train_builder import TrainBuilder
 
 
 @pytest.fixture
@@ -193,6 +193,6 @@ class MockRouteController:
 @pytest.fixture
 def spawner(
     configured_souc: SimulationObjectUpdatingComponent, train_add
-) -> Tuple[SimulationObjectUpdatingComponent, TrainSpawner]:
+) -> Tuple[SimulationObjectUpdatingComponent, TrainBuilder]:
     # pylint: disable=unused-argument
-    return (configured_souc, TrainSpawner(configured_souc, MockRouteController()))
+    return (configured_souc, TrainBuilder(configured_souc, MockRouteController()))

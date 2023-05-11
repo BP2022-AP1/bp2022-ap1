@@ -3,6 +3,9 @@
 
 import json
 
+from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
+    TrackBlockedFaultConfiguration,
+)
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
@@ -87,10 +90,28 @@ def get_all_track_blocked_fault_configuration_ids(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    # Return all track blocked fault configurations of a single simulation configuration
+    if options["simulationId"] is not None:
+        simulation_id = options["simulationId"]
+        simulation_configurations = SimulationConfiguration.select().where(
+            SimulationConfiguration.id == simulation_id
+        )
+        if not simulation_configurations.exists():
+            return "Simulation not found", 404
+        simulation_configuration = simulation_configurations.get()
+        references = (
+            simulation_configuration.track_blocked_fault_configuration_references
+        )
+        # Return all track blocked fault configurations
+        configs = [
+            str(reference.track_blocked_fault_configuration.id)
+            for reference in references
+        ]
+        return configs, 200
 
-    return json.dumps(""), 501  # 200
+    # Return all track blocked fault configurations
+    configs = [str(config.id) for config in TrackBlockedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_track_blocked_fault_configuration(body, token):
@@ -100,16 +121,12 @@ def create_track_blocked_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
+    config = TrackBlockedFaultConfiguration.create(**body)
     return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
+        {
+            "id": config.id,
+        },
+        201,
     )
 
 
