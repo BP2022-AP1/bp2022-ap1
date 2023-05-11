@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from src import implementor as impl
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
     ScheduleBlockedFaultConfiguration,
@@ -49,6 +51,12 @@ class TestScheduleBlockedFaultConfiguration:
     def test_create_schedule_blocked_fault_configuration(
         token, schedule_blocked_fault_configuration_data
     ):
+        def compare(a: object, b: object) -> bool:
+            if isinstance(a, UUID) or isinstance(b, UUID):
+                return str(a) == str(b)
+            else:
+                return a == b
+
         response = impl.component.create_schedule_blocked_fault_configuration(
             schedule_blocked_fault_configuration_data, token
         )
@@ -61,6 +69,6 @@ class TestScheduleBlockedFaultConfiguration:
         assert configs.exists()
         config = configs.get()
         for key in schedule_blocked_fault_configuration_data:
-            assert getattr(config, key) == str(
-                schedule_blocked_fault_configuration_data[key]
+            assert compare(
+                getattr(config, key), schedule_blocked_fault_configuration_data[key]
             )
