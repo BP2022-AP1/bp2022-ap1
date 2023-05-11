@@ -90,7 +90,7 @@ def get_all_track_blocked_fault_configuration_ids(options, token):
 
     """
 
-    # Return all train prio fault configurations of a single simulation configuration
+    # Return all track blocked fault configurations of a single simulation configuration
     if options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
@@ -102,14 +102,16 @@ def get_all_track_blocked_fault_configuration_ids(options, token):
         references = (
             simulation_configuration.track_blocked_fault_configuration_references
         )
-        # Return all train prio fault configurations
+        # Return all track blocked fault configurations
         configs = [
             str(reference.track_blocked_fault_configuration.id)
             for reference in references
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    # Return all track blocked fault configurations
+    configs = [str(config.id) for config in TrackBlockedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_track_blocked_fault_configuration(body, token):
@@ -119,8 +121,6 @@ def create_track_blocked_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
     config = TrackBlockedFaultConfiguration.create(**body)
     return (
         {
