@@ -401,7 +401,7 @@ def get_all_platform_blocked_fault_configuration_ids(options, token):
 
     """
 
-    # Return all train prio fault configurations of a single simulation configuration
+    # Return all platform blocked fault configurations of a single simulation configuration
     if options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
@@ -413,14 +413,16 @@ def get_all_platform_blocked_fault_configuration_ids(options, token):
         references = (
             simulation_configuration.platform_blocked_fault_configuration_references
         )
-        # Return all train prio fault configurations
+        # Return all platform blocked fault configurations
         configs = [
             str(reference.platform_blocked_fault_configuration.id)
             for reference in references
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    # Return all platform blocked fault configurations
+    configs = [str(config.id) for config in PlatformBlockedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_platform_blocked_fault_configuration(body, token):

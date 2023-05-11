@@ -145,15 +145,22 @@ def platform() -> Platform:
 
 
 @pytest.fixture
+def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
+    return {
+        "start_tick": 20,
+        "end_tick": 200,
+        "description": "test PlatformBlockedFault",
+        "affected_element_id": platform.identifier,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
 def platform_blocked_fault_configuration(
-    platform: Platform,
+    platform_blocked_fault_configuration_data,
 ) -> PlatformBlockedFaultConfiguration:
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=20,
-        end_tick=200,
-        description="test PlatformBlockedFault",
-        affected_element_id=platform.identifier,
-        strategy="regular",
+        **platform_blocked_fault_configuration_data
     )
 
 
@@ -322,55 +329,6 @@ def train_speed_fault_configuration_data(train: Train) -> dict:
 @pytest.fixture
 def train_speed_fault_configuration(train_speed_fault_configuration_data):
     return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
-
-
-# ------------- TrackBlockedFaultConfiguration ----------------
-
-
-@pytest.fixture
-def track_blocked_fault_configuration_data(track: Track) -> dict:
-    return {
-        "start_tick": 30,
-        "end_tick": 300,
-        "description": "test TrackBlockedFault",
-        "affected_element_id": track.identifier,
-        "strategy": "regular",
-    }
-
-
-@pytest.fixture
-def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
-    return TrackBlockedFaultConfiguration.create(
-        **track_blocked_fault_configuration_data
-    )
-
-
-# ------------- PlatformBlockedFaultConfiguration ----------------
-
-
-@pytest.fixture
-def platform() -> Platform:
-    return Platform("fault injector platform")
-
-
-@pytest.fixture
-def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
-    return {
-        "start_tick": 20,
-        "end_tick": 200,
-        "description": "test PlatformBlockedFault",
-        "affected_element_id": platform.identifier,
-        "strategy": "regular",
-    }
-
-
-@pytest.fixture
-def platform_blocked_fault_configuration(
-    platform_blocked_fault_configuration_data,
-) -> PlatformBlockedFaultConfiguration:
-    return PlatformBlockedFaultConfiguration.create(
-        **platform_blocked_fault_configuration_data
-    )
 
 
 # ------------- SimulationConfiguration ----------------
