@@ -191,6 +191,7 @@ def mock_interlocking() -> Interlocking:
             infrastructure_provider._set_tds_count_out_callback(
                 self.increment_tds_count_out_count
             )
+
         # pylint: enable=protected-access
 
     return InterlockingMock()
