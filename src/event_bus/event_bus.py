@@ -136,9 +136,15 @@ class EventBus:
         :return: The iterator to all the callbacks
         :yield: a callback
         """
-        return (callback for callback, e_type in self.callbacks if e_type == event_type)
+        return (
+            callback
+            for callback, e_type in self.callbacks.values()
+            if e_type == event_type
+        )
 
-    def _build_arguments(self, arg_keys: list[str], args: list, kwargs: dict) -> dict:
+    def _build_arguments(
+        self, name: str, arg_keys: list[str], args: list, kwargs: dict
+    ) -> dict:
         """Constructs an argument dict from a list of keys that have to be included
         a list of argument values and an kwargs-dict
 
@@ -147,10 +153,25 @@ class EventBus:
         :param kwargs: the kwargs dict
         :return: the argument dict
         """
-        assert len(args) + len(kwargs.keys()) == len(arg_keys)
+        if not len(args) + len(kwargs.keys()) == len(arg_keys):
+            raise TypeError(
+                f"{self.__class__.__name__}.{name}() takes exactly {len(arg_keys)} arguments ({len(args) + len(kwargs.keys())} given)"
+            )
         arguments = {key: value for key, value in zip(arg_keys, args)}
-        arg_keys = [key for key in arg_keys if key not in arguments]
-        assert set(arg_keys) == set(kwargs.keys())
+
+        arg_keys_set = set(key for key in arg_keys if key not in arguments)
+        kwarg_keys_set = set(kwargs.keys())
+        for arg_key in arg_keys_set:
+            if arg_key not in kwarg_keys_set:
+                raise TypeError(
+                    f"{self.__class__.__name__}.{name}() missing required argument '{arg_key}'"
+                )
+        for kwarg_key in kwarg_keys_set:
+            if kwarg_key not in arg_keys_set:
+                raise TypeError(
+                    f"{self.__class__.__name__}.{name}() got an unexpected keyword argument '{kwarg_key}'"
+                )
+
         return arguments | kwargs
 
     def __getattr__(self, name: str) -> object:
@@ -163,11 +184,13 @@ class EventBus:
         :return: a callable
         """
         if name not in self.EVENT_METHODS:
-            raise AttributeError(f"EventBus has no attribute {name}")
+            raise AttributeError(
+                f"'{self.__class__.__name__}' object has no attribute '{name}'"
+            )
         arg_keys, event_type = self.EVENT_METHODS[name]
 
         def emit_event(*args: list, **kwargs: dict):
-            arguments = self._build_arguments(arg_keys, args, kwargs)
+            arguments = self._build_arguments(name, arg_keys, args, kwargs)
             event = Event(event_type, arguments)
             for callback in self._get_callbacks_for_event_type(event_type):
                 callback(event)
