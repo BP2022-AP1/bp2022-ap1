@@ -67,7 +67,7 @@ def fahrstrasse():
 
 @pytest.fixture
 def signal_id():
-    return uuid4()
+    return "Test-Signal"
 
 
 @pytest.fixture

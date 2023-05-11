@@ -135,7 +135,7 @@ class Logger:
         )
 
     def set_signal(
-        self, tick: int, signal_id: UUID, state_before: int, state_after: int
+        self, tick: int, signal_id: str, state_before: int, state_after: int
     ) -> Type[None]:
         """
         This function is being called when setting a signal or changing its state. This should
@@ -188,7 +188,7 @@ class Logger:
         tick: int,
         train_id: str,
         block_section_id: str,
-        block_section_length: float,
+        block_section_length: float = 0,
     ) -> Type[None]:
         """
         This function should be called when a train leaves a block section. This should include a
