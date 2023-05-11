@@ -1,10 +1,10 @@
+import os
+
 from orm_importer.importer import ORMImporter
 from planproexporter import Generator
 from railwayroutegenerator.routegenerator import RouteGenerator
-from track_signal_generator.generator import TrackSignalGenerator
-
-import os
 from sumoexporter.sumoexporter import SUMOExporter
+from track_signal_generator.generator import TrackSignalGenerator
 
 
 def generate_planpro():
@@ -38,7 +38,7 @@ def generate_planpro():
     generator.generate(
         topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/" + topology.name
     )
-    
+
     current_directory = os.getcwd()
     os.makedirs("data/sumo/" + topology.name.split("/")[-1], exist_ok=True)
     os.chdir("data/sumo/" + topology.name.split("/")[-1])
@@ -47,6 +47,7 @@ def generate_planpro():
     sumo_exporter.convert()
     sumo_exporter.write_output()
     os.chdir(current_directory)
+
 
 if __name__ == "__main__":
     generate_planpro()
