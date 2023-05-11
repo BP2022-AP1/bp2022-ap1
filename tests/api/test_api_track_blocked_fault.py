@@ -15,7 +15,7 @@ class TestApiTrackBlockedFault:
             "/component/fault-injection/track-blocked-fault",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "data",
