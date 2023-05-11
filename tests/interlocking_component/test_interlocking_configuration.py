@@ -71,17 +71,17 @@ class TestInterlockingConfigurationXSimulationConfiguration:
 
     def test_back_references(
         self,
-        simulation_configuration: SimulationConfiguration,
+        unsaved_simulation_configuration: SimulationConfiguration,
         interlocking_configuration: InterlockingConfiguration,
     ):
         interlocking_x_simulation = InterlockingConfigurationXSimulationConfiguration(
             interlocking_configuration=interlocking_configuration,
-            schedule_configuration=simulation_configuration,
+            schedule_configuration=unsaved_simulation_configuration,
         )
         interlocking_x_simulation.save()
-        assert len(simulation_configuration.interlocking_configuration_references) == 1
+        assert len(unsaved_simulation_configuration.interlocking_configuration_references) == 1
         assert (
-            simulation_configuration.interlocking_configuration_references[0]
+            unsaved_simulation_configuration.interlocking_configuration_references[0]
             == interlocking_x_simulation
         )
         assert len(interlocking_configuration.simulation_configuration_references) == 1
