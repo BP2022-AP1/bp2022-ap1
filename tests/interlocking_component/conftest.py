@@ -90,6 +90,7 @@ def unsaved_simulation_configuration() -> SimulationConfiguration:
     return SimulationConfiguration.create()
 
 
+@pytest.fixture
 def interlocking_configuration() -> InterlockingConfiguration:
     config = InterlockingConfiguration(
         dynamicRouting=True,
