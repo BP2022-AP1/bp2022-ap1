@@ -30,7 +30,7 @@ def generate_planpro():
     # Write PlanPro
     generator = Generator()
     generator.generate(
-        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/v0905"
+        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/schwarze_pumpe_v1"
     )
 
 
