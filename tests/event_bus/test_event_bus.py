@@ -7,6 +7,8 @@ from src.event_bus.event_bus import EventBus
 
 
 class TestEventBus:
+    """Tests for the EventBus"""
+
     @pytest.fixture
     def event_bus(self) -> EventBus:
         return EventBus()
@@ -21,6 +23,14 @@ class TestEventBus:
             pass
 
         return _callback
+
+    @pytest.fixture
+    def tick(self) -> int:
+        return 42
+
+    @pytest.fixture
+    def train_id(self) -> str:
+        return "cool_train_id"
 
     def test_register_callback(
         self,
@@ -43,25 +53,51 @@ class TestEventBus:
         event_bus.unregister_callback(handle)
         assert len(event_bus.callbacks.keys()) == 0
 
-    def test_event(self, event_bus: EventBus, event_type: EventType):
-        callback_called = False
+    def test_event(
+        self, event_bus: EventBus, event_type: EventType, tick: int, train_id: str
+    ):
+        self.callback_called = False
 
         def callback(event: Event):
-            callback_called = True
+            self.callback_called = True
             assert event.event_type == event_type
-            assert event.arguments["tick"] == 42
-            assert event.arguments["train_id"] == "cool_train_id"
+            assert event.arguments["tick"] == tick
+            assert event.arguments["train_id"] == train_id
 
         event_bus.register_callback(callback, event_type)
-        event_bus.spawn_train(42, train_id="cool_train_id")
-        assert callback_called
+        event_bus.spawn_train(tick, train_id=train_id)
+        assert self.callback_called
 
-    def test_wrong_arguments(
+    def test_wrong_method(
         self,
         event_bus: EventBus,
         event_type: EventType,
         callback: Callable[[Event], None],
+        tick: int,
+        train_id: str,
     ):
         event_bus.register_callback(callback, event_type)
         with pytest.raises(AttributeError):
-            event_bus.spawn_train(42, train_id="cool_train_id", wrong_argument="foo")
+            event_bus.wrong_method(tick, train_id=train_id)
+
+    def test_wrong_number_of_arguments(
+        self,
+        event_bus: EventBus,
+        event_type: EventType,
+        callback: Callable[[Event], None],
+        tick: int,
+    ):
+        event_bus.register_callback(callback, event_type)
+        with pytest.raises(TypeError):
+            event_bus.spawn_train(tick)
+
+    def test_wrong_keyword_argument(
+        self,
+        event_bus: EventBus,
+        event_type: EventType,
+        callback: Callable[[Event], None],
+        tick: int,
+    ):
+        event_bus.register_callback(callback, event_type)
+        with pytest.raises(TypeError):
+            event_bus.spawn_train(tick, wrong_keyword="wrong_keyword")
