@@ -4,6 +4,7 @@ from railwayroutegenerator.routegenerator import RouteGenerator
 from track_signal_generator.generator import TrackSignalGenerator
 
 import os
+import zipfile
 from sumoexporter.sumoexporter import SUMOExporter
 
 
@@ -23,10 +24,12 @@ def generate_planpro():
 
     # Import from OSM/ORM
     topology = ORMImporter().run(polygon)
-    topology.name = "debuggingisfun3"
+    topology.name = "schwarze_pumpe_v1"
 
     # Generate Signals
-    TrackSignalGenerator(topology).place_edge_signals()
+    signal_generator = TrackSignalGenerator(topology)
+    signal_generator.place_switch_signals()
+    signal_generator.place_edge_signals()
 
     # Generate Routes
     RouteGenerator(topology).generate_routes()
@@ -37,6 +40,9 @@ def generate_planpro():
         topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/" + topology.name
     )
 
+    # Zip PlanPro
+    zipfile.ZipFile(f"data/planpro/{topology.name}.ppxml.zip", "w").write(f"data/planpro/{topology.name}.ppxml")
+    
     current_directory = os.getcwd()
     os.makedirs("data/sumo/" + topology.name.split("/")[-1], exist_ok=True)
     os.chdir("data/sumo/" + topology.name.split("/")[-1])

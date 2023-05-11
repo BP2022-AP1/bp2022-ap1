@@ -1,4 +1,5 @@
 import os
+import zipfile
 from typing import List
 
 from interlocking.interlockinginterface import Interlocking
@@ -102,7 +103,7 @@ class RouteController(Component):
         logger: Logger,
         priority: int,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
-        path_name: str = os.path.join("data", "planpro", "test_example.ppxml"),
+        path_name: str = os.path.join("data", "planpro", "schwarze_pumpe_v1.ppxml"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
@@ -112,6 +113,8 @@ class RouteController(Component):
         self.router = Router()
 
         # Import from local PlanPro file
+        if(not os.path.exists(path_name)):
+            zipfile.ZipFile(path_name + ".zip", 'r').extractall(path_name)
         topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
 
         # Generate Routes

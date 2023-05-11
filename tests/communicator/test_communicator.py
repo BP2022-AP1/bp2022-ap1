@@ -1,6 +1,8 @@
 from time import sleep
 from unittest.mock import patch
 
+import os
+
 import pytest
 import traci
 
@@ -31,7 +33,9 @@ def mock_traci(monkeypatch):
 
 
 def test_simulation_runs(mock_traci):  # pylint: disable=unused-argument
-    communicator = Communicator()
+    communicator = Communicator(sumo_configuration = os.path.join(
+            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+        ),)
     run_id = communicator.run()
 
     while Communicator.state(run_id) != "PROGRESS":
@@ -46,7 +50,9 @@ def test_component_next_tick_is_called(
     mock_traci,
 ):  # pylint: disable=unused-argument
     mock = MockComponent()
-    communicator = Communicator(components=[mock])
+    communicator = Communicator(components=[mock], sumo_configuration = os.path.join(
+            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+        ),)
     run_id = communicator.run()
     while Communicator.state(run_id) != "PROGRESS":
         sleep(1)
@@ -60,7 +66,9 @@ def test_component_next_tick_is_called_late_add(
     mock_traci,
 ):  # pylint: disable=unused-argument
     mock = MockComponent()
-    communicator = Communicator()
+    communicator = Communicator(sumo_configuration = os.path.join(
+            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+        ),)
     communicator.add_component(mock)
     run_id = communicator.run()
     while Communicator.state(run_id) != "PROGRESS":
