@@ -8,7 +8,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
     [
         ("/run", 200),
         ("/schedule", 501),
-        ("/simulation", 501),
+        ("/simulation", 200),
         ("/component/interlocking", 501),
         ("/component/spawner", 501),
         ("/component/fault-injection/schedule-blocked-fault", 501),

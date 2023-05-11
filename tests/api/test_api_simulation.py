@@ -12,7 +12,7 @@ class TestApiSimulation:
 
     def test_get_all(self, client, clear_token):
         response = client.get("/simulation", headers={TOKEN_HEADER: clear_token})
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "data",
