@@ -1,5 +1,5 @@
+from src.base_model import db
 from src.implementor.models import SimulationConfiguration
-
 from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
     ScheduleConfigurationXSimulationPlatform,
@@ -9,7 +9,6 @@ from src.spawner.spawner import (
     SpawnerConfigurationXSchedule,
     SpawnerConfigurationXSimulationConfiguration,
 )
-from src.base_model import db
 
 with db.atomic():
     platforms = ["bs_0", "bs_6"]
