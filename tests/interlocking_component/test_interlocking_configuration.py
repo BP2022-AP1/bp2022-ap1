@@ -79,7 +79,10 @@ class TestInterlockingConfigurationXSimulationConfiguration:
             schedule_configuration=unsaved_simulation_configuration,
         )
         interlocking_x_simulation.save()
-        assert len(unsaved_simulation_configuration.interlocking_configuration_references) == 1
+        assert (
+            len(unsaved_simulation_configuration.interlocking_configuration_references)
+            == 1
+        )
         assert (
             unsaved_simulation_configuration.interlocking_configuration_references[0]
             == interlocking_x_simulation
