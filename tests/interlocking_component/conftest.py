@@ -179,6 +179,9 @@ def mock_interlocking() -> Interlocking:
 
         # pylint: enable=unused-argument
 
+        # protected-access has to be disabled, because setting the
+        # callbacks does not really work like a private method.
+        # pylint: disable=protected-access
         def set_tds_count_in_callback(self, infrastructure_provider):
             infrastructure_provider._set_tds_count_in_callback(
                 self.increment_tds_count_in_count
@@ -188,6 +191,7 @@ def mock_interlocking() -> Interlocking:
             infrastructure_provider._set_tds_count_out_callback(
                 self.increment_tds_count_out_count
             )
+        # pylint: enable=protected-access
 
     return InterlockingMock()
 
