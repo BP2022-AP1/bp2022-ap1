@@ -22,7 +22,7 @@ class Communicator:
     _max_tick = None
 
     def _sort_components(self):
-        self._components.sort(lambda x: x.priority, reverse=True)
+        self._components.sort(key=lambda x: x.priority, reverse=True)
 
     def add_component(self, component: Component):
         """Add the given component to the simulation.
@@ -180,7 +180,7 @@ def run_simulation_steps(
     sumo_running = True
     current_tick = 1
 
-    components.sort(lambda x: x.priority, reverse=True)
+    components.sort(key=lambda x: x.priority, reverse=True)
 
     update_state(current_tick, max_tick, sumo_running)
 
