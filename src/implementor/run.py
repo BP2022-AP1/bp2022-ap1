@@ -20,7 +20,7 @@ from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.train_spawner import TrainSpawner
+from src.wrapper.train_builder import TrainBuilder
 
 
 def get_all_run_ids(options: dict, token: Token):
@@ -98,7 +98,7 @@ def create_run(body, token):
     interlocking_disruptor: IInterlockingDisruptor = None
     # pylint: enable=fixme
 
-    train_spawner = TrainSpawner(object_updater, route_controller)
+    train_spawner = TrainBuilder(object_updater, route_controller)
 
     if simulation_configuration.spawner_configuration_references.exists():
         reference = simulation_configuration.spawner_configuration_references.get()

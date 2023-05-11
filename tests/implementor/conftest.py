@@ -192,15 +192,20 @@ def track(edge, edge_re):
 
 
 @pytest.fixture
-def track_blocked_fault_configuration(
-    track: Track,
-) -> TrackBlockedFaultConfiguration:
+def track_blocked_fault_configuration_data(track: Track) -> dict:
+    return {
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test TrackBlockedFault",
+        "affected_element_id": track.identifier,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
     return TrackBlockedFaultConfiguration.create(
-        start_tick=30,
-        end_tick=300,
-        description="test TrackBlockedFault",
-        affected_element_id=track.identifier,
-        strategy="regular",
+        **track_blocked_fault_configuration_data
     )
 
 
@@ -266,7 +271,7 @@ def train_prio_fault_configuration(train_prio_fault_configuration_data):
     return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
 
 
-# ------------- TrainSpeedLimitFault ----------------
+# ------------- TrainSpeedLimitFaultConfiguration ----------------
 
 
 @pytest.fixture
@@ -373,7 +378,6 @@ def platform_blocked_fault_configuration(
 
 @pytest.fixture
 def simulation_configuration_data(
-    interlocking_configuration,
     spawner_configuration,
     platform_blocked_fault_configuration,
     schedule_blocked_fault_configuration,
@@ -383,8 +387,7 @@ def simulation_configuration_data(
     train_speed_fault_configuration,
 ):
     return {
-        "interlocking": [interlocking_configuration.id],
-        "spawner": [spawner_configuration.id],
+        "spawner": spawner_configuration.id,
         "platform_blocked_fault": [platform_blocked_fault_configuration.id],
         "schedule_blocked_fault": [schedule_blocked_fault_configuration.id],
         "track_blocked_fault": [track_blocked_fault_configuration.id],
@@ -404,14 +407,19 @@ def simulation_configuration_full(
 
 
 @pytest.fixture
-def empty_simulation_configuration():
-    simulation = SimulationConfiguration()
+def empty_simulation_configuration_data(spawner_configuration):
+    return {"spawner": [spawner_configuration.id]}
+
+
+@pytest.fixture
+def empty_simulation_configuration(empty_simulation_configuration_data):
+    simulation = SimulationConfiguration(**empty_simulation_configuration_data)
     simulation.save()
     return simulation
 
 
 @pytest.fixture
-def another_empty_simulation_configuration():
-    simulation = SimulationConfiguration()
+def another_empty_simulation_configuration(empty_simulation_configuration_data):
+    simulation = SimulationConfiguration(**empty_simulation_configuration_data)
     simulation.save()
     return simulation
