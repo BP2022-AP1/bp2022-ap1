@@ -23,6 +23,13 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
 )
 from src.implementor.models import Run, SimulationConfiguration
 from src.logger.logger import Logger
+from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
+from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.spawner.spawner import (
+    SpawnerConfiguration,
+    SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
+)
 from tests.decorators import recreate_db_setup
 from tests.fixtures.fixtures_logger import (
     setup_logs_block_sections,
@@ -123,13 +130,39 @@ class TestDataScience:
         )
         assert_frame_equal(verkehrsleistung_df, verkehrsleistung_momentarily_time_df)
 
-    def test_get_coal_demand_by_run_id(self, run: Run, data_science: DataScience):
-        with pytest.raises(NotImplementedError):
-            data_science.get_coal_demand_by_run_id(run)
+    def test_get_coal_demand_by_run_id(
+        self,
+        run: Run,
+        data_science: DataScience,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        simulation_configuration: SimulationConfiguration,
+        coal_demand_by_run_id_head_df: pd.DataFrame,
+    ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        coal_demand_df = data_science.get_coal_demand_by_run_id(run).head(10)
+        assert_frame_equal(coal_demand_df, coal_demand_by_run_id_head_df)
 
-    def test_get_spawn_events_by_run_id(self, run: Run, data_science: DataScience):
-        with pytest.raises(NotImplementedError):
-            data_science.get_spawn_events_by_run_id(run)
+    def test_get_spawn_events_by_run_id(
+        self,
+        run: Run,
+        data_science: DataScience,
+        logger: Logger,
+        spawn_events_by_run_id_head_df: pd.DataFrame,
+    ):
+        TestLogCollector.setup_logs_spawn_trains(logger)
+        assert_frame_equal(
+            spawn_events_by_run_id_head_df,
+            data_science.get_spawn_events_by_run_id(run).head(5),
+        )
 
     def test_get_verkehrsmenge_by_run_id(
         self, logger: Logger, data_science: DataScience, verkehrsmenge_df: pd.DataFrame

@@ -34,6 +34,22 @@
           "tags": [],
           "type": "dashboard"
         }
+      },
+      {
+        "datasource": {
+          "type": "grafana-simple-json-datasource",
+          "uid": "DATASOURCE_UID"
+        },
+        "enable": true,
+        "iconColor": "orange",
+        "name": "Train Spawns",
+        "query": "test_get_spawn_events_by_run_id:${run_id}",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        }
       }
     ]
   },
@@ -238,11 +254,103 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "grafana-simple-json-datasource",
+        "uid": "DATASOURCE_UID"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "masst"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "DATASOURCE_UID"
+          },
+          "refId": "A",
+          "target": "get_coal_demand_by_run_id:${run_id}",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Kohlebedarf",
+      "type": "timeseries"
+    },
+    {
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 17
       },
       "id": 6,
       "title": "Scalar",
@@ -281,7 +389,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 10
+        "y": 18
       },
       "id": 2,
       "options": {
@@ -344,7 +452,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 10
+        "y": 18
       },
       "id": 4,
       "options": {
@@ -430,6 +538,6 @@
   "timezone": "utc",
   "title": "Run based",
   "uid": "yJoIP3P4k",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }

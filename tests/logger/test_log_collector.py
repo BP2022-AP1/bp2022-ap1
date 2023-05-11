@@ -320,6 +320,14 @@ class TestLogCollector:
         logger.train_enter_block_section(50, "ice_4", "section_3", 30.5)
 
     @staticmethod
+    def setup_logs_spawn_trains(logger):
+        logger.spawn_train(4600, "Kohlezug 1")
+        logger.spawn_train(7300, "Kohlezug 2")
+        logger.spawn_train(10900, "Kohlezug 3")
+        logger.spawn_train(13600, "Kohlezug 4")
+        logger.spawn_train(17200, "Kohlezug 5")
+
+    @staticmethod
     def setup_faults(
         logger: Logger,
         platform_blocked_fault_configuration,
@@ -535,6 +543,17 @@ class TestLogCollector:
         assert_frame_equal(
             log_collector.get_block_section_times_all_trains(logger.run_id),
             _enter_leave_block_section_all_df,
+        )
+
+    def test_get_train_spawn_times(
+        self,
+        train_spawn_times_df: pd.DataFrame,
+        logger: Logger,
+        log_collector: LogCollector,
+    ):
+        self.setup_logs_spawn_trains(logger)
+        assert_frame_equal(
+            train_spawn_times_df, log_collector.get_train_spawn_times(logger.run_id)
         )
 
     def test_get_faults(

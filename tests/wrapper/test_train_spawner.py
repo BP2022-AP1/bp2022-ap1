@@ -5,10 +5,10 @@ import pytest
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.train_spawner import TrainSpawner
+from src.wrapper.train_builder import TrainBuilder
 
 
-def test_spawn_train(spawner: Tuple[SimulationObjectUpdatingComponent, TrainSpawner]):
+def test_spawn_train(spawner: Tuple[SimulationObjectUpdatingComponent, TrainBuilder]):
     (souc, spawner) = spawner
     assert spawner.spawn_train("test-train-1", ["station-1", "station-2"], "test-cargo")
 
@@ -16,7 +16,7 @@ def test_spawn_train(spawner: Tuple[SimulationObjectUpdatingComponent, TrainSpaw
 
 
 def test_spawn_train_no_route(
-    spawner: Tuple[SimulationObjectUpdatingComponent, TrainSpawner]
+    spawner: Tuple[SimulationObjectUpdatingComponent, TrainBuilder]
 ):
     (souc, spawner) = spawner
     assert not spawner.spawn_train(
