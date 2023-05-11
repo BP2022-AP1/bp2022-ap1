@@ -58,6 +58,7 @@ services:
     env_file:
       - .env.shared
     environment:
+      - GRAFANA_HOST=grafana-dev
       - C_FORCE_ROOT=true
     volumes:
       - .:/app

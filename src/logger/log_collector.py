@@ -11,6 +11,7 @@ from src.logger.log_entry import (
     TrainDepartureLogEntry,
     TrainEnterBlockSectionLogEntry,
     TrainLeaveBlockSectionLogEntry,
+    TrainSpawnLogEntry,
 )
 
 
@@ -312,6 +313,22 @@ class LogCollector:
         block_section_times_df.sort_values(["train_id", "leave_tick"], inplace=True)
         block_section_times_df = block_section_times_df.reset_index(drop=True)
         return block_section_times_df
+
+    def get_train_spawn_times(self, run_id: UUID) -> pd.DataFrame:
+        """Returns a DataFrame containing all spawn events of trains in the given run.
+        :param run_id: The id of the run.
+        :return: A Dataframe containing all block section times of all trains in the given run.
+        """
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
+        spawn_entries = [
+            (entry.tick, entry.train_id)
+            for entry in TrainSpawnLogEntry.select().where(
+                TrainSpawnLogEntry.run_id == run_id
+            )
+        ]
+        spawn_df = pd.DataFrame(spawn_entries, columns=["tick", "train_id"])
+        return spawn_df
 
     def _parse_inject_log_entry(self, entry: InjectFaultLogEntry) -> tuple:
         """Parses a log entry of a fault injection.

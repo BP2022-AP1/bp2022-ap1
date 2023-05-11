@@ -6,13 +6,13 @@ from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
-from src.wrapper.train_spawner import TrainSpawner
+from src.wrapper.train_builder import TrainBuilder
 
 
 class SpawnerProtocol(Protocol):
     """Protocol for the Spawner"""
 
-    train_spawner: TrainSpawner
+    train_spawner: TrainBuilder
 
 
 class Schedule(ABC):

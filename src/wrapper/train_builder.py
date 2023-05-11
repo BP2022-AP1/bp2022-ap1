@@ -7,7 +7,7 @@ from src.wrapper.simulation_object_updating_component import (
 from src.wrapper.simulation_objects import Platform, Train
 
 
-class TrainSpawner:
+class TrainBuilder:
     """A factory to construct trains wich drive through the simulation"""
 
     def __init__(
