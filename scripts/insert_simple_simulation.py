@@ -15,7 +15,7 @@ with db.atomic():
     regular_schedule = ScheduleConfiguration.create(
         schedule_type="TrainSchedule",
         strategy_type="RegularScheduleStrategy",
-        strategy_start_tick=1000,
+        strategy_start_tick=100,
         strategy_end_tick=2000,
         train_schedule_train_type="passenger",
         regular_strategy_frequency=100,
