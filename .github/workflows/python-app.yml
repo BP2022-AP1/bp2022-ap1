@@ -60,7 +60,7 @@ jobs:
     - name: Install sumo
       run: sudo apt-get install -y sumo
     - name: Docker compose
-      uses: isbang/compose-action@v1
+      uses: isbang/compose-action@v1.4.1
       with:
         compose-file: docker-compose.yaml
         services: |
