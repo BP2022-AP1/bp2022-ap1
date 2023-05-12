@@ -145,15 +145,22 @@ def platform() -> Platform:
 
 
 @pytest.fixture
+def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
+    return {
+        "start_tick": 20,
+        "end_tick": 200,
+        "description": "test PlatformBlockedFault",
+        "affected_element_id": platform.identifier,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
 def platform_blocked_fault_configuration(
-    platform: Platform,
+    platform_blocked_fault_configuration_data,
 ) -> PlatformBlockedFaultConfiguration:
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=20,
-        end_tick=200,
-        description="test PlatformBlockedFault",
-        affected_element_id=platform.identifier,
-        strategy="regular",
+        **platform_blocked_fault_configuration_data
     )
 
 
@@ -236,7 +243,6 @@ def track_speed_limit_fault_configuration(
 
 
 # ------------- TrainPrioFault ----------------
-from traci import vehicle
 
 
 @pytest.fixture
