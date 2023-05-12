@@ -156,7 +156,7 @@ def mock_interlocking() -> Interlocking:
             self.tds_count_in_count += 1
 
         def set_tds_count_in_callback(self, infrastructure_provider):
-            infrastructure_provider.set_tds_count_in_callback(
+            infrastructure_provider._set_tds_count_in_callback(
                 self.increment_tds_count_in_count
             )
 
@@ -164,7 +164,7 @@ def mock_interlocking() -> Interlocking:
             self.tds_count_out_count += 1
 
         def set_tds_count_out_callback(self, infrastructure_provider):
-            infrastructure_provider.set_tds_count_out_callback(
+            infrastructure_provider._set_tds_count_out_callback(
                 self.increment_tds_count_out_count
             )
 
