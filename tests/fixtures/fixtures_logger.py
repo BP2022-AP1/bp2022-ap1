@@ -116,13 +116,13 @@ def stations():
 
 
 @pytest.fixture
-def run_ids(run: Run):
-    return [run.id]
+def run_ids(run: Run, run2: Run):
+    return sorted([run.id, run2.id])
 
 
 @pytest.fixture
-def config_ids(simulation_configuration):
-    return [simulation_configuration.id]
+def config_ids(simulation_configuration, simulation_configuration2):
+    return sorted([simulation_configuration.id, simulation_configuration2.id])
 
 
 @pytest.fixture
