@@ -59,13 +59,29 @@ jobs:
       run: sudo apt update
     - name: Install sumo
       run: sudo apt-get install -y sumo
+    - name: Docker compose
+      uses: isbang/compose-action@v1
+      with:
+        compose-file: docker-compose.yaml
+        services: |
+          grafana-test
+          celery-worker
+          postgresql-test
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: user/app:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies
       run: poetry install
     - name: Test with pytest
       run: |
-        poetry run poe test
+        poetry run poe test-ci
       env:
         CI_INDEX: ${{ matrix.ci_index }}
         CI_TOTAL: ${{ matrix.ci_total }}
