@@ -80,7 +80,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         self._api = SmardApi()
         self._calculate_spawn_ticks()
 
-    def _compute_coal_consumption(self, produced_electrical_energy: float) -> float:
+    def compute_coal_consumption(self, produced_electrical_energy: float) -> float:
         """Computes the coal consumption for the given amount of electrical energy
         for the given power station multiplied by the scaling factor.
 
@@ -109,7 +109,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         :param produced_electrical_power: The amount of electrical power produced.
         :return: The amount of trains to spawn.
         """
-        coal_consumption = self._compute_coal_consumption(produced_electrical_power)
+        coal_consumption = self.compute_coal_consumption(produced_electrical_power)
         return coal_consumption / self.COAL_PER_TRAIN
 
     def _calculate_spawn_ticks(self):
