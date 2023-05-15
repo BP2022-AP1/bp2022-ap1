@@ -78,7 +78,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         self.start_datetime = start_datetime
         self.spawn_ticks = []
         self._api = SmardApi()
-        self.calculate_spawn_ticks()
+        self._calculate_spawn_ticks()
 
     def compute_coal_consumption(self, produced_electrical_energy: float) -> float:
         """Computes the coal consumption for the given amount of electrical energy
@@ -112,7 +112,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         coal_consumption = self.compute_coal_consumption(produced_electrical_power)
         return coal_consumption / self.COAL_PER_TRAIN
 
-    def calculate_spawn_ticks(self):
+    def _calculate_spawn_ticks(self):
         """Calculates the ticks at which trains should spawn."""
         end_datetime = self.start_datetime + timedelta(
             seconds=self.end_tick - self.start_tick

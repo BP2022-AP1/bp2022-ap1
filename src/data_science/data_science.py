@@ -432,20 +432,20 @@ class DataScience:
         del verkehrsleistung_df["tick"]
         return verkehrsleistung_df
 
-    def get_coal_demand_by_config_id(
-        self, simulation_configuration: UUID
-    ) -> pd.DataFrame:
-        """Returns the coal demand by a given config id
+    def _get_demand_schedule_strategies_by_config_id(
+        self, config_id: UUID
+    ) -> list[tuple[DemandScheduleStrategy, UUID]]:
+        """Returns the demand schedule strategies by a given config id
         :param config_id: config id
-        :return: coal demand dataframe
+        :return: list of demand schedule strategies
         """
         spawner_configurations = list(
             SpawnerConfigurationXSimulationConfiguration.select().where(
                 SpawnerConfigurationXSimulationConfiguration.simulation_configuration
-                == simulation_configuration
+                == config_id
             )
         )
-        demand_schedule_strategies_configurations = [
+        schedule_configurations = [
             [
                 config.schedule_configuration_id
                 for config in SpawnerConfigurationXSchedule.select().where(
@@ -455,14 +455,12 @@ class DataScience:
             ]
             for spawner_config in spawner_configurations
         ]
-        demand_schedule_strategies_configurations = [
-            item
-            for sublist in demand_schedule_strategies_configurations
-            for item in sublist
+        schedule_configurations = [
+            item for sublist in schedule_configurations for item in sublist
         ]
         demand_schedule_strategies_configurations = list(
             ScheduleConfiguration.select().where(
-                (ScheduleConfiguration.id << demand_schedule_strategies_configurations)
+                (ScheduleConfiguration.id << schedule_configurations)
                 & (ScheduleConfiguration.strategy_type == "DemandScheduleStrategy")
             )
         )
@@ -470,6 +468,18 @@ class DataScience:
             (DemandScheduleStrategy.from_schedule_configuration(config), config.id)
             for config in demand_schedule_strategies_configurations
         ]
+        return demand_schedule_strategies
+
+    def get_coal_demand_by_config_id(
+        self, simulation_configuration: UUID
+    ) -> pd.DataFrame:
+        """Returns the coal demand by a given config id
+        :param config_id: config id
+        :return: coal demand dataframe
+        """
+        demand_schedule_strategies = self._get_demand_schedule_strategies_by_config_id(
+            simulation_configuration
+        )
         smard_api = SmardApi()
         dataframes = []
         for strategy, config_id in demand_schedule_strategies:
@@ -506,40 +516,11 @@ class DataScience:
         :param config_id: config id
         :return: spawn events dataframe
         """
-        spawner_configurations = list(
-            SpawnerConfigurationXSimulationConfiguration.select().where(
-                SpawnerConfigurationXSimulationConfiguration.simulation_configuration
-                == simulation_configuration
-            )
+        demand_schedule_strategies = self._get_demand_schedule_strategies_by_config_id(
+            simulation_configuration
         )
-        demand_schedule_strategies_configurations = [
-            [
-                config.schedule_configuration_id
-                for config in SpawnerConfigurationXSchedule.select().where(
-                    SpawnerConfigurationXSchedule.spawner_configuration_id
-                    == spawner_config.spawner_configuration_id
-                )
-            ]
-            for spawner_config in spawner_configurations
-        ]
-        demand_schedule_strategies_configurations = [
-            item
-            for sublist in demand_schedule_strategies_configurations
-            for item in sublist
-        ]
-        demand_schedule_strategies_configurations = list(
-            ScheduleConfiguration.select().where(
-                (ScheduleConfiguration.id << demand_schedule_strategies_configurations)
-                & (ScheduleConfiguration.strategy_type == "DemandScheduleStrategy")
-            )
-        )
-        demand_schedule_strategies = [
-            (DemandScheduleStrategy.from_schedule_configuration(config), config.id)
-            for config in demand_schedule_strategies_configurations
-        ]
         dataframes = []
         for strategy, config_id in demand_schedule_strategies:
-            strategy.calculate_spawn_ticks()
             spawn_df = pd.DataFrame({"tick": strategy.spawn_ticks})
             spawn_df["title"] = f"Spawn train from config {config_id}"
             spawn_df["time"] = spawn_df["tick"] + self.unix_2020
