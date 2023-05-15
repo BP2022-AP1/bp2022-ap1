@@ -268,6 +268,7 @@ class Edge(SimulationObject):
     _track: "Track" = None
     _from: Node | str = None
     _to: Node | str = None
+    _length: float
 
     @property
     def to_node(self) -> Node:
@@ -278,6 +279,14 @@ class Edge(SimulationObject):
         assert not isinstance(self._to, str)
 
         return self._to
+
+    @property
+    def length(self) -> float:
+        """The length of this edge
+
+        :return: The length
+        """
+        return self._length
 
     @property
     def from_node(self) -> Node:
@@ -341,6 +350,7 @@ class Edge(SimulationObject):
         result.updater = updater
 
         # pylint: disable=protected-access
+        result._length = simulation_object.getLength()
         result._from = simulation_object.getFromNode().getID()
         result._to = simulation_object.getToNode().getID()
 
@@ -367,6 +377,14 @@ class Track(SimulationObject):
         :return: The edges in both directions
         """
         return self._edges
+
+    @property
+    def length(self) -> float:
+        """The length of the track. If the length differ, choose the shorter one
+
+        :return: The length
+        """
+        return min(self._edges[0].length, self._edges[1].length)
 
     @property
     def nodes(self) -> Tuple[Node, Node]:
