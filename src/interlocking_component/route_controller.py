@@ -15,7 +15,7 @@ from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Track, Train, Node
 
 
 class IInterlockingDisruptor:
@@ -95,6 +95,7 @@ class RouteController(Component):
     router: Router = None
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
+    routes_to_be_reserved: List[Route] = []
     tick: int = 0
 
     def __init__(
@@ -131,6 +132,8 @@ class RouteController(Component):
 
             if was_set:
                 self.routes_to_be_set.remove(interlocking_route)
+        for route in self.routes_to_be_reserved:
+
 
     def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
         """This method can be called when instanciating a train
@@ -196,14 +199,22 @@ class RouteController(Component):
         new_route = self.router.get_route(edge, train.timetable[0].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
+        self.set_route(new_route, train)
+                
+    def set_route(self, route: List[Node], train: Train):
+        was_reserved = self.reserve_route(route)
+
+        if not was_reserved:
+            self.routes_to_be_reserved.append(route)
+
         route_length = 0
 
-        for i, end_node_candidat in enumerate(new_route[1:], start=1):
-            route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
+        for i, end_node_candidat in enumerate(route[1:], start=1):
+            route_length += route[i - 1].get_edge_to(end_node_candidat).length
 
             for interlocking_route in self.interlocking.routes:
                 if (
-                    interlocking_route.start_signal.name == new_route[0]
+                    interlocking_route.start_signal.name == route[0]
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
                     # This sets the route in the interlocking

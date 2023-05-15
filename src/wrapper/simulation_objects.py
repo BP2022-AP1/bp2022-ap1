@@ -358,6 +358,7 @@ class Track(SimulationObject):
     "A track on which trains can drive both directions"
 
     _edges = Tuple[Edge, Edge]
+    reservations: List["Train"] = []
 
     @property
     def edges(self) -> Tuple[Edge, Edge]:
