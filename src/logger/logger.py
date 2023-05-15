@@ -39,6 +39,7 @@ class Logger(Component):
         super().__init__(event_bus, 5)
         self.run_id = run_id
 
+        self.callback_handles = []
         self.callback_handles.append(
             self.event_bus.register_callback(self.spawn_train, EventType.TRAIN_SPAWN)
         )
