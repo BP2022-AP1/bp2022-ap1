@@ -42,7 +42,7 @@ class Router:
             for edge in current_node.edges:
                 distance_to_next_node = distances[current_node] + edge.length
                 if (
-                    edge.end_node not in distances
+                    edge.to_node not in distances
                     or distances[edge.to_node] < distance_to_next_node
                 ):
                     distances[edge.to_node] = distance_to_next_node
