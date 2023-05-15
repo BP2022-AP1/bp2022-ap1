@@ -5,6 +5,9 @@ from datetime import datetime
 from typing import Type
 from uuid import UUID
 
+from src.component import Component
+from src.event_bus.event import Event, EventType
+from src.event_bus.event_bus import EventBus
 from src.logger.log_entry import (
     CreateFahrstrasseLogEntry,
     InjectFaultLogEntry,
@@ -18,9 +21,7 @@ from src.logger.log_entry import (
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
-from src.component import Component
-from src.event_bus.event_bus import EventBus
-from src.event_bus.event import Event, EventType
+
 
 # pylint: disable=too-many-public-methods
 class Logger(Component):
@@ -34,30 +35,66 @@ class Logger(Component):
         """
         The constructor of the logger class
         """
-        super.__init__(event_bus, 5)
+        super().__init__(event_bus, 5)
         self.run_id = run_id
-        self.event_bus.register_callback(self.spawn_train, EventType.TrainSpawn)
-        self.event_bus.register_callback(self.remove_train, EventType.TrainRemove)
-        self.event_bus.register_callback(self.arrival_train, EventType.TrainArrival)
-        self.event_bus.register_callback(self.departure_train, EventType.TrainDeparture)
-        self.event_bus.register_callback(self.create_fahrstrasse, EventType.CreateFahrstrasse)
-        self.event_bus.register_callback(self.remove_fahrstrasse, EventType.RemoveFahrstrasse)
-        self.event_bus.register_callback(self.set_signal, EventType.SetSignal)
-        self.event_bus.register_callback(self.train_enter_block_section, EventType.TrainEnterBlockSection)
-        self.event_bus.register_callback(self.train_leave_block_section, EventType.TrainLeaveBlockSection)
-        self.event_bus.register_callback(self.inject_platform_blocked_fault, EventType.InjectFault)
-        self.event_bus.register_callback(self.inject_track_blocked_fault, EventType.InjectFault)
-        self.event_bus.register_callback(self.inject_track_speed_limit_fault, EventType.InjectFault)
-        self.event_bus.register_callback(self.inject_schedule_blocked_fault, EventType.InjectFault)
-        self.event_bus.register_callback(self.inject_train_prio_fault, EventType.InjectFault)
-        self.event_bus.register_callback(self.inject_train_speed_fault, EventType.InjectFault)
-        self.event_bus.register_callback(self.resolve_platform_blocked_fault, EventType.ResolveFault)
-        self.event_bus.register_callback(self.resolve_track_blocked_fault, EventType.ResolveFault)
-        self.event_bus.register_callback(self.resolve_track_speed_limit_fault, EventType.ResolveFault)
-        self.event_bus.register_callback(self.resolve_schedule_blocked_fault, EventType.ResolveFault)
-        self.event_bus.register_callback(self.resolve_train_prio_fault, EventType.ResolveFault)
-        self.event_bus.register_callback(self.resolve_train_speed_fault, EventType.ResolveFault)
-        
+        self.event_bus.register_callback(self.spawn_train, EventType.TRAIN_SPAWN)
+        self.event_bus.register_callback(self.remove_train, EventType.TRAIN_REMOVE)
+        self.event_bus.register_callback(self.arrival_train, EventType.TRAIN_ARRIVAL)
+        self.event_bus.register_callback(
+            self.departure_train, EventType.TRAIN_DEPARTURE
+        )
+        self.event_bus.register_callback(
+            self.create_fahrstrasse, EventType.CREATE_FAHRSTRASSE
+        )
+        self.event_bus.register_callback(
+            self.remove_fahrstrasse, EventType.REMOVE_FAHRSTRASSE
+        )
+        self.event_bus.register_callback(self.set_signal, EventType.SET_SIGNAL)
+        self.event_bus.register_callback(
+            self.train_enter_block_section, EventType.TRAIN_ENTER_BLOCK_SECTION
+        )
+        self.event_bus.register_callback(
+            self.train_leave_block_section, EventType.TRAIN_LEAVE_BLOCK_SECTION
+        )
+        self.event_bus.register_callback(
+            self.inject_platform_blocked_fault, EventType.INJECT_FAULT
+        )
+        self.event_bus.register_callback(
+            self.inject_track_blocked_fault, EventType.INJECT_FAULT
+        )
+        self.event_bus.register_callback(
+            self.inject_track_speed_limit_fault, EventType.INJECT_FAULT
+        )
+        self.event_bus.register_callback(
+            self.inject_schedule_blocked_fault, EventType.INJECT_FAULT
+        )
+        self.event_bus.register_callback(
+            self.inject_train_prio_fault, EventType.INJECT_FAULT
+        )
+        self.event_bus.register_callback(
+            self.inject_train_speed_fault, EventType.INJECT_FAULT
+        )
+        self.event_bus.register_callback(
+            self.resolve_platform_blocked_fault, EventType.RESOLVE_FAULT
+        )
+        self.event_bus.register_callback(
+            self.resolve_track_blocked_fault, EventType.RESOLVE_FAULT
+        )
+        self.event_bus.register_callback(
+            self.resolve_track_speed_limit_fault, EventType.RESOLVE_FAULT
+        )
+        self.event_bus.register_callback(
+            self.resolve_schedule_blocked_fault, EventType.RESOLVE_FAULT
+        )
+        self.event_bus.register_callback(
+            self.resolve_train_prio_fault, EventType.RESOLVE_FAULT
+        )
+        self.event_bus.register_callback(
+            self.resolve_train_speed_fault, EventType.RESOLVE_FAULT
+        )
+
+    def next_tick(self, tick: int):
+        pass
 
     def spawn_train(self, tick: int, train_id: str) -> Type[None]:
         """

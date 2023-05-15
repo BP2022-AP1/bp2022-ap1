@@ -13,34 +13,34 @@ class EventBus:
     # (aka methods the Logger implements) as keys. The values are tuples
     # containing the argument names and the associated EventType
     EVENT_METHODS: dict[str, tuple[list[str], EventType]] = {
-        "spawn_train": (["tick", "train_id"], EventType.TrainSpawn),
-        "remove_train": (["tick", "train_id"], EventType.TrainRemove),
-        "arrival_train": (["tick", "train_id", "station_id"], EventType.TrainArrival),
+        "spawn_train": (["tick", "train_id"], EventType.TRAIN_SPAWN),
+        "remove_train": (["tick", "train_id"], EventType.TRAIN_REMOVE),
+        "arrival_train": (["tick", "train_id", "station_id"], EventType.TRAIN_ARRIVAL),
         "departure_train": (
             ["tick", "train_id", "station_id"],
-            EventType.TrainDeparture,
+            EventType.TRAIN_DEPARTURE,
         ),
-        "create_fahrstrasse": (["tick", "fahrstrasse"], EventType.CreateFahrstrasse),
-        "remove_fahrstrasse": (["tick", "farhstrasse"], EventType.RemoveFahrstrasse),
+        "create_fahrstrasse": (["tick", "fahrstrasse"], EventType.CREATE_FAHRSTRASSE),
+        "remove_fahrstrasse": (["tick", "farhstrasse"], EventType.REMOVE_FAHRSTRASSE),
         "set_signal": (
             ["tick", "signal_id", "state_before", "state_after"],
-            EventType.SetSignal,
+            EventType.SET_SIGNAL,
         ),
         "train_enter_block_section": (
             ["tick", "train_id", "block_section_id", "block_section_length"],
-            EventType.TrainEnterBlockSection,
+            EventType.TRAIN_ENTER_BLOCK_SECTION,
         ),
         "train_leave_block_section": (
             ["tick", "train_id", "block_section_id", "block_section_length"],
-            EventType.TrainLeaveBlockSection,
+            EventType.TRAIN_LEAVE_BLOCK_SECTION,
         ),
         "inject_platform_blocked_fault": (
             ["tick", "platform_blocked_fault_configuration", "affected_element"],
-            EventType.InjectFault,
+            EventType.INJECT_FAULT,
         ),
         "inject_track_blocked_fault": (
             ["tick", "track_blocked_fault_configuration", "affected_element"],
-            EventType.InjectFault,
+            EventType.INJECT_FAULT,
         ),
         "inject_track_speed_limit_fault": (
             [
@@ -50,11 +50,11 @@ class EventBus:
                 "value_before",
                 "value_after",
             ],
-            EventType.InjectFault,
+            EventType.INJECT_FAULT,
         ),
         "inject_schedule_blocked_fault": (
             ["tick", "schedule_blocked_fault_configuration", "affected_element"],
-            EventType.InjectFault,
+            EventType.INJECT_FAULT,
         ),
         "inject_train_prio_fault": (
             [
@@ -64,7 +64,7 @@ class EventBus:
                 "value_before",
                 "value_after",
             ],
-            EventType.InjectFault,
+            EventType.INJECT_FAULT,
         ),
         "inject_train_speed_fault": (
             [
@@ -74,31 +74,31 @@ class EventBus:
                 "value_before",
                 "value_after",
             ],
-            EventType.InjectFault,
+            EventType.INJECT_FAULT,
         ),
         "resolve_platform_blocked_fault": (
             ["tick", "platform_blocked_fault_configuration"],
-            EventType.ResolveFault,
+            EventType.RESOLVE_FAULT,
         ),
         "resolve_track_blocked_fault": (
             ["tick", "track_blocked_fault_configuration"],
-            EventType.ResolveFault,
+            EventType.RESOLVE_FAULT,
         ),
         "resolve_track_speed_limit_fault": (
             ["tick", "track_speed_limit_fault_configuration"],
-            EventType.ResolveFault,
+            EventType.RESOLVE_FAULT,
         ),
         "resolve_schedule_blocked_fault": (
             ["tick", "schedule_blocked_fault_configuration"],
-            EventType.ResolveFault,
+            EventType.RESOLVE_FAULT,
         ),
         "resolve_train_prio_fault": (
             ["tick", "train_prio_fault_configuration"],
-            EventType.ResolveFault,
+            EventType.RESOLVE_FAULT,
         ),
         "resolve_train_speed_fault": (
             ["tick", "train_speed_fault_configuration"],
-            EventType.ResolveFault,
+            EventType.RESOLVE_FAULT,
         ),
     }
 
@@ -155,9 +155,10 @@ class EventBus:
         """
         if not len(args) + len(kwargs.keys()) == len(arg_keys):
             raise TypeError(
-                f"{self.__class__.__name__}.{name}() takes exactly {len(arg_keys)} arguments ({len(args) + len(kwargs.keys())} given)"
+                f"{self.__class__.__name__}.{name}() takes exactly {len(arg_keys)} "
+                f"arguments ({len(args) + len(kwargs.keys())} given)"
             )
-        arguments = {key: value for key, value in zip(arg_keys, args)}
+        arguments = dict(zip(arg_keys, args))
 
         arg_keys_set = set(key for key in arg_keys if key not in arguments)
         kwarg_keys_set = set(kwargs.keys())
@@ -169,7 +170,8 @@ class EventBus:
         for kwarg_key in kwarg_keys_set:
             if kwarg_key not in arg_keys_set:
                 raise TypeError(
-                    f"{self.__class__.__name__}.{name}() got an unexpected keyword argument '{kwarg_key}'"
+                    f"{self.__class__.__name__}.{name}() got an unexpected "
+                    f"keyword argument '{kwarg_key}'"
                 )
 
         return arguments | kwargs

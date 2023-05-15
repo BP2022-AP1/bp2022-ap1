@@ -15,7 +15,7 @@ class TestEventBus:
 
     @pytest.fixture
     def event_type(self) -> EventType:
-        return EventType.TrainSpawn
+        return EventType.TRAIN_SPAWN
 
     @pytest.fixture
     def callback(self) -> Callable[[Event], None]:
