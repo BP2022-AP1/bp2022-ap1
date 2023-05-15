@@ -42,11 +42,11 @@ class Router:
             if current_node == penultimate_node:
                 break
             for edge in current_node.edges:
+                distance_to_next_node = distances[current_node] + edge.length
                 if (
                     edge.to_node not in distances
                     or distances[edge.to_node] < distance_to_next_node
                 ):
-                    distance_to_next_node = distances[current_node] + edge.length
                     distances[edge.to_node] = distance_to_next_node
                     previous_nodes[edge.to_node] = current_node
             current_index += 1
