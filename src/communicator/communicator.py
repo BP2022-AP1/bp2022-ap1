@@ -81,7 +81,7 @@ class Communicator:
                 "--start",
                 "--quit-on-end",
                 "--delay",
-                delay,
+                str(delay),
             ],
             port=self._port,
         )
