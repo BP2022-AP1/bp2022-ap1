@@ -9,7 +9,7 @@ from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
-from src.wrapper.train_spawner import TrainSpawner
+from src.wrapper.train_builder import TrainBuilder
 
 
 class SpawnerConfiguration(SerializableBaseModel):
@@ -73,7 +73,7 @@ class Spawner(Component, ISpawnerDisruptor):
 
     configuration: SpawnerConfiguration
     _schedules: dict[str, Schedule]
-    train_spawner: TrainSpawner
+    train_spawner: TrainBuilder
 
     PRIORITY: int = 0  # This will need to be set to the correct value
 
@@ -90,7 +90,7 @@ class Spawner(Component, ISpawnerDisruptor):
         self,
         logger: Logger,
         configuration: SpawnerConfiguration,
-        train_spawner: TrainSpawner,
+        train_spawner: TrainBuilder,
     ):
         """Initializes the spawner.
 
