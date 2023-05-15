@@ -1,21 +1,21 @@
 from abc import ABC, abstractmethod
 
-from src.logger.logger import Logger
+from src.event_bus.event_bus import EventBus
 
 
 class Component(ABC):
     """Interface for components that receive ticks."""
 
-    logger: Logger
+    event_bus: EventBus
     priority: int
 
-    def __init__(self, logger: Logger, priority: int):
+    def __init__(self, event_bus: EventBus, priority: int):
         """Initializes the component.
 
-        :param logger: reference to the gobal logger
+        :param event_bus: reference to the global event_bus
         :param priority: priority of the component for sorting purposes
         """
-        self.logger = logger
+        self.event_bus = event_bus
         self.priority = priority
 
     @abstractmethod
