@@ -4,12 +4,12 @@ from src.wrapper.simulation_objects import Node, Edge
 
 
 class Router:
-    """This class calculates routes for trains from track segment to track segment."""
+    """This class calculates routes for trains from edge to edge."""
 
     def get_route(self, start_edge: Edge, end_edge: Edge) -> List[Node]:
-        """This method returns a route from a start track_segment to an end track_segment.
+        """This method returns a route from a start edge to an end edge.
         It returns a list of Sumo Nodes from the Signal the train is currently driving
-        toward to the Node right after the end track.
+        toward to the Node right after the end edge.
 
         :param start_edge: The edge where the route will begin.
         :type start_edge: Edge
@@ -39,13 +39,13 @@ class Router:
             previous_nodes[current_node] = last_node
             if current_node == penultimate_node:
                 break
-            for track in current_node.edges:
-                distance_to_next_node = distances[current_node] + track.length
+            for edge in current_node.edges:
+                distance_to_next_node = distances[current_node] + edge.length
                 if (
-                    track.end_node not in distances
-                    or distances[track.to_node] < distance_to_next_node
+                    edge.end_node not in distances
+                    or distances[edge.to_node] < distance_to_next_node
                 ):
-                    distances[track.to_node] = distance_to_next_node
+                    distances[edge.to_node] = distance_to_next_node
             current_index += 1
         route = List[penultimate_node, end_edge.to_node]
         while current_node in previous_nodes:
