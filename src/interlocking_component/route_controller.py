@@ -132,7 +132,11 @@ class RouteController(Component):
 
             if was_set:
                 self.routes_to_be_set.remove(interlocking_route)
-        for route in self.routes_to_be_reserved:
+        last_routes_to_be_reserved = self.routes_to_be_reserved
+        self.routes_to_be_reserved = []
+        for route in last_routes_to_be_reserved:
+            # set_route adds routes that could not be reserved to routes_to_be_reserved
+            self.set_route(route)
 
 
     def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
@@ -202,7 +206,7 @@ class RouteController(Component):
         self.set_route(new_route, train)
                 
     def set_route(self, route: List[Node], train: Train):
-        was_reserved = self.reserve_route(route)
+        was_reserved = self.reserve_route(route, train)
 
         if not was_reserved:
             self.routes_to_be_reserved.append(route)
@@ -241,6 +245,16 @@ class RouteController(Component):
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return
+                
+    def reserve_route(self, route: List[Node], train: Train):
+        route_as_edges = self.get_edges_of_node_route(route)
+
+    def get_edges_of_node_route(self, route: List[Node]):
+        edge_route = []
+        for i in range(len(route[:-1])):
+            edge = route[i].get_edge_to(route[i+1])
+            edge_route.append(edge)
+        return edge_route
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
         """This method checks if the given edge is the last segment of a activ route
