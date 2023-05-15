@@ -613,6 +613,7 @@ class Train(SimulationObject):
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
+    reserved_tracks: List[Track]
 
     @property
     def edge(self) -> Edge:

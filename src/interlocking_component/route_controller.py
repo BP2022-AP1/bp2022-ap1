@@ -246,15 +246,24 @@ class RouteController(Component):
                     train.route = interlocking_route.id
                     return
                 
-    def reserve_route(self, route: List[Node], train: Train):
-        route_as_edges = self.get_edges_of_node_route(route)
+    def reserve_route(self, route: List[Node], train: Train) -> bool:
+        route_as_tracks = self.get_tracks_of_node_route(route)
+        for track in route_as_tracks:
+            if len(track.reservations) != 0:
+                last_track_of_reserving_train = track.reservations[-1].reserved_tracks[-1]
+                if last_track_of_reserving_train == track:
+                    # What if the train will despawn there and
+                    # because of this train.timetable[0] is None?
+                    route = self.router.get_route(track, track.reservations[-1].timetable[0])
+                    self.reserve_route(route, track.reservations[-1])
+            track.reservations.append(train)
 
-    def get_edges_of_node_route(self, route: List[Node]):
-        edge_route = []
+    def get_tracks_of_node_route(self, route: List[Node])-> List[Track]:
+        track_route = []
         for i in range(len(route[:-1])):
-            edge = route[i].get_edge_to(route[i+1])
-            edge_route.append(edge)
-        return edge_route
+            track = route[i].get_edge_to(route[i+1]).track
+            track_route.append(track)
+        return track_route
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
         """This method checks if the given edge is the last segment of a activ route
