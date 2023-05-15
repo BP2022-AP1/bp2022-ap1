@@ -30,6 +30,7 @@ class Logger(Component):
     """
 
     run_id: UUID
+    callback_handles: list[UUID]
 
     def __init__(self, run_id: UUID, event_bus: EventBus):
         """
@@ -37,61 +38,66 @@ class Logger(Component):
         """
         super().__init__(event_bus, 5)
         self.run_id = run_id
-        self.event_bus.register_callback(self.spawn_train, EventType.TRAIN_SPAWN)
-        self.event_bus.register_callback(self.remove_train, EventType.TRAIN_REMOVE)
-        self.event_bus.register_callback(self.arrival_train, EventType.TRAIN_ARRIVAL)
-        self.event_bus.register_callback(
+
+        self.callback_handles.append(self.event_bus.register_callback(self.spawn_train, EventType.TRAIN_SPAWN))
+        self.callback_handles.append(self.event_bus.register_callback(self.remove_train, EventType.TRAIN_REMOVE))
+        self.callback_handles.append(self.event_bus.register_callback(self.arrival_train, EventType.TRAIN_ARRIVAL))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.departure_train, EventType.TRAIN_DEPARTURE
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.create_fahrstrasse, EventType.CREATE_FAHRSTRASSE
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.remove_fahrstrasse, EventType.REMOVE_FAHRSTRASSE
-        )
-        self.event_bus.register_callback(self.set_signal, EventType.SET_SIGNAL)
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(self.set_signal, EventType.SET_SIGNAL))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.train_enter_block_section, EventType.TRAIN_ENTER_BLOCK_SECTION
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.train_leave_block_section, EventType.TRAIN_LEAVE_BLOCK_SECTION
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.inject_platform_blocked_fault, EventType.INJECT_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.inject_track_blocked_fault, EventType.INJECT_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.inject_track_speed_limit_fault, EventType.INJECT_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.inject_schedule_blocked_fault, EventType.INJECT_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.inject_train_prio_fault, EventType.INJECT_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.inject_train_speed_fault, EventType.INJECT_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.resolve_platform_blocked_fault, EventType.RESOLVE_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.resolve_track_blocked_fault, EventType.RESOLVE_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.resolve_track_speed_limit_fault, EventType.RESOLVE_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.resolve_schedule_blocked_fault, EventType.RESOLVE_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.resolve_train_prio_fault, EventType.RESOLVE_FAULT
-        )
-        self.event_bus.register_callback(
+        ))
+        self.callback_handles.append(self.event_bus.register_callback(
             self.resolve_train_speed_fault, EventType.RESOLVE_FAULT
-        )
+        ))
+
+    def __del__(self):
+        for handle in self.callback_handles:
+            self.event_bus.unregister_callback(handle)
 
     def next_tick(self, tick: int):
         pass
