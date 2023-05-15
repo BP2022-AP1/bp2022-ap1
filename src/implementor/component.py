@@ -62,8 +62,6 @@ def create_schedule_blocked_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
     config = ScheduleBlockedFaultConfiguration.create(**body)
     return (
         {
@@ -219,8 +217,6 @@ def create_track_speed_limit_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
     config = TrackSpeedLimitFaultConfiguration.create(**body)
     return (
         {
@@ -293,8 +289,6 @@ def create_train_prio_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
     config = TrainPrioFaultConfiguration.create(**body)
     return (
         {
@@ -370,8 +364,6 @@ def create_train_speed_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
     config = TrainSpeedFaultConfiguration.create(**body)
     return (
         {
@@ -449,8 +441,6 @@ def create_platform_blocked_fault_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
     config = PlatformBlockedFaultConfiguration.create(**body)
     return (
         {
