@@ -34,18 +34,17 @@ class Router:
             # This sorts the distances based on the values in the dict.
             # sorted_distances is a array of the dict with items of the dict as tupels.
 
-            last_node = current_node
             current_node = sorted_distances[current_index][0]
-            previous_nodes[current_node] = last_node
             if current_node == penultimate_node:
                 break
             for edge in current_node.edges:
-                distance_to_next_node = distances[current_node] + edge.length
                 if (
                     edge.to_node not in distances
                     or distances[edge.to_node] < distance_to_next_node
                 ):
+                    distance_to_next_node = distances[current_node] + edge.length
                     distances[edge.to_node] = distance_to_next_node
+                    previous_nodes[edge.to_node] = current_node
             current_index += 1
         route = List[penultimate_node, end_edge.to_node]
         while current_node in previous_nodes:
