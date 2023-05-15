@@ -1,6 +1,7 @@
 import pytest
 from traci import vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
@@ -42,8 +43,13 @@ def run(simulation_configuration):
 
 
 @pytest.fixture
-def logger(run):
-    return Logger(run_id=run.id)
+def event_bus():
+    return EventBus()
+
+
+@pytest.fixture
+def logger(run, event_bus):
+    return Logger(run_id=run.id, event_bus=event_bus)
 
 
 @pytest.fixture

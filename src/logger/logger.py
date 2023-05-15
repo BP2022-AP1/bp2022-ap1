@@ -39,61 +39,105 @@ class Logger(Component):
         super().__init__(event_bus, 5)
         self.run_id = run_id
 
-        self.callback_handles.append(self.event_bus.register_callback(self.spawn_train, EventType.TRAIN_SPAWN))
-        self.callback_handles.append(self.event_bus.register_callback(self.remove_train, EventType.TRAIN_REMOVE))
-        self.callback_handles.append(self.event_bus.register_callback(self.arrival_train, EventType.TRAIN_ARRIVAL))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.departure_train, EventType.TRAIN_DEPARTURE
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.create_fahrstrasse, EventType.CREATE_FAHRSTRASSE
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.remove_fahrstrasse, EventType.REMOVE_FAHRSTRASSE
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(self.set_signal, EventType.SET_SIGNAL))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.train_enter_block_section, EventType.TRAIN_ENTER_BLOCK_SECTION
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.train_leave_block_section, EventType.TRAIN_LEAVE_BLOCK_SECTION
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.inject_platform_blocked_fault, EventType.INJECT_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.inject_track_blocked_fault, EventType.INJECT_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.inject_track_speed_limit_fault, EventType.INJECT_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.inject_schedule_blocked_fault, EventType.INJECT_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.inject_train_prio_fault, EventType.INJECT_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.inject_train_speed_fault, EventType.INJECT_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.resolve_platform_blocked_fault, EventType.RESOLVE_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.resolve_track_blocked_fault, EventType.RESOLVE_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.resolve_track_speed_limit_fault, EventType.RESOLVE_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.resolve_schedule_blocked_fault, EventType.RESOLVE_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.resolve_train_prio_fault, EventType.RESOLVE_FAULT
-        ))
-        self.callback_handles.append(self.event_bus.register_callback(
-            self.resolve_train_speed_fault, EventType.RESOLVE_FAULT
-        ))
+        self.callback_handles.append(
+            self.event_bus.register_callback(self.spawn_train, EventType.TRAIN_SPAWN)
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(self.remove_train, EventType.TRAIN_REMOVE)
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.arrival_train, EventType.TRAIN_ARRIVAL
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.departure_train, EventType.TRAIN_DEPARTURE
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.create_fahrstrasse, EventType.CREATE_FAHRSTRASSE
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.remove_fahrstrasse, EventType.REMOVE_FAHRSTRASSE
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(self.set_signal, EventType.SET_SIGNAL)
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.train_enter_block_section, EventType.TRAIN_ENTER_BLOCK_SECTION
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.train_leave_block_section, EventType.TRAIN_LEAVE_BLOCK_SECTION
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.inject_platform_blocked_fault, EventType.INJECT_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.inject_track_blocked_fault, EventType.INJECT_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.inject_track_speed_limit_fault, EventType.INJECT_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.inject_schedule_blocked_fault, EventType.INJECT_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.inject_train_prio_fault, EventType.INJECT_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.inject_train_speed_fault, EventType.INJECT_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.resolve_platform_blocked_fault, EventType.RESOLVE_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.resolve_track_blocked_fault, EventType.RESOLVE_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.resolve_track_speed_limit_fault, EventType.RESOLVE_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.resolve_schedule_blocked_fault, EventType.RESOLVE_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.resolve_train_prio_fault, EventType.RESOLVE_FAULT
+            )
+        )
+        self.callback_handles.append(
+            self.event_bus.register_callback(
+                self.resolve_train_speed_fault, EventType.RESOLVE_FAULT
+            )
+        )
 
     def __del__(self):
         for handle in self.callback_handles:
@@ -188,9 +232,7 @@ class Logger(Component):
             fahrstrasse=event.arguments["fahrstrasse"],
         )
 
-    def set_signal(
-        self, event: Event
-    ) -> Type[None]:
+    def set_signal(self, event: Event) -> Type[None]:
         """
         This function is being called when setting a signal or changing its state. This should
         include the signal identifier, the state before and the state after the change.
@@ -206,10 +248,7 @@ class Logger(Component):
             state_after=event.arguments["state_after"],
         )
 
-    def train_enter_block_section(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def train_enter_block_section(self, event: Event) -> Type[None]:
         """
         This function should be called when a train enters a block section. This should include a
         train identifier, the block section identifier and the length of the block section.
@@ -226,10 +265,7 @@ class Logger(Component):
             block_section_length=event.arguments["block_section_length"],
         )
 
-    def train_leave_block_section(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def train_leave_block_section(self, event: Event) -> Type[None]:
         """
         This function should be called when a train leaves a block section. This should include a
         train identifier, the block section identifier and the length of the block section.
@@ -246,10 +282,7 @@ class Logger(Component):
             block_section_length=event.arguments["block_section_length"],
         )
 
-    def inject_platform_blocked_fault(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def inject_platform_blocked_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when injecting a platform blocked fault into the simulation.
         This should include the fault configuration, the affected element, the value before and the
@@ -262,14 +295,13 @@ class Logger(Component):
             message=f"Platform blocked fault with configuration "
             f"{event.arguments['platform_blocked_fault_configuration']} on element {event.arguments['affected_element']}",
             run_id=self.run_id,
-            platform_blocked_fault_configuration=event.arguments["platform_blocked_fault_configuration"],
+            platform_blocked_fault_configuration=event.arguments[
+                "platform_blocked_fault_configuration"
+            ],
             affected_element=event.arguments["affected_element"],
         )
 
-    def inject_track_blocked_fault(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def inject_track_blocked_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when injecting a track blocked fault into the simulation.
         This should include the fault configuration, the affected element, the value before and the
@@ -282,14 +314,13 @@ class Logger(Component):
             message=f"Track blocked fault with configuration {event.arguments['track_blocked_fault_configuration']} "
             f"on element {event.arguments['affected_element']}",
             run_id=self.run_id,
-            track_blocked_fault_configuration=event.arguments["track_blocked_fault_configuration"],
+            track_blocked_fault_configuration=event.arguments[
+                "track_blocked_fault_configuration"
+            ],
             affected_element=event.arguments["affected_element"],
         )
 
-    def inject_track_speed_limit_fault(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def inject_track_speed_limit_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when injecting a track speed limit fault into the simulation.
         This should include the fault configuration, the affected element, the value before and the
@@ -303,16 +334,15 @@ class Logger(Component):
             f"{event.arguments['track_speed_limit_fault_configuration']} on element {event.arguments['affected_element']} "
             f"changed from {event.arguments['value_before']} to {event.arguments['value_after']}",
             run_id=self.run_id,
-            track_speed_limit_fault_configuration=event.arguments["track_speed_limit_fault_configuration"],
+            track_speed_limit_fault_configuration=event.arguments[
+                "track_speed_limit_fault_configuration"
+            ],
             affected_element=event.arguments["affected_element"],
             value_before=event.arguments["value_before"],
             value_after=event.arguments["value_after"],
         )
 
-    def inject_schedule_blocked_fault(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def inject_schedule_blocked_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when injecting a train speed fault into the simulation.
         This should include the fault configuration, the affected element, the value before and the
@@ -325,14 +355,13 @@ class Logger(Component):
             message=f"Schedule blocked fault with configuration "
             f"{event.arguments['schedule_blocked_fault_configuration']} on element {event.arguments['affected_element']}",
             run_id=self.run_id,
-            schedule_blocked_fault_configuration=event.arguments["schedule_blocked_fault_configuration"],
+            schedule_blocked_fault_configuration=event.arguments[
+                "schedule_blocked_fault_configuration"
+            ],
             affected_element=event.arguments["affected_element"],
         )
 
-    def inject_train_prio_fault(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def inject_train_prio_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when injecting a train prio fault into the simulation.
         This should include the fault configuration, the affected element, the value before and the
@@ -345,16 +374,15 @@ class Logger(Component):
             message=f"Train prio fault with configuration {event.arguments['train_prio_fault_configuration']} "
             f"on element {event.arguments['affected_element']} changed from {event.arguments['value_before']} to {event.arguments['value_after']}",
             run_id=self.run_id,
-            train_prio_fault_configuration=event.arguments["train_prio_fault_configuration"],
+            train_prio_fault_configuration=event.arguments[
+                "train_prio_fault_configuration"
+            ],
             affected_element=event.arguments["affected_element"],
             value_before=event.arguments["value_before"],
             value_after=event.arguments["value_after"],
         )
 
-    def inject_train_speed_fault(
-        self,
-        event: Event
-    ) -> Type[None]:
+    def inject_train_speed_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when injecting a train speed fault into the simulation.
         This should include the fault configuration, the affected element, the value before and the
@@ -367,15 +395,15 @@ class Logger(Component):
             message=f"Train speed fault with configuration {event.arguments['train_speed_fault_configuration']} "
             f"on element {event.arguments['affected_element']} changed from {event.arguments['value_before']} to {event.arguments['value_after']}",
             run_id=self.run_id,
-            train_speed_fault_configuration=event.arguments["train_speed_fault_configuration"],
+            train_speed_fault_configuration=event.arguments[
+                "train_speed_fault_configuration"
+            ],
             affected_element=event.arguments["affected_element"],
             value_before=event.arguments["value_before"],
             value_after=event.arguments["value_after"],
         )
 
-    def resolve_platform_blocked_fault(
-        self, event: Event
-    ) -> Type[None]:
+    def resolve_platform_blocked_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when removing a platform blocked fault from the simulation.
         This should reference the fault configuration of the fault.
@@ -387,12 +415,12 @@ class Logger(Component):
             message=f"Platform blocked fault with configuration "
             f"{event.arguments['platform_blocked_fault_configuration']} resolved",
             run_id=self.run_id,
-            platform_blocked_fault_configuration=event.arguments["platform_blocked_fault_configuration"],
+            platform_blocked_fault_configuration=event.arguments[
+                "platform_blocked_fault_configuration"
+            ],
         )
 
-    def resolve_track_blocked_fault(
-        self, event: Event
-    ) -> Type[None]:
+    def resolve_track_blocked_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when removing a track blocked fault from the simulation.
         This should reference the fault configuration of the fault.
@@ -404,12 +432,12 @@ class Logger(Component):
             message=f"Track blocked fault with configuration "
             f"{event.arguments['track_blocked_fault_configuration']} resolved",
             run_id=self.run_id,
-            track_blocked_fault_configuration=event.arguments["track_blocked_fault_configuration"],
+            track_blocked_fault_configuration=event.arguments[
+                "track_blocked_fault_configuration"
+            ],
         )
 
-    def resolve_track_speed_limit_fault(
-        self, event: Event
-    ) -> Type[None]:
+    def resolve_track_speed_limit_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when removing a track speed limit fault from the simulation.
         This should reference the fault configuration of the fault.
@@ -421,12 +449,12 @@ class Logger(Component):
             message=f"Track speed limit fault with configuration "
             f"{event.arguments['track_speed_limit_fault_configuration']} resolved",
             run_id=self.run_id,
-            track_speed_limit_fault_configuration=event.arguments["track_speed_limit_fault_configuration"],
+            track_speed_limit_fault_configuration=event.arguments[
+                "track_speed_limit_fault_configuration"
+            ],
         )
 
-    def resolve_schedule_blocked_fault(
-        self, event: Event
-    ) -> Type[None]:
+    def resolve_schedule_blocked_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when removing a schedule blocked fault from the simulation.
         This should reference the fault configuration of the fault.
@@ -438,12 +466,12 @@ class Logger(Component):
             message=f"Schedule blocked fault with configuration "
             f"{event.arguments['schedule_blocked_fault_configuration']} resolved",
             run_id=self.run_id,
-            schedule_blocked_fault_configuration=event.arguments["schedule_blocked_fault_configuration"],
+            schedule_blocked_fault_configuration=event.arguments[
+                "schedule_blocked_fault_configuration"
+            ],
         )
 
-    def resolve_train_prio_fault(
-        self, event: Event
-    ) -> Type[None]:
+    def resolve_train_prio_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when removing a train prio fault from the simulation.
         This should reference the fault configuration of the fault.
@@ -455,12 +483,12 @@ class Logger(Component):
             message=f"Train prio fault with configuration "
             f"{event.arguments['train_prio_fault_configuration']} resolved",
             run_id=self.run_id,
-            train_prio_fault_configuration=event.arguments["train_prio_fault_configuration"],
+            train_prio_fault_configuration=event.arguments[
+                "train_prio_fault_configuration"
+            ],
         )
 
-    def resolve_train_speed_fault(
-        self, event: Event
-    ) -> Type[None]:
+    def resolve_train_speed_fault(self, event: Event) -> Type[None]:
         """
         This function should be called when removing a train speed fault from the simulation. This
         should reference the fault configuration of the fault.
@@ -472,5 +500,7 @@ class Logger(Component):
             message=f"Train speed fault with configuration "
             f"{event.arguments['train_speed_fault_configuration']} resolved",
             run_id=self.run_id,
-            train_speed_fault_configuration=event.arguments["train_speed_fault_configuration"],
+            train_speed_fault_configuration=event.arguments[
+                "train_speed_fault_configuration"
+            ],
         )

@@ -5,6 +5,7 @@ import pytest
 
 from src.data_science.data_science import DataScience
 from src.data_science.grafana_data_registration import GrafanaDataRegistrator
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -31,13 +32,18 @@ from tests.logger.test_log_collector import TestLogCollector
 
 
 @pytest.fixture
+def event_bus():
+    return EventBus()
+
+
+@pytest.fixture
 def logger(run):
-    return Logger(run_id=run.id)
+    return Logger(run_id=run.id, event_bus=event_bus)
 
 
 @pytest.fixture
 def logger2(run2):
-    return Logger(run_id=run2.id)
+    return Logger(run_id=run2.id, event_bus=event_bus)
 
 
 @pytest.fixture
