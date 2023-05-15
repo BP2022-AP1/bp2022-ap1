@@ -164,7 +164,7 @@ class DataScience:
         verkehrsleistung_df = pd.DataFrame(
             {
                 "tick": np.arange(
-                    block_section_times_df["enter_tick"].min(),
+                    0,
                     block_section_times_df["leave_tick"].max() + 1,
                     delta_tick,
                 )
@@ -174,7 +174,7 @@ class DataScience:
             lambda row: self._calculate_verkehrsleistung_by_tick(
                 block_section_times_df,
                 row["tick"],
-                block_section_times_df["enter_tick"].min(),
+                0,
             ),
             axis=1,
         )
@@ -251,7 +251,7 @@ class DataScience:
         verkehrsleistung_df = pd.DataFrame(
             {
                 "tick": np.arange(
-                    block_section_times_df["enter_tick"].min(),
+                    0,
                     block_section_times_df["leave_tick"].max() + 1,
                     delta_tick,
                 )
@@ -390,7 +390,7 @@ class DataScience:
         )
         grouped_df = pd.DataFrame(
             {
-                "enter_tick": [block_section_times_df["enter_tick"].min()],
+                "enter_tick": [0],
                 "leave_tick": [block_section_times_df["leave_tick"].max()],
                 "block_section_length": [
                     block_section_times_df["block_section_length"].sum()
@@ -404,6 +404,8 @@ class DataScience:
             / (row["leave_tick"] - row["enter_tick"]),
             axis=1,
         )
+        grouped_df["enter_tick"] = grouped_df["enter_tick"].astype("Int64")
+        grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
         return grouped_df
 
     # --- MAP
@@ -468,7 +470,7 @@ class DataScience:
         verkehrsleistung_df = pd.DataFrame(
             {
                 "tick": np.arange(
-                    block_section_times_df["enter_tick"].min(),
+                    0,
                     block_section_times_df["leave_tick"].max() + 1,
                     delta_tick,
                 )
@@ -605,15 +607,12 @@ class DataScience:
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
         grouped_df = block_section_times_df.groupby("run_id").agg(
-            {"enter_tick": "min", "leave_tick": "max", "block_section_length": "sum"}
+            {"leave_tick": "max", "block_section_length": "sum"}
         )
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"]
-            * 3600
-            / (row["leave_tick"] - row["enter_tick"]),
+            lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
             axis=1,
         )
-        grouped_df["enter_tick"] = grouped_df["enter_tick"].astype("Int64")
         grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
         return grouped_df
 
@@ -704,12 +703,10 @@ class DataScience:
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
         grouped_df = block_section_times_df.groupby(["config_id", "run_id"]).agg(
-            {"enter_tick": "min", "leave_tick": "max", "block_section_length": "sum"}
+            {"leave_tick": "max", "block_section_length": "sum"}
         )
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"]
-            * 3600
-            / (row["leave_tick"] - row["enter_tick"]),
+            lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
             axis=1,
         )
         grouped_df = grouped_df.groupby("config_id").mean()
