@@ -34,6 +34,8 @@ class Router:
             # This sorts the distances based on the values in the dict.
             # sorted_distances is a array of the dict with items of the dict as tupels.
 
+            print(sorted_distances)
+
             current_node = sorted_distances[current_index][0]
             if current_node == penultimate_node:
                 break
