@@ -114,10 +114,6 @@ class RouteController(Component):
         # Import from local PlanPro file
         topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
 
-        # Generate Routes
-        # I'm not sure if this is necessary, but better save than sorry.
-        RouteGenerator(topology).generate_routes()
-
         infrastructure_provider = SumoInfrastructureProvider(self, logger)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)

@@ -77,7 +77,10 @@ def create_run(body, token):
     run.save()
     logger = Logger(run_id=run.id)
 
-    object_updater = SimulationObjectUpdatingComponent(logger)
+    object_updater = SimulationObjectUpdatingComponent(
+        logger,
+        "data/sumo/schwarze_pumpe_v1/sumo-config/schwarze_pumpe_v1.scenario.sumocfg",
+    )
     communicator.add_component(object_updater)
 
     # if simulation_configuration.interlocking_configuration_references.exists():

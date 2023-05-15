@@ -27,7 +27,7 @@ class SimulationObject(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def add_subscriptions(self):
+    def add_subscriptions(self) -> List[int]:
         """This method will be called when the object enters
         the simulation to add the corresponding traci-supscriptions.
         The return value should be compatible with
@@ -75,10 +75,11 @@ class Node(SimulationObject):
         return self._edges
 
     def update(self, data: dict):
-        pass
+        # pylint: disable=unused-argument
+        return
 
-    def add_subscriptions(self):
-        pass
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     def set_edges(self, simulation_object: net.node) -> None:
         """Sets the edges that are connected to this node
@@ -170,13 +171,13 @@ class Signal(Node):
 
     def __init__(self, identifier: str = None, state: "Signal.State" = State.HALT):
         super().__init__(identifier=identifier)
-        self.state = state
+        self._state = state
 
     def update(self, data: dict):
         return
 
-    def add_subscriptions(self) -> int:
-        return 0
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     def set_edges(self, simulation_object: net.TLS) -> None:
         self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
@@ -244,8 +245,8 @@ class Switch(Node):
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
 
-    def add_subscriptions(self) -> int:
-        return 0  # We don't have to update anything from the simulator
+    def add_subscriptions(self) -> List[int]:
+        return []  # We don't have to update anything from the simulator
 
     @staticmethod
     def from_simulation(
@@ -328,10 +329,10 @@ class Edge(SimulationObject):
         self.blocked = False
 
     def update(self, data: dict):
-        self._max_speed = data[constants.VAR_MAXSPEED]
+        return
 
-    def add_subscriptions(self) -> int:
-        return constants.VAR_MAXSPEED
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     @staticmethod
     def from_simulation(simulation_object: net.edge, updater) -> "Track":
@@ -442,10 +443,10 @@ class Track(SimulationObject):
 
     def update(self, data: dict) -> None:
         # pylint: disable=unused-argument
-        pass
+        return
 
-    def add_subscriptions(self):
-        pass
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     @staticmethod
     def from_simulation(
@@ -502,8 +503,8 @@ class Platform(SimulationObject):
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
 
-    def add_subscriptions(self) -> int:
-        return 0  # We don't have to update anything from the simulator
+    def add_subscriptions(self) -> List[int]:
+        return []  # We don't have to update anything from the simulator
 
     @staticmethod
     def from_simulation(
@@ -594,8 +595,8 @@ class Train(SimulationObject):
         def update(self, data: dict) -> None:
             self._max_speed = data[constants.VAR_MAXSPEED]
 
-        def add_subscriptions(self) -> int:
-            return constants.VAR_MAXSPEED
+        def add_subscriptions(self) -> List[int]:
+            return [constants.VAR_MAXSPEED]
 
         @staticmethod
         def from_simulation(
@@ -734,17 +735,17 @@ class Train(SimulationObject):
                 self, self._edge
             )
 
-    def add_subscriptions(self) -> int:
+    def add_subscriptions(self) -> List[int]:
         """Gets called when this object is created to allow
         specification of simulator-synchronized properties.
         :return: The synchronized properties (see <https://sumo.dlr.de/pydoc/traci.constants.html>)
         """
-        return (
-            constants.VAR_POSITION
-            + constants.VAR_ROUTE
-            + constants.VAR_ROAD_ID
-            + constants.VAR_SPEED
-        )
+        return [
+            constants.VAR_POSITION,
+            constants.VAR_ROUTE,
+            constants.VAR_ROAD_ID,
+            constants.VAR_SPEED,
+        ]
 
     @staticmethod
     def from_simulation(

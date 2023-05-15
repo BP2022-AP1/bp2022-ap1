@@ -112,11 +112,32 @@ class SimulationObjectUpdatingComponent(Component):
         if sumo_configuration is not None:
             self._fetch_initial_simulation_objects()
 
+    def add_subscriptions(self):
+        for simulation_object in self._simulation_objects:
+            if len(simulation_object.add_subscriptions()) > 0:
+                if isinstance(simulation_object, Train):
+                    traci.vehicle.subscribe(
+                        simulation_object.identifier,
+                        simulation_object.add_subscriptions(),
+                    )
+                if isinstance(simulation_object, Train.TrainType):
+                    traci.vehicletype.subscribe(
+                        simulation_object.identifier,
+                        simulation_object.add_subscriptions(),
+                    )
+
     def next_tick(self, tick: int):
+        if tick == 1:
+            for signal in self.signals:
+                signal.state = signal.State.HALT
         subscription_results = traci.simulation.getAllSubscriptionResults()
+        print("Results:", subscription_results)
 
         for simulation_object in self._simulation_objects:
-            simulation_object.update(subscription_results[simulation_object.identifier])
+            if len(simulation_object.add_subscriptions()) > 0:
+                simulation_object.update(
+                    subscription_results[simulation_object.identifier]
+                )
 
         self._remove_stale_vehicles()
 
@@ -128,7 +149,7 @@ class SimulationObjectUpdatingComponent(Component):
 
         for vehicle in vehicles_to_remove:
             self._simulation_objects.remove(
-                next(train for train in self.trains if train.identifier == vehicle)
+                next((train for train in self.trains if train.identifier == vehicle))
             )
 
     def _fetch_initial_simulation_objects(self):

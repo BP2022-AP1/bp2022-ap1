@@ -11,6 +11,9 @@ from sumolib import checkBinary
 
 from src.communicator.celery import celery
 from src.component import Component
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 class Communicator:
@@ -178,6 +181,15 @@ def run_simulation_steps(
     """
     sumo_running = True
     current_tick = 1
+
+    souc = next(
+        (
+            component
+            for component in components
+            if type(component) == SimulationObjectUpdatingComponent
+        )
+    )
+    souc.add_subscriptions()
 
     update_state(current_tick, max_tick, sumo_running)
 
