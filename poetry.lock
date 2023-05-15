@@ -1420,7 +1420,7 @@ zipp = "3.8.1"
 type = "git"
 url = "https://github.com/bp2022-ap1/orm-importer"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "aa4101eb2803096ac7061943eccb3ac93032bc6d"
+resolved_reference = "96b828d97cb99dd14b7629d87d96ead9fd9d5940"
 
 [[package]]
 name = "overpy"
