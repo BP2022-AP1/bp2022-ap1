@@ -76,7 +76,7 @@ class TestInterlockingConfigurationXSimulationConfiguration:
     ):
         interlocking_x_simulation = InterlockingConfigurationXSimulationConfiguration(
             interlocking_configuration=interlocking_configuration,
-            schedule_configuration=unsaved_simulation_configuration,
+            simulation_configuration=unsaved_simulation_configuration,
         )
         interlocking_x_simulation.save()
         assert (
