@@ -45,7 +45,7 @@ class TrainBuilder:
 
     def _get_first_route(self, from_platform: Platform, to_platform: Platform) -> str:
         return self.route_controller.set_spawn_fahrstrasse(
-            from_platform, to_platform
+            from_platform.edge, to_platform.edge
         )
 
     def _convert_timetable(self, timetable: List[str]):
