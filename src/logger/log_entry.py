@@ -99,7 +99,6 @@ class TrainLeaveBlockSectionLogEntry(LogEntry):
 
     train_id = TextField(null=False)
     block_section_id = TextField(null=False)
-    block_section_length = FloatField(null=False)
 
 
 class InjectFaultLogEntry(LogEntry):

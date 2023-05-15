@@ -257,13 +257,13 @@ class LogCollector:
         # pylint: disable=not-an-iterable
         train_leave_df = pd.DataFrame(
             [
-                [e.tick, e.block_section_id, e.block_section_length]
+                [e.tick, e.block_section_id]
                 for e in TrainLeaveBlockSectionLogEntry.select().where(
                     (TrainLeaveBlockSectionLogEntry.run_id == run_id)
                     & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
                 )
             ],
-            columns=["tick", "block_section_id", "block_section_length"],
+            columns=["tick", "block_section_id"],
         )
         train_enter_df = train_enter_df.sort_values("tick")
         train_leave_df = train_leave_df.sort_values("tick")
@@ -279,9 +279,7 @@ class LogCollector:
             block_section_ids = [train_leave_df.iloc[0].block_section_id] + list(
                 block_section_ids
             )
-            block_lengths = [train_leave_df.iloc[0].block_section_length] + list(
-                block_lengths
-            )
+            block_lengths = [None] + list(block_lengths)
         if train_enter_last:
             leave_ticks = list(leave_ticks) + [None]
         block_section_times_df = pd.DataFrame(

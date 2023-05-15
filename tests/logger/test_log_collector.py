@@ -169,7 +169,7 @@ class TestLogCollector:
     def _enter_leave_block_section_3_df(self):
         return pd.DataFrame(
             [
-                [None, 20, "section_1", 10.5],
+                [None, 20, "section_1", None],
                 [30, 40, "section_2", 20.5],
                 [50, 60, "section_3", 30.5],
             ],
@@ -185,7 +185,7 @@ class TestLogCollector:
     def _enter_leave_block_section_4_df(self):
         return pd.DataFrame(
             [
-                [None, 20, "section_1", 10.5],
+                [None, 20, "section_1", None],
                 [30, 40, "section_2", 20.5],
                 [50, None, "section_3", 30.5],
             ],
@@ -207,10 +207,10 @@ class TestLogCollector:
                 [10, 20, "section_1", 10.5, "ice_2"],
                 [30, 40, "section_2", 20.5, "ice_2"],
                 [50, None, "section_3", 30.5, "ice_2"],
-                [None, 20, "section_1", 10.5, "ice_3"],
+                [None, 20, "section_1", None, "ice_3"],
                 [30, 40, "section_2", 20.5, "ice_3"],
                 [50, 60, "section_3", 30.5, "ice_3"],
-                [None, 20, "section_1", 10.5, "ice_4"],
+                [None, 20, "section_1", None, "ice_4"],
                 [30, 40, "section_2", 20.5, "ice_4"],
                 [50, None, "section_3", 30.5, "ice_4"],
             ],
@@ -290,33 +290,33 @@ class TestLogCollector:
     @staticmethod
     def setup_enter_leave_block_section_1(logger):
         logger.train_enter_block_section(10, "ice_1", "section_1", 10.5)
-        logger.train_leave_block_section(20, "ice_1", "section_1", 10.5)
+        logger.train_leave_block_section(20, "ice_1", "section_1")
         logger.train_enter_block_section(30, "ice_1", "section_2", 20.5)
-        logger.train_leave_block_section(40, "ice_1", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_1", "section_2")
         logger.train_enter_block_section(50, "ice_1", "section_3", 30.5)
-        logger.train_leave_block_section(60, "ice_1", "section_3", 30.5)
+        logger.train_leave_block_section(60, "ice_1", "section_3")
 
     @staticmethod
     def setup_enter_leave_block_section_2(logger):
         logger.train_enter_block_section(10, "ice_2", "section_1", 10.5)
-        logger.train_leave_block_section(20, "ice_2", "section_1", 10.5)
+        logger.train_leave_block_section(20, "ice_2", "section_1")
         logger.train_enter_block_section(30, "ice_2", "section_2", 20.5)
-        logger.train_leave_block_section(40, "ice_2", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_2", "section_2")
         logger.train_enter_block_section(50, "ice_2", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_3(logger):
-        logger.train_leave_block_section(20, "ice_3", "section_1", 10.5)
+        logger.train_leave_block_section(20, "ice_3", "section_1")
         logger.train_enter_block_section(30, "ice_3", "section_2", 20.5)
-        logger.train_leave_block_section(40, "ice_3", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_3", "section_2")
         logger.train_enter_block_section(50, "ice_3", "section_3", 30.5)
-        logger.train_leave_block_section(60, "ice_3", "section_3", 30.5)
+        logger.train_leave_block_section(60, "ice_3", "section_3")
 
     @staticmethod
     def setup_enter_leave_block_section_4(logger):
-        logger.train_leave_block_section(20, "ice_4", "section_1", 10.5)
+        logger.train_leave_block_section(20, "ice_4", "section_1")
         logger.train_enter_block_section(30, "ice_4", "section_2", 20.5)
-        logger.train_leave_block_section(40, "ice_4", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_4", "section_2")
         logger.train_enter_block_section(50, "ice_4", "section_3", 30.5)
 
     @staticmethod
