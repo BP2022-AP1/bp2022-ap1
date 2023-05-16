@@ -224,14 +224,14 @@ class DataScience:
             (block_section_times_df["leave_tick"] >= tick - delta_tick)
             & (block_section_times_df["enter_tick"] <= tick)
         ]
-        source_df.loc[:, "dist"] = self._get_section_length_momentarily_by_tick(
+        dist_series = self._get_section_length_momentarily_by_tick(
             source_df["enter_tick"],
             source_df["leave_tick"],
             source_df["block_section_length"],
             tick,
             delta_tick,
         )
-        return source_df["dist"].sum() * 3600 / delta_tick
+        return np.sum(dist_series) * 3600 / delta_tick
 
     def get_verkehrsleistung_momentarily_time_by_run_id(
         self, run_id: UUID, delta_tick=10
@@ -281,65 +281,7 @@ class DataScience:
         simulation_configuration = (
             Run.select().where(Run.id == run_id).get().simulation_configuration
         )
-        spawner_configurations = list(
-            SpawnerConfigurationXSimulationConfiguration.select().where(
-                SpawnerConfigurationXSimulationConfiguration.simulation_configuration
-                == simulation_configuration
-            )
-        )
-        demand_schedule_strategies_configurations = [
-            [
-                config.schedule_configuration_id
-                for config in SpawnerConfigurationXSchedule.select().where(
-                    SpawnerConfigurationXSchedule.spawner_configuration_id
-                    == spawner_config.spawner_configuration_id
-                )
-            ]
-            for spawner_config in spawner_configurations
-        ]
-        demand_schedule_strategies_configurations = [
-            item
-            for sublist in demand_schedule_strategies_configurations
-            for item in sublist
-        ]
-        demand_schedule_strategies_configurations = list(
-            ScheduleConfiguration.select().where(
-                (ScheduleConfiguration.id << demand_schedule_strategies_configurations)
-                & (ScheduleConfiguration.strategy_type == "DemandScheduleStrategy")
-            )
-        )
-        demand_schedule_strategies = [
-            (DemandScheduleStrategy.from_schedule_configuration(config), config.id)
-            for config in demand_schedule_strategies_configurations
-        ]
-        smard_api = SmardApi()
-        dataframes = []
-        for strategy, config_id in demand_schedule_strategies:
-            data = [
-                entry.value
-                for entry in smard_api.get_data(
-                    strategy.start_datetime,
-                    strategy.start_datetime
-                    + timedelta(seconds=strategy.end_tick - strategy.start_tick),
-                )
-            ]
-            data = map(strategy.compute_coal_consumption, data)
-            smard_df = pd.DataFrame(data, columns=[f"value_{config_id}"])
-
-            smard_df["tick"] = pd.Series(
-                range(strategy.start_tick, strategy.end_tick + 1, 900), dtype="int64"
-            )
-            smard_df.set_index("tick", inplace=True)
-
-            dataframes.append(smard_df)
-
-        result_df = pd.concat(dataframes)
-        result_df.reset_index(inplace=True)
-        result_df["time"] = result_df["tick"] + self.unix_2020
-        result_df["time"] = pd.to_datetime(result_df["time"], unit="s")
-        result_df.set_index("time", inplace=True)
-        del result_df["tick"]
-        return result_df
+        return self.get_coal_demand_by_config_id(simulation_configuration)
 
     def get_spawn_events_by_run_id(self, run_id: UUID) -> pd.DataFrame:
         """Returns the spawn events by a given run id
@@ -557,19 +499,108 @@ class DataScience:
         del verkehrsleistung_df["tick"]
         return verkehrsleistung_df
 
-    def get_coal_demand_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+    def _get_demand_schedule_strategies_by_config_id(
+        self, config_id: UUID
+    ) -> list[tuple[DemandScheduleStrategy, UUID]]:
+        """Returns the demand schedule strategies by a given config id
+        :param config_id: config id
+        :return: list of demand schedule strategies
+        """
+        spawner_configurations = list(
+            SpawnerConfigurationXSimulationConfiguration.select().where(
+                SpawnerConfigurationXSimulationConfiguration.simulation_configuration
+                == config_id
+            )
+        )
+        schedule_configurations = [
+            [
+                config.schedule_configuration_id
+                for config in SpawnerConfigurationXSchedule.select().where(
+                    SpawnerConfigurationXSchedule.spawner_configuration_id
+                    == spawner_config.spawner_configuration_id
+                )
+            ]
+            for spawner_config in spawner_configurations
+        ]
+        schedule_configurations = [
+            item for sublist in schedule_configurations for item in sublist
+        ]
+        demand_schedule_strategies_configurations = list(
+            ScheduleConfiguration.select().where(
+                (ScheduleConfiguration.id << schedule_configurations)
+                & (ScheduleConfiguration.strategy_type == "DemandScheduleStrategy")
+            )
+        )
+        demand_schedule_strategies = [
+            (DemandScheduleStrategy.from_schedule_configuration(config), config.id)
+            for config in demand_schedule_strategies_configurations
+        ]
+        return demand_schedule_strategies
+
+    def get_coal_demand_by_config_id(
+        self, simulation_configuration: UUID
+    ) -> pd.DataFrame:
         """Returns the coal demand by a given config id
         :param config_id: config id
         :return: coal demand dataframe
         """
-        raise NotImplementedError()
+        demand_schedule_strategies = self._get_demand_schedule_strategies_by_config_id(
+            simulation_configuration
+        )
+        smard_api = SmardApi()
+        dataframes = []
+        for strategy, config_id in demand_schedule_strategies:
+            data = [
+                entry.value
+                for entry in smard_api.get_data(
+                    strategy.start_datetime,
+                    strategy.start_datetime
+                    + timedelta(seconds=strategy.end_tick - strategy.start_tick),
+                )
+            ]
+            data = map(strategy.compute_coal_consumption, data)
+            smard_df = pd.DataFrame(data, columns=[f"value_{config_id}"])
 
-    def get_spawn_events_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+            smard_df["tick"] = pd.Series(
+                range(strategy.start_tick, strategy.end_tick + 1, 900), dtype="int64"
+            )
+            smard_df.set_index("tick", inplace=True)
+
+            dataframes.append(smard_df)
+
+        result_df = pd.concat(dataframes)
+        result_df.reset_index(inplace=True)
+        result_df["time"] = result_df["tick"] + self.unix_2020
+        result_df["time"] = pd.to_datetime(result_df["time"], unit="s")
+        result_df.set_index("time", inplace=True)
+        del result_df["tick"]
+        return result_df
+
+    def get_coal_spawn_events_by_config_id(
+        self, simulation_configuration: UUID
+    ) -> pd.DataFrame:
         """Returns the spawn events by a given config id
         :param config_id: config id
         :return: spawn events dataframe
         """
-        raise NotImplementedError()
+        demand_schedule_strategies = self._get_demand_schedule_strategies_by_config_id(
+            simulation_configuration
+        )
+        dataframes = []
+        for strategy, config_id in demand_schedule_strategies:
+            spawn_df = pd.DataFrame({"tick": strategy.spawn_ticks})
+            spawn_df["title"] = f"Spawn train from config {config_id}"
+            spawn_df["time"] = spawn_df["tick"] + self.unix_2020
+            spawn_df["time"] = pd.to_datetime(spawn_df["time"], unit="s")
+
+            dataframes.append(spawn_df)
+
+        result_df = pd.concat(dataframes)
+        result_df.reset_index(inplace=True)
+        result_df.set_index("time", inplace=True)
+        del result_df["tick"]
+        del result_df["index"]
+        return result_df
 
     # --- SCALAR
 

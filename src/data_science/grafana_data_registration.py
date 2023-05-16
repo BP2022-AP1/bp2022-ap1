@@ -94,6 +94,22 @@ class GrafanaDataRegistrator:
         config_id = UUID(param)
         return self.data_science.get_verkehrsleistung_time_by_config_id(config_id)
 
+    def get_coal_demand_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the coal demand over time by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of coal demand over time by config id"""
+        config_id = UUID(param)
+        return self.data_science.get_coal_demand_by_config_id(config_id)
+
+    def get_coal_spawn_events_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the coal train spawn events by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of coal train spawn events by config id"""
+        config_id = UUID(param)
+        return self.data_science.get_coal_spawn_events_by_config_id(config_id)
+
     def get_window_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the window size of the entire network by grafana params
         :param param: Grafana params
@@ -199,6 +215,8 @@ class GrafanaDataRegistrator:
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
+            "get_coal_demand_by_config_id:${config_id}",
+            "get_coal_spawn_events_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
@@ -219,6 +237,10 @@ def define_and_register_data():
     dg.add_annotation_reader(
         "test_get_spawn_events_by_run_id",
         grafana_data_registrator.get_spawn_events_by_run_id,
+    )
+    dg.add_annotation_reader(
+        "get_coal_spawn_events_by_config_id",
+        grafana_data_registrator.get_coal_spawn_events_by_config_id,
     )
     dg.add_metric_reader(
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
@@ -250,6 +272,10 @@ def define_and_register_data():
     dg.add_metric_reader(
         "get_verkehrsleistung_time_by_config_id",
         grafana_data_registrator.get_verkehrsleistung_time_by_config_id,
+    )
+    dg.add_metric_reader(
+        "get_coal_demand_by_config_id",
+        grafana_data_registrator.get_coal_demand_by_config_id,
     )
     dg.add_metric_reader(
         "get_window_by_config_id", grafana_data_registrator.get_window_by_config_id
