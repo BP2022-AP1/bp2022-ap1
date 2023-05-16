@@ -220,7 +220,7 @@ class RouteController(Component):
         :param edge: the edge it is currently on
         :type edge: Edge
         """
-        new_route = self.router.get_route(edge, train.timetable[0].edge)
+        new_route = self.router.get_route(edge, train.timetable[train.station_index].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
         print([x.identifier for x in new_route])
@@ -263,6 +263,7 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
+                    train.station_index += 1
                     return
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
