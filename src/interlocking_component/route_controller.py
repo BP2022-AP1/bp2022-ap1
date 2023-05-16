@@ -120,13 +120,12 @@ class RouteController(Component):
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(self.topology)
 
-
     def initialize_signals(self):
-        for yaramo_signal in self.topology.signals:
+        for yaramo_signal in self.topology.signals.values():
             signal = None
             for potentical_signal in self.simulation_object_updating_component.signals:
                 if yaramo_signal.name == potentical_signal.identifier:
-                    signal= potentical_signal
+                    signal = potentical_signal
 
             edge_leading_to_signal_in_dirction = None
             edge_leading_to_signal_not_in_dirction = None
@@ -137,9 +136,8 @@ class RouteController(Component):
                     edge_leading_to_signal_not_in_dirction = edge
             if yaramo_signal.direction == SignalDirection.IN:
                 signal.incoming = edge_leading_to_signal_in_dirction
-            else: 
+            else:
                 signal.incoming = edge_leading_to_signal_not_in_dirction
-
 
     def next_tick(self, tick: int):
         if tick == 1:
@@ -202,8 +200,14 @@ class RouteController(Component):
         :type edge: Edge
         """
         route = self._get_interlocking_route_for_edge(edge)
-        if route is None or route.get_last_segment_of_route() != edge.identifier:
+        print(edge.identifier)
+        if (
+            route is None
+            or route.get_last_segment_of_route() != edge.identifier.split("-re")[0]
+        ):
             return
+
+        print("changing route")
 
         self.set_fahrstrasse(train, edge)
 
@@ -219,10 +223,14 @@ class RouteController(Component):
         new_route = self.router.get_route(edge, train.timetable[0].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
+        print([x.identifier for x in new_route])
+
         route_length = 0
 
         for i, end_node_candidat in enumerate(new_route[1:], start=1):
             route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
+
+            print(new_route[1].identifier, end_node_candidat.identifier)
 
             for interlocking_route in self.interlocking.routes:
                 if (
@@ -235,6 +243,7 @@ class RouteController(Component):
                     was_set = self.interlocking.set_route(
                         interlocking_route.yaramo_route
                     )
+                    print(was_set)
                     if was_set:
                         self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
                         self.logger.train_enter_block_section(

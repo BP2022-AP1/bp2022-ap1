@@ -127,9 +127,6 @@ class SimulationObjectUpdatingComponent(Component):
                     )
 
     def next_tick(self, tick: int):
-        if tick == 1:
-            for signal in self.signals:
-                signal.state = signal.State.HALT
         subscription_results = traci.vehicle.getAllSubscriptionResults()
 
         for simulation_object in self._simulation_objects:
