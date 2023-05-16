@@ -6,6 +6,7 @@ from grafana_pandas_datasource.registry import data_generators as dg
 from src.data_science.data_science import DataScience
 
 
+# pylint: disable=too-many-public-methods
 class GrafanaDataRegistrator:
     """Class that encapsulates all functions that are used by grafana"""
 
@@ -76,6 +77,14 @@ class GrafanaDataRegistrator:
         return self.data_science.get_verkehrsleistung_by_run_id(run_id)
 
     # --- CONFIG
+
+    def get_window_size_time_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the arrival and departure window sizes over time by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of verkehrsleistung"""
+        config_id = UUID(param)
+        return self.data_science.get_window_size_time_by_config_id(config_id)
 
     def get_verkehrsleistung_time_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsleistung over time by grafana params
@@ -188,6 +197,7 @@ class GrafanaDataRegistrator:
             "test_get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
+            "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
@@ -232,6 +242,10 @@ def define_and_register_data():
     dg.add_metric_reader(
         "get_verkehrsleistung_by_run_id",
         grafana_data_registrator.get_verkehrsleistung_by_run_id,
+    )
+    dg.add_metric_reader(
+        "get_window_size_time_by_config_id",
+        grafana_data_registrator.get_window_size_time_by_config_id,
     )
     dg.add_metric_reader(
         "get_verkehrsleistung_time_by_config_id",
