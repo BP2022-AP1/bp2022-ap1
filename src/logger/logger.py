@@ -295,6 +295,8 @@ class Logger(Component):
         value after the fault.
         :param event: the event containing all relevant info
         """
+        if "platform_blocked_fault_configuration" not in event.arguments:
+            return
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -315,6 +317,8 @@ class Logger(Component):
         value after the fault.
         :param event: the event containing all relevant info
         """
+        if "track_blocked_fault_configuration" not in event.arguments:
+            return
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -335,6 +339,8 @@ class Logger(Component):
         value after the fault.
         :param event: the event containing all relevant info
         """
+        if "track_speed_limit_fault_configuration" not in event.arguments:
+            return
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -358,6 +364,8 @@ class Logger(Component):
         value after the fault.
         :param event: the event containing all relevant info
         """
+        if "schedule_blocked_fault_configuration" not in event.arguments:
+            return
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -378,6 +386,8 @@ class Logger(Component):
         value after the fault.
         :param event: the event containing all relevant info
         """
+        if "train_prio_fault_configuration" not in event.arguments:
+            return
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -401,6 +411,8 @@ class Logger(Component):
         value after the fault.
         :param event: the event containing all relevant info
         """
+        if "train_speed_fault_configuration" not in event.arguments:
+            return
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -423,6 +435,8 @@ class Logger(Component):
         This should reference the fault configuration of the fault.
         :param event: the event containing all relevant info
         """
+        if "platform_blocked_fault_configuration" not in event.arguments:
+            return
         ResolveFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -440,6 +454,8 @@ class Logger(Component):
         This should reference the fault configuration of the fault.
         :param event: the event containing all relevant info
         """
+        if "track_blocked_fault_configuration" not in event.arguments:
+            return
         ResolveFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -457,6 +473,8 @@ class Logger(Component):
         This should reference the fault configuration of the fault.
         :param event: the event containing all relevant info
         """
+        if "track_speed_limit_fault_configuration" not in event.arguments:
+            return
         ResolveFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -474,6 +492,8 @@ class Logger(Component):
         This should reference the fault configuration of the fault.
         :param event: the event containing all relevant info
         """
+        if "schedule_blocked_fault_configuration" not in event.arguments:
+            return
         ResolveFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -491,6 +511,8 @@ class Logger(Component):
         This should reference the fault configuration of the fault.
         :param event: the event containing all relevant info
         """
+        if "train_prio_fault_configuration" not in event.arguments:
+            return
         ResolveFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
@@ -508,6 +530,8 @@ class Logger(Component):
         should reference the fault configuration of the fault.
         :param event: the event containing all relevant info
         """
+        if "train_speed_fault_configuration" not in event.arguments:
+            return
         ResolveFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
