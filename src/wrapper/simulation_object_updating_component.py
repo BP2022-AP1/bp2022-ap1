@@ -130,8 +130,7 @@ class SimulationObjectUpdatingComponent(Component):
         if tick == 1:
             for signal in self.signals:
                 signal.state = signal.State.HALT
-        subscription_results = traci.simulation.getAllSubscriptionResults()
-        print("Results:", subscription_results)
+        subscription_results = traci.vehicle.getAllSubscriptionResults()
 
         for simulation_object in self._simulation_objects:
             if len(simulation_object.add_subscriptions()) > 0:

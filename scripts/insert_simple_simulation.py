@@ -17,7 +17,7 @@ with db.atomic():
         strategy_type="RegularScheduleStrategy",
         strategy_start_tick=100,
         strategy_end_tick=2000,
-        train_schedule_train_type="passenger",
+        train_schedule_train_type="regio",
         regular_strategy_frequency=100,
     )
     print(f"regular schedule: {regular_schedule.id}")

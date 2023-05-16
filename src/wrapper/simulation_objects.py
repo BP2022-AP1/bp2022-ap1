@@ -706,6 +706,7 @@ class Train(SimulationObject):
         train_type: str = None,
         updater: "SimulationObjectUpdatingComponent" = None,
         from_simulator: bool = False,
+        route_id: str = None,
     ):
         """Creates a new train from the given parameters.
         When initializing manually, `timetable` and `train_type` are mandatory
@@ -728,10 +729,10 @@ class Train(SimulationObject):
         self._timetable = timetable
 
         if not from_simulator:
-            self._add_to_simulation(identifier, timetable, train_type)
+            self._add_to_simulation(identifier, train_type, route_id)
 
     def _add_to_simulation(self, identifier: str, train_type: str, route: str):
-        vehicle.add(identifier, route, train_type)
+        vehicle.add(identifier, routeID=route, typeID=train_type)
 
     def update(self, data: dict):
         """Gets called whenever a simualtion tick has happened.
@@ -739,9 +740,14 @@ class Train(SimulationObject):
         """
         self._position = data[constants.VAR_POSITION]
         edge_id = data[constants.VAR_ROAD_ID]
-        self._route = data[constants.VAR_ROUTE]
+        # self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
-        if self._edge is None or self._edge.identifier != edge_id:
+
+        if (
+            self._edge is None
+            or self._edge.identifier != edge_id
+            and not edge_id[:1] == ":"
+        ):
             if self._edge is not None:
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
@@ -760,7 +766,7 @@ class Train(SimulationObject):
         """
         return [
             constants.VAR_POSITION,
-            constants.VAR_ROUTE,
+            # constants.VAR_ROUTE,
             constants.VAR_ROAD_ID,
             constants.VAR_SPEED,
         ]

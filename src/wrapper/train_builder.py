@@ -1,4 +1,5 @@
 from typing import List
+import traci
 
 from src.interlocking_component.route_controller import RouteController
 from src.wrapper.simulation_object_updating_component import (
@@ -37,9 +38,10 @@ class TrainBuilder:
         if not route:
             return False
 
-        self._updater.simulation_objects.append(
-            Train(identifier, timetable, train_type, self._updater)
-        )
+        train = Train(identifier, timetable, train_type, self._updater, route_id=route)
+        traci.vehicle.subscribe(train.identifier, train.add_subscriptions())
+
+        self._updater.simulation_objects.append(train)
 
         return True
 
