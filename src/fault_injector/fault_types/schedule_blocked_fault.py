@@ -4,7 +4,6 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
 )
 from src.fault_injector.fault_types.fault import Fault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,

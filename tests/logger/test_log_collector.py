@@ -341,7 +341,9 @@ class TestLogCollector:
         event_bus.inject_platform_blocked_fault(
             10, platform_blocked_fault_configuration, "station_1"
         )
-        event_bus.resolve_platform_blocked_fault(20, platform_blocked_fault_configuration)
+        event_bus.resolve_platform_blocked_fault(
+            20, platform_blocked_fault_configuration
+        )
 
         event_bus.inject_track_blocked_fault(
             10, track_blocked_fault_configuration, "section_1"
@@ -358,7 +360,9 @@ class TestLogCollector:
         event_bus.inject_schedule_blocked_fault(
             10, schedule_blocked_fault_configuration, "ice_1"
         )
-        event_bus.resolve_schedule_blocked_fault(20, schedule_blocked_fault_configuration)
+        event_bus.resolve_schedule_blocked_fault(
+            20, schedule_blocked_fault_configuration
+        )
 
         event_bus.inject_train_prio_fault(
             10, train_prio_fault_configuration, "ice_1", "2", "1"
@@ -501,7 +505,9 @@ class TestLogCollector:
             _departure_arrival_all_1_df,
         )
 
-    def test_departure_arrival_empty(self, event_bus: Logger, log_collector: LogCollector):
+    def test_departure_arrival_empty(
+        self, event_bus: Logger, log_collector: LogCollector
+    ):
         assert_frame_equal(
             log_collector.get_departures_arrivals_all_trains(event_bus.run_id),
             pd.DataFrame(

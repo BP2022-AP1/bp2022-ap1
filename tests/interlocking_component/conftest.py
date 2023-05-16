@@ -14,7 +14,6 @@ from src.interlocking_component.interlocking_configuration import (
     InterlockingConfiguration,
 )
 from src.interlocking_component.route_controller import RouteController
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )

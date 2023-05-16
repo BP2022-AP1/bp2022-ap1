@@ -165,7 +165,10 @@ class TestDataScience:
         )
 
     def test_get_verkehrsmenge_by_run_id(
-        self, event_bus: Logger, data_science: DataScience, verkehrsmenge_df: pd.DataFrame
+        self,
+        event_bus: Logger,
+        data_science: DataScience,
+        verkehrsmenge_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
         _verkehrsmenge_df = data_science.get_verkehrsmenge_by_run_id(event_bus.run_id)
@@ -178,7 +181,9 @@ class TestDataScience:
         verkehrsleistung_by_run_id_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
-        verkehrsleistung_df = data_science.get_verkehrsleistung_by_run_id(event_bus.run_id)
+        verkehrsleistung_df = data_science.get_verkehrsleistung_by_run_id(
+            event_bus.run_id
+        )
         assert_frame_equal(verkehrsleistung_df, verkehrsleistung_by_run_id_df)
 
     def test_get_station_counts_by_run_id(self, run: Run, data_science: DataScience):
