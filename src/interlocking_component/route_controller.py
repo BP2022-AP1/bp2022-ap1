@@ -5,6 +5,7 @@ from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
 from planpro_importer.reader import PlanProReader
 from railwayroutegenerator.routegenerator import RouteGenerator
+from yaramo.signal import SignalDirection
 
 from src.component import Component
 from src.interlocking_component.infrastructure_provider import (
@@ -117,6 +118,25 @@ class RouteController(Component):
         infrastructure_provider = SumoInfrastructureProvider(self, logger)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(topology)
+
+        for yaramo_signal in topology.signals:
+            signal = None
+            for potentical_signal in self.simulation_object_updating_component.signals:
+                if yaramo_signal.name == potentical_signal.identifier:
+                    signal= potentical_signal
+                    
+            edge_leading_to_signal_in_dirction = None
+            edge_leading_to_signal_not_in_dirction = None
+            for edge in signal.edges:
+                if edge.to_node == signal and "-re" not in edge.identifier:
+                    edge_leading_to_signal_in_dirction = edge
+                if edge.to_node == signal and "-re" in edge.identifier:
+                    edge_leading_to_signal_not_in_dirction = edge
+            if yaramo_signal.direction == SignalDirection.IN:
+                signal.incoming = edge_leading_to_signal_in_dirction
+            else: 
+                signal.incoming = edge_leading_to_signal_not_in_dirction
+
 
     def next_tick(self, tick: int):
         self.tick = tick
