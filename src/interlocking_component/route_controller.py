@@ -97,6 +97,7 @@ class RouteController(Component):
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
     tick: int = 0
+    topology = None
 
     def __init__(
         self,
@@ -113,18 +114,20 @@ class RouteController(Component):
         self.router = Router()
 
         # Import from local PlanPro file
-        topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
+        self.topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
 
         infrastructure_provider = SumoInfrastructureProvider(self, logger)
         self.interlocking = Interlocking(infrastructure_provider)
-        self.interlocking.prepare(topology)
+        self.interlocking.prepare(self.topology)
 
-        for yaramo_signal in topology.signals:
+
+    def initialize_signals(self):
+        for yaramo_signal in self.topology.signals:
             signal = None
             for potentical_signal in self.simulation_object_updating_component.signals:
                 if yaramo_signal.name == potentical_signal.identifier:
                     signal= potentical_signal
-                    
+
             edge_leading_to_signal_in_dirction = None
             edge_leading_to_signal_not_in_dirction = None
             for edge in signal.edges:
@@ -139,6 +142,8 @@ class RouteController(Component):
 
 
     def next_tick(self, tick: int):
+        if tick == 1:
+            self.initialize_signals()
         self.tick = tick
         for interlocking_route in self.routes_to_be_set:
             # This sets the fahrstrasse in the interlocking.
