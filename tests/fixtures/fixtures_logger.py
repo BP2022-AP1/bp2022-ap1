@@ -351,6 +351,29 @@ def spawn_events_by_run_id_head_df():
 
 
 @pytest.fixture
+def spawn_coal_events_by_config_id_head_df(
+    demand_train_schedule_configuration: ScheduleConfiguration,
+):
+    spawn_events_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 1, 16, 40),
+                datetime(2020, 1, 1, 2, 1, 40),
+                datetime(2020, 1, 1, 3, 1, 40),
+                datetime(2020, 1, 1, 3, 46, 40),
+                datetime(2020, 1, 1, 4, 46, 40),
+            ],
+            f"title": [
+                f"Spawn train from config {demand_train_schedule_configuration.id}"
+                for _ in range(1, 6)
+            ],
+        }
+    )
+    spawn_events_by_run_id_head_df.set_index("time", inplace=True)
+    return spawn_events_by_run_id_head_df
+
+
+@pytest.fixture
 def verkehrsmenge_df():
     return pd.DataFrame({"verkehrsmenge": [164.0]})
 
