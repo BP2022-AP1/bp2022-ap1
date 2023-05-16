@@ -5,10 +5,9 @@ from src.implementor.models import SimulationConfiguration
 
 
 class TestSimulationImplementor:
-    def test_get_all_simulation_ids(self, token, empty_simulation_configuration_data):
-        simulation = SimulationConfiguration.create(
-            **empty_simulation_configuration_data
-        )
+    def test_get_all_simulation_ids(self, token):
+        simulation = SimulationConfiguration()
+        simulation.save()
         result, status = impl.simulation.get_all_simulation_ids(token)
         assert status == 200
         assert str(simulation.id) in result
