@@ -110,7 +110,6 @@ class TestRunImplementor:
         assert train_prio_fault_next_tick_mock.called
         assert simulation_object_updating_component_next_tick_mock.called
 
-
     def test_get_run(token, empty_simulation_configuration, monkeypatch):
         monkeypatch.setattr(
             "src.interlocking_component.route_controller.RouteController.next_tick",

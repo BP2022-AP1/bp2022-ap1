@@ -299,7 +299,7 @@ def track_speed_limit_fault_configuration(
         **track_speed_limit_fault_configuration_data
     )
 
-  
+
 @pytest.fixture
 def another_track_speed_limit_fault_configuration(
     track_speed_limit_fault_configuration_data: dict,
@@ -411,7 +411,7 @@ def another_train_speed_fault_configuration(
 ):
     return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
 
- 
+
 # ------------- ScheduleBlockedFaultConfiguration ----------------
 
 
