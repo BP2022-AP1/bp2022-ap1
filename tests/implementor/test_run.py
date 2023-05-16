@@ -90,6 +90,8 @@ class TestRunImplementor:
         assert run.simulation_configuration.id == simulation_configuration_full.id
 
         while Communicator.state(str(run.process_id)) != "PROGRESS":
+            if Communicator.state(str(run.process_id)) == "FAILURE":
+                assert False
             sleep(1)
         Communicator.stop(str(run.process_id))
         assert route_controller_next_tick_mock.assert_called
@@ -101,3 +103,66 @@ class TestRunImplementor:
         assert train_speed_fault_next_tick_mock.assert_called
         assert train_prio_fault_next_tick_mock.assert_called
         assert simulation_object_updating_component_next_tick_mock.assert_called
+
+    def test_get_run(token, empty_simulation_configuration, monkeypatch):
+        monkeypatch.setattr(
+            "src.interlocking_component.route_controller.RouteController.next_tick",
+            lambda: None,
+        )
+        monkeypatch.setattr("src.spawner.spawner.Spawner.next_tick", lambda: None)
+        result, _ = impl.run.create_run(
+            {"simulation_configuration": empty_simulation_configuration.id}, token
+        )
+        run_id = result["id"]
+        assert Run.select().where(Run.id == run_id).exists()
+        run = Run.select().where(Run.id == run_id).get()
+
+        max_waiting_time = 30
+        while Communicator.state(str(run.process_id)) != "PROGRESS":
+            if Communicator.state(str(run.process_id)) == "FAILURE":
+                assert False
+            sleep(1)
+            max_waiting_time = max_waiting_time - 1
+            if max_waiting_time == 0:
+                assert False
+
+        fetched_run, status = impl.run.get_run({"identifier": run.id}, token)
+        assert status == 200
+        assert fetched_run["state"] == "PROGRESS" or fetched_run["state"] == "SUCCESS"
+        assert fetched_run["progress"] > 0
+
+    def test_delete_run(token, empty_simulation_configuration, monkeypatch):
+        monkeypatch.setattr(
+            "src.interlocking_component.route_controller.RouteController.next_tick",
+            lambda: None,
+        )
+        monkeypatch.setattr("src.spawner.spawner.Spawner.next_tick", lambda: None)
+        result, _ = impl.run.create_run(
+            {"simulation_configuration": empty_simulation_configuration.id}, token
+        )
+        run_id = result["id"]
+        assert Run.select().where(Run.id == run_id).exists()
+        run = Run.select().where(Run.id == run_id).get()
+
+        max_waiting_time = 30
+        while Communicator.state(str(run.process_id)) != "PROGRESS":
+            if Communicator.state(str(run.process_id)) == "FAILURE":
+                assert False
+            sleep(1)
+            max_waiting_time = max_waiting_time - 1
+            if max_waiting_time == 0:
+                assert False
+
+        result, status = impl.run.delete_run({"identifier": run.id}, token)
+        assert status == 204
+        assert result == "Deleted run"
+
+        max_waiting_time = 30
+        while Communicator.state(str(run.process_id)) == "PROGRESS":
+            sleep(1)
+            max_waiting_time = max_waiting_time - 1
+            if max_waiting_time == 0:
+                assert False
+
+        assert Communicator.state(str(run.process_id)) == "REVOKED"
+        assert not Run.select().where(Run.id == run_id).exists()
