@@ -70,6 +70,8 @@ class TestGrafanaDataRegistration:
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
+            "get_coal_demand_by_config_id:${config_id}",
+            "get_coal_spawn_events_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
@@ -142,7 +144,7 @@ class TestGrafanaDataRegistration:
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
         simulation_configuration: SimulationConfiguration,
-        coal_demand_by_run_id_head_df: pd.DataFrame,
+        coal_demand_by_run_id_head_df,
     ):
         SpawnerConfigurationXSimulationConfiguration.create(
             simulation_configuration=simulation_configuration,
@@ -211,6 +213,58 @@ class TestGrafanaDataRegistration:
                 _config_id, None
             ),
             verkehrsleistung_momentarily_time_df,
+        )
+
+    def test_get_coal_demand_by_config_id(
+        self,
+        _config_id: str,
+        logger: Logger,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        simulation_configuration: SimulationConfiguration,
+        coal_demand_by_run_id_head_df,
+    ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        assert_frame_equal(
+            grafana_data_registrator.get_coal_demand_by_config_id(
+                _config_id, None
+            ).head(10),
+            coal_demand_by_run_id_head_df,
+        )
+
+    def test_get_coal_spawn_events_by_config_id(
+        self,
+        _config_id: str,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        simulation_configuration: SimulationConfiguration,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        logger: Logger,
+        spawn_coal_events_by_config_id_head_df: pd.DataFrame,
+    ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        assert_frame_equal(
+            grafana_data_registrator.get_coal_spawn_events_by_config_id(
+                _config_id, None
+            ).head(5),
+            spawn_coal_events_by_config_id_head_df,
         )
 
     def test_get_window_by_config_id(

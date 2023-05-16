@@ -256,13 +256,11 @@ class TestLogger:
         assert log_entry.tick == tick
         assert (
             log_entry.message
-            == f"Train with ID {train_id} left block section with ID {block_section_id} with "
-            f"length {block_section_length}"
+            == f"Train with ID {train_id} left block section with ID {block_section_id}"
         )
         assert log_entry.run_id.id == run.id
         assert log_entry.train_id == train_id
         assert log_entry.block_section_id == block_section_id
-        assert log_entry.block_section_length == block_section_length
 
     @freeze_time()
     def test_inject_platform_blocked_fault(

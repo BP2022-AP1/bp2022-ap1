@@ -138,7 +138,7 @@ class TestDataScience:
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
         simulation_configuration: SimulationConfiguration,
-        coal_demand_by_run_id_head_df: pd.DataFrame,
+        coal_demand_by_run_id_head_df,
     ):
         SpawnerConfigurationXSimulationConfiguration.create(
             simulation_configuration=simulation_configuration,
@@ -210,17 +210,48 @@ class TestDataScience:
         self,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        coal_demand_by_run_id_head_df,
     ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_coal_demand_by_config_id(simulation_configuration)
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        coal_demand_df = data_science.get_coal_demand_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(coal_demand_df.head(10), coal_demand_by_run_id_head_df)
 
-    def test_get_spawn_events_by_config_id(
+    def test_get_coal_spawn_events_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        logger: Logger,
+        spawn_coal_events_by_config_id_head_df: pd.DataFrame,
     ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_spawn_events_by_config_id(simulation_configuration)
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration,
+            schedule_configuration_id=demand_train_schedule_configuration,
+        )
+        spawn_events_df = data_science.get_coal_spawn_events_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(
+            spawn_events_df.head(5), spawn_coal_events_by_config_id_head_df
+        )
 
     def test_get_window_by_config_id(
         self,
