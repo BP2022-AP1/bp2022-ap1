@@ -127,17 +127,19 @@ class RouteController(Component):
                 if yaramo_signal.name == potentical_signal.identifier:
                     signal = potentical_signal
 
-            edge_leading_to_signal_in_dirction = None
-            edge_leading_to_signal_not_in_dirction = None
-            for edge in signal.edges:
-                if edge.to_node == signal and "-re" not in edge.identifier:
-                    edge_leading_to_signal_in_dirction = edge
-                if edge.to_node == signal and "-re" in edge.identifier:
-                    edge_leading_to_signal_not_in_dirction = edge
+            edges_into_signal = [edge for edge in signal.edges if edge.to_node == signal]
+            edges_numbers = [item.identifier.split("-")[1] for item in edges_into_signal]
+
             if yaramo_signal.direction == SignalDirection.IN:
-                signal.incoming = edge_leading_to_signal_in_dirction
+                if(edges_numbers[0]<edges_numbers[1]):
+                    signal.incoming = edges_into_signal[0]
+                else:
+                    signal.incoming = edges_into_signal[1]
             else:
-                signal.incoming = edge_leading_to_signal_not_in_dirction
+                if(edges_numbers[0]>edges_numbers[1]):
+                    signal.incoming = edges_into_signal[0]
+                else:
+                    signal.incoming = edges_into_signal[1]
 
     def next_tick(self, tick: int):
         if tick == 1:
