@@ -43,7 +43,7 @@ def update_simulation_configuration(identifier, token):
     options = {}
     options["identifier"] = identifier
 
-    schema = schemas.SimulationConfiguration()
+    schema = schemas.UpdateSimulationConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
