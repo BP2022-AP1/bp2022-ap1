@@ -19,6 +19,7 @@ class Router:
         to the Node right after the end edge
         :rtype: List[Node]
         """
+        node_before_platform = start_edge.from_node
         start_node = start_edge.to_node
         penultimate_node = end_edge.from_node
 
@@ -33,11 +34,6 @@ class Router:
             sorted_distances = sorted(distances.items(), key=lambda item: item[1])
             # This sorts the distances based on the values in the dict.
             # sorted_distances is a array of the dict with items of the dict as tupels.
-
-            print("sorted_distances: ", sorted_distances)
-            print("previous_nodes: ", previous_nodes)
-            print()
-
             current_node = sorted_distances[current_index][0]
             if current_node == penultimate_node:
                 break
@@ -45,14 +41,15 @@ class Router:
                 distance_to_next_node = distances[current_node] + edge.length
                 if (
                     edge.to_node not in distances
-                    or distances[edge.to_node] < distance_to_next_node
+                    or distances[edge.to_node] > distance_to_next_node
                 ):
                     distances[edge.to_node] = distance_to_next_node
                     previous_nodes[edge.to_node] = current_node
             current_index += 1
-        route = List[penultimate_node, end_edge.to_node]
+        route = [penultimate_node, end_edge.to_node]
         while current_node in previous_nodes:
             previous_node = previous_nodes[current_node]
             route.insert(0, previous_node)
             current_node = previous_node
+        route.insert(0, node_before_platform)
         return route

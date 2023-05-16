@@ -147,7 +147,7 @@ class RouteController(Component):
         for end_node_candidat in new_route[1:]:
             for interlocking_route in self.interlocking.routes:
                 if (
-                    interlocking_route.start_signal.name == new_route[0]
+                    interlocking_route.start_signal.name == new_route[1]
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
                     # This sets the route in the interlocking
@@ -199,8 +199,9 @@ class RouteController(Component):
 
             for interlocking_route in self.interlocking.routes:
                 if (
-                    interlocking_route.start_signal.name == new_route[0]
-                    and interlocking_route.end_signal.name == end_node_candidat
+                    interlocking_route.start_signal.yaramo_signal.name == new_route[1]
+                    and interlocking_route.end_signal.yaramo_signal.name
+                    == end_node_candidat
                 ):
                     # This sets the route in the interlocking
                     was_set = self.interlocking.set_route(
