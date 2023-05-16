@@ -163,6 +163,8 @@ class Signal(Node):
                 if edge.identifier == lane.split("_")[0]:
                     self._incoming_index = i
 
+        self.state = Signal.State.HALT
+
     @property
     def state(self) -> "Signal.State":
         """Returns the current state of the signal
@@ -656,6 +658,7 @@ class Train(SimulationObject):
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
+    station_index: int = 0
 
     @property
     def edge(self) -> Edge:
