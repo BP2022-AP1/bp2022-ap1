@@ -1672,7 +1672,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/planpro-exporter"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "012462ca6496c15d1f8ae3e7217e09fa61e6629e"
+resolved_reference = "3ee6f49e69008e67bce84685b64199dfeab9f6f4"
 
 [[package]]
 name = "planpro-importer"
