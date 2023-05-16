@@ -37,12 +37,12 @@ def event_bus():
 
 
 @pytest.fixture
-def logger(run):
+def logger(run, event_bus):
     return Logger(run_id=run.id, event_bus=event_bus)
 
 
 @pytest.fixture
-def logger2(run2):
+def logger2(run2, event_bus):
     return Logger(run_id=run2.id, event_bus=event_bus)
 
 
