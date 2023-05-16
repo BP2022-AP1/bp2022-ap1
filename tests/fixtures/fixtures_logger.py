@@ -368,6 +368,24 @@ def verkehrsleistung_by_run_id_df():
 
 
 @pytest.fixture
+def window_size_time_by_config_id_df():
+    window_size_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 0, int((10 * i) / 60), (10 * i) % 60)
+                for i in range(7)
+            ],
+            "arrival_size": pd.Series([0.0, 0.0, 5.0, 2.5, 7.5, 5.0, 25.0 / 3.0]),
+            "departure_size": pd.Series(
+                [0.0, 0.0, 0.0, 5.0, 5.0, 20.0 / 3.0, 20.0 / 3.0]
+            ),
+        }
+    )
+    window_size_df.set_index("time", inplace=True)
+    return window_size_df
+
+
+@pytest.fixture
 def window_by_config_id_df():
     return pd.DataFrame(
         {

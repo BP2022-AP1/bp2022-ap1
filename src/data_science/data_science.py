@@ -3,6 +3,7 @@ from uuid import UUID
 
 import numpy as np
 import pandas as pd
+from pandas import Series
 
 from src.implementor.models import Run
 from src.logger.log_collector import LogCollector
@@ -223,7 +224,7 @@ class DataScience:
             (block_section_times_df["leave_tick"] >= tick - delta_tick)
             & (block_section_times_df["enter_tick"] <= tick)
         ]
-        source_df["dist"] = self._get_section_length_momentarily_by_tick(
+        source_df.loc[:, "dist"] = self._get_section_length_momentarily_by_tick(
             source_df["enter_tick"],
             source_df["leave_tick"],
             source_df["block_section_length"],
@@ -421,12 +422,76 @@ class DataScience:
 
     # --- TIME
 
-    def get_window_time_by_config_id(self, config_id: UUID) -> pd.DataFrame:
-        """Returns the window time by a given config id
+    def _get_window_size_by_tick_config_id(
+        self, departures_arrivals_df: pd.DataFrame, tick: int, threshold=0.9
+    ) -> Series:
+        """Returns the arrival and departure window sizes by a given tick and config id
         :param config_id: config id
-        :return: dataframe of window time"""
+        :param tick: current tick
+        :return: dataframe of window size"""
 
-        raise NotImplementedError()
+        out_df = departures_arrivals_df[
+            ["station_id", "train_id", "arrival_tick", "departure_tick"]
+        ]
+        out_df = out_df[
+            (out_df["arrival_tick"] <= tick) | (out_df["departure_tick"] <= tick)
+        ]
+        out_df.loc[out_df["arrival_tick"] > tick, "arrival_tick"] = None
+        out_df.loc[out_df["departure_tick"] > tick, "departure_tick"] = None
+
+        out_df = out_df.groupby(["station_id", "train_id"]).agg(
+            lambda x: self._get_window_size_from_values_threshold(x, threshold)
+        )
+        if out_df.empty:
+            return pd.Series([0.0, 0.0])
+        out_df.reset_index(inplace=True)
+        del out_df["station_id"]
+        del out_df["train_id"]
+        out_df = list(out_df.mean())
+        out_df = pd.Series([out_df[0], out_df[1]])
+        return out_df
+
+    def get_window_size_time_by_config_id(
+        self, config_id: UUID, delta_tick=10
+    ) -> pd.DataFrame:
+        """Returns the arrival and departure window sizes over time by a given config id
+        :param config_id: config id
+        :return: dataframe of window size"""
+        df_list = []
+        for run_id in Run.select().where(Run.simulation_configuration == config_id):
+            departures_arrivals_df = (
+                self.log_collector.get_departures_arrivals_all_trains(run_id)
+            )
+            departures_arrivals_df["run_id"] = run_id.id
+            df_list.append(departures_arrivals_df)
+        departures_arrivals_df = pd.concat(df_list, axis=0)
+        window_size_df = pd.DataFrame(
+            {
+                "tick": np.arange(
+                    0,
+                    np.maximum(
+                        departures_arrivals_df["arrival_tick"].max(),
+                        departures_arrivals_df["departure_tick"].max(),
+                    ),
+                    delta_tick,
+                )
+            }
+        )
+        result_df = window_size_df["tick"].apply(
+            lambda tick: self._get_window_size_by_tick_config_id(
+                departures_arrivals_df, tick
+            )
+        )
+
+        window_size_df.loc[:, "arrival_size"] = result_df.iloc[:, 0]
+        window_size_df.loc[:, "departure_size"] = result_df.iloc[:, 1]
+        window_size_df["time"] = window_size_df["tick"].apply(
+            lambda x: x + self.unix_2020
+        )
+        window_size_df["time"] = window_size_df["time"].apply(pd.to_datetime, unit="s")
+        window_size_df.set_index("time", inplace=True)
+        del window_size_df["tick"]
+        return window_size_df
 
     def _calculate_verkehrsleistung_momentarily_by_tick_multiple_runs(
         self, block_section_times_df: pd.DataFrame, tick: int, delta_tick: int
