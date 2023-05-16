@@ -48,7 +48,7 @@ class TestApiSimulation:
         response = client.get(
             f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
         )
-        assert response.status_code == 501
+        assert response.status_code == 404
 
     @pytest.mark.parametrize(
         "data",
@@ -71,11 +71,11 @@ class TestApiSimulation:
         response = client.put(
             f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}, json=data
         )
-        assert response.status_code == 422  # temporary
+        assert response.status_code == 404
 
     def test_delete(self, client, clear_token):
         object_id = uuid.uuid4()
         response = client.delete(
             f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
         )
-        assert response.status_code == 501
+        assert response.status_code == 404
