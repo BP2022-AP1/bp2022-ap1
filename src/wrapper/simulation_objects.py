@@ -156,7 +156,7 @@ class Signal(Node):
     def incoming(self, incoming: "Edge"):
         self._incoming_edge = incoming
 
-        lanes: List[str] = trafficlight.getControlledLanes()
+        lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
         self._controlled_lanes_count = len(lanes)
         for i, lane in enumerate(lanes):
             for edge in self.updater.edges:
