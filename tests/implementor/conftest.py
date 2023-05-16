@@ -168,15 +168,22 @@ def platform() -> Platform:
 
 
 @pytest.fixture
+def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
+    return {
+        "start_tick": 20,
+        "end_tick": 200,
+        "description": "test PlatformBlockedFault",
+        "affected_element_id": platform.identifier,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
 def platform_blocked_fault_configuration(
-    platform: Platform,
+    platform_blocked_fault_configuration_data,
 ) -> PlatformBlockedFaultConfiguration:
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=20,
-        end_tick=200,
-        description="test PlatformBlockedFault",
-        affected_element_id=platform.identifier,
-        strategy="regular",
+        **platform_blocked_fault_configuration_data
     )
 
 
@@ -292,7 +299,7 @@ def track_speed_limit_fault_configuration(
         **track_speed_limit_fault_configuration_data
     )
 
-
+  
 @pytest.fixture
 def another_track_speed_limit_fault_configuration(
     track_speed_limit_fault_configuration_data: dict,
@@ -302,8 +309,7 @@ def another_track_speed_limit_fault_configuration(
     )
 
 
-# ------------- TrainPrioFault ----------------
-from traci import vehicle
+# ------------- TrainPrioFaultConfiguration ----------------
 
 
 @pytest.fixture
@@ -404,6 +410,42 @@ def another_train_speed_fault_configuration(
     train_speed_fault_configuration_data,
 ):
     return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
+
+ 
+# ------------- ScheduleBlockedFaultConfiguration ----------------
+
+
+@pytest.fixture
+def schedule():
+    schedule_configuration = ScheduleConfiguration(
+        schedule_type="TrainSchedule",
+        strategy_type="RegularScheduleStrategy",
+        train_schedule_train_type="cargo",
+        regular_strategy_start_tick=10,
+        regular_strategy_frequency=100,
+    )
+    schedule_configuration.save()
+    return schedule_configuration
+
+
+@pytest.fixture
+def schedule_blocked_fault_configuration_data(schedule) -> dict:
+    return {
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test ScheduleBlockedFault",
+        "affected_element_id": schedule.id,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def schedule_blocked_fault_configuration(
+    schedule_blocked_fault_configuration_data: dict,
+) -> ScheduleBlockedFaultConfiguration:
+    return ScheduleBlockedFaultConfiguration.create(
+        **schedule_blocked_fault_configuration_data
+    )
 
 
 # ------------- SimulationConfiguration ----------------
