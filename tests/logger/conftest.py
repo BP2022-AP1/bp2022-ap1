@@ -1,4 +1,5 @@
 import pytest
+
 from src.event_bus.event_bus import EventBus
 
 

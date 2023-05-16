@@ -184,7 +184,8 @@ class Logger(Component):
         TrainArrivalLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Train with ID {event.arguments['train_id']} arrived at station with ID {event.arguments['station_id']}",
+            message=f"Train with ID {event.arguments['train_id']} "
+            f"arrived at station with ID {event.arguments['station_id']}",
             run_id=self.run_id,
             train_id=event.arguments["train_id"],
             station_id=event.arguments["station_id"],
@@ -199,7 +200,8 @@ class Logger(Component):
         TrainDepartureLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Train with ID {event.arguments['train_id']} departed from station with ID {event.arguments['station_id']}",
+            message=f"Train with ID {event.arguments['train_id']} departed from "
+            f"station with ID {event.arguments['station_id']}",
             run_id=self.run_id,
             train_id=event.arguments["train_id"],
             station_id=event.arguments["station_id"],
@@ -242,7 +244,8 @@ class Logger(Component):
         SetSignalLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Signal with ID {event.arguments['signal_id']} changed from {event.arguments['state_before']} to {event.arguments['state_after']}",
+            message=f"Signal with ID {event.arguments['signal_id']} changed "
+            f"from {event.arguments['state_before']} to {event.arguments['state_after']}",
             run_id=self.run_id,
             signal_id=event.arguments["signal_id"],
             state_before=event.arguments["state_before"],
@@ -258,7 +261,8 @@ class Logger(Component):
         TrainEnterBlockSectionLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Train with ID {event.arguments['train_id']} entered block section with ID {event.arguments['block_section_id']} "
+            message=f"Train with ID {event.arguments['train_id']} entered block "
+            f"section with ID {event.arguments['block_section_id']} "
             f"with length {event.arguments['block_section_length']}",
             run_id=self.run_id,
             train_id=event.arguments["train_id"],
@@ -275,7 +279,8 @@ class Logger(Component):
         TrainLeaveBlockSectionLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Train with ID {event.arguments['train_id']} left block section with ID {event.arguments['block_section_id']} "
+            message=f"Train with ID {event.arguments['train_id']} left block "
+            f"section with ID {event.arguments['block_section_id']} "
             f"with length {event.arguments['block_section_length']}",
             run_id=self.run_id,
             train_id=event.arguments["train_id"],
@@ -294,7 +299,8 @@ class Logger(Component):
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
             message=f"Platform blocked fault with configuration "
-            f"{event.arguments['platform_blocked_fault_configuration']} on element {event.arguments['affected_element']}",
+            f"{event.arguments['platform_blocked_fault_configuration']} on "
+            f"element {event.arguments['affected_element']}",
             run_id=self.run_id,
             platform_blocked_fault_configuration=event.arguments[
                 "platform_blocked_fault_configuration"
@@ -312,7 +318,8 @@ class Logger(Component):
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Track blocked fault with configuration {event.arguments['track_blocked_fault_configuration']} "
+            message=f"Track blocked fault with configuration "
+            f"{event.arguments['track_blocked_fault_configuration']} "
             f"on element {event.arguments['affected_element']}",
             run_id=self.run_id,
             track_blocked_fault_configuration=event.arguments[
@@ -332,7 +339,8 @@ class Logger(Component):
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
             message=f"Track speed limit fault with configuration "
-            f"{event.arguments['track_speed_limit_fault_configuration']} on element {event.arguments['affected_element']} "
+            f"{event.arguments['track_speed_limit_fault_configuration']} "
+            f"on element {event.arguments['affected_element']} "
             f"changed from {event.arguments['value_before']} to {event.arguments['value_after']}",
             run_id=self.run_id,
             track_speed_limit_fault_configuration=event.arguments[
@@ -354,7 +362,8 @@ class Logger(Component):
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
             message=f"Schedule blocked fault with configuration "
-            f"{event.arguments['schedule_blocked_fault_configuration']} on element {event.arguments['affected_element']}",
+            f"{event.arguments['schedule_blocked_fault_configuration']} on "
+            f"element {event.arguments['affected_element']}",
             run_id=self.run_id,
             schedule_blocked_fault_configuration=event.arguments[
                 "schedule_blocked_fault_configuration"
@@ -372,8 +381,10 @@ class Logger(Component):
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Train prio fault with configuration {event.arguments['train_prio_fault_configuration']} "
-            f"on element {event.arguments['affected_element']} changed from {event.arguments['value_before']} to {event.arguments['value_after']}",
+            message=f"Train prio fault with configuration "
+            f"{event.arguments['train_prio_fault_configuration']} "
+            f"on element {event.arguments['affected_element']} changed from "
+            f"{event.arguments['value_before']} to {event.arguments['value_after']}",
             run_id=self.run_id,
             train_prio_fault_configuration=event.arguments[
                 "train_prio_fault_configuration"
@@ -393,8 +404,10 @@ class Logger(Component):
         InjectFaultLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
-            message=f"Train speed fault with configuration {event.arguments['train_speed_fault_configuration']} "
-            f"on element {event.arguments['affected_element']} changed from {event.arguments['value_before']} to {event.arguments['value_after']}",
+            message=f"Train speed fault with configuration "
+            f"{event.arguments['train_speed_fault_configuration']} "
+            f"on element {event.arguments['affected_element']} changed from "
+            f"{event.arguments['value_before']} to {event.arguments['value_after']}",
             run_id=self.run_id,
             train_speed_fault_configuration=event.arguments[
                 "train_speed_fault_configuration"
