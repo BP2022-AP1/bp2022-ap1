@@ -18,12 +18,13 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Signal, Train
+from src.event_bus.event_bus import EventBus
 
 
 @pytest.fixture
-def mock_logger() -> Logger:
-    class LoggerMock:
-        """This mocks the Logger and counts how often the logging methods are called."""
+def mock_event_bus() -> EventBus:
+    class EventBusMock:
+        """This mocks the EventBus and counts how often the logging methods are called."""
 
         create_fahrstrasse_count = 0
         remove_fahrstrasse_count = 0
@@ -68,7 +69,7 @@ def mock_logger() -> Logger:
 
         # pylint: enable=unused-argument
 
-    return LoggerMock()
+    return EventBusMock()
 
 
 @pytest.fixture
@@ -137,10 +138,10 @@ def traffic_update(monkeypatch):
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
+    configured_souc: SimulationObjectUpdatingComponent, event_bus: EventBus
 ) -> RouteController:
     return RouteController(
-        logger=mock_logger,
+        event_bus=event_bus,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),
@@ -150,10 +151,10 @@ def route_controller(
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
     route_controller: RouteController,
-    mock_logger: Logger,
+    mock_event_bus: EventBus
 ) -> SumoInfrastructureProvider:
     sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
-        route_controller, mock_logger
+        route_controller, mock_event_bus
     )
     return sumo_mock_infrastructure_provider
 
@@ -240,10 +241,10 @@ def mock_route_controller(
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
     mock_route_controller: RouteController,
-    mock_logger: Logger,
+    event_bus: EventBus
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
-        mock_route_controller, mock_logger
+        mock_route_controller, event_bus
     )
     mock_route_controller.interlocking.set_tds_count_in_callback(
         interlocking_mock_infrastructure_provider
