@@ -44,7 +44,7 @@ def run(simulation_configuration):
 
 @pytest.fixture
 def event_bus():
-    return EventBus()
+    return EventBus(run_id=42)
 
 
 @pytest.fixture

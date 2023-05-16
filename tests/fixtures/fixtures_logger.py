@@ -33,17 +33,17 @@ from tests.logger.test_log_collector import TestLogCollector
 
 @pytest.fixture
 def event_bus():
-    return EventBus()
+    return EventBus(run_id=42)
 
 
 @pytest.fixture
-def logger(run, event_bus):
-    return Logger(run_id=run.id, event_bus=event_bus)
+def logger(run):
+    return EventBus(run_id=run.id)
 
 
 @pytest.fixture
-def logger2(run2, event_bus):
-    return Logger(run_id=run2.id, event_bus=event_bus)
+def logger2(run2):
+    return EventBus(run_id=run2.id)
 
 
 @pytest.fixture

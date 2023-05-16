@@ -226,517 +226,107 @@ class TestLogCollector:
 
     @staticmethod
     def setup_departure_arrival_1(logger):
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_1", "station_id": "station_1", "tick": 10},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_1", "station_id": "station_1", "tick": 20},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_1", "station_id": "station_2", "tick": 30},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_1", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_1", "station_id": "station_3", "tick": 50},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_1", "station_id": "station_3", "tick": 60},
-            )
-        )
+        logger.arrival_train(10, "ice_1", "station_1")
+        logger.departure_train(20, "ice_1", "station_1")
+        logger.arrival_train(30, "ice_1", "station_2")
+        logger.departure_train(40, "ice_1", "station_2")
+        logger.arrival_train(50, "ice_1", "station_3")
+        logger.departure_train(60, "ice_1", "station_3")
 
     @staticmethod
     def setup_departure_arrival_2(logger):
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_2", "station_id": "station_1", "tick": 10},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_2", "station_id": "station_1", "tick": 20},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_2", "station_id": "station_2", "tick": 30},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_2", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_2", "station_id": "station_3", "tick": 50},
-            )
-        )
+        logger.arrival_train(10, "ice_2", "station_1")
+        logger.departure_train(20, "ice_2", "station_1")
+        logger.arrival_train(30, "ice_2", "station_2")
+        logger.departure_train(40, "ice_2", "station_2")
+        logger.arrival_train(50, "ice_2", "station_3")
 
     @staticmethod
     def setup_departure_arrival_3(logger):
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_3", "station_id": "station_1", "tick": 20},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_3", "station_id": "station_2", "tick": 30},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_3", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_3", "station_id": "station_3", "tick": 50},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_3", "station_id": "station_3", "tick": 60},
-            )
-        )
+        logger.departure_train(20, "ice_3", "station_1")
+        logger.arrival_train(30, "ice_3", "station_2")
+        logger.departure_train(40, "ice_3", "station_2")
+        logger.arrival_train(50, "ice_3", "station_3")
+        logger.departure_train(60, "ice_3", "station_3")
 
     @staticmethod
     def setup_departure_arrival_4(logger):
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_4", "station_id": "station_1", "tick": 20},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_4", "station_id": "station_2", "tick": 30},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_4", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_4", "station_id": "station_3", "tick": 50},
-            )
-        )
+        logger.departure_train(20, "ice_4", "station_1")
+        logger.arrival_train(30, "ice_4", "station_2")
+        logger.departure_train(40, "ice_4", "station_2")
+        logger.arrival_train(50, "ice_4", "station_3")
 
     @staticmethod
     def setup_departure_arrival_1_alt(logger):
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_1", "station_id": "station_1", "tick": 20},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_1", "station_id": "station_1", "tick": 30},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_1", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_1", "station_id": "station_2", "tick": 50},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_1", "station_id": "station_3", "tick": 60},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_1", "station_id": "station_3", "tick": 70},
-            )
-        )
+        logger.arrival_train(20, "ice_1", "station_1")
+        logger.departure_train(30, "ice_1", "station_1")
+        logger.arrival_train(40, "ice_1", "station_2")
+        logger.departure_train(50, "ice_1", "station_2")
+        logger.arrival_train(60, "ice_1", "station_3")
+        logger.departure_train(70, "ice_1", "station_3")
 
     @staticmethod
     def setup_departure_arrival_2_alt(logger):
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_2", "station_id": "station_1", "tick": 20},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_2", "station_id": "station_1", "tick": 30},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_2", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_2", "station_id": "station_2", "tick": 50},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_2", "station_id": "station_3", "tick": 60},
-            )
-        )
+        logger.arrival_train(20, "ice_2", "station_1")
+        logger.departure_train(30, "ice_2", "station_1")
+        logger.arrival_train(40, "ice_2", "station_2")
+        logger.departure_train(50, "ice_2", "station_2")
+        logger.arrival_train(60, "ice_2", "station_3")
 
     @staticmethod
     def setup_departure_arrival_3_alt(logger):
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_3", "station_id": "station_1", "tick": 30},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_3", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_3", "station_id": "station_2", "tick": 50},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_3", "station_id": "station_3", "tick": 60},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_3", "station_id": "station_3", "tick": 70},
-            )
-        )
+        logger.departure_train(30, "ice_3", "station_1")
+        logger.arrival_train(40, "ice_3", "station_2")
+        logger.departure_train(50, "ice_3", "station_2")
+        logger.arrival_train(60, "ice_3", "station_3")
+        logger.departure_train(70, "ice_3", "station_3")
 
     @staticmethod
     def setup_departure_arrival_4_alt(logger):
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_4", "station_id": "station_1", "tick": 30},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_4", "station_id": "station_2", "tick": 40},
-            )
-        )
-        logger.departure_train(
-            Event(
-                EventType.TRAIN_DEPARTURE,
-                {"train_id": "ice_4", "station_id": "station_2", "tick": 50},
-            )
-        )
-        logger.arrival_train(
-            Event(
-                EventType.TRAIN_ARRIVAL,
-                {"train_id": "ice_4", "station_id": "station_3", "tick": 60},
-            )
-        )
+        logger.departure_train(30, "ice_4", "station_1")
+        logger.arrival_train(40, "ice_4", "station_2")
+        logger.departure_train(50, "ice_4", "station_2")
+        logger.arrival_train(60, "ice_4", "station_3")
 
     @staticmethod
     def setup_enter_leave_block_section_1(logger):
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_1",
-                    "block_section_id": "section_1",
-                    "tick": 10,
-                    "block_section_length": 10.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_1",
-                    "block_section_id": "section_1",
-                    "tick": 20,
-                    "block_section_length": 10.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_1",
-                    "block_section_id": "section_2",
-                    "tick": 30,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_1",
-                    "block_section_id": "section_2",
-                    "tick": 40,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_1",
-                    "block_section_id": "section_3",
-                    "tick": 50,
-                    "block_section_length": 30.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_1",
-                    "block_section_id": "section_3",
-                    "tick": 60,
-                    "block_section_length": 30.5,
-                },
-            )
-        )
+        logger.train_enter_block_section(10, "ice_1", "section_1", 10.5)
+        logger.train_leave_block_section(20, "ice_1", "section_1", 10.5)
+        logger.train_enter_block_section(30, "ice_1", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_1", "section_2", 20.5)
+        logger.train_enter_block_section(50, "ice_1", "section_3", 30.5)
+        logger.train_leave_block_section(60, "ice_1", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_2(logger):
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_2",
-                    "block_section_id": "section_1",
-                    "tick": 10,
-                    "block_section_length": 10.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_2",
-                    "block_section_id": "section_1",
-                    "tick": 20,
-                    "block_section_length": 10.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_2",
-                    "block_section_id": "section_2",
-                    "tick": 30,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_2",
-                    "block_section_id": "section_2",
-                    "tick": 40,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_2",
-                    "block_section_id": "section_3",
-                    "tick": 50,
-                    "block_section_length": 30.5,
-                },
-            )
-        )
+        logger.train_enter_block_section(10, "ice_2", "section_1", 10.5)
+        logger.train_leave_block_section(20, "ice_2", "section_1", 10.5)
+        logger.train_enter_block_section(30, "ice_2", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_2", "section_2", 20.5)
+        logger.train_enter_block_section(50, "ice_2", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_3(logger):
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_3",
-                    "block_section_id": "section_1",
-                    "tick": 20,
-                    "block_section_length": 10.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_3",
-                    "block_section_id": "section_2",
-                    "tick": 30,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_3",
-                    "block_section_id": "section_2",
-                    "tick": 40,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_3",
-                    "block_section_id": "section_3",
-                    "tick": 50,
-                    "block_section_length": 30.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_3",
-                    "block_section_id": "section_3",
-                    "tick": 60,
-                    "block_section_length": 30.5,
-                },
-            )
-        )
+        logger.train_leave_block_section(20, "ice_3", "section_1", 10.5)
+        logger.train_enter_block_section(30, "ice_3", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_3", "section_2", 20.5)
+        logger.train_enter_block_section(50, "ice_3", "section_3", 30.5)
+        logger.train_leave_block_section(60, "ice_3", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_4(logger):
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_4",
-                    "block_section_id": "section_1",
-                    "tick": 20,
-                    "block_section_length": 10.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_4",
-                    "block_section_id": "section_2",
-                    "tick": 30,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_leave_block_section(
-            Event(
-                EventType.TRAIN_LEAVE_BLOCK_SECTION,
-                {
-                    "train_id": "ice_4",
-                    "block_section_id": "section_2",
-                    "tick": 40,
-                    "block_section_length": 20.5,
-                },
-            )
-        )
-        logger.train_enter_block_section(
-            Event(
-                EventType.TRAIN_ENTER_BLOCK_SECTION,
-                {
-                    "train_id": "ice_4",
-                    "block_section_id": "section_3",
-                    "tick": 50,
-                    "block_section_length": 30.5,
-                },
-            )
-        )
+        logger.train_leave_block_section(20, "ice_4", "section_1", 10.5)
+        logger.train_enter_block_section(30, "ice_4", "section_2", 20.5)
+        logger.train_leave_block_section(40, "ice_4", "section_2", 20.5)
+        logger.train_enter_block_section(50, "ice_4", "section_3", 30.5)
 
     @staticmethod
     def setup_logs_spawn_trains(logger):
-        logger.spawn_train(
-            Event(EventType.TRAIN_SPAWN, {"tick": 4600, "train_id": "Kohlezug 1"})
-        )
-        logger.spawn_train(
-            Event(EventType.TRAIN_SPAWN, {"tick": 7300, "train_id": "Kohlezug 2"})
-        )
-        logger.spawn_train(
-            Event(EventType.TRAIN_SPAWN, {"tick": 10900, "train_id": "Kohlezug 3"})
-        )
-        logger.spawn_train(
-            Event(EventType.TRAIN_SPAWN, {"tick": 13600, "train_id": "Kohlezug 4"})
-        )
-        logger.spawn_train(
-            Event(EventType.TRAIN_SPAWN, {"tick": 17200, "train_id": "Kohlezug 5"})
-        )
+        logger.spawn_train(4600, "Kohlezug 1")
+        logger.spawn_train(7300, "Kohlezug 2")
+        logger.spawn_train(10900, "Kohlezug 3")
+        logger.spawn_train(13600, "Kohlezug 4")
+        logger.spawn_train(17200, "Kohlezug 5")
 
     @staticmethod
     def setup_faults(
@@ -749,125 +339,36 @@ class TestLogCollector:
         train_speed_fault_configuration,
     ):
         logger.inject_platform_blocked_fault(
-            Event(
-                EventType.INJECT_FAULT,
-                {
-                    "tick": 10,
-                    "platform_blocked_fault_configuration": platform_blocked_fault_configuration,
-                    "affected_element": "station_1",
-                },
-            )
+            10, platform_blocked_fault_configuration, "station_1"
         )
-        logger.resolve_platform_blocked_fault(
-            Event(
-                EventType.RESOLVE_FAULT,
-                {
-                    "tick": 20,
-                    "platform_blocked_fault_configuration": platform_blocked_fault_configuration,
-                },
-            )
+        logger.resolve_platform_blocked_fault(20, platform_blocked_fault_configuration)
+
+        logger.inject_track_blocked_fault(
+            10, track_blocked_fault_configuration, "section_1"
         )
-        logger.inject_inject_track_blocked_faultplatform_blocked_fault(
-            Event(
-                EventType.INJECT_FAULT,
-                {
-                    "tick": 10,
-                    "track_blocked_fault_configuration": track_blocked_fault_configuration,
-                    "affected_element": "section_1",
-                },
-            )
-        )
-        logger.resolve_presolve_track_blocked_faultlatform_blocked_fault(
-            Event(
-                EventType.RESOLVE_FAULT,
-                {
-                    "tick": 20,
-                    "track_blocked_fault_configuration": track_blocked_fault_configuration,
-                },
-            )
-        )
+        logger.resolve_track_blocked_fault(20, track_blocked_fault_configuration)
+
         logger.inject_track_speed_limit_fault(
-            Event(
-                EventType.INJECT_FAULT,
-                {
-                    "tick": 10,
-                    "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration,
-                    "affected_element": "section_1",
-                    "value_before": "100",
-                    "value_after": "10",
-                },
-            )
+            10, track_speed_limit_fault_configuration, "section_1", "100", "10"
         )
         logger.resolve_track_speed_limit_fault(
-            Event(
-                EventType.RESOLVE_FAULT,
-                {
-                    "tick": 20,
-                    "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration,
-                },
-            )
+            20, track_speed_limit_fault_configuration
         )
+
         logger.inject_schedule_blocked_fault(
-            Event(
-                EventType.INJECT_FAULT,
-                {
-                    "tick": 10,
-                    "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration,
-                    "affected_element": "ice_1",
-                },
-            )
+            10, schedule_blocked_fault_configuration, "ice_1"
         )
-        logger.resolve_schedule_blocked_fault(
-            Event(
-                EventType.RESOLVE_FAULT,
-                {
-                    "tick": 20,
-                    "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration,
-                },
-            )
-        )
+        logger.resolve_schedule_blocked_fault(20, schedule_blocked_fault_configuration)
+
         logger.inject_train_prio_fault(
-            Event(
-                EventType.INJECT_FAULT,
-                {
-                    "tick": 10,
-                    "train_prio_fault_configuration": train_prio_fault_configuration,
-                    "affected_element": "ice_1",
-                    "value_before": "2",
-                    "value_after": "1",
-                },
-            )
+            10, train_prio_fault_configuration, "ice_1", "2", "1"
         )
-        logger.resolve_train_prio_fault(
-            Event(
-                EventType.RESOLVE_FAULT,
-                {
-                    "tick": 20,
-                    "train_prio_fault_configuration": train_prio_fault_configuration,
-                },
-            )
-        )
+        logger.resolve_train_prio_fault(20, train_prio_fault_configuration)
+
         logger.inject_train_speed_fault(
-            Event(
-                EventType.INJECT_FAULT,
-                {
-                    "tick": 10,
-                    "train_speed_fault_configuration": train_speed_fault_configuration,
-                    "affected_element": "ice_1",
-                    "value_before": "100",
-                    "value_after": "10",
-                },
-            )
+            10, train_speed_fault_configuration, "ice_1", "100", "10"
         )
-        logger.resolve_train_speed_fault(
-            Event(
-                EventType.RESOLVE_FAULT,
-                {
-                    "tick": 20,
-                    "train_speed_fault_configuration": train_speed_fault_configuration,
-                },
-            )
-        )
+        logger.resolve_train_speed_fault(20, train_speed_fault_configuration)
 
     def test_get_trains(self, _trains, logger, log_collector: LogCollector):
         self.setup_departure_arrival_1(logger)

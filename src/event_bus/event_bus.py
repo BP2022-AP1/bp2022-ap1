@@ -103,9 +103,11 @@ class EventBus:
     }
 
     callbacks: dict[UUID, tuple[Callable[[Event], None], EventType]]
+    run_id: int
 
-    def __init__(self):
+    def __init__(self, run_id: int):
         self.callbacks = {}
+        self.run_id = run_id
 
     def register_callback(
         self, callback: Callable[[Event], None], event_type: EventType

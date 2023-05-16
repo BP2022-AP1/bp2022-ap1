@@ -11,7 +11,7 @@ class TestEventBus:
 
     @pytest.fixture
     def event_bus(self) -> EventBus:
-        return EventBus()
+        return EventBus(run_id=42)
 
     @pytest.fixture
     def event_type(self) -> EventType:
