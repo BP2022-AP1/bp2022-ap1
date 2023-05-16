@@ -26,6 +26,36 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
 from src.implementor.models import SimulationConfiguration
 from src.spawner.spawner import SpawnerConfigurationXSimulationConfiguration
 
+platform_blocked_fault = {
+    "key": "platform_blocked_fault",
+    "column": "platform_blocked_fault_configuration",
+}
+
+schedule_blocked_fault = {
+    "key": "schedule_blocked_fault",
+    "column": "schedule_blocked_fault_configuration",
+}
+
+track_blocked_fault = {
+    "key": "track_blocked_fault",
+    "column": "track_blocked_fault_configuration",
+}
+
+track_speed_limit_fault = {
+    "key": "track_speed_limit_fault",
+    "column": "track_speed_limit_fault_configuration",
+}
+
+train_speed_fault = {
+    "key": "train_speed_fault",
+    "column": "train_speed_fault_configuration",
+}
+
+train_prio_fault = {
+    "key": "train_prio_fault",
+    "column": "train_prio_fault_configuration",
+}
+
 
 def get_all_simulation_ids(token):
     """
@@ -45,26 +75,6 @@ def create_simulation_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    def check_and_create_configuration_references(
-        simulation: SimulationConfiguration,
-        key: str,
-        table: BaseModel,
-        column: str,
-    ):
-        """
-        Create the references between the simulation configuration
-        and the component configuration given the list of configuration ids.
-        """
-        if key in body:
-            configuration_ids = body[key]
-            for configuration_id in configuration_ids:
-                table.create(
-                    **{
-                        "simulation_configuration": simulation,
-                        column: configuration_id,
-                    }
-                )
-
     try:
         with db.atomic():
             simulation = SimulationConfiguration()
@@ -78,75 +88,58 @@ def create_simulation_configuration(body, token):
             )
 
             # Add references between simulation configuration and platform blocked fault
-            platform_blocked_fault = {
-                "key": "platform_blocked_fault",
-                "column": "platform_blocked_fault_configuration",
-            }
             check_and_create_configuration_references(
                 simulation,
                 platform_blocked_fault["key"],
                 PlatformBlockedFaultConfigurationXSimulationConfiguration,
                 platform_blocked_fault["column"],
+                body,
             )
 
             # Add references between simulation configuration and schedule blocked fault
-            schedule_blocked_fault = {
-                "key": "schedule_blocked_fault",
-                "column": "schedule_blocked_fault_configuration",
-            }
+
             check_and_create_configuration_references(
                 simulation,
                 schedule_blocked_fault["key"],
                 ScheduleBlockedFaultConfigurationXSimulationConfiguration,
                 schedule_blocked_fault["column"],
+                body,
             )
 
             # Add references between simulation configuration and track blocked fault
-            track_blocked_fault = {
-                "key": "track_blocked_fault",
-                "column": "track_blocked_fault_configuration",
-            }
             check_and_create_configuration_references(
                 simulation,
                 track_blocked_fault["key"],
                 TrackBlockedFaultConfigurationXSimulationConfiguration,
                 track_blocked_fault["column"],
+                body,
             )
 
             # Add references between simulation configuration and track speed limit fault
-            track_speed_limit_fault = {
-                "key": "track_speed_limit_fault",
-                "column": "track_speed_limit_fault_configuration",
-            }
             check_and_create_configuration_references(
                 simulation,
                 track_speed_limit_fault["key"],
                 TrackSpeedLimitFaultConfigurationXSimulationConfiguration,
                 track_speed_limit_fault["column"],
+                body,
             )
 
             # Add references between simulation configuration and train prio fault
-            train_prio_fault = {
-                "key": "train_prio_fault",
-                "column": "train_prio_fault_configuration",
-            }
             check_and_create_configuration_references(
                 simulation,
                 train_prio_fault["key"],
                 TrainPrioFaultConfigurationXSimulationConfiguration,
                 train_prio_fault["column"],
+                body,
             )
 
             # Add references between simulation configuration and train speed fault
-            train_speed_fault = {
-                "key": "train_speed_fault",
-                "column": "train_speed_fault_configuration",
-            }
             check_and_create_configuration_references(
                 simulation,
                 train_speed_fault["key"],
                 TrainSpeedFaultConfigurationXSimulationConfiguration,
                 train_speed_fault["column"],
+                body,
             )
 
             return {"id": str(simulation.id)}, 201
@@ -194,7 +187,50 @@ def delete_simulation_configuration(options, token):
 
     """
 
+def check_and_create_configuration_references(
+    simulation: SimulationConfiguration,
+    key: str,
+    table: BaseModel,
+    column: str,
+    body: any,
+):
+    """
+    Create the references between the simulation configuration
+    and the component configuration given the list of configuration ids.
+
+    :param simulation: The simulation configuration
+    :param key: The key of the list of configuration ids in the body
+    :param table: The table to create the references in
+    :param column: The column to create the references in
+    :param body: The body of the request
+    """
+    if key in body:
+        configuration_ids = body[key]
+        create_configuration_references(simulation, table, configuration_ids, column)
+
+
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+
+def create_configuration_references(
+    simulation: SimulationConfiguration,
+    table: BaseModel,
+    configuration_ids: list[str],
+    column: str,
+):
+    """
+    Create the references between the simulation configuration.
+
+    :param simulation: The simulation configuration
+    :param table: The table to create the references in
+    :param configuration_ids: The list of configuration ids
+    :param column: The column to create the references in
+    """
+    for configuration_id in configuration_ids:
+        table.create(
+            **{
+                "simulation_configuration": simulation,
+                column: configuration_id,
+            }
+        )
