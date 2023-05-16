@@ -22,9 +22,9 @@ from src.event_bus.event_bus import EventBus
 
 
 @pytest.fixture
-def mock_logger() -> Logger:
-    class LoggerMock:
-        """This mocks the Logger and counts how often the logging methods are called."""
+def mock_event_bus() -> EventBus:
+    class EventBusMock:
+        """This mocks the EventBus and counts how often the logging methods are called."""
 
         create_fahrstrasse_count = 0
         remove_fahrstrasse_count = 0
@@ -69,7 +69,7 @@ def mock_logger() -> Logger:
 
         # pylint: enable=unused-argument
 
-    return LoggerMock()
+    return EventBusMock()
 
 
 @pytest.fixture
@@ -137,11 +137,6 @@ def traffic_update(monkeypatch):
 
 
 @pytest.fixture
-def event_bus() -> EventBus:
-    return EventBus()
-
-
-@pytest.fixture
 def route_controller(
     configured_souc: SimulationObjectUpdatingComponent, event_bus: EventBus
 ) -> RouteController:
@@ -156,10 +151,10 @@ def route_controller(
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
     route_controller: RouteController,
-    event_bus: EventBus
+    mock_event_bus: EventBus
 ) -> SumoInfrastructureProvider:
     sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
-        route_controller, event_bus
+        route_controller, mock_event_bus
     )
     return sumo_mock_infrastructure_provider
 
