@@ -368,8 +368,9 @@ class DataScience:
         self, departures_arrivals_df: pd.DataFrame, tick: int, threshold=0.9
     ) -> Series:
         """Returns the arrival and departure window sizes by a given tick and config id
-        :param config_id: config id
+        :param departures_arrivals_df: dataframe containing departure and arrival times
         :param tick: current tick
+        :param threshold: threshold used to compute departure and arrival time windows
         :return: dataframe of window size"""
 
         out_df = departures_arrivals_df[
