@@ -128,7 +128,7 @@ class RouteController(Component):
                     signal = potentical_signal
 
             edges_into_signal = [edge for edge in signal.edges if edge.to_node == signal]
-            edges_numbers = [item.identifier.split("-")[1] for item in edges_into_signal]
+            edges_numbers = [edge.identifier.split("-")[1] for edge in edges_into_signal]
 
             if yaramo_signal.direction == SignalDirection.IN:
                 if(edges_numbers[0]<edges_numbers[1]):
