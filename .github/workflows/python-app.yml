@@ -64,13 +64,13 @@ jobs:
       with:
         push: false
         load: true
-      set: |
-        grafana-test.cache-from=type=gha
-        grafana-test.cache-to=type=gha
-        celery-worker.cache-from=type=gha
-        celery-worker.cache-to=type=gha
-        postgresql-test.cache-from=type=gha
-        postgresql-test.cache-to=type=gha
+        set: |
+          grafana-test.cache-from=type=gha
+          grafana-test.cache-to=type=gha
+          celery-worker.cache-from=type=gha
+          celery-worker.cache-to=type=gha
+          postgresql-test.cache-from=type=gha
+          postgresql-test.cache-to=type=gha
     - name: Initialize test deps via compose
       run: docker compose up -d grafana-test celery-worker postgresql-test
     - name: Install poetry
