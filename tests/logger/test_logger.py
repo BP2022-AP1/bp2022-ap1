@@ -256,7 +256,8 @@ class TestLogger:
         assert log_entry.tick == tick
         assert (
             log_entry.message
-            == f"Train with ID {train_id} left block section with ID {block_section_id}"
+            == f"Train with ID {train_id} left block section with ID {block_section_id} with "
+            f"length {block_section_length}"
         )
         assert log_entry.run_id.id == run.id
         assert log_entry.train_id == train_id
