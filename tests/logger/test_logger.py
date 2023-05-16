@@ -17,6 +17,7 @@ from src.logger.log_entry import (
 )
 from src.logger.logger import Logger
 from tests.decorators import recreate_db_setup
+from src.event_bus.event import Event, EventType
 
 
 # pylint: disable=too-many-public-methods
@@ -29,8 +30,9 @@ class TestLogger:
 
     @freeze_time()
     def test_spawn_train(self, run, tick, train_id, event_bus):
+        event = Event(EventType.TRAIN_SPAWN, {"tick": tick, "train_id": train_id})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.spawn_train(tick=tick, train_id=train_id)
+        logger.spawn_train(event)
         log_entry = (
             TrainSpawnLogEntry.select()
             .where(TrainSpawnLogEntry.train_id == train_id)
@@ -44,8 +46,9 @@ class TestLogger:
 
     @freeze_time()
     def test_remove_train(self, run, tick, train_id, event_bus):
+        event = Event(EventType.TRAIN_REMOVE, {"tick": tick, "train_id": train_id})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.remove_train(tick=tick, train_id=train_id)
+        logger.remove_train(event)
         log_entry = (
             TrainRemoveLogEntry.select()
             .where(TrainRemoveLogEntry.train_id == train_id)
@@ -59,8 +62,9 @@ class TestLogger:
 
     @freeze_time()
     def test_arrival_train(self, run, tick, train_id, station_id, event_bus):
+        event = Event(EventType.TRAIN_ARRIVAL, {"tick": tick, "train_id": train_id, "station_id": station_id})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.arrival_train(tick=tick, train_id=train_id, station_id=station_id)
+        logger.arrival_train(event)
         log_entry = (
             TrainArrivalLogEntry.select()
             .where(
@@ -82,8 +86,9 @@ class TestLogger:
 
     @freeze_time()
     def test_departure_train(self, run, tick, train_id, station_id, event_bus):
+        event = Event(EventType.TRAIN_DEPARTURE, {"tick": tick, "train_id": train_id, "station_id": station_id})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.departure_train(tick=tick, train_id=train_id, station_id=station_id)
+        logger.departure_train(event)
         log_entry = (
             TrainDepartureLogEntry.select()
             .where(
@@ -105,8 +110,9 @@ class TestLogger:
 
     @freeze_time()
     def test_create_fahrstrasse(self, run, tick, fahrstrasse, event_bus):
+        event = Event(EventType.CREATE_FAHRSTRASSE, {"tick": tick, "fahrstrasse": fahrstrasse})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.create_fahrstrasse(tick=tick, fahrstrasse=fahrstrasse)
+        logger.create_fahrstrasse(event)
         log_entry = (
             CreateFahrstrasseLogEntry.select()
             .where(
@@ -123,8 +129,9 @@ class TestLogger:
 
     @freeze_time()
     def test_remove_fahrstrasse(self, run, tick, fahrstrasse, event_bus):
+        event = Event(EventType.REMOVE_FAHRSTRASSE, {"tick": tick, "fahrstrasse": fahrstrasse})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.remove_fahrstrasse(tick=tick, fahrstrasse=fahrstrasse)
+        logger.remove_fahrstrasse(event)
         log_entry = (
             RemoveFahrstrasseLogEntry.select()
             .where(
@@ -141,13 +148,9 @@ class TestLogger:
 
     @freeze_time()
     def test_set_signal(self, run, tick, signal_id, state_before, state_after, event_bus):
+        event = Event(EventType.SET_SIGNAL, {"tick": tick, "signal_id": signal_id, "state_before": state_before, "state_after": state_after})
         logger = Logger(run_id=run.id, event_bus=event_bus)
-        logger.set_signal(
-            tick=tick,
-            signal_id=signal_id,
-            state_before=state_before,
-            state_after=state_after,
-        )
+        logger.set_signal(event)
         log_entry = (
             SetSignalLogEntry.select()
             .where(
@@ -173,12 +176,10 @@ class TestLogger:
     def test_train_enter_block_section(
         self, run, tick, train_id, block_section_id, block_section_length, event_bus
     ):
+        event = Event(EventType.TRAIN_ENTER_BLOCK_SECTION, {"tick": tick, "train_id": train_id, "block_section_id": block_section_id, "block_section_length": block_section_length})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.train_enter_block_section(
-            tick=tick,
-            train_id=train_id,
-            block_section_id=block_section_id,
-            block_section_length=block_section_length,
+            event
         )
         log_entry = (
             TrainEnterBlockSectionLogEntry.select()
@@ -205,12 +206,10 @@ class TestLogger:
     def test_train_leave_block_section(
         self, run, tick, train_id, block_section_id, block_section_length, event_bus
     ):
+        event = Event(EventType.TRAIN_LEAVE_BLOCK_SECTION, {"tick": tick, "train_id": train_id, "block_section_id": block_section_id, "block_section_length": block_section_length})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.train_leave_block_section(
-            tick=tick,
-            train_id=train_id,
-            block_section_id=block_section_id,
-            block_section_length=block_section_length,
+            event
         )
         log_entry = (
             TrainLeaveBlockSectionLogEntry.select()
@@ -241,11 +240,10 @@ class TestLogger:
         platform_blocked_fault_configuration,
         affected_element, event_bus
     ):
+        event = Event(EventType.INJECT_FAULT, {"tick": tick, "platform_blocked_fault_configuration": platform_blocked_fault_configuration, "affected_element": affected_element})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.inject_platform_blocked_fault(
-            tick=tick,
-            platform_blocked_fault_configuration=platform_blocked_fault_configuration,
-            affected_element=affected_element,
+            event
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -287,11 +285,10 @@ class TestLogger:
         track_blocked_fault_configuration,
         affected_element, event_bus
     ):
+        event = Event(EventType.INJECT_FAULT, {"tick": tick, "track_blocked_fault_configuration": track_blocked_fault_configuration, "affected_element": affected_element})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.inject_track_blocked_fault(
-            tick=tick,
-            track_blocked_fault_configuration=track_blocked_fault_configuration,
-            affected_element=affected_element,
+            event
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -335,13 +332,10 @@ class TestLogger:
         value_before,
         value_after, event_bus
     ):
+        event = Event(EventType.INJECT_FAULT, {"tick": tick, "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration, "affected_element": affected_element, "value_before": value_before, "value_after": value_after})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.inject_track_speed_limit_fault(
-            tick=tick,
-            track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
-            affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
+            event
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -387,11 +381,10 @@ class TestLogger:
         schedule_blocked_fault_configuration,
         affected_element, event_bus
     ):
+        event = Event(EventType.INJECT_FAULT, {"tick": tick, "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration, "affected_element": affected_element})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.inject_schedule_blocked_fault(
-            tick=tick,
-            schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
-            affected_element=affected_element,
+            event
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -435,13 +428,10 @@ class TestLogger:
         value_before,
         value_after, event_bus
     ):
+        event = Event(EventType.INJECT_FAULT, {"tick": tick, "train_prio_fault_configuration": train_prio_fault_configuration, "affected_element": affected_element, "value_before": value_before, "value_after": value_after})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.inject_train_prio_fault(
-            tick=tick,
-            train_prio_fault_configuration=train_prio_fault_configuration,
-            affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
+            event
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -488,13 +478,10 @@ class TestLogger:
         value_before,
         value_after, event_bus
     ):
+        event = Event(EventType.INJECT_FAULT, {"tick": tick, "train_speed_fault_configuration": train_speed_fault_configuration, "affected_element": affected_element, "value_before": value_before, "value_after": value_after})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.inject_train_speed_fault(
-            tick=tick,
-            train_speed_fault_configuration=train_speed_fault_configuration,
-            affected_element=affected_element,
-            value_before=value_before,
-            value_after=value_after,
+            event
         )
         log_entry = (
             InjectFaultLogEntry.select()
@@ -538,10 +525,10 @@ class TestLogger:
         tick,
         platform_blocked_fault_configuration, event_bus
     ):
+        event = Event(EventType.RESOLVE_FAULT, {"tick": tick, "platform_blocked_fault_configuration": platform_blocked_fault_configuration})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.resolve_platform_blocked_fault(
-            tick=tick,
-            platform_blocked_fault_configuration=platform_blocked_fault_configuration,
+            event
         )
         log_entry = (
             ResolveFaultLogEntry.select()
@@ -580,10 +567,10 @@ class TestLogger:
         tick,
         track_blocked_fault_configuration, event_bus
     ):
+        event = Event(EventType.RESOLVE_FAULT, {"tick": tick, "track_blocked_fault_configuration": track_blocked_fault_configuration})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.resolve_track_blocked_fault(
-            tick=tick,
-            track_blocked_fault_configuration=track_blocked_fault_configuration,
+            event
         )
         log_entry = (
             ResolveFaultLogEntry.select()
@@ -622,10 +609,10 @@ class TestLogger:
         tick,
         track_speed_limit_fault_configuration, event_bus
     ):
+        event = Event(EventType.RESOLVE_FAULT, {"tick": tick, "track_speed_limit_fault_configuration": track_speed_limit_fault_configuration})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.resolve_track_speed_limit_fault(
-            tick=tick,
-            track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
+            event
         )
         log_entry = (
             ResolveFaultLogEntry.select()
@@ -663,10 +650,10 @@ class TestLogger:
         tick,
         schedule_blocked_fault_configuration, event_bus
     ):
+        event = Event(EventType.RESOLVE_FAULT, {"tick": tick, "schedule_blocked_fault_configuration": schedule_blocked_fault_configuration})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.resolve_schedule_blocked_fault(
-            tick=tick,
-            schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
+            event
         )
         log_entry = (
             ResolveFaultLogEntry.select()
@@ -705,10 +692,10 @@ class TestLogger:
         tick,
         train_prio_fault_configuration, event_bus
     ):
+        event = Event(EventType.RESOLVE_FAULT, {"tick": tick, "train_prio_fault_configuration": train_prio_fault_configuration})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.resolve_train_prio_fault(
-            tick=tick,
-            train_prio_fault_configuration=train_prio_fault_configuration,
+            event
         )
         log_entry = (
             ResolveFaultLogEntry.select()
@@ -746,10 +733,10 @@ class TestLogger:
         tick,
         train_speed_fault_configuration, event_bus
     ):
+        event = Event(EventType.RESOLVE_FAULT, {"tick": tick, "train_speed_fault_configuration": train_speed_fault_configuration})
         logger = Logger(run_id=run.id, event_bus=event_bus)
         logger.resolve_train_speed_fault(
-            tick=tick,
-            train_speed_fault_configuration=train_speed_fault_configuration,
+            event
         )
         log_entry = (
             ResolveFaultLogEntry.select()
