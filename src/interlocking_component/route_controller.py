@@ -177,7 +177,7 @@ class RouteController(Component):
         :type edge: Edge
         """
         route = self._get_interlocking_route_for_edge(edge)
-        if route is None or route.get_last_segment_of_route != edge.identifier:
+        if route is None or route.get_last_segment_of_route() != edge.identifier:
             return
 
         self.set_fahrstrasse(train, edge)
