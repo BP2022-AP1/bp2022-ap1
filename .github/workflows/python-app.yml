@@ -66,6 +66,8 @@ jobs:
       with:
         push: false
         load: true
+        files: |
+          docker-compose.yaml
         targets: |
           grafana-test
           celery-worker
