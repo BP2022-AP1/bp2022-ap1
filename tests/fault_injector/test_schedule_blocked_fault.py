@@ -15,6 +15,7 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from tests.decorators import recreate_db_setup
+from src.event_bus.event_bus import EventBus
 
 
 class TestScheduleBlockedFault:
@@ -27,9 +28,9 @@ class TestScheduleBlockedFault:
     def setup_method(self):
         pass
 
-    @pytest.fixture
-    def logger(self, run):
-        return Logger(run.id)
+    #@pytest.fixture
+    #def logger(self, run, event_bus):
+    #    return Logger(run.id, event_bus)
 
     @pytest.fixture
     def schedule_blocked_fault_configuration(self, schedule):
@@ -47,14 +48,14 @@ class TestScheduleBlockedFault:
     def schedule_blocked_fault(
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
             configuration=schedule_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             spawner=spawner,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,

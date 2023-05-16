@@ -9,11 +9,11 @@ from src.fault_injector.fault_strategies import (
     RegularFaultStrategy,
 )
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Track, Train
+from src.event_bus.event_bus import EventBus
 
 
 class Fault(ABC):
@@ -21,7 +21,7 @@ class Fault(ABC):
 
     injected: bool = False
     configuration: FaultConfiguration
-    logger: Logger
+    event_bus: EventBus
     simulation_object_updater: SimulationObjectUpdatingComponent
     interlocking: IInterlockingDisruptor
     strategy: FaultStrategy
@@ -34,13 +34,13 @@ class Fault(ABC):
     def __init__(
         self,
         configuration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         self.configuration = configuration
         self.strategy = self.create_strategy_from_configuration(configuration)
-        self.logger = logger
+        self.event_bus = event_bus
         self.simulation_object_updater = simulation_object_updater
         self.interlocking = interlocking
 

@@ -154,9 +154,9 @@ class MockTrainSpawner:
 
 
 @pytest.fixture
-def spawner(spawner_configuration, logger):
+def spawner(spawner_configuration, event_bus):
     spawner = Spawner(
-        logger=logger,
+        event_bus=event_bus,
         configuration=spawner_configuration,
         train_spawner=MockTrainSpawner(),
     )

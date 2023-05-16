@@ -11,6 +11,7 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Platform
 from tests.decorators import recreate_db_setup
+from src.event_bus.event_bus import EventBus
 
 
 class TestPlatformBlockedFault:
@@ -40,13 +41,13 @@ class TestPlatformBlockedFault:
     def platform_blocked_fault(
         self,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return PlatformBlockedFault(
             configuration=platform_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
