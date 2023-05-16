@@ -453,21 +453,27 @@ def create_platform_blocked_fault_configuration(body, token):
 def get_platform_blocked_fault_configuration(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
 
     # Implement your business logic here
     # All the parameters are present in the options argument
-
-    return json.dumps("<map>"), 501  # 200
+    identifier = options["identifier"]
+    configs = PlatformBlockedFaultConfiguration.select().where(
+        PlatformBlockedFaultConfiguration.id == identifier
+    )
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+    return config.to_dict(), 200
 
 
 def delete_platform_blocked_fault_configuration(options, token):
     """
     :param options: A dictionary containing all the paramters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
@@ -475,7 +481,22 @@ def delete_platform_blocked_fault_configuration(options, token):
     # Implement your business logic here
     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+    identifier = options["identifier"]
+    configs = PlatformBlockedFaultConfiguration.select().where(
+        PlatformBlockedFaultConfiguration.id == identifier
+    )
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+
+    if config.simulation_configuration_references.exists():
+        return (
+            "Platform blocked fault configuration is referenced by a simulation configuration",
+            400,
+        )
+
+    config.delete_instance()
+    return "Deleted platform-blocked-fault configuration", 204
 
 
 def get_all_interlocking_configuration_ids(options, token):
