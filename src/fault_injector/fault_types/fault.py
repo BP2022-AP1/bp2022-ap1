@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
@@ -13,7 +14,6 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Track, Train
-from src.event_bus.event_bus import EventBus
 
 
 class Fault(ABC):

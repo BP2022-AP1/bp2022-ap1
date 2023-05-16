@@ -4,8 +4,8 @@ import marshmallow as marsh
 import peewee
 import pytest
 
-from src.event_bus.event_bus import EventBus
 from src.base_model import BaseModel
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )

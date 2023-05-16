@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import SimulationConfiguration, Token
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
@@ -19,7 +20,6 @@ from src.spawner.spawner import (
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
 )
-from src.event_bus.event_bus import EventBus
 
 
 @pytest.fixture

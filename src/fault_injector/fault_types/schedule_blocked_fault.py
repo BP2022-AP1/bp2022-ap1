@@ -1,3 +1,4 @@
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
     ScheduleBlockedFaultConfiguration,
 )
@@ -8,7 +9,6 @@ from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.event_bus.event_bus import EventBus
 
 
 class ScheduleBlockedFault(Fault):
@@ -25,7 +25,9 @@ class ScheduleBlockedFault(Fault):
         interlocking: IInterlockingDisruptor,
         spawner: Spawner,
     ):
-        super().__init__(configuration, event_bus, simulation_object_updater, interlocking)
+        super().__init__(
+            configuration, event_bus, simulation_object_updater, interlocking
+        )
         self.spawner = spawner
 
     def inject_fault(self, tick: int):

@@ -1,5 +1,6 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
     ScheduleBlockedFaultConfiguration,
 )
@@ -15,7 +16,6 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from tests.decorators import recreate_db_setup
-from src.event_bus.event_bus import EventBus
 
 
 class TestScheduleBlockedFault:
@@ -28,8 +28,8 @@ class TestScheduleBlockedFault:
     def setup_method(self):
         pass
 
-    #@pytest.fixture
-    #def logger(self, run, event_bus):
+    # @pytest.fixture
+    # def logger(self, run, event_bus):
     #    return Logger(run.id, event_bus)
 
     @pytest.fixture

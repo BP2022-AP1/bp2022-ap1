@@ -5,6 +5,7 @@ import pytest
 from interlocking.interlockinginterface import Interlocking
 from traci import trafficlight, vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
@@ -18,7 +19,6 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Signal, Train
-from src.event_bus.event_bus import EventBus
 
 
 @pytest.fixture
@@ -150,8 +150,7 @@ def route_controller(
 
 @pytest.fixture
 def sumo_mock_infrastructure_provider(
-    route_controller: RouteController,
-    mock_event_bus: EventBus
+    route_controller: RouteController, mock_event_bus: EventBus
 ) -> SumoInfrastructureProvider:
     sumo_mock_infrastructure_provider = SumoInfrastructureProvider(
         route_controller, mock_event_bus
@@ -240,8 +239,7 @@ def mock_route_controller(
 
 @pytest.fixture
 def interlocking_mock_infrastructure_provider(
-    mock_route_controller: RouteController,
-    event_bus: EventBus
+    mock_route_controller: RouteController, event_bus: EventBus
 ) -> SumoInfrastructureProvider:
     interlocking_mock_infrastructure_provider = SumoInfrastructureProvider(
         mock_route_controller, event_bus

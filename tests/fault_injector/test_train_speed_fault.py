@@ -1,6 +1,7 @@
 import pytest
 from traci import vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
@@ -11,7 +12,6 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Train
 from tests.decorators import recreate_db_setup
-from src.event_bus.event_bus import EventBus
 
 
 class TestTrainSpeedFault:

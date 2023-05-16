@@ -1,5 +1,6 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
 )
@@ -10,7 +11,6 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Train
 from tests.decorators import recreate_db_setup
-from src.event_bus.event_bus import EventBus
 
 
 class TestTrainPrioFault:

@@ -1,5 +1,6 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -11,7 +12,6 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Platform
 from tests.decorators import recreate_db_setup
-from src.event_bus.event_bus import EventBus
 
 
 class TestPlatformBlockedFault:
