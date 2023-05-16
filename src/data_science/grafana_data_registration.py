@@ -78,6 +78,14 @@ class GrafanaDataRegistrator:
 
     # --- CONFIG
 
+    def get_window_size_time_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the arrival and departure window sizes over time by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of verkehrsleistung"""
+        config_id = UUID(param)
+        return self.data_science.get_window_size_time_by_config_id(config_id)
+
     def get_verkehrsleistung_time_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsleistung over time by grafana params
         :param param: Grafana params
@@ -205,6 +213,7 @@ class GrafanaDataRegistrator:
             "test_get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
+            "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
             "get_coal_demand_by_config_id:${config_id}",
             "get_coal_spawn_events_by_config_id:${config_id}",
@@ -255,6 +264,10 @@ def define_and_register_data():
     dg.add_metric_reader(
         "get_verkehrsleistung_by_run_id",
         grafana_data_registrator.get_verkehrsleistung_by_run_id,
+    )
+    dg.add_metric_reader(
+        "get_window_size_time_by_config_id",
+        grafana_data_registrator.get_window_size_time_by_config_id,
     )
     dg.add_metric_reader(
         "get_verkehrsleistung_time_by_config_id",
