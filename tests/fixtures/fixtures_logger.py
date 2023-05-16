@@ -32,18 +32,17 @@ from tests.logger.test_log_collector import TestLogCollector
 
 
 @pytest.fixture
-def event_bus():
-    return EventBus(run_id=42)
+def event_bus(run):
+    bus = EventBus(run_id=run.id)
+    Logger(run_id=run.id, event_bus=bus)
+    return bus
 
 
 @pytest.fixture
-def logger(run):
-    return EventBus(run_id=run.id)
-
-
-@pytest.fixture
-def logger2(run2):
-    return EventBus(run_id=run2.id)
+def event_bus2(run2):
+    bus = EventBus(run_id=run2.id)
+    Logger(run_id=run2.id, event_bus=bus)
+    return bus
 
 
 @pytest.fixture
@@ -514,22 +513,22 @@ def grafana_data_registrator():
     return GrafanaDataRegistrator()
 
 
-def setup_logs_departure_arrival(logger):
-    TestLogCollector.setup_departure_arrival_1(logger)
-    TestLogCollector.setup_departure_arrival_2(logger)
-    TestLogCollector.setup_departure_arrival_3(logger)
-    TestLogCollector.setup_departure_arrival_4(logger)
+def setup_logs_departure_arrival(event_bus):
+    TestLogCollector.setup_departure_arrival_1(event_bus)
+    TestLogCollector.setup_departure_arrival_2(event_bus)
+    TestLogCollector.setup_departure_arrival_3(event_bus)
+    TestLogCollector.setup_departure_arrival_4(event_bus)
 
 
-def setup_logs_departure_arrival_alt(logger2):
-    TestLogCollector.setup_departure_arrival_1_alt(logger2)
-    TestLogCollector.setup_departure_arrival_2_alt(logger2)
-    TestLogCollector.setup_departure_arrival_3_alt(logger2)
-    TestLogCollector.setup_departure_arrival_4_alt(logger2)
+def setup_logs_departure_arrival_alt(event_bus2):
+    TestLogCollector.setup_departure_arrival_1_alt(event_bus2)
+    TestLogCollector.setup_departure_arrival_2_alt(event_bus2)
+    TestLogCollector.setup_departure_arrival_3_alt(event_bus2)
+    TestLogCollector.setup_departure_arrival_4_alt(event_bus2)
 
 
-def setup_logs_block_sections(logger):
-    TestLogCollector.setup_enter_leave_block_section_1(logger)
-    TestLogCollector.setup_enter_leave_block_section_2(logger)
-    TestLogCollector.setup_enter_leave_block_section_3(logger)
-    TestLogCollector.setup_enter_leave_block_section_4(logger)
+def setup_logs_block_sections(event_bus):
+    TestLogCollector.setup_enter_leave_block_section_1(event_bus)
+    TestLogCollector.setup_enter_leave_block_section_2(event_bus)
+    TestLogCollector.setup_enter_leave_block_section_3(event_bus)
+    TestLogCollector.setup_enter_leave_block_section_4(event_bus)

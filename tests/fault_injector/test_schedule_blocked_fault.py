@@ -28,10 +28,6 @@ class TestScheduleBlockedFault:
     def setup_method(self):
         pass
 
-    # @pytest.fixture
-    # def logger(self, run, event_bus):
-    #    return Logger(run.id, event_bus)
-
     @pytest.fixture
     def schedule_blocked_fault_configuration(self, schedule):
         return ScheduleBlockedFaultConfiguration.create(

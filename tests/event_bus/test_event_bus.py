@@ -10,8 +10,8 @@ class TestEventBus:
     """Tests for the EventBus"""
 
     @pytest.fixture
-    def event_bus(self) -> EventBus:
-        return EventBus(run_id=42)
+    def event_bus(self, run) -> EventBus:
+        return EventBus(run_id=run.id)
 
     @pytest.fixture
     def event_type(self) -> EventType:

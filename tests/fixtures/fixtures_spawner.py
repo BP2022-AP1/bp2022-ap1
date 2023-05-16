@@ -20,6 +20,7 @@ from src.spawner.spawner import (
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
 )
+from src.logger.logger import Logger
 
 
 @pytest.fixture
@@ -759,8 +760,10 @@ def mock_train_spawner() -> object:
 
 
 @pytest.fixture
-def event_bus() -> EventBus:
-    return EventBus(run_id=42)
+def event_bus(run) -> EventBus:
+    bus = EventBus(run_id=run.id)
+    Logger(run.id, bus)
+    return bus
 
 
 @pytest.fixture

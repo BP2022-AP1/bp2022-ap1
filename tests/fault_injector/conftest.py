@@ -43,13 +43,10 @@ def run(simulation_configuration):
 
 
 @pytest.fixture
-def event_bus():
-    return EventBus(run_id=42)
-
-
-@pytest.fixture
-def logger(run, event_bus):
-    return Logger(run_id=run.id, event_bus=event_bus)
+def event_bus(run):
+    bus = EventBus(run_id=run.id)
+    Logger(run.id, bus)
+    return bus
 
 
 @pytest.fixture
