@@ -144,6 +144,24 @@ class Signal(Node):
         GO = 2
 
     _state: "Signal.State"
+    _incoming_edge: "Edge"
+    _incoming_index: int
+    _controlled_lanes_count: int
+
+    @property
+    def incoming(self) -> "Edge":
+        return self._incoming_edge
+
+    @incoming.setter
+    def incoming(self, incoming: "Edge"):
+        self._incoming_edge = incoming
+
+        lanes: List[str] = trafficlight.getControlledLanes()
+        self._controlled_lanes_count = len(lanes)
+        for i, lane in enumerate(lanes):
+            for edge in self.updater.edges:
+                if edge.identifier == lane.split("_")[0]:
+                    self._incoming_index = i
 
     @property
     def state(self) -> "Signal.State":
@@ -162,10 +180,17 @@ class Signal(Node):
 
         :param target: the target signal state
         """
-        if target is Signal.State.HALT:
-            trafficlight.setRedYellowGreenState(self.identifier, "rr")
-        elif target is Signal.State.GO:
-            trafficlight.setRedYellowGreenState(self.identifier, "GG")
+
+        target_state = "r"
+        if target is Signal.State.GO:
+            target_state = "G"
+
+        trafficlight.setRedYellowGreenState(
+            self.identifier,
+            "G" * self._incoming_index
+            + target_state
+            + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1),
+        )
 
         self._state = target
 
