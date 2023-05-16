@@ -72,7 +72,7 @@ jobs:
         postgresql-test.cache-from=type=gha
         postgresql-test.cache-to=type=gha
     - name: Initialize test deps via compose
-      command: docker compose up -d grafana-test celery-worker postgresql-test
+      run: docker compose up -d grafana-test celery-worker postgresql-test
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies
