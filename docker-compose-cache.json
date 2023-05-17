@@ -2,10 +2,10 @@
   "target": {
     "grafana-test": {
       "cache-from": [
-        "type=registry,ref=ghcr.io/BP2022-AP1/grafana-test:cache"
+        "type=registry,ref=ghcr.io/bp2022-ap1/grafana-test:cache"
       ],
       "cache-to": [
-        "type=registry,ref=ghcr.io/BP2022-AP1/grafana-test:cache"
+        "type=registry,ref=ghcr.io/bp2022-ap1/grafana-test:cache"
       ],
       "output": [
         "type=docker"
@@ -13,10 +13,10 @@
     },
     "celery-worker": {
       "cache-from": [
-        "type=registry,ref=ghcr.io/BP2022-AP1/celery-worker:cache"
+        "type=registry,ref=ghcr.io/bp2022-ap1/celery-worker:cache"
       ],
       "cache-to": [
-        "type=registry,ref=ghcr.io/BP2022-AP1/celery-worker:cache"
+        "type=registry,ref=ghcr.io/bp2022-ap1/celery-worker:cache"
       ],
       "output": [
         "type=docker"
@@ -24,10 +24,10 @@
     },
     "postgresql-test": {
       "cache-from": [
-        "type=registry,ref=ghcr.io/BP2022-AP1/postgresql-test:cache"
+        "type=registry,ref=ghcr.io/bp2022-ap1/postgresql-test:cache"
       ],
       "cache-to": [
-        "type=registry,ref=ghcr.io/BP2022-AP1/postgresql-test:cache"
+        "type=registry,ref=ghcr.io/bp2022-ap1/postgresql-test:cache"
       ],
       "output": [
         "type=docker"
