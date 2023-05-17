@@ -204,13 +204,13 @@ class TestGrafanaDataRegistration:
     def test_get_window_size_time_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
-        logger2: Logger,
+        event_bus: Logger,
+        event_bus2: Logger,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_size_time_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_departure_arrival(logger)
-        setup_logs_departure_arrival_alt(logger2)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
         assert_frame_equal(
             grafana_data_registrator.get_window_size_time_by_config_id(
                 _config_id, None
