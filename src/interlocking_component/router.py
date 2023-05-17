@@ -29,7 +29,6 @@ class Router:
         distances[start_node] = 0
         previous_nodes[start_node] = start_edge.from_node
         current_index = 0
-        current_node = start_node
         while True:
             sorted_distances = sorted(distances.items(), key=lambda item: item[1])
             # This sorts the distances based on the values in the dict.
@@ -37,6 +36,11 @@ class Router:
             current_node = sorted_distances[current_index][0]
             if current_node == penultimate_node:
                 break
+            
+            print(f"Previous Node: {previous_nodes[current_node]}, Current Node: {current_node}")
+            for edge in previous_nodes[current_node].edges:
+                print(edge.to_node)
+
             edge_to_current_node = previous_nodes[current_node].get_edge_to(
                 current_node
             )
