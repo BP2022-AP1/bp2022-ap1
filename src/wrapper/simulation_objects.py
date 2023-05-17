@@ -357,9 +357,9 @@ class Switch(Node):
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
         if incoming_edge in self.head:
-            return [self.left, self.right]
+            return self.left + self.right
         if incoming_edge in self.left or incoming_edge in self.right:
-            return [self.head]
+            return self.head
         raise ValueError("Given edge is not connected to the switch.")
 
 
