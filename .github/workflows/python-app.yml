@@ -77,12 +77,12 @@ jobs:
       with:
         context: .
         file: compose/celery/Dockerfile
-        push: true
+        push: false
         tags: user/app:latest
         cache-from: |
-          type=registry,ref=user/app:latest
+          type=gha
         cache-to: |
-          type=inline
+          type=gha
 #    - name: Build and push celery-worker
 #      uses: docker/build-push-action@v4
 #      with:
