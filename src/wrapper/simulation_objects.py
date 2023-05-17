@@ -787,8 +787,6 @@ class Train(SimulationObject):
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )
-            if self.edge == self.timetable[0].edge:
-                self.station_index += 1
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
             )
