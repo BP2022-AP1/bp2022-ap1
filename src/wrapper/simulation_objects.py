@@ -103,7 +103,7 @@ class Node(SimulationObject):
             if potential_edge.to_node == other_node:
                 return potential_edge
         raise ValueError("The two nodes are not connected.")
-    
+
     def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
         if edge not in self.edges:
             raise ValueError("The given edge is not connected to the node.")
@@ -238,7 +238,7 @@ class Signal(Node):
         result.set_edges(simulation_object)
 
         return result
-    
+
     def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
         edges = super.get_edges_accessible_from(edge)
         return [accessible_edge for accessible_edge in edges if accessible_edge != edge]
@@ -256,9 +256,12 @@ class Switch(Node):
         RIGHT = 2
 
     _state: "Switch.State"
-    head: List["Edge"]
-    left: List["Edge"]
-    right: List["Edge"]
+    _head_ids: List[str]
+    _left_ids: List[str]
+    _right_ids: List[str]
+    head: List["Edge"] = []
+    left: List["Edge"] = []
+    right: List["Edge"] = []
 
     def __init__(self, identifier: str = None):
         super().__init__(identifier)
@@ -301,35 +304,51 @@ class Switch(Node):
         result.set_edges(simulation_object)
         result.set_connections(simulation_object)
         return result
-    
+
+    def add_simulation_connections(self) -> None:
+        super.add_simulation_connections()
+        for edge in self.edges:
+            if edge.identifier in self._head_ids:
+                self.head.append(edge)
+            elif edge.identifier in self._left_ids:
+                self.left.append(edge)
+            elif edge.identifier in self._right_ids:
+                self.right.append(edge)
+
     def set_connections(self, simulation_object: net.node):
         connection_counts = []
-        for edge in self.edges:
-            connection_counts.append((0,0))
+        for edge_id in self._edge_ids:
+            connection_counts.append((0, 0))
         connections = simulation_object.getConnections()
         for connection in connections:
-            for i in len(self.edges):
-                if self.edges[i].identifier == connection.getTo().getID():
-                    if connection.getDirection() in [net.connection.Connection.LINKDIR_LEFT, net.connection.Connection.LINKDIR_PARTLEFT]:
+            for i in len(self._edge_ids):
+                if self._edge_ids[i] == connection.getTo().getID():
+                    if connection.getDirection() in [
+                        net.connection.Connection.LINKDIR_LEFT,
+                        net.connection.Connection.LINKDIR_PARTLEFT,
+                    ]:
                         connection_counts[i][0] += 1
                     else:
                         connection_counts[i][1] += 1
-                if self.edges[i].identifier == connection.getFrom().getID():
-                    if connection.getDirection() in [net.connection.Connection.LINKDIR_RIGHT, net.connection.Connection.LINKDIR_PARTRIGHT]:
+                if self._edge_ids[i] == connection.getFrom().getID():
+                    if connection.getDirection() in [
+                        net.connection.Connection.LINKDIR_RIGHT,
+                        net.connection.Connection.LINKDIR_PARTRIGHT,
+                    ]:
                         connection_counts[i][0] += 1
                     else:
                         connection_counts[i][1] += 1
         for i in len(connection_counts):
             if connection_counts[i][0] == connection_counts[i][1]:
-                self.head = self.edges[i]
+                self._head_ids = self._edge_ids[i]
             if connection_counts[i][0] > connection_counts[i][1]:
-                self.left = self.edges[i]
-            if connection_counts[i][0] < connection_counts[i][1] :
-                self.right = self.edges[i]
-    
+                self._left_ids = self._edge_ids[i]
+            if connection_counts[i][0] < connection_counts[i][1]:
+                self._right_ids = self._edge_ids[i]
+
     def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
         if edge == self.head:
-            return[self.left, self.right]
+            return [self.left, self.right]
         if edge in [self.left, self.right]:
             return [self.head]
         raise ValueError("Given edge is not connected to the switch.")

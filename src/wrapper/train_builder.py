@@ -1,4 +1,5 @@
 from typing import List
+
 import traci
 
 from src.interlocking_component.route_controller import RouteController
