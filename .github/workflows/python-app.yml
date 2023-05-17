@@ -78,6 +78,7 @@ jobs:
         context: .
         file: compose/celery/Dockerfile
         push: false
+        load: true
         tags: user/app:latest
         cache-from: |
           type=gha
