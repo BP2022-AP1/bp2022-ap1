@@ -1,5 +1,5 @@
-from uuid import UUID
 import uuid
+from uuid import UUID
 
 from src import implementor as impl
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
