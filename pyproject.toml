@@ -109,7 +109,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-ci]
     help = "Run DB and test with pytest"
-    sequence = ["sleep", "db-test recreate", "test-pytest"]
+    sequence = ["sleep", "db-test recreate", "test-pytest-ci"]
     envfile = [".env.shared", ".env.test"]
 
     [tool.poe.tasks.test-deps]
@@ -119,6 +119,11 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
     cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml --cov-append --durations=100 --splits $CI_TOTAL --group $CI_INDEX tests"
+    envfile = [".env.shared", ".env.test"]
+
+    [tool.poe.tasks.test-pytest-ci]
+    help = "Run test with pytest"
+    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml --cov-append --durations=100 --splits $CI_TOTAL --group $CI_INDEX --splitting-algorithm least_duration tests"
     envfile = [".env.shared", ".env.test"]
 
     [tool.poe.tasks.ci]
