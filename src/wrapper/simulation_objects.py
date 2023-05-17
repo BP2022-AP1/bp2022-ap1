@@ -159,9 +159,8 @@ class Signal(Node):
         lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
         self._controlled_lanes_count = len(lanes)
         for i, lane in enumerate(lanes):
-            for edge in self.updater.edges:
-                if edge.identifier == lane.split("_")[0]:
-                    self._incoming_index = i
+            if incoming.identifier == lane.split("_")[0]:
+                self._incoming_index = i
 
         self.state = Signal.State.HALT
 
@@ -192,6 +191,11 @@ class Signal(Node):
             "G" * self._incoming_index
             + target_state
             + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1),
+        )
+        print(
+            "G" * self._incoming_index
+            + target_state
+            + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1)
         )
 
         self._state = target
