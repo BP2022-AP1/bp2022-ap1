@@ -7,9 +7,7 @@ RUN add-apt-repository ppa:sumo/stable
 RUN apt-get update && apt-get install -y sumo
 
 RUN pip install poetry
-COPY pyproject.toml pyproject.toml
-COPY poetry.lock poetry.lock
-RUN poetry install
 
 COPY . /app
+RUN poetry install
 CMD poetry run celery -A make_celery worker --loglevel=info
