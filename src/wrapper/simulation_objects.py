@@ -260,9 +260,9 @@ class Switch(Node):
         RIGHT = 2
 
     _state: "Switch.State"
-    _head_ids: List[str]
-    _left_ids: List[str]
-    _right_ids: List[str]
+    _head_ids: List[str] = []
+    _left_ids: List[str] = []
+    _right_ids: List[str] = []
     head: List["Edge"] = []
     left: List["Edge"] = []
     right: List["Edge"] = []
@@ -343,13 +343,13 @@ class Switch(Node):
                         connection_counts[i][0] += 1
                     else:
                         connection_counts[i][1] += 1
-        for i in range(len(connection_counts)):
+        for i in range(len(self._edge_ids)):
             if connection_counts[i][0] == connection_counts[i][1]:
-                self._head_ids = self._edge_ids[i]
+                self._head_ids.append(self._edge_ids[i])
             if connection_counts[i][0] > connection_counts[i][1]:
-                self._left_ids = self._edge_ids[i]
+                self._left_ids.append(self._edge_ids[i])
             if connection_counts[i][0] < connection_counts[i][1]:
-                self._right_ids = self._edge_ids[i]
+                self._right_ids.append(self._edge_ids[i])
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
         if incoming_edge == self.head:
