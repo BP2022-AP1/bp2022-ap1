@@ -81,7 +81,7 @@ class Node(SimulationObject):
     def add_subscriptions(self) -> List[int]:
         return []
 
-    def set_edges(self, simulation_object: net.node) -> None:
+    def set_edges(self, simulation_object: "net.node.Node") -> None:
         """Sets the edges that are connected to this node
 
         :param simulation_object: the current node as a sumo net.node
@@ -111,7 +111,7 @@ class Node(SimulationObject):
 
     @staticmethod
     def from_simulation(
-        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: "net.node.Node", updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
         if simulation_object.getID() in [x.identifier for x in updater.signals]:
             # We need to update the signal with our data
@@ -218,7 +218,7 @@ class Signal(Node):
     def set_edges(self, simulation_object: net.TLS) -> None:
         self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
 
-    def add_edges(self, node: net.node) -> None:
+    def add_edges(self, node: "net.node.Node") -> None:
         """Adds more edges to the signal (coming from the passed node)
 
         :param node: The node from which to load the additional edges
@@ -240,7 +240,7 @@ class Signal(Node):
         return result
 
     def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
-        edges = super.get_edges_accessible_from(edge)
+        edges = super().get_edges_accessible_from(edge)
         return [accessible_edge for accessible_edge in edges if accessible_edge != edge]
 
 
@@ -296,7 +296,8 @@ class Switch(Node):
 
     @staticmethod
     def from_simulation(
-        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: "net.node.Node",
+        updater: "SimulationObjectUpdatingComponent",
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
         result = Switch(identifier=simulation_object.getID())
@@ -306,7 +307,7 @@ class Switch(Node):
         return result
 
     def add_simulation_connections(self) -> None:
-        super.add_simulation_connections()
+        super().add_simulation_connections()
         for edge in self.edges:
             if edge.identifier in self._head_ids:
                 self.head.append(edge)
@@ -315,14 +316,14 @@ class Switch(Node):
             elif edge.identifier in self._right_ids:
                 self.right.append(edge)
 
-    def set_connections(self, simulation_object: net.node):
+    def set_connections(self, simulation_object: "net.node.Node"):
         connection_counts = []
         for edge_id in self._edge_ids:
-            connection_counts.append((0, 0))
-        connections = simulation_object.getConnections()
+            connection_counts.append([0, 0])
+        connections: List["net.edge.Edge"] = simulation_object.getConnections()
         for connection in connections:
-            for i in len(self._edge_ids):
-                if self._edge_ids[i] == connection.getTo().getID():
+            for i, edge_id in enumerate(self._edge_ids):
+                if edge_id == connection.getTo().getID():
                     if connection.getDirection() in [
                         net.connection.Connection.LINKDIR_LEFT,
                         net.connection.Connection.LINKDIR_PARTLEFT,
@@ -330,7 +331,7 @@ class Switch(Node):
                         connection_counts[i][0] += 1
                     else:
                         connection_counts[i][1] += 1
-                if self._edge_ids[i] == connection.getFrom().getID():
+                if edge_id == connection.getFrom().getID():
                     if connection.getDirection() in [
                         net.connection.Connection.LINKDIR_RIGHT,
                         net.connection.Connection.LINKDIR_PARTRIGHT,
@@ -338,7 +339,7 @@ class Switch(Node):
                         connection_counts[i][0] += 1
                     else:
                         connection_counts[i][1] += 1
-        for i in len(connection_counts):
+        for i in range(len(connection_counts)):
             if connection_counts[i][0] == connection_counts[i][1]:
                 self._head_ids = self._edge_ids[i]
             if connection_counts[i][0] > connection_counts[i][1]:
