@@ -202,14 +202,11 @@ class RouteController(Component):
         :type edge: Edge
         """
         route = self._get_interlocking_route_for_edge(edge)
-        print(edge.identifier)
         if (
             route is None
             or route.get_last_segment_of_route() != edge.identifier.split("-re")[0]
         ):
             return
-
-        print("changing route")
 
         self.set_fahrstrasse(train, edge)
 
@@ -225,14 +222,10 @@ class RouteController(Component):
         new_route = self.router.get_route(edge, train.timetable[train.station_index].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        print([x.identifier for x in new_route])
-
         route_length = 0
 
         for i, end_node_candidat in enumerate(new_route[2:], start=2):
             route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
-
-            print(new_route[1].identifier, end_node_candidat.identifier)
 
             for interlocking_route in self.interlocking.routes:
                 if (
@@ -245,7 +238,6 @@ class RouteController(Component):
                     was_set = self.interlocking.set_route(
                         interlocking_route.yaramo_route
                     )
-                    print(was_set)
                     if was_set:
                         self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
                         self.logger.train_enter_block_section(
@@ -265,7 +257,6 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
-                    train.station_index += 1
                     return
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
