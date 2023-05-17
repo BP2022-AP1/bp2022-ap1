@@ -107,12 +107,12 @@ def delete_schedule_blocked_fault_configuration(options, token):
 
     if config.simulation_configuration_references.exists():
         return (
-            "Platform blocked fault configuration is referenced by a simulation configuration",
+            "Schedule blocked fault configuration is referenced by a simulation configuration",
             400,
         )
 
     config.delete_instance()
-    return "Deleted platform-blocked-fault configuration", 204
+    return "Deleted schedule-blocked-fault configuration", 204
 
 
 def get_all_track_blocked_fault_configuration_ids(options, token):
