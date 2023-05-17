@@ -322,7 +322,7 @@ class Switch(Node):
 
     def set_connections(self, simulation_object: "net.node.Node"):
         connections: List["net.edge.Edge"] = simulation_object.getConnections()
-        connection_counts = self.connection_counts(connections)
+        connection_counts = self.get_connection_counts(connections)
         for i, edge_id in enumerate(self._edge_ids):
             if connection_counts[i][0] == connection_counts[i][1]:
                 self._head_ids.append(edge_id)
@@ -331,7 +331,7 @@ class Switch(Node):
             if connection_counts[i][0] < connection_counts[i][1]:
                 self._right_ids.append(edge_id)
 
-    def connection_counts(self, connections):
+    def get_connection_counts(self, connections):
         connection_counts = []
         for _ in self._edge_ids:
             connection_counts.append([0, 0])
