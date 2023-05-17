@@ -2,10 +2,10 @@
   "target": {
     "celery-worker": {
       "cache-from": [
-        "type=registry,ref=ghcr.io/bp2022-ap1/celery-worker:cache"
+        "type=gha"
       ],
       "cache-to": [
-        "type=registry,ref=ghcr.io/bp2022-ap1/celery-worker:cache"
+        "type=gha"
       ],
       "output": [
         "type=docker"
