@@ -69,7 +69,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build docker-compose
       # Before the cache, it was "run: docker compose build".
-      run: docker buildx bake --file docker-compose.yqml --file docker-compose-cache.json
+      run: docker buildx bake --file docker-compose.yaml --file docker-compose-cache.json
 #    - name: Initialize test deps via compose
 #      run: docker compose up -d grafana-test celery-worker postgresql-test
     - name: Install poetry
