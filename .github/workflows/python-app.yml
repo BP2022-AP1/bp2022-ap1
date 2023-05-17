@@ -72,15 +72,26 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Build and push celery-worker
-      uses: docker/build-push-action@v4
+    - name: Build and Cache Docker Image
+      id: build-image
+      uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./compose/celery/Dockerfile
-        push: true
-        tags: user/app:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        file: compose/celery/Dockerfile
+        push: false
+        cache-from: |
+          type=local,src=/tmp/.buildx-cache
+        cache-to: |
+          type=local,dest=/tmp/.buildx-cache
+#    - name: Build and push celery-worker
+#      uses: docker/build-push-action@v4
+#      with:
+#        context: .
+#        file: ./compose/celery/Dockerfile
+#        push: true
+#        tags: user/app:latest
+#        cache-from: type=gha
+#        cache-to: type=gha,mode=max
 #    - name: Build docker-compose
       # Before the cache, it was "run: docker compose build".
 #      run: docker buildx bake --push --file docker-compose.yaml --file docker-compose-cache.json celery-worker
