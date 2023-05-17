@@ -135,7 +135,7 @@ class Communicator:
         :param process_id: The id of the celery task
         """
         process = AsyncResult(process_id)
-        process.revoke()
+        process.revoke(terminate=True)
 
     @classmethod
     def progress(cls, process_id: str) -> float:
@@ -151,7 +151,7 @@ class Communicator:
     def state(cls, progress_id: str) -> str:
         """
         Get the current state of the simulation.
-        Possible states are: PENDING, STARTED, RETRY, FAILURE, SUCCESS.
+        Possible states are: PENDING, STARTED, RETRY, FAILURE, SUCCESS, REVOKED.
 
         :param progress_id: The id of the celery task
         :return: The current state of the simulation

@@ -1,8 +1,4 @@
-import os
-
 from interlocking.interlockinginterface import Interlocking
-
-from src.interlocking_component.route_controller import RouteController
 
 
 class TestRouteController:

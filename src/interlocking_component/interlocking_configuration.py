@@ -24,7 +24,7 @@ class InterlockingConfigurationXSimulationConfiguration(BaseModel):
         null=False,
         backref="interlocking_configuration_references",
     )
-    spawner_configuration = ForeignKeyField(
+    interlocking_configuration = ForeignKeyField(
         InterlockingConfiguration,
         null=False,
         backref="simulation_configuration_references",

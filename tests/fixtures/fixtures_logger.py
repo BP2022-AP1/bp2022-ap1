@@ -261,9 +261,9 @@ def verkehrsleistung_time_df():
         {
             "time": [
                 datetime(2020, 1, 1, 0, 1 if i == 6 else 0, (10 * i) % 60)
-                for i in range(1, 7)
+                for i in range(0, 7)
             ],
-            "verkehrsleistung": [0.0, 7560.0, 3780.0, 12360.0, 9270.0, 11808.0],
+            "verkehrsleistung": [0.0, 0.0, 3780.0, 2520.0, 9270.0, 7416.0, 9840.0],
         }
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
@@ -276,9 +276,9 @@ def verkehrsleistung_momentarily_time_df():
         {
             "time": [
                 datetime(2020, 1, 1, 0, 1 if i == 6 else 0, (10 * i) % 60)
-                for i in range(1, 7)
+                for i in range(0, 7)
             ],
-            "verkehrsleistung": [0.0, 7560.0, 0.0, 29520.0, 0.0, 21960.0],
+            "verkehrsleistung": [0.0, 0.0, 7560.0, 0.0, 29520.0, 0.0, 21960.0],
         }
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
@@ -351,6 +351,29 @@ def spawn_events_by_run_id_head_df():
 
 
 @pytest.fixture
+def spawn_coal_events_by_config_id_head_df(
+    demand_train_schedule_configuration: ScheduleConfiguration,
+):
+    spawn_events_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 1, 16, 40),
+                datetime(2020, 1, 1, 2, 1, 40),
+                datetime(2020, 1, 1, 3, 1, 40),
+                datetime(2020, 1, 1, 3, 46, 40),
+                datetime(2020, 1, 1, 4, 46, 40),
+            ],
+            f"title": [
+                f"Spawn train from config {demand_train_schedule_configuration.id}"
+                for _ in range(1, 6)
+            ],
+        }
+    )
+    spawn_events_by_run_id_head_df.set_index("time", inplace=True)
+    return spawn_events_by_run_id_head_df
+
+
+@pytest.fixture
 def verkehrsmenge_df():
     return pd.DataFrame({"verkehrsmenge": [164.0]})
 
@@ -359,12 +382,30 @@ def verkehrsmenge_df():
 def verkehrsleistung_by_run_id_df():
     return pd.DataFrame(
         {
-            "enter_tick": [10.0],
-            "leave_tick": [60.0],
+            "enter_tick": pd.Series([0], dtype="Int64"),
+            "leave_tick": pd.Series([60], dtype="Int64"),
             "block_section_length": [164.0],
-            "verkehrsleistung": [11808.0],
+            "verkehrsleistung": [9840.0],
         }
     )
+
+
+@pytest.fixture
+def window_size_time_by_config_id_df():
+    window_size_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 0, int((10 * i) / 60), (10 * i) % 60)
+                for i in range(7)
+            ],
+            "arrival_size": pd.Series([0.0, 0.0, 5.0, 2.5, 7.5, 5.0, 25.0 / 3.0]),
+            "departure_size": pd.Series(
+                [0.0, 0.0, 0.0, 5.0, 5.0, 20.0 / 3.0, 20.0 / 3.0]
+            ),
+        }
+    )
+    window_size_df.set_index("time", inplace=True)
+    return window_size_df
 
 
 @pytest.fixture
@@ -438,10 +479,9 @@ def verkehrsleistung_by_config_id_df(run):
     verkehrsleistung_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "enter_tick": pd.Series([10], dtype="Int64"),
             "leave_tick": pd.Series([60], dtype="Int64"),
             "block_section_length": pd.Series([164.0]),
-            "verkehrsleistung": pd.Series([11808.0]),
+            "verkehrsleistung": pd.Series([9840.0]),
         }
     )
     verkehrsleistung_df.set_index("run_id", inplace=True)
@@ -474,10 +514,9 @@ def verkehrsleistung_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
             "config_id": [simulation_configuration.id],
-            "enter_tick": pd.Series([10.0]),
             "leave_tick": pd.Series([60.0]),
             "block_section_length": pd.Series([164.0]),
-            "verkehrsleistung": pd.Series([11808.0]),
+            "verkehrsleistung": pd.Series([9840.0]),
         }
     )
 
