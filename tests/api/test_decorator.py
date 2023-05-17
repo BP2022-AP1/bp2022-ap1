@@ -32,7 +32,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ),
         (
             "/component/fault-injection/track-blocked-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
         (
             "/component/fault-injection/train-prio-fault/00000000-0000-0000-0000-000000000000",
