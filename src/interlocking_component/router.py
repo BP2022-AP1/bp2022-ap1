@@ -1,6 +1,6 @@
 from typing import List
 
-from src.wrapper.simulation_objects import Node, Edge
+from src.wrapper.simulation_objects import Edge, Node
 
 
 class Router:

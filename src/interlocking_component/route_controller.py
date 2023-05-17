@@ -127,16 +127,20 @@ class RouteController(Component):
                 if yaramo_signal.name == potentical_signal.identifier:
                     signal = potentical_signal
 
-            edges_into_signal = [edge for edge in signal.edges if edge.to_node == signal]
-            edges_numbers = [edge.identifier.split("-")[1] for edge in edges_into_signal]
+            edges_into_signal = [
+                edge for edge in signal.edges if edge.to_node == signal
+            ]
+            edges_numbers = [
+                edge.identifier.split("-")[1] for edge in edges_into_signal
+            ]
 
             if yaramo_signal.direction == SignalDirection.IN:
-                if(edges_numbers[0]<edges_numbers[1]):
+                if edges_numbers[0] < edges_numbers[1]:
                     signal.incoming = edges_into_signal[0]
                 else:
                     signal.incoming = edges_into_signal[1]
             else:
-                if(edges_numbers[0]>edges_numbers[1]):
+                if edges_numbers[0] > edges_numbers[1]:
                     signal.incoming = edges_into_signal[0]
                 else:
                     signal.incoming = edges_into_signal[1]
@@ -219,7 +223,9 @@ class RouteController(Component):
         :param edge: the edge it is currently on
         :type edge: Edge
         """
-        new_route = self.router.get_route(edge, train.timetable[train.station_index].edge)
+        new_route = self.router.get_route(
+            edge, train.timetable[train.station_index].edge
+        )
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
         route_length = 0
