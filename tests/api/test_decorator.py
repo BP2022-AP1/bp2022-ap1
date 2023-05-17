@@ -44,7 +44,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ),
         (
             "/component/fault-injection/track-speed-limit-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
     ],
 )
