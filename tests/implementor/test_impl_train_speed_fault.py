@@ -1,9 +1,10 @@
+import uuid
+
 from src import implementor as impl
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
     TrainSpeedFaultConfigurationXSimulationConfiguration,
 )
-import uuid
 
 
 class TestTrainSpeedFaultConfiguration:
