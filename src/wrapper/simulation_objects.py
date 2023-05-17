@@ -837,6 +837,11 @@ class Train(SimulationObject):
                 self, self._edge
             )
 
+            if (
+                self._timetable[0].edge == self._edge
+            ):  # we reached an edge with a platform
+                self.station_index += 1
+
     def add_subscriptions(self) -> List[int]:
         """Gets called when this object is created to allow
         specification of simulator-synchronized properties.
