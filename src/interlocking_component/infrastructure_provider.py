@@ -79,8 +79,6 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_in(track_segment_id)
 
-        self.route_controller.maybe_free_fahrstrasse(train, edge)
-
         self.route_controller.maybe_set_fahrstrasse(train, edge)
 
     def train_drove_off_track(self, train: Train, edge: Edge):
@@ -92,3 +90,5 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         track_segment_id = edge.identifier.split("-re")[0]
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_out(track_segment_id)
+
+        self.route_controller.maybe_free_fahrstrasse(train, edge)

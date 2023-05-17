@@ -19,7 +19,6 @@ class Router:
         to the Node right after the end edge
         :rtype: List[Node]
         """
-        node_before_platform = start_edge.from_node
         start_node = start_edge.to_node
         penultimate_node = end_edge.from_node
 
@@ -28,6 +27,7 @@ class Router:
         distances = {}
         previous_nodes = {}
         distances[start_node] = 0
+        previous_nodes[start_node] = start_edge.from_node
         current_index = 0
         current_node = start_node
         while True:
@@ -37,7 +37,7 @@ class Router:
             current_node = sorted_distances[current_index][0]
             if current_node == penultimate_node:
                 break
-            edge_to_current_node = previous_node[current_node].get_edge_to(current_node)
+            edge_to_current_node = previous_nodes[current_node].get_edge_to(current_node)
             for edge in current_node.get_edges_accessible_from(edge_to_current_node):
                 distance_to_next_node = distances[current_node] + edge.length
                 if (
@@ -52,5 +52,4 @@ class Router:
             previous_node = previous_nodes[current_node]
             route.insert(0, previous_node)
             current_node = previous_node
-        route.insert(0, node_before_platform)
         return route
