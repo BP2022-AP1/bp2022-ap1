@@ -321,10 +321,20 @@ class Switch(Node):
                 self.right.append(my_edge)
 
     def set_connections(self, simulation_object: "net.node.Node"):
+        connections: List["net.edge.Edge"] = simulation_object.getConnections()
+        connection_counts = self.connection_counts(connections)
+        for i, edge_id in enumerate(self._edge_ids):
+            if connection_counts[i][0] == connection_counts[i][1]:
+                self._head_ids.append(edge_id)
+            if connection_counts[i][0] > connection_counts[i][1]:
+                self._left_ids.append(edge_id)
+            if connection_counts[i][0] < connection_counts[i][1]:
+                self._right_ids.append(edge_id)
+
+    def connection_counts(self, connections):
         connection_counts = []
         for _ in self._edge_ids:
             connection_counts.append([0, 0])
-        connections: List["net.edge.Edge"] = simulation_object.getConnections()
         for connection in connections:
             for i, edge_id in enumerate(self._edge_ids):
                 if edge_id == connection.getTo().getID():
@@ -343,13 +353,7 @@ class Switch(Node):
                         connection_counts[i][0] += 1
                     else:
                         connection_counts[i][1] += 1
-        for i in range(len(self._edge_ids)):
-            if connection_counts[i][0] == connection_counts[i][1]:
-                self._head_ids.append(self._edge_ids[i])
-            if connection_counts[i][0] > connection_counts[i][1]:
-                self._left_ids.append(self._edge_ids[i])
-            if connection_counts[i][0] < connection_counts[i][1]:
-                self._right_ids.append(self._edge_ids[i])
+        return connection_counts
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
         if incoming_edge == self.head:
