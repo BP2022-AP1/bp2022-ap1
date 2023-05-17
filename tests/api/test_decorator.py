@@ -24,7 +24,7 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ("/component/spawner/00000000-0000-0000-0000-000000000000", 501),
         (
             "/component/fault-injection/schedule-blocked-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
         (
             "/component/fault-injection/platform-blocked-fault/00000000-0000-0000-0000-000000000000",
