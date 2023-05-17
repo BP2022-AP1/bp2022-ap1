@@ -257,7 +257,6 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
-                    train.station_index += 1
                     return
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
