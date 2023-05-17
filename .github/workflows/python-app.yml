@@ -59,14 +59,14 @@ jobs:
       run: sudo apt update
     - name: Install sumo
       run: sudo apt-get install -y sumo
-    - name: Login to Github
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
+#    - name: Login to Github
+#      uses: docker/login-action@v2
+#      with:
+#        registry: ghcr.io
+#        username: ${{ github.actor }}
+#        password: ${{ secrets.GITHUB_TOKEN }}
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -74,15 +74,17 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and Cache Docker Image
       id: build-image
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v4
       with:
         context: .
         file: compose/celery/Dockerfile
-        push: false
+        push: true
+        load: true
+        tags: user/app:latest
         cache-from: |
-          type=local,src=/tmp/.buildx-cache
+          type=registry,ref=user/app:latest
         cache-to: |
-          type=local,dest=/tmp/.buildx-cache
+          type=inline
 #    - name: Build and push celery-worker
 #      uses: docker/build-push-action@v4
 #      with:
