@@ -440,29 +440,45 @@ def create_train_speed_fault_configuration(body, token):
 def get_train_speed_fault_configuration(options, token):
     """
     :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return json.dumps("<map>"), 501  # 200
+    identifier = options["identifier"]
+    configs = TrainSpeedFaultConfiguration.select().where(
+        TrainSpeedFaultConfiguration.id == identifier
+    )
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+    return config.to_dict(), 200
 
 
 def delete_train_speed_fault_configuration(options, token):
     """
     :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    identifier = options["identifier"]
+    configs = TrainSpeedFaultConfiguration.select().where(
+        TrainSpeedFaultConfiguration.id == identifier
+    )
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
 
-    return "", 501  # 204
+    if config.simulation_configuration_references.exists():
+        return (
+            "Train speed fault configuration is referenced by a simulation configuration",
+            400,
+        )
+
+    config.delete_instance()
+    return "Deleted train-speed-fault configuration", 204
 
 
 def get_all_platform_blocked_fault_configuration_ids(options, token):
