@@ -4,7 +4,6 @@ from typing import List
 from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
 from planpro_importer.reader import PlanProReader
-from railwayroutegenerator.routegenerator import RouteGenerator
 from yaramo.signal import SignalDirection
 
 from src.component import Component
