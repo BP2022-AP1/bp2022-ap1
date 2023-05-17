@@ -103,6 +103,11 @@ class Node(SimulationObject):
             if potential_edge.to_node == other_node:
                 return potential_edge
         raise ValueError("The two nodes are not connected.")
+    
+    def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
+        if edge not in self.edges:
+            raise ValueError("The given edge is not connected to the node.")
+        return self.edges
 
     @staticmethod
     def from_simulation(
@@ -233,6 +238,10 @@ class Signal(Node):
         result.set_edges(simulation_object)
 
         return result
+    
+    def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
+        edges = super.get_edges_accessible_from(edge)
+        return [accessible_edge for accessible_edge in edges if accessible_edge != edge]
 
 
 class Switch(Node):
@@ -247,6 +256,9 @@ class Switch(Node):
         RIGHT = 2
 
     _state: "Switch.State"
+    head: List["Edge"]
+    left: List["Edge"]
+    right: List["Edge"]
 
     def __init__(self, identifier: str = None):
         super().__init__(identifier)
@@ -287,8 +299,40 @@ class Switch(Node):
         result = Switch(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
-
+        result.set_connections(simulation_object)
         return result
+    
+    def set_connections(self, simulation_object: net.node):
+        connection_counts = []
+        for edge in self.edges:
+            connection_counts.append((0,0))
+        connections = simulation_object.getConnections()
+        for connection in connections:
+            for i in len(self.edges):
+                if self.edges[i].identifier == connection.getTo().getID():
+                    if connection.getDirection() in [net.connection.Connection.LINKDIR_LEFT, net.connection.Connection.LINKDIR_PARTLEFT]:
+                        connection_counts[i][0] += 1
+                    else:
+                        connection_counts[i][1] += 1
+                if self.edges[i].identifier == connection.getFrom().getID():
+                    if connection.getDirection() in [net.connection.Connection.LINKDIR_RIGHT, net.connection.Connection.LINKDIR_PARTRIGHT]:
+                        connection_counts[i][0] += 1
+                    else:
+                        connection_counts[i][1] += 1
+        for i in len(connection_counts):
+            if connection_counts[i][0] == connection_counts[i][1]:
+                self.head = self.edges[i]
+            if connection_counts[i][0] > connection_counts[i][1]:
+                self.left = self.edges[i]
+            if connection_counts[i][0] < connection_counts[i][1] :
+                self.right = self.edges[i]
+    
+    def get_edges_accessible_from(self, edge: "Edge") -> List["Edge"]:
+        if edge == self.head:
+            return[self.left, self.right]
+        if edge in [self.left, self.right]:
+            return [self.head]
+        raise ValueError("Given edge is not connected to the switch.")
 
 
 class Edge(SimulationObject):

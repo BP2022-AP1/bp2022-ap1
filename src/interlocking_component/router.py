@@ -37,7 +37,8 @@ class Router:
             current_node = sorted_distances[current_index][0]
             if current_node == penultimate_node:
                 break
-            for edge in current_node.edges:
+            edge_to_current_node = previous_node[current_node].get_edge_to(current_node)
+            for edge in current_node.get_edges_accessible_from(edge_to_current_node):
                 distance_to_next_node = distances[current_node] + edge.length
                 if (
                     edge.to_node not in distances
