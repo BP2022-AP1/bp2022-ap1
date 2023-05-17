@@ -1,3 +1,5 @@
+import uuid
+
 from src import implementor as impl
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
@@ -64,7 +66,6 @@ class TestTrackSpeedLimitFaultConfiguration:
             assert (
                 getattr(config, key) == track_speed_limit_fault_configuration_data[key]
             )
-
 
     def test_get_track_speed_limit_fault_configuration(
         self, token, track_speed_limit_fault_configuration_data
