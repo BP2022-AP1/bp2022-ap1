@@ -111,3 +111,15 @@ def test_run_simulation_step_is_called_with_gui(
     communicator.run()
     del os.environ["DISABLE_CELERY"]
     assert run_with_gui_mock.called
+
+
+def test_components_are_ordered_correctly():
+    communicator = Communicator()
+    mock1 = MockComponent()
+    mock2 = MockComponent()
+    mock2.priority = 100
+
+    communicator.add_component(mock1)
+    communicator.add_component(mock2)
+
+    assert communicator._components == [mock2, mock1]
