@@ -47,6 +47,12 @@ class SimulationConfiguration(Schema):
     train_prio_fault = fields.List(fields.UUID())
 
 
+class UpdateSimulationConfiguration(SimulationConfiguration):
+    """The marshmallow schema for the simulation configuration model."""
+
+    spawner = fields.UUID()
+
+
 class SpawnerConfiguration(Schema):
     """The marshmallow schema for the spawner configuration model."""
 

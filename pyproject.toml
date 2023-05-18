@@ -122,11 +122,11 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-deps]
     help = "Initializes needed components for tests"
-    sequence = ["test-docker-deps", "sleep", "db-test recreate"]
+    sequence = ["test-docker-deps", "db-test recreate"]
 
     [tool.poe.tasks.test-docker-deps]
     help = "Initializes needed docker containers for tests"
-    cmd = "docker compose up -d grafana-test celery-worker postgresql-test"
+    cmd = "docker compose up -d grafana-test redis postgresql-test --wait"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
