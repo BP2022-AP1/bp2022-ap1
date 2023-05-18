@@ -189,43 +189,10 @@ def platform_blocked_fault_configuration(
 
 @pytest.fixture
 def another_platform_blocked_fault_configuration(
-    platform: Platform,
+    platform_blocked_fault_configuration_data,
 ) -> PlatformBlockedFaultConfiguration:
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=20,
-        end_tick=200,
-        description="test PlatformBlockedFault",
-        affected_element_id=platform.identifier,
-        strategy="regular",
-    )
-
-
-# ------------- ScheduleBlockedFaultConfiguration ----------------
-
-
-@pytest.fixture
-def schedule_blocked_fault_configuration(
-    regular_train_schedule: TrainSchedule,
-) -> ScheduleBlockedFaultConfiguration(regular_train_schedule):
-    return ScheduleBlockedFaultConfiguration.create(
-        start_tick=30,
-        end_tick=300,
-        description="test ScheduleBlockedFault",
-        affected_element_id=regular_train_schedule.id,
-        strategy="regular",
-    )
-
-
-@pytest.fixture
-def another_schedule_blocked_fault_configuration(
-    regular_train_schedule: TrainSchedule,
-) -> ScheduleBlockedFaultConfiguration(regular_train_schedule):
-    return ScheduleBlockedFaultConfiguration.create(
-        start_tick=30,
-        end_tick=300,
-        description="test ScheduleBlockedFault",
-        affected_element_id=regular_train_schedule.id,
-        strategy="regular",
+        **platform_blocked_fault_configuration_data
     )
 
 
@@ -441,6 +408,15 @@ def schedule_blocked_fault_configuration_data(schedule) -> dict:
 
 @pytest.fixture
 def schedule_blocked_fault_configuration(
+    schedule_blocked_fault_configuration_data: dict,
+) -> ScheduleBlockedFaultConfiguration:
+    return ScheduleBlockedFaultConfiguration.create(
+        **schedule_blocked_fault_configuration_data
+    )
+
+
+@pytest.fixture
+def another_schedule_blocked_fault_configuration(
     schedule_blocked_fault_configuration_data: dict,
 ) -> ScheduleBlockedFaultConfiguration:
     return ScheduleBlockedFaultConfiguration.create(
