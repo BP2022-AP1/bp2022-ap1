@@ -3,6 +3,9 @@
 
 import json
 
+import peewee
+
+from src.base_model import db
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -22,6 +25,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import SimulationConfiguration
+from src.spawner.spawner import SpawnerConfiguration
 
 
 def get_all_schedule_blocked_fault_configuration_ids(options, token):
@@ -675,26 +679,48 @@ def create_spawner_configuration(body, token):
 def get_spawner_configuration(options, token):
     """
     :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
+    config_id = options["identifier"]
+    configs = SpawnerConfiguration.select().where(SpawnerConfiguration.id == config_id)
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+    config_data = config.to_dict()
+    schedules = [
+        str(reference.schedule_configuration_id.id)
+        for reference in config.schedule_configuration_references
+    ]
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return json.dumps("<map>"), 501  # 200
+    return {**config_data, "schedule": schedules}, 200
 
 
 def delete_spawner_configuration(options, token):
     """
     :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    config_id = options["identifier"]
+    configs = SpawnerConfiguration.select().where(SpawnerConfiguration.id == config_id)
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+    if config.simulation_configuration_references.exists():
+        return (
+            "Spawner configuration is referenced by a simulation configuration",
+            400,
+        )
+    try:
+        with db.atomic():
+            for reference in config.schedule_configuration_references:
+                reference.delete_instance()
+            config.delete_instance()
 
-    return "", 501  # 204
+        return "Deleted spawner", 204
+    except peewee.IntegrityError:
+        return "Something went wrong", 500
