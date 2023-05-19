@@ -45,17 +45,19 @@ class TestSpawnerConfiguration:
         assert status == 404
         assert result == "Id not found"
 
-    def test_delete_spawner_configuration_with_run(self, token, spawner_configuration):
+    def test_delete_spawner_configuration_not_allowed(
+        self, token, spawner_configuration
+    ):
         simulation = SimulationConfiguration()
         simulation.save()
         SpawnerConfigurationXSimulationConfiguration(
             spawner_configuration=spawner_configuration,
             simulation_configuration=simulation,
-        )
+        ).save()
         result, status = impl.component.delete_spawner_configuration(
             {"identifier": str(spawner_configuration.id)}, token
         )
-        assert status == 204
+        assert status == 400
         assert (
             result
             == "Spawner configuration is referenced by a simulation configuration"
