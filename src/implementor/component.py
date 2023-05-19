@@ -2,7 +2,9 @@
 # pylint: disable=duplicate-code
 
 import json
+import peewee
 
+from src.base_model import db
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -22,6 +24,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import SimulationConfiguration
+from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
 
 
 def get_all_schedule_blocked_fault_configuration_ids(options, token):
@@ -646,10 +649,23 @@ def get_all_spawner_configuration_ids(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    # Return all spawner configurations of a single simulation configuration
+    if options["simulationId"] is not None:
+        simulation_id = options["simulationId"]
+        simulation_configurations = SimulationConfiguration.select().where(
+            SimulationConfiguration.id == simulation_id
+        )
+        if not simulation_configurations.exists():
+            return "Simulation not found", 404
+        simulation_configuration = simulation_configurations.get()
+        references = simulation_configuration.spawner_configuration_references
+        # Return all platform blocked fault configurations
+        configs = [str(reference.spawner_configuration.id) for reference in references]
+        return configs, 200
 
-    return json.dumps(""), 501  # 200
+    # Return all spawner configurations
+    configs = [str(config.id) for config in SpawnerConfiguration.select()]
+    return configs, 200
 
 
 def create_spawner_configuration(body, token):
@@ -659,17 +675,23 @@ def create_spawner_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
-    )
+    try:
+        with db.atomic():
+            config = SpawnerConfiguration()
+            config.save()
+            for spawner in body["schedule"]:
+                SpawnerConfigurationXSchedule.create(
+                    spawner_configuration_id=config, schedule_configuration_id=spawner
+                )
+            return (
+                {
+                    "id": config.id,
+                },
+                201,
+            )
+    except peewee.IntegrityError as error:
+        print(error)
+        return "Schedule not found", 404
 
 
 def get_spawner_configuration(options, token):
