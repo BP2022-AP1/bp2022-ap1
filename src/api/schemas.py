@@ -56,6 +56,8 @@ class UpdateSimulationConfiguration(SimulationConfiguration):
 class SpawnerConfiguration(Schema):
     """The marshmallow schema for the spawner configuration model."""
 
+    schedule = fields.List(fields.UUID(), required=True)
+
 
 class TokenConfiguration(Schema):
     """The marshmallow schema for the token model."""
