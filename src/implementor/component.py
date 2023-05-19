@@ -2,6 +2,7 @@
 # pylint: disable=duplicate-code
 
 import json
+
 import peewee
 
 from src.base_model import db
