@@ -11,7 +11,7 @@ from src.spawner.spawner import (
 )
 
 with db.atomic():
-    platforms = ["bs_0", "bs_6"]
+    platforms = ["bs_0", "bs_3"]
     regular_schedule = ScheduleConfiguration.create(
         schedule_type="TrainSchedule",
         strategy_type="RegularScheduleStrategy",

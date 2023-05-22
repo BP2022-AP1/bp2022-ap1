@@ -821,7 +821,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/interlocking.git"
 reference = "add-Poetry-support"
-resolved_reference = "f348be2c0acbec9da7c8db90bc00ef3b3bb9b293"
+resolved_reference = "420761dd48fd9adc0c48d03efbd76314928df9a4"
 
 [[package]]
 name = "isort"
@@ -2529,7 +2529,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/track-signal-generator.git"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "8f5547cc2191c3f0ec999f616f9be0f80e00eb77"
+resolved_reference = "629660b5cad54ccc857a18b5e2133a0c08049db9"
 
 [[package]]
 name = "typing-extensions"

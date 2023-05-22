@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from enum import IntEnum
 from typing import List, Tuple
 
@@ -87,8 +88,8 @@ class Node(SimulationObject):
         :param simulation_object: the current node as a sumo net.node
         """
         self._edge_ids = [
-            edge.getID()
-            for edge in simulation_object.getOutgoing()
+            my_edge.getID()
+            for my_edge in simulation_object.getOutgoing()
             + simulation_object.getIncoming()
         ]
 
@@ -197,11 +198,6 @@ class Signal(Node):
             + target_state
             + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1),
         )
-        print(
-            "G" * self._incoming_index
-            + target_state
-            + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1)
-        )
 
         self._state = target
 
@@ -216,7 +212,7 @@ class Signal(Node):
         return []
 
     def set_edges(self, simulation_object: net.TLS) -> None:
-        self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
+        self._edge_ids = [my_edge.getID() for my_edge in simulation_object.getEdges()]
 
     def add_edges(self, node: "net.node.Node") -> None:
         """Adds more edges to the signal (coming from the passed node)
@@ -226,7 +222,7 @@ class Signal(Node):
         assert node.getID() == self.identifier
 
         self._edge_ids += [
-            edge.getID() for edge in node.getOutgoing() + node.getIncoming()
+            my_edge.getID() for my_edge in node.getOutgoing() + node.getIncoming()
         ]
 
     @staticmethod
@@ -260,16 +256,15 @@ class Switch(Node):
         RIGHT = 2
 
     _state: "Switch.State"
-    _head_ids: List[str] = []
-    _left_ids: List[str] = []
-    _right_ids: List[str] = []
-    head: List["Edge"] = []
-    left: List["Edge"] = []
-    right: List["Edge"] = []
+    _head_ids: List[str]
+    head: List["Edge"]
 
     def __init__(self, identifier: str = None):
         super().__init__(identifier)
         self._state = Switch.State.LEFT
+
+        self._head_ids = []
+        self.head = []
 
     @property
     def state(self) -> State:
@@ -315,50 +310,45 @@ class Switch(Node):
         for my_edge in self.edges:
             if my_edge.identifier in self._head_ids:
                 self.head.append(my_edge)
-            elif my_edge.identifier in self._left_ids:
-                self.left.append(my_edge)
-            elif my_edge.identifier in self._right_ids:
-                self.right.append(my_edge)
+
+        print(self._head_ids, self._edge_ids)
+        assert len(self.head) == 2
+
+    def is_head(self, my_edge: "Edge") -> bool:
+        return my_edge in self.head
 
     def set_connections(self, simulation_object: "net.node.Node"):
-        connections: List["net.edge.Edge"] = simulation_object.getConnections()
-        connection_counts = self.get_connection_counts(connections)
-        for i, edge_id in enumerate(self._edge_ids):
-            if connection_counts[i][0] == connection_counts[i][1]:
-                self._head_ids.append(edge_id)
-            if connection_counts[i][0] > connection_counts[i][1]:
-                self._left_ids.append(edge_id)
-            if connection_counts[i][0] < connection_counts[i][1]:
-                self._right_ids.append(edge_id)
+        connections = simulation_object.getConnections()
 
-    def get_connection_counts(self, connections):
-        connection_counts = []
-        for _ in self._edge_ids:
-            connection_counts.append([0, 0])
+        directions_to = defaultdict(int)
+        directions_from = defaultdict(int)
+
         for connection in connections:
-            for i, edge_id in enumerate(self._edge_ids):
-                if edge_id == connection.getTo().getID():
-                    if connection.getDirection() in [
-                        net.connection.Connection.LINKDIR_LEFT,
-                        net.connection.Connection.LINKDIR_PARTLEFT,
-                    ]:
-                        connection_counts[i][0] += 1
-                    else:
-                        connection_counts[i][1] += 1
-                if edge_id == connection.getFrom().getID():
-                    if connection.getDirection() in [
-                        net.connection.Connection.LINKDIR_RIGHT,
-                        net.connection.Connection.LINKDIR_PARTRIGHT,
-                    ]:
-                        connection_counts[i][0] += 1
-                    else:
-                        connection_counts[i][1] += 1
-        return connection_counts
+            directions_to[connection.getTo().getID()] += 1
+            directions_from[connection.getFrom().getID()] += 1
+
+        for connection in connections:
+            if (
+                directions_to[connection.getTo().getID()] == 2
+                and connection.getTo().getID() not in self._head_ids
+            ):
+                self._head_ids.append(connection.getTo().getID())
+            if (
+                directions_from[connection.getFrom().getID()] == 2
+                and connection.getFrom().getID() not in self._head_ids
+            ):
+                self._head_ids.append(connection.getFrom().getID())
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
-        if incoming_edge in self.head:
-            return self.left + self.right
-        if incoming_edge in self.left or incoming_edge in self.right:
+        print(
+            "accessible?",
+            self.is_head(incoming_edge),
+            [x.identifier for x in self.head],
+            [x.identifier for x in self.edges if not self.is_head(x)],
+        )
+        if self.is_head(incoming_edge):
+            return [my_edge for my_edge in self.edges if not self.is_head(my_edge)]
+        if not self.is_head(incoming_edge):
             return self.head
         raise ValueError("Given edge is not connected to the switch.")
 

@@ -36,11 +36,6 @@ class Router:
             current_node = sorted_distances[current_index][0]
             if current_node == penultimate_node:
                 break
-            
-            print(f"Previous Node: {previous_nodes[current_node]}, Current Node: {current_node}")
-            for edge in previous_nodes[current_node].edges:
-                print(edge.to_node)
-
             edge_to_current_node = previous_nodes[current_node].get_edge_to(
                 current_node
             )
@@ -58,4 +53,7 @@ class Router:
             previous_node = previous_nodes[current_node]
             route.insert(0, previous_node)
             current_node = previous_node
+            if current_node == start_node:
+                route.insert(0, previous_nodes[current_node])
+                break
         return route

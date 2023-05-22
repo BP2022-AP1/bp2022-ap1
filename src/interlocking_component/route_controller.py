@@ -172,7 +172,17 @@ class RouteController(Component):
         new_route = self.router.get_route(start_edge, end_edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
+        print("start", start_edge.identifier, new_route[1].identifier)
+
+        for route in self.interlocking.routes:
+            print(
+                "interlocking route:",
+                route.start_signal.yaramo_signal.name,
+                route.end_signal.yaramo_signal.name,
+            )
+
         for end_node_candidat in new_route[2:]:
+            print("candidate", end_node_candidat.identifier)
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.yaramo_signal.name
