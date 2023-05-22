@@ -153,7 +153,10 @@ def track_speed_limit_fault_configuration():
 @pytest.fixture
 def schedule_blocked_fault_configuration():
     return ScheduleBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="ice_1_passenger", strategy="regular"
+        start_tick=10,
+        end_tick=20,
+        affected_element_id="ice_1_passenger",
+        strategy="regular",
     )
 
 
@@ -375,9 +378,12 @@ def spawn_coal_events_by_config_id_head_df(
 
 @pytest.fixture
 def verkehrsmenge_df():
-    return pd.DataFrame({
-        "train_type": ["cargo", "passenger", "all"],
-        "verkehrsmenge": [20.5, 143.5, 164.0]})
+    return pd.DataFrame(
+        {
+            "train_type": ["cargo", "passenger", "all"],
+            "verkehrsmenge": [20.5, 143.5, 164.0],
+        }
+    )
 
 
 @pytest.fixture
@@ -496,7 +502,11 @@ def verkehrsleistung_by_config_id_df(run):
 def window_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id,simulation_configuration.id,simulation_configuration.id],
+            "config_id": [
+                simulation_configuration.id,
+                simulation_configuration.id,
+                simulation_configuration.id,
+            ],
             "train_type": ["all", "cargo", "passenger"],
             "arrival_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
             "departure_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
@@ -508,7 +518,11 @@ def window_by_multi_config_df(simulation_configuration):
 def verkehrsmenge_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id, simulation_configuration.id, simulation_configuration.id],
+            "config_id": [
+                simulation_configuration.id,
+                simulation_configuration.id,
+                simulation_configuration.id,
+            ],
             "train_type": ["all", "cargo", "passenger"],
             "block_section_length": pd.Series([164.0, 20.5, 143.5]),
         }
@@ -519,7 +533,11 @@ def verkehrsmenge_by_multi_config_df(simulation_configuration):
 def verkehrsleistung_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id, simulation_configuration.id, simulation_configuration.id],
+            "config_id": [
+                simulation_configuration.id,
+                simulation_configuration.id,
+                simulation_configuration.id,
+            ],
             "train_type": ["all", "cargo", "passenger"],
             "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
         }

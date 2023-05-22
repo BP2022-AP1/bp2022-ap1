@@ -16,7 +16,6 @@ class TestLogCollector:
     def setup_method(self):
         pass
 
-
     @pytest.fixture
     def _run_ids(self, run: Run):
         return [run.id]
@@ -405,7 +404,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_1(logger)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(logger.run_id, "ice_1_passenger"),
+            log_collector.get_departures_arrivals_of_train(
+                logger.run_id, "ice_1_passenger"
+            ),
             _departure_arrival_1_df,
         )
 
@@ -414,7 +415,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_2(logger)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(logger.run_id, "ice_2_passenger"),
+            log_collector.get_departures_arrivals_of_train(
+                logger.run_id, "ice_2_passenger"
+            ),
             _departure_arrival_2_df,
         )
 
@@ -423,7 +426,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_3(logger)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(logger.run_id, "ice_3_passenger"),
+            log_collector.get_departures_arrivals_of_train(
+                logger.run_id, "ice_3_passenger"
+            ),
             _departure_arrival_3_df,
         )
 
@@ -432,7 +437,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_4(logger)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(logger.run_id, "cargo_4_cargo"),
+            log_collector.get_departures_arrivals_of_train(
+                logger.run_id, "cargo_4_cargo"
+            ),
             _departure_arrival_4_df,
         )
 
@@ -441,7 +448,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_1(logger)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(logger.run_id, "ice_1_passenger"),
+            log_collector.get_block_section_times_of_train(
+                logger.run_id, "ice_1_passenger"
+            ),
             _enter_leave_block_section_1_df,
         )
 
@@ -450,7 +459,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_2(logger)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(logger.run_id, "ice_2_passenger"),
+            log_collector.get_block_section_times_of_train(
+                logger.run_id, "ice_2_passenger"
+            ),
             _enter_leave_block_section_2_df,
         )
 
@@ -459,7 +470,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_3(logger)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(logger.run_id, "ice_3_passenger"),
+            log_collector.get_block_section_times_of_train(
+                logger.run_id, "ice_3_passenger"
+            ),
             _enter_leave_block_section_3_df,
         )
 
@@ -468,7 +481,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_4(logger)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(logger.run_id, "cargo_4_cargo"),
+            log_collector.get_block_section_times_of_train(
+                logger.run_id, "cargo_4_cargo"
+            ),
             _enter_leave_block_section_4_df,
         )
 
