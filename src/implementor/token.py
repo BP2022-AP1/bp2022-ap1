@@ -2,6 +2,9 @@
 # pylint: disable=duplicate-code
 
 import json
+import secrets
+import hashlib
+from src.implementor.models import Token
 
 
 def create_token(body, token):
@@ -13,5 +16,8 @@ def create_token(body, token):
 
     # Implement your business logic here
     # All the parameters are present in the options argument
+    token = secrets.token_hex(32)
+    hashed_token = hashlib.sha256(token.encode()).hexdigest()
+    Token.create(**body, hashedToken=hashed_token)
 
-    return json.dumps("<map>"), 501  # 201
+    return {"token": token}, 201
