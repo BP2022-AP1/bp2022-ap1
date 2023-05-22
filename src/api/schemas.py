@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields
-from src.api.token import Permission
+
+from src.implementor.permission import Permission
 
 
 class InterlockingConfiguration(Schema):

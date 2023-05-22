@@ -1,9 +1,9 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
-import json
-import secrets
 import hashlib
+import secrets
+
 from src.implementor.models import Token
 
 
