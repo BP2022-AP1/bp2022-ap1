@@ -58,24 +58,8 @@ jobs:
       run: sudo apt update
     - name: Install sumo
       run: sudo apt-get install -y sumo
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-    - name: Build and Cache Docker Image
-      id: build-image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: compose/celery/Dockerfile
-        push: false
-        load: true
-        pull: false
-        tags: user/app:latest
-        cache-from: |
-          type=gha
-        cache-to: |
-          type=gha,mode=max
     - name: Docker compose up
-      run: docker compose up -d grafana-test celery-worker postgresql-test
+      run: docker compose up -d grafana-test postgresql-test
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies
