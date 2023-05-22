@@ -334,8 +334,6 @@ class DataScience:
             [grouped_df, all_df],
             ignore_index=True,
         )
-        print("grouped_df", grouped_df)
-        print("all_df", all_df)
         grouped_df.reset_index(inplace=True)
         del grouped_df["index"]
         return grouped_df
@@ -389,19 +387,8 @@ class DataScience:
             [grouped_df, all_df],
             ignore_index=True,
         )
-        print("grouped_df", grouped_df)
-        print("all_df", all_df)
         grouped_df.reset_index(inplace=True)
         del grouped_df["index"]
-        with pd.option_context(
-            "display.max_rows",
-            None,
-            "display.max_columns",
-            None,
-            "display.precision",
-            3,
-        ):
-            print("grouped_df", grouped_df)
         return grouped_df
 
     # --- MAP

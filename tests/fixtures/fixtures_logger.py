@@ -520,7 +520,6 @@ def average_verkehrsleistung_by_config_id_df():
     return verkehrsleistung
 
 
-
 @pytest.fixture
 def window_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
