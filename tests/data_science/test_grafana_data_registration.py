@@ -77,6 +77,8 @@ class TestGrafanaDataRegistration:
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
             "get_verkehrsleistung_by_config_id:${config_id}",
+            "get_average_verkehrsmenge_by_config_id:${config_id}",
+            "get_average_verkehrsleistung_by_config_id:${config_id}",
             "get_window_by_multi_config:${config_ids}",
             "get_verkehrsmenge_by_multi_config:${config_ids}",
             "get_verkehrsleistung_by_multi_config:${config_ids}",

@@ -107,7 +107,7 @@ def value_after():
 
 @pytest.fixture
 def trains():
-    return ["ice_1", "ice_2", "ice_3", "ice_4"]
+    return ["cargo_4_cargo", "ice_1_passenger", "ice_2_passenger", "ice_3_passenger"]
 
 
 @pytest.fixture
@@ -153,7 +153,7 @@ def track_speed_limit_fault_configuration():
 @pytest.fixture
 def schedule_blocked_fault_configuration():
     return ScheduleBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="ice_1", strategy="regular"
+        start_tick=10, end_tick=20, affected_element_id="ice_1_passenger", strategy="regular"
     )
 
 
@@ -162,7 +162,7 @@ def train_prio_fault_configuration():
     return TrainPrioFaultConfiguration.create(
         start_tick=10,
         end_tick=20,
-        affected_element_id="ice_1",
+        affected_element_id="ice_1_passenger",
         new_prio=1,
         strategy="regular",
     )
@@ -173,7 +173,7 @@ def train_speed_fault_configuration():
     return TrainSpeedFaultConfiguration.create(
         start_tick=10,
         end_tick=20,
-        affected_element_id="ice_1",
+        affected_element_id="ice_1_passenger",
         new_speed=10,
         strategy="regular",
     )
@@ -211,9 +211,9 @@ def faults_log_collector_df(
                 "station_1",
                 "section_1",
                 "section_1",
-                "ice_1",
-                "ice_1",
-                "ice_1",
+                "ice_1_passenger",
+                "ice_1_passenger",
+                "ice_1_passenger",
             ],
             "value_before": [None, None, "100", None, "2", "100"],
             "value_after": [None, None, "10", None, "1", "10"],
@@ -375,17 +375,20 @@ def spawn_coal_events_by_config_id_head_df(
 
 @pytest.fixture
 def verkehrsmenge_df():
-    return pd.DataFrame({"verkehrsmenge": [164.0]})
+    return pd.DataFrame({
+        "train_type": ["cargo", "passenger", "all"],
+        "verkehrsmenge": [20.5, 143.5, 164.0]})
 
 
 @pytest.fixture
 def verkehrsleistung_by_run_id_df():
     return pd.DataFrame(
         {
-            "enter_tick": pd.Series([0], dtype="Int64"),
-            "leave_tick": pd.Series([60], dtype="Int64"),
-            "block_section_length": [164.0],
-            "verkehrsleistung": [9840.0],
+            "train_type": ["cargo", "passenger", "all"],
+            "enter_tick": pd.Series([0, 0, 0], dtype="Int64"),
+            "leave_tick": pd.Series([40, 60, 60], dtype="Int64"),
+            "block_section_length": [20.5, 143.5, 164.0],
+            "verkehrsleistung": [1845.0, 8610.0, 10455.0],
         }
     )
 
@@ -412,8 +415,9 @@ def window_size_time_by_config_id_df():
 def window_by_config_id_df():
     return pd.DataFrame(
         {
-            "arrival_tick": [25 / 3],
-            "departure_tick": [25 / 3],
+            "train_type": ["all", "cargo", "passenger"],
+            "arrival_tick": [25 / 3, 20 / 3, 80 / 9],
+            "departure_tick": [25 / 3, 20 / 3, 80 / 9],
         }
     )
 
@@ -437,24 +441,24 @@ def window_all_by_config_id_df():
                 "station_3",
             ],
             "train_id": [
-                "ice_1",
-                "ice_2",
-                "ice_3",
-                "ice_4",
-                "ice_1",
-                "ice_2",
-                "ice_3",
-                "ice_4",
-                "ice_1",
-                "ice_2",
-                "ice_3",
-                "ice_4",
+                "cargo_4_cargo",
+                "ice_1_passenger",
+                "ice_2_passenger",
+                "ice_3_passenger",
+                "cargo_4_cargo",
+                "ice_1_passenger",
+                "ice_2_passenger",
+                "ice_3_passenger",
+                "cargo_4_cargo",
+                "ice_1_passenger",
+                "ice_2_passenger",
+                "ice_3_passenger",
             ],
             "arrival_tick": pd.Series(
-                [10, 10, 0, 0, 10, 10, 10, 10, 10, 10, 10, 10], dtype="Int64"
+                [0, 10, 10, 0, 10, 10, 10, 10, 10, 10, 10, 10], dtype="Int64"
             ),
             "departure_tick": pd.Series(
-                [10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 0], dtype="Int64"
+                [10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 0, 10], dtype="Int64"
             ),
         }
     )
@@ -492,9 +496,10 @@ def verkehrsleistung_by_config_id_df(run):
 def window_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id],
-            "arrival_tick": pd.Series([25 / 3], dtype="Float64"),
-            "departure_tick": pd.Series([25 / 3], dtype="Float64"),
+            "config_id": [simulation_configuration.id,simulation_configuration.id,simulation_configuration.id],
+            "train_type": ["all", "cargo", "passenger"],
+            "arrival_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
+            "departure_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
         }
     )
 
@@ -503,8 +508,9 @@ def window_by_multi_config_df(simulation_configuration):
 def verkehrsmenge_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id],
-            "block_section_length": pd.Series([164.0]),
+            "config_id": [simulation_configuration.id, simulation_configuration.id, simulation_configuration.id],
+            "train_type": ["all", "cargo", "passenger"],
+            "block_section_length": pd.Series([164.0, 20.5, 143.5]),
         }
     )
 
@@ -513,10 +519,9 @@ def verkehrsmenge_by_multi_config_df(simulation_configuration):
 def verkehrsleistung_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id],
-            "leave_tick": pd.Series([60.0]),
-            "block_section_length": pd.Series([164.0]),
-            "verkehrsleistung": pd.Series([9840.0]),
+            "config_id": [simulation_configuration.id, simulation_configuration.id, simulation_configuration.id],
+            "train_type": ["all", "cargo", "passenger"],
+            "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
         }
     )
 
