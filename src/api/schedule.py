@@ -9,7 +9,7 @@ bp = Blueprint("schedule", __name__)
 
 
 @bp.route("/schedule", methods=["get"])
-@token_required
+@token_required()
 def get_all_schedule_ids(token):
     """Get all schedule id"""
     options = {}
@@ -19,7 +19,7 @@ def get_all_schedule_ids(token):
 
 
 @bp.route("/schedule", methods=["post"])
-@token_required
+@token_required()
 def create_schedule(token):
     """Create a schedule"""
     schema = schemas.ScheduleConfiguration()
@@ -30,7 +30,7 @@ def create_schedule(token):
 
 
 @bp.route("/schedule/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_schedule(identifier, token):
     """Get a schedule"""
     options = {}
@@ -40,7 +40,7 @@ def get_schedule(identifier, token):
 
 
 @bp.route("/schedule/<identifier>", methods=["delete"])
-@token_required
+@token_required()
 def delete_schedule(identifier, token):
     """Delete a schedule"""
     options = {}
