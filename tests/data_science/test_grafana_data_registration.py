@@ -345,6 +345,36 @@ class TestGrafanaDataRegistration:
             verkehrsleistung_by_config_id_df,
         )
 
+    def test_get_average_verkehrsmenge_by_config_id(
+        self,
+        _config_id: str,
+        logger: Logger,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        average_verkehrsmenge_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(logger)
+        assert_frame_equal(
+            grafana_data_registrator.get_average_verkehrsmenge_by_config_id(
+                _config_id, None
+            ),
+            average_verkehrsmenge_by_config_id_df,
+        )
+
+    def test_get_average_verkehrsleistung_by_config_id(
+            self,
+            _config_id: str,
+            logger: Logger,
+            grafana_data_registrator: GrafanaDataRegistrator,
+            average_verkehrsleistung_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(logger)
+        assert_frame_equal(
+            grafana_data_registrator.get_average_verkehrsleistung_by_config_id(
+                _config_id, None
+            ),
+            average_verkehrsleistung_by_config_id_df,
+        )
+
     # --- MULTI CONFIG
 
     def test_get_window_by_multi_config(

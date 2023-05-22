@@ -306,6 +306,34 @@ class TestDataScience:
         )
         assert_frame_equal(verkehrsmenge_df, verkehrsleistung_by_config_id_df)
 
+    def test_get_average_verkehrsmenge_by_config_id(
+        self,
+        logger: Logger,
+        simulation_configuration: SimulationConfiguration,
+        data_science: DataScience,
+        average_verkehrsmenge_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(logger)
+        verkehrsmenge_df = data_science.get_average_verkehrsmenge_by_config_id(
+            simulation_configuration
+        )
+        print('Verkehrsmenge df', verkehrsmenge_df)
+        assert_frame_equal(verkehrsmenge_df, average_verkehrsmenge_by_config_id_df)
+
+    def test_get_average_verkehrsleistung_by_config_id(
+        self,
+        logger: Logger,
+        simulation_configuration: SimulationConfiguration,
+        data_science: DataScience,
+        average_verkehrsleistung_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(logger)
+        verkehrsleistung_df = data_science.get_average_verkehrsleistung_by_config_id(
+            simulation_configuration
+        )
+        print('Verkehrsmenge df', verkehrsleistung_df)
+        assert_frame_equal(verkehrsleistung_df, average_verkehrsleistung_by_config_id_df)
+
     def test_get_window_by_multi_config(
         self,
         logger: Logger,

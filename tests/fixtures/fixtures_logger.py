@@ -499,6 +499,29 @@ def verkehrsleistung_by_config_id_df(run):
 
 
 @pytest.fixture
+def average_verkehrsmenge_by_config_id_df():
+    verkehrsmenge = pd.DataFrame(
+        {
+            "train_type": ["all", "cargo", "passenger"],
+            "verkehrsmenge": pd.Series([164.0, 20.5, 143.5]),
+        }
+    )
+    return verkehrsmenge
+
+
+@pytest.fixture
+def average_verkehrsleistung_by_config_id_df():
+    verkehrsleistung = pd.DataFrame(
+        {
+            "train_type": ["all", "cargo", "passenger"],
+            "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
+        }
+    )
+    return verkehrsleistung
+
+
+
+@pytest.fixture
 def window_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
