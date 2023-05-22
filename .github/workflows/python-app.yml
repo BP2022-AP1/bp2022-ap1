@@ -60,17 +60,6 @@ jobs:
       run: sudo apt-get install -y sumo
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-#    - name: Login to Github
-#      uses: docker/login-action@v2
-#      with:
-#        registry: ghcr.io
-#        username: ${{ github.actor }}
-#        password: ${{ secrets.GITHUB_TOKEN }}
-#    - name: Login to Docker Hub
-#      uses: docker/login-action@v2
-#      with:
-#        username: ${{ secrets.DOCKERHUB_USERNAME }}
-#        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and Cache Docker Image
       id: build-image
       uses: docker/build-push-action@v4
@@ -85,20 +74,6 @@ jobs:
           type=gha
         cache-to: |
           type=gha,mode=max
-#    - name: Build and push celery-worker
-#      uses: docker/build-push-action@v4
-#      with:
-#        context: .
-#        file: ./compose/celery/Dockerfile
-#        push: true
-#        tags: user/app:latest
-#        cache-from: type=gha
-#        cache-to: type=gha,mode=max
-#    - name: Build docker-compose
-      # Before the cache, it was "run: docker compose build".
-#      run: docker buildx bake --push --file docker-compose.yaml --file docker-compose-cache.json celery-worker
-#    - name: Initialize test deps via compose
-#      run: docker compose up -d grafana-test celery-worker postgresql-test
     - name: Docker compose up
       run: docker compose up -d grafana-test celery-worker postgresql-test
     - name: Install poetry
