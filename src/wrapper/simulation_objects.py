@@ -237,10 +237,11 @@ class Signal(Node):
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
         edges = super().get_edges_accessible_from(incoming_edge)
+        base_edge_id = incoming_edge.identifier.split("-re")[0]
         return [
             accessible_edge
             for accessible_edge in edges
-            if accessible_edge != incoming_edge
+            if base_edge_id not in accessible_edge.identifier
         ]
 
 

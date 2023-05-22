@@ -27,7 +27,7 @@ class SimulationObjectUpdatingComponent(Component):
     Also handles the adding and removing of objects from the simulation.
     """
 
-    _simulation_objects = None
+    _simulation_objects: List[SimulationObject]
     _sumo_configuration = None
     infrastructure_provider: SumoInfrastructureProvider = None
 
@@ -128,14 +128,13 @@ class SimulationObjectUpdatingComponent(Component):
 
     def next_tick(self, tick: int):
         subscription_results = traci.vehicle.getAllSubscriptionResults()
+        self._remove_stale_vehicles()
 
         for simulation_object in self._simulation_objects:
             if len(simulation_object.add_subscriptions()) > 0:
                 simulation_object.update(
                     subscription_results[simulation_object.identifier]
                 )
-
-        self._remove_stale_vehicles()
 
     def _remove_stale_vehicles(self):
         simulation_vehicles = set(traci.vehicle.getIDList())
