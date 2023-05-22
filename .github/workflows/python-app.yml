@@ -59,7 +59,7 @@ jobs:
     - name: Install sumo
       run: sudo apt-get install -y sumo
     - name: Docker compose up
-      run: docker compose up -d grafana-test postgresql-test
+      run: docker compose up -d grafana-test postgresql-test redis
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies
