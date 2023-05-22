@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 import os
+
 import peewee
 
 from src.base_model import db
