@@ -589,6 +589,4 @@ class TestLogCollector:
             "fault_id"
         ].astype("string")
         generated_faults_df = log_collector.get_faults(event_bus.run_id)
-        print(generated_faults_df)
-        print(faults_log_collector_df)
         assert_frame_equal(generated_faults_df, faults_log_collector_df)
