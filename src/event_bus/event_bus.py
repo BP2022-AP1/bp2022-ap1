@@ -132,7 +132,7 @@ class EventBus:
     def _get_callbacks_for_event_type(
         self, event_type: EventType
     ) -> Iterator[Callable[[Event], None]]:
-        """Returns an iterator to all callbacks associated with th eenevent type
+        """Returns an iterator to all callbacks associated with the relevant type
 
         :param event_type: The event type
         :return: The iterator to all the callbacks
