@@ -52,7 +52,8 @@ def get_all_schedule_blocked_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    configs = [str(config.id) for config in ScheduleBlockedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_schedule_blocked_fault_configuration(body, token):
@@ -327,7 +328,8 @@ def get_all_train_prio_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    configs = [str(config.id) for config in TrainPrioFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_train_prio_fault_configuration(body, token):
