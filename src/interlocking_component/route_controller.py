@@ -273,6 +273,8 @@ class RouteController(Component):
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     return
+        # If the no interlocking route is found an error is raised
+        raise KeyError()
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
         """This method checks if the given edge is the last segment of a activ route
