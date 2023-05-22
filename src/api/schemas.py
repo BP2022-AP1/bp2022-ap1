@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields
+from src.api.token import Permission
 
 
 class InterlockingConfiguration(Schema):
@@ -60,7 +61,7 @@ class SpawnerConfiguration(Schema):
 class TokenConfiguration(Schema):
     """The marshmallow schema for the token model."""
 
-    permission = fields.String(required=True)
+    permission = fields.Enum(Permission, required=True, by_value=True)
     name = fields.String(required=True)
 
 
