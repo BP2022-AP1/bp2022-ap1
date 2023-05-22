@@ -38,6 +38,19 @@ class SimulationConfiguration(Schema):
     """The marshmallow schema for the simulation configuration model."""
 
     description = fields.String()
+    spawner = fields.UUID(required=True)
+    platform_blocked_fault = fields.List(fields.UUID())
+    schedule_blocked_fault = fields.List(fields.UUID())
+    track_blocked_fault = fields.List(fields.UUID())
+    track_speed_limit_fault = fields.List(fields.UUID())
+    train_speed_fault = fields.List(fields.UUID())
+    train_prio_fault = fields.List(fields.UUID())
+
+
+class UpdateSimulationConfiguration(SimulationConfiguration):
+    """The marshmallow schema for the simulation configuration model."""
+
+    spawner = fields.UUID()
 
 
 class SpawnerConfiguration(Schema):

@@ -15,7 +15,7 @@ class TestApiPlatformBlockedFault:
             "/component/fault-injection/platform-blocked-fault",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "data",
@@ -55,7 +55,7 @@ class TestApiPlatformBlockedFault:
             f"/component/fault-injection/platform-blocked-fault/{object_id}",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 404
 
     def test_delete(self, client, clear_token):
         object_id = uuid.uuid4()
@@ -63,4 +63,4 @@ class TestApiPlatformBlockedFault:
             f"/component/fault-injection/platform-blocked-fault/{object_id}",
             headers={TOKEN_HEADER: clear_token},
         )
-        assert response.status_code == 501
+        assert response.status_code == 404

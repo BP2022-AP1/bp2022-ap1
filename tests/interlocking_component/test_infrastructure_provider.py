@@ -1,5 +1,3 @@
-import pytest
-
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
@@ -7,6 +5,8 @@ from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
 class TestInfrastructurProvider:
+    """This tests the InfrastructureProvieder."""
+
     def test_initialization(
         self, sumo_mock_infrastructure_provider: SumoInfrastructureProvider
     ):
@@ -18,11 +18,10 @@ class TestInfrastructurProvider:
         yaramo_point,
     ):
         switch: Switch = None
-        for (
-            potential_switch
-        ) in (
-            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component.switches
-        ):
+        souc = (
+            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component
+        )
+        for potential_switch in souc.switches:
             if potential_switch.identifier == yaramo_point.point_id:
                 switch = potential_switch
                 break
@@ -41,11 +40,10 @@ class TestInfrastructurProvider:
         rr_count = get_rr_count()  # Count for setting halt
         gg_count = get_gg_count()  # Count for setting go
         signal: Signal = None
-        for (
-            potential_signal
-        ) in (
-            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component.signals
-        ):
+        souc = (
+            sumo_mock_infrastructure_provider.route_controller.simulation_object_updating_component
+        )
+        for potential_signal in souc.signals:
             if potential_signal.identifier == yaramo_signal.name:
                 signal = potential_signal
                 break
@@ -65,11 +63,11 @@ class TestInfrastructurProvider:
     def test_train_drove_onto_track(
         self,
         interlocking_mock_infrastructure_provider: SumoInfrastructureProvider,
-        SUMO_train: Train,
-        SUMO_edge: Edge,
+        sumo_train: Train,
+        sumo_edge: Edge,
     ):
         interlocking_mock_infrastructure_provider.train_drove_onto_track(
-            SUMO_train, SUMO_edge
+            sumo_train, sumo_edge
         )
         assert (
             interlocking_mock_infrastructure_provider.route_controller.maybe_set_fahrstrasse_count
@@ -83,11 +81,11 @@ class TestInfrastructurProvider:
     def test_train_drove_off_track(
         self,
         interlocking_mock_infrastructure_provider: SumoInfrastructureProvider,
-        SUMO_train: Train,
-        SUMO_edge: Edge,
+        sumo_train: Train,
+        sumo_edge: Edge,
     ):
         interlocking_mock_infrastructure_provider.train_drove_off_track(
-            SUMO_train, SUMO_edge
+            sumo_train, sumo_edge
         )
         assert (
             interlocking_mock_infrastructure_provider.route_controller.maybe_free_fahrstrasse_count

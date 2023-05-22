@@ -674,14 +674,14 @@ Six = "*"
 
 [[package]]
 name = "fonttools"
-version = "4.39.3"
+version = "4.39.4"
 description = "Tools to manipulate font files"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "fonttools-4.39.3-py3-none-any.whl", hash = "sha256:64c0c05c337f826183637570ac5ab49ee220eec66cf50248e8df527edfa95aeb"},
-    {file = "fonttools-4.39.3.zip", hash = "sha256:9234b9f57b74e31b192c3fc32ef1a40750a8fbc1cd9837a7b7bfc4ca4a5c51d7"},
+    {file = "fonttools-4.39.4-py3-none-any.whl", hash = "sha256:106caf6167c4597556b31a8d9175a3fdc0356fdcd70ab19973c3b0d4c893c461"},
+    {file = "fonttools-4.39.4.zip", hash = "sha256:dba8d7cdb8e2bac1b3da28c5ed5960de09e59a2fe7e63bb73f5a59e57b0430d2"},
 ]
 
 [package.extras]
@@ -834,7 +834,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/interlocking.git"
 reference = "add-Poetry-support"
-resolved_reference = "44a9f5e5eefc32ffe0dd3fca71506b5c22453cff"
+resolved_reference = "45e6e23bacbd544fbf4a644b2ea9cd41e137fafc"
 
 [[package]]
 name = "isort"

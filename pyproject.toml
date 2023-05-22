@@ -104,7 +104,22 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test]
     help = "Run DB and test with pytest"
-    sequence = ["test-deps", "sleep", "db-test recreate", "test-pytest"]
+    sequence = ["test-deps", "test-pytest"]
+    envfile = [".env.shared", ".env.test"]
+
+    [tool.poe.tasks.test-lf]
+    help = "Run DB and test with pytest (only tests that failed last time)"
+    sequence = ["test-deps", "test-pytest --lf"]
+    envfile = [".env.shared", ".env.test"]
+
+    [tool.poe.tasks.test-ff]
+    help = "Run DB and test with pytest (tests that failed last time first)"
+    sequence = ["test-deps", "test-pytest --ff"]
+    envfile = [".env.shared", ".env.test"]
+
+    [tool.poe.tasks.test-nf]
+    help = "Run DB and test with pytest (new tests first)"
+    sequence = ["test-deps", "test-pytest --nf"]
     envfile = [".env.shared", ".env.test"]
 
     [tool.poe.tasks.test-ci]
@@ -114,7 +129,11 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-deps]
     help = "Initializes needed components for tests"
-    cmd = "docker compose up -d grafana-test celery-worker postgresql-test"
+    sequence = ["test-docker-deps", "db-test recreate"]
+
+    [tool.poe.tasks.test-docker-deps]
+    help = "Initializes needed docker containers for tests"
+    cmd = "docker compose up -d grafana-test redis postgresql-test --wait"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"

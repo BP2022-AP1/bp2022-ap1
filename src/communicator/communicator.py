@@ -21,6 +21,9 @@ class Communicator:
     _components = None
     _max_tick = None
 
+    def _sort_components(self):
+        self._components.sort(key=lambda x: x.priority, reverse=True)
+
     def add_component(self, component: Component):
         """Add the given component to the simulation.
         There are no guarantees if the component will be called within
@@ -29,6 +32,7 @@ class Communicator:
         :param component: The component to add to the current simulation
         """
         self._components.append(component)
+        self._sort_components()
 
     def __init__(
         self,
@@ -43,6 +47,7 @@ class Communicator:
         self._configuration = sumo_configuration
         self._port = sumo_port
         self._components = components if components is not None else []
+        self._sort_components()
         self._max_tick = max_tick
 
     def run(self) -> str:
@@ -130,7 +135,7 @@ class Communicator:
         :param process_id: The id of the celery task
         """
         process = AsyncResult(process_id)
-        process.revoke()
+        process.revoke(terminate=True)
 
     @classmethod
     def progress(cls, process_id: str) -> float:
@@ -146,7 +151,7 @@ class Communicator:
     def state(cls, progress_id: str) -> str:
         """
         Get the current state of the simulation.
-        Possible states are: PENDING, STARTED, RETRY, FAILURE, SUCCESS.
+        Possible states are: PENDING, STARTED, RETRY, FAILURE, SUCCESS, REVOKED.
 
         :param progress_id: The id of the celery task
         :return: The current state of the simulation
@@ -174,6 +179,8 @@ def run_simulation_steps(
     """
     sumo_running = True
     current_tick = 1
+
+    components.sort(key=lambda x: x.priority, reverse=True)
 
     update_state(current_tick, max_tick, sumo_running)
 

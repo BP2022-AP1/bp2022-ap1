@@ -62,7 +62,7 @@ class TestDataScience:
         assert _trains == trains
 
     def test_get_all_run_ids(
-        self, run: Run, run2: Run, data_science: DataScience, run_ids: list[Run]
+        self, logger: Logger, data_science: DataScience, run_ids: list[Run]
     ):
         assert sorted(data_science.get_all_run_ids()) == run_ids
 
@@ -177,13 +177,20 @@ class TestDataScience:
         with pytest.raises(NotImplementedError):
             data_science.get_station_counts_by_run_id(run)
 
-    def test_get_window_time_by_config_id(
+    def test_get_window_size_time_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
+        logger: Logger,
+        logger2: Logger,
         data_science: DataScience,
+        window_size_time_by_config_id_df: pd.DataFrame,
     ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_window_time_by_config_id(simulation_configuration)
+        setup_logs_departure_arrival(logger)
+        setup_logs_departure_arrival_alt(logger2)
+        window_size_df = data_science.get_window_size_time_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(window_size_df, window_size_time_by_config_id_df)
 
     def test_get_verkehrsleistung_time_by_config_id(
         self,
@@ -202,17 +209,48 @@ class TestDataScience:
         self,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        coal_demand_by_run_id_head_df,
     ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_coal_demand_by_config_id(simulation_configuration)
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        coal_demand_df = data_science.get_coal_demand_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(coal_demand_df.head(10), coal_demand_by_run_id_head_df)
 
-    def test_get_spawn_events_by_config_id(
+    def test_get_coal_spawn_events_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        logger: Logger,
+        spawn_coal_events_by_config_id_head_df: pd.DataFrame,
     ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_spawn_events_by_config_id(simulation_configuration)
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration,
+            schedule_configuration_id=demand_train_schedule_configuration,
+        )
+        spawn_events_df = data_science.get_coal_spawn_events_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(
+            spawn_events_df.head(5), spawn_coal_events_by_config_id_head_df
+        )
 
     def test_get_window_by_config_id(
         self,

@@ -5,21 +5,27 @@ from traci import vehicle
 
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
+    PlatformBlockedFaultConfigurationXSimulationConfiguration,
 )
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
     ScheduleBlockedFaultConfiguration,
+    ScheduleBlockedFaultConfigurationXSimulationConfiguration,
 )
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
+    TrackBlockedFaultConfigurationXSimulationConfiguration,
 )
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
+    TrackSpeedLimitFaultConfigurationXSimulationConfiguration,
 )
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
+    TrainPrioFaultConfigurationXSimulationConfiguration,
 )
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
+    TrainSpeedFaultConfigurationXSimulationConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.interlocking_configuration import (
@@ -31,7 +37,11 @@ from src.schedule.schedule_configuration import (
     ScheduleConfigurationXSimulationPlatform,
 )
 from src.schedule.train_schedule import TrainSchedule
-from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
+from src.spawner.spawner import (
+    SpawnerConfiguration,
+    SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
+)
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
@@ -136,6 +146,19 @@ def spawner_configuration(
     return configuration
 
 
+@pytest.fixture
+def another_spawner_configuration(
+    regular_train_schedule: TrainSchedule,
+) -> SpawnerConfiguration:
+    configuration = SpawnerConfiguration()
+    configuration.save()
+    SpawnerConfigurationXSchedule(
+        spawner_configuration_id=configuration.id,
+        schedule_configuration_id=regular_train_schedule.id,
+    ).save()
+    return configuration
+
+
 # ------------- PlatformBlockedFaultConfiguration ----------------
 
 
@@ -145,31 +168,31 @@ def platform() -> Platform:
 
 
 @pytest.fixture
-def platform_blocked_fault_configuration(
-    platform: Platform,
-) -> PlatformBlockedFaultConfiguration:
-    return PlatformBlockedFaultConfiguration.create(
-        start_tick=20,
-        end_tick=200,
-        description="test PlatformBlockedFault",
-        affected_element_id=platform.identifier,
-        strategy="regular",
-    )
-
-
-# ------------- ScheduleBlockedFaultConfiguration ----------------
+def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
+    return {
+        "start_tick": 20,
+        "end_tick": 200,
+        "description": "test PlatformBlockedFault",
+        "affected_element_id": platform.identifier,
+        "strategy": "regular",
+    }
 
 
 @pytest.fixture
-def schedule_blocked_fault_configuration(
-    regular_train_schedule: TrainSchedule,
-) -> ScheduleBlockedFaultConfiguration(regular_train_schedule):
-    return ScheduleBlockedFaultConfiguration.create(
-        start_tick=30,
-        end_tick=300,
-        description="test ScheduleBlockedFault",
-        affected_element_id=regular_train_schedule.id,
-        strategy="regular",
+def platform_blocked_fault_configuration(
+    platform_blocked_fault_configuration_data,
+) -> PlatformBlockedFaultConfiguration:
+    return PlatformBlockedFaultConfiguration.create(
+        **platform_blocked_fault_configuration_data
+    )
+
+
+@pytest.fixture
+def another_platform_blocked_fault_configuration(
+    platform_blocked_fault_configuration_data,
+) -> PlatformBlockedFaultConfiguration:
+    return PlatformBlockedFaultConfiguration.create(
+        **platform_blocked_fault_configuration_data
     )
 
 
@@ -192,15 +215,29 @@ def track(edge, edge_re):
 
 
 @pytest.fixture
-def track_blocked_fault_configuration(
-    track: Track,
-) -> TrackBlockedFaultConfiguration:
+def track_blocked_fault_configuration_data(track: Track) -> dict:
+    return {
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test TrackBlockedFault",
+        "affected_element_id": track.identifier,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def track_blocked_fault_configuration(track_blocked_fault_configuration_data):
     return TrackBlockedFaultConfiguration.create(
-        start_tick=30,
-        end_tick=300,
-        description="test TrackBlockedFault",
-        affected_element_id=track.identifier,
-        strategy="regular",
+        **track_blocked_fault_configuration_data
+    )
+
+
+@pytest.fixture
+def another_track_blocked_fault_configuration(
+    track_blocked_fault_configuration_data,
+):
+    return TrackBlockedFaultConfiguration.create(
+        **track_blocked_fault_configuration_data
     )
 
 
@@ -230,8 +267,16 @@ def track_speed_limit_fault_configuration(
     )
 
 
-# ------------- TrainPrioFault ----------------
-from traci import vehicle
+@pytest.fixture
+def another_track_speed_limit_fault_configuration(
+    track_speed_limit_fault_configuration_data: dict,
+) -> TrackSpeedLimitFaultConfiguration:
+    return TrackSpeedLimitFaultConfiguration.create(
+        **track_speed_limit_fault_configuration_data
+    )
+
+
+# ------------- TrainPrioFaultConfiguration ----------------
 
 
 @pytest.fixture
@@ -267,7 +312,14 @@ def train_prio_fault_configuration(train_prio_fault_configuration_data):
     return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
 
 
-# ------------- TrainSpeedLimitFault ----------------
+@pytest.fixture
+def another_train_prio_fault_configuration(
+    train_prio_fault_configuration_data,
+):
+    return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
+
+
+# ------------- TrainSpeedLimitFaultConfiguration ----------------
 
 
 @pytest.fixture
@@ -320,12 +372,63 @@ def train_speed_fault_configuration(train_speed_fault_configuration_data):
     return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
 
 
+@pytest.fixture
+def another_train_speed_fault_configuration(
+    train_speed_fault_configuration_data,
+):
+    return TrainSpeedFaultConfiguration.create(**train_speed_fault_configuration_data)
+
+
+# ------------- ScheduleBlockedFaultConfiguration ----------------
+
+
+@pytest.fixture
+def schedule():
+    schedule_configuration = ScheduleConfiguration(
+        schedule_type="TrainSchedule",
+        strategy_type="RegularScheduleStrategy",
+        train_schedule_train_type="cargo",
+        regular_strategy_start_tick=10,
+        regular_strategy_frequency=100,
+    )
+    schedule_configuration.save()
+    return schedule_configuration
+
+
+@pytest.fixture
+def schedule_blocked_fault_configuration_data(schedule) -> dict:
+    return {
+        "start_tick": 30,
+        "end_tick": 300,
+        "description": "test ScheduleBlockedFault",
+        "affected_element_id": schedule.id,
+        "strategy": "regular",
+    }
+
+
+@pytest.fixture
+def schedule_blocked_fault_configuration(
+    schedule_blocked_fault_configuration_data: dict,
+) -> ScheduleBlockedFaultConfiguration:
+    return ScheduleBlockedFaultConfiguration.create(
+        **schedule_blocked_fault_configuration_data
+    )
+
+
+@pytest.fixture
+def another_schedule_blocked_fault_configuration(
+    schedule_blocked_fault_configuration_data: dict,
+) -> ScheduleBlockedFaultConfiguration:
+    return ScheduleBlockedFaultConfiguration.create(
+        **schedule_blocked_fault_configuration_data
+    )
+
+
 # ------------- SimulationConfiguration ----------------
 
 
 @pytest.fixture
 def simulation_configuration_data(
-    interlocking_configuration,
     spawner_configuration,
     platform_blocked_fault_configuration,
     schedule_blocked_fault_configuration,
@@ -335,8 +438,7 @@ def simulation_configuration_data(
     train_speed_fault_configuration,
 ):
     return {
-        "interlocking": [interlocking_configuration.id],
-        "spawner": [spawner_configuration.id],
+        "spawner": spawner_configuration.id,
         "platform_blocked_fault": [platform_blocked_fault_configuration.id],
         "schedule_blocked_fault": [schedule_blocked_fault_configuration.id],
         "track_blocked_fault": [track_blocked_fault_configuration.id],
@@ -348,22 +450,71 @@ def simulation_configuration_data(
 
 @pytest.fixture
 def simulation_configuration_full(
-    simulation_configuration_data: dict[str, any],
+    spawner_configuration,
+    platform_blocked_fault_configuration,
+    schedule_blocked_fault_configuration,
+    track_blocked_fault_configuration,
+    track_speed_limit_fault_configuration,
+    train_prio_fault_configuration,
+    train_speed_fault_configuration,
 ):
-    configuration = SimulationConfiguration(**simulation_configuration_data)
+    configuration = SimulationConfiguration()
     configuration.save()
+
+    SpawnerConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        spawner_configuration=spawner_configuration,
+    )
+    PlatformBlockedFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        platform_blocked_fault_configuration=platform_blocked_fault_configuration,
+    )
+    ScheduleBlockedFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        schedule_blocked_fault_configuration=schedule_blocked_fault_configuration,
+    )
+    TrackBlockedFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        track_blocked_fault_configuration=track_blocked_fault_configuration,
+    )
+    TrackSpeedLimitFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        track_speed_limit_fault_configuration=track_speed_limit_fault_configuration,
+    )
+    TrainSpeedFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        train_speed_fault_configuration=train_speed_fault_configuration,
+    )
+    TrainPrioFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        train_prio_fault_configuration=train_prio_fault_configuration,
+    )
+
     return configuration
 
 
 @pytest.fixture
-def empty_simulation_configuration():
-    simulation = SimulationConfiguration()
-    simulation.save()
-    return simulation
+def empty_simulation_configuration_data(spawner_configuration):
+    return {"spawner": spawner_configuration.id}
 
 
 @pytest.fixture
-def another_empty_simulation_configuration():
-    simulation = SimulationConfiguration()
-    simulation.save()
-    return simulation
+def empty_simulation_configuration(empty_simulation_configuration_data):
+    configuration = SimulationConfiguration()
+    configuration.save()
+    SpawnerConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        spawner_configuration=empty_simulation_configuration_data["spawner"],
+    )
+    return configuration
+
+
+@pytest.fixture
+def another_empty_simulation_configuration(empty_simulation_configuration_data):
+    configuration = SimulationConfiguration()
+    configuration.save()
+    SpawnerConfigurationXSimulationConfiguration.create(
+        simulation_configuration=configuration,
+        spawner_configuration=empty_simulation_configuration_data["spawner"],
+    )
+    return configuration
