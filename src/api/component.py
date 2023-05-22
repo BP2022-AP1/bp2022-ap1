@@ -281,45 +281,48 @@ def delete_platform_blocked_fault_configuration(identifier, token):
     return impl.component.delete_platform_blocked_fault_configuration(options, token)
 
 
-@bp.route("/component/interlocking", methods=["get"])
-@token_required
-def get_all_interlocking_configuration_ids(token):
-    """Get all interlocking configuration ids"""
-    options = {}
-    options["simulationId"] = request.args.get("simulationId")
+# -----------------------------------------------------------------------------------
+# --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
+# -----------------------------------------------------------------------------------
+# @bp.route("/component/interlocking", methods=["get"])
+# @token_required
+# def get_all_interlocking_configuration_ids(token):
+#     """Get all interlocking configuration ids"""
+#     options = {}
+#     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.component.get_all_interlocking_configuration_ids(options, token)
-
-
-@bp.route("/component/interlocking", methods=["post"])
-@token_required
-def create_interlocking_configuration(token):
-    """Create a interlocking configuration"""
-    schema = schemas.InterlockingConfiguration()
-
-    body = parser.parse(schema, request, location="json")
-
-    return impl.component.create_interlocking_configuration(body, token)
+#     return impl.component.get_all_interlocking_configuration_ids(options, token)
 
 
-@bp.route("/component/interlocking/<identifier>", methods=["get"])
-@token_required
-def get_interlocking_configuration(identifier, token):
-    """Get a interlocking configuration"""
-    options = {}
-    options["identifier"] = identifier
+# @bp.route("/component/interlocking", methods=["post"])
+# @token_required
+# def create_interlocking_configuration(token):
+#     """Create a interlocking configuration"""
+#     schema = schemas.InterlockingConfiguration()
 
-    return impl.component.get_interlocking_configuration(options, token)
+#     body = parser.parse(schema, request, location="json")
+
+#     return impl.component.create_interlocking_configuration(body, token)
 
 
-@bp.route("/component/interlocking/<identifier>", methods=["delete"])
-@token_required
-def delete_interlocking_configuration(identifier, token):
-    """Delete a interlocking configuration"""
-    options = {}
-    options["identifier"] = identifier
+# @bp.route("/component/interlocking/<identifier>", methods=["get"])
+# @token_required
+# def get_interlocking_configuration(identifier, token):
+#     """Get a interlocking configuration"""
+#     options = {}
+#     options["identifier"] = identifier
 
-    return impl.component.delete_interlocking_configuration(options, token)
+#     return impl.component.get_interlocking_configuration(options, token)
+
+
+# @bp.route("/component/interlocking/<identifier>", methods=["delete"])
+# @token_required
+# def delete_interlocking_configuration(identifier, token):
+#     """Delete a interlocking configuration"""
+#     options = {}
+#     options["identifier"] = identifier
+
+#     return impl.component.delete_interlocking_configuration(options, token)
 
 
 @bp.route("/component/spawner", methods=["get"])
