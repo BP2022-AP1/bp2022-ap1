@@ -842,16 +842,17 @@ class Train(SimulationObject):
             or self._edge.identifier != edge_id
             and not edge_id[:1] == ":"
         ):
-            if self._edge is not None:
-                self.updater.infrastructure_provider.train_drove_off_track(
-                    self, self._edge
-                )
+            old_edge = self._edge
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
             )
+            if old_edge is not None:
+                self.updater.infrastructure_provider.train_drove_off_track(
+                    self, old_edge
+                )
 
             if (
                 self._timetable[0].edge == self._edge
