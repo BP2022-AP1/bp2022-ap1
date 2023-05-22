@@ -2529,7 +2529,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/track-signal-generator.git"
 reference = "refactor/replace-connected-nodes-edges"
-resolved_reference = "629660b5cad54ccc857a18b5e2133a0c08049db9"
+resolved_reference = "5baf27ae9549773abe727301ad6fe2d422113244"
 
 [[package]]
 name = "typing-extensions"
