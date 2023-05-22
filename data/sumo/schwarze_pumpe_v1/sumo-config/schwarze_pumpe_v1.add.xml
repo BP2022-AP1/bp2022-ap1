@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2023-05-16 11:27:48 by Eclipse SUMO netedit Version 1.15.0
+<!-- generated on 2023-05-22 15:30:47 by Eclipse SUMO netedit Version 1.15.0
 -->
 
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
     <!-- StoppingPlaces -->
-    <busStop id="bs_0" lane="a411e-1_0" startPos="817.20" endPos="917.20"/>
-    <busStop id="bs_1" lane="c99ac-1_0" startPos="504.78" endPos="604.78"/>
-    <busStop id="bs_2" lane="26189-1_0" startPos="339.61" endPos="439.61"/>
-    <busStop id="bs_3" lane="c5d25-1_0" startPos="1133.00" endPos="1233.00"/>
-    <busStop id="bs_4" lane="cc3c3-1_0" startPos="142.03" endPos="242.03"/>
-    <busStop id="bs_5" lane="84204-2_0" startPos="870.04" endPos="970.04"/>
-    <busStop id="bs_6" lane="d8d2c-9_0" startPos="1177.13" endPos="1277.13"/>
-    <busStop id="bs_7" lane="a4223-4_0" startPos="885.92" endPos="985.92"/>
+    <busStop id="bs_0" lane="b2daa-1_0" startPos="689.97" endPos="789.97"/>
+    <busStop id="bs_1" lane="f8127-1_0" startPos="446.74" endPos="546.74"/>
+    <busStop id="bs_2" lane="1c363-1_0" startPos="212.54" endPos="312.54"/>
+    <busStop id="bs_3" lane="f7740-1_0" startPos="1303.24" endPos="1403.24"/>
+    <busStop id="bs_4" lane="eefc2-1_0" startPos="174.00" endPos="274.00"/>
+    <busStop id="bs_5" lane="45e38-2_0" startPos="888.51" endPos="988.51"/>
+    <busStop id="bs_6" lane="ce5c2-1-re_0" startPos="892.98" endPos="992.98"/>
+    <busStop id="bs_7" lane="d8c47-4_0" startPos="596.78" endPos="696.78"/>
 </additional>
