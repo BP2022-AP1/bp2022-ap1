@@ -23,7 +23,6 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration
-from src.logger.logger import Logger
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.spawner.spawner import (
@@ -78,6 +77,8 @@ class TestGrafanaDataRegistration:
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
             "get_verkehrsleistung_by_config_id:${config_id}",
+            "get_average_verkehrsmenge_by_config_id:${config_id}",
+            "get_average_verkehrsleistung_by_config_id:${config_id}",
             "get_window_by_multi_config:${config_ids}",
             "get_verkehrsmenge_by_multi_config:${config_ids}",
             "get_verkehrsleistung_by_multi_config:${config_ids}",
@@ -342,6 +343,36 @@ class TestGrafanaDataRegistration:
                 _config_id, None
             ),
             verkehrsleistung_by_config_id_df,
+        )
+
+    def test_get_average_verkehrsmenge_by_config_id(
+        self,
+        _config_id: str,
+        event_bus: EventBus,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        average_verkehrsmenge_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(event_bus)
+        assert_frame_equal(
+            grafana_data_registrator.get_average_verkehrsmenge_by_config_id(
+                _config_id, None
+            ),
+            average_verkehrsmenge_by_config_id_df,
+        )
+
+    def test_get_average_verkehrsleistung_by_config_id(
+        self,
+        _config_id: str,
+        event_bus: EventBus,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        average_verkehrsleistung_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(event_bus)
+        assert_frame_equal(
+            grafana_data_registrator.get_average_verkehrsleistung_by_config_id(
+                _config_id, None
+            ),
+            average_verkehrsleistung_by_config_id_df,
         )
 
     # --- MULTI CONFIG

@@ -142,6 +142,22 @@ class GrafanaDataRegistrator:
         config_id = UUID(param)
         return self.data_science.get_verkehrsleistung_by_config_id(config_id)
 
+    def get_average_verkehrsmenge_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the average verkehrsmenge by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of average verkehrsmenge"""
+        config_id = UUID(param)
+        return self.data_science.get_average_verkehrsmenge_by_config_id(config_id)
+
+    def get_average_verkehrsleistung_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the average verkehrsleistung by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of average verkehrsleistung"""
+        config_id = UUID(param)
+        return self.data_science.get_average_verkehrsleistung_by_config_id(config_id)
+
     # --- MULTI CONFIG
 
     def get_window_by_multi_config(self, param, _) -> pd.DataFrame:
@@ -221,6 +237,8 @@ class GrafanaDataRegistrator:
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
             "get_verkehrsleistung_by_config_id:${config_id}",
+            "get_average_verkehrsmenge_by_config_id:${config_id}",
+            "get_average_verkehrsleistung_by_config_id:${config_id}",
             "get_window_by_multi_config:${config_ids}",
             "get_verkehrsmenge_by_multi_config:${config_ids}",
             "get_verkehrsleistung_by_multi_config:${config_ids}",
@@ -291,6 +309,14 @@ def define_and_register_data():
     dg.add_metric_reader(
         "get_verkehrsleistung_by_config_id",
         grafana_data_registrator.get_verkehrsleistung_by_config_id,
+    )
+    dg.add_metric_reader(
+        "get_average_verkehrsmenge_by_config_id",
+        grafana_data_registrator.get_average_verkehrsmenge_by_config_id,
+    )
+    dg.add_metric_reader(
+        "get_average_verkehrsleistung_by_config_id",
+        grafana_data_registrator.get_average_verkehrsleistung_by_config_id,
     )
     dg.add_metric_reader(
         "get_window_by_multi_config",
