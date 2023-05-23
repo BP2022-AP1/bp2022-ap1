@@ -1,15 +1,15 @@
 import os
 from datetime import datetime
 from uuid import uuid4
-import human_readable_ids
 
+import human_readable_ids
 from peewee import (
+    CharField,
     DateTimeField,
     Model,
     PostgresqlDatabase,
     SqliteDatabase,
     UUIDField,
-    CharField,
 )
 
 db: PostgresqlDatabase = PostgresqlDatabase(
