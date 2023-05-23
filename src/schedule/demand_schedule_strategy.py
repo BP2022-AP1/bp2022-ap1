@@ -53,7 +53,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
     power_station: str
     scaling_factor: float
     start_datetime: datetime
-    _spawn_ticks: list[int]
+    spawn_ticks: list[int]
     _api: SmardApi
 
     def __init__(
@@ -76,7 +76,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         self.power_station = power_station
         self.scaling_factor = scaling_factor
         self.start_datetime = start_datetime
-        self._spawn_ticks = []
+        self.spawn_ticks = []
         self._api = SmardApi()
         self._calculate_spawn_ticks()
 
@@ -123,10 +123,10 @@ class DemandScheduleStrategy(ScheduleStrategy):
             train_accumulator += self._compute_trains_to_spawn(entry.value)
             tick = int(quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_tick)
             while train_accumulator >= 1.0:
-                self._spawn_ticks.append(tick)
+                self.spawn_ticks.append(tick)
                 train_accumulator -= 1.0
                 tick += 1
 
     def should_spawn(self, tick: int) -> bool:
         """Returns whether a train should spawn at the given tick."""
-        return super().should_spawn(tick) and tick in self._spawn_ticks
+        return super().should_spawn(tick) and tick in self.spawn_ticks

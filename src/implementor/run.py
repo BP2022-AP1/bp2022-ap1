@@ -1,8 +1,6 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
-import json
-
 from src.communicator.communicator import Communicator
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
@@ -204,10 +202,17 @@ def get_run(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    run_id = options["identifier"]
+    runs = Run.select().where(Run.id == run_id)
 
-    return json.dumps("<map>"), 501  # 200
+    if not runs.exists():
+        return "Run not found", 404
+
+    run = runs.get()
+    progress = Communicator.progress(str(run.process_id))
+    state = Communicator.state(str(run.process_id))
+
+    return {"state": state, "progress": progress}, 200
 
 
 def delete_run(options, token):
@@ -218,7 +223,13 @@ def delete_run(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    run_id = options["identifier"]
+    runs = Run.select().where(Run.id == run_id)
 
-    return "", 501  # 204
+    if not runs.exists():
+        return "Run not found", 404
+
+    run = runs.get()
+    Communicator.stop(str(run.process_id))
+    run.delete_instance()
+    return "Deleted run", 204

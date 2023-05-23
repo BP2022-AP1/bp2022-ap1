@@ -21,7 +21,7 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import SimulationConfiguration
+from src.implementor.models import Run, SimulationConfiguration
 from src.logger.logger import Logger
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
@@ -69,7 +69,10 @@ class TestGrafanaDataRegistration:
             "test_get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
+            "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
+            "get_coal_demand_by_config_id:${config_id}",
+            "get_coal_spawn_events_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
@@ -142,7 +145,7 @@ class TestGrafanaDataRegistration:
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
         simulation_configuration: SimulationConfiguration,
-        coal_demand_by_run_id_head_df: pd.DataFrame,
+        coal_demand_by_run_id_head_df,
     ):
         SpawnerConfigurationXSimulationConfiguration.create(
             simulation_configuration=simulation_configuration,
@@ -198,6 +201,23 @@ class TestGrafanaDataRegistration:
 
     # --- CONFIG
 
+    def test_get_window_size_time_by_config_id(
+        self,
+        _config_id: str,
+        logger: Logger,
+        logger2: Logger,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        window_size_time_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_departure_arrival(logger)
+        setup_logs_departure_arrival_alt(logger2)
+        assert_frame_equal(
+            grafana_data_registrator.get_window_size_time_by_config_id(
+                _config_id, None
+            ),
+            window_size_time_by_config_id_df,
+        )
+
     def test_get_verkehrsleistung_time_by_config_id(
         self,
         _config_id: str,
@@ -211,6 +231,58 @@ class TestGrafanaDataRegistration:
                 _config_id, None
             ),
             verkehrsleistung_momentarily_time_df,
+        )
+
+    def test_get_coal_demand_by_config_id(
+        self,
+        _config_id: str,
+        logger: Logger,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        simulation_configuration: SimulationConfiguration,
+        coal_demand_by_run_id_head_df,
+    ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        assert_frame_equal(
+            grafana_data_registrator.get_coal_demand_by_config_id(
+                _config_id, None
+            ).head(10),
+            coal_demand_by_run_id_head_df,
+        )
+
+    def test_get_coal_spawn_events_by_config_id(
+        self,
+        _config_id: str,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        simulation_configuration: SimulationConfiguration,
+        demand_strategy: DemandScheduleStrategy,
+        demand_train_schedule_configuration: ScheduleConfiguration,
+        spawner_configuration: SpawnerConfiguration,
+        logger: Logger,
+        spawn_coal_events_by_config_id_head_df: pd.DataFrame,
+    ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
+        assert_frame_equal(
+            grafana_data_registrator.get_coal_spawn_events_by_config_id(
+                _config_id, None
+            ).head(5),
+            spawn_coal_events_by_config_id_head_df,
         )
 
     def test_get_window_by_config_id(
@@ -343,22 +415,22 @@ class TestGrafanaDataRegistration:
     def test_get_all_run_ids(
         self,
         _multi_config: str,
-        logger: Logger,
+        run: Run,
+        run2: Run,
         grafana_data_registrator: GrafanaDataRegistrator,
         run_ids,
     ):
-        setup_logs_block_sections(logger)
-        assert grafana_data_registrator.get_all_run_ids(None) == run_ids
+        assert sorted(grafana_data_registrator.get_all_run_ids(None)) == run_ids
 
     def test_get_all_config_ids(
         self,
         _multi_config: str,
-        logger: Logger,
+        simulation_configuration: SimulationConfiguration,
+        simulation_configuration2: SimulationConfiguration,
         grafana_data_registrator: GrafanaDataRegistrator,
         config_ids,
     ):
-        setup_logs_block_sections(logger)
-        assert grafana_data_registrator.get_all_config_ids(None) == config_ids
+        assert sorted(grafana_data_registrator.get_all_config_ids(None)) == config_ids
 
     def test_search(
         self, grafana_data_registrator: GrafanaDataRegistrator, _search_list

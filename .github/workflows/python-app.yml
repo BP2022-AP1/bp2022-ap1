@@ -7,8 +7,7 @@ on:
   push
 
 
-permissions:
-  contents: read
+permissions: write-all
 
 jobs:
   lint:
@@ -39,8 +38,13 @@ jobs:
         poetry run poe lint-tests
 
   test:
-
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_index: [ 1, 2, 3, 4, 5, 6, 7, 8 ]
+        ci_total: [ 8 ]
 
     steps:
     - uses: actions/checkout@v3
@@ -54,13 +58,18 @@ jobs:
       run: sudo apt update
     - name: Install sumo
       run: sudo apt-get install -y sumo
+    - name: Docker compose up
+      run: docker compose up -d grafana-test postgresql-test redis
     - name: Install poetry
       run: pipx install poetry
     - name: Install dependencies
       run: poetry install
     - name: Test with pytest
       run: |
-        poetry run poe test
+        poetry run poe test-ci
+      env:
+        CI_INDEX: ${{ matrix.ci_index }}
+        CI_TOTAL: ${{ matrix.ci_total }}
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v2.0.0
       with:

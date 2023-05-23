@@ -579,7 +579,6 @@ class TestLogEntry:
             run,
             train_id,
             block_section_id,
-            block_section_length,
         ):
             """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
             return {
@@ -589,7 +588,6 @@ class TestLogEntry:
                 "run_id": run.id,
                 "train_id": train_id,
                 "block_section_id": block_section_id,
-                "block_section_length": block_section_length,
             }
 
         @pytest.fixture
@@ -601,7 +599,6 @@ class TestLogEntry:
             run,
             train_id,
             block_section_id,
-            block_section_length,
         ):
             """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
             return {
@@ -611,7 +608,6 @@ class TestLogEntry:
                 "run_id": str(run.id),
                 "train_id": train_id,
                 "block_section_id": block_section_id,
-                "block_section_length": block_section_length,
             }
 
         @pytest.fixture
