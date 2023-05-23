@@ -1,12 +1,12 @@
 import pytest
 from traci import edge
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_types.track_speed_limit_fault import TrackSpeedLimitFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -38,13 +38,13 @@ class TestTrackSpeedLimitFault:
     def track_speed_limit_fault(
         self,
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         interlocking: IInterlockingDisruptor,
         simulation_object_updater: SimulationObjectUpdatingComponent,
     ):
         return TrackSpeedLimitFault(
             configuration=track_speed_limit_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )

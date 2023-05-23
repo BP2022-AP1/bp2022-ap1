@@ -26,11 +26,11 @@ class TestSpawner:
         self,
         spawner: Spawner,
         spawner_configuration: SpawnerConfiguration,
-        mock_logger: object,
+        event_bus: object,
         mock_train_spawner: object,
     ):
         assert spawner.configuration == spawner_configuration
-        assert spawner.logger == mock_logger
+        assert spawner.event_bus == event_bus
         assert spawner.train_spawner == mock_train_spawner
 
     def test_get_schedules(
