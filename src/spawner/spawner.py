@@ -27,7 +27,9 @@ class SpawnerConfigurationXSchedule(BaseModel):
     spawner_configuration_id = ForeignKeyField(
         SpawnerConfiguration, null=False, backref="schedule_configuration_references"
     )
-    schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
+    schedule_configuration_id = ForeignKeyField(
+        ScheduleConfiguration, null=False, backref="spawner_configuration_references"
+    )
 
 
 class SpawnerConfigurationXSimulationConfiguration(BaseModel):
