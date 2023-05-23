@@ -206,7 +206,7 @@ class TestGrafanaDataRegistration:
         self,
         _config_id: str,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_size_time_by_config_id_df: pd.DataFrame,
     ):
@@ -290,7 +290,7 @@ class TestGrafanaDataRegistration:
         self,
         _config_id: str,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_by_config_id_df: pd.DataFrame,
     ):
@@ -305,7 +305,7 @@ class TestGrafanaDataRegistration:
         self,
         _config_id: str,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_all_by_config_id_df,
     ):
@@ -350,7 +350,7 @@ class TestGrafanaDataRegistration:
         self,
         _multi_config: str,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_by_multi_config_df: pd.DataFrame,
     ):
