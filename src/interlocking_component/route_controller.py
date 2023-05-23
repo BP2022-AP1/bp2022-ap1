@@ -120,6 +120,7 @@ class RouteController(Component):
         self.interlocking.prepare(self.topology)
 
     def initialize_signals(self):
+        """This method sets which edge is the incoming for each signal."""
         for yaramo_signal in self.topology.signals.values():
             signal = None
             for potentical_signal in self.simulation_object_updating_component.signals:

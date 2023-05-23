@@ -106,6 +106,11 @@ class Node(SimulationObject):
         raise ValueError("The two nodes are not connected.")
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
+        """This method return all edges accessible from the given edge.
+
+        :param incoming_edge: The edge from which other edges should be accessible
+        :return: A list of all accessible edges
+        """
         if incoming_edge not in self.edges:
             raise ValueError("The given edge is not connected to the node.")
         return self.edges
@@ -156,10 +161,18 @@ class Signal(Node):
 
     @property
     def incoming(self) -> "Edge":
+        """Returns the incoming edge to the signal. The signal only applys for that edge.
+
+        :return: The incoming edge
+        """
         return self._incoming_edge
 
     @incoming.setter
     def incoming(self, incoming: "Edge"):
+        """Updates the incomig edge.
+
+        :param incoming: The incoming edge
+        """
         self._incoming_edge = incoming
 
         lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
@@ -315,9 +328,19 @@ class Switch(Node):
         assert len(self.head) == 2
 
     def is_head(self, my_edge: "Edge") -> bool:
+        """This method returns, whether the given edge is connected on head of the switch.
+
+        :param my_edge: The edge which may be connected on head
+        :return: If the edge is connected on head
+        """
         return my_edge in self.head
 
     def set_connections(self, simulation_object: "net.node.Node"):
+        """This method sets which edge_ids are connected on head of the switch.
+        It only sets the head_ids, as the edge objects are not yet initialized.
+
+        :param simulation_object: The Node object from Sumo
+        """
         connections = simulation_object.getConnections()
 
         directions_to = defaultdict(int)

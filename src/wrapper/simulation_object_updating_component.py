@@ -113,6 +113,7 @@ class SimulationObjectUpdatingComponent(Component):
             self._fetch_initial_simulation_objects()
 
     def add_subscriptions(self):
+        """This method adds the subscriptions from each simulation_object to Sumo."""
         for simulation_object in self._simulation_objects:
             if len(simulation_object.add_subscriptions()) > 0:
                 if isinstance(simulation_object, Train):
