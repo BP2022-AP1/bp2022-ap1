@@ -12,10 +12,10 @@ class SimulationObject(ABC):
     and can manipulate the simualtion directly.
     """
 
-    identifier: str = None
-    updater: "SimulationObjectUpdatingComponent" = None
+    identifier: str
+    updater: "SimulationObjectUpdatingComponent"
 
-    def __init__(self, identifier=None):
+    def __init__(self, identifier: str):
         self.identifier = identifier
 
     @abstractmethod
@@ -62,8 +62,8 @@ class SimulationObject(ABC):
 class Node(SimulationObject):
     """A point somewhere in the simulation where `Track`s meet"""
 
-    _edges: List["Edge"] = None
-    _edge_ids: List["str"] = None
+    _edges: List["Edge"]
+    _edge_ids: List["str"]
 
     @property
     def edges(self) -> List["Edge"]:
@@ -80,7 +80,7 @@ class Node(SimulationObject):
     def add_subscriptions(self):
         pass
 
-    def set_edges(self, simulation_object: net.node) -> None:
+    def set_edges(self, simulation_object: net.node.Node) -> None:
         """Sets the edges that are connected to this node
 
         :param simulation_object: the current node as a sumo net.node
@@ -105,7 +105,7 @@ class Node(SimulationObject):
 
     @staticmethod
     def from_simulation(
-        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
         if simulation_object.getID() in [x.identifier for x in updater.signals]:
             # We need to update the signal with our data
@@ -119,8 +119,7 @@ class Node(SimulationObject):
 
             return None
 
-        # we need to create a new node
-
+        # We need to create a new node
         result = Node(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
@@ -168,7 +167,7 @@ class Signal(Node):
 
         self._state = target
 
-    def __init__(self, identifier: str = None, state: "Signal.State" = State.HALT):
+    def __init__(self, identifier: str, state: "Signal.State" = State.HALT):
         super().__init__(identifier=identifier)
         self.state = state
 
@@ -181,7 +180,7 @@ class Signal(Node):
     def set_edges(self, simulation_object: net.TLS) -> None:
         self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
 
-    def add_edges(self, node: net.node) -> None:
+    def add_edges(self, node: net.node.Node) -> None:
         """Adds more edges to the signal (coming from the passed node)
 
         :param node: The node from which to load the additional edges
@@ -249,7 +248,7 @@ class Switch(Node):
 
     @staticmethod
     def from_simulation(
-        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
         result = Switch(identifier=simulation_object.getID())
