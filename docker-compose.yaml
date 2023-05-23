@@ -41,6 +41,7 @@ services:
 
   postgresql-test:
     image: postgres:14-alpine
+    command: "postgres -c 'shared_buffers=128MB' -c 'fsync=off' -c 'synchronous_commit=off' -c 'full_page_writes=off' -c 'max_connections=100' -c 'client_min_messages=warning'"
     environment:
       - POSTGRES_PASSWORD=root
     ports:

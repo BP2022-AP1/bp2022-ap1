@@ -768,17 +768,3 @@ def spawner(
         logger=mock_logger,
         train_spawner=mock_train_spawner,
     )
-
-
-@pytest.fixture
-def token() -> Token:
-    token = Token(name="owner", permission="admin", hashedToken="hash")
-    token.save()
-    return token
-
-
-@pytest.fixture
-def simulation_configuration() -> SimulationConfiguration:
-    config = SimulationConfiguration()
-    config.save()
-    return config

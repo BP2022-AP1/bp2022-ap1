@@ -7,7 +7,6 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
     "route, response_code",
     [
         ("/run", 200),
-        ("/schedule", 501),
         ("/simulation", 200),
         ("/component/interlocking", 501),
         ("/component/spawner", 200),
@@ -18,7 +17,6 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ("/component/fault-injection/train-speed-fault", 200),
         ("/component/fault-injection/track-speed-limit-fault", 200),
         ("/run/00000000-0000-0000-0000-000000000000", 404),
-        ("/schedule/00000000-0000-0000-0000-000000000000", 501),
         ("/simulation/00000000-0000-0000-0000-000000000000", 404),
         ("/component/interlocking/00000000-0000-0000-0000-000000000000", 501),
         ("/component/spawner/00000000-0000-0000-0000-000000000000", 501),
