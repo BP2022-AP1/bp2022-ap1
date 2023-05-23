@@ -278,8 +278,7 @@ class Logger(Component):
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
             message=f"Train with ID {event.arguments['train_id']} left block "
-            f"section with ID {event.arguments['block_section_id']} "
-            f"with length {event.arguments['block_section_length']}",
+            f"section with ID {event.arguments['block_section_id']}",
             run_id=self.event_bus.run_id,
             train_id=event.arguments["train_id"],
             block_section_id=event.arguments["block_section_id"],
