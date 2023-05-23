@@ -1,11 +1,11 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_prio_fault import TrainPrioFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -37,13 +37,13 @@ class TestTrainPrioFault:
     def train_prio_fault(
         self,
         train_prio_fault_configuration: TrainPrioFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrainPrioFault(
             configuration=train_prio_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )

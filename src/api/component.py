@@ -9,7 +9,7 @@ bp = Blueprint("component", __name__)
 
 
 @bp.route("/component/fault-injection/schedule-blocked-fault", methods=["get"])
-@token_required
+@token_required()
 def get_all_schedule_blocked_fault_configuration_ids(token):
     """Get all schedule blocked fault configuration ids"""
     options = {}
@@ -21,7 +21,7 @@ def get_all_schedule_blocked_fault_configuration_ids(token):
 
 
 @bp.route("/component/fault-injection/schedule-blocked-fault", methods=["post"])
-@token_required
+@token_required()
 def create_schedule_blocked_fault_configuration(token):
     """Create a schedule blocked fault configuration"""
     schema = schemas.ScheduleBlockedFaultConfiguration()
@@ -34,7 +34,7 @@ def create_schedule_blocked_fault_configuration(token):
 @bp.route(
     "/component/fault-injection/schedule-blocked-fault/<identifier>", methods=["get"]
 )
-@token_required
+@token_required()
 def get_schedule_blocked_fault_configuration(identifier, token):
     """Get a schedule blocked fault configuration"""
     options = {}
@@ -46,7 +46,7 @@ def get_schedule_blocked_fault_configuration(identifier, token):
 @bp.route(
     "/component/fault-injection/schedule-blocked-fault/<identifier>", methods=["delete"]
 )
-@token_required
+@token_required()
 def delete_schedule_blocked_fault_configuration(identifier, token):
     """Delete a schedule blocked fault configuration"""
     options = {}
@@ -56,7 +56,7 @@ def delete_schedule_blocked_fault_configuration(identifier, token):
 
 
 @bp.route("/component/fault-injection/track-blocked-fault", methods=["get"])
-@token_required
+@token_required()
 def get_all_track_blocked_fault_configuration_ids(token):
     """Get all track blocked fault configuration ids"""
     options = {}
@@ -66,7 +66,7 @@ def get_all_track_blocked_fault_configuration_ids(token):
 
 
 @bp.route("/component/fault-injection/track-blocked-fault", methods=["post"])
-@token_required
+@token_required()
 def create_track_blocked_fault_configuration(token):
     """Create a track blocked fault configuration"""
     schema = schemas.TrackBlockedFaultConfiguration()
@@ -79,7 +79,7 @@ def create_track_blocked_fault_configuration(token):
 @bp.route(
     "/component/fault-injection/track-blocked-fault/<identifier>", methods=["get"]
 )
-@token_required
+@token_required()
 def get_track_blocked_fault_configuration(identifier, token):
     """Get a track blocked fault configuration"""
     options = {}
@@ -91,7 +91,7 @@ def get_track_blocked_fault_configuration(identifier, token):
 @bp.route(
     "/component/fault-injection/track-blocked-fault/<identifier>", methods=["delete"]
 )
-@token_required
+@token_required()
 def delete_track_blocked_fault_configuration(identifier, token):
     """Delete a track blocked fault configuration"""
     options = {}
@@ -101,7 +101,7 @@ def delete_track_blocked_fault_configuration(identifier, token):
 
 
 @bp.route("/component/fault-injection/track-speed-limit-fault", methods=["get"])
-@token_required
+@token_required()
 def get_all_track_speed_limit_fault_configuration_ids(token):
     """Get all track speed limit fault configuration ids"""
     options = {}
@@ -113,7 +113,7 @@ def get_all_track_speed_limit_fault_configuration_ids(token):
 
 
 @bp.route("/component/fault-injection/track-speed-limit-fault", methods=["post"])
-@token_required
+@token_required()
 def create_track_speed_limit_fault_configuration(token):
     """Create a track speed limit fault configuration"""
     schema = schemas.TrackSpeedLimitFaultConfiguration()
@@ -126,7 +126,7 @@ def create_track_speed_limit_fault_configuration(token):
 @bp.route(
     "/component/fault-injection/track-speed-limit-fault/<identifier>", methods=["get"]
 )
-@token_required
+@token_required()
 def get_track_speed_limit_fault_configuration(identifier, token):
     """Get a track speed limit fault configuration"""
     options = {}
@@ -139,7 +139,7 @@ def get_track_speed_limit_fault_configuration(identifier, token):
     "/component/fault-injection/track-speed-limit-fault/<identifier>",
     methods=["delete"],
 )
-@token_required
+@token_required()
 def delete_track_speed_limit_fault_configuration(identifier, token):
     """Delete a track speed limit fault configuration"""
     options = {}
@@ -149,7 +149,7 @@ def delete_track_speed_limit_fault_configuration(identifier, token):
 
 
 @bp.route("/component/fault-injection/train-prio-fault", methods=["get"])
-@token_required
+@token_required()
 def get_all_train_prio_fault_configuration_ids(token):
     """Get all train prio fault configuration ids"""
     options = {}
@@ -159,7 +159,7 @@ def get_all_train_prio_fault_configuration_ids(token):
 
 
 @bp.route("/component/fault-injection/train-prio-fault", methods=["post"])
-@token_required
+@token_required()
 def create_train_prio_fault_configuration(token):
     """Create a train prio fault configuration"""
     schema = schemas.TrainPrioFaultConfiguration()
@@ -170,7 +170,7 @@ def create_train_prio_fault_configuration(token):
 
 
 @bp.route("/component/fault-injection/train-prio-fault/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_train_prio_fault_configuration(identifier, token):
     """Get a train prio fault configuration"""
     options = {}
@@ -182,7 +182,7 @@ def get_train_prio_fault_configuration(identifier, token):
 @bp.route(
     "/component/fault-injection/train-prio-fault/<identifier>", methods=["delete"]
 )
-@token_required
+@token_required()
 def delete_train_prio_fault_configuration(identifier, token):
     """Delete a train prio fault configuration"""
     options = {}
@@ -192,7 +192,7 @@ def delete_train_prio_fault_configuration(identifier, token):
 
 
 @bp.route("/component/fault-injection/train-speed-fault", methods=["get"])
-@token_required
+@token_required()
 def get_all_train_speed_fault_configuration_ids(token):
     """Get all train speed fault configuration ids"""
     options = {}
@@ -202,7 +202,7 @@ def get_all_train_speed_fault_configuration_ids(token):
 
 
 @bp.route("/component/fault-injection/train-speed-fault", methods=["post"])
-@token_required
+@token_required()
 def create_train_speed_fault_configuration(token):
     """Create a train speed fault configuration"""
     schema = schemas.TrainSpeedFaultConfiguration()
@@ -213,7 +213,7 @@ def create_train_speed_fault_configuration(token):
 
 
 @bp.route("/component/fault-injection/train-speed-fault/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_train_speed_fault_configuration(identifier, token):
     """Get a train speed fault configuration"""
     options = {}
@@ -225,7 +225,7 @@ def get_train_speed_fault_configuration(identifier, token):
 @bp.route(
     "/component/fault-injection/train-speed-fault/<identifier>", methods=["delete"]
 )
-@token_required
+@token_required()
 def delete_train_speed_fault_configuration(identifier, token):
     """Delete a train speed fault configuration"""
     options = {}
@@ -235,7 +235,7 @@ def delete_train_speed_fault_configuration(identifier, token):
 
 
 @bp.route("/component/fault-injection/platform-blocked-fault", methods=["get"])
-@token_required
+@token_required()
 def get_all_platform_blocked_fault_configuration_ids(token):
     """Get all platform blocked fault configuration ids"""
     options = {}
@@ -247,7 +247,7 @@ def get_all_platform_blocked_fault_configuration_ids(token):
 
 
 @bp.route("/component/fault-injection/platform-blocked-fault", methods=["post"])
-@token_required
+@token_required()
 def create_platform_blocked_fault_configuration(token):
     """Create a platform blocked fault configuration"""
     schema = schemas.PlatformBlockedFaultConfiguration()
@@ -260,7 +260,7 @@ def create_platform_blocked_fault_configuration(token):
 @bp.route(
     "/component/fault-injection/platform-blocked-fault/<identifier>", methods=["get"]
 )
-@token_required
+@token_required()
 def get_platform_blocked_fault_configuration(identifier, token):
     """Get a platform blocked fault configuration"""
     options = {}
@@ -272,7 +272,7 @@ def get_platform_blocked_fault_configuration(identifier, token):
 @bp.route(
     "/component/fault-injection/platform-blocked-fault/<identifier>", methods=["delete"]
 )
-@token_required
+@token_required()
 def delete_platform_blocked_fault_configuration(identifier, token):
     """Delete a platform blocked fault configuration"""
     options = {}
@@ -285,7 +285,7 @@ def delete_platform_blocked_fault_configuration(identifier, token):
 # --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
 # -----------------------------------------------------------------------------------
 # @bp.route("/component/interlocking", methods=["get"])
-# @token_required
+# @token_required()
 # def get_all_interlocking_configuration_ids(token):
 #     """Get all interlocking configuration ids"""
 #     options = {}
@@ -295,7 +295,7 @@ def delete_platform_blocked_fault_configuration(identifier, token):
 
 
 # @bp.route("/component/interlocking", methods=["post"])
-# @token_required
+# @token_required()
 # def create_interlocking_configuration(token):
 #     """Create a interlocking configuration"""
 #     schema = schemas.InterlockingConfiguration()
@@ -306,7 +306,7 @@ def delete_platform_blocked_fault_configuration(identifier, token):
 
 
 # @bp.route("/component/interlocking/<identifier>", methods=["get"])
-# @token_required
+# @token_required()
 # def get_interlocking_configuration(identifier, token):
 #     """Get a interlocking configuration"""
 #     options = {}
@@ -316,7 +316,7 @@ def delete_platform_blocked_fault_configuration(identifier, token):
 
 
 # @bp.route("/component/interlocking/<identifier>", methods=["delete"])
-# @token_required
+# @token_required()
 # def delete_interlocking_configuration(identifier, token):
 #     """Delete a interlocking configuration"""
 #     options = {}
@@ -326,7 +326,7 @@ def delete_platform_blocked_fault_configuration(identifier, token):
 
 
 @bp.route("/component/spawner", methods=["get"])
-@token_required
+@token_required()
 def get_all_spawner_configuration_ids(token):
     """Get all spawner configuration ids"""
     options = {}
@@ -336,7 +336,7 @@ def get_all_spawner_configuration_ids(token):
 
 
 @bp.route("/component/spawner", methods=["post"])
-@token_required
+@token_required()
 def create_spawner_configuration(token):
     """Create a spawner configuration"""
     schema = schemas.SpawnerConfiguration()
@@ -347,7 +347,7 @@ def create_spawner_configuration(token):
 
 
 @bp.route("/component/spawner/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_spawner_configuration(identifier, token):
     """Get a spawner configuration"""
     options = {}
@@ -357,7 +357,7 @@ def get_spawner_configuration(identifier, token):
 
 
 @bp.route("/component/spawner/<identifier>", methods=["delete"])
-@token_required
+@token_required()
 def delete_spawner_configuration(identifier, token):
     """Delete a spawner configuration"""
     options = {}
