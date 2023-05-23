@@ -253,6 +253,21 @@ class TestDataScience:
             spawn_events_df.head(5), spawn_coal_events_by_config_id_head_df
         )
 
+    def test_get_window_size_time_by_config_id(
+        self,
+        simulation_configuration: SimulationConfiguration,
+        logger: Logger,
+        logger2: Logger,
+        data_science: DataScience,
+        window_size_time_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_departure_arrival(logger)
+        setup_logs_departure_arrival_alt(logger2)
+        window_size_df = data_science.get_window_size_time_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(window_size_df, window_size_time_by_config_id_df)
+
     def test_get_window_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
