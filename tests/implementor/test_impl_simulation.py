@@ -68,6 +68,7 @@ class TestSimulationImplementor:
     def test_get_single_simulation_configuration(
         self, token, simulation_configuration_full
     ):
+        run = Run.create(simulation_configuration=simulation_configuration_full)
         result, status = impl.simulation.get_simulation_configuration(
             {"identifier": str(simulation_configuration_full.id)}, token
         )
@@ -95,8 +96,9 @@ class TestSimulationImplementor:
             for reference in simulation_configuration_full.spawner_configuration_references
         ]
         spawner = spawners[0]
-
         assert result["spawner"] == str(spawner.id)
+
+        assert result["runs"] == [str(run.id)]
 
     def test_update_simulation_configuration_not_found(self, token):
         result, status = impl.simulation.get_simulation_configuration(
