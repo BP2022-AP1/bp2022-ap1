@@ -280,6 +280,7 @@ def delete_platform_blocked_fault_configuration(identifier, token):
 
     return impl.component.delete_platform_blocked_fault_configuration(options, token)
 
+
 # -----------------------------------------------------------------------------------
 # --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
 # -----------------------------------------------------------------------------------
