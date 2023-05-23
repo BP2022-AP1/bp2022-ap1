@@ -75,7 +75,7 @@ def create_run(body, token):
     run = Run(simulation_configuration=simulation_configuration)
     run.save()
     event_bus = EventBus(run_id=run.id)
-    logger = Logger(run_id=run.id, event_bus=event_bus)
+    logger = Logger(event_bus=event_bus)
     communicator.add_component(logger)
 
     object_updater = SimulationObjectUpdatingComponent(event_bus)
