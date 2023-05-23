@@ -140,7 +140,7 @@ def route_controller(
     configured_souc: SimulationObjectUpdatingComponent, mock_event_bus: EventBus
 ) -> RouteController:
     return RouteController(
-        event_bus=event_bus,
+        event_bus=mock_event_bus,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),
