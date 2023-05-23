@@ -37,6 +37,7 @@ from tests.fixtures.fixtures_logger import (
     setup_logs_departure_arrival_alt,
 )
 from tests.logger.test_log_collector import TestLogCollector
+from src.event_bus.event_bus import EventBus
 
 
 # pylint: disable=too-many-public-methods
@@ -48,36 +49,38 @@ class TestDataScience:
         pass
 
     def test_get_all_stations(
-        self, event_bus: Logger, data_science: DataScience, stations
+        self, event_bus: EventBus, data_science: DataScience, stations
     ):
         setup_logs_departure_arrival(event_bus)
         _stations = data_science.get_all_stations()
         _stations = sorted(stations)
         assert _stations == stations
 
-    def test_get_all_trains(self, event_bus: Logger, data_science: DataScience, trains):
+    def test_get_all_trains(self, event_bus: EventBus, data_science: DataScience, trains):
         setup_logs_departure_arrival(event_bus)
         _trains = data_science.get_all_trains()
         _trains = sorted(_trains)
         assert _trains == trains
 
     def test_get_all_run_ids(
-        self, event_bus: Logger, data_science: DataScience, run_ids: list[Run]
+        self, event_bus: EventBus, data_science: DataScience, run_ids: list[Run]
     ):
-        assert sorted(data_science.get_all_run_ids()) == run_ids
+        setup_logs_departure_arrival(event_bus)
+        _run_ids = data_science.get_all_run_ids()
+        _run_ids = sorted(_run_ids)
+        assert _run_ids == run_ids
 
     def test_get_all_config_ids(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        simulation_configuration2: SimulationConfiguration,
-        data_science: DataScience,
-        config_ids,
+        self, event_bus: EventBus, data_science: DataScience, config_ids
     ):
-        assert sorted(data_science.get_all_config_ids()) == config_ids
+        setup_logs_departure_arrival(event_bus)
+        _config_ids = data_science.get_all_config_ids()
+        _config_ids = sorted(_config_ids)
+        assert _config_ids == config_ids
 
     def test_get_faults_by_run_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         data_science: DataScience,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
@@ -104,7 +107,7 @@ class TestDataScience:
 
     def test_get_verkehrsleistung_time_by_run_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         data_science: DataScience,
         verkehrsleistung_time_df: pd.DataFrame,
     ):
@@ -116,7 +119,7 @@ class TestDataScience:
 
     def test_get_verkehrsleistung_momentarily_time_by_run_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         data_science: DataScience,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
@@ -136,10 +139,16 @@ class TestDataScience:
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
         simulation_configuration: SimulationConfiguration,
-        spawner_configuration_x_simulation_configuration: SpawnerConfigurationXSimulationConfiguration,
-        spawner_configuration_x_demand_schedule: SpawnerConfigurationXSchedule,
-        coal_demand_by_run_id_head_df: pd.DataFrame,
+        coal_demand_by_run_id_head_df,
     ):
+        SpawnerConfigurationXSimulationConfiguration.create(
+            simulation_configuration=simulation_configuration,
+            spawner_configuration=spawner_configuration,
+        )
+        SpawnerConfigurationXSchedule.create(
+            spawner_configuration_id=spawner_configuration.id,
+            schedule_configuration_id=demand_train_schedule_configuration.id,
+        )
         coal_demand_df = data_science.get_coal_demand_by_run_id(run).head(10)
         assert_frame_equal(coal_demand_df, coal_demand_by_run_id_head_df)
 
@@ -147,7 +156,7 @@ class TestDataScience:
         self,
         run: Run,
         data_science: DataScience,
-        event_bus: Logger,
+        event_bus: EventBus,
         spawn_events_by_run_id_head_df: pd.DataFrame,
     ):
         TestLogCollector.setup_logs_spawn_trains(event_bus)
@@ -158,7 +167,7 @@ class TestDataScience:
 
     def test_get_verkehrsmenge_by_run_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         data_science: DataScience,
         verkehrsmenge_df: pd.DataFrame,
     ):
@@ -168,7 +177,7 @@ class TestDataScience:
 
     def test_get_verkehrsleistung_by_run_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         data_science: DataScience,
         verkehrsleistung_by_run_id_df: pd.DataFrame,
     ):
@@ -182,25 +191,18 @@ class TestDataScience:
         with pytest.raises(NotImplementedError):
             data_science.get_station_counts_by_run_id(run)
 
-    def test_get_window_size_time_by_config_id(
+    def test_get_window_time_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
-        event_bus: Logger,
-        event_bus2: Logger,
         data_science: DataScience,
-        window_size_time_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_departure_arrival(event_bus)
-        setup_logs_departure_arrival_alt(event_bus2)
-        window_size_df = data_science.get_window_size_time_by_config_id(
-            simulation_configuration
-        )
-        assert_frame_equal(window_size_df, window_size_time_by_config_id_df)
+        with pytest.raises(NotImplementedError):
+            data_science.get_window_time_by_config_id(simulation_configuration)
 
     def test_get_verkehrsleistung_time_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
-        event_bus: Logger,
+        event_bus: EventBus,
         data_science: DataScience,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
@@ -239,7 +241,7 @@ class TestDataScience:
         demand_strategy: DemandScheduleStrategy,
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
-        event_bus: Logger,
+        event_bus: EventBus,
         spawn_coal_events_by_config_id_head_df: pd.DataFrame,
     ):
         SpawnerConfigurationXSimulationConfiguration.create(
@@ -260,7 +262,7 @@ class TestDataScience:
     def test_get_window_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         data_science: DataScience,
         window_by_config_id_df: pd.DataFrame,
@@ -275,7 +277,7 @@ class TestDataScience:
     def test_get_window_all_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         data_science: DataScience,
         window_all_by_config_id_df: pd.DataFrame,
@@ -287,7 +289,7 @@ class TestDataScience:
 
     def test_get_verkehrsmenge_by_config_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
         verkehrsmenge_by_config_id_df: pd.DataFrame,
@@ -300,7 +302,7 @@ class TestDataScience:
 
     def test_get_verkehrsleistung_by_config_id(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
         verkehrsleistung_by_config_id_df: pd.DataFrame,
@@ -313,7 +315,7 @@ class TestDataScience:
 
     def test_get_window_by_multi_config(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
@@ -326,7 +328,7 @@ class TestDataScience:
 
     def test_get_verkehrsmenge_by_multi_config(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
         verkehrsmenge_by_multi_config_df: pd.DataFrame,
@@ -339,7 +341,7 @@ class TestDataScience:
 
     def test_get_verkehrsleistung_by_multi_config(
         self,
-        event_bus: Logger,
+        event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
         verkehrsleistung_by_multi_config_df: pd.DataFrame,

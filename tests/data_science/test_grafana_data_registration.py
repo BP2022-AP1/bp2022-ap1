@@ -37,6 +37,7 @@ from tests.fixtures.fixtures_logger import (
     setup_logs_departure_arrival_alt,
 )
 from tests.logger.test_log_collector import TestLogCollector
+from src.event_bus.event_bus import EventBus
 
 
 # pylint: disable=too-many-public-methods
@@ -85,7 +86,7 @@ class TestGrafanaDataRegistration:
     def test_get_faults_by_run_id(
         self,
         _run_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
@@ -112,7 +113,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_time_by_run_id(
         self,
         _run_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_time_df: pd.DataFrame,
     ):
@@ -125,7 +126,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_momentarily_time_by_run_id(
         self,
         _run_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
@@ -163,7 +164,7 @@ class TestGrafanaDataRegistration:
     def test_get_spawn_events_by_run_id(
         self,
         _run_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         spawn_events_by_run_id_head_df: pd.DataFrame,
     ):
@@ -176,7 +177,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsmenge_by_run_id(
         self,
         _run_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsmenge_df: pd.DataFrame,
     ):
@@ -189,7 +190,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_by_run_id(
         self,
         _run_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_by_run_id_df: pd.DataFrame,
     ):
@@ -204,7 +205,7 @@ class TestGrafanaDataRegistration:
     def test_get_window_size_time_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_size_time_by_config_id_df: pd.DataFrame,
@@ -221,7 +222,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_time_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
@@ -236,7 +237,7 @@ class TestGrafanaDataRegistration:
     def test_get_coal_demand_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         demand_strategy: DemandScheduleStrategy,
         demand_train_schedule_configuration: ScheduleConfiguration,
@@ -267,7 +268,7 @@ class TestGrafanaDataRegistration:
         demand_strategy: DemandScheduleStrategy,
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
-        event_bus: Logger,
+        event_bus: EventBus,
         spawn_coal_events_by_config_id_head_df: pd.DataFrame,
     ):
         SpawnerConfigurationXSimulationConfiguration.create(
@@ -288,7 +289,7 @@ class TestGrafanaDataRegistration:
     def test_get_window_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_by_config_id_df: pd.DataFrame,
@@ -303,7 +304,7 @@ class TestGrafanaDataRegistration:
     def test_get_window_all_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_all_by_config_id_df,
@@ -318,7 +319,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsmenge_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsmenge_by_config_id_df: pd.DataFrame,
     ):
@@ -331,7 +332,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_by_config_id(
         self,
         _config_id: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_by_config_id_df: pd.DataFrame,
     ):
@@ -348,7 +349,7 @@ class TestGrafanaDataRegistration:
     def test_get_window_by_multi_config(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         event_bus2: Logger,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_by_multi_config_df: pd.DataFrame,
@@ -363,7 +364,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsmenge_by_multi_config(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsmenge_by_multi_config_df: pd.DataFrame,
     ):
@@ -378,7 +379,7 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_by_multi_config(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_by_multi_config_df: pd.DataFrame,
     ):
@@ -395,7 +396,7 @@ class TestGrafanaDataRegistration:
     def test_get_all_station_ids(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         stations,
     ):
@@ -405,7 +406,7 @@ class TestGrafanaDataRegistration:
     def test_get_all_train_ids(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         trains,
     ):
