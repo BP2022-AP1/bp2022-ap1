@@ -89,6 +89,7 @@ class TestScheduleBlockedFaultConfiguration:
         assert str(config.id) == result["id"]
         assert str(config.updated_at) == result["updated_at"]
         assert str(config.created_at) == result["created_at"]
+        assert str(config.readable_id) == result["readable_id"]
         assert config.start_tick == result["start_tick"]
         assert config.end_tick == result["end_tick"]
         assert config.inject_probability == result["inject_probability"]
