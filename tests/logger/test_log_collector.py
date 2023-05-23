@@ -2,11 +2,10 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
-from src.event_bus.event import Event, EventType
 from src.implementor.models import Run
 from src.logger.log_collector import LogCollector
-from src.logger.logger import Logger
 from tests.decorators import recreate_db_setup
+from src.event_bus.event_bus import EventBus
 
 
 # pylint: disable=too-many-public-methods
@@ -330,7 +329,7 @@ class TestLogCollector:
 
     @staticmethod
     def setup_faults(
-        event_bus: Logger,
+        event_bus: EventBus,
         platform_blocked_fault_configuration,
         track_blocked_fault_configuration,
         track_speed_limit_fault_configuration,
@@ -506,7 +505,7 @@ class TestLogCollector:
         )
 
     def test_departure_arrival_empty(
-        self, event_bus: Logger, log_collector: LogCollector
+        self, event_bus: EventBus, log_collector: LogCollector
     ):
         assert_frame_equal(
             log_collector.get_departures_arrivals_all_trains(event_bus.run_id),
@@ -517,8 +516,8 @@ class TestLogCollector:
 
     def test_departure_arrival__multiple_runs(
         self,
-        event_bus: Logger,
-        event_bus2: Logger,
+        event_bus: EventBus,
+        event_bus2: EventBus,
         log_collector: LogCollector,
         _departure_arrival_all_df,
     ):
@@ -555,7 +554,7 @@ class TestLogCollector:
     def test_get_train_spawn_times(
         self,
         train_spawn_times_df: pd.DataFrame,
-        event_bus: Logger,
+        event_bus: EventBus,
         log_collector: LogCollector,
     ):
         self.setup_logs_spawn_trains(event_bus)
