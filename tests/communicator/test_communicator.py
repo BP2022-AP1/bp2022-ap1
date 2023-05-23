@@ -24,7 +24,7 @@ def mock_traci(monkeypatch):
         return
 
     monkeypatch.setattr(
-        traci.simulation, "getAllSubscriptionResults", get_all_subscription_results
+        traci.vehicle, "getAllSubscriptionResults", get_all_subscription_results
     )
     monkeypatch.setattr(traci, "simulationStep", simulation_step)
     monkeypatch.setattr(traci, "start", start)

@@ -3,7 +3,7 @@ from collections import defaultdict
 from typing import Tuple
 
 import pytest
-from traci import constants, edge, simulation, trafficlight, vehicle
+from traci import constants, edge, trafficlight, vehicle
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
@@ -27,9 +27,7 @@ def results(monkeypatch):
         dict["fake-sim-train"] = edge_dict
         return dict
 
-    monkeypatch.setattr(
-        simulation, "getAllSubscriptionResults", get_subscription_result
-    )
+    monkeypatch.setattr(vehicle, "getAllSubscriptionResults", get_subscription_result)
 
 
 @pytest.fixture
@@ -78,12 +76,20 @@ def vehicle_route(monkeypatch):
 
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
+def train_route_update(monkeypatch):
+    def update_route(identifier, routeID=None):
+        assert identifier is not None
+        assert routeID is not None
+
+    monkeypatch.setattr(vehicle, "setRouteID", update_route)
 
 
 @pytest.fixture
@@ -102,7 +108,9 @@ def edge2() -> Edge:
 
 
 @pytest.fixture
-def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
+def train(
+    train_add, train_route_update, configured_souc: SimulationObjectUpdatingComponent
+) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
         identifier="fake-sim-train",
@@ -118,10 +126,10 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
                 100,
             ),
             constants.VAR_ROAD_ID: "cfc57-0",
-            constants.VAR_ROUTE: "testing-route",
             constants.VAR_SPEED: 10.2,
         }
     )
+    created_train.route = "testing-route"
     created_train.train_type.update(
         {
             constants.VAR_MAXSPEED: 11,

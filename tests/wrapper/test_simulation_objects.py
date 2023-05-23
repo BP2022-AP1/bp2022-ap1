@@ -21,6 +21,8 @@ class TestSignal:
     def test_update_state(self, traffic_update):
         # pylint: disable=unused-argument
         signal = Signal("fancy-signal")
+        signal._incoming_index = 0
+        signal._controlled_lanes_count = 2
         signal.state = Signal.State.GO
 
         assert signal.state == Signal.State.GO
@@ -144,10 +146,10 @@ class TestTrain:
                     90,
                 ),
                 constants.VAR_ROAD_ID: "cfc57-1",
-                constants.VAR_ROUTE: "ending-route",
                 constants.VAR_SPEED: 10,
             }
         )
+        train.route = "ending-route"
         train.train_type.update(
             {
                 constants.VAR_MAXSPEED: 10,
@@ -167,7 +169,7 @@ class TestTrain:
         assert train.timetable == []
 
     def test_subscription(self, train):
-        assert train.add_subscriptions() > 0
+        assert len(train.add_subscriptions()) > 0
 
     def test_spawn_loaded_net(self, configured_souc, train_add):
         # pylint: disable=unused-argument
@@ -201,7 +203,7 @@ class TestSwitch:
         assert switch.state == Switch.State.LEFT
 
     def test_subscription(self, switch):
-        assert switch.add_subscriptions() == 0
+        assert len(switch.add_subscriptions()) == 0
 
 
 class TestPlatform:
@@ -224,4 +226,4 @@ class TestPlatform:
         assert platform.platform_id == "fancy-city-platform-1"
 
     def test_subscription(self, platform):
-        assert platform.add_subscriptions() == 0
+        assert len(platform.add_subscriptions()) == 0

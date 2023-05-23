@@ -844,7 +844,8 @@ class Train(SimulationObject):
                 item for item in self.updater.edges if item.identifier == edge_id
             )
             if (
-                self._timetable[self.station_index].edge == self._edge
+                len(self._timetable) > 0
+                and self._timetable[self.station_index].edge == self._edge
             ):  # we reached an edge with a platform
                 self.station_index += 1
 
