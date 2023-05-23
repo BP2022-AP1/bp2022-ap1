@@ -27,21 +27,6 @@ def token():
 
 
 @pytest.fixture
-def simulation_configuration(token):
-    return SimulationConfiguration.create(token=token.id)
-
-
-@pytest.fixture
-def simulation_configuration2(token):
-    return SimulationConfiguration.create(token=token.id)
-
-
-@pytest.fixture
-def run(simulation_configuration):
-    return Run.create(simulation_configuration=simulation_configuration.id)
-
-
-@pytest.fixture
 def logger(run):
     return Logger(run_id=run.id)
 

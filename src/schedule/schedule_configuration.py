@@ -25,6 +25,15 @@ class ScheduleConfiguration(SerializableBaseModel):
 
     def to_dict(self):
         data = super().to_dict()
+        platform_ids = [
+            platform.simulation_platform_id
+            for platform in ScheduleConfigurationXSimulationPlatform.select()
+            .where(
+                ScheduleConfigurationXSimulationPlatform.schedule_configuration_id
+                == self.id
+            )
+            .order_by(ScheduleConfigurationXSimulationPlatform.index)
+        ]
         return {
             "schedule_type": self.schedule_type,
             "strategy_type": self.strategy_type,
@@ -37,6 +46,7 @@ class ScheduleConfiguration(SerializableBaseModel):
             "demand_strategy_power_station": self.demand_strategy_power_station,
             "demand_strategy_scaling_factor": self.demand_strategy_scaling_factor,
             "demand_strategy_start_datetime": self.demand_strategy_start_datetime,
+            "platforms": platform_ids,
             **data,
         }
 

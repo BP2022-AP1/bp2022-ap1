@@ -134,28 +134,39 @@ def regular_train_schedule(
 
 
 @pytest.fixture
-def spawner_configuration(
+def spawner_configuration_data(
     regular_train_schedule: TrainSchedule,
+) -> dict[str, any]:
+    return {
+        "schedule": [regular_train_schedule.id],
+    }
+
+
+@pytest.fixture
+def spawner_configuration(
+    spawner_configuration_data: dict[str, any],
 ) -> SpawnerConfiguration:
     configuration = SpawnerConfiguration()
     configuration.save()
-    SpawnerConfigurationXSchedule(
-        spawner_configuration_id=configuration.id,
-        schedule_configuration_id=regular_train_schedule.id,
-    ).save()
+    for schedule_configuration_id in spawner_configuration_data["schedule"]:
+        SpawnerConfigurationXSchedule(
+            spawner_configuration_id=configuration.id,
+            schedule_configuration_id=schedule_configuration_id,
+        ).save()
     return configuration
 
 
 @pytest.fixture
 def another_spawner_configuration(
-    regular_train_schedule: TrainSchedule,
+    spawner_configuration_data: dict[str, any],
 ) -> SpawnerConfiguration:
     configuration = SpawnerConfiguration()
     configuration.save()
-    SpawnerConfigurationXSchedule(
-        spawner_configuration_id=configuration.id,
-        schedule_configuration_id=regular_train_schedule.id,
-    ).save()
+    for schedule_configuration_id in spawner_configuration_data["schedule"]:
+        SpawnerConfigurationXSchedule(
+            spawner_configuration_id=configuration.id,
+            schedule_configuration_id=schedule_configuration_id,
+        ).save()
     return configuration
 
 
