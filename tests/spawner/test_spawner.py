@@ -10,6 +10,7 @@ from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
 )
 from tests.decorators import recreate_db_setup
 
@@ -106,6 +107,7 @@ class TestSpawnerConfiguration:
         obj_dict = spawner_configuration.to_dict()
         del obj_dict["created_at"]
         del obj_dict["updated_at"]
+        del obj_dict["readable_id"]
 
         assert obj_dict == {
             "id": str(spawner_configuration.id),
@@ -195,6 +197,7 @@ class SpawnerConfigurationXSimulationConfiguration:
         obj_dict = spawner_x_simulation.to_dict()
         del obj_dict["created_at"]
         del obj_dict["updated_at"]
+        del obj_dict["readable_id"]
 
         assert obj_dict == {
             "id": str(spawner_x_simulation.id),
