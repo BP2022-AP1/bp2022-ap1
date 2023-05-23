@@ -272,7 +272,7 @@ class TestDataScience:
         self,
         simulation_configuration: SimulationConfiguration,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         data_science: DataScience,
         window_by_config_id_df: pd.DataFrame,
     ):
@@ -287,7 +287,7 @@ class TestDataScience:
         self,
         simulation_configuration: SimulationConfiguration,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         data_science: DataScience,
         window_all_by_config_id_df: pd.DataFrame,
     ):
@@ -325,7 +325,7 @@ class TestDataScience:
     def test_get_window_by_multi_config(
         self,
         event_bus: EventBus,
-        event_bus2: Logger,
+        event_bus2: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
         window_by_multi_config_df: pd.DataFrame,
