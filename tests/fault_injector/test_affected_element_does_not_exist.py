@@ -1,7 +1,3 @@
-from uuid import UUID
-
-import marshmallow as marsh
-import peewee
 import pytest
 
 from src.base_model import BaseModel
@@ -35,7 +31,6 @@ from src.fault_injector.fault_types.track_speed_limit_fault import TrackSpeedLim
 from src.fault_injector.fault_types.train_prio_fault import TrainPrioFault
 from src.fault_injector.fault_types.train_speed_fault import TrainSpeedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,

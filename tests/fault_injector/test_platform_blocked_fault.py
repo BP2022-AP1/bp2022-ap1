@@ -6,7 +6,6 @@ from src.fault_injector.fault_configurations.platform_blocked_fault_configuratio
 )
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
