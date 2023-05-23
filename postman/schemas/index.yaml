@@ -82,6 +82,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing simulation configuration
             responses:
                 "204":
                     description: Deleted simulation
@@ -104,6 +105,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing simulation configuration
             responses:
                 "200":
                     content:
@@ -130,6 +132,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing simulation configuration
             requestBody:
                 content:
                     application/json:
@@ -221,6 +224,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing run
             responses:
                 "204":
                     description: Deleted run
@@ -243,6 +247,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing run
             responses:
                 "200":
                     content:
@@ -330,6 +335,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing spawner configuration
             responses:
                 "204":
                     description: Deleted spawner configuration
@@ -351,6 +357,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing spawner configuration
             responses:
                 "200":
                     content:
@@ -432,6 +439,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing regular schedule configuration
             responses:
                 "204":
                     description: Deleted schedule
@@ -446,7 +454,7 @@ paths:
                 - schedule
 
         get:
-            operationId: get_schedule
+            operationId: get_regular_schedule
             parameters:
                 - in: path
                   name: id
@@ -454,6 +462,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing regular schedule configuration
             responses:
                 "200":
                     content:
@@ -537,6 +546,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing random schedule configuration
             responses:
                 "204":
                     description: Deleted schedule
@@ -559,6 +569,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing random schedule configuration
             responses:
                 "200":
                     content:
@@ -644,6 +655,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing demand schedule configuration
             responses:
                 "204":
                     description: Deleted schedule
@@ -666,6 +678,8 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing demand schedule configuration
+
             responses:
                 "200":
                     content:
@@ -761,6 +775,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing schedule blocked fault configuration
             responses:
                 "204":
                     description: Deleted schedule-blocked-fault configuration
@@ -782,6 +797,8 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing schedule blocked fault configuration
+                    
             responses:
                 "200":
                     content:
@@ -878,6 +895,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing track blocked fault configuration
             responses:
                 "204":
                     description: Deleted track-blocked-fault configuration
@@ -899,6 +917,8 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing track blocked fault configuration
+                    
             responses:
                 "200":
                     content:
@@ -996,6 +1016,8 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing track speed limit fault configuration
+                    
             responses:
                 "204":
                     description: Deleted track-speed-limit-fault configuration
@@ -1017,6 +1039,8 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing track speed limit fault configuration
+                    
             responses:
                 "200":
                     content:
@@ -1113,6 +1137,8 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing train prio fault configuration
+                    
             responses:
                 "204":
                     description: Deleted train-prio-fault configuration
@@ -1134,6 +1160,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing train prio fault configuration
             responses:
                 "200":
                     content:
@@ -1230,6 +1257,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing train speed fault configuration
             responses:
                 "204":
                     description: Deleted train-speed-fault configuration
@@ -1251,6 +1279,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing train speed fault configuration
             responses:
                 "200":
                     content:
@@ -1345,6 +1374,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing platform blocked fault configuration
             responses:
                 "204":
                     description: Deleted platform-blocked-fault configuration
@@ -1366,6 +1396,7 @@ paths:
                   schema:
                       format: uuid
                       type: string
+                  description: Id of an existing platform blocked fault configuration
             responses:
                 "200":
                     content:
@@ -1432,6 +1463,8 @@ components:
                 created_at:
                     type: string
                     format: date
+                speakable_id:
+                    type: string
 
         BasicSimulationConfiguration:
             type: object
