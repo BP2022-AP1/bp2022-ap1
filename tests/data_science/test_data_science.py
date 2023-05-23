@@ -193,14 +193,6 @@ class TestDataScience:
         with pytest.raises(NotImplementedError):
             data_science.get_station_counts_by_run_id(run)
 
-    def test_get_window_time_by_config_id(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        data_science: DataScience,
-    ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_window_time_by_config_id(simulation_configuration)
-
     def test_get_verkehrsleistung_time_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
