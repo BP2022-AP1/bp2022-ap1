@@ -16,24 +16,10 @@ class RunConfiguration(Schema):
 
 
 class ScheduleConfiguration(Schema):
-    """The marshmallow schema for ScheduleConfiguration"""
+    """The marshmallow schema for every schedule configuration"""
 
     schedule_type = fields.String(required=True)
-    strategy_type = fields.String(required=True)
-
-    strategy_start_tick = fields.Integer()
-    strategy_end_tick = fields.Integer()
-
-    train_schedule_train_type = fields.String()
-
-    regular_strategy_frequency = fields.Integer()
-
-    random_strategy_trains_per_1000_ticks = fields.Float()
-    random_strategy_seed = fields.Integer()
-
-    demand_strategy_power_station = fields.String()
-    demand_strategy_scaling_factor = fields.Float()
-    demand_strategy_start_datetime = fields.DateTime()
+    platforms = fields.List(fields.String(), required=True)
 
 
 class SimulationConfiguration(Schema):
@@ -57,6 +43,8 @@ class UpdateSimulationConfiguration(SimulationConfiguration):
 
 class SpawnerConfiguration(Schema):
     """The marshmallow schema for the spawner configuration model."""
+
+    schedule = fields.List(fields.UUID(), required=True)
 
 
 class TokenConfiguration(Schema):

@@ -78,6 +78,9 @@ def create_run(body, token):
     object_updater = SimulationObjectUpdatingComponent(logger)
     communicator.add_component(object_updater)
 
+    # -----------------------------------------------------------------------------------
+    # --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
+    # -----------------------------------------------------------------------------------
     # if simulation_configuration.interlocking_configuration_references.exists():
     #    references = (
     #        simulation_configuration.interlocking_configuration_references.get()
