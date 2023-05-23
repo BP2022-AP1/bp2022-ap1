@@ -18,6 +18,16 @@ class ScheduleConfiguration(Schema):
 
     schedule_type = fields.String(required=True)
     platforms = fields.List(fields.String(), required=True)
+    strategy_start_tick = fields.Integer()
+    strategy_end_tick = fields.Integer()
+
+    train_schedule_train_type = fields.String()
+
+
+class RegularScheduleConfiguration(ScheduleConfiguration):
+    """The marshmallow schema for the regular schedule configuration"""
+
+    regular_strategy_frequency = fields.Integer(required=True)
 
 
 class SimulationConfiguration(Schema):
