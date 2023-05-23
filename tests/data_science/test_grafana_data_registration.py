@@ -3,6 +3,7 @@ import pytest
 from pandas.testing import assert_frame_equal
 
 from src.data_science.grafana_data_registration import GrafanaDataRegistrator
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -37,7 +38,6 @@ from tests.fixtures.fixtures_logger import (
     setup_logs_departure_arrival_alt,
 )
 from tests.logger.test_log_collector import TestLogCollector
-from src.event_bus.event_bus import EventBus
 
 
 # pylint: disable=too-many-public-methods
