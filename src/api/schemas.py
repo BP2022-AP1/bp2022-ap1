@@ -18,6 +18,17 @@ class ScheduleConfiguration(Schema):
 
     schedule_type = fields.String(required=True)
     platforms = fields.List(fields.String(), required=True)
+    strategy_start_tick = fields.Integer()
+    strategy_end_tick = fields.Integer()
+
+    train_schedule_train_type = fields.String()
+
+
+class RandomScheduleConfiguration(ScheduleConfiguration):
+    """The marshmallow schema for the random schedule configuration"""
+
+    random_strategy_trains_per_1000_ticks = fields.Float(required=True)
+    random_strategy_seed = fields.Integer(required=True)
 
 
 class SimulationConfiguration(Schema):
