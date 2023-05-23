@@ -7,7 +7,6 @@ from src.spawner.spawner import (
 
 
 class TestSpawnerConfiguration:
-
     def test_get_single_spawner_configuration(self, token, spawner_configuration):
         result, status = impl.component.get_spawner_configuration(
             {"identifier": str(spawner_configuration.id)}, token
