@@ -69,6 +69,7 @@ class TestGrafanaDataRegistration:
             "test_get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
+            "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
             "get_coal_demand_by_config_id:${config_id}",
             "get_coal_spawn_events_by_config_id:${config_id}",
@@ -199,6 +200,23 @@ class TestGrafanaDataRegistration:
         )
 
     # --- CONFIG
+
+    def test_get_window_size_time_by_config_id(
+        self,
+        _config_id: str,
+        event_bus: Logger,
+        event_bus2: Logger,
+        grafana_data_registrator: GrafanaDataRegistrator,
+        window_size_time_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
+        assert_frame_equal(
+            grafana_data_registrator.get_window_size_time_by_config_id(
+                _config_id, None
+            ),
+            window_size_time_by_config_id_df,
+        )
 
     def test_get_verkehrsleistung_time_by_config_id(
         self,

@@ -190,13 +190,20 @@ class TestDataScience:
         with pytest.raises(NotImplementedError):
             data_science.get_station_counts_by_run_id(run)
 
-    def test_get_window_time_by_config_id(
+    def test_get_window_size_time_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
+        event_bus: Logger,
+        event_bus2: Logger,
         data_science: DataScience,
+        window_size_time_by_config_id_df: pd.DataFrame,
     ):
-        with pytest.raises(NotImplementedError):
-            data_science.get_window_time_by_config_id(simulation_configuration)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
+        window_size_df = data_science.get_window_size_time_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(window_size_df, window_size_time_by_config_id_df)
 
     def test_get_verkehrsleistung_time_by_config_id(
         self,

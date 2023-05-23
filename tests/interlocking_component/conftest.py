@@ -137,7 +137,7 @@ def traffic_update(monkeypatch):
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, event_bus: EventBus
+    configured_souc: SimulationObjectUpdatingComponent, mock_event_bus: EventBus
 ) -> RouteController:
     return RouteController(
         event_bus=event_bus,
