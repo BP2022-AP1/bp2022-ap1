@@ -256,13 +256,13 @@ class TestDataScience:
     def test_get_window_size_time_by_config_id(
         self,
         simulation_configuration: SimulationConfiguration,
-        logger: Logger,
-        logger2: Logger,
+        event_bus: EventBus,
+        event_bus2: EventBus,
         data_science: DataScience,
         window_size_time_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_departure_arrival(logger)
-        setup_logs_departure_arrival_alt(logger2)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
         window_size_df = data_science.get_window_size_time_by_config_id(
             simulation_configuration
         )
