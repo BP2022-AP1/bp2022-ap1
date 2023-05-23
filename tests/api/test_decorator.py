@@ -19,12 +19,12 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ("/component/fault-injection/track-speed-limit-fault", 200),
         ("/run/00000000-0000-0000-0000-000000000000", 404),
         ("/schedule/00000000-0000-0000-0000-000000000000", 501),
-        ("/simulation/00000000-0000-0000-0000-000000000000", 501),
+        ("/simulation/00000000-0000-0000-0000-000000000000", 404),
         ("/component/interlocking/00000000-0000-0000-0000-000000000000", 501),
         ("/component/spawner/00000000-0000-0000-0000-000000000000", 501),
         (
             "/component/fault-injection/schedule-blocked-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
         (
             "/component/fault-injection/platform-blocked-fault/00000000-0000-0000-0000-000000000000",
@@ -32,19 +32,19 @@ TOKEN_HEADER = "bp2022-ap1-api-key"
         ),
         (
             "/component/fault-injection/track-blocked-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
         (
             "/component/fault-injection/train-prio-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
         (
             "/component/fault-injection/train-speed-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
         (
             "/component/fault-injection/track-speed-limit-fault/00000000-0000-0000-0000-000000000000",
-            501,
+            404,
         ),
     ],
 )

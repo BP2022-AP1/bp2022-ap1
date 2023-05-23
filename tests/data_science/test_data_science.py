@@ -64,18 +64,16 @@ class TestDataScience:
     def test_get_all_run_ids(
         self, event_bus: Logger, data_science: DataScience, run_ids: list[Run]
     ):
-        setup_logs_departure_arrival(event_bus)
-        _run_ids = data_science.get_all_run_ids()
-        _run_ids = sorted(_run_ids)
-        assert _run_ids == run_ids
+        assert sorted(data_science.get_all_run_ids()) == run_ids
 
     def test_get_all_config_ids(
-        self, event_bus: Logger, data_science: DataScience, config_ids
+        self,
+        simulation_configuration: SimulationConfiguration,
+        simulation_configuration2: SimulationConfiguration,
+        data_science: DataScience,
+        config_ids,
     ):
-        setup_logs_departure_arrival(event_bus)
-        _config_ids = data_science.get_all_config_ids()
-        _config_ids = sorted(_config_ids)
-        assert _config_ids == config_ids
+        assert sorted(data_science.get_all_config_ids()) == config_ids
 
     def test_get_faults_by_run_id(
         self,
@@ -138,16 +136,10 @@ class TestDataScience:
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
         simulation_configuration: SimulationConfiguration,
-        coal_demand_by_run_id_head_df,
+        spawner_configuration_x_simulation_configuration: SpawnerConfigurationXSimulationConfiguration,
+        spawner_configuration_x_demand_schedule: SpawnerConfigurationXSchedule,
+        coal_demand_by_run_id_head_df: pd.DataFrame,
     ):
-        SpawnerConfigurationXSimulationConfiguration.create(
-            simulation_configuration=simulation_configuration,
-            spawner_configuration=spawner_configuration,
-        )
-        SpawnerConfigurationXSchedule.create(
-            spawner_configuration_id=spawner_configuration.id,
-            schedule_configuration_id=demand_train_schedule_configuration.id,
-        )
         coal_demand_df = data_science.get_coal_demand_by_run_id(run).head(10)
         assert_frame_equal(coal_demand_df, coal_demand_by_run_id_head_df)
 

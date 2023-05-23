@@ -21,7 +21,7 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
-from src.implementor.models import SimulationConfiguration
+from src.implementor.models import Run, SimulationConfiguration
 from src.logger.logger import Logger
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
@@ -415,22 +415,22 @@ class TestGrafanaDataRegistration:
     def test_get_all_run_ids(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        run: Run,
+        run2: Run,
         grafana_data_registrator: GrafanaDataRegistrator,
         run_ids,
     ):
-        setup_logs_block_sections(event_bus)
-        assert grafana_data_registrator.get_all_run_ids(None) == run_ids
+        assert sorted(grafana_data_registrator.get_all_run_ids(None)) == run_ids
 
     def test_get_all_config_ids(
         self,
         _multi_config: str,
-        event_bus: Logger,
+        simulation_configuration: SimulationConfiguration,
+        simulation_configuration2: SimulationConfiguration,
         grafana_data_registrator: GrafanaDataRegistrator,
         config_ids,
     ):
-        setup_logs_block_sections(event_bus)
-        assert grafana_data_registrator.get_all_config_ids(None) == config_ids
+        assert sorted(grafana_data_registrator.get_all_config_ids(None)) == config_ids
 
     def test_search(
         self, grafana_data_registrator: GrafanaDataRegistrator, _search_list
