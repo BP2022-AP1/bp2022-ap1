@@ -3,6 +3,7 @@ import pytest
 from pandas.testing import assert_frame_equal
 
 from src.data_science.grafana_data_registration import GrafanaDataRegistrator
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -87,7 +88,7 @@ class TestGrafanaDataRegistration:
     def test_get_faults_by_run_id(
         self,
         _run_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
@@ -99,7 +100,7 @@ class TestGrafanaDataRegistration:
     ):
         # pylint: disable=duplicate-code
         TestLogCollector.setup_faults(
-            logger,
+            event_bus,
             platform_blocked_fault_configuration,
             track_blocked_fault_configuration,
             track_speed_limit_fault_configuration,
@@ -114,11 +115,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_time_by_run_id(
         self,
         _run_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_time_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsleistung_time_by_run_id(_run_id, None),
             verkehrsleistung_time_df,
@@ -127,11 +128,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_momentarily_time_by_run_id(
         self,
         _run_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsleistung_momentarily_time_by_run_id(
                 _run_id, None
@@ -165,11 +166,11 @@ class TestGrafanaDataRegistration:
     def test_get_spawn_events_by_run_id(
         self,
         _run_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         spawn_events_by_run_id_head_df: pd.DataFrame,
     ):
-        TestLogCollector.setup_logs_spawn_trains(logger)
+        TestLogCollector.setup_logs_spawn_trains(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_spawn_events_by_run_id(_run_id, None).head(5),
             spawn_events_by_run_id_head_df,
@@ -178,11 +179,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsmenge_by_run_id(
         self,
         _run_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsmenge_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsmenge_by_run_id(_run_id, None),
             verkehrsmenge_df,
@@ -191,11 +192,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_by_run_id(
         self,
         _run_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_by_run_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsleistung_by_run_id(_run_id, None),
             verkehrsleistung_by_run_id_df,
@@ -206,13 +207,13 @@ class TestGrafanaDataRegistration:
     def test_get_window_size_time_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
-        logger2: Logger,
+        event_bus: EventBus,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_size_time_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_departure_arrival(logger)
-        setup_logs_departure_arrival_alt(logger2)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
         assert_frame_equal(
             grafana_data_registrator.get_window_size_time_by_config_id(
                 _config_id, None
@@ -223,11 +224,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_time_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsleistung_time_by_config_id(
                 _config_id, None
@@ -238,7 +239,7 @@ class TestGrafanaDataRegistration:
     def test_get_coal_demand_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         demand_strategy: DemandScheduleStrategy,
         demand_train_schedule_configuration: ScheduleConfiguration,
@@ -269,7 +270,7 @@ class TestGrafanaDataRegistration:
         demand_strategy: DemandScheduleStrategy,
         demand_train_schedule_configuration: ScheduleConfiguration,
         spawner_configuration: SpawnerConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         spawn_coal_events_by_config_id_head_df: pd.DataFrame,
     ):
         SpawnerConfigurationXSimulationConfiguration.create(
@@ -290,13 +291,13 @@ class TestGrafanaDataRegistration:
     def test_get_window_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
-        logger2: Logger,
+        event_bus: EventBus,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_departure_arrival(logger)
-        setup_logs_departure_arrival_alt(logger2)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
         assert_frame_equal(
             grafana_data_registrator.get_window_by_config_id(_config_id, None),
             window_by_config_id_df,
@@ -305,13 +306,13 @@ class TestGrafanaDataRegistration:
     def test_get_window_all_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
-        logger2: Logger,
+        event_bus: EventBus,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_all_by_config_id_df,
     ):
-        setup_logs_departure_arrival(logger)
-        setup_logs_departure_arrival_alt(logger2)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
         assert_frame_equal(
             grafana_data_registrator.get_window_all_by_config_id(_config_id, None),
             window_all_by_config_id_df,
@@ -320,11 +321,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsmenge_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsmenge_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsmenge_by_config_id(_config_id, None),
             verkehrsmenge_by_config_id_df,
@@ -333,11 +334,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_by_config_id(
         self,
         _config_id: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsleistung_by_config_id(
                 _config_id, None
@@ -380,13 +381,13 @@ class TestGrafanaDataRegistration:
     def test_get_window_by_multi_config(
         self,
         _multi_config: str,
-        logger: Logger,
-        logger2: Logger,
+        event_bus: EventBus,
+        event_bus2: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         window_by_multi_config_df: pd.DataFrame,
     ):
-        setup_logs_departure_arrival(logger)
-        setup_logs_departure_arrival_alt(logger2)
+        setup_logs_departure_arrival(event_bus)
+        setup_logs_departure_arrival_alt(event_bus2)
         assert_frame_equal(
             grafana_data_registrator.get_window_by_multi_config(_multi_config, None),
             window_by_multi_config_df,
@@ -395,11 +396,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsmenge_by_multi_config(
         self,
         _multi_config: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsmenge_by_multi_config_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsmenge_by_multi_config(
                 _multi_config, None
@@ -410,11 +411,11 @@ class TestGrafanaDataRegistration:
     def test_get_verkehrsleistung_by_multi_config(
         self,
         _multi_config: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         verkehrsleistung_by_multi_config_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert_frame_equal(
             grafana_data_registrator.get_verkehrsleistung_by_multi_config(
                 _multi_config, None
@@ -427,21 +428,21 @@ class TestGrafanaDataRegistration:
     def test_get_all_station_ids(
         self,
         _multi_config: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         stations,
     ):
-        setup_logs_departure_arrival(logger)
+        setup_logs_departure_arrival(event_bus)
         assert sorted(grafana_data_registrator.get_all_station_ids(None)) == stations
 
     def test_get_all_train_ids(
         self,
         _multi_config: str,
-        logger: Logger,
+        event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
         trains,
     ):
-        setup_logs_block_sections(logger)
+        setup_logs_block_sections(event_bus)
         assert sorted(grafana_data_registrator.get_all_train_ids(None)) == trains
 
     def test_get_all_run_ids(

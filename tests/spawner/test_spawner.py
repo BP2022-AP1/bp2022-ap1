@@ -10,6 +10,7 @@ from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
 )
 from tests.decorators import recreate_db_setup
 
@@ -25,11 +26,11 @@ class TestSpawner:
         self,
         spawner: Spawner,
         spawner_configuration: SpawnerConfiguration,
-        mock_logger: object,
+        event_bus: object,
         mock_train_spawner: object,
     ):
         assert spawner.configuration == spawner_configuration
-        assert spawner.logger == mock_logger
+        assert spawner.event_bus == event_bus
         assert spawner.train_spawner == mock_train_spawner
 
     def test_get_schedules(
@@ -106,6 +107,7 @@ class TestSpawnerConfiguration:
         obj_dict = spawner_configuration.to_dict()
         del obj_dict["created_at"]
         del obj_dict["updated_at"]
+        del obj_dict["readable_id"]
 
         assert obj_dict == {
             "id": str(spawner_configuration.id),
@@ -195,6 +197,7 @@ class SpawnerConfigurationXSimulationConfiguration:
         obj_dict = spawner_x_simulation.to_dict()
         del obj_dict["created_at"]
         del obj_dict["updated_at"]
+        del obj_dict["readable_id"]
 
         assert obj_dict == {
             "id": str(spawner_x_simulation.id),
