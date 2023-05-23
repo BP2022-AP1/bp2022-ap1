@@ -183,6 +183,11 @@ class EventBus:
         defined in EVENT_METHODS. It returns a callable that creates
         an event and calls all callbacks.
 
+        __getattr__ gets called when the caller tries to acces an attribute
+        that doesn't exist. It then creates this attribute and returns it.
+        Because the caller here tries to execute a method, __getattr__ has
+        to return a callable that then gets executed by the caller.
+
         :param name: the method name
         :raises AttributeError: when unknown method name is passed
         :return: a callable
