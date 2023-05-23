@@ -134,12 +134,12 @@ class RouteController(Component):
             ]
 
             if yaramo_signal.direction == SignalDirection.IN:
-                if edges_numbers[0] < edges_numbers[1]:
+                if int(edges_numbers[0]) < int(edges_numbers[1]):
                     signal.incoming = edges_into_signal[0]
                 else:
                     signal.incoming = edges_into_signal[1]
             else:
-                if edges_numbers[0] > edges_numbers[1]:
+                if int(edges_numbers[0]) > int(edges_numbers[1]):
                     signal.incoming = edges_into_signal[0]
                 else:
                     signal.incoming = edges_into_signal[1]
@@ -169,20 +169,11 @@ class RouteController(Component):
         :return: The id of the first SUMO Route.
         :rtype: str
         """
+        print("trying to set spawn fahrstraße")
         new_route = self.router.get_route(start_edge, end_edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        print("start", start_edge.identifier, new_route[1].identifier)
-
-        for route in self.interlocking.routes:
-            print(
-                "interlocking route:",
-                route.start_signal.yaramo_signal.name,
-                route.end_signal.yaramo_signal.name,
-            )
-
         for end_node_candidat in new_route[2:]:
-            print("candidate", end_node_candidat.identifier)
             for interlocking_route in self.interlocking.routes:
                 if (
                     interlocking_route.start_signal.yaramo_signal.name
@@ -194,6 +185,8 @@ class RouteController(Component):
                     was_set = self.interlocking.set_route(
                         interlocking_route.yaramo_route
                     )
+
+                    print("set?", was_set)
 
                     if was_set:
                         # The Interlocking Route has the same id as the SUMO route.
@@ -214,14 +207,17 @@ class RouteController(Component):
         :param edge: the edge it just entered
         :type edge: Edge
         """
-        route = self._get_interlocking_route_for_edge(edge)
-        if (
-            route is None
-            or route.get_last_segment_of_route() != edge.identifier.split("-re")[0]
-        ):
+        if train.station_index >= len(train.timetable):
+            # if the train has reached the last station, don't allocate a new fahrstraße
             return
 
-        self.set_fahrstrasse(train, edge)
+        routes = self._get_interlocking_routes_for_edge(edge)
+        for route in routes:
+            if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
+                continue
+
+            self.set_fahrstrasse(train, edge)
+            break
 
     def set_fahrstrasse(self, train: Train, edge: Edge):
         """This method can be called when a train reaches a platform,
@@ -285,11 +281,12 @@ class RouteController(Component):
         :param edge: The edge the train drove off of
         :type edge: Edge
         """
-        route = self._get_interlocking_route_for_edge(edge)
-        if route is None or route.get_last_segment_of_route != edge.identifier:
-            return
+        routes = self._get_interlocking_routes_for_edge(edge)
+        for route in routes:
+            if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
+                continue
 
-        self._free_fahrstrasse(train, route)
+            self._free_fahrstrasse(train, route)
 
     def _free_fahrstrasse(self, train: Train, route: Route):
         """This method frees the given interlocking route.
@@ -305,7 +302,7 @@ class RouteController(Component):
             self.logger.remove_fahrstrasse(self.tick, route.id)
             self.logger.train_leave_block_section(self.tick, train.identifier, route.id)
 
-    def _get_interlocking_route_for_edge(self, edge: Edge) -> Route:
+    def _get_interlocking_routes_for_edge(self, edge: Edge) -> List[Route]:
         """This method returns the interlocking route corresponding to the given edge.
 
         :param edge: The edge to which the route is searched
@@ -313,6 +310,7 @@ class RouteController(Component):
         :return: The interlocking Route corresponding to the edge
         :rtype: Route
         """
+        routes = []
         for route_candidate in self.interlocking.active_routes:
             interlocking_track_candidat = route_candidate.contains_segment(
                 edge.identifier.split("-re")[0]
@@ -322,8 +320,8 @@ class RouteController(Component):
             # A track can be part of many routes, but only ever part of one active route.
 
             if interlocking_track_candidat is not None:
-                return route_candidate
-        return None
+                routes.append(route_candidate)
+        return routes
 
     def check_all_fahrstrassen_for_failures(self):
         """This method checks for all trains, if their fahrstrassen and routes are still valid."""

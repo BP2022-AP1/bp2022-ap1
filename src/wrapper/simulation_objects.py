@@ -312,7 +312,6 @@ class Switch(Node):
             if my_edge.identifier in self._head_ids:
                 self.head.append(my_edge)
 
-        print(self._head_ids, self._edge_ids)
         assert len(self.head) == 2
 
     def is_head(self, my_edge: "Edge") -> bool:
@@ -341,12 +340,6 @@ class Switch(Node):
                 self._head_ids.append(connection.getFrom().getID())
 
     def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
-        print(
-            "accessible?",
-            self.is_head(incoming_edge),
-            [x.identifier for x in self.head],
-            [x.identifier for x in self.edges if not self.is_head(x)],
-        )
         if self.is_head(incoming_edge):
             return [my_edge for my_edge in self.edges if not self.is_head(my_edge)]
         if not self.is_head(incoming_edge):
@@ -843,21 +836,21 @@ class Train(SimulationObject):
             or self._edge.identifier != edge_id
             and not edge_id[:1] == ":"
         ):
-            self._edge = next(
-                item for item in self.updater.edges if item.identifier == edge_id
-            )
             if self._edge is not None:
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
                 )
+            self._edge = next(
+                item for item in self.updater.edges if item.identifier == edge_id
+            )
+            if (
+                self._timetable[self.station_index].edge == self._edge
+            ):  # we reached an edge with a platform
+                self.station_index += 1
+
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
             )
-
-            if (
-                self._timetable[0].edge == self._edge
-            ):  # we reached an edge with a platform
-                self.station_index += 1
 
     def add_subscriptions(self) -> List[int]:
         """Gets called when this object is created to allow
