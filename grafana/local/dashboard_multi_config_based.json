@@ -109,8 +109,9 @@
           "options": {
             "include": {
               "names": [
+                "config_id",
                 "arrival_tick",
-                "config_id"
+                "train_type"
               ]
             }
           }
@@ -187,7 +188,8 @@
             "include": {
               "names": [
                 "config_id",
-                "departure_tick"
+                "departure_tick",
+                "train_type"
               ]
             }
           }
@@ -326,7 +328,8 @@
             "include": {
               "names": [
                 "config_id",
-                "verkehrsleistung"
+                "verkehrsleistung",
+                "train_type"
               ]
             }
           }
