@@ -5,6 +5,8 @@ import pytest
 from src.event_bus.event import Event, EventType
 from src.event_bus.event_bus import EventBus
 
+# pylint disable=attribute-defined-outside-init
+
 
 class TestEventBus:
     """Tests for the EventBus"""
@@ -19,7 +21,7 @@ class TestEventBus:
 
     @pytest.fixture
     def callback(self) -> Callable[[Event], None]:
-        def _callback(event: Event):
+        def _callback(_: Event):
             pass
 
         return _callback
