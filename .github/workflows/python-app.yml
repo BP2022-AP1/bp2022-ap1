@@ -76,13 +76,12 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: coverage.xml
         parallel: true
-        flag-name: run-$
+#        flag-name: run-$
 
   finish:
     runs-on: ubuntu-latest
 
     needs: test
-    if: $
     steps:
     - name: Close parallel build
       uses: coverallsapp/github-action@v2.0.0
