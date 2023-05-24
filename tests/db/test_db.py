@@ -46,6 +46,7 @@ class TestDB:
             "updated_at": str(test_obj.updated_at),
             "created_at": str(test_obj.created_at),
             "test_value": 1,
+            "readable_id": test_obj.readable_id,
         }.items() == test_obj.to_dict().items()
 
     def test_created_at(self):

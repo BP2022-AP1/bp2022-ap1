@@ -3,6 +3,9 @@
 
 import json
 
+import peewee
+
+from src.base_model import db
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -22,6 +25,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import SimulationConfiguration
+from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
 
 
 def get_all_schedule_blocked_fault_configuration_ids(options, token):
@@ -576,67 +580,70 @@ def delete_platform_blocked_fault_configuration(options, token):
     return "Deleted platform-blocked-fault configuration", 204
 
 
-def get_all_interlocking_configuration_ids(options, token):
-    """
-    :param options: A dictionary containing all the parameters for the Operations
-        options["simulationId"]: Specify id of simulation
-            if you only want to get the interlocking configuration of a single simulation
-        :param token: Token object of the current user
+# -----------------------------------------------------------------------------------
+# --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
+# -----------------------------------------------------------------------------------
+# def get_all_interlocking_configuration_ids(options, token):
+#     """
+#     :param options: A dictionary containing all the parameters for the Operations
+#         options["simulationId"]: Specify id of simulation
+#             if you only want to get the interlocking configuration of a single simulation
+#         :param token: Token object of the current user
 
-    """
+#     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
 
-    return json.dumps(""), 501  # 200
-
-
-def create_interlocking_configuration(body, token):
-    """
-
-    :param body: The parsed body of the request
-    :param token: Token object of the current user
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
-    )
+#     return json.dumps(""), 501  # 200
 
 
-def get_interlocking_configuration(options, token):
-    """
-    :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
-    :param token: Token object of the current user
+# def create_interlocking_configuration(body, token):
+#     """
 
-    """
+#     :param body: The parsed body of the request
+#     :param token: Token object of the current user
+#     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 501  # 200
+#     return (
+#         json.dumps(
+#             {
+#                 "id": "<uuid>",
+#             }
+#         ),
+#         501,  # 201,
+#     )
 
 
-def delete_interlocking_configuration(options, token):
-    """
-    :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
-    :param token: Token object of the current user
+# def get_interlocking_configuration(options, token):
+#     """
+#     :param options: A dictionary containing all the parameters for the Operations
+#         options["id"]
+#     :param token: Token object of the current user
 
-    """
+#     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+#     return json.dumps("<map>"), 501  # 200
+
+
+# def delete_interlocking_configuration(options, token):
+#     """
+#     :param options: A dictionary containing all the parameters for the Operations
+#         options["id"]
+#     :param token: Token object of the current user
+
+#     """
+
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
+
+#     return "", 501  # 204
 
 
 def get_all_spawner_configuration_ids(options, token):
@@ -648,10 +655,23 @@ def get_all_spawner_configuration_ids(options, token):
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    # Return all spawner configurations of a single simulation configuration
+    if options["simulationId"] is not None:
+        simulation_id = options["simulationId"]
+        simulation_configurations = SimulationConfiguration.select().where(
+            SimulationConfiguration.id == simulation_id
+        )
+        if not simulation_configurations.exists():
+            return "Simulation not found", 404
+        simulation_configuration = simulation_configurations.get()
+        references = simulation_configuration.spawner_configuration_references
+        # Return all platform blocked fault configurations
+        configs = [str(reference.spawner_configuration.id) for reference in references]
+        return configs, 200
 
-    return json.dumps(""), 501  # 200
+    # Return all spawner configurations
+    configs = [str(config.id) for config in SpawnerConfiguration.select()]
+    return configs, 200
 
 
 def create_spawner_configuration(body, token):
@@ -661,42 +681,70 @@ def create_spawner_configuration(body, token):
     :param token: Token object of the current user
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
-    )
+    try:
+        with db.atomic():
+            config = SpawnerConfiguration()
+            config.save()
+            for spawner in body["schedule"]:
+                SpawnerConfigurationXSchedule.create(
+                    spawner_configuration_id=config, schedule_configuration_id=spawner
+                )
+            return (
+                {
+                    "id": config.id,
+                },
+                201,
+            )
+    except peewee.IntegrityError as error:
+        print(error)
+        return "Schedule not found", 404
 
 
 def get_spawner_configuration(options, token):
     """
     :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
+    config_id = options["identifier"]
+    configs = SpawnerConfiguration.select().where(SpawnerConfiguration.id == config_id)
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+    config_data = config.to_dict()
+    schedules = [
+        str(reference.schedule_configuration_id.id)
+        for reference in config.schedule_configuration_references
+    ]
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return json.dumps("<map>"), 501  # 200
+    return {**config_data, "schedule": schedules}, 200
 
 
 def delete_spawner_configuration(options, token):
     """
     :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
+        options["identifier"]
     :param token: Token object of the current user
 
     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+    config_id = options["identifier"]
+    configs = SpawnerConfiguration.select().where(SpawnerConfiguration.id == config_id)
+    if not configs.exists():
+        return "Id not found", 404
+    config = configs.get()
+    if config.simulation_configuration_references.exists():
+        return (
+            "Spawner configuration is referenced by a simulation configuration",
+            400,
+        )
+    try:
+        with db.atomic():
+            for reference in config.schedule_configuration_references:
+                reference.delete_instance()
+            config.delete_instance()
 
-    return "", 501  # 204
+        return "Deleted spawner", 204
+    except peewee.IntegrityError:
+        return "Something went wrong", 500

@@ -56,6 +56,7 @@ class TestScheduleConfigurationModel:
         serialized = schedule_configuration.to_dict()
         for key, value in schedule_data.items():
             assert serialized[key] == value
+        assert serialized["platforms"] == []
 
 
 @pytest.mark.parametrize(

@@ -1,3 +1,4 @@
+# pylint: disable=too-many-lines
 from datetime import timedelta
 from uuid import UUID
 
@@ -312,11 +313,29 @@ class DataScience:
         block_section_times_df["time"] = block_section_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = pd.DataFrame(
+        block_section_times_df["train_type"] = block_section_times_df["train_id"].apply(
+            lambda train_id: train_id.split("_")[2]
+        )
+        grouped_df = block_section_times_df.groupby("train_type").apply(
+            lambda data: pd.Series(
+                {
+                    "verkehrsmenge": data["block_section_length"].sum(),
+                }
+            )
+        )
+        grouped_df.reset_index(inplace=True)
+        all_df = pd.DataFrame(
             {
-                "verkehrsmenge": [block_section_times_df["block_section_length"].sum()],
+                "train_type": ["all"],
+                "verkehrsmenge": [grouped_df["verkehrsmenge"].sum()],
             }
         )
+        grouped_df = pd.concat(
+            [grouped_df, all_df],
+            ignore_index=True,
+        )
+        grouped_df.reset_index(inplace=True)
+        del grouped_df["index"]
         return grouped_df
 
     def get_verkehrsleistung_by_run_id(self, run_id: UUID) -> pd.DataFrame:
@@ -331,14 +350,18 @@ class DataScience:
         block_section_times_df["time"] = block_section_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = pd.DataFrame(
-            {
-                "enter_tick": [0],
-                "leave_tick": [block_section_times_df["leave_tick"].max()],
-                "block_section_length": [
-                    block_section_times_df["block_section_length"].sum()
-                ],
-            }
+        block_section_times_df["train_type"] = block_section_times_df["train_id"].apply(
+            lambda train_id: train_id.split("_")[2]
+        )
+
+        grouped_df = block_section_times_df.groupby("train_type").apply(
+            lambda data: pd.Series(
+                {
+                    "enter_tick": 0,
+                    "leave_tick": data["leave_tick"].max(),
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
         )
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
@@ -349,6 +372,23 @@ class DataScience:
         )
         grouped_df["enter_tick"] = grouped_df["enter_tick"].astype("Int64")
         grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
+        grouped_df.reset_index(inplace=True)
+        all_df = pd.DataFrame(
+            {
+                "train_type": ["all"],
+                "enter_tick": [0],
+                "leave_tick": [grouped_df["leave_tick"].max()],
+                "block_section_length": [grouped_df["block_section_length"].sum()],
+                "verkehrsleistung": [grouped_df["verkehrsleistung"].sum()],
+            }
+        )
+
+        grouped_df = pd.concat(
+            [grouped_df, all_df],
+            ignore_index=True,
+        )
+        grouped_df.reset_index(inplace=True)
+        del grouped_df["index"]
         return grouped_df
 
     # --- MAP
@@ -617,23 +657,48 @@ class DataScience:
             departures_arrivals_df = (
                 self.log_collector.get_departures_arrivals_all_trains(run_id)
             )
+            departures_arrivals_df["train_type"] = departures_arrivals_df[
+                "train_id"
+            ].apply(lambda train_id: train_id.split("_")[2])
             departures_arrivals_df["run_id"] = run_id.id
             df_list.append(departures_arrivals_df)
         departures_arrivals_df = pd.concat(df_list, axis=0)
         out_df = departures_arrivals_df[
-            ["station_id", "train_id", "arrival_tick", "departure_tick"]
+            ["station_id", "train_id", "train_type", "arrival_tick", "departure_tick"]
         ]
-        out_df = out_df.groupby(["station_id", "train_id"]).agg(
+        all_df = out_df.groupby(["station_id", "train_id"]).apply(
+            lambda data: pd.Series(
+                {
+                    "train_type": "all",
+                    "arrival_tick": self._get_window_size_from_values_threshold(
+                        data["arrival_tick"], threshold
+                    ),
+                    "departure_tick": self._get_window_size_from_values_threshold(
+                        data["departure_tick"], threshold
+                    ),
+                }
+            )
+        )
+
+        all_df.reset_index(inplace=True)
+        del all_df["station_id"]
+        del all_df["train_id"]
+        out_df = out_df.groupby(["station_id", "train_id", "train_type"]).agg(
             lambda x: self._get_window_size_from_values_threshold(x, threshold)
         )
         out_df.reset_index(inplace=True)
         del out_df["station_id"]
         del out_df["train_id"]
-        out_df = list(out_df.mean())
-        out_df = pd.DataFrame(
-            {"arrival_tick": [out_df[0]], "departure_tick": [out_df[1]]}
+        out_df = pd.concat([out_df, all_df], axis=0)
+        out_df = out_df.groupby("train_type").apply(
+            lambda data: pd.Series(
+                {
+                    "arrival_tick": data["arrival_tick"].mean(),
+                    "departure_tick": data["departure_tick"].mean(),
+                }
+            )
         )
-
+        out_df.reset_index(inplace=True)
         return out_df
 
     def get_window_all_by_config_id(
@@ -713,6 +778,103 @@ class DataScience:
         grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
         return grouped_df
 
+    def get_average_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+        """Returns the average verkehrsmenge by a given config id
+        :param config_id: config id
+        :return: verkehrsmenge dataframe
+        """
+
+        df_list = []
+        for run_id in Run.select().where(Run.simulation_configuration == config_id):
+            block_section_times_df = (
+                self.log_collector.get_block_section_times_all_trains(run_id)
+            )
+            block_section_times_df["train_type"] = block_section_times_df[
+                "train_id"
+            ].apply(lambda train_id: train_id.split("_")[2])
+            block_section_times_df["run_id"] = run_id.id
+            df_list.append(block_section_times_df)
+        block_section_times_df = pd.concat(df_list, axis=0)
+        block_section_times_df.dropna(inplace=True)
+        block_section_times_df["time"] = block_section_times_df.apply(
+            lambda row: row["leave_tick"] - row["enter_tick"], axis=1
+        )
+        grouped_df = block_section_times_df.groupby(["run_id", "train_type"]).apply(
+            lambda data: pd.Series(
+                {
+                    "verkehrsmenge": data["block_section_length"].sum(),
+                }
+            )
+        )
+        grouped_df.reset_index(inplace=True)
+        all_df = grouped_df.groupby("run_id").apply(
+            lambda data: pd.Series(
+                {
+                    "train_type": "all",
+                    "verkehrsmenge": data["verkehrsmenge"].sum(),
+                }
+            )
+        )
+        all_df.reset_index(inplace=True)
+        grouped_df = pd.concat([grouped_df, all_df], axis=0)
+        grouped_df = grouped_df.groupby(["train_type"]).agg({"verkehrsmenge": "mean"})
+        grouped_df.reset_index(inplace=True)
+        return grouped_df
+
+    def get_average_verkehrsleistung_by_config_id(
+        self, config_id: UUID
+    ) -> pd.DataFrame:
+        """Returns the average verkehrsleistung by a given config id
+        :param config_id: config id
+        :return: verkehrsleistung dataframe"""
+        df_list = []
+        for run_id in Run.select().where(Run.simulation_configuration == config_id):
+            block_section_times_df = (
+                self.log_collector.get_block_section_times_all_trains(run_id)
+            )
+            block_section_times_df["train_type"] = block_section_times_df[
+                "train_id"
+            ].apply(lambda train_id: train_id.split("_")[2])
+            block_section_times_df["run_id"] = run_id.id
+            df_list.append(block_section_times_df)
+        block_section_times_df = pd.concat(df_list, axis=0)
+        block_section_times_df.dropna(inplace=True)
+        block_section_times_df["time"] = block_section_times_df.apply(
+            lambda row: row["leave_tick"] - row["enter_tick"], axis=1
+        )
+        grouped_df = block_section_times_df.groupby(["run_id", "train_type"]).apply(
+            lambda data: pd.Series(
+                {
+                    "enter_tick": 0,
+                    "leave_tick": data["leave_tick"].max(),
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
+        )
+        grouped_df.reset_index(inplace=True)
+        all_df = grouped_df.groupby("run_id").apply(
+            lambda data: pd.Series(
+                {
+                    "train_type": "all",
+                    "enter_tick": 0,
+                    "leave_tick": data["leave_tick"].max(),
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
+        )
+        all_df.reset_index(inplace=True)
+        grouped_df = pd.concat([grouped_df, all_df], axis=0)
+
+        grouped_df["verkehrsleistung"] = grouped_df.apply(
+            lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
+            axis=1,
+        )
+        grouped_df = grouped_df.groupby(["train_type"]).agg(
+            {"verkehrsleistung": "mean"}
+        )
+        grouped_df.reset_index(inplace=True)
+        return grouped_df
+
     # -- MULTI CONFIG BASED
 
     # --- SCALAR
@@ -732,17 +894,64 @@ class DataScience:
             departures_arrivals_df = (
                 self.log_collector.get_departures_arrivals_all_trains(run_id)
             )
+            departures_arrivals_df["train_type"] = departures_arrivals_df[
+                "train_id"
+            ].apply(lambda train_id: train_id.split("_")[2])
             departures_arrivals_df["run_id"] = run_id.id
             departures_arrivals_df["config_id"] = run_id.simulation_configuration.id
             df_list.append(departures_arrivals_df)
         departures_arrivals_df = pd.concat(df_list, axis=0)
         out_df = departures_arrivals_df[
-            ["config_id", "station_id", "train_id", "arrival_tick", "departure_tick"]
+            [
+                "config_id",
+                "station_id",
+                "train_id",
+                "train_type",
+                "arrival_tick",
+                "departure_tick",
+            ]
         ]
-        out_df = out_df.groupby(["config_id", "station_id", "train_id"]).agg(
-            lambda x: self._get_window_size_from_values_threshold(x, threshold)
+        all_df = out_df.groupby(["config_id", "station_id", "train_id"]).apply(
+            lambda data: pd.Series(
+                {
+                    "train_type": "all",
+                    "arrival_tick": self._get_window_size_from_values_threshold(
+                        data["arrival_tick"], threshold
+                    ),
+                    "departure_tick": self._get_window_size_from_values_threshold(
+                        data["departure_tick"], threshold
+                    ),
+                }
+            )
         )
-        out_df = out_df.groupby("config_id").mean()
+        all_df.reset_index(inplace=True)
+        del all_df["station_id"]
+        del all_df["train_id"]
+        all_df = all_df.groupby(["config_id", "train_type"]).apply(
+            lambda data: pd.Series(
+                {
+                    "arrival_tick": data["arrival_tick"].mean(),
+                    "departure_tick": data["departure_tick"].mean(),
+                }
+            )
+        )
+        out_df = out_df.groupby(
+            ["config_id", "station_id", "train_id", "train_type"]
+        ).agg(lambda x: self._get_window_size_from_values_threshold(x, threshold))
+        out_df.reset_index(inplace=True)
+        del out_df["station_id"]
+        del out_df["train_id"]
+        out_df = out_df.groupby(["config_id", "train_type"]).apply(
+            lambda data: pd.Series(
+                {
+                    "arrival_tick": data["arrival_tick"].mean(),
+                    "departure_tick": data["departure_tick"].mean(),
+                }
+            )
+        )
+        out_df = pd.concat([out_df, all_df], axis=0)
+
+        out_df.sort_values(by=["config_id", "train_type"], inplace=True)
         out_df.reset_index(inplace=True)
         return out_df
 
@@ -762,19 +971,44 @@ class DataScience:
             )
             block_section_times_df["run_id"] = run_id.id
             block_section_times_df["config_id"] = run_id.simulation_configuration.id
+            block_section_times_df["train_type"] = block_section_times_df[
+                "train_id"
+            ].apply(lambda train_id: train_id.split("_")[2])
             df_list.append(block_section_times_df)
         block_section_times_df = pd.concat(df_list, axis=0)
         block_section_times_df.dropna(inplace=True)
         block_section_times_df["time"] = block_section_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby(["config_id", "run_id"]).agg(
-            {"enter_tick": "min", "leave_tick": "max", "block_section_length": "sum"}
+        grouped_df = block_section_times_df.groupby(
+            ["config_id", "run_id", "train_type"]
+        ).apply(
+            lambda data: pd.Series(
+                {
+                    "enter_tick": 0,
+                    "leave_tick": data["leave_tick"].max(),
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
         )
-        grouped_df = grouped_df.groupby("config_id").agg(
+
+        grouped_df = grouped_df.groupby(["config_id", "train_type"]).agg(
             {"block_section_length": "mean"}
         )
         grouped_df.reset_index(inplace=True)
+        all_df = grouped_df.groupby(["config_id"]).apply(
+            lambda data: pd.Series(
+                {
+                    "train_type": "all",
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
+        )
+        all_df.reset_index(inplace=True)
+        grouped_df = pd.concat([grouped_df, all_df], axis=0)
+        grouped_df.sort_values(by=["config_id", "train_type"], inplace=True)
+        grouped_df.reset_index(inplace=True)
+        del grouped_df["index"]
         return grouped_df
 
     def get_verkehrsleistung_by_multi_config(
@@ -791,6 +1025,9 @@ class DataScience:
             block_section_times_df = (
                 self.log_collector.get_block_section_times_all_trains(run_id)
             )
+            block_section_times_df["train_type"] = block_section_times_df[
+                "train_id"
+            ].apply(lambda train_id: train_id.split("_")[2])
             block_section_times_df["run_id"] = run_id.id
             block_section_times_df["config_id"] = run_id.simulation_configuration.id
             df_list.append(block_section_times_df)
@@ -799,13 +1036,38 @@ class DataScience:
         block_section_times_df["time"] = block_section_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby(["config_id", "run_id"]).agg(
-            {"leave_tick": "max", "block_section_length": "sum"}
+        grouped_df = block_section_times_df.groupby(
+            ["config_id", "run_id", "train_type"]
+        ).apply(
+            lambda data: pd.Series(
+                {
+                    "enter_tick": 0,
+                    "leave_tick": data["leave_tick"].max(),
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
         )
+        grouped_df.reset_index(inplace=True)
+        all_df = grouped_df.groupby(["config_id", "run_id"]).apply(
+            lambda data: pd.Series(
+                {
+                    "train_type": "all",
+                    "enter_tick": 0,
+                    "leave_tick": data["leave_tick"].max(),
+                    "block_section_length": data["block_section_length"].sum(),
+                }
+            )
+        )
+        all_df.reset_index(inplace=True)
+        grouped_df = pd.concat([grouped_df, all_df], axis=0)
+
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
             axis=1,
         )
-        grouped_df = grouped_df.groupby("config_id").mean()
+        grouped_df = grouped_df.groupby(["config_id", "train_type"]).agg(
+            {"verkehrsleistung": "mean"}
+        )
         grouped_df.reset_index(inplace=True)
+        grouped_df.sort_values(by=["config_id", "train_type"], inplace=True)
         return grouped_df

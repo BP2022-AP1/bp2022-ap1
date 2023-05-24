@@ -4,8 +4,8 @@ from peewee import ForeignKeyField
 
 from src.base_model import BaseModel, SerializableBaseModel
 from src.component import Component
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import SimulationConfiguration
-from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
@@ -27,7 +27,9 @@ class SpawnerConfigurationXSchedule(BaseModel):
     spawner_configuration_id = ForeignKeyField(
         SpawnerConfiguration, null=False, backref="schedule_configuration_references"
     )
-    schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
+    schedule_configuration_id = ForeignKeyField(
+        ScheduleConfiguration, null=False, backref="spawner_configuration_references"
+    )
 
 
 class SpawnerConfigurationXSimulationConfiguration(BaseModel):
@@ -88,13 +90,13 @@ class Spawner(Component, ISpawnerDisruptor):
 
     def __init__(
         self,
-        logger: Logger,
+        event_bus: EventBus,
         configuration: SpawnerConfiguration,
         train_spawner: TrainBuilder,
     ):
         """Initializes the spawner.
 
-        :param logger: The logger.
+        :param event_bus: The event_bus.
         :param configuration: The configuration.
         :param train_spawner: The TrainSpawner.
         """
@@ -103,7 +105,9 @@ class Spawner(Component, ISpawnerDisruptor):
         # super(<CLASS>, self).__init__ calls the __init__ method of the next <CLASS> in the MRO
         # call <CLASS>.mro() to see the MRO of <CLASS>
         # pylint: disable=super-with-arguments
-        super(Spawner, self).__init__(logger, self.PRIORITY)  # calls Component.__init__
+        super(Spawner, self).__init__(
+            event_bus, self.PRIORITY
+        )  # calls Component.__init__
         self.configuration = configuration
         self.train_spawner = train_spawner
         self._load_schedules()
