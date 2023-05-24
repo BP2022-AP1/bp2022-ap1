@@ -23,7 +23,6 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
 )
 from src.implementor.models import Run, SimulationConfiguration
-from src.logger.logger import Logger
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.spawner.spawner import (
@@ -321,6 +320,34 @@ class TestDataScience:
             simulation_configuration
         )
         assert_frame_equal(verkehrsmenge_df, verkehrsleistung_by_config_id_df)
+
+    def test_get_average_verkehrsmenge_by_config_id(
+        self,
+        event_bus: EventBus,
+        simulation_configuration: SimulationConfiguration,
+        data_science: DataScience,
+        average_verkehrsmenge_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(event_bus)
+        verkehrsmenge_df = data_science.get_average_verkehrsmenge_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(verkehrsmenge_df, average_verkehrsmenge_by_config_id_df)
+
+    def test_get_average_verkehrsleistung_by_config_id(
+        self,
+        event_bus: EventBus,
+        simulation_configuration: SimulationConfiguration,
+        data_science: DataScience,
+        average_verkehrsleistung_by_config_id_df: pd.DataFrame,
+    ):
+        setup_logs_block_sections(event_bus)
+        verkehrsleistung_df = data_science.get_average_verkehrsleistung_by_config_id(
+            simulation_configuration
+        )
+        assert_frame_equal(
+            verkehrsleistung_df, average_verkehrsleistung_by_config_id_df
+        )
 
     def test_get_window_by_multi_config(
         self,
