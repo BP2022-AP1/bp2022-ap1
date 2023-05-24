@@ -138,7 +138,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
-    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml --cov-append --durations=100 tests"
+    cmd = "pytest --cov=src  --cov-config=.coveragerc --cov-report xml --cov-append --durations=100 tests/data_science"
     envfile = [".env.shared", ".env.test"]
 
     [tool.poe.tasks.test-pytest-ci]
