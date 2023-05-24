@@ -43,8 +43,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_index: [ 1, 2, 3, 4 ]
-        ci_total: [ 4 ]
+        ci_index: [ 1, 2, 3, 4, 5, 6 ]
+        ci_total: [ 6 ]
 
     steps:
     - uses: actions/checkout@v3
