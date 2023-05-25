@@ -43,7 +43,7 @@ class BaseModel(Model):
         """
         # As `save` is called from `create`, `updated_at` will also be set  when calling `create`.
         if self.readable_id is None:
-            self.readable_id = human_readable_ids.get_new_id()
+            self.readable_id = human_readable_ids.get_new_id().lower().replace(" ", "-")
         self.updated_at = datetime.now()
         super().save(force_insert, only)
 
