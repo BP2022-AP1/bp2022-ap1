@@ -1,7 +1,6 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
-import json
 
 import peewee
 
@@ -38,7 +37,7 @@ def get_all_schedule_blocked_fault_configuration_ids(options, token):
     """
 
     # Return all schedule blocked fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -56,7 +55,8 @@ def get_all_schedule_blocked_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    configs = [str(config.id) for config in ScheduleBlockedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_schedule_blocked_fault_configuration(body, token):
@@ -129,7 +129,7 @@ def get_all_track_blocked_fault_configuration_ids(options, token):
     """
 
     # Return all track blocked fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -222,7 +222,7 @@ def get_all_track_speed_limit_fault_configuration_ids(options, token):
     """
 
     # Return all track speed limit fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -316,7 +316,7 @@ def get_all_train_prio_fault_configuration_ids(options, token):
     """
 
     # Return all train prio fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -331,7 +331,8 @@ def get_all_train_prio_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    configs = [str(config.id) for config in TrainPrioFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_train_prio_fault_configuration(body, token):
@@ -404,7 +405,7 @@ def get_all_train_speed_fault_configuration_ids(options, token):
     """
 
     # Return all train speed fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -495,7 +496,7 @@ def get_all_platform_blocked_fault_configuration_ids(options, token):
     """
 
     # Return all platform blocked fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
