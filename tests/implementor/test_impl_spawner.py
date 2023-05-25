@@ -7,6 +7,9 @@ from src.spawner.spawner import (
 
 
 class TestSpawnerConfiguration:
+    """ Tests for SpawnerConfiguration
+    """
+
     def test_get_single_spawner_configuration(self, token, spawner_configuration):
         result, status = impl.component.get_spawner_configuration(
             {"identifier": str(spawner_configuration.id)}, token
@@ -93,7 +96,7 @@ class TestSpawnerConfiguration:
         assert str(config.id) in result
         assert str(another_config.id) not in result
 
-    def test_create_spawner_configuration(token, spawner_configuration_data):
+    def test_create_spawner_configuration(self, token, spawner_configuration_data):
         response = impl.component.create_spawner_configuration(
             spawner_configuration_data, token
         )
@@ -113,7 +116,7 @@ class TestSpawnerConfiguration:
             assert schedule.id in spawner_configuration_data["schedule"]
 
     def test_create_spawner_configuration_not_found(
-        token,
+        self, token,
     ):
         response = impl.component.create_spawner_configuration(
             {"schedule": ["00000000-0000-0000-0000-000000000000"]}, token
