@@ -143,7 +143,7 @@ def route_controller(
         logger=mock_logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
-        path_name=os.path.join("data", "planpro", "test_example.ppxml"),
+        path_name=os.path.join("data", "planpro", "example.ppxml"),
     )
     route_controller.initialize_signals
     return route_controller
@@ -199,17 +199,6 @@ def mock_interlocking() -> Interlocking:
     return InterlockingMock()
 
 
-@pytest.fixture
-def mock_simulation_object_updating_component() -> SimulationObjectUpdatingComponent:
-    class SOUCMock:
-        """This mocks a simulation object updating component
-        with an infrastructur_provider that may be set.
-        """
-
-        infrastructur_provider = None
-
-    return SOUCMock()
-
 
 @pytest.fixture
 def mock_route_controller(
@@ -263,7 +252,7 @@ def yaramo_point():
         with the same attributes, but not the functionality.
         """
 
-        point_id = "73093"
+        point_id = "15bae"
         state = None
 
     return PointMock()
@@ -276,7 +265,7 @@ def yaramo_signal():
         with the same attributes, but not the functionality.
         """
 
-        name = "637cdc98-0b49-4eff-bd2f-b9549becfc57-km-25"
+        name = "74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen"
         state = None     
 
     return SignalMock()
