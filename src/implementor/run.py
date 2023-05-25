@@ -237,5 +237,6 @@ def delete_run(options, token):
 
     run = runs.get()
     Communicator.stop(str(run.process_id))
-    run.delete_instance()
+    run.delete_instance(recursive=True)  # will remove logs too
+
     return "Deleted run", 204
