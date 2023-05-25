@@ -139,12 +139,14 @@ def traffic_update(monkeypatch):
 def route_controller(
     configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
 ) -> RouteController:
-    return RouteController(
+    route_controller =  RouteController(
         logger=mock_logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "test_example.ppxml"),
     )
+    route_controller.initialize_signals
+    return route_controller
 
 
 @pytest.fixture
@@ -275,7 +277,7 @@ def yaramo_signal():
         """
 
         name = "637cdc98-0b49-4eff-bd2f-b9549becfc57-km-25"
-        state = None
+        state = None     
 
     return SignalMock()
 
