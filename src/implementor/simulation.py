@@ -203,6 +203,7 @@ def get_simulation_configuration(options, token):
         str(reference.train_prio_fault_configuration.id)
         for reference in simulation_configuration.train_prio_fault_configuration_references
     ]
+    run_ids = [str(run.id) for run in simulation_configuration.runs]
 
     return {
         "id": str(simulation_configuration.id),
@@ -214,6 +215,7 @@ def get_simulation_configuration(options, token):
         "track_speed_limit_fault": track_speed_limit_fault_ids,
         "train_speed_fault": train_speed_fault_ids,
         "train_prio_fault": train_prio_fault_ids,
+        "runs": run_ids,
     }, 200
 
 
@@ -233,6 +235,9 @@ def update_simulation_configuration(options, body, token):
         return "Run not found", 404
 
     simulation = simulation_configurations.get()
+
+    if simulation.runs.count() > 0:
+        return "Simulation configuration is used in a run", 400
 
     try:
         with db.atomic():
@@ -335,8 +340,9 @@ def delete_simulation_configuration(options, token):
 
     simulation_configuration = simulation_configurations.get()
 
-    if len(simulation_configuration.runs) > 0:
+    if simulation_configuration.runs.count() > 0:
         return "Simulation configuration is used in a run", 400
+
     with db.atomic():
         SpawnerConfigurationXSimulationConfiguration.delete().where(
             SpawnerConfigurationXSimulationConfiguration.simulation_configuration

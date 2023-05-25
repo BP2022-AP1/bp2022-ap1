@@ -17,20 +17,12 @@ class TestLogCollector:
         pass
 
     @pytest.fixture
-    def _trains(self):
-        return ["ice_1", "ice_2", "ice_3", "ice_4"]
-
-    @pytest.fixture
-    def _stations(self):
-        return ["station_1", "station_2", "station_3"]
-
-    @pytest.fixture
     def _run_ids(self, run: Run):
-        return [run.id]
+        return [run.readable_id]
 
     @pytest.fixture
     def _config_ids(self, simulation_configuration):
-        return [simulation_configuration.id]
+        return [simulation_configuration.readable_id]
 
     @pytest.fixture
     def _departure_arrival_1_df(self):
@@ -50,9 +42,9 @@ class TestLogCollector:
     def _departure_arrival_all_1_df(self):
         departure_arrival_df = pd.DataFrame(
             [
-                ["station_1", 10, 20, "ice_1"],
-                ["station_2", 30, 40, "ice_1"],
-                ["station_3", 50, 60, "ice_1"],
+                ["station_1", 10, 20, "ice_1_passenger"],
+                ["station_2", 30, 40, "ice_1_passenger"],
+                ["station_3", 50, 60, "ice_1_passenger"],
             ],
             columns=["station_id", "arrival_tick", "departure_tick", "train_id"],
         )
@@ -110,18 +102,18 @@ class TestLogCollector:
     def _departure_arrival_all_df(self):
         departure_arrival_df = pd.DataFrame(
             [
-                ["station_1", 10, 20, "ice_1"],
-                ["station_2", 30, 40, "ice_1"],
-                ["station_3", 50, 60, "ice_1"],
-                ["station_1", 10, 20, "ice_2"],
-                ["station_2", 30, 40, "ice_2"],
-                ["station_3", 50, None, "ice_2"],
-                ["station_1", None, 20, "ice_3"],
-                ["station_2", 30, 40, "ice_3"],
-                ["station_3", 50, 60, "ice_3"],
-                ["station_1", None, 20, "ice_4"],
-                ["station_2", 30, 40, "ice_4"],
-                ["station_3", 50, None, "ice_4"],
+                ["station_1", None, 20, "cargo_4_cargo"],
+                ["station_2", 30, 40, "cargo_4_cargo"],
+                ["station_3", 50, None, "cargo_4_cargo"],
+                ["station_1", 10, 20, "ice_1_passenger"],
+                ["station_2", 30, 40, "ice_1_passenger"],
+                ["station_3", 50, 60, "ice_1_passenger"],
+                ["station_1", 10, 20, "ice_2_passenger"],
+                ["station_2", 30, 40, "ice_2_passenger"],
+                ["station_3", 50, None, "ice_2_passenger"],
+                ["station_1", None, 20, "ice_3_passenger"],
+                ["station_2", 30, 40, "ice_3_passenger"],
+                ["station_3", 50, 60, "ice_3_passenger"],
             ],
             columns=["station_id", "arrival_tick", "departure_tick", "train_id"],
         )
@@ -201,18 +193,18 @@ class TestLogCollector:
     def _enter_leave_block_section_all_df(self):
         return pd.DataFrame(
             [
-                [10, 20, "section_1", 10.5, "ice_1"],
-                [30, 40, "section_2", 20.5, "ice_1"],
-                [50, 60, "section_3", 30.5, "ice_1"],
-                [10, 20, "section_1", 10.5, "ice_2"],
-                [30, 40, "section_2", 20.5, "ice_2"],
-                [50, None, "section_3", 30.5, "ice_2"],
-                [None, 20, "section_1", None, "ice_3"],
-                [30, 40, "section_2", 20.5, "ice_3"],
-                [50, 60, "section_3", 30.5, "ice_3"],
-                [None, 20, "section_1", None, "ice_4"],
-                [30, 40, "section_2", 20.5, "ice_4"],
-                [50, None, "section_3", 30.5, "ice_4"],
+                [None, 20, "section_1", None, "cargo_4_cargo"],
+                [30, 40, "section_2", 20.5, "cargo_4_cargo"],
+                [50, None, "section_3", 30.5, "cargo_4_cargo"],
+                [10, 20, "section_1", 10.5, "ice_1_passenger"],
+                [30, 40, "section_2", 20.5, "ice_1_passenger"],
+                [50, 60, "section_3", 30.5, "ice_1_passenger"],
+                [10, 20, "section_1", 10.5, "ice_2_passenger"],
+                [30, 40, "section_2", 20.5, "ice_2_passenger"],
+                [50, None, "section_3", 30.5, "ice_2_passenger"],
+                [None, 20, "section_1", None, "ice_3_passenger"],
+                [30, 40, "section_2", 20.5, "ice_3_passenger"],
+                [50, 60, "section_3", 30.5, "ice_3_passenger"],
             ],
             columns=[
                 "enter_tick",
@@ -225,99 +217,99 @@ class TestLogCollector:
 
     @staticmethod
     def setup_departure_arrival_1(event_bus):
-        event_bus.arrival_train(10, "ice_1", "station_1")
-        event_bus.departure_train(20, "ice_1", "station_1")
-        event_bus.arrival_train(30, "ice_1", "station_2")
-        event_bus.departure_train(40, "ice_1", "station_2")
-        event_bus.arrival_train(50, "ice_1", "station_3")
-        event_bus.departure_train(60, "ice_1", "station_3")
+        event_bus.arrival_train(10, "ice_1_passenger", "station_1")
+        event_bus.departure_train(20, "ice_1_passenger", "station_1")
+        event_bus.arrival_train(30, "ice_1_passenger", "station_2")
+        event_bus.departure_train(40, "ice_1_passenger", "station_2")
+        event_bus.arrival_train(50, "ice_1_passenger", "station_3")
+        event_bus.departure_train(60, "ice_1_passenger", "station_3")
 
     @staticmethod
     def setup_departure_arrival_2(event_bus):
-        event_bus.arrival_train(10, "ice_2", "station_1")
-        event_bus.departure_train(20, "ice_2", "station_1")
-        event_bus.arrival_train(30, "ice_2", "station_2")
-        event_bus.departure_train(40, "ice_2", "station_2")
-        event_bus.arrival_train(50, "ice_2", "station_3")
+        event_bus.arrival_train(10, "ice_2_passenger", "station_1")
+        event_bus.departure_train(20, "ice_2_passenger", "station_1")
+        event_bus.arrival_train(30, "ice_2_passenger", "station_2")
+        event_bus.departure_train(40, "ice_2_passenger", "station_2")
+        event_bus.arrival_train(50, "ice_2_passenger", "station_3")
 
     @staticmethod
     def setup_departure_arrival_3(event_bus):
-        event_bus.departure_train(20, "ice_3", "station_1")
-        event_bus.arrival_train(30, "ice_3", "station_2")
-        event_bus.departure_train(40, "ice_3", "station_2")
-        event_bus.arrival_train(50, "ice_3", "station_3")
-        event_bus.departure_train(60, "ice_3", "station_3")
+        event_bus.departure_train(20, "ice_3_passenger", "station_1")
+        event_bus.arrival_train(30, "ice_3_passenger", "station_2")
+        event_bus.departure_train(40, "ice_3_passenger", "station_2")
+        event_bus.arrival_train(50, "ice_3_passenger", "station_3")
+        event_bus.departure_train(60, "ice_3_passenger", "station_3")
 
     @staticmethod
     def setup_departure_arrival_4(event_bus):
-        event_bus.departure_train(20, "ice_4", "station_1")
-        event_bus.arrival_train(30, "ice_4", "station_2")
-        event_bus.departure_train(40, "ice_4", "station_2")
-        event_bus.arrival_train(50, "ice_4", "station_3")
+        event_bus.departure_train(20, "cargo_4_cargo", "station_1")
+        event_bus.arrival_train(30, "cargo_4_cargo", "station_2")
+        event_bus.departure_train(40, "cargo_4_cargo", "station_2")
+        event_bus.arrival_train(50, "cargo_4_cargo", "station_3")
 
     @staticmethod
     def setup_departure_arrival_1_alt(event_bus):
-        event_bus.arrival_train(20, "ice_1", "station_1")
-        event_bus.departure_train(30, "ice_1", "station_1")
-        event_bus.arrival_train(40, "ice_1", "station_2")
-        event_bus.departure_train(50, "ice_1", "station_2")
-        event_bus.arrival_train(60, "ice_1", "station_3")
-        event_bus.departure_train(70, "ice_1", "station_3")
+        event_bus.arrival_train(20, "ice_1_passenger", "station_1")
+        event_bus.departure_train(30, "ice_1_passenger", "station_1")
+        event_bus.arrival_train(40, "ice_1_passenger", "station_2")
+        event_bus.departure_train(50, "ice_1_passenger", "station_2")
+        event_bus.arrival_train(60, "ice_1_passenger", "station_3")
+        event_bus.departure_train(70, "ice_1_passenger", "station_3")
 
     @staticmethod
     def setup_departure_arrival_2_alt(event_bus):
-        event_bus.arrival_train(20, "ice_2", "station_1")
-        event_bus.departure_train(30, "ice_2", "station_1")
-        event_bus.arrival_train(40, "ice_2", "station_2")
-        event_bus.departure_train(50, "ice_2", "station_2")
-        event_bus.arrival_train(60, "ice_2", "station_3")
+        event_bus.arrival_train(20, "ice_2_passenger", "station_1")
+        event_bus.departure_train(30, "ice_2_passenger", "station_1")
+        event_bus.arrival_train(40, "ice_2_passenger", "station_2")
+        event_bus.departure_train(50, "ice_2_passenger", "station_2")
+        event_bus.arrival_train(60, "ice_2_passenger", "station_3")
 
     @staticmethod
     def setup_departure_arrival_3_alt(event_bus):
-        event_bus.departure_train(30, "ice_3", "station_1")
-        event_bus.arrival_train(40, "ice_3", "station_2")
-        event_bus.departure_train(50, "ice_3", "station_2")
-        event_bus.arrival_train(60, "ice_3", "station_3")
-        event_bus.departure_train(70, "ice_3", "station_3")
+        event_bus.departure_train(30, "ice_3_passenger", "station_1")
+        event_bus.arrival_train(40, "ice_3_passenger", "station_2")
+        event_bus.departure_train(50, "ice_3_passenger", "station_2")
+        event_bus.arrival_train(60, "ice_3_passenger", "station_3")
+        event_bus.departure_train(70, "ice_3_passenger", "station_3")
 
     @staticmethod
     def setup_departure_arrival_4_alt(event_bus):
-        event_bus.departure_train(30, "ice_4", "station_1")
-        event_bus.arrival_train(40, "ice_4", "station_2")
-        event_bus.departure_train(50, "ice_4", "station_2")
-        event_bus.arrival_train(60, "ice_4", "station_3")
+        event_bus.departure_train(30, "cargo_4_cargo", "station_1")
+        event_bus.arrival_train(40, "cargo_4_cargo", "station_2")
+        event_bus.departure_train(50, "cargo_4_cargo", "station_2")
+        event_bus.arrival_train(60, "cargo_4_cargo", "station_3")
 
     @staticmethod
     def setup_enter_leave_block_section_1(event_bus):
-        event_bus.train_enter_block_section(10, "ice_1", "section_1", 10.5)
-        event_bus.train_leave_block_section(20, "ice_1", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_1", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_1", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_1", "section_3", 30.5)
-        event_bus.train_leave_block_section(60, "ice_1", "section_3", 30.5)
+        event_bus.train_enter_block_section(10, "ice_1_passenger", "section_1", 10.5)
+        event_bus.train_leave_block_section(20, "ice_1_passenger", "section_1", 10.5)
+        event_bus.train_enter_block_section(30, "ice_1_passenger", "section_2", 20.5)
+        event_bus.train_leave_block_section(40, "ice_1_passenger", "section_2", 20.5)
+        event_bus.train_enter_block_section(50, "ice_1_passenger", "section_3", 30.5)
+        event_bus.train_leave_block_section(60, "ice_1_passenger", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_2(event_bus):
-        event_bus.train_enter_block_section(10, "ice_2", "section_1", 10.5)
-        event_bus.train_leave_block_section(20, "ice_2", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_2", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_2", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_2", "section_3", 30.5)
+        event_bus.train_enter_block_section(10, "ice_2_passenger", "section_1", 10.5)
+        event_bus.train_leave_block_section(20, "ice_2_passenger", "section_1", 10.5)
+        event_bus.train_enter_block_section(30, "ice_2_passenger", "section_2", 20.5)
+        event_bus.train_leave_block_section(40, "ice_2_passenger", "section_2", 20.5)
+        event_bus.train_enter_block_section(50, "ice_2_passenger", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_3(event_bus):
-        event_bus.train_leave_block_section(20, "ice_3", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_3", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_3", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_3", "section_3", 30.5)
-        event_bus.train_leave_block_section(60, "ice_3", "section_3", 30.5)
+        event_bus.train_leave_block_section(20, "ice_3_passenger", "section_1", 10.5)
+        event_bus.train_enter_block_section(30, "ice_3_passenger", "section_2", 20.5)
+        event_bus.train_leave_block_section(40, "ice_3_passenger", "section_2", 20.5)
+        event_bus.train_enter_block_section(50, "ice_3_passenger", "section_3", 30.5)
+        event_bus.train_leave_block_section(60, "ice_3_passenger", "section_3", 30.5)
 
     @staticmethod
     def setup_enter_leave_block_section_4(event_bus):
-        event_bus.train_leave_block_section(20, "ice_4", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_4", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_4", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_4", "section_3", 30.5)
+        event_bus.train_leave_block_section(20, "cargo_4_cargo", "section_1", 10.5)
+        event_bus.train_enter_block_section(30, "cargo_4_cargo", "section_2", 20.5)
+        event_bus.train_leave_block_section(40, "cargo_4_cargo", "section_2", 20.5)
+        event_bus.train_enter_block_section(50, "cargo_4_cargo", "section_3", 30.5)
 
     @staticmethod
     def setup_logs_spawn_trains(event_bus):
@@ -357,39 +349,39 @@ class TestLogCollector:
         )
 
         event_bus.inject_schedule_blocked_fault(
-            10, schedule_blocked_fault_configuration, "ice_1"
+            10, schedule_blocked_fault_configuration, "ice_1_passenger"
         )
         event_bus.resolve_schedule_blocked_fault(
             20, schedule_blocked_fault_configuration
         )
 
         event_bus.inject_train_prio_fault(
-            10, train_prio_fault_configuration, "ice_1", "2", "1"
+            10, train_prio_fault_configuration, "ice_1_passenger", "2", "1"
         )
         event_bus.resolve_train_prio_fault(20, train_prio_fault_configuration)
 
         event_bus.inject_train_speed_fault(
-            10, train_speed_fault_configuration, "ice_1", "100", "10"
+            10, train_speed_fault_configuration, "ice_1_passenger", "100", "10"
         )
         event_bus.resolve_train_speed_fault(20, train_speed_fault_configuration)
 
-    def test_get_trains(self, _trains, event_bus, log_collector: LogCollector):
+    def test_get_trains(self, trains, event_bus, log_collector: LogCollector):
         self.setup_departure_arrival_1(event_bus)
         self.setup_departure_arrival_2(event_bus)
         self.setup_departure_arrival_3(event_bus)
         self.setup_departure_arrival_4(event_bus)
-        trains = log_collector.get_trains()
-        trains = sorted(trains)
-        assert trains == _trains
+        _trains = log_collector.get_trains()
+        _trains = sorted(_trains)
+        assert _trains == trains
 
-    def test_get_stations(self, _stations, event_bus, log_collector: LogCollector):
+    def test_get_stations(self, stations, event_bus, log_collector: LogCollector):
         self.setup_departure_arrival_1(event_bus)
         self.setup_departure_arrival_2(event_bus)
         self.setup_departure_arrival_3(event_bus)
         self.setup_departure_arrival_4(event_bus)
-        stations = log_collector.get_stations()
-        stations = sorted(stations)
-        assert stations == _stations
+        _stations = log_collector.get_stations()
+        _stations = sorted(_stations)
+        assert _stations == stations
 
     def test_get_run_ids(self, _run_ids, event_bus, log_collector: LogCollector):
         self.setup_departure_arrival_1(event_bus)
@@ -416,7 +408,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_1(event_bus)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(event_bus.run_id, "ice_1"),
+            log_collector.get_departures_arrivals_of_train(
+                event_bus.run_id, "ice_1_passenger"
+            ),
             _departure_arrival_1_df,
         )
 
@@ -425,7 +419,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_2(event_bus)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(event_bus.run_id, "ice_2"),
+            log_collector.get_departures_arrivals_of_train(
+                event_bus.run_id, "ice_2_passenger"
+            ),
             _departure_arrival_2_df,
         )
 
@@ -434,7 +430,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_3(event_bus)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(event_bus.run_id, "ice_3"),
+            log_collector.get_departures_arrivals_of_train(
+                event_bus.run_id, "ice_3_passenger"
+            ),
             _departure_arrival_3_df,
         )
 
@@ -443,7 +441,9 @@ class TestLogCollector:
     ):
         self.setup_departure_arrival_4(event_bus)
         assert_frame_equal(
-            log_collector.get_departures_arrivals_of_train(event_bus.run_id, "ice_4"),
+            log_collector.get_departures_arrivals_of_train(
+                event_bus.run_id, "cargo_4_cargo"
+            ),
             _departure_arrival_4_df,
         )
 
@@ -452,7 +452,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_1(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(event_bus.run_id, "ice_1"),
+            log_collector.get_block_section_times_of_train(
+                event_bus.run_id, "ice_1_passenger"
+            ),
             _enter_leave_block_section_1_df,
         )
 
@@ -461,7 +463,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_2(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(event_bus.run_id, "ice_2"),
+            log_collector.get_block_section_times_of_train(
+                event_bus.run_id, "ice_2_passenger"
+            ),
             _enter_leave_block_section_2_df,
         )
 
@@ -470,7 +474,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_3(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(event_bus.run_id, "ice_3"),
+            log_collector.get_block_section_times_of_train(
+                event_bus.run_id, "ice_3_passenger"
+            ),
             _enter_leave_block_section_3_df,
         )
 
@@ -479,7 +485,9 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_block_section_4(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(event_bus.run_id, "ice_4"),
+            log_collector.get_block_section_times_of_train(
+                event_bus.run_id, "cargo_4_cargo"
+            ),
             _enter_leave_block_section_4_df,
         )
 
@@ -514,7 +522,7 @@ class TestLogCollector:
             ),
         )
 
-    def test_departure_arrival__multiple_runs(
+    def test_departure_arrival_multiple_runs(
         self,
         event_bus: EventBus,
         event_bus2: EventBus,
