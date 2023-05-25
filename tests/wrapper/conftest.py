@@ -23,7 +23,7 @@ def results(monkeypatch):
 
         dict = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "cfc57-0"
+        edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"
         dict["fake-sim-train"] = edge_dict
         return dict
 
@@ -94,17 +94,17 @@ def train_route_update(monkeypatch):
 
 @pytest.fixture
 def edge1() -> Edge:
-    return Edge("cfc57-0")
+    return Edge("a57e4-0")
 
 
 @pytest.fixture
 def edge_re() -> Edge:
-    return Edge("cfc57-0-re")
+    return Edge("a57e4-0-re")
 
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("cfc57-1")
+    return Edge("a57e4-1")
 
 
 @pytest.fixture
@@ -125,7 +125,7 @@ def train(
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "cfc57-0",
+            constants.VAR_ROAD_ID: "a57e4-0",
             constants.VAR_SPEED: 10.2,
         }
     )
@@ -154,7 +154,7 @@ def platform() -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="cfc57-0",
+        edge_id="a57e4-0",
     )
 
 
@@ -192,9 +192,10 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 
 class MockRouteController:
     def set_spawn_fahrstrasse(self, start: Track, end: Track):
-        print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")
-        if start.identifier == "7df3b-1-re":
+        print(start.identifier, end.identifier, start.identifier == "58ab8-1")
+        if start.identifier == "58ab8-1":
             return True
+            #return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return False
 
 
