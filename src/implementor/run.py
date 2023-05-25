@@ -1,6 +1,8 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
+import os
+
 from src.communicator.communicator import Communicator
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
@@ -19,8 +21,6 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.train_builder import TrainBuilder
-
-import os
 
 
 def get_all_run_ids(options: dict, token: Token):

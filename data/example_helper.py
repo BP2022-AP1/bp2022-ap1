@@ -1,15 +1,15 @@
+import os
+
 from orm_importer.importer import ORMImporter
 from planproexporter import Generator
 from railwayroutegenerator.routegenerator import RouteGenerator
 from sumoexporter.sumoexporter import SUMOExporter
 from track_signal_generator.generator import TrackSignalGenerator
-
 from yaramo.edge import Edge
 from yaramo.geo_node import DbrefGeoNode
 from yaramo.node import Node
 from yaramo.topology import Topology
 
-import os
 
 def setup() -> Topology:
     node1 = Node()
@@ -23,10 +23,10 @@ def setup() -> Topology:
 
     node1.geo_node = DbrefGeoNode(000, 10)
     node2.geo_node = DbrefGeoNode(250, 10)
-    #node3.geo_node = DbrefGeoNode(250, 20)
-    #node4.geo_node = DbrefGeoNode(250, 30)
+    # node3.geo_node = DbrefGeoNode(250, 20)
+    # node4.geo_node = DbrefGeoNode(250, 30)
     node5.geo_node = DbrefGeoNode(350, 20)
-    #node6.geo_node = DbrefGeoNode(75, 10)
+    # node6.geo_node = DbrefGeoNode(75, 10)
     node7.geo_node = DbrefGeoNode(000, 00)
     switch1.geo_node = DbrefGeoNode(50, 10)
     switch2.geo_node = DbrefGeoNode(100, 20)
@@ -37,7 +37,7 @@ def setup() -> Topology:
     edge1.maximum_speed = 160
     edge2 = Edge(switch1, switch3, length=50)
     edge2.maximum_speed = 160
-    #edge3 = Edge(node6, switch3, length=25)
+    # edge3 = Edge(node6, switch3, length=25)
     edge4 = Edge(switch1, switch2, length=50)
     edge4.maximum_speed = 160
     edge5 = Edge(switch3, node7, length=100)
@@ -46,10 +46,10 @@ def setup() -> Topology:
     edge6.maximum_speed = 160
     edge7 = Edge(switch2, switch4, length=200)
     edge7.maximum_speed = 160
-    #edge10 = Edge(node3, switch4, length=50)
+    # edge10 = Edge(node3, switch4, length=50)
     edge8 = Edge(switch2, switch4, length=200)
     edge8.maximum_speed = 160
-    #edge9 = Edge(node4, switch4, length=50)
+    # edge9 = Edge(node4, switch4, length=50)
     edge11 = Edge(switch4, node5, length=50)
     edge11.maximum_speed = 160
 
@@ -76,7 +76,7 @@ def setup() -> Topology:
     switch4.set_connection_head_edge(edge7)
     switch4.set_connection_left_edge(edge11)
     switch4.set_connection_right_edge(edge8)
-    
+
     node1.set_connection_head_edge(edge1)
 
     node2.set_connection_head_edge(edge6)
@@ -122,7 +122,7 @@ def generate_files():
     # This is somewhere west of Schwarze Pumpe.
 
     # Import from OSM/ORM
-    #topology = ORMImporter().run(polygon)
+    # topology = ORMImporter().run(polygon)
     topology = setup()
     topology.name = "example"
 
@@ -136,9 +136,7 @@ def generate_files():
 
     # Write PlanPro
     generator = Generator()
-    generator.generate(
-        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/example"
-    )
+    generator.generate(topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/example")
 
     current_directory = os.getcwd()
     os.makedirs("data/sumo/" + topology.name.split("/")[-1], exist_ok=True)
@@ -148,6 +146,7 @@ def generate_files():
     sumo_exporter.convert()
     sumo_exporter.write_output()
     os.chdir(current_directory)
+
 
 if __name__ == "__main__":
     generate_files()

@@ -134,7 +134,7 @@ def traffic_update(monkeypatch):
 
     return (get_rr_count, get_gg_count)
 
-    
+
 @pytest.fixture
 def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingComponent):
     def get_controlled_lanes(identifier: str):
@@ -149,9 +149,11 @@ def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingCompo
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger, controlled_lanes
+    configured_souc: SimulationObjectUpdatingComponent,
+    mock_logger: Logger,
+    controlled_lanes,
 ) -> RouteController:
-    my_route_controller =  RouteController(
+    my_route_controller = RouteController(
         logger=mock_logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
@@ -209,7 +211,6 @@ def mock_interlocking() -> Interlocking:
         # pylint: enable=protected-access
 
     return InterlockingMock()
-
 
 
 @pytest.fixture
@@ -278,7 +279,7 @@ def yaramo_signal():
         """
 
         name = "74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen"
-        state = None     
+        state = None
 
     return SignalMock()
 
