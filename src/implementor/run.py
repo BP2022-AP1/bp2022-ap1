@@ -20,6 +20,8 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.train_builder import TrainBuilder
 
+import os
+
 
 def get_all_run_ids(options: dict, token: Token):
     """
@@ -61,6 +63,14 @@ def create_run(body, token):
     :param body: The parsed body of the request
     :param token: Token object of the current user
     """
+    sumo_configuration = os.path.join(
+        "data",
+        "sumo",
+        "schwarze_pumpe_v1",
+        "sumo-config",
+        "schwarze_pumpe_v1.scenario.sumocfg",
+    )
+
     simulation_configuration_id = body.pop("simulation_configuration")
     simulation_configurations = SimulationConfiguration.select().where(
         SimulationConfiguration.id == simulation_configuration_id
@@ -69,7 +79,7 @@ def create_run(body, token):
         return "Simulation not found", 404
 
     simulation_configuration = simulation_configurations.get()
-    communicator = Communicator()
+    communicator = Communicator(sumo_configuration=sumo_configuration)
 
     run = Run(simulation_configuration=simulation_configuration)
     run.save()
@@ -77,7 +87,7 @@ def create_run(body, token):
 
     object_updater = SimulationObjectUpdatingComponent(
         logger,
-        "data/sumo/schwarze_pumpe_v1/sumo-config/schwarze_pumpe_v1.scenario.sumocfg",
+        sumo_configuration,
     )
     communicator.add_component(object_updater)
 
