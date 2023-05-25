@@ -122,12 +122,14 @@ def stations():
 
 @pytest.fixture
 def run_ids(run: Run, run2: Run):
-    return sorted([run.id, run2.id])
+    return sorted([run.readable_id, run2.readable_id])
 
 
 @pytest.fixture
 def config_ids(simulation_configuration, simulation_configuration2):
-    return sorted([simulation_configuration.id, simulation_configuration2.id])
+    return sorted(
+        [simulation_configuration.readable_id, simulation_configuration2.readable_id]
+    )
 
 
 @pytest.fixture
@@ -529,10 +531,10 @@ def average_verkehrsleistung_by_config_id_df():
 def window_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [
-                simulation_configuration.id,
-                simulation_configuration.id,
-                simulation_configuration.id,
+            "config_readable_id": [
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
             "arrival_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
@@ -545,10 +547,10 @@ def window_by_multi_config_df(simulation_configuration):
 def verkehrsmenge_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [
-                simulation_configuration.id,
-                simulation_configuration.id,
-                simulation_configuration.id,
+            "config_readable_id": [
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
             "block_section_length": pd.Series([164.0, 20.5, 143.5]),
@@ -560,10 +562,10 @@ def verkehrsmenge_by_multi_config_df(simulation_configuration):
 def verkehrsleistung_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [
-                simulation_configuration.id,
-                simulation_configuration.id,
-                simulation_configuration.id,
+            "config_readable_id": [
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
             "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
