@@ -5,14 +5,14 @@ import pytest
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
 
-class TestApiColeDemandSchedule:
+class TestApiCoalDemandSchedule:
     """
-    Test the /schedule/cole-demand endpoint
+    Test the /schedule/coal-demand endpoint
     """
 
     def test_get_all(self, client, clear_token):
         response = client.get(
-            "/schedule/cole-demand", headers={TOKEN_HEADER: clear_token}
+            "/schedule/coal-demand", headers={TOKEN_HEADER: clear_token}
         )
         assert response.status_code == 200
 
@@ -40,27 +40,27 @@ class TestApiColeDemandSchedule:
     )
     def test_post(self, client, clear_token, data):
         response = client.post(
-            "/schedule/cole-demand", headers={TOKEN_HEADER: clear_token}, json=data
+            "/schedule/coal-demand", headers={TOKEN_HEADER: clear_token}, json=data
         )
         assert response.status_code != 422
 
     @pytest.mark.parametrize("data", [{}])
     def test_post_invalid(self, client, clear_token, data):
         response = client.post(
-            "/schedule/cole-demand", headers={TOKEN_HEADER: clear_token}, json=data
+            "/schedule/coal-demand", headers={TOKEN_HEADER: clear_token}, json=data
         )
         assert response.status_code == 422
 
     def test_get_single(self, client, clear_token):
         object_id = uuid.uuid4()
         response = client.get(
-            f"/schedule/cole-demand/{object_id}", headers={TOKEN_HEADER: clear_token}
+            f"/schedule/coal-demand/{object_id}", headers={TOKEN_HEADER: clear_token}
         )
         assert response.status_code == 404
 
     def test_delete(self, client, clear_token):
         object_id = uuid.uuid4()
         response = client.delete(
-            f"/schedule/cole-demand/{object_id}", headers={TOKEN_HEADER: clear_token}
+            f"/schedule/coal-demand/{object_id}", headers={TOKEN_HEADER: clear_token}
         )
         assert response.status_code == 404

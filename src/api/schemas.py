@@ -24,8 +24,8 @@ class ScheduleConfiguration(Schema):
     train_schedule_train_type = fields.String()
 
 
-class ColeDemandScheduleConfiguration(ScheduleConfiguration):
-    """The marshmallow schema for the cole demand schedule configuration"""
+class CoalDemandScheduleConfiguration(ScheduleConfiguration):
+    """The marshmallow schema for the coal demand schedule configuration"""
 
     demand_strategy_power_station = fields.String(required=True)
     demand_strategy_scaling_factor = fields.Float(required=True)
