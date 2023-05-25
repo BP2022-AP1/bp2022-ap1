@@ -107,6 +107,18 @@ class TestSimulationImplementor:
         assert status == 404
         assert result == "Simulation not found"
 
+    def test_update_simulation_configuration_with_run(
+        self, token, empty_simulation_configuration
+    ):
+        Run.create(simulation_configuration=empty_simulation_configuration)
+        result, status = impl.simulation.update_simulation_configuration(
+            {"identifier": str(empty_simulation_configuration.id)},
+            token,
+            {},
+        )
+        assert status == 400
+        assert result == "Simulation configuration is used in a run"
+
     def test_delete_simulation_configuration(
         self, token, simulation_configuration_full
     ):

@@ -236,6 +236,9 @@ def update_simulation_configuration(options, body, token):
 
     simulation = simulation_configurations.get()
 
+    if simulation.runs.count() > 0:
+        return "Simulation configuration is used in a run", 400
+
     try:
         with db.atomic():
             if "description" in body:
@@ -337,8 +340,9 @@ def delete_simulation_configuration(options, token):
 
     simulation_configuration = simulation_configurations.get()
 
-    if len(simulation_configuration.runs) > 0:
+    if simulation_configuration.runs.count() > 0:
         return "Simulation configuration is used in a run", 400
+
     with db.atomic():
         SpawnerConfigurationXSimulationConfiguration.delete().where(
             SpawnerConfigurationXSimulationConfiguration.simulation_configuration

@@ -2,7 +2,7 @@ from interlocking.infrastructureprovider.infrastructureprovider import (
     InfrastructureProvider,
 )
 
-from src.logger.logger import Logger
+from src.event_bus.event_bus import EventBus
 from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
@@ -12,19 +12,19 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     """
 
     route_controller: "RouteController"
-    logger: Logger
+    event_bus: EventBus
 
     def __init__(
         self,
         route_controller: "RouteController",
-        logger: Logger,
+        event_bus: EventBus,
     ):
         super().__init__()
         self.route_controller = route_controller
         self.route_controller.simulation_object_updating_component.infrastructure_provider = (
             self
         )
-        self.logger = logger
+        self.event_bus = event_bus
 
     def turn_point(self, yaramo_point, target_orientation):
         super().turn_point(yaramo_point, target_orientation)
@@ -50,7 +50,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 signal = potential_signal
                 break
         if target_state == "halt":
-            self.logger.set_signal(
+            self.event_bus.set_signal(
                 self.route_controller.tick,
                 signal.identifier,
                 signal.state,
@@ -58,7 +58,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
             )
             signal.state = Signal.State.HALT
         elif target_state == "go":
-            self.logger.set_signal(
+            self.event_bus.set_signal(
                 self.route_controller.tick,
                 signal.identifier,
                 signal.state,
