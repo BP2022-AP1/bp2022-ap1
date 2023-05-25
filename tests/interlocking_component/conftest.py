@@ -118,8 +118,8 @@ def traffic_update(monkeypatch):
     def set_traffic_light_state(identifier: str, state: str) -> None:
         # pylint: disable=unused-argument
         nonlocal rr_count, gg_count
-        assert state in ("rr", "GG")
-        if state == "rr":
+        assert state in ("rG", "GG")
+        if state == "rG":
             rr_count += 1
         else:
             gg_count += 1
@@ -134,19 +134,31 @@ def traffic_update(monkeypatch):
 
     return (get_rr_count, get_gg_count)
 
+    
+@pytest.fixture
+def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingComponent):
+    def get_controlled_lanes(identifier: str):
+        signal = None
+        for pot_signal in configured_souc.signals:
+            if pot_signal.identifier == identifier:
+                signal = pot_signal
+        return [signal._incoming_edge.identifier, "not_the_incoming_lane"]
+
+    monkeypatch.setattr(trafficlight, "getControlledLanes", get_controlled_lanes)
+
 
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger
+    configured_souc: SimulationObjectUpdatingComponent, mock_logger: Logger, controlled_lanes
 ) -> RouteController:
-    route_controller =  RouteController(
+    my_route_controller =  RouteController(
         logger=mock_logger,
         priority=1,
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "example.ppxml"),
     )
-    route_controller.initialize_signals
-    return route_controller
+    my_route_controller.initialize_signals()
+    return my_route_controller
 
 
 @pytest.fixture

@@ -121,6 +121,7 @@ class RouteController(Component):
 
     def initialize_signals(self):
         """This method sets which edge is the incoming for each signal."""
+        print("Starting to initialize signals")
         for yaramo_signal in self.topology.signals.values():
             signal = None
             for potentical_signal in self.simulation_object_updating_component.signals:
@@ -144,6 +145,7 @@ class RouteController(Component):
                     signal.incoming = edges_into_signal[0]
                 else:
                     signal.incoming = edges_into_signal[1]
+        print("Signals were initialized")
 
     def next_tick(self, tick: int):
         if tick == 1:

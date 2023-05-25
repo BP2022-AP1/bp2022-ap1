@@ -182,6 +182,8 @@ class Signal(Node):
                 self._incoming_index = i
 
         self.state = Signal.State.HALT
+        
+        print(self._incoming_index, self._controlled_lanes_count, self._incoming_edge)
 
     @property
     def state(self) -> "Signal.State":
