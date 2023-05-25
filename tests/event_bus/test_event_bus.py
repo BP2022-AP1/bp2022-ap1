@@ -5,8 +5,6 @@ import pytest
 from src.event_bus.event import Event, EventType
 from src.event_bus.event_bus import EventBus
 
-# pylint disable=attribute-defined-outside-init
-
 
 class TestEventBus:
     """Tests for the EventBus"""
@@ -34,6 +32,8 @@ class TestEventBus:
     def train_id(self) -> str:
         return "cool_train_id"
 
+    callback_called: bool = False
+
     def test_register_callback(
         self,
         event_bus: EventBus,
@@ -58,8 +58,6 @@ class TestEventBus:
     def test_event(
         self, event_bus: EventBus, event_type: EventType, tick: int, train_id: str
     ):
-        self.callback_called = False
-
         def callback(event: Event):
             self.callback_called = True
             assert event.event_type == event_type
