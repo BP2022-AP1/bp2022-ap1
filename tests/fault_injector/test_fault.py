@@ -35,10 +35,10 @@ class TestFault:
         return configuration
 
     @pytest.fixture
-    def fault(self, configuration, logger, simulation_object_updater, interlocking):
+    def fault(self, configuration, event_bus, simulation_object_updater, interlocking):
         return self.MockSpecialFault(
             configuration,
-            logger,
+            event_bus,
             simulation_object_updater,
             interlocking,
         )
