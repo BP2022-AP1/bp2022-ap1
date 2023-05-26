@@ -81,6 +81,14 @@ def train_add(monkeypatch):
         assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
+    
+@pytest.fixture
+def train_subscribe(monkeypatch):
+    def subscribe_train(identifier, subscriptions=None):
+        assert identifier is not None
+        assert subscriptions == [constants.VAR_POSITION, constants.VAR_ROAD_ID, constants.VAR_SPEED]
+
+    monkeypatch.setattr(vehicle, "subscribe", subscribe_train)
 
 
 @pytest.fixture
@@ -201,7 +209,7 @@ class MockRouteController:
 
 @pytest.fixture
 def spawner(
-    configured_souc: SimulationObjectUpdatingComponent, train_add
+    configured_souc: SimulationObjectUpdatingComponent, train_add, train_subscribe
 ) -> Tuple[SimulationObjectUpdatingComponent, TrainBuilder]:
     # pylint: disable=unused-argument
     return (configured_souc, TrainBuilder(configured_souc, MockRouteController()))
