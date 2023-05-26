@@ -135,6 +135,7 @@ def traffic_update(monkeypatch):
     return (get_rr_count, get_gg_count)
 
 
+# pylint: disable=protected-access
 @pytest.fixture
 def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingComponent):
     def get_controlled_lanes(identifier: str):
@@ -147,6 +148,10 @@ def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingCompo
     monkeypatch.setattr(trafficlight, "getControlledLanes", get_controlled_lanes)
 
 
+# pylint: enable=protected-access
+
+
+# pylint: disable=unused-argument
 @pytest.fixture
 def route_controller(
     configured_souc: SimulationObjectUpdatingComponent,
@@ -161,6 +166,9 @@ def route_controller(
     )
     my_route_controller.initialize_signals()
     return my_route_controller
+
+
+# pylint: enable=unused-argument
 
 
 @pytest.fixture
@@ -306,10 +314,15 @@ def sumo_edge() -> Edge:
     return EdgeMock()
 
 
+# pylint: disable=invalid-name
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
+        assert routeID is not None
         assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
+
+
+# pylint: enable=invalid-name
