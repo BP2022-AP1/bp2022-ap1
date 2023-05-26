@@ -24,7 +24,7 @@ def fixture_client(app):
 
 @pytest.fixture(name="clear_admin_token")
 def fixture_clear_hashed_token():
-    return "token"
+    return "admin_token"
 
 
 @pytest.fixture(name="admin_token", autouse=True)
@@ -37,7 +37,7 @@ def fixture_admin_token(clear_admin_token):
 
 @pytest.fixture(name="clear_token")
 def fixture_not_hashed_token():
-    return "token"
+    return "user_token"
 
 
 @pytest.fixture(name="token", autouse=True)

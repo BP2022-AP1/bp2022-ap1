@@ -5,6 +5,7 @@ import pytest
 
 from src.data_science.data_science import DataScience
 from src.data_science.grafana_data_registration import GrafanaDataRegistrator
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
@@ -31,13 +32,17 @@ from tests.logger.test_log_collector import TestLogCollector
 
 
 @pytest.fixture
-def logger(run):
-    return Logger(run_id=run.id)
+def event_bus(run):
+    bus = EventBus(run_id=run.id)
+    Logger(event_bus=bus)
+    return bus
 
 
 @pytest.fixture
-def logger2(run2):
-    return Logger(run_id=run2.id)
+def event_bus2(run2):
+    bus = EventBus(run_id=run2.id)
+    Logger(event_bus=bus)
+    return bus
 
 
 @pytest.fixture
@@ -107,7 +112,7 @@ def value_after():
 
 @pytest.fixture
 def trains():
-    return ["ice_1", "ice_2", "ice_3", "ice_4"]
+    return ["cargo_4_cargo", "ice_1_passenger", "ice_2_passenger", "ice_3_passenger"]
 
 
 @pytest.fixture
@@ -116,13 +121,15 @@ def stations():
 
 
 @pytest.fixture
-def run_ids(run: Run):
-    return [run.id]
+def run_ids(run: Run, run2: Run):
+    return sorted([run.readable_id, run2.readable_id])
 
 
 @pytest.fixture
-def config_ids(simulation_configuration):
-    return [simulation_configuration.id]
+def config_ids(simulation_configuration, simulation_configuration2):
+    return sorted(
+        [simulation_configuration.readable_id, simulation_configuration2.readable_id]
+    )
 
 
 @pytest.fixture
@@ -153,7 +160,10 @@ def track_speed_limit_fault_configuration():
 @pytest.fixture
 def schedule_blocked_fault_configuration():
     return ScheduleBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="ice_1", strategy="regular"
+        start_tick=10,
+        end_tick=20,
+        affected_element_id="ice_1_passenger",
+        strategy="regular",
     )
 
 
@@ -162,7 +172,7 @@ def train_prio_fault_configuration():
     return TrainPrioFaultConfiguration.create(
         start_tick=10,
         end_tick=20,
-        affected_element_id="ice_1",
+        affected_element_id="ice_1_passenger",
         new_prio=1,
         strategy="regular",
     )
@@ -173,7 +183,7 @@ def train_speed_fault_configuration():
     return TrainSpeedFaultConfiguration.create(
         start_tick=10,
         end_tick=20,
-        affected_element_id="ice_1",
+        affected_element_id="ice_1_passenger",
         new_speed=10,
         strategy="regular",
     )
@@ -211,9 +221,9 @@ def faults_log_collector_df(
                 "station_1",
                 "section_1",
                 "section_1",
-                "ice_1",
-                "ice_1",
-                "ice_1",
+                "ice_1_passenger",
+                "ice_1_passenger",
+                "ice_1_passenger",
             ],
             "value_before": [None, None, "100", None, "2", "100"],
             "value_after": [None, None, "10", None, "1", "10"],
@@ -261,9 +271,9 @@ def verkehrsleistung_time_df():
         {
             "time": [
                 datetime(2020, 1, 1, 0, 1 if i == 6 else 0, (10 * i) % 60)
-                for i in range(1, 7)
+                for i in range(0, 7)
             ],
-            "verkehrsleistung": [0.0, 7560.0, 3780.0, 12360.0, 9270.0, 11808.0],
+            "verkehrsleistung": [0.0, 0.0, 3780.0, 2520.0, 9270.0, 7416.0, 9840.0],
         }
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
@@ -276,9 +286,9 @@ def verkehrsleistung_momentarily_time_df():
         {
             "time": [
                 datetime(2020, 1, 1, 0, 1 if i == 6 else 0, (10 * i) % 60)
-                for i in range(1, 7)
+                for i in range(0, 7)
             ],
-            "verkehrsleistung": [0.0, 7560.0, 0.0, 29520.0, 0.0, 21960.0],
+            "verkehrsleistung": [0.0, 0.0, 7560.0, 0.0, 29520.0, 0.0, 21960.0],
         }
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
@@ -351,28 +361,76 @@ def spawn_events_by_run_id_head_df():
 
 
 @pytest.fixture
+def spawn_coal_events_by_config_id_head_df(
+    demand_train_schedule_configuration: ScheduleConfiguration,
+):
+    spawn_events_by_run_id_head_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 1, 16, 40),
+                datetime(2020, 1, 1, 2, 1, 40),
+                datetime(2020, 1, 1, 3, 1, 40),
+                datetime(2020, 1, 1, 3, 46, 40),
+                datetime(2020, 1, 1, 4, 46, 40),
+            ],
+            f"title": [
+                f"Spawn train from config {demand_train_schedule_configuration.id}"
+                for _ in range(1, 6)
+            ],
+        }
+    )
+    spawn_events_by_run_id_head_df.set_index("time", inplace=True)
+    return spawn_events_by_run_id_head_df
+
+
+@pytest.fixture
 def verkehrsmenge_df():
-    return pd.DataFrame({"verkehrsmenge": [164.0]})
+    return pd.DataFrame(
+        {
+            "train_type": ["cargo", "passenger", "all"],
+            "verkehrsmenge": [20.5, 143.5, 164.0],
+        }
+    )
 
 
 @pytest.fixture
 def verkehrsleistung_by_run_id_df():
     return pd.DataFrame(
         {
-            "enter_tick": [10.0],
-            "leave_tick": [60.0],
-            "block_section_length": [164.0],
-            "verkehrsleistung": [11808.0],
+            "train_type": ["cargo", "passenger", "all"],
+            "enter_tick": pd.Series([0, 0, 0], dtype="Int64"),
+            "leave_tick": pd.Series([40, 60, 60], dtype="Int64"),
+            "block_section_length": [20.5, 143.5, 164.0],
+            "verkehrsleistung": [1845.0, 8610.0, 10455.0],
         }
     )
+
+
+@pytest.fixture
+def window_size_time_by_config_id_df():
+    window_size_df = pd.DataFrame(
+        {
+            "time": [
+                datetime(2020, 1, 1, 0, int((10 * i) / 60), (10 * i) % 60)
+                for i in range(7)
+            ],
+            "arrival_size": pd.Series([0.0, 0.0, 5.0, 2.5, 7.5, 5.0, 25.0 / 3.0]),
+            "departure_size": pd.Series(
+                [0.0, 0.0, 0.0, 5.0, 5.0, 20.0 / 3.0, 20.0 / 3.0]
+            ),
+        }
+    )
+    window_size_df.set_index("time", inplace=True)
+    return window_size_df
 
 
 @pytest.fixture
 def window_by_config_id_df():
     return pd.DataFrame(
         {
-            "arrival_tick": [25 / 3],
-            "departure_tick": [25 / 3],
+            "train_type": ["all", "cargo", "passenger"],
+            "arrival_tick": [25 / 3, 20 / 3, 80 / 9],
+            "departure_tick": [25 / 3, 20 / 3, 80 / 9],
         }
     )
 
@@ -396,24 +454,24 @@ def window_all_by_config_id_df():
                 "station_3",
             ],
             "train_id": [
-                "ice_1",
-                "ice_2",
-                "ice_3",
-                "ice_4",
-                "ice_1",
-                "ice_2",
-                "ice_3",
-                "ice_4",
-                "ice_1",
-                "ice_2",
-                "ice_3",
-                "ice_4",
+                "cargo_4_cargo",
+                "ice_1_passenger",
+                "ice_2_passenger",
+                "ice_3_passenger",
+                "cargo_4_cargo",
+                "ice_1_passenger",
+                "ice_2_passenger",
+                "ice_3_passenger",
+                "cargo_4_cargo",
+                "ice_1_passenger",
+                "ice_2_passenger",
+                "ice_3_passenger",
             ],
             "arrival_tick": pd.Series(
-                [10, 10, 0, 0, 10, 10, 10, 10, 10, 10, 10, 10], dtype="Int64"
+                [0, 10, 10, 0, 10, 10, 10, 10, 10, 10, 10, 10], dtype="Int64"
             ),
             "departure_tick": pd.Series(
-                [10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 0], dtype="Int64"
+                [10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 0, 10], dtype="Int64"
             ),
         }
     )
@@ -438,10 +496,9 @@ def verkehrsleistung_by_config_id_df(run):
     verkehrsleistung_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "enter_tick": pd.Series([10], dtype="Int64"),
             "leave_tick": pd.Series([60], dtype="Int64"),
             "block_section_length": pd.Series([164.0]),
-            "verkehrsleistung": pd.Series([11808.0]),
+            "verkehrsleistung": pd.Series([9840.0]),
         }
     )
     verkehrsleistung_df.set_index("run_id", inplace=True)
@@ -449,12 +506,39 @@ def verkehrsleistung_by_config_id_df(run):
 
 
 @pytest.fixture
+def average_verkehrsmenge_by_config_id_df():
+    verkehrsmenge = pd.DataFrame(
+        {
+            "train_type": ["all", "cargo", "passenger"],
+            "verkehrsmenge": pd.Series([164.0, 20.5, 143.5]),
+        }
+    )
+    return verkehrsmenge
+
+
+@pytest.fixture
+def average_verkehrsleistung_by_config_id_df():
+    verkehrsleistung = pd.DataFrame(
+        {
+            "train_type": ["all", "cargo", "passenger"],
+            "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
+        }
+    )
+    return verkehrsleistung
+
+
+@pytest.fixture
 def window_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id],
-            "arrival_tick": pd.Series([25 / 3], dtype="Float64"),
-            "departure_tick": pd.Series([25 / 3], dtype="Float64"),
+            "config_readable_id": [
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+            ],
+            "train_type": ["all", "cargo", "passenger"],
+            "arrival_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
+            "departure_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
         }
     )
 
@@ -463,8 +547,13 @@ def window_by_multi_config_df(simulation_configuration):
 def verkehrsmenge_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id],
-            "block_section_length": pd.Series([164.0]),
+            "config_readable_id": [
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+            ],
+            "train_type": ["all", "cargo", "passenger"],
+            "block_section_length": pd.Series([164.0, 20.5, 143.5]),
         }
     )
 
@@ -473,11 +562,13 @@ def verkehrsmenge_by_multi_config_df(simulation_configuration):
 def verkehrsleistung_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
-            "config_id": [simulation_configuration.id],
-            "enter_tick": pd.Series([10.0]),
-            "leave_tick": pd.Series([60.0]),
-            "block_section_length": pd.Series([164.0]),
-            "verkehrsleistung": pd.Series([11808.0]),
+            "config_readable_id": [
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+                simulation_configuration.readable_id,
+            ],
+            "train_type": ["all", "cargo", "passenger"],
+            "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
         }
     )
 
@@ -487,22 +578,22 @@ def grafana_data_registrator():
     return GrafanaDataRegistrator()
 
 
-def setup_logs_departure_arrival(logger):
-    TestLogCollector.setup_departure_arrival_1(logger)
-    TestLogCollector.setup_departure_arrival_2(logger)
-    TestLogCollector.setup_departure_arrival_3(logger)
-    TestLogCollector.setup_departure_arrival_4(logger)
+def setup_logs_departure_arrival(event_bus):
+    TestLogCollector.setup_departure_arrival_1(event_bus)
+    TestLogCollector.setup_departure_arrival_2(event_bus)
+    TestLogCollector.setup_departure_arrival_3(event_bus)
+    TestLogCollector.setup_departure_arrival_4(event_bus)
 
 
-def setup_logs_departure_arrival_alt(logger2):
-    TestLogCollector.setup_departure_arrival_1_alt(logger2)
-    TestLogCollector.setup_departure_arrival_2_alt(logger2)
-    TestLogCollector.setup_departure_arrival_3_alt(logger2)
-    TestLogCollector.setup_departure_arrival_4_alt(logger2)
+def setup_logs_departure_arrival_alt(event_bus2):
+    TestLogCollector.setup_departure_arrival_1_alt(event_bus2)
+    TestLogCollector.setup_departure_arrival_2_alt(event_bus2)
+    TestLogCollector.setup_departure_arrival_3_alt(event_bus2)
+    TestLogCollector.setup_departure_arrival_4_alt(event_bus2)
 
 
-def setup_logs_block_sections(logger):
-    TestLogCollector.setup_enter_leave_block_section_1(logger)
-    TestLogCollector.setup_enter_leave_block_section_2(logger)
-    TestLogCollector.setup_enter_leave_block_section_3(logger)
-    TestLogCollector.setup_enter_leave_block_section_4(logger)
+def setup_logs_block_sections(event_bus):
+    TestLogCollector.setup_enter_leave_block_section_1(event_bus)
+    TestLogCollector.setup_enter_leave_block_section_2(event_bus)
+    TestLogCollector.setup_enter_leave_block_section_3(event_bus)
+    TestLogCollector.setup_enter_leave_block_section_4(event_bus)

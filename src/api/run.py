@@ -9,7 +9,7 @@ bp = Blueprint("run", __name__)
 
 
 @bp.route("/run", methods=["get"])
-@token_required
+@token_required()
 def get_all_run_ids(token):
     """Get all run id"""
     options = {}
@@ -19,7 +19,7 @@ def get_all_run_ids(token):
 
 
 @bp.route("/run", methods=["post"])
-@token_required
+@token_required()
 def create_run(token):
     """Create a run"""
     schema = schemas.RunConfiguration()
@@ -30,7 +30,7 @@ def create_run(token):
 
 
 @bp.route("/run/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_run(identifier, token):
     """Get a run"""
     options = {}
@@ -40,7 +40,7 @@ def get_run(identifier, token):
 
 
 @bp.route("/run/<identifier>", methods=["delete"])
-@token_required
+@token_required()
 def delete_run(identifier, token):
     """Delete a run"""
     options = {}

@@ -84,16 +84,16 @@ class LogCollector:
         station_ids = station_ids.union({t.station_id for t in stations_departures})
         return list(station_ids)
 
-    def get_run_ids(self) -> list[UUID]:
+    def get_run_ids(self) -> list[str]:
         """Returns a list of all run ids.
         :return: A list of all run ids.
         """
         # pylint will not recognize that peewee results are iterable
         # pylint: disable=not-an-iterable
-        run_ids = [r.id for r in Run.select(Run.id).distinct()]
+        run_ids = [r.readable_id for r in Run.select(Run.readable_id).distinct()]
         return list(run_ids)
 
-    def get_config_ids(self) -> list[UUID]:
+    def get_config_ids(self) -> list[str]:
         """Returns a list of all config ids.
         :return: A list of all config ids.
         """
@@ -101,9 +101,9 @@ class LogCollector:
         # pylint will not recognize that peewee results are iterable
         # pylint: disable=not-an-iterable
         config_ids = [
-            c.id
+            c.readable_id
             for c in SimulationConfiguration.select(
-                SimulationConfiguration.id
+                SimulationConfiguration.readable_id
             ).distinct()
         ]
         return list(config_ids)
@@ -257,13 +257,13 @@ class LogCollector:
         # pylint: disable=not-an-iterable
         train_leave_df = pd.DataFrame(
             [
-                [e.tick, e.block_section_id, e.block_section_length]
+                [e.tick, e.block_section_id]
                 for e in TrainLeaveBlockSectionLogEntry.select().where(
                     (TrainLeaveBlockSectionLogEntry.run_id == run_id)
                     & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
                 )
             ],
-            columns=["tick", "block_section_id", "block_section_length"],
+            columns=["tick", "block_section_id"],
         )
         train_enter_df = train_enter_df.sort_values("tick")
         train_leave_df = train_leave_df.sort_values("tick")
@@ -279,9 +279,7 @@ class LogCollector:
             block_section_ids = [train_leave_df.iloc[0].block_section_id] + list(
                 block_section_ids
             )
-            block_lengths = [train_leave_df.iloc[0].block_section_length] + list(
-                block_lengths
-            )
+            block_lengths = [None] + list(block_lengths)
         if train_enter_last:
             leave_ticks = list(leave_ticks) + [None]
         block_section_times_df = pd.DataFrame(

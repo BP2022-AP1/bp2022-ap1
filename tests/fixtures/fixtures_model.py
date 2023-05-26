@@ -3,6 +3,12 @@ from datetime import datetime
 import pytest
 
 from src.implementor.models import Run, SimulationConfiguration, Token
+from src.schedule.schedule_configuration import ScheduleConfiguration
+from src.spawner.spawner import (
+    SpawnerConfiguration,
+    SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
+)
 
 
 @pytest.fixture
@@ -28,6 +34,33 @@ def token():
 @pytest.fixture
 def simulation_configuration(token):
     return SimulationConfiguration.create(token=token.id)
+
+
+@pytest.fixture
+def simulation_configuration2(token):
+    return SimulationConfiguration.create(token=token.id)
+
+
+@pytest.fixture
+def spawner_configuration_x_simulation_configuration(
+    spawner_configuration: SpawnerConfiguration,
+    simulation_configuration: SimulationConfiguration,
+):
+    return SpawnerConfigurationXSimulationConfiguration.create(
+        simulation_configuration=simulation_configuration,
+        spawner_configuration=spawner_configuration,
+    )
+
+
+@pytest.fixture
+def spawner_configuration_x_demand_schedule(
+    spawner_configuration: SpawnerConfiguration,
+    demand_train_schedule_configuration: ScheduleConfiguration,
+):
+    return SpawnerConfigurationXSchedule.create(
+        spawner_configuration_id=spawner_configuration.id,
+        schedule_configuration_id=demand_train_schedule_configuration.id,
+    )
 
 
 @pytest.fixture

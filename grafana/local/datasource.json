@@ -5,7 +5,9 @@
   "basicAuthUser": "",
   "database": "",
   "isDefault": false,
-  "jsonData": {},
+  "jsonData": {
+    "timeout": 600
+  },
   "name": "simulation-runs",
   "orgId": 1,
   "password": "",

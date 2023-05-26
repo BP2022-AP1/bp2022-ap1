@@ -4,8 +4,10 @@ import pandas as pd
 from grafana_pandas_datasource.registry import data_generators as dg
 
 from src.data_science.data_science import DataScience
+from src.implementor.models import Run, SimulationConfiguration
 
 
+# pylint: disable=too-many-public-methods
 class GrafanaDataRegistrator:
     """Class that encapsulates all functions that are used by grafana"""
 
@@ -17,13 +19,53 @@ class GrafanaDataRegistrator:
 
     # --- RUN
 
+    @staticmethod
+    def _get_run_id_from_param(param) -> UUID:
+        """Returns a run id from params
+        :param param: Grafana params
+        :return: run id
+        """
+        run_id = Run.select(Run.id).where(param == Run.readable_id).get().id
+        return run_id
+
+    @staticmethod
+    def _get_config_id_from_param(param) -> UUID:
+        """Returns a config id from params
+        :param param: Grafana params
+        :return: config id
+        """
+        config_id = (
+            SimulationConfiguration.select(SimulationConfiguration.id)
+            .where(param == SimulationConfiguration.readable_id)
+            .get()
+            .id
+        )
+        return config_id
+
+    @staticmethod
+    def _get_config_id_list_from_param(param) -> list[UUID]:
+        """Returns a list of config ids from params
+        :param param: Grafana params
+        :return: list of config id
+        """
+        config_readable_ids = param.replace(")", "").replace("(", "").split("|")
+        # pylint will not recognize that peewee results are iterable
+        # pylint: disable=not-an-iterable
+        config_ids = [
+            config_id.id
+            for config_id in SimulationConfiguration.select(
+                SimulationConfiguration.id
+            ).where(SimulationConfiguration.readable_id << config_readable_ids)
+        ]
+        return config_ids
+
     def get_faults_by_run_id(self, param, _) -> pd.DataFrame:
         """Returns a list of all faults by grafana params
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of faults
         """
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_faults_by_run_id(run_id)
 
     def get_verkehrsleistung_time_by_run_id(self, param, _) -> pd.DataFrame:
@@ -31,7 +73,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsleistung"""
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_verkehrsleistung_time_by_run_id(run_id)
 
     def get_verkehrsleistung_momentarily_time_by_run_id(self, param, _) -> pd.DataFrame:
@@ -39,7 +81,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsleistung over time"""
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_verkehrsleistung_momentarily_time_by_run_id(run_id)
 
     def get_coal_demand_by_run_id(self, param, _) -> pd.DataFrame:
@@ -47,7 +89,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of coal demand over time"""
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_coal_demand_by_run_id(run_id)
 
     def get_spawn_events_by_run_id(self, param, _) -> pd.DataFrame:
@@ -56,7 +98,7 @@ class GrafanaDataRegistrator:
         :param _: ignored input time range
         :return: dataframe of all train spawn events over time
         """
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_spawn_events_by_run_id(run_id)
 
     def get_verkehrsmenge_by_run_id(self, param, _) -> pd.DataFrame:
@@ -64,7 +106,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsmenge"""
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_verkehrsmenge_by_run_id(run_id)
 
     def get_verkehrsleistung_by_run_id(self, param, _) -> pd.DataFrame:
@@ -72,25 +114,49 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsleistung"""
-        run_id = UUID(param)
+        run_id = self._get_run_id_from_param(param)
         return self.data_science.get_verkehrsleistung_by_run_id(run_id)
 
     # --- CONFIG
+
+    def get_window_size_time_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the arrival and departure window sizes over time by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of verkehrsleistung"""
+        config_id = self._get_config_id_from_param(param)
+        return self.data_science.get_window_size_time_by_config_id(config_id)
 
     def get_verkehrsleistung_time_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsleistung over time by grafana params
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsleistung over time"""
-        config_id = UUID(param)
+        config_id = self._get_config_id_from_param(param)
         return self.data_science.get_verkehrsleistung_time_by_config_id(config_id)
+
+    def get_coal_demand_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the coal demand over time by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of coal demand over time by config id"""
+        config_id = self._get_config_id_from_param(param)
+        return self.data_science.get_coal_demand_by_config_id(config_id)
+
+    def get_coal_spawn_events_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the coal train spawn events by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of coal train spawn events by config id"""
+        config_id = self._get_config_id_from_param(param)
+        return self.data_science.get_coal_spawn_events_by_config_id(config_id)
 
     def get_window_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the window size of the entire network by grafana params
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of window size"""
-        config_id = UUID(param)
+        config_id = self._get_config_id_from_param(param)
         return self.data_science.get_window_by_config_id(config_id)
 
     def get_window_all_by_config_id(self, param, _) -> pd.DataFrame:
@@ -98,7 +164,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of window sizes of stations and trains"""
-        config_id = UUID(param)
+        config_id = self._get_config_id_from_param(param)
         return self.data_science.get_window_all_by_config_id(config_id)
 
     def get_verkehrsmenge_by_config_id(self, param, _) -> pd.DataFrame:
@@ -106,7 +172,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsmenge"""
-        config_id = UUID(param)
+        config_id = self._get_config_id_from_param(param)
         return self.data_science.get_verkehrsmenge_by_config_id(config_id)
 
     def get_verkehrsleistung_by_config_id(self, param, _) -> pd.DataFrame:
@@ -114,8 +180,24 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsleistung"""
-        config_id = UUID(param)
+        config_id = self._get_config_id_from_param(param)
         return self.data_science.get_verkehrsleistung_by_config_id(config_id)
+
+    def get_average_verkehrsmenge_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the average verkehrsmenge by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of average verkehrsmenge"""
+        config_id = self._get_config_id_from_param(param)
+        return self.data_science.get_average_verkehrsmenge_by_config_id(config_id)
+
+    def get_average_verkehrsleistung_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the average verkehrsleistung by grafana params
+        :param param: Grafana params
+        :param _: ignored input time range
+        :return: dataframe of average verkehrsleistung"""
+        config_id = self._get_config_id_from_param(param)
+        return self.data_science.get_average_verkehrsleistung_by_config_id(config_id)
 
     # --- MULTI CONFIG
 
@@ -124,9 +206,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of multiple windows"""
-        config_ids = [
-            UUID(x) for x in param.replace(")", "").replace("(", "").split("|")
-        ]
+        config_ids = self._get_config_id_list_from_param(param)
         return self.data_science.get_window_by_multi_config(config_ids)
 
     def get_verkehrsmenge_by_multi_config(self, param, _) -> pd.DataFrame:
@@ -134,9 +214,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsmengen of multiple configs"""
-        config_ids = [
-            UUID(x) for x in param.replace(")", "").replace("(", "").split("|")
-        ]
+        config_ids = self._get_config_id_list_from_param(param)
         return self.data_science.get_verkehrsmenge_by_multi_config(config_ids)
 
     def get_verkehrsleistung_by_multi_config(self, param, _) -> pd.DataFrame:
@@ -144,9 +222,7 @@ class GrafanaDataRegistrator:
         :param param: Grafana params
         :param _: ignored input time range
         :return: dataframe of verkehrsleistung of multiple configs"""
-        config_ids = [
-            UUID(x) for x in param.replace(")", "").replace("(", "").split("|")
-        ]
+        config_ids = self._get_config_id_list_from_param(param)
         return self.data_science.get_verkehrsleistung_by_multi_config(config_ids)
 
     # -- FINDERS
@@ -164,13 +240,13 @@ class GrafanaDataRegistrator:
         :return: list of all train ids"""
         return self.data_science.get_all_trains()
 
-    def get_all_run_ids(self, _) -> list[UUID]:
+    def get_all_run_ids(self, _) -> list[str]:
         """Returns all run ids
         :param _: ignored input time range
         :return: list of all run ids"""
         return self.data_science.get_all_run_ids()
 
-    def get_all_config_ids(self, _) -> list[UUID]:
+    def get_all_config_ids(self, _) -> list[str]:
         """Returns all config ids
         :param _: ignored input time range
         :return: list of all config ids"""
@@ -188,11 +264,16 @@ class GrafanaDataRegistrator:
             "test_get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsmenge_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
+            "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
+            "get_coal_demand_by_config_id:${config_id}",
+            "get_coal_spawn_events_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
             "get_verkehrsmenge_by_config_id:${config_id}",
             "get_verkehrsleistung_by_config_id:${config_id}",
+            "get_average_verkehrsmenge_by_config_id:${config_id}",
+            "get_average_verkehrsleistung_by_config_id:${config_id}",
             "get_window_by_multi_config:${config_ids}",
             "get_verkehrsmenge_by_multi_config:${config_ids}",
             "get_verkehrsleistung_by_multi_config:${config_ids}",
@@ -209,6 +290,10 @@ def define_and_register_data():
     dg.add_annotation_reader(
         "test_get_spawn_events_by_run_id",
         grafana_data_registrator.get_spawn_events_by_run_id,
+    )
+    dg.add_annotation_reader(
+        "get_coal_spawn_events_by_config_id",
+        grafana_data_registrator.get_coal_spawn_events_by_config_id,
     )
     dg.add_metric_reader(
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
@@ -234,8 +319,16 @@ def define_and_register_data():
         grafana_data_registrator.get_verkehrsleistung_by_run_id,
     )
     dg.add_metric_reader(
+        "get_window_size_time_by_config_id",
+        grafana_data_registrator.get_window_size_time_by_config_id,
+    )
+    dg.add_metric_reader(
         "get_verkehrsleistung_time_by_config_id",
         grafana_data_registrator.get_verkehrsleistung_time_by_config_id,
+    )
+    dg.add_metric_reader(
+        "get_coal_demand_by_config_id",
+        grafana_data_registrator.get_coal_demand_by_config_id,
     )
     dg.add_metric_reader(
         "get_window_by_config_id", grafana_data_registrator.get_window_by_config_id
@@ -251,6 +344,14 @@ def define_and_register_data():
     dg.add_metric_reader(
         "get_verkehrsleistung_by_config_id",
         grafana_data_registrator.get_verkehrsleistung_by_config_id,
+    )
+    dg.add_metric_reader(
+        "get_average_verkehrsmenge_by_config_id",
+        grafana_data_registrator.get_average_verkehrsmenge_by_config_id,
+    )
+    dg.add_metric_reader(
+        "get_average_verkehrsleistung_by_config_id",
+        grafana_data_registrator.get_average_verkehrsleistung_by_config_id,
     )
     dg.add_metric_reader(
         "get_window_by_multi_config",
