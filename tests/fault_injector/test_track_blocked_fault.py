@@ -1,11 +1,11 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
     TrackBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -36,13 +36,13 @@ class TestTrackBlockedFault:
     def track_blocked_fault(
         self,
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrackBlockedFault(
             configuration=track_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )

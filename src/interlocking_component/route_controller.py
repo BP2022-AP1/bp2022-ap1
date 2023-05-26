@@ -7,11 +7,11 @@ from planpro_importer.reader import PlanProReader
 from yaramo.signal import SignalDirection
 
 from src.component import Component
+from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
 from src.interlocking_component.router import Router
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -100,7 +100,7 @@ class RouteController(Component):
 
     def __init__(
         self,
-        logger: Logger,
+        event_bus: EventBus,
         priority: int,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
         path_name: str = os.path.join("data", "planpro", "schwarze_pumpe_v1.ppxml"),
@@ -108,14 +108,14 @@ class RouteController(Component):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
-        super().__init__(logger, priority)
+        super().__init__(event_bus, priority)
         self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
         # Import from local PlanPro file
         self.topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
 
-        infrastructure_provider = SumoInfrastructureProvider(self, logger)
+        infrastructure_provider = SumoInfrastructureProvider(self, event_bus)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(self.topology)
 
@@ -253,8 +253,10 @@ class RouteController(Component):
                         interlocking_route.yaramo_route
                     )
                     if was_set:
-                        self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
-                        self.logger.train_enter_block_section(
+                        self.event_bus.create_fahrstrasse(
+                            self.tick, interlocking_route.id
+                        )
+                        self.event_bus.train_enter_block_section(
                             self.tick,
                             train.identifier,
                             interlocking_route.id,
@@ -302,8 +304,10 @@ class RouteController(Component):
         if route is not None:
             # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)
-            self.logger.remove_fahrstrasse(self.tick, route.id)
-            self.logger.train_leave_block_section(self.tick, train.identifier, route.id)
+            self.event_bus.remove_fahrstrasse(self.tick, route.id)
+            self.event_bus.train_leave_block_section(
+                self.tick, train.identifier, route.id
+            )
 
     def _get_interlocking_routes_for_edge(self, edge: Edge) -> List[Route]:
         """This method returns the interlocking route corresponding to the given edge.

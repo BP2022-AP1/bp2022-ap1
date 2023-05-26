@@ -1,6 +1,7 @@
 import pytest
 from traci import vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
@@ -27,8 +28,25 @@ def token():
 
 
 @pytest.fixture
-def logger(run):
-    return Logger(run_id=run.id)
+def simulation_configuration(token):
+    return SimulationConfiguration.create(token=token.id)
+
+
+@pytest.fixture
+def simulation_configuration2(token):
+    return SimulationConfiguration.create(token=token.id)
+
+
+@pytest.fixture
+def run(simulation_configuration):
+    return Run.create(simulation_configuration=simulation_configuration.id)
+
+
+@pytest.fixture
+def event_bus(run):
+    bus = EventBus(run_id=run.id)
+    Logger(bus)
+    return bus
 
 
 @pytest.fixture
@@ -132,9 +150,9 @@ class MockTrainSpawner:
 
 
 @pytest.fixture
-def spawner(spawner_configuration, logger):
+def spawner(spawner_configuration, event_bus):
     spawner = Spawner(
-        logger=logger,
+        event_bus=event_bus,
         configuration=spawner_configuration,
         train_spawner=MockTrainSpawner(),
     )
