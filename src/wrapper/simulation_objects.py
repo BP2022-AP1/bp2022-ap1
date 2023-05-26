@@ -730,6 +730,7 @@ class Train(SimulationObject):
                 self._edge.track.reservations.pop(0)
                 assert self.edge.track == self.reserved_tracks[0]
                 self.reserved_tracks.pop(0)
+
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
                 )

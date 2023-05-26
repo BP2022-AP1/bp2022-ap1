@@ -245,6 +245,14 @@ class RouteController(Component):
     def try_reserving_route(
         self, route: List[Node], train, interlocking_route, route_length
     ) -> bool:
+        """This method tries to reserve a route.
+
+        :param route: the route to be reserved
+        :param train: the train to reserve for
+        :param interlocking_route: the corresponding interlocking route
+        :param route_length: the length of the route
+        :return: if it was successful
+        """
         was_reserved = self.reserve_route(route, train)
 
         was_set = self.try_setting_interlocking_route(
@@ -259,6 +267,14 @@ class RouteController(Component):
     def try_setting_interlocking_route(
         self, route: List[Node], interlocking_route, train: Train, route_length: int
     ) -> bool:
+        """This method tries to set the interlocking route.
+
+        :param route: the route to set
+        :param interlocking_route: the corresponding interlocking route
+        :param train: the train to set the route for (needed for logging)
+        :param route_length: the length of the route (nedded for logging)
+        :return: if it was successful
+        """
         if not self.check_if_route_is_reserved(route, train):
             return False
 
@@ -278,6 +294,13 @@ class RouteController(Component):
         return was_set
 
     def check_if_route_is_reserved(self, route: List[Node], train) -> bool:
+        """This method checks, if the given route is fully reserved for the given train
+        and if the train is in the first position in the queue.
+
+        :param route: the route to check
+        :param train: the train to check for
+        :return: if the route is reserved for the train
+        """
         route_as_tracks = self.get_tracks_of_node_route(route)
         for track in route_as_tracks:
             if track.reservations[0][0] != train:
@@ -285,6 +308,12 @@ class RouteController(Component):
         return True
 
     def reserve_route(self, route: List[Node], train: Train) -> bool:
+        """This method reserves a route and returns, if it was successful.
+
+        :param route: the route to reserve
+        :param train: the train the route should be reserved for
+        :return: if it was successful
+        """
         route_as_edges = self.get_edges_of_node_route(route)
         recursiv_reservation_worked = True
         tracks_to_be_reserved: List[Tuple[Train, Track]] = []
@@ -323,6 +352,12 @@ class RouteController(Component):
     def check_if_reservation_ends_in_opposing_reservation(
         self, route: List[Node]
     ) -> bool:
+        """This method checks if the given route ends on a track,
+        that is reserved for a train in the opposing direction.
+
+        :param route: the route to check
+        :return: if  the last track is reserved for a train in the opposing direction
+        """
         route_as_edges = self.get_edges_of_node_route(route)
         last_edge = route_as_edges[-1]
         # If a route to be reserved leads into a track that is reserved for
@@ -335,6 +370,11 @@ class RouteController(Component):
         return True
 
     def get_tracks_of_node_route(self, route: List[Node]) -> List[Track]:
+        """This method returns a list of tracks corresponding to the given list of nodes.
+
+        :param route: the route as nodes
+        :return: the route as tracks
+        """
         track_route = []
         for i in range(len(route[:-1])):
             track = route[i].get_edge_to(route[i + 1]).track
@@ -342,6 +382,11 @@ class RouteController(Component):
         return track_route
 
     def get_edges_of_node_route(self, route: List[Node]) -> List[Edge]:
+        """This method returns a list of edges corresponding to the given list of nodes.
+
+        :param route: the route as nodes
+        :return: the route as edges
+        """
         edge_route = []
         for i in range(len(route[:-1])):
             edge = route[i].get_edge_to(route[i + 1])
