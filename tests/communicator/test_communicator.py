@@ -48,7 +48,6 @@ class TestCommunicator:
         Communicator.stop(run_id)
         assert Communicator.progress(run_id) > 0
 
-
     @patch("src.component.MockComponent.next_tick")
     def test_component_next_tick_is_called(
         next_tick_mock,
@@ -68,7 +67,6 @@ class TestCommunicator:
             sleep(1)
         Communicator.stop(run_id)
         assert next_tick_mock.assert_called
-
 
     @patch("src.component.MockComponent.next_tick")
     def test_component_next_tick_is_called_add(
