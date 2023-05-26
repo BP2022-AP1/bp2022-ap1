@@ -49,47 +49,47 @@ class TestCommunicator:
         assert Communicator.progress(run_id) > 0
 
 
-@patch("src.component.MockComponent.next_tick")
-def test_component_next_tick_is_called(
-    next_tick_mock,
-    mock_traci,
-):  # pylint: disable=unused-argument
-    mock = MockComponent()
-    communicator = Communicator(
-        components=[mock],
-        sumo_configuration=os.path.join(
-            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
-        ),
-    )
-    run_id = communicator.run()
-    while Communicator.state(run_id) != "PROGRESS":
-        if Communicator.state(run_id) == "FAILURE":
-            assert False
-        sleep(1)
-    Communicator.stop(run_id)
-    assert next_tick_mock.assert_called
+    @patch("src.component.MockComponent.next_tick")
+    def test_component_next_tick_is_called(
+        next_tick_mock,
+        mock_traci,
+    ):  # pylint: disable=unused-argument
+        mock = MockComponent()
+        communicator = Communicator(
+            components=[mock],
+            sumo_configuration=os.path.join(
+                "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            ),
+        )
+        run_id = communicator.run()
+        while Communicator.state(run_id) != "PROGRESS":
+            if Communicator.state(run_id) == "FAILURE":
+                assert False
+            sleep(1)
+        Communicator.stop(run_id)
+        assert next_tick_mock.assert_called
 
 
-@patch("src.component.MockComponent.next_tick")
-def test_component_next_tick_is_called_add(
-    next_tick_mock,
-    mock_traci,
-):  # pylint: disable=unused-argument
-    mock = MockComponent()
-    communicator = Communicator(
-        sumo_configuration=os.path.join(
-            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
-        ),
-    )
-    communicator.add_component(mock)
-    run_id = communicator.run()
-    assert run_id != "no id available"
-    while Communicator.state(run_id) != "PROGRESS":
-        if Communicator.state(run_id) == "FAILURE":
-            assert False
-        sleep(1)
-    Communicator.stop(run_id)
-    assert next_tick_mock.assert_called
+    @patch("src.component.MockComponent.next_tick")
+    def test_component_next_tick_is_called_add(
+        next_tick_mock,
+        mock_traci,
+    ):  # pylint: disable=unused-argument
+        mock = MockComponent()
+        communicator = Communicator(
+            sumo_configuration=os.path.join(
+                "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            ),
+        )
+        communicator.add_component(mock)
+        run_id = communicator.run()
+        assert run_id != "no id available"
+        while Communicator.state(run_id) != "PROGRESS":
+            if Communicator.state(run_id) == "FAILURE":
+                assert False
+            sleep(1)
+        Communicator.stop(run_id)
+        assert next_tick_mock.assert_called
 
 
 @patch("src.communicator.communicator.Communicator._run_with_gui")
