@@ -81,12 +81,17 @@ def train_add(monkeypatch):
         assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
-    
+
+
 @pytest.fixture
 def train_subscribe(monkeypatch):
     def subscribe_train(identifier, subscriptions=None):
         assert identifier is not None
-        assert subscriptions == [constants.VAR_POSITION, constants.VAR_ROAD_ID, constants.VAR_SPEED]
+        assert subscriptions == [
+            constants.VAR_POSITION,
+            constants.VAR_ROAD_ID,
+            constants.VAR_SPEED,
+        ]
 
     monkeypatch.setattr(vehicle, "subscribe", subscribe_train)
 
