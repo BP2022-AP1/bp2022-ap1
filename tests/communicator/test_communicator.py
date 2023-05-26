@@ -83,6 +83,7 @@ def test_component_next_tick_is_called_add(
     )
     communicator.add_component(mock)
     run_id = communicator.run()
+    assert run_id != "no id available"
     while Communicator.state(run_id) != "PROGRESS":
         if Communicator.state(run_id) == "FAILURE":
             assert False
