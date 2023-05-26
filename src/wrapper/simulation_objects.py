@@ -358,7 +358,7 @@ class Track(SimulationObject):
     "A track on which trains can drive both directions"
 
     _edges = Tuple[Edge, Edge]
-    reservations: List[Tuple["Train", Edge]] = []
+    reservations: List[Tuple["Train", Edge]]
 
     @property
     def edges(self) -> Tuple[Edge, Edge]:
@@ -385,7 +385,7 @@ class Track(SimulationObject):
             self._edges = (edge2, edge1)
 
         super().__init__(identifier=self._edges[0].identifier)
-
+        self.reservations = []
         edge1.track = self
         edge2.track = self
 
@@ -709,6 +709,7 @@ class Train(SimulationObject):
 
         self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
         self._timetable = timetable
+        self.reserved_tracks = []
 
         if not from_simulator:
             self._add_to_simulation(identifier, timetable, train_type)

@@ -127,6 +127,8 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
             constants.VAR_MAXSPEED: 11,
         }
     )
+    created_train.reserved_tracks.append(created_train.edge.track)
+    created_train.edge.track.reservations.append((created_train, created_train.edge))
 
     return created_train
 
