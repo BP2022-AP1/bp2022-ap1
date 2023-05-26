@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Tuple
 
 from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
@@ -125,18 +125,19 @@ class RouteController(Component):
 
     def next_tick(self, tick: int):
         self.tick = tick
-        for interlocking_route in self.routes_to_be_set:
-            # This sets the fahrstrasse in the interlocking.
-            # The Sumo SUMO route was already set.
-            was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
-
+        for (interlocking_route, train, route_length) in self.routes_to_be_set:
+            # This tries to set the fahrstrasse in the interlocking.
+            # The Sumo route was already set and the route was reserved.
+            was_set = self.try_setting_interlocking_route(interlocking_route, train, route_length)
             if was_set:
-                self.routes_to_be_set.remove(interlocking_route)
-        last_routes_to_be_reserved = self.routes_to_be_reserved
-        self.routes_to_be_reserved = []
-        for route in last_routes_to_be_reserved:
-            # set_route adds routes that could not be reserved to routes_to_be_reserved
-            self.set_route(route)
+                self.routes_to_be_set.remove((interlocking_route, train, route_length))
+
+        for (route, train, interlocking_route, route_length) in self.routes_to_be_reserved:
+            # This tries to reserve the route and then also set the interlocking route.
+            # The Sumo route was set already.
+            was_reserved = self.try_reserving_route(route, train, interlocking_route, route_length)
+            if was_reserved:
+                self.routes_to_be_reserved.remove((route, train, interlocking_route, route_length))
 
 
     def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
@@ -203,60 +204,107 @@ class RouteController(Component):
         new_route = self.router.get_route(edge, train.timetable[0].edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
-        self.set_route(new_route, train)
-                
-    def set_route(self, route: List[Node], train: Train):
-        was_reserved = self.reserve_route(route, train)
-
-        if not was_reserved:
-            self.routes_to_be_reserved.append(route)
-
         route_length = 0
 
-        for i, end_node_candidat in enumerate(route[1:], start=1):
-            route_length += route[i - 1].get_edge_to(end_node_candidat).length
+        for i, end_node_candidat in enumerate(new_route[1:], start=1):
+            route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
 
             for interlocking_route in self.interlocking.routes:
                 if (
-                    interlocking_route.start_signal.name == route[0]
+                    interlocking_route.start_signal.name == new_route[0]
                     and interlocking_route.end_signal.name == end_node_candidat
                 ):
-                    # This sets the route in the interlocking
-                    was_set = self.interlocking.set_route(
-                        interlocking_route.yaramo_route
-                    )
-                    if was_set:
-                        self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
-                        self.logger.train_enter_block_section(
-                            self.tick,
-                            train.identifier,
-                            interlocking_route.id,
-                            route_length,
-                        )
-                        # Right now a fahrstrasse is always from one Signal to the next.
-                        # Because of this the fahrstrasse is identical
-                        # to the block section the train drives into.
-                    else:
-                        self.routes_to_be_set.append(interlocking_route)
-
                     # This sets the route in SUMO.
                     # The SUMO route is also set when the interlocking fahrstrasse could not be set,
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
+
+
+                    was_reserved = self.try_reserving_route(new_route[:i], train, interlocking_route, route_length)
+
+                    if not was_reserved:
+                        self.routes_to_be_reserved.append(new_route[:i], train, interlocking_route, route_length)
                     return
                 
-    def reserve_route(self, route: List[Node], train: Train) -> bool:
+    def try_reserving_route(self, route: List[Node], train, interlocking_route, route_length)->bool:
+        was_reserved = self.reserve_route(route, train)
+
+        was_set = self.try_setting_interlocking_route(route, interlocking_route, train, route_length)
+        if not was_set:
+            self.routes_to_be_set.append((interlocking_route, train, route_length))
+        return was_reserved
+
+    def try_setting_interlocking_route(self, route: List[Node], interlocking_route, train: Train, route_length: int)-> bool:
+
+        if not self.check_if_route_is_reserved(route, train):
+            return False
+
+        # This sets the route in the interlocking
+        was_set = self.interlocking.set_route(
+            interlocking_route.yaramo_route
+        )
+        if was_set:
+            self.logger.create_fahrstrasse(self.tick, interlocking_route.id)
+            self.logger.train_enter_block_section(
+                self.tick,
+                train.identifier,
+                interlocking_route.id,
+                route_length,
+            )
+            # Right now a fahrstrasse is always from one Signal to the next.
+            # Because of this the fahrstrasse is identical
+            # to the block section the train drives into.
+        return was_set
+    
+    def check_if_route_is_reserved(self, route: List[Node], train)-> bool:
         route_as_tracks = self.get_tracks_of_node_route(route)
         for track in route_as_tracks:
+            if track.reservations[0][0] != train:
+                return False
+        return True
+                
+    def reserve_route(self, route: List[Node], train: Train) -> bool:
+        route_as_edges = self.get_edges_of_node_route(route)
+        recursiv_reservation_worked = True
+        tracks_to_be_reserved: List[Tuple[Train, Track]] = []
+
+        train_reservation_start = len(train.reserved_tracks)
+        
+        if self.check_if_reservation_ends_in_opposing_reservation():
+            return False
+
+        for edge in route_as_edges:
+            track = edge.track
             if len(track.reservations) != 0:
-                last_track_of_reserving_train = track.reservations[-1].reserved_tracks[-1]
+                reserving_train = track.reservations[-1][0]
+                last_track_of_reserving_train = reserving_train.reserved_tracks[-1]
                 if last_track_of_reserving_train == track:
-                    # What if the train will despawn there and
-                    # because of this train.timetable[0] is None?
-                    route = self.router.get_route(track, track.reservations[-1].timetable[0])
-                    self.reserve_route(route, track.reservations[-1])
-            track.reservations.append(train)
+                    if reserving_train.station_index != len(reserving_train.timetable):
+                        # When the reservation reached the end of the trains route,
+                        # there will be no more reservations.
+                        route = self.router.get_route(track, reserving_train.timetable[reserving_train.station_index])
+                        was_reserved = self.reserve_route(route, reserving_train)
+                        if not was_reserved:
+                            recursiv_reservation_worked = False
+            tracks_to_be_reserved.append((train, track, edge))
+        if recursiv_reservation_worked == False:
+            return False
+        for i, (train, track, edge) in enumerate(tracks_to_be_reserved):
+            track.reservations.append((train, edge))
+            train.reserved_tracks.insert(train_reservation_start + i, track)
+
+    def check_if_reservation_ends_in_opposing_reservation(self, route: List[Node])-> bool:
+        route_as_edges = self.get_edges_of_node_route(route)
+        last_edge = route_as_edges[-1]
+        # If a route to be reserved leads into a track that is reserved for 
+        # or occupied by an opposing train, i.e. a train that will leave that 
+        # section by moving into the section the route to be reserved comes from, 
+        # the reservation of that route fails.
+        for (_, edge) in last_edge.track.reservations:
+            if edge != last_edge:
+                return False
+
 
     def get_tracks_of_node_route(self, route: List[Node])-> List[Track]:
         track_route = []
@@ -264,6 +312,13 @@ class RouteController(Component):
             track = route[i].get_edge_to(route[i+1]).track
             track_route.append(track)
         return track_route
+
+    def get_edges_of_node_route(self, route: List[Node])-> List[Edge]:
+        edge_route = []
+        for i in range(len(route[:-1])):
+            edge = route[i].get_edge_to(route[i+1])
+            edge_route.append(edge)
+        return edge_route
 
     def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
         """This method checks if the given edge is the last segment of a activ route
