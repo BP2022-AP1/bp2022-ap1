@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import IntEnum
-from typing import List, Tuple
+from typing import List, Optional, Tuple, Union
 
 from sumolib import net
 from traci import constants, edge, trafficlight, vehicle
@@ -106,7 +106,7 @@ class Node(SimulationObject):
     @staticmethod
     def from_simulation(
         simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
-    ) -> "SimulationObject" | None:
+    ) -> Optional["SimulationObject"]:
         if simulation_object.getID() in [x.identifier for x in updater.signals]:
             # We need to update the signal with our data
             signal: "Signal" = [
@@ -264,8 +264,8 @@ class Edge(SimulationObject):
     blocked: bool
     _max_speed: float
     _track: "Track"
-    _from: Node | str
-    _to: Node | str
+    _from: Union[Node, str]
+    _to: Union[Node, str]
 
     @property
     def to_node(self) -> Node:
@@ -301,7 +301,7 @@ class Edge(SimulationObject):
 
         :return: The track
         """
-        return self._track
+        return self._track if hasattr(self, "_track") else None
 
     @track.setter
     def track(self, track: "Track") -> None:
@@ -309,7 +309,7 @@ class Edge(SimulationObject):
 
         :param track: The track this edge belongs to
         """
-        assert self._track is None and track is not None
+        assert not hasattr(self, "_track") and track is not None
         self._track = track
 
     @max_speed.setter
@@ -388,7 +388,7 @@ class Track(SimulationObject):
         edge2.track = self
 
     @property
-    def max_speed(self) -> Tuple[float, float] | float:
+    def max_speed(self) -> Union[Tuple[float, float], float]:
         """Returns the max_speed of the track
 
         :return: If both edges have the same speed, a float is returned,
@@ -403,7 +403,7 @@ class Track(SimulationObject):
         return (speed0, speed1)
 
     @max_speed.setter
-    def max_speed(self, speed: Tuple[float, float] | float) -> None:
+    def max_speed(self, speed: Union[Tuple[float, float], float]) -> None:
         """Updates the max_speed of the track
 
         :param speed: If both edges should have the same speed, a float should be passed,
@@ -416,7 +416,7 @@ class Track(SimulationObject):
         self.edges[1].max_speed = speed[1]
 
     @property
-    def blocked(self) -> Tuple[bool, bool] | bool:
+    def blocked(self) -> Union[Tuple[bool, bool], bool]:
         """Returns if the edge/track is blocked.
 
         :return: If only one edge is blocked, a tuple is returned;
@@ -427,7 +427,7 @@ class Track(SimulationObject):
         return (self.edges[0].blocked, self.edges[1].blocked)
 
     @blocked.setter
-    def blocked(self, blocked: Tuple[bool, bool] | bool) -> None:
+    def blocked(self, blocked: Union[Tuple[bool, bool], bool]) -> None:
         """Block the edges represented by this track
 
         :param blocked: Which edge to block (if only one direction should be blocked,
@@ -478,7 +478,7 @@ class Platform(SimulationObject):
 
         :return: The track
         """
-        if self._edge is None or self._edge.identifier != self._edge_id:
+        if not hasattr(self, "_edge") or self._edge.identifier != self._edge_id:
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == self._edge_id
             )
@@ -614,7 +614,7 @@ class Train(SimulationObject):
     train_type: TrainType
 
     @property
-    def current_platform(self) -> Platform | None:
+    def current_platform(self) -> Optional[Platform]:
         """Returns the platform the train is heading to.
         If the train has passed all stations or the timetable is empty, return None.
 
@@ -631,7 +631,7 @@ class Train(SimulationObject):
 
         :return: The current track the train is on
         """
-        return self._edge
+        return self._edge if hasattr(self, "_edge") else None
 
     @property
     def track(self) -> Track:
@@ -731,8 +731,8 @@ class Train(SimulationObject):
         edge_id = data[constants.VAR_ROAD_ID]
         self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
-        if self._edge is None or self._edge.identifier != edge_id:
-            if self._edge is not None:
+        if not hasattr(self, "_edge") or self._edge.identifier != edge_id:
+            if hasattr(self, "_edge"):
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
                 )

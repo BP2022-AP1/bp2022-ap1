@@ -92,7 +92,7 @@ def edge1() -> Edge:
 
 
 @pytest.fixture
-def edge_re() -> Edge:
+def edge1_re() -> Edge:
     return Edge("cfc57-0-re")
 
 
@@ -110,6 +110,7 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
         timetable=[],
         from_simulator=True,
     )
+    created_train.train_type.priority = 0
     created_train.updater = configured_souc
     created_train.update(
         {
@@ -132,8 +133,11 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
 
 
 @pytest.fixture
-def track(edge1: Edge, edge_re: Edge) -> Track:
-    return Track(edge1, edge_re)
+def track(edge1, edge1_re):
+    track = Track(edge1, edge1_re)
+    edge1._track = track
+    edge1_re._track = track
+    return track
 
 
 @pytest.fixture

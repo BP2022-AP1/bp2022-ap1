@@ -128,7 +128,11 @@ class TestTrain:
 
     def test_spawning(self, train_add):
         # pylint: disable=unused-argument
-        Train(identifier="fancy-rb-001", train_type="fancy-rb")
+        Train(
+            identifier="fancy-rb-001",
+            train_type="fancy-rb",
+            timetable=["platform-1", "platform-2"],
+        )
 
     def test_update(self, configured_souc, train, edge2):
         train.updater = configured_souc

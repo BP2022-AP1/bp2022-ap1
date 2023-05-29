@@ -21,10 +21,6 @@ class TestPlatformBlockedFault:
         pass
 
     @pytest.fixture
-    def platform(self) -> Platform:
-        return Platform("fault injector platform")
-
-    @pytest.fixture
     def platform_blocked_fault_configuration(self, platform: Platform):
         return PlatformBlockedFaultConfiguration.create(
             **{
