@@ -8,6 +8,8 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
 
 
 class TestTrackSpeedLimitFaultConfiguration:
+    """Test for TrackSpeedLimitFaultConfiguration"""
+
     def test_get_all_track_speed_limit_fault_configuration_ids(
         self, token, track_speed_limit_fault_configuration_data
     ):
@@ -22,7 +24,7 @@ class TestTrackSpeedLimitFaultConfiguration:
         assert status == 200
         assert str(config.id) in result
 
-    def test_get_all_track_speed_limit_fault_configuration_ids(
+    def test_get_all_track_speed_limit_fault_configuration_ids2(
         self,
         token,
         track_speed_limit_fault_configuration_data,
@@ -49,7 +51,7 @@ class TestTrackSpeedLimitFaultConfiguration:
         assert str(another_config.id) not in result
 
     def test_create_track_speed_limit_fault_configuration(
-        token, track_speed_limit_fault_configuration_data
+        self, token, track_speed_limit_fault_configuration_data
     ):
         response = impl.component.create_track_speed_limit_fault_configuration(
             track_speed_limit_fault_configuration_data, token
@@ -110,6 +112,8 @@ class TestTrackSpeedLimitFaultConfiguration:
             .where(TrackSpeedLimitFaultConfiguration.id == config.id)
             .exists()
         )
+
+    # pylint: disable=unused-argument
 
     def test_delete_track_speed_limit_fault_configuration_not_found(
         self,

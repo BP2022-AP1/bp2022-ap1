@@ -102,7 +102,9 @@ from tests.decorators import recreate_db_setup
     ],
 )
 class TestAffectedElementDoesNotExist:
-    """Test cases where the requested element for injecting a fault does not exist (in the simulation)"""
+    """Test cases where the requested element for injecting a
+    fault does not exist (in the simulation)
+    """
 
     @recreate_db_setup
     def setup_method(self):
@@ -138,7 +140,9 @@ class TestAffectedElementDoesNotExist:
 
 
 class TestAffectedElementDoesNotExistScheduleBlockedFault:
-    """Tests cases where the requested element for injecting a schedule blocked fault does not exist (in the simulation)"""
+    """Tests cases where the requested element for injecting a schedule "
+    "blocked fault does not exist (in the simulation)
+    """
 
     @recreate_db_setup
     def setup_method(self):
