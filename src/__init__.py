@@ -70,19 +70,22 @@ def insert_first_token():
     """
     Insert first admin token defined in env variables.
     """
-    FIRST_TOKEN_KEY = "FIRST_ADMIN_TOKEN"
-    NAME = "first-admin-token"
-
-    clear_token = os.getenv(FIRST_TOKEN_KEY, None)
+    name = "first-admin-token"
+    permission = Permission.ADMIN.value
+    clear_token = os.getenv("FIRST_ADMIN_TOKEN", None)
     if clear_token is not None:
         hashed_token = hash_token(clear_token)
         if (
             Token.select()
-            .where((Token.hashedToken == hashed_token) & (Token.name == NAME))
+            .where(
+                (Token.hashedToken == hashed_token)
+                & (Token.name == name)
+                & (Token.permission == permission)
+            )
             .exists()
         ):
             return
-        Token.create(hashedToken=hashed_token, permission=Permission.ADMIN, name=NAME)
+        Token.create(hashedToken=hashed_token, permission=permission, name=name)
 
 
 def create_app(test_config=None) -> Flask:
