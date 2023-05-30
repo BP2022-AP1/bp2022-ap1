@@ -1,23 +1,22 @@
-from uuid import UUID
-
 import pytest
 
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
 from src.fault_injector.fault_types.fault import Fault
-from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
 
 
 class TestFault:
+    """Test fault"""
+
     class MockConfiguration(FaultConfiguration):
+        """Mock configuration"""
+
         strategy: str = "regular"
 
     class MockSpecialFault(Fault):
+        """Mock fault"""
+
         tick_injected: int = 0
         tick_resolved: int = 0
 
