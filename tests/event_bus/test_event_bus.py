@@ -19,7 +19,7 @@ class TestEventBus:
 
     @pytest.fixture
     def callback(self) -> Callable[[Event], None]:
-        def _callback(event: Event):
+        def _callback(_: Event):
             pass
 
         return _callback
@@ -31,6 +31,8 @@ class TestEventBus:
     @pytest.fixture
     def train_id(self) -> str:
         return "cool_train_id"
+
+    callback_called: bool = False
 
     def test_register_callback(
         self,
@@ -56,8 +58,6 @@ class TestEventBus:
     def test_event(
         self, event_bus: EventBus, event_type: EventType, tick: int, train_id: str
     ):
-        self.callback_called = False
-
         def callback(event: Event):
             self.callback_called = True
             assert event.event_type == event_type

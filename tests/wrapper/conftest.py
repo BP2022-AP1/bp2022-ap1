@@ -11,7 +11,7 @@ from src.interlocking_component.infrastructure_provider import (
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_builder import TrainBuilder
 
 
@@ -21,11 +21,11 @@ def results(monkeypatch):
         def subscription_results():
             return defaultdict(int)
 
-        dict = defaultdict(subscription_results)
+        dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
         edge_dict[constants.VAR_ROAD_ID] = "cfc57-0"
-        dict["fake-sim-train"] = edge_dict
-        return dict
+        dict_["fake-sim-train"] = edge_dict
+        return dict_
 
     monkeypatch.setattr(
         simulation, "getAllSubscriptionResults", get_subscription_result
@@ -173,6 +173,8 @@ def configured_souc(
 @pytest.fixture
 def infrastructure_provider() -> SumoInfrastructureProvider:
     class IPMock:
+        """Mock for the infrastructure provider"""
+
         def train_drove_onto_track(self, train: Train, edge: Edge):
             pass
 
@@ -183,6 +185,8 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 
 
 class MockRouteController:
+    """Mock for the route controller"""
+
     def set_spawn_fahrstrasse(self, start: Track, end: Track):
         print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")
         if start.identifier == "7df3b-1-re":
