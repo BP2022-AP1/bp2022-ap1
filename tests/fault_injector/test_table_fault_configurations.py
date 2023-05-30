@@ -1,6 +1,3 @@
-from uuid import UUID
-
-import marshmallow as marsh
 import peewee
 import pytest
 

@@ -1,7 +1,5 @@
 from typing import Tuple
 
-import pytest
-
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )

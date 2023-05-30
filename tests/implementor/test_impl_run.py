@@ -13,6 +13,8 @@ from src.logger.log_entry import LogEntry
 @pytest.mark.usefixtures("celery_session_app")
 @pytest.mark.usefixtures("celery_session_worker")
 class TestRunImplementor:
+    """Tests for RunImplementor"""
+
     def test_get_all_simulation_ids(self, token, empty_simulation_configuration):
         run = Run.create(simulation_configuration=empty_simulation_configuration)
         result, status = impl.run.get_all_run_ids({}, token)
@@ -50,6 +52,8 @@ class TestRunImplementor:
         assert status == 404
         assert result == "Simulation not found"
 
+    # pylint: disable=too-many-locals
+
     # Test skipped, because the fixtures of celery aren't working properly
     # That's why we have to use the real celery app instead and cannot mock the components
     @patch("src.interlocking_component.route_controller.RouteController.next_tick")
@@ -69,7 +73,8 @@ class TestRunImplementor:
     @patch("src.fault_injector.fault_types.train_speed_fault.TrainSpeedFault.next_tick")
     @patch("src.fault_injector.fault_types.train_prio_fault.TrainPrioFault.next_tick")
     @patch(
-        "src.wrapper.simulation_object_updating_component.SimulationObjectUpdatingComponent.next_tick"
+        "src.wrapper.simulation_object_updating_component"
+        ".SimulationObjectUpdatingComponent.next_tick"
     )
     @pytest.mark.skip(reason="Celery fixtures not working properly")
     def test_create_run(
@@ -114,7 +119,7 @@ class TestRunImplementor:
     # Test skipped, because the fixtures of celery aren't working properly
     # That's why we have to use the real celery app instead and cannot mock the components
     @pytest.mark.skip(reason="Celery fixtures not working properly")
-    def test_get_run(token, empty_simulation_configuration, monkeypatch):
+    def test_get_run(self, token, empty_simulation_configuration, monkeypatch):
         monkeypatch.setattr(
             "src.interlocking_component.route_controller.RouteController.next_tick",
             lambda: None,
@@ -144,7 +149,7 @@ class TestRunImplementor:
     # Test skipped, because the fixtures of celery aren't working properly
     # That's why we have to use the real celery app instead and cannot mock the components
     @pytest.mark.skip(reason="Celery fixtures not working properly")
-    def test_delete_run(token, empty_simulation_configuration, monkeypatch):
+    def test_delete_run(self, token, empty_simulation_configuration, monkeypatch):
         monkeypatch.setattr(
             "src.interlocking_component.route_controller.RouteController.next_tick",
             lambda: None,

@@ -1,13 +1,9 @@
-import os
 from uuid import uuid4
 
 import pytest
-from traci import constants, edge, trafficlight, vehicle
+from traci import constants
 
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
-from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
+from src.wrapper.simulation_objects import Signal, Switch, Train
 
 
 class TestSignal:
