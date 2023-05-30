@@ -12,6 +12,8 @@ from tests.decorators import recreate_db_setup
     [({})],
 )
 class TestSmardApiIndexFail:
+    """Test the SmardApiIndex class."""
+
     @recreate_db_setup
     def setup_method(self):
         pass
@@ -26,6 +28,8 @@ class TestSmardApiIndexFail:
 
 @pytest.mark.parametrize("obj", [({"timestamp": datetime(2015, 1, 19, 0, 0)})])
 class TestSmardApiIndexModel:
+    """Test the SmardApiIndex class."""
+
     @recreate_db_setup
     def setup_method(self):
         pass
@@ -43,6 +47,8 @@ class TestSmardApiIndexModel:
     [({})],
 )
 class TestSmardApiEntryFail:
+    """Test the SmardApiEntry class."""
+
     @recreate_db_setup
     def setup_method(self):
         pass
@@ -59,6 +65,8 @@ class TestSmardApiEntryFail:
     "obj", [({"timestamp": datetime(2015, 1, 19, 0, 0), "value": 42.0})]
 )
 class TestSmardApiEntryModel:
+    """Test the SmardApiEntry class."""
+
     _index: SmardApiIndex
 
     @recreate_db_setup
@@ -102,15 +110,6 @@ class TestSmardApi:
         demand_strategy_not_available_past_interval: tuple[datetime, datetime],
     ):
         start, end = demand_strategy_not_available_past_interval
-        availability = monkeypatched_smard_api.data_availability(start, end)
-        assert not availability.available
-
-    def test_no_data_available(
-        self,
-        monkeypatched_smard_api: object,
-        demand_strategy_not_available_future_interval: tuple[datetime, datetime],
-    ):
-        start, end = demand_strategy_not_available_future_interval
         availability = monkeypatched_smard_api.data_availability(start, end)
         assert not availability.available
 

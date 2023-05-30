@@ -7,17 +7,16 @@ from src.fault_injector.fault_types.fault import Fault
 
 
 class TestFault:
-    """ Test fault
-    """
+    """Test fault"""
 
     class MockConfiguration(FaultConfiguration):
-        """ Mock configuration
-        """
+        """Mock configuration"""
+
         strategy: str = "regular"
 
     class MockSpecialFault(Fault):
-        """ Mock fault
-        """
+        """Mock fault"""
+
         tick_injected: int = 0
         tick_resolved: int = 0
 

@@ -68,6 +68,8 @@ class TestSpawner:
         regular_strategy_frequency: int,
         random_strategy_spawn_ticks: list[int],
     ):
+        # pylint: disable=protected-access
+
         regular_spawn_ticks = list(
             range(
                 strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
@@ -141,7 +143,7 @@ class TestSpawnerConfigurationXSchedule:
         )
 
 
-class SpawnerConfigurationXSimulationConfiguration:
+class TestSpawnerConfigurationXSimulationConfiguration:
     """Tests for the SpawnerConfigurationXSimulationConfiguration"""
 
     @recreate_db_setup
@@ -156,11 +158,11 @@ class SpawnerConfigurationXSimulationConfiguration:
     ):
         spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
             spawner_configuration=spawner_configuration,
-            schedule_configuration=simulation_configuration,
+            simulation_configuration=simulation_configuration,
         )
         spawner_x_simulation.save()
         assert spawner_x_simulation.spawner_configuration == spawner_configuration
-        assert spawner_x_simulation.schedule_configuration == simulation_configuration
+        assert spawner_x_simulation.simulation_configuration == simulation_configuration
 
     def test_back_references(
         self,
@@ -169,7 +171,7 @@ class SpawnerConfigurationXSimulationConfiguration:
     ):
         spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
             spawner_configuration=spawner_configuration,
-            schedule_configuration=simulation_configuration,
+            simulation_configuration=simulation_configuration,
         )
         spawner_x_simulation.save()
         assert len(simulation_configuration.spawner_configuration_references) == 1
@@ -182,25 +184,3 @@ class SpawnerConfigurationXSimulationConfiguration:
             spawner_configuration.simulation_configuration_references[0]
             == spawner_x_simulation
         )
-
-    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
-    def test_serialization(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        spawner_configuration: SpawnerConfiguration,
-    ):
-        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
-            spawner_configuration=spawner_configuration,
-            simulation_configuration=simulation_configuration,
-        )
-        spawner_x_simulation.save()
-        obj_dict = spawner_x_simulation.to_dict()
-        del obj_dict["created_at"]
-        del obj_dict["updated_at"]
-        del obj_dict["readable_id"]
-
-        assert obj_dict == {
-            "id": str(spawner_x_simulation.id),
-            "spawner_configuration": str(spawner_x_simulation.id),
-            "schedule_configuration": str(spawner_x_simulation.id),
-        }

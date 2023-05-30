@@ -173,8 +173,7 @@ def configured_souc(
 @pytest.fixture
 def infrastructure_provider() -> SumoInfrastructureProvider:
     class IPMock:
-        """ Mock for the infrastructure provider
-        """
+        """Mock for the infrastructure provider"""
 
         def train_drove_onto_track(self, train: Train, edge: Edge):
             pass
@@ -186,8 +185,7 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 
 
 class MockRouteController:
-    """ Mock for the route controller
-    """
+    """Mock for the route controller"""
 
     def set_spawn_fahrstrasse(self, start: Track, end: Track):
         print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")

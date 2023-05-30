@@ -12,8 +12,7 @@ from src.implementor.models import Run
 @pytest.mark.usefixtures("celery_session_app")
 @pytest.mark.usefixtures("celery_session_worker")
 class TestRunImplementor:
-    """ Tests for RunImplementor
-    """
+    """Tests for RunImplementor"""
 
     def test_get_all_simulation_ids(self, token, empty_simulation_configuration):
         run = Run.create(simulation_configuration=empty_simulation_configuration)

@@ -9,8 +9,8 @@ class TestFaultInjector:
     """tests the method of the fault injector component"""
 
     class MockFault:
-        """ A mock fault class to test the fault injector component
-        """
+        """A mock fault class to test the fault injector component"""
+
         received_ticks: int = 0
         last_tick: int
 

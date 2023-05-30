@@ -1,4 +1,3 @@
-import marshmallow as marsh
 import peewee
 import pytest
 
@@ -64,7 +63,9 @@ class TestScheduleConfigurationModel:
     [({})],
 )
 class TestScheduleConfigurationXSimulationPlatformFail:
-    """Test that the TestScheduleConfigurationXSimulationPlatformFail fails when fields are missing"""
+    """Test that the TestScheduleConfigurationXSimulationPlatformFail
+    fails when fields are missing
+    """
 
     @recreate_db_setup
     def setup_method(self):

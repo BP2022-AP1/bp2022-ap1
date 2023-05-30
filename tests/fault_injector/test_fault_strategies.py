@@ -12,8 +12,8 @@ from src.fault_injector.fault_strategies import (
 
 
 class TestFaultStrategies:
-    """ Test fault strategies
-    """
+    """Test fault strategies"""
+
     @pytest.fixture
     def regular_ticks(self):
         return (4, 109)

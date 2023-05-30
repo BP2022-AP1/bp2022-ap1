@@ -8,8 +8,7 @@ from src.spawner.spawner import SpawnerConfiguration
 
 
 class TestSimulationImplementor:
-    """ Tests for SimulationImplementor
-    """
+    """Tests for SimulationImplementor"""
 
     def test_get_all_simulation_ids(self, token):
         simulation = SimulationConfiguration()
