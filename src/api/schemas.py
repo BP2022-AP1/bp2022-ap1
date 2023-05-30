@@ -26,6 +26,13 @@ class ScheduleConfiguration(Schema):
     train_schedule_train_type = fields.String()
 
 
+class RandomScheduleConfiguration(ScheduleConfiguration):
+    """The marshmallow schema for the random schedule configuration"""
+
+    random_strategy_trains_per_1000_ticks = fields.Float(required=True)
+    random_strategy_seed = fields.Integer(required=True)
+
+
 class RegularScheduleConfiguration(ScheduleConfiguration):
     """The marshmallow schema for the regular schedule configuration"""
 
