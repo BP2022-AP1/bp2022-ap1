@@ -306,7 +306,7 @@ class RouteController(Component):
             self.interlocking.free_route(route.yaramo_route)
             self.event_bus.remove_fahrstrasse(self.tick, route.id)
             self.event_bus.train_leave_block_section(
-                self.tick, train.identifier, route.id
+                self.tick, train.identifier, route.id, 0
             )
 
     def _get_interlocking_routes_for_edge(self, edge: Edge) -> List[Route]:
