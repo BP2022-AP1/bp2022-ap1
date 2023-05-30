@@ -24,7 +24,7 @@ def results(monkeypatch):
         dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
         edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"
-        dict["fake-sim-train"] = edge_dict
+        dict_["fake-sim-train"] = edge_dict
         return dict_
 
     monkeypatch.setattr(vehicle, "getAllSubscriptionResults", get_subscription_result)
