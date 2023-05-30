@@ -13,6 +13,8 @@ from src.wrapper.simulation_object_updating_component import (
 from src.wrapper.simulation_objects import Train
 from tests.decorators import recreate_db_setup
 
+# pylint: disable=protected-access
+
 
 class TestTrainSpeedFault:
     """Tests for TrainSpeedFault"""
@@ -97,7 +99,10 @@ class TestTrainSpeedFault:
     def test_resolve_train_not_in_simulation(
         self, tick, train_speed_fault: TrainSpeedFault, train: Train
     ):
-        """tests that nothing happens when resolving the TrainSpeedFault while the affected train is not in the simulation"""
+        """tests that nothing happens when resolving the TrainSpeedFault
+        while the affected train is not in the simulation
+        """
+
         train_speed_fault.train = train
         train_speed_fault.old_speed = 3
         train.train_type._max_speed = 5
@@ -105,7 +110,7 @@ class TestTrainSpeedFault:
             train_speed_fault.get_train_or_none(
                 train_speed_fault.simulation_object_updater, train.identifier
             )
-            == None
+            is None
         )
         train_speed_fault.resolve_fault(tick)
         assert train.train_type.max_speed == 5

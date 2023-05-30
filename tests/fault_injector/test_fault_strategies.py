@@ -12,6 +12,8 @@ from src.fault_injector.fault_strategies import (
 
 
 class TestFaultStrategies:
+    """Test fault strategies"""
+
     @pytest.fixture
     def regular_ticks(self):
         return (4, 109)
@@ -334,7 +336,7 @@ class TestFaultStrategies:
             if random_fault_strategy.should_inject(
                 tick, random_configuration, injected
             ):
-                assert tick in random_inject_ticks and injected == False
+                assert tick in random_inject_ticks and not injected
 
     def test_resolve_random_strategy(
         self,
@@ -349,4 +351,4 @@ class TestFaultStrategies:
             if random_fault_strategy.should_resolve(
                 tick, random_configuration, injected
             ):
-                assert tick in random_resolve_ticks and injected == True
+                assert tick in random_resolve_ticks and injected
