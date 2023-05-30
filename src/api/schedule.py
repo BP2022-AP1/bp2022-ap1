@@ -34,7 +34,7 @@ def create_random_schedule(token):
 
 
 @bp.route("/schedule/random/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_random_schedule(identifier, token):
     """Get a schedule"""
     options = {}
