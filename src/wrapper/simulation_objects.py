@@ -746,6 +746,7 @@ class Train(SimulationObject):
     train_type: TrainType
     reserved_tracks: List[Track]
     station_index: int = 0
+    reserved_until_station_index: int = 0
 
     @property
     def edge(self) -> Edge:
@@ -865,6 +866,7 @@ class Train(SimulationObject):
             and not edge_id[:1] == ":"
         ):
             if self._edge is not None:
+                print(f"Track: {self._edge.track.identifier}, Reservations: {self._edge.track.reservations}")
                 assert self._edge.track.reservations[0][1] == self._edge
                 self._edge.track.reservations.pop(0)
                 assert self.edge.track == self.reserved_tracks[0]

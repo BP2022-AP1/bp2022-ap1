@@ -152,32 +152,21 @@ class RouteController(Component):
         if tick == 1:
             self.initialize_signals()
         self.tick = tick
-        for route, interlocking_route, train, route_length in self.routes_to_be_set:
+        for interlocking_route, train, route_length in self.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
-            was_set = self.try_setting_interlocking_route(
-                route, interlocking_route, train, route_length
+            was_set = self.set_interlocking_route(
+                interlocking_route, train, route_length
             )
             if was_set:
-                self.routes_to_be_set.remove(
-                    (route, interlocking_route, train, route_length)
-                )
+                self.routes_to_be_set.remove((interlocking_route, train, route_length))
 
-        for (
-            route,
-            train,
-            interlocking_route,
-            route_length,
-        ) in self.routes_to_be_reserved:
+        for route, train in self.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
-            was_reserved = self.try_reserving_route(
-                route, train, interlocking_route, route_length
-            )
+            was_reserved = self.reserve_route(route, train)
             if was_reserved:
-                self.routes_to_be_reserved.remove(
-                    (route, train, interlocking_route, route_length)
-                )
+                self.routes_to_be_reserved.remove((route, train))
 
     def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
         """This method can be called when instanciating a train
@@ -204,6 +193,11 @@ class RouteController(Component):
                     and interlocking_route.end_signal.yaramo_signal.name
                     == end_node_candidat.identifier
                 ):
+                    if not self.can_route_be_reserved(new_route):
+                        return None
+                    # TODO es fehlt dann noch der call vom wrapper nach dem spawnen 
+                    # zum RoutController, damit auch wirklich reserviert wird.
+                    
                     # This sets the route in the interlocking
                     was_set = self.interlocking.set_route(
                         interlocking_route.yaramo_route
@@ -273,45 +267,34 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
+                    
+                    print("Checking if Route is reserved")
+                    is_reserved = self.check_if_route_is_reserved(new_route, train)
+                    print(is_reserved)
 
-                    was_reserved = self.try_reserving_route(
-                        new_route[:i], train, interlocking_route, route_length
-                    )
+                    if not is_reserved:
+                        is_reserved = self.reserve_route(new_route[:i], train)
 
-                    if not was_reserved:
+                    if not is_reserved:
                         self.routes_to_be_reserved.append(
                             new_route[:i], train, interlocking_route, route_length
                         )
+                    else:
+                        was_set = self.set_interlocking_route(
+                            interlocking_route, train, route_length
+                        )
+                        if not was_set:
+                            self.routes_to_be_set.append(
+                                (interlocking_route, train, route_length)
+                            )
                     return
         # If the no interlocking route is found an error is raised
         raise KeyError()
 
-    def try_reserving_route(
-        self, route: List[Node], train, interlocking_route, route_length
+    def set_interlocking_route(
+        self, interlocking_route, train: Train, route_length: int
     ) -> bool:
-        """This method tries to reserve a route.
-
-        :param route: the route to be reserved
-        :param train: the train to reserve for
-        :param interlocking_route: the corresponding interlocking route
-        :param route_length: the length of the route
-        :return: if it was successful
-        """
-        was_reserved = self.reserve_route(route, train)
-
-        was_set = self.try_setting_interlocking_route(
-            route, interlocking_route, train, route_length
-        )
-        if not was_set:
-            self.routes_to_be_set.append(
-                (route, interlocking_route, train, route_length)
-            )
-        return was_reserved
-
-    def try_setting_interlocking_route(
-        self, route: List[Node], interlocking_route, train: Train, route_length: int
-    ) -> bool:
-        """This method tries to set the interlocking route.
+        """This method sets the interlocking route.
 
         :param route: the route to set
         :param interlocking_route: the corresponding interlocking route
@@ -319,9 +302,6 @@ class RouteController(Component):
         :param route_length: the length of the route (nedded for logging)
         :return: if it was successful
         """
-        if not self.check_if_route_is_reserved(route, train):
-            return False
-
         # This sets the route in the interlocking
         was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
         if was_set:
@@ -358,10 +338,12 @@ class RouteController(Component):
         :param train: the train the route should be reserved for
         :return: if it was successful
         """
+        print("_______RESERVING ROUTE________")
         route_as_edges = self.get_edges_of_node_route(route)
         recursiv_reservation_worked = True
         tracks_to_be_reserved: List[Tuple[Train, Track]] = []
 
+        # This is needed so the reservations on the train are inserted in the right order.
         train_reservation_start = len(train.reserved_tracks)
 
         if self.check_if_reservation_ends_in_opposing_reservation(route):
@@ -370,15 +352,21 @@ class RouteController(Component):
         for edge in route_as_edges:
             track = edge.track
             if len(track.reservations) != 0:
+                # In this case, the track is reserved for another train,
+                # and we must check, if that train has reservations beyond that point.
                 reserving_train = track.reservations[-1][0]
                 last_track_of_reserving_train = reserving_train.reserved_tracks[-1]
                 if last_track_of_reserving_train == track:
-                    if reserving_train.station_index != len(reserving_train.timetable):
+                    if reserving_train.reserved_until_station_index != len(
+                        reserving_train.timetable
+                    ):
                         # When the reservation reached the end of the trains route,
                         # there will be no more reservations.
                         route = self.router.get_route(
                             track,
-                            reserving_train.timetable[reserving_train.station_index],
+                            reserving_train.timetable[
+                                reserving_train.reserved_until_station_index
+                            ],
                         )
                         was_reserved = self.reserve_route(route, reserving_train)
                         if not was_reserved:
@@ -391,6 +379,8 @@ class RouteController(Component):
             train_to_be_reserved.reserved_tracks.insert(
                 train_reservation_start + i, track
             )
+            print(f"Train: {train_to_be_reserved}, Track: {track}, Edge: {edge}")
+        train.reserved_until_station_index += 1
         return True
 
     def check_if_reservation_ends_in_opposing_reservation(
