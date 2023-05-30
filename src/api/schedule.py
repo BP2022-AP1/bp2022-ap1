@@ -7,6 +7,7 @@ from src.api.decorators import token_required
 
 bp = Blueprint("schedule", __name__)
 
+
 @bp.route("/schedule/regular", methods=["get"])
 @token_required()
 def get_all_regular_schedule_ids(token):
@@ -52,7 +53,7 @@ def delete_regular_schedule(identifier, token):
     options["strategy"] = "regular"
 
     return impl.schedule.delete_schedule(options, token)
-  
+
 
 @bp.route("/schedule/random", methods=["get"])
 @token_required()

@@ -32,7 +32,7 @@ class RandomScheduleConfiguration(ScheduleConfiguration):
     random_strategy_trains_per_1000_ticks = fields.Float(required=True)
     random_strategy_seed = fields.Integer(required=True)
 
-    
+
 class RegularScheduleConfiguration(ScheduleConfiguration):
     """The marshmallow schema for the regular schedule configuration"""
 
