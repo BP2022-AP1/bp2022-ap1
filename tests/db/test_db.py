@@ -1,10 +1,8 @@
 from datetime import datetime
-from uuid import UUID
 
-import marshmallow as marsh
 from peewee import IntegerField
 
-from src.base_model import BaseModel, SerializableBaseModel, db
+from src.base_model import SerializableBaseModel, db
 from tests.decorators import recreate_db_setup
 
 
