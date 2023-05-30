@@ -1,6 +1,7 @@
 import os
-from src.implementor.token import hash_token
+
 from src.implementor.models import Token
+from src.implementor.token import hash_token
 
 
 def test_first_token(client):

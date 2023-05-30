@@ -15,8 +15,8 @@ from src.api.simulation import bp as simulation_bp
 from src.api.token import bp as token_bp
 from src.data_science.grafana_data_registration import define_and_register_data
 from src.implementor.models import Token
-from src.implementor.token import hash_token
 from src.implementor.permission import Permission
+from src.implementor.token import hash_token
 
 
 def _post_data(path, data):
