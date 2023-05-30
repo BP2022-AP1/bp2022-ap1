@@ -18,11 +18,11 @@ class TestLogCollector:
 
     @pytest.fixture
     def _run_ids(self, run: Run):
-        return [run.id]
+        return [run.readable_id]
 
     @pytest.fixture
     def _config_ids(self, simulation_configuration):
-        return [simulation_configuration.id]
+        return [simulation_configuration.readable_id]
 
     @pytest.fixture
     def _departure_arrival_1_df(self):

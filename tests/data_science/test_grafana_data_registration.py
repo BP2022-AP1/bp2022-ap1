@@ -49,15 +49,15 @@ class TestGrafanaDataRegistration:
 
     @pytest.fixture
     def _run_id(self, run):
-        return str(run.id)
+        return str(run.readable_id)
 
     @pytest.fixture
     def _config_id(self, simulation_configuration):
-        return str(simulation_configuration.id)
+        return str(simulation_configuration.readable_id)
 
     @pytest.fixture
     def _multi_config(self, simulation_configuration):
-        return str(simulation_configuration)
+        return str(simulation_configuration.readable_id)
 
     @pytest.fixture
     def _search_list(self):
