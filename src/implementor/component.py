@@ -1,7 +1,6 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
-import json
 
 import peewee
 
@@ -38,7 +37,7 @@ def get_all_schedule_blocked_fault_configuration_ids(options, token):
     """
 
     # Return all schedule blocked fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -56,7 +55,8 @@ def get_all_schedule_blocked_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    configs = [str(config.id) for config in ScheduleBlockedFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_schedule_blocked_fault_configuration(body, token):
@@ -129,7 +129,7 @@ def get_all_track_blocked_fault_configuration_ids(options, token):
     """
 
     # Return all track blocked fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -222,7 +222,7 @@ def get_all_track_speed_limit_fault_configuration_ids(options, token):
     """
 
     # Return all track speed limit fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -316,7 +316,7 @@ def get_all_train_prio_fault_configuration_ids(options, token):
     """
 
     # Return all train prio fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -331,7 +331,8 @@ def get_all_train_prio_fault_configuration_ids(options, token):
         ]
         return configs, 200
 
-    return json.dumps(""), 200
+    configs = [str(config.id) for config in TrainPrioFaultConfiguration.select()]
+    return configs, 200
 
 
 def create_train_prio_fault_configuration(body, token):
@@ -404,7 +405,7 @@ def get_all_train_speed_fault_configuration_ids(options, token):
     """
 
     # Return all train speed fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -495,7 +496,7 @@ def get_all_platform_blocked_fault_configuration_ids(options, token):
     """
 
     # Return all platform blocked fault configurations of a single simulation configuration
-    if options["simulationId"] is not None:
+    if "simulationId" in options and options["simulationId"] is not None:
         simulation_id = options["simulationId"]
         simulation_configurations = SimulationConfiguration.select().where(
             SimulationConfiguration.id == simulation_id
@@ -578,67 +579,70 @@ def delete_platform_blocked_fault_configuration(options, token):
     return "Deleted platform-blocked-fault configuration", 204
 
 
-def get_all_interlocking_configuration_ids(options, token):
-    """
-    :param options: A dictionary containing all the parameters for the Operations
-        options["simulationId"]: Specify id of simulation
-            if you only want to get the interlocking configuration of a single simulation
-        :param token: Token object of the current user
+# -----------------------------------------------------------------------------------
+# --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
+# -----------------------------------------------------------------------------------
+# def get_all_interlocking_configuration_ids(options, token):
+#     """
+#     :param options: A dictionary containing all the parameters for the Operations
+#         options["simulationId"]: Specify id of simulation
+#             if you only want to get the interlocking configuration of a single simulation
+#         :param token: Token object of the current user
 
-    """
+#     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
 
-    return json.dumps(""), 501  # 200
-
-
-def create_interlocking_configuration(body, token):
-    """
-
-    :param body: The parsed body of the request
-    :param token: Token object of the current user
-    """
-
-    # Implement your business logic here
-    # All the parameters are present in the options argument
-
-    return (
-        json.dumps(
-            {
-                "id": "<uuid>",
-            }
-        ),
-        501,  # 201,
-    )
+#     return json.dumps(""), 501  # 200
 
 
-def get_interlocking_configuration(options, token):
-    """
-    :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
-    :param token: Token object of the current user
+# def create_interlocking_configuration(body, token):
+#     """
 
-    """
+#     :param body: The parsed body of the request
+#     :param token: Token object of the current user
+#     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
 
-    return json.dumps("<map>"), 501  # 200
+#     return (
+#         json.dumps(
+#             {
+#                 "id": "<uuid>",
+#             }
+#         ),
+#         501,  # 201,
+#     )
 
 
-def delete_interlocking_configuration(options, token):
-    """
-    :param options: A dictionary containing all the parameters for the Operations
-        options["id"]
-    :param token: Token object of the current user
+# def get_interlocking_configuration(options, token):
+#     """
+#     :param options: A dictionary containing all the parameters for the Operations
+#         options["id"]
+#     :param token: Token object of the current user
 
-    """
+#     """
 
-    # Implement your business logic here
-    # All the parameters are present in the options argument
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
 
-    return "", 501  # 204
+#     return json.dumps("<map>"), 501  # 200
+
+
+# def delete_interlocking_configuration(options, token):
+#     """
+#     :param options: A dictionary containing all the parameters for the Operations
+#         options["id"]
+#     :param token: Token object of the current user
+
+#     """
+
+#     # Implement your business logic here
+#     # All the parameters are present in the options argument
+
+#     return "", 501  # 204
 
 
 def get_all_spawner_configuration_ids(options, token):

@@ -83,6 +83,7 @@ class TestTrackSpeedLimitFaultConfiguration:
         assert str(config.updated_at) == result["updated_at"]
         assert str(config.created_at) == result["created_at"]
         assert config.start_tick == result["start_tick"]
+        assert str(config.readable_id) == result["readable_id"]
         assert config.end_tick == result["end_tick"]
         assert config.inject_probability == result["inject_probability"]
         assert config.resolve_probability == result["resolve_probability"]

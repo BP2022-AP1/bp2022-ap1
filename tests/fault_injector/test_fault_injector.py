@@ -26,8 +26,8 @@ class TestFaultInjector:
         return self.MockFault()
 
     @pytest.fixture
-    def fault_injector(self, logger) -> FaultInjector:
-        return FaultInjector(logger=logger, priority=1)
+    def fault_injector(self, event_bus) -> FaultInjector:
+        return FaultInjector(event_bus=event_bus, priority=1)
 
     def test_add_fault(
         self, fault_injector: FaultInjector, fault_1: MockFault, fault_2: MockFault
