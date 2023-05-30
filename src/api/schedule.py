@@ -15,7 +15,7 @@ def get_all_regular_schedule_ids(token):
     options = {}
     options["simulationId"] = request.args.get("simulationId")
     options["strategy"] = "regular"
-    
+
     return impl.schedule.get_all_schedule_ids(options, token)
 
 
@@ -40,7 +40,7 @@ def get_regular_schedule(identifier, token):
     options = {}
     options["identifier"] = identifier
     options["strategy"] = "regular"
-    
+
     return impl.schedule.get_schedule(options, token)
 
 
@@ -51,7 +51,7 @@ def delete_regular_schedule(identifier, token):
     options = {}
     options["identifier"] = identifier
     options["strategy"] = "regular"
-    
+
     return impl.schedule.delete_schedule(options, token)
 
 
@@ -64,7 +64,7 @@ def get_all_demand_schedule_ids(token):
     options["strategy"] = "coal-demand"
 
     return impl.schedule.get_all_schedule_ids(options, token)
- 
+
 
 @bp.route("/schedule/coal-demand", methods=["post"])
 @token_required()
@@ -89,6 +89,7 @@ def get_demand_schedule(identifier, token):
     options["strategy"] = "coal-demand"
 
     return impl.schedule.get_schedule(options, token)
+
 
 @bp.route("/schedule/coal-demand/<identifier>", methods=["delete"])
 @token_required()
