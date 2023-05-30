@@ -1,6 +1,8 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
+import os
+
 from src.communicator.communicator import Communicator
 from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
@@ -62,6 +64,14 @@ def create_run(body, token):
     :param body: The parsed body of the request
     :param token: Token object of the current user
     """
+    sumo_configuration = os.path.join(
+        "data",
+        "sumo",
+        "schwarze_pumpe_v1",
+        "sumo-config",
+        "schwarze_pumpe_v1.scenario.sumocfg",
+    )
+
     simulation_configuration_id = body.pop("simulation_configuration")
     simulation_configurations = SimulationConfiguration.select().where(
         SimulationConfiguration.id == simulation_configuration_id
@@ -70,7 +80,7 @@ def create_run(body, token):
         return "Simulation not found", 404
 
     simulation_configuration = simulation_configurations.get()
-    communicator = Communicator()
+    communicator = Communicator(sumo_configuration=sumo_configuration)
 
     run = Run(simulation_configuration=simulation_configuration)
     run.save()
@@ -78,7 +88,10 @@ def create_run(body, token):
     logger = Logger(event_bus=event_bus)
     communicator.add_component(logger)
 
-    object_updater = SimulationObjectUpdatingComponent(event_bus)
+    object_updater = SimulationObjectUpdatingComponent(
+        event_bus,
+        sumo_configuration,
+    )
     communicator.add_component(object_updater)
 
     # -----------------------------------------------------------------------------------

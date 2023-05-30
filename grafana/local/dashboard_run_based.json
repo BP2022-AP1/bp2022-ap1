@@ -426,7 +426,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "color" : {
+          "color": {
             "mode": "continuous-GrYlRd"
           },
           "mappings": [],

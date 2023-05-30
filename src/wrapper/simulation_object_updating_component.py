@@ -27,7 +27,7 @@ class SimulationObjectUpdatingComponent(Component):
     Also handles the adding and removing of objects from the simulation.
     """
 
-    _simulation_objects = None
+    _simulation_objects: List[SimulationObject]
     _sumo_configuration = None
     infrastructure_provider: SumoInfrastructureProvider = None
 
@@ -112,13 +112,30 @@ class SimulationObjectUpdatingComponent(Component):
         if sumo_configuration is not None:
             self._fetch_initial_simulation_objects()
 
+    def add_subscriptions(self):
+        """This method adds the subscriptions from each simulation_object to Sumo."""
+        for simulation_object in self._simulation_objects:
+            if len(simulation_object.add_subscriptions()) > 0:
+                if isinstance(simulation_object, Train):
+                    traci.vehicle.subscribe(
+                        simulation_object.identifier,
+                        simulation_object.add_subscriptions(),
+                    )
+                if isinstance(simulation_object, Train.TrainType):
+                    traci.vehicletype.subscribe(
+                        simulation_object.identifier,
+                        simulation_object.add_subscriptions(),
+                    )
+
     def next_tick(self, tick: int):
-        subscription_results = traci.simulation.getAllSubscriptionResults()
+        subscription_results = traci.vehicle.getAllSubscriptionResults()
+        self._remove_stale_vehicles()
 
         for simulation_object in self._simulation_objects:
-            simulation_object.update(subscription_results[simulation_object.identifier])
-
-        self._remove_stale_vehicles()
+            if len(simulation_object.add_subscriptions()) > 0:
+                simulation_object.update(
+                    subscription_results[simulation_object.identifier]
+                )
 
     def _remove_stale_vehicles(self):
         simulation_vehicles = set(traci.vehicle.getIDList())
@@ -127,9 +144,11 @@ class SimulationObjectUpdatingComponent(Component):
         vehicles_to_remove = stored_vehicles - simulation_vehicles
 
         for vehicle in vehicles_to_remove:
-            self._simulation_objects.remove(
-                next(train for train in self.trains if train.identifier == vehicle)
+            train = next(
+                (train for train in self.trains if train.identifier == vehicle)
             )
+            self._simulation_objects.remove(train)
+            self.infrastructure_provider.train_drove_off_track(train, train.edge)
 
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)
