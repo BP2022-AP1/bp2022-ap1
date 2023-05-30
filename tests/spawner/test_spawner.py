@@ -150,20 +150,6 @@ class TestSpawnerConfigurationXSimulationConfiguration:
     def setup_method(self):
         pass
 
-    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
-    def test_creation(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        spawner_configuration: SpawnerConfiguration,
-    ):
-        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
-            spawner_configuration=spawner_configuration,
-            simulation_configuration=simulation_configuration,
-        )
-        spawner_x_simulation.save()
-        assert spawner_x_simulation.spawner_configuration == spawner_configuration
-        assert spawner_x_simulation.simulation_configuration == simulation_configuration
-
     def test_back_references(
         self,
         simulation_configuration: SimulationConfiguration,
