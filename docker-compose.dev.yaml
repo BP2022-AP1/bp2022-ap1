@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: ./compose/flask/Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "5010:5000"
+    env_file:
+      - .env.shared
+      - .env.dev
+    depends_on:
+      - postgresql
+      - celery-worker
+      - grafana
+
+  postgresql:
+    env_file:
+      - .env.dev
+
+  celery-worker:
+    env_file:
+      - .env.dev
+
+  grafana:
+    env_file:
+      - .env.dev
