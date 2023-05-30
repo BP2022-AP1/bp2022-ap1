@@ -107,7 +107,7 @@ def train_route_update(monkeypatch):
 
 @pytest.fixture
 def edge1() -> Edge:
-    return Edge("a57e4-0")
+    return Edge("cfc57-0")
 
 
 @pytest.fixture

@@ -64,7 +64,7 @@ class TestNode:
     """Tests for the node abstract class"""
 
     def test_accessible_edges(self):
-        node = Node()
+        node = Node("fancy-node")
         node._edges = ["a", "b"]  # type: ignore
 
         assert node.get_edges_accessible_from("a") == ["a", "b"]

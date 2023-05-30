@@ -378,6 +378,7 @@ class Edge(SimulationObject):
     _track: "Track"
     _from: Union[Node, str]
     _to: Union[Node, str]
+    _length: float
 
     @property
     def to_node(self) -> Node:
