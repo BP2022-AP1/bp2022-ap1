@@ -1,6 +1,3 @@
-from uuid import UUID
-
-import marshmallow as marsh
 import peewee
 import pytest
 
@@ -159,7 +156,7 @@ class TestCorrectFilledDict:
         none_fields = (
             set(object_as_dict.keys())
             - set(object_as_dict.keys())
-            - set(["id", "created_at", "updated_at"])
+            - set(["id", "created_at", "updated_at", "readable_id"])
         )
         for key in none_fields:
             assert serialized_obj[key] is None

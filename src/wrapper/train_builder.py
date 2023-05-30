@@ -1,5 +1,7 @@
 from typing import List
 
+import traci
+
 from src.interlocking_component.route_controller import RouteController
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
@@ -37,15 +39,16 @@ class TrainBuilder:
         if not route:
             return False
 
-        self._updater.simulation_objects.append(
-            Train(identifier, timetable, train_type, self._updater)
-        )
+        train = Train(identifier, timetable, train_type, self._updater, route_id=route)
+        traci.vehicle.subscribe(train.identifier, train.add_subscriptions())
+
+        self._updater.simulation_objects.append(train)
 
         return True
 
     def _get_first_route(self, from_platform: Platform, to_platform: Platform) -> str:
         return self.route_controller.set_spawn_fahrstrasse(
-            from_platform.track, to_platform.track
+            from_platform.edge, to_platform.edge
         )
 
     def _convert_timetable(self, timetable: List[str]):

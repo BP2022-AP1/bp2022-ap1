@@ -1,3 +1,4 @@
+import uuid
 from uuid import UUID
 
 from src import implementor as impl
@@ -72,3 +73,83 @@ class TestScheduleBlockedFaultConfiguration:
             assert compare(
                 getattr(config, key), schedule_blocked_fault_configuration_data[key]
             )
+
+    def test_get_schedule_blocked_fault_configuration(
+        self, token, schedule_blocked_fault_configuration_data
+    ):
+        config = ScheduleBlockedFaultConfiguration.create(
+            **schedule_blocked_fault_configuration_data
+        )
+
+        response = impl.component.get_schedule_blocked_fault_configuration(
+            {"identifier": str(config.id)}, token
+        )
+        (result, status) = response
+        assert status == 200
+        assert str(config.id) == result["id"]
+        assert str(config.updated_at) == result["updated_at"]
+        assert str(config.created_at) == result["created_at"]
+        assert str(config.readable_id) == result["readable_id"]
+        assert config.start_tick == result["start_tick"]
+        assert config.end_tick == result["end_tick"]
+        assert config.inject_probability == result["inject_probability"]
+        assert config.resolve_probability == result["resolve_probability"]
+        assert str(config.description) == result["description"]
+        assert str(config.strategy) == result["strategy"]
+        assert str(config.affected_element_id) == result["affected_element_id"]
+
+    def test_delete_schedule_blocked_fault_configuration(
+        self,
+        token,
+        schedule_blocked_fault_configuration_data,
+    ):
+        config = ScheduleBlockedFaultConfiguration.create(
+            **schedule_blocked_fault_configuration_data
+        )
+        response = impl.component.delete_schedule_blocked_fault_configuration(
+            {"identifier": str(config.id)}, token
+        )
+        (result, status) = response
+        assert status == 204
+        assert result == "Deleted schedule-blocked-fault configuration"
+        assert (
+            not ScheduleBlockedFaultConfiguration.select()
+            .where(ScheduleBlockedFaultConfiguration.id == config.id)
+            .exists()
+        )
+
+    def test_delete_schedule_blocked_fault_configuration_not_found(
+        self,
+        token,
+        schedule_blocked_fault_configuration_data,
+    ):
+        object_id = uuid.uuid4()
+        response = impl.component.delete_schedule_blocked_fault_configuration(
+            {"identifier": object_id}, token
+        )
+        (result, status) = response
+        assert status == 404
+        assert result == "Id not found"
+
+    def test_delete_schedule_blocked_fault_configuration_in_use(
+        self,
+        token,
+        schedule_blocked_fault_configuration_data,
+        empty_simulation_configuration,
+    ):
+        config = ScheduleBlockedFaultConfiguration.create(
+            **schedule_blocked_fault_configuration_data
+        )
+        ScheduleBlockedFaultConfigurationXSimulationConfiguration.create(
+            simulation_configuration=empty_simulation_configuration,
+            schedule_blocked_fault_configuration=config,
+        )
+        response = impl.component.delete_schedule_blocked_fault_configuration(
+            {"identifier": str(config.id)}, token
+        )
+        (result, status) = response
+        assert status == 400
+        assert (
+            result
+            == "Schedule blocked fault configuration is referenced by a simulation configuration"
+        )

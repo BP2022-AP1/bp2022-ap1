@@ -1,11 +1,11 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.train_prio_fault_configuration import (
     TrainPrioFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_prio_fault import TrainPrioFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -37,13 +37,13 @@ class TestTrainPrioFault:
     def train_prio_fault(
         self,
         train_prio_fault_configuration: TrainPrioFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrainPrioFault(
             configuration=train_prio_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
@@ -82,7 +82,10 @@ class TestTrainPrioFault:
     def test_resolve_train_not_in_simulation(
         self, tick, train_prio_fault: TrainPrioFault, train: Train
     ):
-        """tests that nothing happens when resolving the TrainPrioFault while the affected train is not in the simulation"""
+        """tests that nothing happens when resolving the TrainPrioFault while
+        the affected train is not in the simulation
+        """
+
         train_prio_fault.train = train
         train_prio_fault.old_prio = 3
         train.train_type.priority = 5
@@ -90,7 +93,7 @@ class TestTrainPrioFault:
             train_prio_fault.get_train_or_none(
                 train_prio_fault.simulation_object_updater, train.identifier
             )
-            == None
+            is None
         )
         train_prio_fault.resolve_fault(tick)
         assert train.train_type.priority == 5

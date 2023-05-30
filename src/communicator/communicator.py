@@ -11,6 +11,9 @@ from sumolib import checkBinary
 
 from src.communicator.celery import celery
 from src.component import Component
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 class Communicator:
@@ -21,6 +24,9 @@ class Communicator:
     _components = None
     _max_tick = None
 
+    def _sort_components(self):
+        self._components.sort(key=lambda x: x.priority, reverse=True)
+
     def add_component(self, component: Component):
         """Add the given component to the simulation.
         There are no guarantees if the component will be called within
@@ -29,6 +35,7 @@ class Communicator:
         :param component: The component to add to the current simulation
         """
         self._components.append(component)
+        self._sort_components()
 
     def __init__(
         self,
@@ -36,13 +43,18 @@ class Communicator:
         max_tick: int = 86_400,
         sumo_port: int = None,
         sumo_configuration: str = os.path.join(
-            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            "data",
+            "sumo",
+            "schwarze_pumpe_v1",
+            "sumo-config",
+            "schwarze_pumpe_v1.scenario.sumocfg",
         ),
     ):
         """Creates a new Communicator object"""
         self._configuration = sumo_configuration
         self._port = sumo_port
         self._components = components if components is not None else []
+        self._sort_components()
         self._max_tick = max_tick
 
     def run(self) -> str:
@@ -77,7 +89,7 @@ class Communicator:
                 "--start",
                 "--quit-on-end",
                 "--delay",
-                delay,
+                str(delay),
             ],
             port=self._port,
         )
@@ -175,11 +187,23 @@ def run_simulation_steps(
     sumo_running = True
     current_tick = 1
 
+    souc = next(
+        (
+            component
+            for component in components
+            if type(component) == SimulationObjectUpdatingComponent
+        )
+    )
+    souc.add_subscriptions()
+
+    components.sort(key=lambda x: x.priority, reverse=True)
+
     update_state(current_tick, max_tick, sumo_running)
 
     while current_tick <= max_tick:
         for component in components:
             component.next_tick(current_tick)
+
         traci.simulationStep()
         current_tick += 1
         update_state(current_tick, max_tick, sumo_running)

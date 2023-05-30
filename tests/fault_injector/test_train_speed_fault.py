@@ -1,17 +1,19 @@
 import pytest
 from traci import vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
     TrainSpeedFaultConfiguration,
 )
 from src.fault_injector.fault_types.train_speed_fault import TrainSpeedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Train
 from tests.decorators import recreate_db_setup
+
+# pylint: disable=protected-access
 
 
 class TestTrainSpeedFault:
@@ -38,13 +40,13 @@ class TestTrainSpeedFault:
     def train_speed_fault(
         self,
         train_speed_fault_configuration: TrainSpeedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return TrainSpeedFault(
             configuration=train_speed_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )
@@ -97,7 +99,10 @@ class TestTrainSpeedFault:
     def test_resolve_train_not_in_simulation(
         self, tick, train_speed_fault: TrainSpeedFault, train: Train
     ):
-        """tests that nothing happens when resolving the TrainSpeedFault while the affected train is not in the simulation"""
+        """tests that nothing happens when resolving the TrainSpeedFault
+        while the affected train is not in the simulation
+        """
+
         train_speed_fault.train = train
         train_speed_fault.old_speed = 3
         train.train_type._max_speed = 5
@@ -105,7 +110,7 @@ class TestTrainSpeedFault:
             train_speed_fault.get_train_or_none(
                 train_speed_fault.simulation_object_updater, train.identifier
             )
-            == None
+            is None
         )
         train_speed_fault.resolve_fault(tick)
         assert train.train_type.max_speed == 5

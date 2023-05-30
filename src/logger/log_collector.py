@@ -84,16 +84,16 @@ class LogCollector:
         station_ids = station_ids.union({t.station_id for t in stations_departures})
         return list(station_ids)
 
-    def get_run_ids(self) -> list[UUID]:
+    def get_run_ids(self) -> list[str]:
         """Returns a list of all run ids.
         :return: A list of all run ids.
         """
         # pylint will not recognize that peewee results are iterable
         # pylint: disable=not-an-iterable
-        run_ids = [r.id for r in Run.select(Run.id).distinct()]
+        run_ids = [r.readable_id for r in Run.select(Run.readable_id).distinct()]
         return list(run_ids)
 
-    def get_config_ids(self) -> list[UUID]:
+    def get_config_ids(self) -> list[str]:
         """Returns a list of all config ids.
         :return: A list of all config ids.
         """
@@ -101,9 +101,9 @@ class LogCollector:
         # pylint will not recognize that peewee results are iterable
         # pylint: disable=not-an-iterable
         config_ids = [
-            c.id
+            c.readable_id
             for c in SimulationConfiguration.select(
-                SimulationConfiguration.id
+                SimulationConfiguration.readable_id
             ).distinct()
         ]
         return list(config_ids)

@@ -1,7 +1,10 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
+import os
+
 from src.communicator.communicator import Communicator
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
 from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFault
@@ -61,6 +64,14 @@ def create_run(body, token):
     :param body: The parsed body of the request
     :param token: Token object of the current user
     """
+    sumo_configuration = os.path.join(
+        "data",
+        "sumo",
+        "schwarze_pumpe_v1",
+        "sumo-config",
+        "schwarze_pumpe_v1.scenario.sumocfg",
+    )
+
     simulation_configuration_id = body.pop("simulation_configuration")
     simulation_configurations = SimulationConfiguration.select().where(
         SimulationConfiguration.id == simulation_configuration_id
@@ -69,25 +80,33 @@ def create_run(body, token):
         return "Simulation not found", 404
 
     simulation_configuration = simulation_configurations.get()
-    communicator = Communicator()
+    communicator = Communicator(sumo_configuration=sumo_configuration)
 
     run = Run(simulation_configuration=simulation_configuration)
     run.save()
-    logger = Logger(run_id=run.id)
+    event_bus = EventBus(run_id=run.id)
+    logger = Logger(event_bus=event_bus)
+    communicator.add_component(logger)
 
-    object_updater = SimulationObjectUpdatingComponent(logger)
+    object_updater = SimulationObjectUpdatingComponent(
+        event_bus,
+        sumo_configuration,
+    )
     communicator.add_component(object_updater)
 
+    # -----------------------------------------------------------------------------------
+    # --------------- INTERLOCKING  CONFIGURATION IS TEMPORARILY DISABLED ---------------
+    # -----------------------------------------------------------------------------------
     # if simulation_configuration.interlocking_configuration_references.exists():
     #    references = (
     #        simulation_configuration.interlocking_configuration_references.get()
     #    )
     #    reference = references.interlocking_configuration.get()
     #    interlocking_configuration = reference.interlocking_component
-    #    interlocking_component = RouteController(logger, interlocking_configuration)
+    #    interlocking_component = RouteController(event_bus, interlocking_configuration)
     #    communicator.add_component(interlocking_component)
 
-    route_controller = RouteController(logger, 1, object_updater)
+    route_controller = RouteController(event_bus, 1, object_updater)
     communicator.add_component(route_controller)
 
     # The todo will be replaces in other PR when the interlocking component is implemented
@@ -103,7 +122,7 @@ def create_run(body, token):
         spawner_config = reference.spawner_configuration
         spawner = Spawner(
             configuration=spawner_config,
-            logger=logger,
+            event_bus=event_bus,
             train_spawner=train_spawner,
         )
         communicator.add_component(spawner)
@@ -114,7 +133,7 @@ def create_run(body, token):
         platform_blocked_fault_config = reference.platform_blocked_fault_configuration
         fault = PlatformBlockedFault(
             platform_blocked_fault_config,
-            logger,
+            event_bus,
             object_updater,
             interlocking_disruptor,
         )
@@ -126,7 +145,7 @@ def create_run(body, token):
         schedule_blocked_fault_config = reference.schedule_blocked_fault_configuration
         fault = ScheduleBlockedFault(
             schedule_blocked_fault_config,
-            logger,
+            event_bus,
             object_updater,
             interlocking_disruptor,
             spawner,
@@ -138,7 +157,10 @@ def create_run(body, token):
     ) in simulation_configuration.track_blocked_fault_configuration_references:
         track_blocked_fault_config = reference.track_blocked_fault_configuration
         fault = TrackBlockedFault(
-            track_blocked_fault_config, logger, object_updater, interlocking_disruptor
+            track_blocked_fault_config,
+            event_bus,
+            object_updater,
+            interlocking_disruptor,
         )
         communicator.add_component(fault)
 
@@ -148,7 +170,7 @@ def create_run(body, token):
         track_speed_limit_fault_config = reference.track_speed_limit_fault_configuration
         fault = TrackSpeedLimitFault(
             track_speed_limit_fault_config,
-            logger,
+            event_bus,
             object_updater,
             interlocking_disruptor,
         )
@@ -160,7 +182,7 @@ def create_run(body, token):
         train_speed_fault_config = reference.train_speed_fault_configuration
         fault = TrainSpeedFault(
             train_speed_fault_config,
-            logger,
+            event_bus,
             object_updater,
             interlocking_disruptor,
         )
@@ -170,7 +192,7 @@ def create_run(body, token):
         train_prio_fault_config = reference.train_prio_fault_configuration
         fault = TrainPrioFault(
             train_prio_fault_config,
-            logger,
+            event_bus,
             object_updater,
             interlocking_disruptor,
         )
@@ -228,5 +250,6 @@ def delete_run(options, token):
 
     run = runs.get()
     Communicator.stop(str(run.process_id))
-    run.delete_instance()
+    run.delete_instance(recursive=True)  # will remove logs too
+
     return "Deleted run", 204

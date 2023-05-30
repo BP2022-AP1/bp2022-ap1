@@ -1,11 +1,11 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -36,13 +36,13 @@ class TestPlatformBlockedFault:
     def platform_blocked_fault(
         self,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
         interlocking: IInterlockingDisruptor,
     ):
         return PlatformBlockedFault(
             configuration=platform_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
             interlocking=interlocking,
         )

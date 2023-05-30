@@ -15,7 +15,7 @@ class TrainSchedule(Schedule):
         """
         assert schedule_configuration.schedule_type == "TrainSchedule"
         platform_ids = [
-            platform_reference.id
+            platform_reference.simulation_platform_id
             for platform_reference in sorted(
                 schedule_configuration.train_schedule_platform_references,
                 key=lambda ref: ref.index,

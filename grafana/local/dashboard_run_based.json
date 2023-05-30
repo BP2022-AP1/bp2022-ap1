@@ -363,21 +363,21 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
           "mappings": [],
+          "min": 0,
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
               },
               {
-                "color": "orange",
-                "value": 70
-              },
-              {
                 "color": "red",
-                "value": 85
+                "value": 80
               }
             ]
           },
@@ -393,16 +393,16 @@
       },
       "id": 2,
       "options": {
-        "orientation": "auto",
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": [],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": false
+        "showUnfilled": true
       },
       "pluginVersion": "9.4.7",
       "targets": [
@@ -417,7 +417,7 @@
         }
       ],
       "title": "Verkehrsmenge",
-      "type": "gauge"
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -426,21 +426,21 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
           "mappings": [],
+          "min": 0,
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
               },
               {
-                "color": "orange",
-                "value": 70
-              },
-              {
                 "color": "red",
-                "value": 85
+                "value": 80
               }
             ]
           },
@@ -456,16 +456,16 @@
       },
       "id": 4,
       "options": {
-        "orientation": "auto",
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": [],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": false
+        "showUnfilled": true
       },
       "pluginVersion": "9.4.7",
       "targets": [
@@ -486,16 +486,17 @@
           "options": {
             "include": {
               "names": [
-                "verkehrsleistung"
+                "verkehrsleistung",
+                "train_type"
               ]
             }
           }
         }
       ],
-      "type": "gauge"
+      "type": "bargauge"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",

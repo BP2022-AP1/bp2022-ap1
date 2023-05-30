@@ -1,4 +1,3 @@
-import marshmallow as marsh
 import peewee
 import pytest
 
@@ -56,6 +55,7 @@ class TestScheduleConfigurationModel:
         serialized = schedule_configuration.to_dict()
         for key, value in schedule_data.items():
             assert serialized[key] == value
+        assert serialized["platforms"] == []
 
 
 @pytest.mark.parametrize(
@@ -63,7 +63,9 @@ class TestScheduleConfigurationModel:
     [({})],
 )
 class TestScheduleConfigurationXSimulationPlatformFail:
-    """Test that the TestScheduleConfigurationXSimulationPlatformFail fails when fields are missing"""
+    """Test that the TestScheduleConfigurationXSimulationPlatformFail
+    fails when fields are missing
+    """
 
     @recreate_db_setup
     def setup_method(self):

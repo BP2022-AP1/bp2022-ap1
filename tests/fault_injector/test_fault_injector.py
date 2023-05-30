@@ -1,15 +1,16 @@
 import pytest
 
 from src.fault_injector.fault_injector import FaultInjector
-from src.fault_injector.fault_types.fault import Fault
-from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
-from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFault
+
+# pylint: disable=protected-access
 
 
 class TestFaultInjector:
     """tests the method of the fault injector component"""
 
     class MockFault:
+        """A mock fault class to test the fault injector component"""
+
         received_ticks: int = 0
         last_tick: int
 
@@ -26,8 +27,8 @@ class TestFaultInjector:
         return self.MockFault()
 
     @pytest.fixture
-    def fault_injector(self, logger) -> FaultInjector:
-        return FaultInjector(logger=logger, priority=1)
+    def fault_injector(self, event_bus) -> FaultInjector:
+        return FaultInjector(event_bus=event_bus, priority=1)
 
     def test_add_fault(
         self, fault_injector: FaultInjector, fault_1: MockFault, fault_2: MockFault
