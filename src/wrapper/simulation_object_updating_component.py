@@ -5,10 +5,10 @@ import sumolib
 import traci
 
 from src.component import Component
+from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
-from src.logger.logger import Logger
 from src.wrapper.simulation_objects import (
     Edge,
     Node,
@@ -97,16 +97,16 @@ class SimulationObjectUpdatingComponent(Component):
 
     def __init__(
         self,
-        logger: Logger = None,
+        event_bus: EventBus = None,
         sumo_configuration: str = None,
     ):
         """Creates a new SimulationObjectUpdatingComponent.
 
-        :param logger: The logger to send events to, defaults to None
+        :param event_bus: The event_bus to send events to, defaults to None
         :param sumo_configuration: the path to the `.sumocfg` file
         (relative to the root of the project), defaults to None
         """
-        super().__init__(priority=10, logger=logger)
+        super().__init__(priority=10, event_bus=event_bus)
         self._simulation_objects = []
         self._sumo_configuration = sumo_configuration
         if sumo_configuration is not None:

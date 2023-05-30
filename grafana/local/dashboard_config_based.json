@@ -400,18 +400,6 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "arrival_tick"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Ankunftszeitfenster"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "departure_tick"
             },
             "properties": [
@@ -440,7 +428,7 @@
             "lastNotNull"
           ],
           "fields": "",
-          "values": false
+          "values": true
         },
         "showUnfilled": true
       },
@@ -456,7 +444,20 @@
           "type": "table"
         }
       ],
-      "title": "Durschnittliche Abfahrts- und Ankunftszeitfenster",
+      "title": "Durschnittliche Ankunftszeitfenster",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "train_type",
+                "arrival_tick"
+              ]
+            }
+          }
+        }
+      ],
       "type": "bargauge"
     },
     {
@@ -571,7 +572,20 @@
           },
           "unit": "s"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "arrival_tick"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ankunftszeitfenster"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -579,14 +593,16 @@
         "x": 0,
         "y": 26
       },
-      "id": 11,
+      "id": 25,
       "options": {
         "displayMode": "lcd",
         "minVizHeight": 10,
         "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
-          "calcs": [],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": true
         },
@@ -600,20 +616,19 @@
             "uid": "DATASOURCE_UID"
           },
           "refId": "A",
-          "target": "get_window_all_by_config_id:${config_id}",
+          "target": "get_window_by_config_id:${config_id}",
           "type": "table"
         }
       ],
-      "title": "Ankunftszeitfenster",
+      "title": "Durschnittliche Abfahrtszeitfenster",
       "transformations": [
         {
           "id": "filterFieldsByName",
           "options": {
             "include": {
               "names": [
-                "station_id",
-                "train_id",
-                "arrival_tick"
+                "train_type",
+                "departure_tick"
               ]
             }
           }
@@ -742,6 +757,146 @@
         "x": 0,
         "y": 34
       },
+      "id": 11,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "DATASOURCE_UID"
+          },
+          "refId": "A",
+          "target": "get_window_all_by_config_id:${config_id}",
+          "type": "table"
+        }
+      ],
+      "title": "Ankunftszeitfenster",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "station_id",
+                "train_id",
+                "arrival_tick"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-simple-json-datasource",
+        "uid": "DATASOURCE_UID"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "lengthkm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
+      "id": 22,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "DATASOURCE_UID"
+          },
+          "refId": "A",
+          "target": "get_average_verkehrsmenge_by_config_id:${config_id}",
+          "type": "table"
+        }
+      ],
+      "title": "Durchschnittliche Verkehrsmenge nach Typ",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-simple-json-datasource",
+        "uid": "DATASOURCE_UID"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 42
+      },
       "id": 10,
       "options": {
         "displayMode": "lcd",
@@ -785,12 +940,89 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "grafana-simple-json-datasource",
+        "uid": "DATASOURCE_UID"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 42
+      },
+      "id": 24,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.4.7",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "DATASOURCE_UID"
+          },
+          "refId": "A",
+          "target": "get_average_verkehrsleistung_by_config_id:${config_id}",
+          "type": "table"
+        }
+      ],
+      "title": "Durchschnittliche Verkehrsleistung nach Typ",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "run_id",
+                "train_type",
+                "verkehrsleistung"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
       "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 50
       },
       "id": 6,
       "panels": [],
@@ -798,7 +1030,7 @@
       "type": "row"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",

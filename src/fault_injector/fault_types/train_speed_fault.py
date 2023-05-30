@@ -26,7 +26,7 @@ class TrainSpeedFault(Fault, TrainMixIn):
         self.train.train_type.max_speed = self.configuration.new_speed
 
         self.interlocking.insert_train_max_speed_changed(self.train)
-        self.logger.inject_train_speed_fault(
+        self.event_bus.inject_train_speed_fault(
             tick,
             self.configuration.id,
             self.train.identifier,
@@ -48,4 +48,4 @@ class TrainSpeedFault(Fault, TrainMixIn):
         ):
             self.train.train_type.max_speed = self.old_speed
             self.interlocking.insert_train_max_speed_changed(self.train)
-        self.logger.resolve_train_speed_fault(tick, self.configuration.id)
+        self.event_bus.resolve_train_speed_fault(tick, self.configuration.id)
