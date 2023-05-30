@@ -402,7 +402,7 @@
           "fields": "",
           "values": true
         },
-        "showUnfilled": true,
+        "showUnfilled": true
       },
       "pluginVersion": "9.4.7",
       "targets": [
