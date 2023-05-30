@@ -7,6 +7,7 @@ import pytest
 from src import implementor as impl
 from src.communicator.communicator import Communicator
 from src.implementor.models import Run
+from src.logger.log_entry import LogEntry
 
 
 @pytest.mark.usefixtures("celery_session_app")
@@ -165,6 +166,8 @@ class TestRunImplementor:
             if max_waiting_time == 0:
                 assert False
 
+        LogEntry.create(tick=0, message="Test", run_id=run_id)
+
         result, status = impl.run.delete_run({"identifier": run.id}, token)
         assert status == 204
         assert result == "Deleted run"
@@ -178,3 +181,4 @@ class TestRunImplementor:
 
         assert Communicator.state(str(run.process_id)) == "REVOKED"
         assert not Run.select().where(Run.id == run_id).exists()
+        assert not LogEntry.select().where(LogEntry.run_id == run_id).exists()

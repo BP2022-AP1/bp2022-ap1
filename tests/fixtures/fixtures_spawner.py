@@ -4,7 +4,9 @@ from datetime import datetime
 
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import SimulationConfiguration, Token
+from src.logger.logger import Logger
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
@@ -758,13 +760,20 @@ def mock_train_spawner() -> object:
 
 
 @pytest.fixture
+def event_bus(run) -> EventBus:
+    bus = EventBus(run_id=run.id)
+    Logger(bus)
+    return bus
+
+
+@pytest.fixture
 def spawner(
     spawner_configuration: SpawnerConfiguration,
-    mock_logger: object,
+    event_bus: EventBus,
     mock_train_spawner: object,
 ) -> Spawner:
     return Spawner(
         configuration=spawner_configuration,
-        logger=mock_logger,
+        event_bus=event_bus,
         train_spawner=mock_train_spawner,
     )

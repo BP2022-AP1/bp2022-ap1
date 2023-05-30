@@ -75,4 +75,14 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: coverage.xml
+        parallel: true
 
+  finish:
+    runs-on: ubuntu-latest
+
+    needs: test
+    steps:
+    - name: Close parallel build
+      uses: coverallsapp/github-action@v2.0.0
+      with:
+        parallel-finished: true
