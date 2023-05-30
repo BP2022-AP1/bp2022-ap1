@@ -26,6 +26,12 @@ class ScheduleConfiguration(Schema):
     train_schedule_train_type = fields.String()
 
 
+class RegularScheduleConfiguration(ScheduleConfiguration):
+    """The marshmallow schema for the regular schedule configuration"""
+
+    regular_strategy_frequency = fields.Integer(required=True)
+
+
 class CoalDemandScheduleConfiguration(ScheduleConfiguration):
     """The marshmallow schema for the coal demand schedule configuration"""
 
