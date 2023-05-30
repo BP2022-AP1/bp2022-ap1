@@ -1,56 +1,17 @@
 version: "3.8"
 
 services:
-  prod:
-    build:
-      context: .
-      dockerfile: ./compose/waitress/Dockerfile
-    volumes:
-      - .:/app
-    ports:
-      - "8090:8080"
-    env_file:
-      - .env.shared
-    depends_on:
-      - postgresql
-      - celery-worker
-
-  dev:
-    build:
-      context: .
-      dockerfile: ./compose/flask/Dockerfile
-    volumes:
-      - .:/app
-    ports:
-      - 5010:5000
-    env_file:
-      - .env.shared
-    environment:
-      - GRAFANA_HOST=grafana-dev
-    depends_on:
-      - postgresql
-      - celery-worker
-      - grafana-dev
-
   postgresql:
     image: postgres:14-alpine
-    environment:
-      - POSTGRES_PASSWORD=root
+    env_file:
+      - .env.shared
     ports:
-      - 5432:5432
-
-  postgresql-test:
-    image: postgres:14-alpine
-    command: "postgres -c 'shared_buffers=128MB' -c 'fsync=off' -c 'synchronous_commit=off' -c 'full_page_writes=off' -c 'max_connections=100' -c 'client_min_messages=warning'"
-    environment:
-      - POSTGRES_PASSWORD=root
-    ports:
-      - 5430:5432
+      - "5432:5432"
 
   redis:
     image: redis:7-alpine
     ports:
-      - 6379:6379
+      - "6379:6379"
 
   celery-worker:
     build:
@@ -58,30 +19,17 @@ services:
       dockerfile: ./compose/celery/Dockerfile
     env_file:
       - .env.shared
-    environment:
-      - GRAFANA_HOST=grafana-dev
-      - C_FORCE_ROOT=true
     volumes:
       - .:/app
     depends_on:
       - redis
 
-  grafana-test:
+  grafana:
     image: grafana/grafana
     ports:
       - "3000:3000"
-    environment:
-      - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,natel-plotly-panel
     env_file:
-      - .env.test
-
-  grafana-dev:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_INSTALL_PLUGINS=grafana-simple-json-datasource,natel-plotly-panel
-
+      - .env.shared
 
 volumes:
   postgres_data:
