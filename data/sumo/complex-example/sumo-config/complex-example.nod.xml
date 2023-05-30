@@ -1,0 +1,27 @@
+<nodes>
+<node id="d6e07" x="0.0" y="0.0" type="priority"/>
+<node id="d43f9" x="100.0" y="0.0" type="priority"/>
+<node id="fa9ea" x="150.0" y="0.0" type="priority"/>
+<node id="fd73d" x="200.0" y="10.0" type="priority"/>
+<node id="aa303" x="230.0" y="15.0" type="priority"/>
+<node id="cfe02" x="200.0" y="-10.0" type="priority"/>
+<node id="852bb" x="230.0" y="-15.0" type="priority"/>
+<node id="21b88" x="250.0" y="0.0" type="priority"/>
+<node id="e641b" x="300.0" y="30.0" type="priority"/>
+<node id="80a8e" x="400.0" y="60.0" type="priority"/>
+<node id="fb749" x="150.0" y="30.0" type="priority"/>
+<node id="8e14c" x="200.0" y="60.0" type="priority"/>
+<node id="60BS1" x="50.0" y="0.0" type="rail_signal"/>
+<node id="60BS7" x="50.0" y="0.0" type="rail_signal"/>
+<node id="60ES1" x="125.0" y="0.0" type="rail_signal"/>
+<node id="60AS3" x="170.0003202250021" y="10.0" type="rail_signal"/>
+<node id="60AS4" x="170.0003202250021" y="-10.0" type="rail_signal"/>
+<node id="60AS1" x="230.0" y="10.0" type="rail_signal"/>
+<node id="60AS2" x="230.0" y="-10.0" type="rail_signal"/>
+<node id="60ES2" x="278.56308935548486" y="17.13785361329091" type="rail_signal"/>
+<node id="60BS3" x="347.8913142610576" y="44.36739427831727" type="rail_signal"/>
+<node id="60BS4" x="352.1086233948863" y="45.63258701846589" type="rail_signal"/>
+<node id="60BS2" x="200.0" y="30.0" type="rail_signal"/>
+<node id="60BS6" x="200.0" y="30.0" type="rail_signal"/>
+<node id="60BS5" x="250.0" y="30.0" type="rail_signal"/>
+</nodes>

@@ -3,7 +3,7 @@ from collections import defaultdict
 from typing import Tuple
 
 import pytest
-from traci import constants, edge, simulation, trafficlight, vehicle
+from traci import constants, edge, trafficlight, vehicle
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
@@ -11,7 +11,7 @@ from src.interlocking_component.infrastructure_provider import (
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_builder import TrainBuilder
 
 
@@ -21,15 +21,13 @@ def results(monkeypatch):
         def subscription_results():
             return defaultdict(int)
 
-        dict = defaultdict(subscription_results)
+        dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "cfc57-0"
-        dict["fake-sim-train"] = edge_dict
-        return dict
+        edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"
+        dict_["fake-sim-train"] = edge_dict
+        return dict_
 
-    monkeypatch.setattr(
-        simulation, "getAllSubscriptionResults", get_subscription_result
-    )
+    monkeypatch.setattr(vehicle, "getAllSubscriptionResults", get_subscription_result)
 
 
 @pytest.fixture
@@ -78,31 +76,54 @@ def vehicle_route(monkeypatch):
 
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
 
 @pytest.fixture
+def train_subscribe(monkeypatch):
+    def subscribe_train(identifier, subscriptions=None):
+        assert identifier is not None
+        assert subscriptions == [
+            constants.VAR_POSITION,
+            constants.VAR_ROAD_ID,
+            constants.VAR_SPEED,
+        ]
+
+    monkeypatch.setattr(vehicle, "subscribe", subscribe_train)
+
+
+@pytest.fixture
+def train_route_update(monkeypatch):
+    def update_route(identifier, routeID=None):
+        assert identifier is not None
+        assert routeID is not None
+
+    monkeypatch.setattr(vehicle, "setRouteID", update_route)
+
+
+@pytest.fixture
 def edge1() -> Edge:
-    return Edge("cfc57-0")
+    return Edge("a57e4-0")
 
 
 @pytest.fixture
 def edge_re() -> Edge:
-    return Edge("cfc57-0-re")
+    return Edge("a57e4-0-re")
 
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("cfc57-1")
+    return Edge("a57e4-1")
 
 
 @pytest.fixture
-def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
+def train(
+    train_add, train_route_update, configured_souc: SimulationObjectUpdatingComponent
+) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
         identifier="fake-sim-train",
@@ -117,11 +138,11 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "cfc57-0",
-            constants.VAR_ROUTE: "testing-route",
+            constants.VAR_ROAD_ID: "a57e4-0",
             constants.VAR_SPEED: 10.2,
         }
     )
+    created_train.route = "testing-route"
     created_train.train_type.update(
         {
             constants.VAR_MAXSPEED: 11,
@@ -148,7 +169,7 @@ def platform() -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="cfc57-0",
+        edge_id="a57e4-0",
     )
 
 
@@ -175,6 +196,8 @@ def configured_souc(
 @pytest.fixture
 def infrastructure_provider() -> SumoInfrastructureProvider:
     class IPMock:
+        """Mock for the infrastructure provider"""
+
         def train_drove_onto_track(self, train: Train, edge: Edge):
             pass
 
@@ -185,16 +208,19 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 
 
 class MockRouteController:
+    """Mock for the route controller"""
+
     def set_spawn_fahrstrasse(self, start: Track, end: Track):
-        print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")
-        if start.identifier == "7df3b-1-re":
+        print(start.identifier, end.identifier, start.identifier == "58ab8-1")
+        if start.identifier == "58ab8-1":
             return True
+            # return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return False
 
 
 @pytest.fixture
 def spawner(
-    configured_souc: SimulationObjectUpdatingComponent, train_add
+    configured_souc: SimulationObjectUpdatingComponent, train_add, train_subscribe
 ) -> Tuple[SimulationObjectUpdatingComponent, TrainBuilder]:
     # pylint: disable=unused-argument
     return (configured_souc, TrainBuilder(configured_souc, MockRouteController()))

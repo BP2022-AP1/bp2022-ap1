@@ -21,7 +21,7 @@ class EventBus:
             EventType.TRAIN_DEPARTURE,
         ),
         "create_fahrstrasse": (["tick", "fahrstrasse"], EventType.CREATE_FAHRSTRASSE),
-        "remove_fahrstrasse": (["tick", "farhstrasse"], EventType.REMOVE_FAHRSTRASSE),
+        "remove_fahrstrasse": (["tick", "fahrstrasse"], EventType.REMOVE_FAHRSTRASSE),
         "set_signal": (
             ["tick", "signal_id", "state_before", "state_after"],
             EventType.SET_SIGNAL,

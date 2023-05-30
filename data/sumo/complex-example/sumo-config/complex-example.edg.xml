@@ -1,0 +1,80 @@
+<edges>
+<!-- Track 88d820fc-95b4-408c-b418-a516877de139 -->
+<edge id="de139-0" from="d6e07" to="60BS1" shape="0.0,0.0 50.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="de139-0-re" from="60BS1" to="d6e07" shape="50.0,0.0 0.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 88d820fc-95b4-408c-b418-a516877de139 -->
+<edge id="de139-1" from="60BS1" to="60BS7" shape="50.0,0.0 50.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="de139-1-re" from="60BS7" to="60BS1" shape="50.0,0.0 50.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 88d820fc-95b4-408c-b418-a516877de139 -->
+<edge id="de139-2" from="60BS7" to="d43f9" shape="50.0,0.0 100.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="de139-2-re" from="d43f9" to="60BS7" shape="100.0,0.0 50.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 3c738175-43c6-4758-a0dd-612a8d494cb9 -->
+<edge id="94cb9-0" from="d43f9" to="60ES1" shape="100.0,0.0 125.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="94cb9-0-re" from="60ES1" to="d43f9" shape="125.0,0.0 100.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 3c738175-43c6-4758-a0dd-612a8d494cb9 -->
+<edge id="94cb9-1" from="60ES1" to="fa9ea" shape="125.0,0.0 150.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="94cb9-1-re" from="fa9ea" to="60ES1" shape="150.0,0.0 125.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 293c5de6-a5c1-4847-bee5-f92025cb6d5c -->
+<edge id="b6d5c-0" from="fa9ea" to="60AS3" shape="150.0,0.0 170.0,10.0 170.0003202250021,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="b6d5c-0-re" from="60AS3" to="fa9ea" shape="170.0003202250021,10.0 170.0,10.0 150.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 293c5de6-a5c1-4847-bee5-f92025cb6d5c -->
+<edge id="b6d5c-1" from="60AS3" to="fd73d" shape="170.0003202250021,10.0 200.0,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="b6d5c-1-re" from="fd73d" to="60AS3" shape="200.0,10.0 170.0003202250021,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track e9b773e1-3a4d-4be1-93a2-734a20ecd7fb -->
+<edge id="cd7fb-0" from="fa9ea" to="60AS4" shape="150.0,0.0 170.0,-10.0 170.0003202250021,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="cd7fb-0-re" from="60AS4" to="fa9ea" shape="170.0003202250021,-10.0 170.0,-10.0 150.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track e9b773e1-3a4d-4be1-93a2-734a20ecd7fb -->
+<edge id="cd7fb-1" from="60AS4" to="cfe02" shape="170.0003202250021,-10.0 200.0,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="cd7fb-1-re" from="cfe02" to="60AS4" shape="200.0,-10.0 170.0003202250021,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 81d1d99a-d0b4-4db5-89bc-b2d3b9aa89b2 -->
+<edge id="a89b2-0" from="fd73d" to="aa303" shape="200.0,10.0 230.0,15.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="a89b2-0-re" from="aa303" to="fd73d" shape="230.0,15.0 200.0,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track fea0fc75-710f-42b2-b07c-9a48d5e64f22 -->
+<edge id="64f22-0" from="cfe02" to="852bb" shape="200.0,-10.0 230.0,-15.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="64f22-0-re" from="852bb" to="cfe02" shape="230.0,-15.0 200.0,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track e117e570-e2e6-48db-a462-10f5a473a70a -->
+<edge id="3a70a-0" from="fd73d" to="60AS1" shape="200.0,10.0 230.0,10.0 230.0,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="3a70a-0-re" from="60AS1" to="fd73d" shape="230.0,10.0 230.0,10.0 200.0,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track e117e570-e2e6-48db-a462-10f5a473a70a -->
+<edge id="3a70a-1" from="60AS1" to="21b88" shape="230.0,10.0 250.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="3a70a-1-re" from="21b88" to="60AS1" shape="250.0,0.0 230.0,10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 658a6eab-b9d6-4c44-9d02-d67f07338f16 -->
+<edge id="38f16-0" from="cfe02" to="60AS2" shape="200.0,-10.0 230.0,-10.0 230.0,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="38f16-0-re" from="60AS2" to="cfe02" shape="230.0,-10.0 230.0,-10.0 200.0,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 658a6eab-b9d6-4c44-9d02-d67f07338f16 -->
+<edge id="38f16-1" from="60AS2" to="21b88" shape="230.0,-10.0 250.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="38f16-1-re" from="21b88" to="60AS2" shape="250.0,0.0 230.0,-10.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track b4315276-78c1-44a6-859f-1152c93bb5a5 -->
+<edge id="bb5a5-0" from="21b88" to="60ES2" shape="250.0,0.0 278.56308935548486,17.13785361329091" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="bb5a5-0-re" from="60ES2" to="21b88" shape="278.56308935548486,17.13785361329091 250.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track b4315276-78c1-44a6-859f-1152c93bb5a5 -->
+<edge id="bb5a5-1" from="60ES2" to="e641b" shape="278.56308935548486,17.13785361329091 300.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="bb5a5-1-re" from="e641b" to="60ES2" shape="300.0,30.0 278.56308935548486,17.13785361329091" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 66adf559-7dd5-487f-bad7-8e256a8a8f44 -->
+<edge id="a8f44-0" from="e641b" to="60BS3" shape="300.0,30.0 347.8913142610576,44.36739427831727" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="a8f44-0-re" from="60BS3" to="e641b" shape="347.8913142610576,44.36739427831727 300.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 66adf559-7dd5-487f-bad7-8e256a8a8f44 -->
+<edge id="a8f44-1" from="60BS3" to="60BS4" shape="347.8913142610576,44.36739427831727 352.1086233948863,45.63258701846589" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="a8f44-1-re" from="60BS4" to="60BS3" shape="352.1086233948863,45.63258701846589 347.8913142610576,44.36739427831727" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 66adf559-7dd5-487f-bad7-8e256a8a8f44 -->
+<edge id="a8f44-2" from="60BS4" to="80a8e" shape="352.1086233948863,45.63258701846589 400.0,60.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="a8f44-2-re" from="80a8e" to="60BS4" shape="400.0,60.0 352.1086233948863,45.63258701846589" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track f438d162-b5c4-4c0c-9d73-f55fad294742 -->
+<edge id="94742-0" from="d43f9" to="fb749" shape="100.0,0.0 150.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="94742-0-re" from="fb749" to="d43f9" shape="150.0,30.0 100.0,0.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 61d57b1b-2ae2-4637-897b-abbab41b8e69 -->
+<edge id="b8e69-0" from="fb749" to="60BS2" shape="150.0,30.0 200.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="b8e69-0-re" from="60BS2" to="fb749" shape="200.0,30.0 150.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 61d57b1b-2ae2-4637-897b-abbab41b8e69 -->
+<edge id="b8e69-1" from="60BS2" to="60BS6" shape="200.0,30.0 200.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="b8e69-1-re" from="60BS6" to="60BS2" shape="200.0,30.0 200.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 61d57b1b-2ae2-4637-897b-abbab41b8e69 -->
+<edge id="b8e69-2" from="60BS6" to="60BS5" shape="200.0,30.0 250.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="b8e69-2-re" from="60BS5" to="60BS6" shape="250.0,30.0 200.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track 61d57b1b-2ae2-4637-897b-abbab41b8e69 -->
+<edge id="b8e69-3" from="60BS5" to="e641b" shape="250.0,30.0 300.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="b8e69-3-re" from="e641b" to="60BS5" shape="300.0,30.0 250.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<!-- Track f63e5398-f20c-47be-bbed-f7f8f8034bff -->
+<edge id="34bff-0" from="fb749" to="8e14c" shape="150.0,30.0 200.0,60.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+<edge id="34bff-0-re" from="8e14c" to="fb749" shape="200.0,60.0 150.0,30.0" priority="-1" numLanes="1" speed="110.0" allow="rail rail_electric" spreadType="center" />
+</edges>

@@ -1,15 +1,16 @@
 import pytest
 
 from src.fault_injector.fault_injector import FaultInjector
-from src.fault_injector.fault_types.fault import Fault
-from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
-from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFault
+
+# pylint: disable=protected-access
 
 
 class TestFaultInjector:
     """tests the method of the fault injector component"""
 
     class MockFault:
+        """A mock fault class to test the fault injector component"""
+
         received_ticks: int = 0
         last_tick: int
 

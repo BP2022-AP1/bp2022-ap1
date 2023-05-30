@@ -75,11 +75,6 @@ def track(edge, edge_re):
 
 
 @pytest.fixture
-def track(edge, edge_re):
-    return Track(edge, edge_re)
-
-
-@pytest.fixture
 def combine_track_and_wrapper(
     track: Track, simulation_object_updater: SimulationObjectUpdatingComponent
 ):
@@ -108,10 +103,9 @@ def combine_train_and_wrapper(
 
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
