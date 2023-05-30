@@ -82,7 +82,10 @@ class TestTrainPrioFault:
     def test_resolve_train_not_in_simulation(
         self, tick, train_prio_fault: TrainPrioFault, train: Train
     ):
-        """tests that nothing happens when resolving the TrainPrioFault while the affected train is not in the simulation"""
+        """tests that nothing happens when resolving the TrainPrioFault while
+        the affected train is not in the simulation
+        """
+
         train_prio_fault.train = train
         train_prio_fault.old_prio = 3
         train.train_type.priority = 5
@@ -90,7 +93,7 @@ class TestTrainPrioFault:
             train_prio_fault.get_train_or_none(
                 train_prio_fault.simulation_object_updater, train.identifier
             )
-            == None
+            is None
         )
         train_prio_fault.resolve_fault(tick)
         assert train.train_type.priority == 5

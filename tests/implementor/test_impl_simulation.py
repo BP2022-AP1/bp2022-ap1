@@ -8,6 +8,8 @@ from src.spawner.spawner import SpawnerConfiguration
 
 
 class TestSimulationImplementor:
+    """Tests for SimulationImplementor"""
+
     def test_get_all_simulation_ids(self, token):
         simulation = SimulationConfiguration()
         simulation.save()
@@ -30,16 +32,16 @@ class TestSimulationImplementor:
 
         def verify_references(key: str):
             """
-            Verifies that the references between the simulation configuration and the component configuration exist
+            Verifies that the references between the simulation configuration
+            and the component configuration exist
+
             :param key: The key of the component configuration
             """
             assert set(simulation_configuration_data[key]) == set(
-                [
-                    getattr(reference, f"{key}_configuration").id
-                    for reference in getattr(
-                        simulation_configuration, f"{key}_configuration_references"
-                    )
-                ]
+                getattr(reference, f"{key}_configuration").id
+                for reference in getattr(
+                    simulation_configuration, f"{key}_configuration_references"
+                )
             )
 
         verify_references("platform_blocked_fault")
@@ -75,13 +77,11 @@ class TestSimulationImplementor:
         assert status == 200
 
         def verify_references(key: str):
-            set(result[key]) == set(
-                [
-                    str(getattr(reference, f"{key}_configuration").id)
-                    for reference in getattr(
-                        simulation_configuration_full, f"{key}_configuration_references"
-                    )
-                ]
+            assert set(result[key]) == set(
+                str(getattr(reference, f"{key}_configuration").id)
+                for reference in getattr(
+                    simulation_configuration_full, f"{key}_configuration_references"
+                )
             )
 
         verify_references("platform_blocked_fault")

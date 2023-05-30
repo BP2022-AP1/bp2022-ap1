@@ -1,8 +1,7 @@
-import os
 from uuid import uuid4
 
 import pytest
-from traci import constants, edge, trafficlight, vehicle
+from traci import constants
 
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
