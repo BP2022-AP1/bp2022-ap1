@@ -1,10 +1,10 @@
-import hashlib
 from functools import wraps
 
 from flask import request
 
 from src.implementor.models import Token
 from src.implementor.permission import Permission
+from src.implementor.token import hash_token
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
@@ -18,7 +18,7 @@ def token_required(permission: Permission = None):
             token_clear = request.headers.get(TOKEN_HEADER)
             if not token_clear:
                 return {"message": "Token is missing"}, 401
-            token_hash = hashlib.sha256(token_clear.encode()).hexdigest()
+            token_hash = hash_token(token_clear)
             token = Token.select().where(Token.hashedToken == token_hash).first()
             if not token:
                 return {"message": "Token is invalid"}, 401
