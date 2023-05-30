@@ -75,11 +75,6 @@ def track(edge, edge_re):
 
 
 @pytest.fixture
-def track(edge, edge_re):
-    return Track(edge, edge_re)
-
-
-@pytest.fixture
 def combine_track_and_wrapper(
     track: Track, simulation_object_updater: SimulationObjectUpdatingComponent
 ):
