@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from enum import IntEnum
 from typing import List, Tuple
 
@@ -27,7 +28,7 @@ class SimulationObject(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def add_subscriptions(self):
+    def add_subscriptions(self) -> List[int]:
         """This method will be called when the object enters
         the simulation to add the corresponding traci-supscriptions.
         The return value should be compatible with
@@ -75,19 +76,20 @@ class Node(SimulationObject):
         return self._edges
 
     def update(self, data: dict):
-        pass
+        # pylint: disable=unused-argument
+        return
 
-    def add_subscriptions(self):
-        pass
+    def add_subscriptions(self) -> List[int]:
+        return []
 
-    def set_edges(self, simulation_object: net.node) -> None:
+    def set_edges(self, simulation_object: "net.node.Node") -> None:
         """Sets the edges that are connected to this node
 
         :param simulation_object: the current node as a sumo net.node
         """
         self._edge_ids = [
-            edge.getID()
-            for edge in simulation_object.getOutgoing()
+            my_edge.getID()
+            for my_edge in simulation_object.getOutgoing()
             + simulation_object.getIncoming()
         ]
 
@@ -103,9 +105,19 @@ class Node(SimulationObject):
                 return potential_edge
         raise ValueError("The two nodes are not connected.")
 
+    def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
+        """This method return all edges accessible from the given edge.
+
+        :param incoming_edge: The edge from which other edges should be accessible
+        :return: A list of all accessible edges
+        """
+        if incoming_edge not in self.edges:
+            raise ValueError("The given edge is not connected to the node.")
+        return self.edges
+
     @staticmethod
     def from_simulation(
-        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: "net.node.Node", updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
         if simulation_object.getID() in [x.identifier for x in updater.signals]:
             # We need to update the signal with our data
@@ -143,6 +155,35 @@ class Signal(Node):
         GO = 2
 
     _state: "Signal.State"
+    _incoming_edge: "Edge"
+    _incoming_index: int
+    _controlled_lanes_count: int
+
+    @property
+    def incoming(self) -> "Edge":
+        """Returns the incoming edge to the signal. The signal only applys for that edge.
+
+        :return: The incoming edge
+        """
+        return self._incoming_edge
+
+    @incoming.setter
+    def incoming(self, incoming: "Edge"):
+        """Updates the incomig edge.
+
+        :param incoming: The incoming edge
+        """
+        self._incoming_edge = incoming
+
+        lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
+        self._controlled_lanes_count = len(lanes)
+        for i, lane in enumerate(lanes):
+            if incoming.identifier == lane.split("_")[0]:
+                self._incoming_index = i
+
+        self.state = Signal.State.HALT
+
+        print(self._incoming_index, self._controlled_lanes_count, self._incoming_edge)
 
     @property
     def state(self) -> "Signal.State":
@@ -161,27 +202,34 @@ class Signal(Node):
 
         :param target: the target signal state
         """
-        if target is Signal.State.HALT:
-            trafficlight.setRedYellowGreenState(self.identifier, "rr")
-        elif target is Signal.State.GO:
-            trafficlight.setRedYellowGreenState(self.identifier, "GG")
+
+        target_state = "r"
+        if target is Signal.State.GO:
+            target_state = "G"
+
+        trafficlight.setRedYellowGreenState(
+            self.identifier,
+            "G" * self._incoming_index
+            + target_state
+            + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1),
+        )
 
         self._state = target
 
     def __init__(self, identifier: str = None, state: "Signal.State" = State.HALT):
         super().__init__(identifier=identifier)
-        self.state = state
+        self._state = state
 
     def update(self, data: dict):
         return
 
-    def add_subscriptions(self) -> int:
-        return 0
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     def set_edges(self, simulation_object: net.TLS) -> None:
-        self._edge_ids = [edge.getID() for edge in simulation_object.getEdges()]
+        self._edge_ids = [my_edge.getID() for my_edge in simulation_object.getEdges()]
 
-    def add_edges(self, node: net.node) -> None:
+    def add_edges(self, node: "net.node.Node") -> None:
         """Adds more edges to the signal (coming from the passed node)
 
         :param node: The node from which to load the additional edges
@@ -189,7 +237,7 @@ class Signal(Node):
         assert node.getID() == self.identifier
 
         self._edge_ids += [
-            edge.getID() for edge in node.getOutgoing() + node.getIncoming()
+            my_edge.getID() for my_edge in node.getOutgoing() + node.getIncoming()
         ]
 
     @staticmethod
@@ -201,6 +249,15 @@ class Signal(Node):
         result.set_edges(simulation_object)
 
         return result
+
+    def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
+        edges = super().get_edges_accessible_from(incoming_edge)
+        base_edge_id = incoming_edge.identifier.split("-re")[0]
+        return [
+            accessible_edge
+            for accessible_edge in edges
+            if base_edge_id not in accessible_edge.identifier
+        ]
 
 
 class Switch(Node):
@@ -215,10 +272,15 @@ class Switch(Node):
         RIGHT = 2
 
     _state: "Switch.State"
+    _head_ids: List[str]
+    head: List["Edge"]
 
     def __init__(self, identifier: str = None):
         super().__init__(identifier)
         self._state = Switch.State.LEFT
+
+        self._head_ids = []
+        self.head = []
 
     @property
     def state(self) -> State:
@@ -244,19 +306,70 @@ class Switch(Node):
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
 
-    def add_subscriptions(self) -> int:
-        return 0  # We don't have to update anything from the simulator
+    def add_subscriptions(self) -> List[int]:
+        return []  # We don't have to update anything from the simulator
 
     @staticmethod
     def from_simulation(
-        simulation_object: net.node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: "net.node.Node",
+        updater: "SimulationObjectUpdatingComponent",
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
         result = Switch(identifier=simulation_object.getID())
         result.updater = updater
         result.set_edges(simulation_object)
-
+        result.set_connections(simulation_object)
         return result
+
+    def add_simulation_connections(self) -> None:
+        super().add_simulation_connections()
+        for my_edge in self.edges:
+            if my_edge.identifier in self._head_ids:
+                self.head.append(my_edge)
+
+        assert len(self.head) == 2
+
+    def is_head(self, my_edge: "Edge") -> bool:
+        """This method returns, whether the given edge is connected on head of the switch.
+
+        :param my_edge: The edge which may be connected on head
+        :return: If the edge is connected on head
+        """
+        return my_edge in self.head
+
+    def set_connections(self, simulation_object: "net.node.Node"):
+        """This method sets which edge_ids are connected on head of the switch.
+        It only sets the head_ids, as the edge objects are not yet initialized.
+
+        :param simulation_object: The Node object from Sumo
+        """
+        connections = simulation_object.getConnections()
+
+        directions_to = defaultdict(int)
+        directions_from = defaultdict(int)
+
+        for connection in connections:
+            directions_to[connection.getTo().getID()] += 1
+            directions_from[connection.getFrom().getID()] += 1
+
+        for connection in connections:
+            if (
+                directions_to[connection.getTo().getID()] == 2
+                and connection.getTo().getID() not in self._head_ids
+            ):
+                self._head_ids.append(connection.getTo().getID())
+            if (
+                directions_from[connection.getFrom().getID()] == 2
+                and connection.getFrom().getID() not in self._head_ids
+            ):
+                self._head_ids.append(connection.getFrom().getID())
+
+    def get_edges_accessible_from(self, incoming_edge: "Edge") -> List["Edge"]:
+        if self.is_head(incoming_edge):
+            return [my_edge for my_edge in self.edges if not self.is_head(my_edge)]
+        if not self.is_head(incoming_edge):
+            return self.head
+        raise ValueError("Given edge is not connected to the switch.")
 
 
 class Edge(SimulationObject):
@@ -267,6 +380,7 @@ class Edge(SimulationObject):
     _track: "Track" = None
     _from: Node | str = None
     _to: Node | str = None
+    _length: float
 
     @property
     def to_node(self) -> Node:
@@ -277,6 +391,14 @@ class Edge(SimulationObject):
         assert not isinstance(self._to, str)
 
         return self._to
+
+    @property
+    def length(self) -> float:
+        """The length of this edge
+
+        :return: The length
+        """
+        return self._length
 
     @property
     def from_node(self) -> Node:
@@ -328,10 +450,10 @@ class Edge(SimulationObject):
         self.blocked = False
 
     def update(self, data: dict):
-        self._max_speed = data[constants.VAR_MAXSPEED]
+        return
 
-    def add_subscriptions(self) -> int:
-        return constants.VAR_MAXSPEED
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     @staticmethod
     def from_simulation(simulation_object: net.edge, updater) -> "Track":
@@ -340,6 +462,7 @@ class Edge(SimulationObject):
         result.updater = updater
 
         # pylint: disable=protected-access
+        result._length = simulation_object.getLength()
         result._from = simulation_object.getFromNode().getID()
         result._to = simulation_object.getToNode().getID()
 
@@ -366,6 +489,14 @@ class Track(SimulationObject):
         :return: The edges in both directions
         """
         return self._edges
+
+    @property
+    def length(self) -> float:
+        """The length of the track. If the length differ, choose the shorter one
+
+        :return: The length
+        """
+        return min(self._edges[0].length, self._edges[1].length)
 
     @property
     def nodes(self) -> Tuple[Node, Node]:
@@ -442,10 +573,10 @@ class Track(SimulationObject):
 
     def update(self, data: dict) -> None:
         # pylint: disable=unused-argument
-        pass
+        return
 
-    def add_subscriptions(self):
-        pass
+    def add_subscriptions(self) -> List[int]:
+        return []
 
     @staticmethod
     def from_simulation(
@@ -502,8 +633,8 @@ class Platform(SimulationObject):
     def update(self, data: dict) -> None:
         return  # We don't have to update anything from the simulator
 
-    def add_subscriptions(self) -> int:
-        return 0  # We don't have to update anything from the simulator
+    def add_subscriptions(self) -> List[int]:
+        return []  # We don't have to update anything from the simulator
 
     @staticmethod
     def from_simulation(
@@ -594,8 +725,8 @@ class Train(SimulationObject):
         def update(self, data: dict) -> None:
             self._max_speed = data[constants.VAR_MAXSPEED]
 
-        def add_subscriptions(self) -> int:
-            return constants.VAR_MAXSPEED
+        def add_subscriptions(self) -> List[int]:
+            return [constants.VAR_MAXSPEED]
 
         @staticmethod
         def from_simulation(
@@ -612,6 +743,7 @@ class Train(SimulationObject):
     _speed: float
     _timetable: List[Platform]
     train_type: TrainType
+    station_index: int = 0
 
     @property
     def edge(self) -> Edge:
@@ -687,6 +819,7 @@ class Train(SimulationObject):
         train_type: str = None,
         updater: "SimulationObjectUpdatingComponent" = None,
         from_simulator: bool = False,
+        route_id: str = None,
     ):
         """Creates a new train from the given parameters.
         When initializing manually, `timetable` and `train_type` are mandatory
@@ -709,10 +842,10 @@ class Train(SimulationObject):
         self._timetable = timetable
 
         if not from_simulator:
-            self._add_to_simulation(identifier, timetable, train_type)
+            self._add_to_simulation(identifier, train_type, route_id)
 
     def _add_to_simulation(self, identifier: str, train_type: str, route: str):
-        vehicle.add(identifier, route, train_type)
+        vehicle.add(identifier, routeID=route, typeID=train_type)
 
     def update(self, data: dict):
         """Gets called whenever a simualtion tick has happened.
@@ -720,9 +853,14 @@ class Train(SimulationObject):
         """
         self._position = data[constants.VAR_POSITION]
         edge_id = data[constants.VAR_ROAD_ID]
-        self._route = data[constants.VAR_ROUTE]
+        # self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
-        if self._edge is None or self._edge.identifier != edge_id:
+
+        if (
+            self._edge is None
+            or self._edge.identifier != edge_id
+            and not edge_id[:1] == ":"
+        ):
             if self._edge is not None:
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
@@ -730,21 +868,27 @@ class Train(SimulationObject):
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )
+            if (
+                len(self._timetable) > 0
+                and self._timetable[self.station_index].edge == self._edge
+            ):  # we reached an edge with a platform
+                self.station_index += 1
+
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
             )
 
-    def add_subscriptions(self) -> int:
+    def add_subscriptions(self) -> List[int]:
         """Gets called when this object is created to allow
         specification of simulator-synchronized properties.
         :return: The synchronized properties (see <https://sumo.dlr.de/pydoc/traci.constants.html>)
         """
-        return (
-            constants.VAR_POSITION
-            + constants.VAR_ROUTE
-            + constants.VAR_ROAD_ID
-            + constants.VAR_SPEED
-        )
+        return [
+            constants.VAR_POSITION,
+            # constants.VAR_ROUTE,
+            constants.VAR_ROAD_ID,
+            constants.VAR_SPEED,
+        ]
 
     @staticmethod
     def from_simulation(

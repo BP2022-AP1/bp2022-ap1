@@ -118,8 +118,8 @@ def traffic_update(monkeypatch):
     def set_traffic_light_state(identifier: str, state: str) -> None:
         # pylint: disable=unused-argument
         nonlocal rr_count, gg_count
-        assert state in ("rr", "GG")
-        if state == "rr":
+        assert state in ("rG", "GG")
+        if state == "rG":
             rr_count += 1
         else:
             gg_count += 1
@@ -135,16 +135,40 @@ def traffic_update(monkeypatch):
     return (get_rr_count, get_gg_count)
 
 
+# pylint: disable=protected-access
+@pytest.fixture
+def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingComponent):
+    def get_controlled_lanes(identifier: str):
+        signal = None
+        for pot_signal in configured_souc.signals:
+            if pot_signal.identifier == identifier:
+                signal = pot_signal
+        return [signal._incoming_edge.identifier, "not_the_incoming_lane"]
+
+    monkeypatch.setattr(trafficlight, "getControlledLanes", get_controlled_lanes)
+
+
+# pylint: enable=protected-access
+
+
+# pylint: disable=unused-argument
 @pytest.fixture
 def route_controller(
-    configured_souc: SimulationObjectUpdatingComponent, mock_event_bus: EventBus
+    configured_souc: SimulationObjectUpdatingComponent,
+    mock_event_bus: EventBus,
+    controlled_lanes,
 ) -> RouteController:
-    return RouteController(
+    my_route_controller = RouteController(
         event_bus=mock_event_bus,
         priority=1,
         simulation_object_updating_component=configured_souc,
-        path_name=os.path.join("data", "planpro", "test_example.ppxml"),
+        path_name=os.path.join("data", "planpro", "example.ppxml"),
     )
+    my_route_controller.initialize_signals()
+    return my_route_controller
+
+
+# pylint: enable=unused-argument
 
 
 @pytest.fixture
@@ -194,18 +218,6 @@ def mock_interlocking() -> Interlocking:
         # pylint: enable=protected-access
 
     return InterlockingMock()
-
-
-@pytest.fixture
-def mock_simulation_object_updating_component() -> SimulationObjectUpdatingComponent:
-    class SOUCMock:
-        """This mocks a simulation object updating component
-        with an infrastructur_provider that may be set.
-        """
-
-        infrastructur_provider = None
-
-    return SOUCMock()
 
 
 @pytest.fixture
@@ -259,7 +271,7 @@ def yaramo_point():
         with the same attributes, but not the functionality.
         """
 
-        point_id = "73093"
+        point_id = "15bae"
         state = None
 
     return PointMock()
@@ -272,7 +284,7 @@ def yaramo_signal():
         with the same attributes, but not the functionality.
         """
 
-        name = "637cdc98-0b49-4eff-bd2f-b9549becfc57-km-25"
+        name = "74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen"
         state = None
 
     return SignalMock()
@@ -302,11 +314,15 @@ def sumo_edge() -> Edge:
     return EdgeMock()
 
 
+# pylint: disable=invalid-name
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert routeID is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
+
+
+# pylint: enable=invalid-name

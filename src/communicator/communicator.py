@@ -11,6 +11,9 @@ from sumolib import checkBinary
 
 from src.communicator.celery import celery
 from src.component import Component
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 class Communicator:
@@ -40,7 +43,11 @@ class Communicator:
         max_tick: int = 86_400,
         sumo_port: int = None,
         sumo_configuration: str = os.path.join(
-            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            "data",
+            "sumo",
+            "schwarze_pumpe_v1",
+            "sumo-config",
+            "schwarze_pumpe_v1.scenario.sumocfg",
         ),
     ):
         """Creates a new Communicator object"""
@@ -82,7 +89,7 @@ class Communicator:
                 "--start",
                 "--quit-on-end",
                 "--delay",
-                delay,
+                str(delay),
             ],
             port=self._port,
         )
@@ -180,6 +187,15 @@ def run_simulation_steps(
     sumo_running = True
     current_tick = 1
 
+    souc = next(
+        (
+            component
+            for component in components
+            if type(component) == SimulationObjectUpdatingComponent
+        )
+    )
+    souc.add_subscriptions()
+
     components.sort(key=lambda x: x.priority, reverse=True)
 
     update_state(current_tick, max_tick, sumo_running)
@@ -187,6 +203,7 @@ def run_simulation_steps(
     while current_tick <= max_tick:
         for component in components:
             component.next_tick(current_tick)
+
         traci.simulationStep()
         current_tick += 1
         update_state(current_tick, max_tick, sumo_running)
