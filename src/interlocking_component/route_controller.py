@@ -205,7 +205,7 @@ class RouteController(Component):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
-        :param train: the train that may need a new fahrstasse
+        :param train: the train that may need a new fahrstrasse
         :type train: Train
         :param edge: the edge it just entered
         :type edge: Edge
@@ -330,6 +330,15 @@ class RouteController(Component):
                 routes.append(route_candidate)
         return routes
 
-    def check_all_fahrstrassen_for_failures(self):
-        """This method checks for all trains, if their fahrstrassen and routes are still valid."""
-        raise NotImplementedError()
+    #def check_all_fahrstrassen_for_failures(self):
+    #    """This method checks for all trains, if their fahrstrassen and routes are still valid."""
+    #    raise NotImplementedError()
+    
+    def recalculate_all_routes(self):
+        """Recalculates the route for every train in the simulation"""
+        self.routes_to_be_set = []
+        trains: list[Train] = self.simulation_object_updating_component.trains
+        for train in trains:
+            self._free_fahrstrasse(train, train.route)
+            self.set_fahrstrasse(train, train.edge)
+
