@@ -86,7 +86,7 @@ class Communicator:
                 "--delay",
                 str(delay),
                 "--step-length",
-                str(self._step_length),
+                os.getenv("TICK_LENGTH"),
             ],
             port=self._port,
         )
@@ -121,7 +121,7 @@ class Communicator:
                 "-c",
                 configuration,
                 "--step-length",
-                str(0.02),  # todo use parameter
+                os.getenv("TICK_LENGTH"),
             ],
             port=port,
         )
