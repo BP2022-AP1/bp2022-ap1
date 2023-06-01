@@ -854,7 +854,7 @@ yaramo = {git = "https://github.com/bp2022-ap1/yaramo", branch = "refactor/repla
 type = "git"
 url = "https://github.com/bp2022-ap1/interlocking.git"
 reference = "add-Poetry-support"
-resolved_reference = "a2978e34328a2e187f9a3bc4ce1b1d15f6a0c067"
+resolved_reference = "d9cc6a1a7e15c50cdbbc933eb3b92c807cdef855"
 
 [[package]]
 name = "isort"
