@@ -58,7 +58,7 @@ class TestTrackBlockedFault:
     ):
         assert not track.blocked
         track_blocked_fault.inject_fault(tick)
-        assert track_blocked_fault.interlocking.method_calls > 0
+        assert track_blocked_fault.interlocking.route_controller.method_calls > 0
         assert track.blocked
 
     def test_resolve_track_blocked_fault(
@@ -72,7 +72,7 @@ class TestTrackBlockedFault:
     ):
         track_blocked_fault.inject_fault(tick)
         assert track.blocked
-        assert track_blocked_fault.interlocking.method_calls > 0
+        assert track_blocked_fault.interlocking.route_controller.method_calls > 0
         track_blocked_fault.resolve_fault(tick)
         assert not track.blocked
-        assert track_blocked_fault.interlocking.method_calls > 1
+        assert track_blocked_fault.interlocking.route_controller.method_calls > 1

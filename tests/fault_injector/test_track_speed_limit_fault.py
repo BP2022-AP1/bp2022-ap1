@@ -72,7 +72,7 @@ class TestTrackSpeedLimitFault:
         assert track.max_speed == 100
         track_speed_limit_fault.inject_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
-        assert track_speed_limit_fault.interlocking.method_calls > 0
+        assert track_speed_limit_fault.interlocking.route_controller.method_calls > 0
 
     def test_resolve_track_speed_limit_fault(
         self,
@@ -87,7 +87,7 @@ class TestTrackSpeedLimitFault:
     ):
         track.max_speed = 100
         track_speed_limit_fault.inject_fault(tick=tick)
-        assert track_speed_limit_fault.interlocking.method_calls > 0
+        assert track_speed_limit_fault.interlocking.route_controller.method_calls > 0
         track_speed_limit_fault.resolve_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.old_speed_limit
-        assert track_speed_limit_fault.interlocking.method_calls > 1
+        assert track_speed_limit_fault.interlocking.route_controller.method_calls > 1

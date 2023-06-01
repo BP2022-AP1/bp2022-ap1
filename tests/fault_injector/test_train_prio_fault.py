@@ -60,7 +60,7 @@ class TestTrainPrioFault:
         train.train_type.priority = 1
         train_prio_fault.inject_fault(tick)
         assert train.train_type.priority == train_prio_fault.configuration.new_prio
-        assert train_prio_fault.interlocking.method_calls > 0
+        assert train_prio_fault.interlocking.route_controller.method_calls > 0
 
     def test_resolve_train_prio_fault(
         self,
@@ -74,10 +74,10 @@ class TestTrainPrioFault:
         train.train_type.priority = 5
         train_prio_fault.inject_fault(tick)
         assert train.train_type.priority == train_prio_fault.configuration.new_prio
-        assert train_prio_fault.interlocking.method_calls > 0
+        assert train_prio_fault.interlocking.route_controller.method_calls > 0
         train_prio_fault.resolve_fault(tick)
         assert train.train_type.priority == train_prio_fault.old_prio == 5
-        assert train_prio_fault.interlocking.method_calls > 1
+        assert train_prio_fault.interlocking.route_controller.method_calls > 1
 
     def test_resolve_train_not_in_simulation(
         self, tick, train_prio_fault: TrainPrioFault, train: Train

@@ -74,7 +74,7 @@ class TestTrainSpeedFault:
         train.train_type.max_speed = 100
         train_speed_fault.inject_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
-        assert train_speed_fault.interlocking.method_calls > 0
+        assert train_speed_fault.interlocking.route_controller.method_calls > 0
 
     def test_resolve_train_speed_fault(
         self,
@@ -91,10 +91,10 @@ class TestTrainSpeedFault:
         train.train_type.max_speed = 50
         train_speed_fault.inject_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
-        assert train_speed_fault.interlocking.method_calls > 0
+        assert train_speed_fault.interlocking.route_controller.method_calls > 0
         train_speed_fault.resolve_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.old_speed == 50
-        assert train_speed_fault.interlocking.method_calls > 1
+        assert train_speed_fault.interlocking.route_controller.method_calls > 1
 
     def test_resolve_train_not_in_simulation(
         self, tick, train_speed_fault: TrainSpeedFault, train: Train
