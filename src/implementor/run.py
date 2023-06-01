@@ -64,13 +64,6 @@ def create_run(body, token):
     :param body: The parsed body of the request
     :param token: Token object of the current user
     """
-    sumo_configuration = os.path.join(
-        "data",
-        "sumo",
-        "schwarze_pumpe_v1",
-        "sumo-config",
-        "schwarze_pumpe_v1.scenario.sumocfg",
-    )
 
     simulation_configuration_id = body.pop("simulation_configuration")
     simulation_configurations = SimulationConfiguration.select().where(
@@ -80,7 +73,7 @@ def create_run(body, token):
         return "Simulation not found", 404
 
     simulation_configuration = simulation_configurations.get()
-    communicator = Communicator(sumo_configuration=sumo_configuration)
+    communicator = Communicator()
 
     run = Run(simulation_configuration=simulation_configuration)
     run.save()

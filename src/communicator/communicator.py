@@ -42,13 +42,7 @@ class Communicator:
         components: List[Component] = None,
         max_tick: int = 86_400,
         sumo_port: int = None,
-        sumo_configuration: str = os.path.join(
-            "data",
-            "sumo",
-            "schwarze_pumpe_v1",
-            "sumo-config",
-            "schwarze_pumpe_v1.scenario.sumocfg",
-        ),
+        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new Communicator object"""
         self._configuration = sumo_configuration
