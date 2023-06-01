@@ -49,7 +49,7 @@ def event_bus(run):
     return bus
 
 
-class MockRouteController():
+class MockRouteController:
     method_calls: int = 0
 
     def recalculate_all_routes(self):
