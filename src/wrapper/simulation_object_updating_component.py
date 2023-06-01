@@ -1,5 +1,5 @@
-from os import path
 import os
+from os import path
 from typing import List
 
 import sumolib

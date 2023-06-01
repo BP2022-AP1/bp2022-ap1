@@ -5,6 +5,7 @@ from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
 from planpro_importer.reader import PlanProReader
 from yaramo.signal import SignalDirection
+from yaramo.topology import Topology
 
 from src.component import Component
 from src.event_bus.event_bus import EventBus
@@ -16,7 +17,6 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
-from yaramo.topology import Topology
 
 
 class IInterlockingDisruptor:
