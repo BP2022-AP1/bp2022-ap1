@@ -1,8 +1,6 @@
 # pylint: disable=unused-argument
 # pylint: disable=duplicate-code
 
-import os
-
 from src.communicator.communicator import Communicator
 from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
@@ -83,7 +81,6 @@ def create_run(body, token):
 
     object_updater = SimulationObjectUpdatingComponent(
         event_bus,
-        sumo_configuration,
     )
     communicator.add_component(object_updater)
 
