@@ -5,6 +5,7 @@ import os
 
 from src.communicator.communicator import Communicator
 from src.event_bus.event_bus import EventBus
+from src.fault_injector.fault_injector import FaultInjector
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
 from src.fault_injector.fault_types.track_blocked_fault import TrackBlockedFault
@@ -109,11 +110,11 @@ def create_run(body, token):
     route_controller = RouteController(event_bus, 1, object_updater)
     communicator.add_component(route_controller)
 
-    # The todo will be replaces in other PR when the interlocking component is implemented
-    # pylint: disable=fixme
-    # TODO: get real interlocking disruptor
-    interlocking_disruptor: IInterlockingDisruptor = IInterlockingDisruptor(route_controller)
-    # pylint: enable=fixme
+    interlocking_disruptor: IInterlockingDisruptor = IInterlockingDisruptor(
+        route_controller
+    )
+    fault_injector: FaultInjector = FaultInjector(event_bus, 1)
+    communicator.add_component(fault_injector)
 
     train_spawner = TrainBuilder(object_updater, route_controller)
 
@@ -137,7 +138,7 @@ def create_run(body, token):
             object_updater,
             interlocking_disruptor,
         )
-        communicator.add_component(fault)
+        fault_injector.add_fault(fault)
 
     for (
         reference
@@ -150,7 +151,7 @@ def create_run(body, token):
             interlocking_disruptor,
             spawner,
         )
-        communicator.add_component(fault)
+        fault_injector.add_fault(fault)
 
     for (
         reference
@@ -162,7 +163,7 @@ def create_run(body, token):
             object_updater,
             interlocking_disruptor,
         )
-        communicator.add_component(fault)
+        fault_injector.add_fault(fault)
 
     for (
         reference
@@ -174,7 +175,7 @@ def create_run(body, token):
             object_updater,
             interlocking_disruptor,
         )
-        communicator.add_component(fault)
+        fault_injector.add_fault(fault)
 
     for (
         reference
@@ -186,7 +187,7 @@ def create_run(body, token):
             object_updater,
             interlocking_disruptor,
         )
-        communicator.add_component(fault)
+        fault_injector.add_fault(fault)
 
     for reference in simulation_configuration.train_prio_fault_configuration_references:
         train_prio_fault_config = reference.train_prio_fault_configuration
@@ -196,7 +197,7 @@ def create_run(body, token):
             object_updater,
             interlocking_disruptor,
         )
-        communicator.add_component(fault)
+        fault_injector.add_fault(fault)
 
     process_id = communicator.run()
 

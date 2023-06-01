@@ -11,12 +11,12 @@ from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
+from src.interlocking_component.route_controller import RouteController
 from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
-from src.interlocking_component.route_controller import RouteController
 
 
 class IInterlockingDisruptor:
