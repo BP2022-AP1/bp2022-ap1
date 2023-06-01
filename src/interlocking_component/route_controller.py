@@ -5,6 +5,7 @@ from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
 from planpro_importer.reader import PlanProReader
 from yaramo.signal import SignalDirection
+from yaramo.topology import Topology
 
 from src.component import Component
 from src.event_bus.event_bus import EventBus
@@ -96,7 +97,7 @@ class RouteController(Component):
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
     tick: int = 0
-    topology = None
+    topology: Topology
 
     def __init__(
         self,
@@ -127,6 +128,8 @@ class RouteController(Component):
             for potentical_signal in self.simulation_object_updating_component.signals:
                 if yaramo_signal.name == potentical_signal.identifier:
                     signal = potentical_signal
+
+            assert signal is not None
 
             edges_into_signal = [
                 edge for edge in signal.edges if edge.to_node == signal
