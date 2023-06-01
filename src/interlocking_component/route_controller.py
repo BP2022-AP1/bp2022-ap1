@@ -11,7 +11,6 @@ from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
-from src.interlocking_component.route_controller import RouteController
 from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
@@ -24,7 +23,7 @@ class IInterlockingDisruptor:
     as well as to notify the Interlocking faults that occur in other parts of the simulation.
     """
 
-    route_controller: RouteController = None
+    route_controller: "RouteController" = None
 
     def insert_track_blocked(self, track: Track):
         """This method is used to block a track and recalculate the routes of relevant trains.
