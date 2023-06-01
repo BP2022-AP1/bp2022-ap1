@@ -1,6 +1,6 @@
 import os
 from collections import defaultdict
-from typing import Tuple, List
+from typing import List, Tuple
 
 import pytest
 from traci import constants, edge, trafficlight, vehicle

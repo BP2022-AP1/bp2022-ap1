@@ -44,14 +44,14 @@ class TrainBuilder:
 
         self._updater.simulation_objects.append(train)
 
-        self.route_controller.reserve_for_initialized_train(reservation_placeholder, train)
+        self.route_controller.reserve_for_initialized_train(
+            reservation_placeholder, train
+        )
 
         return True
 
     def _get_first_route(self, timetable: List[Platform]) -> str:
-        return self.route_controller.set_spawn_fahrstrasse(
-            timetable
-        )
+        return self.route_controller.set_spawn_fahrstrasse(timetable)
 
     def _convert_timetable(self, timetable: List[str]):
         converted = []

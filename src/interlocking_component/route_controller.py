@@ -85,15 +85,19 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
 
-class UninitializedTrain():
+class UninitializedTrain:
+    """This class mocks many attributes of Train, so that a spawn route can be reserved.
+    When the spawnroute is set, the train is not yet initialized.
+    """
     identifier: str = None
     reserved_tracks: List[Track] = None
     station_index: int = 1
     reserved_until_station_index: int = 1
     timetable: List[Platform] = None
     route: str = None
-    def __init__(self, id: str, timetable: str):
-        self.identifier = id
+
+    def __init__(self, identifier: str, timetable: str):
+        self.identifier = identifier
         self.timetable = timetable
         self.reserved_tracks = []
 
@@ -165,7 +169,7 @@ class RouteController(Component):
         if tick == 1:
             self.initialize_signals()
         self.tick = tick
-        for (interlocking_route, train, route_length) in self.routes_to_be_set:
+        for interlocking_route, train, route_length in self.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
             was_set = self.set_interlocking_route(
@@ -173,7 +177,7 @@ class RouteController(Component):
             )
             if was_set:
                 self.routes_to_be_set.remove((interlocking_route, train, route_length))
-        for (route, train) in self.routes_to_be_reserved:
+        for route, train in self.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
             was_reserved = self.reserve_route(route, train)
@@ -185,7 +189,7 @@ class RouteController(Component):
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
 
-        :param timetable: The timetable of the train. The spawn fahrstrasse 
+        :param timetable: The timetable of the train. The spawn fahrstrasse
         will lead from the first to the second platform on the list.
         :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
@@ -193,13 +197,24 @@ class RouteController(Component):
         train_to_be_initialized = UninitializedTrain("/not_a_real_train", timetable)
         self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
         return train_to_be_initialized.route, train_to_be_initialized
-    
-    def reserve_for_initialized_train(self, reservation_placeholder: UninitializedTrain, train: Train):
+
+    def reserve_for_initialized_train(
+        self, reservation_placeholder: UninitializedTrain, train: Train
+    ):
+        """This method replaces a placeholder train with a train, that should be the one the reservations were held for.
+
+        :param reservation_placeholder: The placeholder, that has reservations
+        :param train: The train that will get those reservations
+        """
         for track in reservation_placeholder.reserved_tracks:
-            for (reserved_train, edge) in track.reservations:
+            for reserved_train, edge in track.reservations:
                 if reserved_train == reservation_placeholder:
                     i = track.reservations.index((reserved_train, edge))
-                    track.reservations = track.reservations[:i] + [(train, edge)] + track.reservations[i+1:]
+                    track.reservations = (
+                        track.reservations[:i]
+                        + [(train, edge)]
+                        + track.reservations[i + 1 :]
+                    )
         train.reserved_tracks = reservation_placeholder.reserved_tracks
 
     def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
@@ -254,16 +269,14 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
-                    
+
                     is_reserved = self.check_if_route_is_reserved(new_route[:i], train)
 
                     if not is_reserved:
                         is_reserved = self.reserve_route(new_route, train)
 
                     if not is_reserved:
-                        self.routes_to_be_reserved.append(
-                            (new_route[:i], train)
-                        )
+                        self.routes_to_be_reserved.append((new_route[:i], train))
                     else:
                         was_set = self.set_interlocking_route(
                             interlocking_route, train, route_length
@@ -341,7 +354,7 @@ class RouteController(Component):
                 reserving_train = track.reservations[-1][0]
                 last_track_of_reserving_train = reserving_train.reserved_tracks[-1]
                 if last_track_of_reserving_train == track:
-                    if reserving_train.reserved_until_station_index +1 < len(
+                    if reserving_train.reserved_until_station_index + 1 < len(
                         reserving_train.timetable
                     ):
                         # When the reservation reached the end of the trains route,
@@ -355,7 +368,7 @@ class RouteController(Component):
                             ].edge,
                         )
                         was_reserved = self.reserve_route(next_route, reserving_train)
-                        # Here the entire route to the next platform is reserved, 
+                        # Here the entire route to the next platform is reserved,
                         # as the source of the deadlock prevention algorithm suggested.
                         if not was_reserved:
                             recursiv_reservation_worked = False
