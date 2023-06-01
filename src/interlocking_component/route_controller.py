@@ -89,6 +89,7 @@ class UninitializedTrain:
     """This class mocks many attributes of Train, so that a spawn route can be reserved.
     When the spawnroute is set, the train is not yet initialized.
     """
+
     identifier: str = None
     reserved_tracks: List[Track] = None
     station_index: int = 1
