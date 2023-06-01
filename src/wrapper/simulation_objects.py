@@ -183,8 +183,6 @@ class Signal(Node):
 
         self.state = Signal.State.HALT
 
-        print(self._incoming_index, self._controlled_lanes_count, self._incoming_edge)
-
     @property
     def state(self) -> "Signal.State":
         """Returns the current state of the signal
@@ -745,8 +743,8 @@ class Train(SimulationObject):
     _timetable: List[Platform]
     train_type: TrainType
     reserved_tracks: List[Track]
-    station_index: int = 0
-    reserved_until_station_index: int = 0
+    station_index: int = 1
+    reserved_until_station_index: int = 1
 
     @property
     def edge(self) -> Edge:
@@ -866,10 +864,9 @@ class Train(SimulationObject):
             and not edge_id[:1] == ":"
         ):
             if self._edge is not None:
-                print(f"Track: {self._edge.track.identifier}, Reservations: {self._edge.track.reservations}")
                 assert self._edge.track.reservations[0][1] == self._edge
                 self._edge.track.reservations.pop(0)
-                assert self.edge.track == self.reserved_tracks[0]
+                assert self._edge.track == self.reserved_tracks[0]
                 self.reserved_tracks.pop(0)
 
                 self.updater.infrastructure_provider.train_drove_off_track(

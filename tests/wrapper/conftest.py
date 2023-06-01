@@ -1,6 +1,6 @@
 import os
 from collections import defaultdict
-from typing import Tuple
+from typing import Tuple, List
 
 import pytest
 from traci import constants, edge, trafficlight, vehicle
@@ -210,7 +210,9 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 class MockRouteController:
     """Mock for the route controller"""
 
-    def set_spawn_fahrstrasse(self, start: Track, end: Track):
+    def set_spawn_fahrstrasse(self, timetable: List[Platform]):
+        start = timetable[0].edge
+        end = timetable[1].edge
         print(start.identifier, end.identifier, start.identifier == "58ab8-1")
         if start.identifier == "58ab8-1":
             return True

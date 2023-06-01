@@ -85,6 +85,19 @@ class IInterlockingDisruptor:
         raise NotImplementedError()
 
 
+class UninitializedTrain():
+    identifier: str = None
+    reserved_tracks: List[Track] = None
+    station_index: int = 1
+    reserved_until_station_index: int = 1
+    timetable: List[Platform] = None
+    route: str = None
+    def __init__(self, id: str, timetable: str):
+        self.identifier = id
+        self.timetable = timetable
+        self.reserved_tracks = []
+
+
 class RouteController(Component):
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
@@ -152,7 +165,7 @@ class RouteController(Component):
         if tick == 1:
             self.initialize_signals()
         self.tick = tick
-        for interlocking_route, train, route_length in self.routes_to_be_set:
+        for (interlocking_route, train, route_length) in self.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
             was_set = self.set_interlocking_route(
@@ -160,60 +173,34 @@ class RouteController(Component):
             )
             if was_set:
                 self.routes_to_be_set.remove((interlocking_route, train, route_length))
-
-        for route, train in self.routes_to_be_reserved:
+        for (route, train) in self.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
             was_reserved = self.reserve_route(route, train)
             if was_reserved:
                 self.routes_to_be_reserved.remove((route, train))
 
-    def set_spawn_fahrstrasse(self, start_edge: Edge, end_edge: Edge) -> str:
+    def set_spawn_fahrstrasse(self, timetable: List[Platform]) -> str:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
 
-        :param start_edge: The edge from where the route should start
-        :type start_edge: Edge
-        :param end_edge: The edge where the route should end
-        :type end_edge: Edge
+        :param timetable: The timetable of the train. The spawn fahrstrasse 
+        will lead from the first to the second platform on the list.
         :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
-        :rtype: str
         """
-        print("trying to set spawn fahrstraße")
-        new_route = self.router.get_route(start_edge, end_edge)
-        # new_route contains a list of signals from starting signal to end signal of the new route.
-
-        for end_node_candidat in new_route[2:]:
-            for interlocking_route in self.interlocking.routes:
-                if (
-                    interlocking_route.start_signal.yaramo_signal.name
-                    == new_route[1].identifier
-                    and interlocking_route.end_signal.yaramo_signal.name
-                    == end_node_candidat.identifier
-                ):
-                    if not self.can_route_be_reserved(new_route):
-                        return None
-                    # TODO es fehlt dann noch der call vom wrapper nach dem spawnen 
-                    # zum RoutController, damit auch wirklich reserviert wird.
-                    
-                    # This sets the route in the interlocking
-                    was_set = self.interlocking.set_route(
-                        interlocking_route.yaramo_route
-                    )
-
-                    print("set?", was_set)
-
-                    if was_set:
-                        # The Interlocking Route has the same id as the SUMO route.
-                        # So this is also the id of the SUMO route.
-                        return interlocking_route.id
-                    # If the route can not be set in the interlocking None is returned,
-                    # so that the spawner can try again next tick.
-                    return None
-        # If the no interlocking route is found an error is raised
-        raise KeyError()
+        train_to_be_initialized = UninitializedTrain("/not_a_real_train", timetable)
+        self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
+        return train_to_be_initialized.route, train_to_be_initialized
+    
+    def reserve_for_initialized_train(self, reservation_placeholder: UninitializedTrain, train: Train):
+        for track in reservation_placeholder.reserved_tracks:
+            for (reserved_train, edge) in track.reservations:
+                if reserved_train == reservation_placeholder:
+                    i = track.reservations.index((reserved_train, edge))
+                    track.reservations = track.reservations[:i] + [(train, edge)] + track.reservations[i+1:]
+        train.reserved_tracks = reservation_placeholder.reserved_tracks
 
     def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
         """This method should be called when a train enters a new track_segment.
@@ -268,16 +255,14 @@ class RouteController(Component):
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
                     
-                    print("Checking if Route is reserved")
-                    is_reserved = self.check_if_route_is_reserved(new_route, train)
-                    print(is_reserved)
+                    is_reserved = self.check_if_route_is_reserved(new_route[:i], train)
 
                     if not is_reserved:
-                        is_reserved = self.reserve_route(new_route[:i], train)
+                        is_reserved = self.reserve_route(new_route, train)
 
                     if not is_reserved:
                         self.routes_to_be_reserved.append(
-                            new_route[:i], train, interlocking_route, route_length
+                            (new_route[:i], train)
                         )
                     else:
                         was_set = self.set_interlocking_route(
@@ -327,7 +312,7 @@ class RouteController(Component):
         """
         route_as_tracks = self.get_tracks_of_node_route(route)
         for track in route_as_tracks:
-            if track.reservations[0][0] != train:
+            if len(track.reservations) == 0 or track.reservations[0][0] != train:
                 return False
         return True
 
@@ -338,7 +323,6 @@ class RouteController(Component):
         :param train: the train the route should be reserved for
         :return: if it was successful
         """
-        print("_______RESERVING ROUTE________")
         route_as_edges = self.get_edges_of_node_route(route)
         recursiv_reservation_worked = True
         tracks_to_be_reserved: List[Tuple[Train, Track]] = []
@@ -346,7 +330,7 @@ class RouteController(Component):
         # This is needed so the reservations on the train are inserted in the right order.
         train_reservation_start = len(train.reserved_tracks)
 
-        if self.check_if_reservation_ends_in_opposing_reservation(route):
+        if not self.check_if_reservation_ends_in_opposing_reservation(route):
             return False
 
         for edge in route_as_edges:
@@ -357,29 +341,33 @@ class RouteController(Component):
                 reserving_train = track.reservations[-1][0]
                 last_track_of_reserving_train = reserving_train.reserved_tracks[-1]
                 if last_track_of_reserving_train == track:
-                    if reserving_train.reserved_until_station_index != len(
+                    if reserving_train.reserved_until_station_index +1 < len(
                         reserving_train.timetable
                     ):
                         # When the reservation reached the end of the trains route,
                         # there will be no more reservations.
-                        route = self.router.get_route(
-                            track,
+                        next_route = self.router.get_route(
                             reserving_train.timetable[
                                 reserving_train.reserved_until_station_index
-                            ],
+                            ].edge,
+                            reserving_train.timetable[
+                                reserving_train.reserved_until_station_index + 1
+                            ].edge,
                         )
-                        was_reserved = self.reserve_route(route, reserving_train)
+                        was_reserved = self.reserve_route(next_route, reserving_train)
+                        # Here the entire route to the next platform is reserved, 
+                        # as the source of the deadlock prevention algorithm suggested.
                         if not was_reserved:
                             recursiv_reservation_worked = False
             tracks_to_be_reserved.append((train, track, edge))
         if recursiv_reservation_worked is False:
+            print(f"Recursiv reservation failed for Train {train}")
             return False
         for i, (train_to_be_reserved, track, edge) in enumerate(tracks_to_be_reserved):
             track.reservations.append((train_to_be_reserved, edge))
             train_to_be_reserved.reserved_tracks.insert(
                 train_reservation_start + i, track
             )
-            print(f"Train: {train_to_be_reserved}, Track: {track}, Edge: {edge}")
         train.reserved_until_station_index += 1
         return True
 

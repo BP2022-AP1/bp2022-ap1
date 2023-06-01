@@ -34,7 +34,7 @@ class TrainBuilder:
 
         assert len(timetable) >= 2
 
-        route = self._get_first_route(timetable[0], timetable[1])
+        route, reservation_placeholder = self._get_first_route(timetable)
 
         if not route:
             return False
@@ -44,11 +44,13 @@ class TrainBuilder:
 
         self._updater.simulation_objects.append(train)
 
+        self.route_controller.reserve_for_initialized_train(reservation_placeholder, train)
+
         return True
 
-    def _get_first_route(self, from_platform: Platform, to_platform: Platform) -> str:
+    def _get_first_route(self, timetable: List[Platform]) -> str:
         return self.route_controller.set_spawn_fahrstrasse(
-            from_platform.edge, to_platform.edge
+            timetable
         )
 
     def _convert_timetable(self, timetable: List[str]):
