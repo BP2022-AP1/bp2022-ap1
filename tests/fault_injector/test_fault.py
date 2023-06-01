@@ -34,12 +34,18 @@ class TestFault:
         return configuration
 
     @pytest.fixture
-    def fault(self, configuration, event_bus, simulation_object_updater, interlocking):
+    def fault(
+        self,
+        configuration,
+        event_bus,
+        simulation_object_updater,
+        interlocking_disruptor,
+    ):
         return self.MockSpecialFault(
             configuration,
             event_bus,
             simulation_object_updater,
-            interlocking,
+            interlocking_disruptor,
         )
 
     def test_next_tick(self, fault: MockSpecialFault):

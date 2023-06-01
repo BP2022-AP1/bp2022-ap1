@@ -41,7 +41,7 @@ class TestScheduleBlockedFault:
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
@@ -49,7 +49,7 @@ class TestScheduleBlockedFault:
             event_bus=event_bus,
             spawner=spawner,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     # It would be better to test if trains spawn after inject_fault.

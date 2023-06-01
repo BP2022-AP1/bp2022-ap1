@@ -24,7 +24,7 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
         self.old_speed_limit = self.track.max_speed
         self.track.max_speed = self.configuration.new_speed_limit
 
-        self.interlocking.insert_track_speed_limit_changed(self.track)
+        self.interlocking_disruptor.insert_track_speed_limit_changed(self.track)
         self.event_bus.inject_track_speed_limit_fault(
             tick,
             self.configuration.id,
@@ -43,6 +43,6 @@ class TrackSpeedLimitFault(Fault, TrackMixIn):
             raise ValueError("TrackSpeedLimitFault not injected")
 
         self.track.max_speed = self.old_speed_limit
-        self.interlocking.insert_track_speed_limit_changed(self.track)
+        self.interlocking_disruptor.insert_track_speed_limit_changed(self.track)
 
         self.event_bus.resolve_track_speed_limit_fault(tick, self.configuration.id)

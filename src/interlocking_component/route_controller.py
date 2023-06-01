@@ -338,13 +338,10 @@ class RouteController(Component):
                 routes.append(route_candidate)
         return routes
 
-    # def check_all_fahrstrassen_for_failures(self):
-    #    """This method checks for all trains, if their fahrstrassen and routes are still valid."""
-    #    raise NotImplementedError()
-
     def recalculate_all_routes(self):
         """Recalculates the route for every train in the simulation"""
         self.routes_to_be_set = []
+        # self.routes_to_be_reserved
         trains: list[Train] = self.simulation_object_updating_component.trains
         for train in trains:
             self._free_fahrstrasse(train, train.route)

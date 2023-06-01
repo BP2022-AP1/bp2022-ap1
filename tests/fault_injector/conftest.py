@@ -57,7 +57,7 @@ class MockRouteController:
 
 
 @pytest.fixture
-def interlocking():
+def interlocking_disruptor():
     return IInterlockingDisruptor(MockRouteController())
 
 

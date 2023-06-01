@@ -38,13 +38,13 @@ class TestTrackBlockedFault:
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
     ):
         return TrackBlockedFault(
             configuration=track_blocked_fault_configuration,
             event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     def test_inject_track_blocked_fault(
@@ -58,7 +58,10 @@ class TestTrackBlockedFault:
     ):
         assert not track.blocked
         track_blocked_fault.inject_fault(tick)
-        assert track_blocked_fault.interlocking.route_controller.method_calls > 0
+        assert (
+            track_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 1
+        )
         assert track.blocked
 
     def test_resolve_track_blocked_fault(
@@ -72,7 +75,13 @@ class TestTrackBlockedFault:
     ):
         track_blocked_fault.inject_fault(tick)
         assert track.blocked
-        assert track_blocked_fault.interlocking.route_controller.method_calls > 0
+        assert (
+            track_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 1
+        )
         track_blocked_fault.resolve_fault(tick)
         assert not track.blocked
-        assert track_blocked_fault.interlocking.route_controller.method_calls > 1
+        assert (
+            track_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 2
+        )

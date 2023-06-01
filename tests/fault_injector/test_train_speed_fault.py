@@ -42,13 +42,13 @@ class TestTrainSpeedFault:
         train_speed_fault_configuration: TrainSpeedFaultConfiguration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
     ):
         return TrainSpeedFault(
             configuration=train_speed_fault_configuration,
             event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     @pytest.fixture
@@ -74,7 +74,9 @@ class TestTrainSpeedFault:
         train.train_type.max_speed = 100
         train_speed_fault.inject_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
-        assert train_speed_fault.interlocking.route_controller.method_calls > 0
+        assert (
+            train_speed_fault.interlocking_disruptor.route_controller.method_calls == 1
+        )
 
     def test_resolve_train_speed_fault(
         self,
@@ -91,10 +93,14 @@ class TestTrainSpeedFault:
         train.train_type.max_speed = 50
         train_speed_fault.inject_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
-        assert train_speed_fault.interlocking.route_controller.method_calls > 0
+        assert (
+            train_speed_fault.interlocking_disruptor.route_controller.method_calls == 1
+        )
         train_speed_fault.resolve_fault(tick=tick)
         assert train.train_type.max_speed == train_speed_fault.old_speed == 50
-        assert train_speed_fault.interlocking.route_controller.method_calls > 1
+        assert (
+            train_speed_fault.interlocking_disruptor.route_controller.method_calls == 2
+        )
 
     def test_resolve_train_not_in_simulation(
         self, tick, train_speed_fault: TrainSpeedFault, train: Train
