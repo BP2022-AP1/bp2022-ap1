@@ -1,4 +1,5 @@
 from os import path
+import os
 from typing import List
 
 import sumolib
@@ -98,7 +99,7 @@ class SimulationObjectUpdatingComponent(Component):
     def __init__(
         self,
         event_bus: EventBus = None,
-        sumo_configuration: str = None,
+        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new SimulationObjectUpdatingComponent.
 
@@ -153,6 +154,7 @@ class SimulationObjectUpdatingComponent(Component):
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)
         inputs = next(sumolib.xml.parse(self._sumo_configuration, "input"))
+        print(inputs)
         net_file = path.join(folder, inputs["net-file"][0].getAttribute("value"))
         additional_file = path.join(
             folder, inputs["additional-files"][0].getAttribute("value")

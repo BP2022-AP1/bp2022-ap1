@@ -16,6 +16,7 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
+from yaramo.topology import Topology
 
 
 class IInterlockingDisruptor:
@@ -96,7 +97,7 @@ class RouteController(Component):
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Route] = []
     tick: int = 0
-    topology = None
+    topology: Topology
 
     def __init__(
         self,
@@ -127,6 +128,8 @@ class RouteController(Component):
             for potentical_signal in self.simulation_object_updating_component.signals:
                 if yaramo_signal.name == potentical_signal.identifier:
                     signal = potentical_signal
+
+            assert signal is not None
 
             edges_into_signal = [
                 edge for edge in signal.edges if edge.to_node == signal
