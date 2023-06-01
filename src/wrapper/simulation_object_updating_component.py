@@ -1,3 +1,4 @@
+import os
 from os import path
 from typing import List
 
@@ -98,7 +99,7 @@ class SimulationObjectUpdatingComponent(Component):
     def __init__(
         self,
         event_bus: EventBus = None,
-        sumo_configuration: str = None,
+        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new SimulationObjectUpdatingComponent.
 
