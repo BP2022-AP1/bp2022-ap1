@@ -16,12 +16,15 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
+from src.interlocking_component.route_controller import RouteController
 
 
 class IInterlockingDisruptor:
     """This class is the Interface to inject faults into the interlocking
     as well as to notify the Interlocking faults that occur in other parts of the simulation.
     """
+
+    route_controller: RouteController = None
 
     def insert_track_blocked(self, track: Track):
         """This method is used to block a track and recalculate the routes of relevant trains.

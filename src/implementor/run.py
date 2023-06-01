@@ -112,7 +112,7 @@ def create_run(body, token):
     # The todo will be replaces in other PR when the interlocking component is implemented
     # pylint: disable=fixme
     # TODO: get real interlocking disruptor
-    interlocking_disruptor: IInterlockingDisruptor = None
+    interlocking_disruptor: IInterlockingDisruptor = IInterlockingDisruptor(route_controller)
     # pylint: enable=fixme
 
     train_spawner = TrainBuilder(object_updater, route_controller)
