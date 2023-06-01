@@ -70,9 +70,9 @@ class TestTrackSpeedLimitFault:
     ):
         track.max_speed = 100
         assert track.max_speed == 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick=tick)
+        track_speed_limit_fault.inject_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
+        assert track_speed_limit_fault.interlocking.method_calls > 0
 
     def test_resolve_track_speed_limit_fault(
         self,
@@ -86,8 +86,8 @@ class TestTrackSpeedLimitFault:
         # pylint: enable=unused-argument
     ):
         track.max_speed = 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick=tick)
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.resolve_fault(tick=tick)
+        track_speed_limit_fault.inject_fault(tick=tick)
+        assert track_speed_limit_fault.interlocking.method_calls > 0
+        track_speed_limit_fault.resolve_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.old_speed_limit
+        assert track_speed_limit_fault.interlocking.method_calls > 1

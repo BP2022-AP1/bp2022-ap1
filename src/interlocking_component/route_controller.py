@@ -25,13 +25,17 @@ class IInterlockingDisruptor:
 
     route_controller: "RouteController" = None
 
+    def __init__(self, route_controller: "RouteController"):
+        self.route_controller = route_controller
+
+    # pylint: disable=unused-argument
     def insert_track_blocked(self, track: Track):
         """This method is used to block a track and recalculate the routes of relevant trains.
 
         :param track: the blocked track
         :type track: Track
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_track_unblocked(self, track: Track):
         """This method is used to unblock a track and recalculate the routes of relevant trains.
@@ -39,7 +43,7 @@ class IInterlockingDisruptor:
         :param track: the unblocked track
         :type track: Track
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_platform_blocked(self, platform: Platform):
         """This method is used to block a platform and recalculate the routes
@@ -48,7 +52,7 @@ class IInterlockingDisruptor:
         :param platform: the blocked platform
         :type platform: Platform
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_platform_unblocked(self, platform: Platform):
         """This method is used to unblock a platform and recalculate the routes
@@ -57,7 +61,7 @@ class IInterlockingDisruptor:
         :param platform: the unblocked platform
         :type platform: Platform
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_track_speed_limit_changed(self, track: Track):
         """This method is used to notify the interlocking about a changed track speed limit,
@@ -66,7 +70,7 @@ class IInterlockingDisruptor:
         :param track: the track, which speedlimit changed
         :type track: Track
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_train_max_speed_changed(self, train: Train):
         """This method is used to notify the interlocking about a changed train speed limit,
@@ -75,7 +79,7 @@ class IInterlockingDisruptor:
         :param train: the train, which speed limit changed
         :type train: Train
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_train_priority_changed(self, train: Train):
         """This method is used to notify the interlocking about a changed train priority,
@@ -84,7 +88,9 @@ class IInterlockingDisruptor:
         :param train: the train, which priority changed
         :type train: Train
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
+
+    # pylint: enable=unused-argument
 
 
 class RouteController(Component):

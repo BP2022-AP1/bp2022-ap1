@@ -49,9 +49,16 @@ def event_bus(run):
     return bus
 
 
+class MockRouteController(IInterlockingDisruptor):
+    method_calls: int = 0
+
+    def recalculate_all_routes(self):
+        self.method_calls += 1
+
+
 @pytest.fixture
 def interlocking():
-    return IInterlockingDisruptor()
+    return IInterlockingDisruptor(route_controller=MockRouteController())
 
 
 @pytest.fixture

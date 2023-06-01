@@ -57,8 +57,8 @@ class TestTrackBlockedFault:
         combine_track_and_wrapper,
     ):
         assert not track.blocked
-        with pytest.raises(NotImplementedError):
-            track_blocked_fault.inject_fault(tick)
+        track_blocked_fault.inject_fault(tick)
+        assert track_blocked_fault.interlocking.method_calls > 0
         assert track.blocked
 
     def test_resolve_track_blocked_fault(
@@ -70,9 +70,9 @@ class TestTrackBlockedFault:
         # pylint: disable-next=unused-argument
         combine_track_and_wrapper,
     ):
-        with pytest.raises(NotImplementedError):
-            track_blocked_fault.inject_fault(tick)
+        track_blocked_fault.inject_fault(tick)
         assert track.blocked
-        with pytest.raises(NotImplementedError):
-            track_blocked_fault.resolve_fault(tick)
+        assert track_blocked_fault.interlocking.method_calls > 0
+        track_blocked_fault.resolve_fault(tick)
         assert not track.blocked
+        assert track_blocked_fault.interlocking.method_calls > 1

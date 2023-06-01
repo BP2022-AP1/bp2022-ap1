@@ -61,8 +61,8 @@ class TestPlatformBlockedFault:
         combine_platform_and_wrapper,
     ):
         assert not platform.blocked
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
+        platform_blocked_fault.inject_fault(tick)
+        assert platform_blocked_fault.interlocking.method_calls > 0
         assert platform.blocked
 
     def test_resolve_platform_blocked_fault(
@@ -74,9 +74,9 @@ class TestPlatformBlockedFault:
         # pylint: disable-next=unused-argument
         combine_platform_and_wrapper,
     ):
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
+        platform_blocked_fault.inject_fault(tick)
         assert platform.blocked
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.resolve_fault(tick)
+        assert platform_blocked_fault.interlocking.method_calls > 0
+        platform_blocked_fault.resolve_fault(tick)
+        assert platform_blocked_fault.interlocking.method_calls > 1
         assert not platform.blocked
