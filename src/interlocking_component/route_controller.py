@@ -103,7 +103,7 @@ class RouteController(Component):
         event_bus: EventBus,
         priority: int,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
-        path_name: str = os.path.join("data", "planpro", "schwarze_pumpe_v1.ppxml"),
+        path_name: str = os.getenv("PLANPRO_PATH"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
