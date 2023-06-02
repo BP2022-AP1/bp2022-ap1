@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from uuid import UUID
 
 from peewee import ForeignKeyField
 
@@ -10,7 +11,6 @@ from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
 from src.wrapper.train_builder import TrainBuilder
-from uuid import UUID
 
 
 class SpawnerConfiguration(SerializableBaseModel):
@@ -143,7 +143,6 @@ class Spawner(Component, ISpawnerDisruptor):
 
         :param schedule_id: The id of the schedule to block
         """
-        print(self._schedules.keys())
         self.get_schedule(schedule_id).block()
 
     def unblock_schedule(self, schedule_id: str):
