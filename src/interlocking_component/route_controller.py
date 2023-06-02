@@ -24,13 +24,19 @@ class IInterlockingDisruptor:
     as well as to notify the Interlocking faults that occur in other parts of the simulation.
     """
 
+    route_controller: "RouteController" = None
+
+    def __init__(self, route_controller: "RouteController"):
+        self.route_controller = route_controller
+
+    # pylint: disable=unused-argument
     def insert_track_blocked(self, track: Track):
         """This method is used to block a track and recalculate the routes of relevant trains.
 
         :param track: the blocked track
         :type track: Track
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_track_unblocked(self, track: Track):
         """This method is used to unblock a track and recalculate the routes of relevant trains.
@@ -38,7 +44,7 @@ class IInterlockingDisruptor:
         :param track: the unblocked track
         :type track: Track
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_platform_blocked(self, platform: Platform):
         """This method is used to block a platform and recalculate the routes
@@ -47,7 +53,7 @@ class IInterlockingDisruptor:
         :param platform: the blocked platform
         :type platform: Platform
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
     def insert_platform_unblocked(self, platform: Platform):
         """This method is used to unblock a platform and recalculate the routes
@@ -56,25 +62,27 @@ class IInterlockingDisruptor:
         :param platform: the unblocked platform
         :type platform: Platform
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
 
-    def insert_track_speed_limit_changed(self, track: Track):
-        """This method is used to notify the interlocking about a changed track speed limit,
-        so that it can recalculate the routing of relevant trains.
+    ####### This is not yet taken into account, comment in later #######
+    # def insert_track_speed_limit_changed(self, track: Track):
+    #     """This method is used to notify the interlocking about a changed track speed limit,
+    #     so that it can recalculate the routing of relevant trains.
+    #
+    #     :param track: the track, which speedlimit changed
+    #     :type track: Track
+    #     """
+    #     self.route_controller.recalculate_all_routes()
 
-        :param track: the track, which speedlimit changed
-        :type track: Track
-        """
-        raise NotImplementedError()
-
-    def insert_train_max_speed_changed(self, train: Train):
-        """This method is used to notify the interlocking about a changed train speed limit,
-        so that it can recalculate the routing of relevant trains.
-
-        :param train: the train, which speed limit changed
-        :type train: Train
-        """
-        raise NotImplementedError()
+    ####### This is not yet taken into account, comment in later #######
+    # def insert_train_max_speed_changed(self, train: Train):
+    #     """This method is used to notify the interlocking about a changed train speed limit,
+    #     so that it can recalculate the routing of relevant trains.
+    #
+    #     :param train: the train, which speed limit changed
+    #     :type train: Train
+    #     """
+    #     self.route_controller.recalculate_all_routes()
 
     def insert_train_priority_changed(self, train: Train):
         """This method is used to notify the interlocking about a changed train priority,
@@ -83,7 +91,9 @@ class IInterlockingDisruptor:
         :param train: the train, which priority changed
         :type train: Train
         """
-        raise NotImplementedError()
+        self.route_controller.recalculate_all_routes()
+
+    # pylint: enable=unused-argument
 
 
 class UninitializedTrain:
@@ -225,7 +235,7 @@ class RouteController(Component):
         """This method should be called when a train enters a new track_segment.
         It then checks if the train is near the end of his fahrstrasse and updates it, if necessary.
 
-        :param train: the train that may need a new fahrstasse
+        :param train: the train that may need a new fahrstrasse
         :type train: Train
         :param edge: the edge it just entered
         :type edge: Edge
@@ -485,6 +495,11 @@ class RouteController(Component):
                 routes.append(route_candidate)
         return routes
 
-    def check_all_fahrstrassen_for_failures(self):
-        """This method checks for all trains, if their fahrstrassen and routes are still valid."""
-        raise NotImplementedError()
+    def recalculate_all_routes(self):
+        """Recalculates the route for every train in the simulation"""
+        self.routes_to_be_set = []
+        # self.routes_to_be_reserved
+        trains: list[Train] = self.simulation_object_updating_component.trains
+        for train in trains:
+            self._free_fahrstrasse(train, train.route)
+            self.set_fahrstrasse(train, train.edge)
