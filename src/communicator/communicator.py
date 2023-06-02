@@ -75,6 +75,7 @@ class Communicator:
 
     def _run_with_gui(self):
         delay = os.getenv("SUMO_GUI_DELAY", 10)
+        time_to_teleport = os.getenv("SUMO_TIME_TO_TELEPORT", -1)
         traci.start(
             [
                 checkBinary("sumo-gui"),
@@ -84,6 +85,8 @@ class Communicator:
                 "--quit-on-end",
                 "--delay",
                 str(delay),
+                "--time-to-teleport",
+                str(time_to_teleport),
             ],
             port=self._port,
         )
@@ -112,7 +115,16 @@ class Communicator:
         """
 
         components = pickle.loads(components_pickle)
-        traci.start([checkBinary("sumo"), "-c", configuration], port=port)
+        time_to_teleport = os.getenv("SUMO_TIME_TO_TELEPORT", -1)
+        traci.start(
+            [
+                checkBinary("sumo"), 
+                "-c", 
+                configuration,
+                "--time-to-teleport",
+                str(time_to_teleport)
+            ], 
+            port=port)
 
         def update_state(max_tick: int, current_tick: int, sumo_running: bool):
             self.update_state(
