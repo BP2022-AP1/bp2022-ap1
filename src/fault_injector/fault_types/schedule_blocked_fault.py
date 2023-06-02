@@ -21,11 +21,11 @@ class ScheduleBlockedFault(Fault):
         configuration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         super().__init__(
-            configuration, event_bus, simulation_object_updater, interlocking
+            configuration, event_bus, simulation_object_updater, interlocking_disruptor
         )
         self.spawner = spawner
 
