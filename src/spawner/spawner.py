@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from uuid import UUID
 
 from peewee import ForeignKeyField
 
@@ -128,7 +127,7 @@ class Spawner(Component, ISpawnerDisruptor):
             schedule = schedule_subclass.from_schedule_configuration(
                 schedule_configuration
             )
-            self._schedules[schedule.id] = schedule
+            self._schedules[str(schedule.id)] = schedule
 
     def get_schedule(self, schedule_id: str) -> Schedule:
         """Returns the schedule with the given id.
@@ -136,18 +135,18 @@ class Spawner(Component, ISpawnerDisruptor):
         :param schedule_id: The id of the schedule.
         :return: The schedule.
         """
-        return self._schedules[schedule_id]
+        return self._schedules[str(schedule_id)]
 
     def block_schedule(self, schedule_id: str):
         """Blocks a schedule.
 
         :param schedule_id: The id of the schedule to block
         """
-        self._schedules[UUID(schedule_id)].block()
+        self._schedules[str(schedule_id)].block()
 
     def unblock_schedule(self, schedule_id: str):
         """Unblocks a schedule.
 
         :param schedule_id: The id of the schedule to unblock
         """
-        self._schedules[UUID(schedule_id)].unblock()
+        self._schedules[str(schedule_id)].unblock()
