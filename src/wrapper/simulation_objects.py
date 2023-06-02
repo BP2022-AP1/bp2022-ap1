@@ -869,7 +869,8 @@ class Train(SimulationObject):
                     assert self._edge.track == self.reserved_tracks[0]
                     if len(self.reserved_tracks) > 1:
                         assert (
-                            edge_id == self.reserved_tracks[1].reservations[0][1].identifier
+                            edge_id
+                            == self.reserved_tracks[1].reservations[0][1].identifier
                         )
                 except Exception as exc:
                     for track in self.reserved_tracks:
