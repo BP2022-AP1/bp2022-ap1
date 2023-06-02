@@ -25,7 +25,8 @@ class TrainSpeedFault(Fault, TrainMixIn):
         self.old_speed = self.train.train_type.max_speed
         self.train.train_type.max_speed = self.configuration.new_speed
 
-        self.interlocking_disruptor.insert_train_max_speed_changed(self.train)
+        # The following is currently not implemented, comment in later
+        # self.interlocking_disruptor.insert_train_max_speed_changed(self.train)
         self.event_bus.inject_train_speed_fault(
             tick,
             self.configuration.id,
@@ -47,5 +48,6 @@ class TrainSpeedFault(Fault, TrainMixIn):
             self.simulation_object_updater, self.train.identifier
         ):
             self.train.train_type.max_speed = self.old_speed
-            self.interlocking_disruptor.insert_train_max_speed_changed(self.train)
+            # The following is currently not implemented, comment in later
+            # self.interlocking_disruptor.insert_train_max_speed_changed(self.train)
         self.event_bus.resolve_train_speed_fault(tick, self.configuration.id)
