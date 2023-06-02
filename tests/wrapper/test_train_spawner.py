@@ -12,6 +12,9 @@ def test_spawn_train(spawner: Tuple[SimulationObjectUpdatingComponent, TrainBuil
 
     assert len(souc.trains) == 1
 
+    assert spawner[1].route_controller.reserve_for_initialized_train_count == 1
+    assert spawner[1].route_controller.set_spawn_fahrstrasse_count == 1
+
 
 def test_spawn_train_no_route(
     spawner: Tuple[SimulationObjectUpdatingComponent, TrainBuilder]

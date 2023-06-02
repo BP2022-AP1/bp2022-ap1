@@ -90,15 +90,14 @@ class UninitializedTrain:
     When the spawnroute is set, the train is not yet initialized.
     """
 
-    identifier: str = None
+    identifier: str = "/not_a_real_train"
     reserved_tracks: List[Track] = None
     station_index: int = 1
     reserved_until_station_index: int = 1
     timetable: List[Platform] = None
     route: str = None
 
-    def __init__(self, identifier: str, timetable: str):
-        self.identifier = identifier
+    def __init__(self, timetable: str):
         self.timetable = timetable
         self.reserved_tracks = []
 
@@ -195,14 +194,15 @@ class RouteController(Component):
         :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
         """
-        train_to_be_initialized = UninitializedTrain("/not_a_real_train", timetable)
+        train_to_be_initialized = UninitializedTrain(timetable)
         self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
         self, reservation_placeholder: UninitializedTrain, train: Train
     ):
-        """This method replaces a placeholder train with a train, that should be the one the reservations were held for.
+        """This method replaces a placeholder train with a train, 
+        that should be the one the reservations were held for.
 
         :param reservation_placeholder: The placeholder, that has reservations
         :param train: The train that will get those reservations
