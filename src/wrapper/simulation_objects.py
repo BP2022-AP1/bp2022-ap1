@@ -867,9 +867,10 @@ class Train(SimulationObject):
                 try:
                     assert self._edge.track.reservations[0][1] == self._edge
                     assert self._edge.track == self.reserved_tracks[0]
-                    assert (
-                        edge_id == self.reserved_tracks[1].reservations[0][1].identifier
-                    )
+                    if len(self.reserved_tracks) > 1:
+                        assert (
+                            edge_id == self.reserved_tracks[1].reservations[0][1].identifier
+                        )
                 except Exception as exc:
                     for track in self.reserved_tracks:
                         print(track.edges[0].identifier)
