@@ -867,11 +867,15 @@ class Train(SimulationObject):
                 try:
                     assert self._edge.track.reservations[0][1] == self._edge
                     assert self._edge.track == self.reserved_tracks[0]
-                    assert edge_id == self.reserved_tracks[1].reservations[0][1].identifier
+                    assert (
+                        edge_id == self.reserved_tracks[1].reservations[0][1].identifier
+                    )
                 except Exception as exc:
                     for track in self.reserved_tracks:
                         print(track.edges[0].identifier)
-                    raise ValueError(f"A Track was skipped: Old track: {self._edge.identifier}, new track: {edge_id}") from exc
+                    raise ValueError(
+                        f"A Track was skipped: Old track: {self._edge.identifier}, new track: {edge_id}"
+                    ) from exc
                 self._edge.track.reservations.pop(0)
                 self.reserved_tracks.pop(0)
 

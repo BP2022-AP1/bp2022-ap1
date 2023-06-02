@@ -118,13 +118,14 @@ class Communicator:
         time_to_teleport = os.getenv("SUMO_TIME_TO_TELEPORT", -1)
         traci.start(
             [
-                checkBinary("sumo"), 
-                "-c", 
+                checkBinary("sumo"),
+                "-c",
                 configuration,
                 "--time-to-teleport",
-                str(time_to_teleport)
-            ], 
-            port=port)
+                str(time_to_teleport),
+            ],
+            port=port,
+        )
 
         def update_state(max_tick: int, current_tick: int, sumo_running: bool):
             self.update_state(
