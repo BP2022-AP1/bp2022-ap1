@@ -210,8 +210,10 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 
 class MockRouteController:
     """Mock for the route controller"""
+
     reserve_for_initialized_train_count = 0
     set_spawn_fahrstrasse_count = 0
+
     def set_spawn_fahrstrasse(self, timetable: List[Platform]):
         reservation_placeholder = UninitializedTrain(timetable)
         start = timetable[0].edge
@@ -220,7 +222,7 @@ class MockRouteController:
             return (True, reservation_placeholder)
             # return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return (False, reservation_placeholder)
-    
+
     def reserve_for_initialized_train(
         self, reservation_placeholder: UninitializedTrain, train: Train
     ):

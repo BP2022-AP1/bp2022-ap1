@@ -204,7 +204,7 @@ class RouteController(Component):
     def reserve_for_initialized_train(
         self, reservation_placeholder: UninitializedTrain, train: Train
     ):
-        """This method replaces a placeholder train with a train, 
+        """This method replaces a placeholder train with a train,
         that should be the one the reservations were held for.
 
         :param reservation_placeholder: The placeholder, that has reservations
