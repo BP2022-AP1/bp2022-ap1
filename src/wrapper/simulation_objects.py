@@ -874,7 +874,10 @@ class Train(SimulationObject):
                     for track in self.reserved_tracks:
                         print(track.edges[0].identifier)
                     raise ValueError(
-                        f"A Track was skipped: Old track: {self._edge.identifier}, new track: {edge_id}"
+                        (
+                            "A Track was skipped: Old track: "
+                            f"{self._edge.identifier}, new track: {edge_id}"
+                        )
                     ) from exc
                 self._edge.track.reservations.pop(0)
                 self.reserved_tracks.pop(0)
