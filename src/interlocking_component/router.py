@@ -8,7 +8,7 @@ class Router:
 
     def get_route(self, start_edge: Edge, end_edge: Edge) -> List[Node]:
         """This method returns a route from a start edge to an end edge.
-        It returns a list of Sumo Nodes from the Signal the train is currently driving
+        It returns a list of Sumo Nodes from the Node behind the train
         toward to the Node right after the end edge.
 
         :param start_edge: The edge where the route will begin.

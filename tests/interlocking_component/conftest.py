@@ -14,6 +14,7 @@ from src.interlocking_component.interlocking_configuration import (
     InterlockingConfiguration,
 )
 from src.interlocking_component.route_controller import RouteController
+from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -326,3 +327,8 @@ def train_add(monkeypatch):
 
 
 # pylint: enable=invalid-name
+
+@pytest.fixture
+def router()-> Router:
+    router = Router()
+    return router
