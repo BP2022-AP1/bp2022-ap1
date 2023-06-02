@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  prod:
+    build:
+      context: .
+      dockerfile: ./compose/waitress/Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8090:8080"
+    env_file:
+      - .env.shared
+      - .env.secret
+    depends_on:
+      - postgresql
+      - celery-worker
+      - grafana
+
+  postgresql:
+    env_file:
+      - .env.secret
+
+  celery-worker:
+    env_file:
+      - .env.secret
+
+  grafana:
+    env_file:
+      - .env.secret
