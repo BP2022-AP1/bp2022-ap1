@@ -67,7 +67,7 @@ class IInterlockingDisruptor:
     # def insert_track_speed_limit_changed(self, track: Track):
     #     """This method is used to notify the interlocking about a changed track speed limit,
     #     so that it can recalculate the routing of relevant trains.
-# 
+    #
     #     :param track: the track, which speedlimit changed
     #     :type track: Track
     #     """
@@ -77,7 +77,7 @@ class IInterlockingDisruptor:
     # def insert_train_max_speed_changed(self, train: Train):
     #     """This method is used to notify the interlocking about a changed train speed limit,
     #     so that it can recalculate the routing of relevant trains.
-# 
+    #
     #     :param train: the train, which speed limit changed
     #     :type train: Train
     #     """
