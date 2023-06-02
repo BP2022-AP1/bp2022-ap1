@@ -498,7 +498,7 @@ class RouteController(Component):
     def recalculate_all_routes(self):
         """Recalculates the route for every train in the simulation"""
         self.routes_to_be_set = []
-        # self.routes_to_be_reserved
+        self.routes_to_be_reserved = []
         trains: list[Train] = self.simulation_object_updating_component.trains
         for train in trains:
             self._free_fahrstrasse(train, train.route)
