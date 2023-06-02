@@ -10,6 +10,7 @@ from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
 from src.wrapper.train_builder import TrainBuilder
+from uuid import UUID
 
 
 class SpawnerConfiguration(SerializableBaseModel):
@@ -135,18 +136,19 @@ class Spawner(Component, ISpawnerDisruptor):
         :param schedule_id: The id of the schedule.
         :return: The schedule.
         """
-        return self._schedules[schedule_id]
+        return self._schedules[UUID(schedule_id)]
 
     def block_schedule(self, schedule_id: str):
         """Blocks a schedule.
 
         :param schedule_id: The id of the schedule to block
         """
-        self._schedules[schedule_id].block()
+        print(self._schedules.keys())
+        self.get_schedule(schedule_id).block()
 
     def unblock_schedule(self, schedule_id: str):
         """Unblocks a schedule.
 
         :param schedule_id: The id of the schedule to unblock
         """
-        self._schedules[schedule_id].unblock()
+        self.get_schedule(schedule_id).unblock()
