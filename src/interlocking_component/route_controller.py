@@ -197,7 +197,7 @@ class RouteController(Component):
             if was_reserved:
                 self.routes_to_be_reserved.remove((route, train))
 
-    def set_spawn_fahrstrasse(self, timetable: List[Platform]) -> str:
+    def set_spawn_fahrstrasse(self, timetable: List[Platform]) -> Tuple[str, UninitializedTrain]:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
@@ -207,8 +207,11 @@ class RouteController(Component):
         :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route.
         """
+        print("JOOOOOO")
         train_to_be_initialized = UninitializedTrain(timetable)
+        print("JOOOOOO")
         self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
+        print("JOOOOOO")
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
@@ -268,6 +271,8 @@ class RouteController(Component):
 
         route_length = 0
 
+        print("Hallo?")
+
         for i, end_node_candidat in enumerate(new_route[2:], start=2):
             route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
 
@@ -283,6 +288,8 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
+
+                    print(interlocking_route.id)
 
                     is_reserved = self.check_if_route_is_reserved(new_route[:i], train)
 

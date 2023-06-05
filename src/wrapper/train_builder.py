@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Tuple
 
 import traci
 
-from src.interlocking_component.route_controller import RouteController
+from src.interlocking_component.route_controller import RouteController, UninitializedTrain
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -36,7 +36,10 @@ class TrainBuilder:
 
         route, reservation_placeholder = self._get_first_route(timetable)
 
+        print(route)
+
         if not route:
+            print("ufff")
             return False
 
         train = Train(identifier, timetable, train_type, self._updater, route_id=route)
@@ -50,7 +53,8 @@ class TrainBuilder:
 
         return True
 
-    def _get_first_route(self, timetable: List[Platform]) -> str:
+    def _get_first_route(self, timetable: List[Platform]) -> Tuple[str, UninitializedTrain]:
+        print("Ja also....")
         return self.route_controller.set_spawn_fahrstrasse(timetable)
 
     def _convert_timetable(self, timetable: List[str]):
