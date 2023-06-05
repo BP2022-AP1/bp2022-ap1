@@ -207,13 +207,10 @@ class RouteController(Component):
         :param timetable: The timetable of the train. The spawn fahrstrasse
         will lead from the first to the second platform on the list.
         :raises KeyError: The route could not be found in the interlocking.
-        :return: The id of the first SUMO Route.
+        :return: The id of the first SUMO Route and the placholder for reservations.
         """
-        print("JOOOOOO")
         train_to_be_initialized = UninitializedTrain(timetable)
-        print("JOOOOOO")
         self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
-        print("JOOOOOO")
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
@@ -273,8 +270,6 @@ class RouteController(Component):
 
         route_length = 0
 
-        print("Hallo?")
-
         for i, end_node_candidat in enumerate(new_route[2:], start=2):
             route_length += new_route[i - 1].get_edge_to(end_node_candidat).length
 
@@ -290,8 +285,6 @@ class RouteController(Component):
                     # so that the train waits in front of the next signal instead of disappearing.
                     # The Interlocking Route has the same id as the SUMO route.
                     train.route = interlocking_route.id
-
-                    print(interlocking_route.id)
 
                     is_reserved = self.check_if_route_is_reserved(new_route[:i], train)
 

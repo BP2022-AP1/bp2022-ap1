@@ -39,10 +39,7 @@ class TrainBuilder:
 
         route, reservation_placeholder = self._get_first_route(timetable)
 
-        print(route)
-
         if not route:
-            print("ufff")
             return False
 
         train = Train(identifier, timetable, train_type, self._updater, route_id=route)
@@ -59,7 +56,6 @@ class TrainBuilder:
     def _get_first_route(
         self, timetable: List[Platform]
     ) -> Tuple[str, UninitializedTrain]:
-        print("Ja also....")
         return self.route_controller.set_spawn_fahrstrasse(timetable)
 
     def _convert_timetable(self, timetable: List[str]):
