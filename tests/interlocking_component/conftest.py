@@ -272,7 +272,7 @@ def yaramo_point():
         with the same attributes, but not the functionality.
         """
 
-        point_id = "15bae"
+        point_id = "f7d38"
         state = None
 
     return PointMock()
@@ -285,7 +285,7 @@ def yaramo_signal():
         with the same attributes, but not the functionality.
         """
 
-        name = "74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen"
+        name = "94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in"
         state = None
 
     return SignalMock()
@@ -328,7 +328,8 @@ def train_add(monkeypatch):
 
 # pylint: enable=invalid-name
 
+
 @pytest.fixture
-def router()-> Router:
+def router() -> Router:
     router = Router()
     return router

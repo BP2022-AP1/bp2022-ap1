@@ -197,7 +197,9 @@ class RouteController(Component):
             if was_reserved:
                 self.routes_to_be_reserved.remove((route, train))
 
-    def set_spawn_fahrstrasse(self, timetable: List[Platform]) -> Tuple[str, UninitializedTrain]:
+    def set_spawn_fahrstrasse(
+        self, timetable: List[Platform]
+    ) -> Tuple[str, UninitializedTrain]:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
