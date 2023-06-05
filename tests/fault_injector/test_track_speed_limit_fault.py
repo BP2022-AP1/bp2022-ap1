@@ -39,14 +39,14 @@ class TestTrackSpeedLimitFault:
         self,
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
         event_bus: EventBus,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         simulation_object_updater: SimulationObjectUpdatingComponent,
     ):
         return TrackSpeedLimitFault(
             configuration=track_speed_limit_fault_configuration,
             event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     @pytest.fixture
@@ -70,9 +70,12 @@ class TestTrackSpeedLimitFault:
     ):
         track.max_speed = 100
         assert track.max_speed == 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick=tick)
+        track_speed_limit_fault.inject_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
+        # assert (
+        #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
+        #     == 1
+        # )
 
     def test_resolve_track_speed_limit_fault(
         self,
@@ -86,8 +89,14 @@ class TestTrackSpeedLimitFault:
         # pylint: enable=unused-argument
     ):
         track.max_speed = 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick=tick)
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.resolve_fault(tick=tick)
+        track_speed_limit_fault.inject_fault(tick=tick)
+        # assert (
+        #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
+        #     == 1
+        # )
+        track_speed_limit_fault.resolve_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.old_speed_limit
+        # assert (
+        #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
+        #     == 2
+        # )

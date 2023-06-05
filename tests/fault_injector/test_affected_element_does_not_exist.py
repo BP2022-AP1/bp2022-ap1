@@ -120,14 +120,14 @@ class TestAffectedElementDoesNotExist:
         fault_configuration: FaultConfiguration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         fault_type: Fault,
     ):
         return fault_type(
             configuration=fault_configuration,
             event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     def test_injection(self, tick, fault: Fault):
@@ -166,14 +166,14 @@ class TestAffectedElementDoesNotExistScheduleBlockedFault:
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
             configuration=schedule_blocked_fault_configuration,
             event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
             spawner=spawner,
         )
 

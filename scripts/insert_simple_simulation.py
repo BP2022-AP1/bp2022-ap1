@@ -16,7 +16,7 @@ with db.atomic():
         schedule_type="TrainSchedule",
         strategy_type="RegularScheduleStrategy",
         strategy_start_tick=100,
-        strategy_end_tick=10000,
+        strategy_end_tick=20000,
         train_schedule_train_type="regio",
         regular_strategy_frequency=3000,
     )
