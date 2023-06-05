@@ -22,7 +22,7 @@ class TrackBlockedFault(Fault, TrackMixIn):
         )
         self.track.blocked = True
 
-        self.interlocking.insert_track_blocked(self.track)
+        self.interlocking_disruptor.insert_track_blocked(self.track)
         self.event_bus.inject_track_blocked_fault(
             tick, self.configuration.id, self.track.identifier
         )
@@ -37,6 +37,6 @@ class TrackBlockedFault(Fault, TrackMixIn):
             raise ValueError("TrackBlockedFault not injected")
 
         self.track.blocked = False
-        self.interlocking.insert_track_unblocked(self.track)
+        self.interlocking_disruptor.insert_track_unblocked(self.track)
 
         self.event_bus.resolve_track_blocked_fault(tick, self.configuration.id)

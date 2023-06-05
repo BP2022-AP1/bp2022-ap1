@@ -38,13 +38,13 @@ class TestPlatformBlockedFault:
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
     ):
         return PlatformBlockedFault(
             configuration=platform_blocked_fault_configuration,
             event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     def test_inject_platform_blocked_fault(
@@ -57,8 +57,11 @@ class TestPlatformBlockedFault:
         combine_platform_and_wrapper,
     ):
         assert not platform.blocked
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
+        platform_blocked_fault.inject_fault(tick)
+        assert (
+            platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 1
+        )
         assert platform.blocked
 
     def test_resolve_platform_blocked_fault(
@@ -70,9 +73,15 @@ class TestPlatformBlockedFault:
         # pylint: disable-next=unused-argument
         combine_platform_and_wrapper,
     ):
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
+        platform_blocked_fault.inject_fault(tick)
         assert platform.blocked
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.resolve_fault(tick)
+        assert (
+            platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 1
+        )
+        platform_blocked_fault.resolve_fault(tick)
+        assert (
+            platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 2
+        )
         assert not platform.blocked

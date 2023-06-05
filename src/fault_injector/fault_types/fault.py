@@ -23,7 +23,7 @@ class Fault(ABC):
     configuration: FaultConfiguration
     event_bus: EventBus
     simulation_object_updater: SimulationObjectUpdatingComponent
-    interlocking: IInterlockingDisruptor
+    interlocking_disruptor: IInterlockingDisruptor
     strategy: FaultStrategy
 
     STRATEGY_CLASSES: dict[str, type] = {
@@ -36,13 +36,13 @@ class Fault(ABC):
         configuration,
         event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
     ):
         self.configuration = configuration
         self.strategy = self.create_strategy_from_configuration(configuration)
         self.event_bus = event_bus
         self.simulation_object_updater = simulation_object_updater
-        self.interlocking = interlocking
+        self.interlocking_disruptor = interlocking_disruptor
 
     def create_strategy_from_configuration(
         self, configuration: FaultConfiguration

@@ -182,8 +182,6 @@ class Signal(Node):
 
         self.state = Signal.State.HALT
 
-        print(self._incoming_index, self._controlled_lanes_count, self._incoming_edge)
-
     @property
     def state(self) -> "Signal.State":
         """Returns the current state of the signal
@@ -478,7 +476,8 @@ class Edge(SimulationObject):
 class Track(SimulationObject):
     "A track on which trains can drive both directions"
 
-    _edges: Tuple[Edge, Edge]
+    _edges = Tuple[Edge, Edge]
+    reservations: List[Tuple["Train", Edge]]
 
     @property
     def edges(self) -> Tuple[Edge, Edge]:
@@ -513,7 +512,7 @@ class Track(SimulationObject):
             self._edges = (edge2, edge1)
 
         super().__init__(identifier=self._edges[0].identifier)
-
+        self.reservations = []
         edge1.track = self
         edge2.track = self
 
@@ -742,7 +741,9 @@ class Train(SimulationObject):
     _timetable: List[Platform]
     _station_index: int = 0
     train_type: TrainType
-    station_index: int = 0
+    reserved_tracks: List[Track]
+    station_index: int = 1
+    reserved_until_station_index: int = 1
 
     @property
     def current_platform(self) -> Optional[Platform]:
@@ -848,6 +849,7 @@ class Train(SimulationObject):
 
         self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
         self._timetable = timetable
+        self.reserved_tracks = []
 
         if not from_simulator:
             self._add_to_simulation(identifier, train_type, route_id)
@@ -869,6 +871,26 @@ class Train(SimulationObject):
             and not edge_id[:1] == ":"
         ):
             if hasattr(self, "_edge"):
+                try:
+                    assert self._edge.track.reservations[0][1] == self._edge
+                    assert self._edge.track == self.reserved_tracks[0]
+                    if len(self.reserved_tracks) > 1:
+                        assert (
+                            edge_id
+                            == self.reserved_tracks[1].reservations[0][1].identifier
+                        )
+                except Exception as exc:
+                    for track in self.reserved_tracks:
+                        print(track.edges[0].identifier)
+                    raise ValueError(
+                        (
+                            "A Track was skipped: Old track: "
+                            f"{self._edge.identifier}, new track: {edge_id}"
+                        )
+                    ) from exc
+                self._edge.track.reservations.pop(0)
+                self.reserved_tracks.pop(0)
+
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
                 )
