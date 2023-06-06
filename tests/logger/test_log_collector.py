@@ -52,9 +52,24 @@ class TestLogCollector:
     def _departure_arrival_all_1_df(self):
         departure_arrival_df = pd.DataFrame(
             [
-                ["station_1", self.second_to_tick(10), self.second_to_tick(20), "ice_1_passenger"],
-                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_1_passenger"],
-                ["station_3", self.second_to_tick(50), self.second_to_tick(60), "ice_1_passenger"],
+                [
+                    "station_1",
+                    self.second_to_tick(10),
+                    self.second_to_tick(20),
+                    "ice_1_passenger",
+                ],
+                [
+                    "station_2",
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "ice_1_passenger",
+                ],
+                [
+                    "station_3",
+                    self.second_to_tick(50),
+                    self.second_to_tick(60),
+                    "ice_1_passenger",
+                ],
             ],
             columns=["station_id", "arrival_tick", "departure_tick", "train_id"],
         )
@@ -125,17 +140,57 @@ class TestLogCollector:
         departure_arrival_df = pd.DataFrame(
             [
                 ["station_1", None, self.second_to_tick(20), "cargo_4_cargo"],
-                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "cargo_4_cargo"],
+                [
+                    "station_2",
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "cargo_4_cargo",
+                ],
                 ["station_3", self.second_to_tick(50), None, "cargo_4_cargo"],
-                ["station_1", self.second_to_tick(10), self.second_to_tick(20), "ice_1_passenger"],
-                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_1_passenger"],
-                ["station_3", self.second_to_tick(50), self.second_to_tick(60), "ice_1_passenger"],
-                ["station_1", self.second_to_tick(10), self.second_to_tick(20), "ice_2_passenger"],
-                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_2_passenger"],
+                [
+                    "station_1",
+                    self.second_to_tick(10),
+                    self.second_to_tick(20),
+                    "ice_1_passenger",
+                ],
+                [
+                    "station_2",
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "ice_1_passenger",
+                ],
+                [
+                    "station_3",
+                    self.second_to_tick(50),
+                    self.second_to_tick(60),
+                    "ice_1_passenger",
+                ],
+                [
+                    "station_1",
+                    self.second_to_tick(10),
+                    self.second_to_tick(20),
+                    "ice_2_passenger",
+                ],
+                [
+                    "station_2",
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "ice_2_passenger",
+                ],
                 ["station_3", self.second_to_tick(50), None, "ice_2_passenger"],
                 ["station_1", None, self.second_to_tick(20), "ice_3_passenger"],
-                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_3_passenger"],
-                ["station_3", self.second_to_tick(50), self.second_to_tick(60), "ice_3_passenger"],
+                [
+                    "station_2",
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "ice_3_passenger",
+                ],
+                [
+                    "station_3",
+                    self.second_to_tick(50),
+                    self.second_to_tick(60),
+                    "ice_3_passenger",
+                ],
             ],
             columns=["station_id", "arrival_tick", "departure_tick", "train_id"],
         )
@@ -216,17 +271,65 @@ class TestLogCollector:
         return pd.DataFrame(
             [
                 [None, self.second_to_tick(20), "section_1", None, "cargo_4_cargo"],
-                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "cargo_4_cargo"],
+                [
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "section_2",
+                    20.5,
+                    "cargo_4_cargo",
+                ],
                 [self.second_to_tick(50), None, "section_3", 30.5, "cargo_4_cargo"],
-                [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5, "ice_1_passenger"],
-                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "ice_1_passenger"],
-                [self.second_to_tick(50), self.second_to_tick(60), "section_3", 30.5, "ice_1_passenger"],
-                [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5, "ice_2_passenger"],
-                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "ice_2_passenger"],
+                [
+                    self.second_to_tick(10),
+                    self.second_to_tick(20),
+                    "section_1",
+                    10.5,
+                    "ice_1_passenger",
+                ],
+                [
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "section_2",
+                    20.5,
+                    "ice_1_passenger",
+                ],
+                [
+                    self.second_to_tick(50),
+                    self.second_to_tick(60),
+                    "section_3",
+                    30.5,
+                    "ice_1_passenger",
+                ],
+                [
+                    self.second_to_tick(10),
+                    self.second_to_tick(20),
+                    "section_1",
+                    10.5,
+                    "ice_2_passenger",
+                ],
+                [
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "section_2",
+                    20.5,
+                    "ice_2_passenger",
+                ],
                 [self.second_to_tick(50), None, "section_3", 30.5, "ice_2_passenger"],
                 [None, self.second_to_tick(20), "section_1", None, "ice_3_passenger"],
-                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "ice_3_passenger"],
-                [self.second_to_tick(50), self.second_to_tick(60), "section_3", 30.5, "ice_3_passenger"],
+                [
+                    self.second_to_tick(30),
+                    self.second_to_tick(40),
+                    "section_2",
+                    20.5,
+                    "ice_3_passenger",
+                ],
+                [
+                    self.second_to_tick(50),
+                    self.second_to_tick(60),
+                    "section_3",
+                    30.5,
+                    "ice_3_passenger",
+                ],
             ],
             columns=[
                 "enter_tick",
@@ -517,15 +620,9 @@ class TestLogCollector:
     def setup_logs_spawn_trains(event_bus):
         event_bus.spawn_train(TestLogCollector.second_to_tick(4600), "Kohlezug 1")
         event_bus.spawn_train(TestLogCollector.second_to_tick(7300), "Kohlezug 2")
-        event_bus.spawn_train(
-            TestLogCollector.second_to_tick(10900), "Kohlezug 3"
-        )
-        event_bus.spawn_train(
-            TestLogCollector.second_to_tick(13600), "Kohlezug 4"
-        )
-        event_bus.spawn_train(
-            TestLogCollector.second_to_tick(17200), "Kohlezug 5"
-        )
+        event_bus.spawn_train(TestLogCollector.second_to_tick(10900), "Kohlezug 3")
+        event_bus.spawn_train(TestLogCollector.second_to_tick(13600), "Kohlezug 4")
+        event_bus.spawn_train(TestLogCollector.second_to_tick(17200), "Kohlezug 5")
 
     @staticmethod
     def setup_faults(

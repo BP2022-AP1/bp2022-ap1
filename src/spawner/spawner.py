@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 import os
+from abc import ABC, abstractmethod
 
 from peewee import ForeignKeyField
 
@@ -79,7 +79,7 @@ class Spawner(Component, ISpawnerDisruptor):
     train_spawner: TrainBuilder
 
     PRIORITY: int = 0  # This will need to be set to the correct value
-    TICKS_PER_SECOND: int = int(1 / float(os.environ['TICK_LENGTH']))
+    TICKS_PER_SECOND: int = int(1 / float(os.environ["TICK_LENGTH"]))
 
     def next_tick(self, tick: int):
         """Called to announce that the next tick occurred.

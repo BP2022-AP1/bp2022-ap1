@@ -17,7 +17,7 @@ from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
 from src.wrapper.simulation_objects import Edge, Node, Platform, Track, Train
-from yaramo.topology import Topology
+
 
 class IInterlockingDisruptor:
     """This class is the Interface to inject faults into the interlocking

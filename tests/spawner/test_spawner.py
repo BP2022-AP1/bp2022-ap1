@@ -1,5 +1,5 @@
-from itertools import zip_longest
 import os
+from itertools import zip_longest
 
 from src.implementor.models import SimulationConfiguration
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
@@ -69,7 +69,7 @@ class TestSpawner:
     ):
         # pylint: disable=protected-access
 
-        ticks_per_second = int(1 / float(os.environ['TICK_LENGTH']))
+        ticks_per_second = int(1 / float(os.environ["TICK_LENGTH"]))
         regular_spawn_seconds = list(
             range(
                 strategy_start_time, strategy_end_time + 1, regular_strategy_frequency

@@ -624,7 +624,9 @@ class DataScience:
                     strategy.start_datetime,
                     strategy.start_datetime
                     + timedelta(
-                        seconds=self.tick_to_second(strategy.end_tick - strategy.start_tick)
+                        seconds=self.tick_to_second(
+                            strategy.end_tick - strategy.start_tick
+                        )
                     ),
                 )
             ]

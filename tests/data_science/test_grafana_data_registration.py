@@ -167,7 +167,7 @@ class TestGrafanaDataRegistration:
         _run_id: str,
         event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
-            spawn_events_by_run_id_df,
+        spawn_events_by_run_id_df,
     ):
         TestLogCollector.setup_logs_spawn_trains(event_bus)
         assert_frame_equal(

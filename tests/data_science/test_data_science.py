@@ -173,10 +173,7 @@ class TestDataScience:
     ):
         TestLogCollector.setup_logs_spawn_trains(event_bus)
         spawn_events_df = data_science.get_spawn_events_by_run_id(run)
-        assert_frame_equal(
-            spawn_events_by_run_id_df,
-            spawn_events_df
-        )
+        assert_frame_equal(spawn_events_by_run_id_df, spawn_events_df)
         # will be fixed by Lucas after Schedules are updated with new tick system
 
     def test_get_verkehrsmenge_by_run_id(
