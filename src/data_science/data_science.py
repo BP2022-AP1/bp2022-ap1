@@ -754,12 +754,8 @@ class DataScience:
         out_df = out_df.groupby(["station_id", "train_id"]).agg(
             lambda x: self._get_window_size_from_values_threshold(x, threshold)
         )
-        out_df["arrival_second"] = out_df["arrival_tick"].apply(
-            self.tick_to_second
-        )
-        out_df["departure_second"] = out_df["departure_tick"].apply(
-            self.tick_to_second
-        )
+        out_df["arrival_second"] = out_df["arrival_tick"].apply(self.tick_to_second)
+        out_df["departure_second"] = out_df["departure_tick"].apply(self.tick_to_second)
         del out_df["arrival_tick"]
         del out_df["departure_tick"]
         out_df.reset_index(inplace=True)
