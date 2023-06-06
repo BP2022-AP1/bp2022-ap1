@@ -744,10 +744,11 @@ def mock_train_spawner() -> object:
         def spawn_train(
             self, identifier: str, timetable: list[str], train_type: str
         ) -> bool:
+            ticks_per_second = int(1.0 / float(os.environ["TICK_LENGTH"]))
             if self._next_spawn_fails:
                 self._next_spawn_fails = False
                 return False
-            self.spawn_history.append(int(identifier.split("_")[1]))
+            self.spawn_history.append(int(identifier.split("_")[1]) // ticks_per_second)
             self.identifier = identifier
             self.timetable = timetable
             self.train_type = train_type

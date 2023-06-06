@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from src.schedule.train_schedule import TrainSchedule
@@ -19,9 +21,13 @@ class TestTrainSchedule:
         mock_train_spawner: object,
         strategy_start_time: int,
     ):
+        ticks_per_second = int(1.0 / float(os.environ["TICK_LENGTH"]))
         regular_train_schedule.maybe_spawn(strategy_start_time, spawner)
         assert mock_train_spawner.spawn_history == [strategy_start_time]
-        assert mock_train_spawner.identifier.split("_")[1] == str(strategy_start_time)
+        assert (
+            int(mock_train_spawner.identifier.split("_")[1]) // ticks_per_second
+            == strategy_start_time
+        )
 
     def test_delayed_spawning(
         self,

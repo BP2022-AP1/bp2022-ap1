@@ -1,3 +1,5 @@
+import os
+
 from src.schedule.schedule import Schedule, SpawnerProtocol
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
@@ -5,6 +7,8 @@ from src.schedule.schedule_strategy import ScheduleStrategy
 
 class TrainSchedule(Schedule):
     """A schedule for spawning SUMO trains."""
+
+    TICKS_PER_SECOND = int(1.0 / float(os.environ["TICK_LENGTH"]))
 
     @classmethod
     def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
@@ -55,5 +59,7 @@ class TrainSchedule(Schedule):
         :return: if the spawning was successful
         """
         return spawner.train_spawner.spawn_train(
-            f"{self.id}_{seconds}_{self.train_type}", self.platform_ids, self.train_type
+            f"{self.id}_{seconds * self.TICKS_PER_SECOND}_{self.train_type}",
+            self.platform_ids,
+            self.train_type,
         )
