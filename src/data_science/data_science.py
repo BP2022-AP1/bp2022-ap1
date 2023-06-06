@@ -1,4 +1,5 @@
 # pylint: disable=too-many-lines
+import os
 from datetime import timedelta
 from uuid import UUID
 
@@ -28,6 +29,22 @@ class DataScience:
     def __init__(self):
         """Constructor of DataScience"""
         self.log_collector = LogCollector()
+
+    @staticmethod
+    def tick_to_second(tick: int) -> int:
+        """Converts a tick to a second
+        :param tick: tick
+        :return: second
+        """
+        return int(float(tick) * float(os.getenv("TICK_LENGTH")))
+
+    @staticmethod
+    def tick_to_second_float(tick: float | int) -> float:
+        """Converts a tick to a second
+        :param tick: tick
+        :return: second
+        """
+        return float(tick) * float(os.getenv("TICK_LENGTH"))
 
     # -- HELPERS
 
@@ -87,13 +104,13 @@ class DataScience:
         """
         faults_df = self.log_collector.get_faults(run_id)
         faults_df["begin_time"] = faults_df["begin_tick"].apply(
-            lambda x: x + self.unix_2020
+            lambda x: self.tick_to_second(x) + self.unix_2020
         )
         faults_df["begin_time"] = faults_df["begin_time"].apply(
             pd.to_datetime, unit="s"
         )
         faults_df["end_time"] = faults_df["end_tick"].apply(
-            lambda x: x + self.unix_2020
+            lambda x: self.tick_to_second(x) + self.unix_2020
         )
         faults_df["end_time"] = faults_df["end_time"].apply(pd.to_datetime, unit="s")
         faults_df.set_index("begin_time", inplace=True)
@@ -146,10 +163,10 @@ class DataScience:
         )
         if tick == start_tick:
             return 0
-        return source_df["dist"].sum() * 3600 / (tick - start_tick)
+        return source_df["dist"].sum() * 3600 / self.tick_to_second(tick - start_tick)
 
     def get_verkehrsleistung_time_by_run_id(
-        self, run_id: UUID, delta_tick=10
+        self, run_id: UUID, delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH")))
     ) -> pd.DataFrame:
         """Returns the accumulated verkehrsleistung over a period of time by a given run id
         :param run_id: the run id
@@ -181,7 +198,7 @@ class DataScience:
             axis=1,
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["tick"].apply(
-            lambda x: x + self.unix_2020
+            lambda x: self.tick_to_second(x) + self.unix_2020
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["time"].apply(
             pd.to_datetime, unit="s"
@@ -232,10 +249,10 @@ class DataScience:
             tick,
             delta_tick,
         )
-        return np.sum(dist_series) * 3600 / delta_tick
+        return np.sum(dist_series) * 3600 / self.tick_to_second(delta_tick)
 
     def get_verkehrsleistung_momentarily_time_by_run_id(
-        self, run_id: UUID, delta_tick=10
+        self, run_id: UUID, delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH")))
     ) -> pd.DataFrame:
         """Returns the momentary verkehrsleistung over a period of time by a given run id
         :param run_id: the run id
@@ -266,7 +283,9 @@ class DataScience:
             axis=1,
         )
 
-        verkehrsleistung_df["time"] = verkehrsleistung_df["tick"] + self.unix_2020
+        verkehrsleistung_df["time"] = verkehrsleistung_df["tick"].apply(
+            lambda x: self.tick_to_second(x) + self.unix_2020
+        )
         verkehrsleistung_df["time"] = pd.to_datetime(
             verkehrsleistung_df["time"], unit="s"
         )
@@ -290,7 +309,9 @@ class DataScience:
         :return: dataframe of spawn events
         """
         spawn_df = self.log_collector.get_train_spawn_times(run_id)
-        spawn_df["time"] = spawn_df["tick"] + self.unix_2020
+        spawn_df["time"] = spawn_df["tick"].apply(
+            lambda x: self.tick_to_second(x) + self.unix_2020
+        )
         spawn_df["time"] = pd.to_datetime(spawn_df["time"], unit="s")
         spawn_df["title"] = f"Spawn train {spawn_df['train_id']}"
         spawn_df["title"] = spawn_df["train_id"].apply(lambda e: f"Spawn train {e}")
@@ -367,7 +388,7 @@ class DataScience:
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["block_section_length"]
             * 3600
-            / (row["leave_tick"] - row["enter_tick"]),
+            / self.tick_to_second(row["leave_tick"] - row["enter_tick"]),
             axis=1,
         )
         grouped_df["enter_tick"] = grouped_df["enter_tick"].astype("Int64")
@@ -431,11 +452,15 @@ class DataScience:
         del out_df["station_id"]
         del out_df["train_id"]
         out_df = list(out_df.mean())
-        out_df = pd.Series([out_df[0], out_df[1]])
+        out_df = pd.Series(
+            [self.tick_to_second_float(out_df[0]), self.tick_to_second_float(out_df[1])]
+        )
         return out_df
 
     def get_window_size_time_by_config_id(
-        self, config_id: UUID, delta_tick=10
+        self,
+        config_id: UUID,
+        delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH"))),
     ) -> pd.DataFrame:
         """Returns the arrival and departure window sizes over time by a given config id
         :param config_id: config id
@@ -469,7 +494,7 @@ class DataScience:
         window_size_df.loc[:, "arrival_size"] = result_df.iloc[:, 0]
         window_size_df.loc[:, "departure_size"] = result_df.iloc[:, 1]
         window_size_df["time"] = window_size_df["tick"].apply(
-            lambda x: x + self.unix_2020
+            lambda x: self.tick_to_second(x) + self.unix_2020
         )
         window_size_df["time"] = window_size_df["time"].apply(pd.to_datetime, unit="s")
         window_size_df.set_index("time", inplace=True)
@@ -499,7 +524,9 @@ class DataScience:
         return np.array(verkehrsleistung).mean()
 
     def get_verkehrsleistung_time_by_config_id(
-        self, config_id: UUID, delta_tick=10
+        self,
+        config_id: UUID,
+        delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH"))),
     ) -> pd.DataFrame:
         """Returns the verkehrsleistung time by a given config id
         :param config_id: config id
@@ -531,7 +558,7 @@ class DataScience:
             axis=1,
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["tick"].apply(
-            lambda x: x + self.unix_2020
+            lambda x: self.tick_to_second(x) + self.unix_2020
         )
         verkehrsleistung_df["time"] = verkehrsleistung_df["time"].apply(
             pd.to_datetime, unit="s"
@@ -596,25 +623,27 @@ class DataScience:
                 for entry in smard_api.get_data(
                     strategy.start_datetime,
                     strategy.start_datetime
-                    + timedelta(seconds=strategy.end_time - strategy.start_time),
+                    + timedelta(
+                        seconds=self.tick_to_second(strategy.end_tick - strategy.start_tick)
+                    ),
                 )
             ]
             data = map(strategy.compute_coal_consumption, data)
             smard_df = pd.DataFrame(data, columns=[f"value_{config_id}"])
 
-            smard_df["tick"] = pd.Series(
-                range(strategy.start_time, strategy.end_time + 1, 900), dtype="int64"
+            smard_df["second"] = pd.Series(
+                range(strategy.start_tick, strategy.end_tick + 1, 900), dtype="int64"
             )
-            smard_df.set_index("tick", inplace=True)
+            smard_df.set_index("second", inplace=True)
 
             dataframes.append(smard_df)
 
         result_df = pd.concat(dataframes)
         result_df.reset_index(inplace=True)
-        result_df["time"] = result_df["tick"] + self.unix_2020
+        result_df["time"] = result_df["second"].apply(lambda x: x + self.unix_2020)
         result_df["time"] = pd.to_datetime(result_df["time"], unit="s")
         result_df.set_index("time", inplace=True)
-        del result_df["tick"]
+        del result_df["second"]
         return result_df
 
     def get_coal_spawn_events_by_config_id(
@@ -631,7 +660,9 @@ class DataScience:
         for strategy, config_id in demand_schedule_strategies:
             spawn_df = pd.DataFrame({"tick": strategy.spawn_seconds})
             spawn_df["title"] = f"Spawn train from config {config_id}"
-            spawn_df["time"] = spawn_df["tick"] + self.unix_2020
+            spawn_df["time"] = spawn_df["tick"].apply(
+                lambda x: self.tick_to_second(x) + self.unix_2020
+            )
             spawn_df["time"] = pd.to_datetime(spawn_df["time"], unit="s")
 
             dataframes.append(spawn_df)
@@ -693,8 +724,12 @@ class DataScience:
         out_df = out_df.groupby("train_type").apply(
             lambda data: pd.Series(
                 {
-                    "arrival_tick": data["arrival_tick"].mean(),
-                    "departure_tick": data["departure_tick"].mean(),
+                    "arrival_tick": self.tick_to_second_float(
+                        data["arrival_tick"].mean()
+                    ),
+                    "departure_tick": self.tick_to_second_float(
+                        data["departure_tick"].mean()
+                    ),
                 }
             )
         )
@@ -723,7 +758,18 @@ class DataScience:
         out_df = out_df.groupby(["station_id", "train_id"]).agg(
             lambda x: self._get_window_size_from_values_threshold(x, threshold)
         )
+        out_df["arrival_second"] = out_df["arrival_tick"].apply(
+            lambda x: self.tick_to_second(x)
+        )
+        out_df["departure_second"] = out_df["departure_tick"].apply(
+            lambda x: self.tick_to_second(x)
+        )
+        del out_df["arrival_tick"]
+        del out_df["departure_tick"]
         out_df.reset_index(inplace=True)
+
+        out_df["arrival_second"] = out_df["arrival_second"].astype("Int64")
+        out_df["departure_second"] = out_df["departure_second"].astype("Int64")
         return out_df
 
     def get_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
@@ -747,8 +793,8 @@ class DataScience:
         grouped_df = block_section_times_df.groupby("run_id").agg(
             {"enter_tick": "min", "leave_tick": "max", "block_section_length": "sum"}
         )
-        grouped_df["enter_tick"] = grouped_df["enter_tick"].astype("Int64")
-        grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
+        del grouped_df["enter_tick"]
+        del grouped_df["leave_tick"]
         return grouped_df
 
     def get_verkehrsleistung_by_config_id(self, config_id: UUID) -> pd.DataFrame:
@@ -772,10 +818,12 @@ class DataScience:
             {"leave_tick": "max", "block_section_length": "sum"}
         )
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
+            lambda row: row["block_section_length"]
+            * 3600
+            / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
-        grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
+        del grouped_df["leave_tick"]
         return grouped_df
 
     def get_average_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
@@ -866,7 +914,9 @@ class DataScience:
         grouped_df = pd.concat([grouped_df, all_df], axis=0)
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
+            lambda row: row["block_section_length"]
+            * 3600
+            / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
         grouped_df = grouped_df.groupby(["train_type"]).agg(
@@ -965,7 +1015,16 @@ class DataScience:
             by=["config_id", "config_readable_id", "train_type"], inplace=True
         )
         out_df.reset_index(inplace=True)
+        out_df["arrival_second"] = out_df["arrival_tick"].apply(
+            lambda tick: self.tick_to_second_float(tick)
+        )
+        out_df["departure_second"] = out_df["departure_tick"].apply(
+            lambda tick: self.tick_to_second_float(tick)
+        )
         del out_df["config_id"]
+        del out_df["arrival_tick"]
+        del out_df["departure_tick"]
+
         return out_df
 
     def get_verkehrsmenge_by_multi_config(
@@ -1086,7 +1145,9 @@ class DataScience:
         grouped_df = pd.concat([grouped_df, all_df], axis=0)
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"] * 3600 / row["leave_tick"],
+            lambda row: row["block_section_length"]
+            * 3600
+            / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
         grouped_df = grouped_df.groupby(

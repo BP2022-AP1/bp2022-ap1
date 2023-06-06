@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
@@ -16,6 +18,10 @@ class TestLogCollector:
     def setup_method(self):
         pass
 
+    @staticmethod
+    def second_to_tick(second: int) -> int:
+        return int(float(second) / float(os.getenv("TICK_LENGTH")))
+
     @pytest.fixture
     def _run_ids(self, run: Run):
         return [run.readable_id]
@@ -27,7 +33,11 @@ class TestLogCollector:
     @pytest.fixture
     def _departure_arrival_1_df(self):
         departure_arrival_df = pd.DataFrame(
-            [["station_1", 10, 20], ["station_2", 30, 40], ["station_3", 50, 60]],
+            [
+                ["station_1", self.second_to_tick(10), self.second_to_tick(20)],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40)],
+                ["station_3", self.second_to_tick(50), self.second_to_tick(60)],
+            ],
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departure_arrival_df["arrival_tick"] = departure_arrival_df[
@@ -42,9 +52,9 @@ class TestLogCollector:
     def _departure_arrival_all_1_df(self):
         departure_arrival_df = pd.DataFrame(
             [
-                ["station_1", 10, 20, "ice_1_passenger"],
-                ["station_2", 30, 40, "ice_1_passenger"],
-                ["station_3", 50, 60, "ice_1_passenger"],
+                ["station_1", self.second_to_tick(10), self.second_to_tick(20), "ice_1_passenger"],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_1_passenger"],
+                ["station_3", self.second_to_tick(50), self.second_to_tick(60), "ice_1_passenger"],
             ],
             columns=["station_id", "arrival_tick", "departure_tick", "train_id"],
         )
@@ -59,7 +69,11 @@ class TestLogCollector:
     @pytest.fixture
     def _departure_arrival_2_df(self):
         departure_arrival_df = pd.DataFrame(
-            [["station_1", 10, 20], ["station_2", 30, 40], ["station_3", 50, None]],
+            [
+                ["station_1", self.second_to_tick(10), self.second_to_tick(20)],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40)],
+                ["station_3", self.second_to_tick(50), None],
+            ],
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departure_arrival_df["arrival_tick"] = departure_arrival_df[
@@ -73,7 +87,11 @@ class TestLogCollector:
     @pytest.fixture
     def _departure_arrival_3_df(self):
         departure_arrival_df = pd.DataFrame(
-            [["station_1", None, 20], ["station_2", 30, 40], ["station_3", 50, 60]],
+            [
+                ["station_1", None, self.second_to_tick(20)],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40)],
+                ["station_3", self.second_to_tick(50), self.second_to_tick(60)],
+            ],
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departure_arrival_df["arrival_tick"] = departure_arrival_df[
@@ -87,7 +105,11 @@ class TestLogCollector:
     @pytest.fixture
     def _departure_arrival_4_df(self):
         departure_arrival_df = pd.DataFrame(
-            [["station_1", None, 20], ["station_2", 30, 40], ["station_3", 50, None]],
+            [
+                ["station_1", None, self.second_to_tick(20)],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40)],
+                ["station_3", self.second_to_tick(50), None],
+            ],
             columns=["station_id", "arrival_tick", "departure_tick"],
         )
         departure_arrival_df["arrival_tick"] = departure_arrival_df[
@@ -102,18 +124,18 @@ class TestLogCollector:
     def _departure_arrival_all_df(self):
         departure_arrival_df = pd.DataFrame(
             [
-                ["station_1", None, 20, "cargo_4_cargo"],
-                ["station_2", 30, 40, "cargo_4_cargo"],
-                ["station_3", 50, None, "cargo_4_cargo"],
-                ["station_1", 10, 20, "ice_1_passenger"],
-                ["station_2", 30, 40, "ice_1_passenger"],
-                ["station_3", 50, 60, "ice_1_passenger"],
-                ["station_1", 10, 20, "ice_2_passenger"],
-                ["station_2", 30, 40, "ice_2_passenger"],
-                ["station_3", 50, None, "ice_2_passenger"],
-                ["station_1", None, 20, "ice_3_passenger"],
-                ["station_2", 30, 40, "ice_3_passenger"],
-                ["station_3", 50, 60, "ice_3_passenger"],
+                ["station_1", None, self.second_to_tick(20), "cargo_4_cargo"],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "cargo_4_cargo"],
+                ["station_3", self.second_to_tick(50), None, "cargo_4_cargo"],
+                ["station_1", self.second_to_tick(10), self.second_to_tick(20), "ice_1_passenger"],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_1_passenger"],
+                ["station_3", self.second_to_tick(50), self.second_to_tick(60), "ice_1_passenger"],
+                ["station_1", self.second_to_tick(10), self.second_to_tick(20), "ice_2_passenger"],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_2_passenger"],
+                ["station_3", self.second_to_tick(50), None, "ice_2_passenger"],
+                ["station_1", None, self.second_to_tick(20), "ice_3_passenger"],
+                ["station_2", self.second_to_tick(30), self.second_to_tick(40), "ice_3_passenger"],
+                ["station_3", self.second_to_tick(50), self.second_to_tick(60), "ice_3_passenger"],
             ],
             columns=["station_id", "arrival_tick", "departure_tick", "train_id"],
         )
@@ -129,9 +151,9 @@ class TestLogCollector:
     def _enter_leave_block_section_1_df(self):
         return pd.DataFrame(
             [
-                [10, 20, "section_1", 10.5],
-                [30, 40, "section_2", 20.5],
-                [50, 60, "section_3", 30.5],
+                [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5],
+                [self.second_to_tick(50), self.second_to_tick(60), "section_3", 30.5],
             ],
             columns=[
                 "enter_tick",
@@ -145,9 +167,9 @@ class TestLogCollector:
     def _enter_leave_block_section_2_df(self):
         return pd.DataFrame(
             [
-                [10, 20, "section_1", 10.5],
-                [30, 40, "section_2", 20.5],
-                [50, None, "section_3", 30.5],
+                [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5],
+                [self.second_to_tick(50), None, "section_3", 30.5],
             ],
             columns=[
                 "enter_tick",
@@ -161,9 +183,9 @@ class TestLogCollector:
     def _enter_leave_block_section_3_df(self):
         return pd.DataFrame(
             [
-                [None, 20, "section_1", None],
-                [30, 40, "section_2", 20.5],
-                [50, 60, "section_3", 30.5],
+                [None, self.second_to_tick(20), "section_1", None],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5],
+                [self.second_to_tick(50), self.second_to_tick(60), "section_3", 30.5],
             ],
             columns=[
                 "enter_tick",
@@ -177,9 +199,9 @@ class TestLogCollector:
     def _enter_leave_block_section_4_df(self):
         return pd.DataFrame(
             [
-                [None, 20, "section_1", None],
-                [30, 40, "section_2", 20.5],
-                [50, None, "section_3", 30.5],
+                [None, self.second_to_tick(20), "section_1", None],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5],
+                [self.second_to_tick(50), None, "section_3", 30.5],
             ],
             columns=[
                 "enter_tick",
@@ -193,18 +215,18 @@ class TestLogCollector:
     def _enter_leave_block_section_all_df(self):
         return pd.DataFrame(
             [
-                [None, 20, "section_1", None, "cargo_4_cargo"],
-                [30, 40, "section_2", 20.5, "cargo_4_cargo"],
-                [50, None, "section_3", 30.5, "cargo_4_cargo"],
-                [10, 20, "section_1", 10.5, "ice_1_passenger"],
-                [30, 40, "section_2", 20.5, "ice_1_passenger"],
-                [50, 60, "section_3", 30.5, "ice_1_passenger"],
-                [10, 20, "section_1", 10.5, "ice_2_passenger"],
-                [30, 40, "section_2", 20.5, "ice_2_passenger"],
-                [50, None, "section_3", 30.5, "ice_2_passenger"],
-                [None, 20, "section_1", None, "ice_3_passenger"],
-                [30, 40, "section_2", 20.5, "ice_3_passenger"],
-                [50, 60, "section_3", 30.5, "ice_3_passenger"],
+                [None, self.second_to_tick(20), "section_1", None, "cargo_4_cargo"],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "cargo_4_cargo"],
+                [self.second_to_tick(50), None, "section_3", 30.5, "cargo_4_cargo"],
+                [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5, "ice_1_passenger"],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "ice_1_passenger"],
+                [self.second_to_tick(50), self.second_to_tick(60), "section_3", 30.5, "ice_1_passenger"],
+                [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5, "ice_2_passenger"],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "ice_2_passenger"],
+                [self.second_to_tick(50), None, "section_3", 30.5, "ice_2_passenger"],
+                [None, self.second_to_tick(20), "section_1", None, "ice_3_passenger"],
+                [self.second_to_tick(30), self.second_to_tick(40), "section_2", 20.5, "ice_3_passenger"],
+                [self.second_to_tick(50), self.second_to_tick(60), "section_3", 30.5, "ice_3_passenger"],
             ],
             columns=[
                 "enter_tick",
@@ -217,107 +239,293 @@ class TestLogCollector:
 
     @staticmethod
     def setup_departure_arrival_1(event_bus):
-        event_bus.arrival_train(10, "ice_1_passenger", "station_1")
-        event_bus.departure_train(20, "ice_1_passenger", "station_1")
-        event_bus.arrival_train(30, "ice_1_passenger", "station_2")
-        event_bus.departure_train(40, "ice_1_passenger", "station_2")
-        event_bus.arrival_train(50, "ice_1_passenger", "station_3")
-        event_bus.departure_train(60, "ice_1_passenger", "station_3")
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(10), "ice_1_passenger", "station_1"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(20), "ice_1_passenger", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(30), "ice_1_passenger", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(40), "ice_1_passenger", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(50), "ice_1_passenger", "station_3"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(60), "ice_1_passenger", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_2(event_bus):
-        event_bus.arrival_train(10, "ice_2_passenger", "station_1")
-        event_bus.departure_train(20, "ice_2_passenger", "station_1")
-        event_bus.arrival_train(30, "ice_2_passenger", "station_2")
-        event_bus.departure_train(40, "ice_2_passenger", "station_2")
-        event_bus.arrival_train(50, "ice_2_passenger", "station_3")
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(10), "ice_2_passenger", "station_1"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(20), "ice_2_passenger", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(30), "ice_2_passenger", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(40), "ice_2_passenger", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(50), "ice_2_passenger", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_3(event_bus):
-        event_bus.departure_train(20, "ice_3_passenger", "station_1")
-        event_bus.arrival_train(30, "ice_3_passenger", "station_2")
-        event_bus.departure_train(40, "ice_3_passenger", "station_2")
-        event_bus.arrival_train(50, "ice_3_passenger", "station_3")
-        event_bus.departure_train(60, "ice_3_passenger", "station_3")
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(20), "ice_3_passenger", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(30), "ice_3_passenger", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(40), "ice_3_passenger", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(50), "ice_3_passenger", "station_3"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(60), "ice_3_passenger", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_4(event_bus):
-        event_bus.departure_train(20, "cargo_4_cargo", "station_1")
-        event_bus.arrival_train(30, "cargo_4_cargo", "station_2")
-        event_bus.departure_train(40, "cargo_4_cargo", "station_2")
-        event_bus.arrival_train(50, "cargo_4_cargo", "station_3")
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(20), "cargo_4_cargo", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(30), "cargo_4_cargo", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(40), "cargo_4_cargo", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(50), "cargo_4_cargo", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_1_alt(event_bus):
-        event_bus.arrival_train(20, "ice_1_passenger", "station_1")
-        event_bus.departure_train(30, "ice_1_passenger", "station_1")
-        event_bus.arrival_train(40, "ice_1_passenger", "station_2")
-        event_bus.departure_train(50, "ice_1_passenger", "station_2")
-        event_bus.arrival_train(60, "ice_1_passenger", "station_3")
-        event_bus.departure_train(70, "ice_1_passenger", "station_3")
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(20), "ice_1_passenger", "station_1"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(30), "ice_1_passenger", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(40), "ice_1_passenger", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(50), "ice_1_passenger", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(60), "ice_1_passenger", "station_3"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(70), "ice_1_passenger", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_2_alt(event_bus):
-        event_bus.arrival_train(20, "ice_2_passenger", "station_1")
-        event_bus.departure_train(30, "ice_2_passenger", "station_1")
-        event_bus.arrival_train(40, "ice_2_passenger", "station_2")
-        event_bus.departure_train(50, "ice_2_passenger", "station_2")
-        event_bus.arrival_train(60, "ice_2_passenger", "station_3")
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(20), "ice_2_passenger", "station_1"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(30), "ice_2_passenger", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(40), "ice_2_passenger", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(50), "ice_2_passenger", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(60), "ice_2_passenger", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_3_alt(event_bus):
-        event_bus.departure_train(30, "ice_3_passenger", "station_1")
-        event_bus.arrival_train(40, "ice_3_passenger", "station_2")
-        event_bus.departure_train(50, "ice_3_passenger", "station_2")
-        event_bus.arrival_train(60, "ice_3_passenger", "station_3")
-        event_bus.departure_train(70, "ice_3_passenger", "station_3")
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(30), "ice_3_passenger", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(40), "ice_3_passenger", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(50), "ice_3_passenger", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(60), "ice_3_passenger", "station_3"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(70), "ice_3_passenger", "station_3"
+        )
 
     @staticmethod
     def setup_departure_arrival_4_alt(event_bus):
-        event_bus.departure_train(30, "cargo_4_cargo", "station_1")
-        event_bus.arrival_train(40, "cargo_4_cargo", "station_2")
-        event_bus.departure_train(50, "cargo_4_cargo", "station_2")
-        event_bus.arrival_train(60, "cargo_4_cargo", "station_3")
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(30), "cargo_4_cargo", "station_1"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(40), "cargo_4_cargo", "station_2"
+        )
+        event_bus.departure_train(
+            TestLogCollector.second_to_tick(50), "cargo_4_cargo", "station_2"
+        )
+        event_bus.arrival_train(
+            TestLogCollector.second_to_tick(60), "cargo_4_cargo", "station_3"
+        )
 
     @staticmethod
     def setup_enter_leave_block_section_1(event_bus):
-        event_bus.train_enter_block_section(10, "ice_1_passenger", "section_1", 10.5)
-        event_bus.train_leave_block_section(20, "ice_1_passenger", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_1_passenger", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_1_passenger", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_1_passenger", "section_3", 30.5)
-        event_bus.train_leave_block_section(60, "ice_1_passenger", "section_3", 30.5)
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(10),
+            "ice_1_passenger",
+            "section_1",
+            10.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(20),
+            "ice_1_passenger",
+            "section_1",
+            10.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(30),
+            "ice_1_passenger",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(40),
+            "ice_1_passenger",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(50),
+            "ice_1_passenger",
+            "section_3",
+            30.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(60),
+            "ice_1_passenger",
+            "section_3",
+            30.5,
+        )
 
     @staticmethod
     def setup_enter_leave_block_section_2(event_bus):
-        event_bus.train_enter_block_section(10, "ice_2_passenger", "section_1", 10.5)
-        event_bus.train_leave_block_section(20, "ice_2_passenger", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_2_passenger", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_2_passenger", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_2_passenger", "section_3", 30.5)
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(10),
+            "ice_2_passenger",
+            "section_1",
+            10.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(20),
+            "ice_2_passenger",
+            "section_1",
+            10.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(30),
+            "ice_2_passenger",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(40),
+            "ice_2_passenger",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(50),
+            "ice_2_passenger",
+            "section_3",
+            30.5,
+        )
 
     @staticmethod
     def setup_enter_leave_block_section_3(event_bus):
-        event_bus.train_leave_block_section(20, "ice_3_passenger", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "ice_3_passenger", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "ice_3_passenger", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "ice_3_passenger", "section_3", 30.5)
-        event_bus.train_leave_block_section(60, "ice_3_passenger", "section_3", 30.5)
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(20),
+            "ice_3_passenger",
+            "section_1",
+            10.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(30),
+            "ice_3_passenger",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(40),
+            "ice_3_passenger",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(50),
+            "ice_3_passenger",
+            "section_3",
+            30.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(60),
+            "ice_3_passenger",
+            "section_3",
+            30.5,
+        )
 
     @staticmethod
     def setup_enter_leave_block_section_4(event_bus):
-        event_bus.train_leave_block_section(20, "cargo_4_cargo", "section_1", 10.5)
-        event_bus.train_enter_block_section(30, "cargo_4_cargo", "section_2", 20.5)
-        event_bus.train_leave_block_section(40, "cargo_4_cargo", "section_2", 20.5)
-        event_bus.train_enter_block_section(50, "cargo_4_cargo", "section_3", 30.5)
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(20),
+            "cargo_4_cargo",
+            "section_1",
+            10.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(30),
+            "cargo_4_cargo",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_leave_block_section(
+            TestLogCollector.second_to_tick(40),
+            "cargo_4_cargo",
+            "section_2",
+            20.5,
+        )
+        event_bus.train_enter_block_section(
+            TestLogCollector.second_to_tick(50),
+            "cargo_4_cargo",
+            "section_3",
+            30.5,
+        )
 
     @staticmethod
     def setup_logs_spawn_trains(event_bus):
-        event_bus.spawn_train(4600, "Kohlezug 1")
-        event_bus.spawn_train(7300, "Kohlezug 2")
-        event_bus.spawn_train(10900, "Kohlezug 3")
-        event_bus.spawn_train(13600, "Kohlezug 4")
-        event_bus.spawn_train(17200, "Kohlezug 5")
+        event_bus.spawn_train(TestLogCollector.second_to_tick(4600), "Kohlezug 1")
+        event_bus.spawn_train(TestLogCollector.second_to_tick(7300), "Kohlezug 2")
+        event_bus.spawn_train(
+            TestLogCollector.second_to_tick(10900), "Kohlezug 3"
+        )
+        event_bus.spawn_train(
+            TestLogCollector.second_to_tick(13600), "Kohlezug 4"
+        )
+        event_bus.spawn_train(
+            TestLogCollector.second_to_tick(17200), "Kohlezug 5"
+        )
 
     @staticmethod
     def setup_faults(
@@ -330,40 +538,67 @@ class TestLogCollector:
         train_speed_fault_configuration,
     ):
         event_bus.inject_platform_blocked_fault(
-            10, platform_blocked_fault_configuration, "station_1"
+            TestLogCollector.second_to_tick(10),
+            platform_blocked_fault_configuration,
+            "station_1",
         )
         event_bus.resolve_platform_blocked_fault(
-            20, platform_blocked_fault_configuration
+            TestLogCollector.second_to_tick(20),
+            platform_blocked_fault_configuration,
         )
 
         event_bus.inject_track_blocked_fault(
-            10, track_blocked_fault_configuration, "section_1"
+            TestLogCollector.second_to_tick(10),
+            track_blocked_fault_configuration,
+            "section_1",
         )
-        event_bus.resolve_track_blocked_fault(20, track_blocked_fault_configuration)
+        event_bus.resolve_track_blocked_fault(
+            TestLogCollector.second_to_tick(20), track_blocked_fault_configuration
+        )
 
         event_bus.inject_track_speed_limit_fault(
-            10, track_speed_limit_fault_configuration, "section_1", "100", "10"
+            TestLogCollector.second_to_tick(10),
+            track_speed_limit_fault_configuration,
+            "section_1",
+            "100",
+            "10",
         )
         event_bus.resolve_track_speed_limit_fault(
-            20, track_speed_limit_fault_configuration
+            TestLogCollector.second_to_tick(20),
+            track_speed_limit_fault_configuration,
         )
 
         event_bus.inject_schedule_blocked_fault(
-            10, schedule_blocked_fault_configuration, "ice_1_passenger"
+            TestLogCollector.second_to_tick(10),
+            schedule_blocked_fault_configuration,
+            "ice_1_passenger",
         )
         event_bus.resolve_schedule_blocked_fault(
-            20, schedule_blocked_fault_configuration
+            TestLogCollector.second_to_tick(20),
+            schedule_blocked_fault_configuration,
         )
 
         event_bus.inject_train_prio_fault(
-            10, train_prio_fault_configuration, "ice_1_passenger", "2", "1"
+            TestLogCollector.second_to_tick(10),
+            train_prio_fault_configuration,
+            "ice_1_passenger",
+            "2",
+            "1",
         )
-        event_bus.resolve_train_prio_fault(20, train_prio_fault_configuration)
+        event_bus.resolve_train_prio_fault(
+            TestLogCollector.second_to_tick(20), train_prio_fault_configuration
+        )
 
         event_bus.inject_train_speed_fault(
-            10, train_speed_fault_configuration, "ice_1_passenger", "100", "10"
+            TestLogCollector.second_to_tick(10),
+            train_speed_fault_configuration,
+            "ice_1_passenger",
+            "100",
+            "10",
         )
-        event_bus.resolve_train_speed_fault(20, train_speed_fault_configuration)
+        event_bus.resolve_train_speed_fault(
+            TestLogCollector.second_to_tick(20), train_speed_fault_configuration
+        )
 
     def test_get_trains(self, trains, event_bus, log_collector: LogCollector):
         self.setup_departure_arrival_1(event_bus)
