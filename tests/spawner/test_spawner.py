@@ -1,6 +1,5 @@
 from itertools import zip_longest
-
-import pytest
+import os
 
 from src.implementor.models import SimulationConfiguration
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
@@ -63,30 +62,31 @@ class TestSpawner:
         self,
         spawner: Spawner,
         mock_train_spawner: object,
-        strategy_start_tick: int,
-        strategy_end_tick: int,
+        strategy_start_time: int,
+        strategy_end_time: int,
         regular_strategy_frequency: int,
-        random_strategy_spawn_ticks: list[int],
+        random_strategy_spawn_seconds: list[int],
     ):
         # pylint: disable=protected-access
 
-        regular_spawn_ticks = list(
+        ticks_per_second = int(1 / float(os.environ['TICK_LENGTH']))
+        regular_spawn_seconds = list(
             range(
-                strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
+                strategy_start_time, strategy_end_time + 1, regular_strategy_frequency
             )
         )
-        spawn_ticks = sorted(regular_spawn_ticks + random_strategy_spawn_ticks)
-        for tick in range(strategy_start_tick, strategy_end_tick + 1):
-            spawner.next_tick(tick)
+        spawn_seconds = sorted(regular_spawn_seconds + random_strategy_spawn_seconds)
+        for seconds in range(strategy_start_time, strategy_end_time + 1):
+            spawner.next_tick(seconds * ticks_per_second)
         assert all(
             len(schedule._seconds_to_be_spawned) == 0
             for schedule in spawner._schedules.values()
         )
         assert all(
-            history_tick == spawn_tick
-            for history_tick, spawn_tick in zip_longest(
+            history_time == spawn_time
+            for history_time, spawn_time in zip_longest(
                 sorted(mock_train_spawner.spawn_history),
-                sorted(spawn_ticks),
+                sorted(spawn_seconds),
                 fillvalue=None,
             )
         )

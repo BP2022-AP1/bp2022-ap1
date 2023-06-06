@@ -121,7 +121,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         train_accumulator = 0.0
         for quarter_hour, entry in enumerate(data):
             train_accumulator += self._compute_trains_to_spawn(entry.value)
-            second = int(quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_second)
+            second = int(quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_time)
             while train_accumulator >= 1.0:
                 self.spawn_seconds.append(second)
                 train_accumulator -= 1.0

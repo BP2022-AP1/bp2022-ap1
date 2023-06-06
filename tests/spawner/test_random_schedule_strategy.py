@@ -9,12 +9,12 @@ class TestRandomScheduleStrategy:
     def setup_method(self):
         pass
 
-    def test_spawn_at_right_ticks(
+    def test_spawn_at_right_times(
         self,
         random_strategy: RandomScheduleStrategy,
-        random_strategy_spawn_ticks: list[int],
-        strategy_end_tick: int,
+        random_strategy_spawn_seconds: list[int],
+        strategy_end_time: int,
     ):
-        for tick in range(0, strategy_end_tick * 2):
-            if random_strategy.should_spawn(tick):
-                assert tick in random_strategy_spawn_ticks
+        for seconds in range(0, strategy_end_time * 2):
+            if random_strategy.should_spawn(seconds):
+                assert seconds in random_strategy_spawn_seconds

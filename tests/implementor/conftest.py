@@ -64,12 +64,12 @@ def interlocking_configuration():
 
 
 @pytest.fixture
-def strategy_start_tick() -> int:
+def strategy_start_time() -> int:
     return 1000
 
 
 @pytest.fixture
-def strategy_end_tick() -> int:
+def strategy_end_time() -> int:
     return 2000
 
 
@@ -80,13 +80,13 @@ def regular_strategy_frequency() -> int:
 
 @pytest.fixture
 def regular_train_schedule_data(
-    strategy_start_tick: int, strategy_end_tick: int, regular_strategy_frequency: int
+    strategy_start_time: int, strategy_end_time: int, regular_strategy_frequency: int
 ) -> dict[str, any]:
     return {
         "schedule_type": "TrainSchedule",
         "strategy_type": "RegularScheduleStrategy",
-        "strategy_start_tick": strategy_start_tick,
-        "strategy_end_tick": strategy_end_tick,
+        "strategy_start_time": strategy_start_time,
+        "strategy_end_time": strategy_end_time,
         "train_schedule_train_type": "passenger",
         "regular_strategy_frequency": regular_strategy_frequency,
     }
