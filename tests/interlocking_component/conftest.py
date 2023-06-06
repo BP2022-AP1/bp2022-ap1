@@ -331,5 +331,4 @@ def train_add(monkeypatch):
 
 @pytest.fixture
 def router() -> Router:
-    router = Router()
-    return router
+    return Router()
