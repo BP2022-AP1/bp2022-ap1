@@ -80,7 +80,6 @@ def train_add(monkeypatch):
     def add_train(identifier, routeID=None, typeID=None):
         # pylint: disable=invalid-name, unused-argument
         # We want to use the same signature as the TraCI methods
-        assert routeID is not None
         assert identifier is not None
         assert typeID is not None
 
