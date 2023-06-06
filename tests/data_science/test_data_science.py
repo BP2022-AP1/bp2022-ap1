@@ -161,8 +161,6 @@ class TestDataScience:
         coal_demand_df = data_science.get_coal_demand_by_run_id(run)
         assert (1345, 1) == coal_demand_df.shape
         assert_frame_equal(coal_demand_df.head(10), coal_demand_by_run_id_head_df)
-        # will be fixed by Lucas after Schedules are updated with new tick system
-        assert False
 
     def test_get_spawn_events_by_run_id(
         self,
@@ -238,8 +236,6 @@ class TestDataScience:
         )
         assert (1345, 1) == coal_demand_df.shape
         assert_frame_equal(coal_demand_df.head(10), coal_demand_by_run_id_head_df)
-        # will be fixed by Lucas after Schedules are updated with new tick system
-        assert False
 
     def test_get_coal_spawn_events_by_config_id(
         self,
@@ -266,8 +262,6 @@ class TestDataScience:
         assert_frame_equal(
             spawn_events_df.head(5), spawn_coal_events_by_config_id_head_df
         )
-        # will be fixed by Lucas after Schedules are updated with new tick system
-        assert False
 
     def test_get_window_size_time_by_config_id(
         self,

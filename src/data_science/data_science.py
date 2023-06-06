@@ -623,18 +623,14 @@ class DataScience:
                 for entry in smard_api.get_data(
                     strategy.start_datetime,
                     strategy.start_datetime
-                    + timedelta(
-                        seconds=self.tick_to_second(
-                            strategy.end_tick - strategy.start_tick
-                        )
-                    ),
+                    + timedelta(seconds=strategy.end_time - strategy.start_time),
                 )
             ]
             data = map(strategy.compute_coal_consumption, data)
             smard_df = pd.DataFrame(data, columns=[f"value_{config_id}"])
 
             smard_df["second"] = pd.Series(
-                range(strategy.start_tick, strategy.end_tick + 1, 900), dtype="int64"
+                range(strategy.start_time, strategy.end_time + 1, 900), dtype="int64"
             )
             smard_df.set_index("second", inplace=True)
 
@@ -660,11 +656,9 @@ class DataScience:
         )
         dataframes = []
         for strategy, config_id in demand_schedule_strategies:
-            spawn_df = pd.DataFrame({"tick": strategy.spawn_seconds})
+            spawn_df = pd.DataFrame({"second": strategy.spawn_seconds})
             spawn_df["title"] = f"Spawn train from config {config_id}"
-            spawn_df["time"] = spawn_df["tick"].apply(
-                lambda x: self.tick_to_second(x) + self.unix_2020
-            )
+            spawn_df["time"] = spawn_df["second"].apply(lambda x: x + self.unix_2020)
             spawn_df["time"] = pd.to_datetime(spawn_df["time"], unit="s")
 
             dataframes.append(spawn_df)
@@ -672,7 +666,7 @@ class DataScience:
         result_df = pd.concat(dataframes)
         result_df.reset_index(inplace=True)
         result_df.set_index("time", inplace=True)
-        del result_df["tick"]
+        del result_df["second"]
         del result_df["index"]
         return result_df
 
@@ -761,10 +755,10 @@ class DataScience:
             lambda x: self._get_window_size_from_values_threshold(x, threshold)
         )
         out_df["arrival_second"] = out_df["arrival_tick"].apply(
-            lambda x: self.tick_to_second(x)
+            self.tick_to_second
         )
         out_df["departure_second"] = out_df["departure_tick"].apply(
-            lambda x: self.tick_to_second(x)
+            self.tick_to_second
         )
         del out_df["arrival_tick"]
         del out_df["departure_tick"]
@@ -1018,10 +1012,10 @@ class DataScience:
         )
         out_df.reset_index(inplace=True)
         out_df["arrival_second"] = out_df["arrival_tick"].apply(
-            lambda tick: self.tick_to_second_float(tick)
+            self.tick_to_second_float
         )
         out_df["departure_second"] = out_df["departure_tick"].apply(
-            lambda tick: self.tick_to_second_float(tick)
+            self.tick_to_second_float
         )
         del out_df["config_id"]
         del out_df["arrival_tick"]
