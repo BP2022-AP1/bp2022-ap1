@@ -78,6 +78,9 @@ def vehicle_route(monkeypatch):
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, routeID=None, typeID=None):
+        # pylint: disable=invalid-name, unused-argument
+        # We want to use the same signature as the TraCI methods
+        assert routeID is not None
         assert identifier is not None
         assert typeID is not None
 
@@ -100,6 +103,8 @@ def train_subscribe(monkeypatch):
 @pytest.fixture
 def train_route_update(monkeypatch):
     def update_route(identifier, routeID=None):
+        # pylint: disable=invalid-name
+        # We want to use the same signature as the TraCI methods
         assert identifier is not None
         assert routeID is not None
 
@@ -162,8 +167,8 @@ def train(
 @pytest.fixture
 def track(edge1, edge1_re):
     track = Track(edge1, edge1_re)
-    edge1._track = track
-    edge1_re._track = track
+    #    edge1._track = track
+    #    edge1_re._track = track
     return track
 
 
@@ -227,7 +232,6 @@ class MockRouteController:
         self.set_spawn_fahrstrasse_count += 1
         if start.identifier == "58ab8-1":
             return (True, reservation_placeholder)
-            # return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return (False, reservation_placeholder)
 
     def reserve_for_initialized_train(

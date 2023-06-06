@@ -26,7 +26,8 @@ class TestSignal:
         assert signal.state == Signal.State.HALT
 
     def test_update_state(self, traffic_update):
-        # pylint: disable=unused-argument
+        # pylint: disable=unused-argument, protected-access
+        # We need to set the signal properties manually
         signal = Signal("fancy-signal")
         signal._incoming_index = 0
         signal._controlled_lanes_count = 2
@@ -37,7 +38,7 @@ class TestSignal:
     def test_accessible_edges(self):
         signal = Signal("fancy-signal")
         edges = [Edge("a"), Edge("b"), Edge("a-re"), Edge("b-re")]
-        signal._edges = edges
+        signal._edges = edges  # pylint: disable=protected-access
 
         assert signal.get_edges_accessible_from(edges[0]) == [edges[1], edges[3]]
 
@@ -65,7 +66,7 @@ class TestNode:
 
     def test_accessible_edges(self):
         node = Node("fancy-node")
-        node._edges = ["a", "b"]  # type: ignore
+        node._edges = ["a", "b"]  # type: ignore # pylint: disable=protected-access
 
         assert node.get_edges_accessible_from("a") == ["a", "b"]
 
@@ -98,6 +99,7 @@ class TestTrack:
         assert track.blocked
 
     def test_length(self, track: Track):
+        # pylint: disable=protected-access
         track.edges[0]._length = 100
         track.edges[1]._length = 100
         assert track.length == track.edges[0].length == track.edges[1].length
