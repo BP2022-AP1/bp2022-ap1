@@ -108,12 +108,12 @@ def train_route_update(monkeypatch):
 
 @pytest.fixture
 def edge1() -> Edge:
-    return Edge("cfc57-0")
+    return Edge("a57e4-0")
 
 
 @pytest.fixture
 def edge1_re() -> Edge:
-    return Edge("cfc57-0-re")
+    return Edge("a57e4-0-re")
 
 
 @pytest.fixture
@@ -123,7 +123,10 @@ def edge2() -> Edge:
 
 @pytest.fixture
 def train(
-    train_add, train_route_update, configured_souc: SimulationObjectUpdatingComponent
+    train_add,
+    train_route_update,
+    configured_souc: SimulationObjectUpdatingComponent,
+    edge1: Edge,
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
@@ -170,11 +173,11 @@ def switch() -> Switch:
 
 
 @pytest.fixture
-def platform() -> Platform:
+def platform(edge1: Edge) -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="a57e4-0",
+        edge_id=edge1.identifier,
     )
 
 

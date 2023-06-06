@@ -215,8 +215,8 @@ class TestTrain:
         self, configured_souc: SimulationObjectUpdatingComponent, train_add
     ):
         # pylint: disable=unused-argument
-        p1_id = "station-1"
-        p2_id = "station-2"
+        p1_id = Platform("station-1", edge_id="a57e4-1", platform_id="station-1")
+        p2_id = Platform("station-2", edge_id="58ab8-2", platform_id="station-2")
 
         Train(
             identifier=f"{uuid4()}_42",
@@ -224,6 +224,34 @@ class TestTrain:
             train_type="cargo",
             updater=configured_souc,
         )
+
+    def test_current_platform(
+        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+    ):
+        # pylint: disable=unused-argument
+        p1_id = Platform("station-1", edge_id="a57e4-0", platform_id="station-1")
+        p1_id.updater = configured_souc
+        p2_id = Platform("station-2", edge_id="a57e4-1", platform_id="station-2")
+        p2_id.updater = configured_souc
+
+        train = Train(
+            identifier=f"{uuid4()}_42",
+            timetable=[p1_id, p2_id],
+            train_type="cargo",
+            updater=configured_souc,
+        )
+
+        assert train.current_platform is not None and train.current_platform == p1_id
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_SPEED: 10,
+            }
+        )
+
+        assert train.current_platform is not None and train.current_platform == p2_id
 
 
 class TestSwitch:
