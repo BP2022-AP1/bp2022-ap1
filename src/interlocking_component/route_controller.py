@@ -114,12 +114,19 @@ class UninitializedTrain:
 
     @property
     def current_platform(self) -> Optional[Platform]:
+        """Returns the platform the train is driving to.
+
+        :return: The next station
+        """
         if self._station_index >= len(self.timetable):
             return None
 
         return self.timetable[self._station_index]
 
     def depart_platform(self):
+        """Used when the mock train departs from a platform.
+        The real train does not have this method as it checks for departures automatically.
+        """
         self._station_index += 1
 
 
