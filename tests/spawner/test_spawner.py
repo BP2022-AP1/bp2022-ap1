@@ -46,8 +46,8 @@ class TestSpawner:
             schedule = spawner.get_schedule(configuration.id)
             assert schedule.id == configuration.id
             assert schedule.train_type == configuration.train_schedule_train_type
-            assert schedule.strategy.start_tick == configuration.strategy_start_tick
-            assert schedule.strategy.end_tick == configuration.strategy_end_tick
+            assert schedule.strategy.start_time == configuration.strategy_start_time
+            assert schedule.strategy.end_time == configuration.strategy_end_time
             if isinstance(schedule.strategy, RegularScheduleStrategy):
                 assert (
                     schedule.strategy.frequency
@@ -55,8 +55,8 @@ class TestSpawner:
                 )
             elif isinstance(schedule.strategy, RandomScheduleStrategy):
                 assert (
-                    schedule.strategy.trains_per_1000_ticks
-                    == configuration.random_strategy_trains_per_1000_ticks
+                    schedule.strategy.trains_per_1000_seconds
+                    == configuration.random_strategy_trains_per_1000_seconds
                 )
 
     def test_next_tick(
@@ -79,7 +79,7 @@ class TestSpawner:
         for tick in range(strategy_start_tick, strategy_end_tick + 1):
             spawner.next_tick(tick)
         assert all(
-            len(schedule._ticks_to_be_spawned) == 0
+            len(schedule._seconds_to_be_spawned) == 0
             for schedule in spawner._schedules.values()
         )
         assert all(

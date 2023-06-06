@@ -47,13 +47,13 @@ class TrainSchedule(Schedule):
         self.platform_ids = platform_ids
         super().__init__(strategy, id_)
 
-    def _spawn(self, spawner: SpawnerProtocol, tick: int) -> bool:
+    def _spawn(self, spawner: SpawnerProtocol, seconds: int) -> bool:
         """Spawns a vehicle.
 
         :param spawner: The calling Spawner.
-        :param tick: The current tick
+        :param seconds: The elapsed seconds
         :return: if the spawning was successful
         """
         return spawner.train_spawner.spawn_train(
-            f"{self.id}_{tick}_{self.train_type}", self.platform_ids, self.train_type
+            f"{self.id}_{seconds}_{self.train_type}", self.platform_ids, self.train_type
         )

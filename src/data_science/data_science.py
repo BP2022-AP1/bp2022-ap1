@@ -596,14 +596,14 @@ class DataScience:
                 for entry in smard_api.get_data(
                     strategy.start_datetime,
                     strategy.start_datetime
-                    + timedelta(seconds=strategy.end_tick - strategy.start_tick),
+                    + timedelta(seconds=strategy.end_time - strategy.start_time),
                 )
             ]
             data = map(strategy.compute_coal_consumption, data)
             smard_df = pd.DataFrame(data, columns=[f"value_{config_id}"])
 
             smard_df["tick"] = pd.Series(
-                range(strategy.start_tick, strategy.end_tick + 1, 900), dtype="int64"
+                range(strategy.start_time, strategy.end_time + 1, 900), dtype="int64"
             )
             smard_df.set_index("tick", inplace=True)
 
@@ -629,7 +629,7 @@ class DataScience:
         )
         dataframes = []
         for strategy, config_id in demand_schedule_strategies:
-            spawn_df = pd.DataFrame({"tick": strategy.spawn_ticks})
+            spawn_df = pd.DataFrame({"tick": strategy.spawn_seconds})
             spawn_df["title"] = f"Spawn train from config {config_id}"
             spawn_df["time"] = spawn_df["tick"] + self.unix_2020
             spawn_df["time"] = pd.to_datetime(spawn_df["time"], unit="s")

@@ -14,6 +14,6 @@ class TestDemandScheduleStrategy:
         demand_strategy: DemandScheduleStrategy,
         demand_strategy_spawn_ticks: list[int],
     ):
-        for tick in range(0, demand_strategy.end_tick * 2):
+        for tick in range(0, demand_strategy.end_time * 2):
             if demand_strategy.should_spawn(tick):
                 assert tick in demand_strategy_spawn_ticks
