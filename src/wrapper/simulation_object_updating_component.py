@@ -1,6 +1,5 @@
 import os
 from os import path
-import os
 from typing import List
 
 import sumolib
