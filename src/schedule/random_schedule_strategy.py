@@ -38,7 +38,8 @@ class RandomScheduleStrategy(ScheduleStrategy):
 
         :param start_time: The time in seconds when train spawning should start
         :param end_tick: The time in seconds when train spawning should end
-        :param trains_per_1000_seconds: The probability that a train will spawn in a given amout of time
+        :param trains_per_1000_seconds: The probability that a train will spawn
+        in a given amout of time
         :param seed: Seed for the random number generator, defaults to None
         """
         super().__init__(start_time, end_time)
