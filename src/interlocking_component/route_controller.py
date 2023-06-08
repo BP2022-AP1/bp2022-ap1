@@ -127,6 +127,7 @@ class RouteController(Component):
     """
 
     class RouteQueues:
+        """This class capsules all routes, that need to be considered every tick."""
         routes_to_be_set: List[Tuple[Route, Train, int]]
         routes_to_be_reserved: List[Tuple[Route, Train]]
         routes_waiting_for_reservations: List[Route]
