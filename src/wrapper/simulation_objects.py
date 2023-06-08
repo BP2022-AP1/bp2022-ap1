@@ -431,7 +431,7 @@ class Edge(SimulationObject):
         :param track: The track this edge belongs to
         """
         assert track is not None and (
-            self._track.identifier == track.identifier or self._track is None
+            self._track is None or self._track.identifier == track.identifier
         )
         self._track = track
 
