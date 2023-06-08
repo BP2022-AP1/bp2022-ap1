@@ -21,13 +21,13 @@ class TestTrainPrioFault:
         pass
 
     @pytest.fixture
-    def train_prio_fault_configuration(self, train: Train):
+    def train_prio_fault_configuration(self, basic_train):
         return TrainPrioFaultConfiguration.create(
             **{
                 "start_tick": 50,
                 "end_tick": 500,
                 "description": "test TrainPrioFault",
-                "affected_element_id": train.identifier,
+                "affected_element_id": basic_train.identifier,
                 "new_prio": 3,
                 "strategy": "regular",
             }
@@ -38,13 +38,13 @@ class TestTrainPrioFault:
         self,
         train_prio_fault_configuration: TrainPrioFaultConfiguration,
         event_bus: EventBus,
-        simulation_object_updater: SimulationObjectUpdatingComponent,
+        souc: SimulationObjectUpdatingComponent,
         interlocking_disruptor: IInterlockingDisruptor,
     ):
         return TrainPrioFault(
             configuration=train_prio_fault_configuration,
             event_bus=event_bus,
-            simulation_object_updater=simulation_object_updater,
+            simulation_object_updater=souc,
             interlocking_disruptor=interlocking_disruptor,
         )
 
@@ -52,14 +52,13 @@ class TestTrainPrioFault:
         self,
         tick,
         train_prio_fault: TrainPrioFault,
-        train: Train,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_train_and_wrapper,
+        basic_train: Train,
     ):
-        train.train_type.priority = 1
+        basic_train.train_type.priority = 1
         train_prio_fault.inject_fault(tick)
-        assert train.train_type.priority == train_prio_fault.configuration.new_prio
+        assert (
+            basic_train.train_type.priority == train_prio_fault.configuration.new_prio
+        )
         assert (
             train_prio_fault.interlocking_disruptor.route_controller.method_calls == 1
         )
@@ -68,38 +67,45 @@ class TestTrainPrioFault:
         self,
         tick,
         train_prio_fault: TrainPrioFault,
-        train: Train,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_train_and_wrapper,
+        basic_train: Train,
     ):
-        train.train_type.priority = 5
+        basic_train.train_type.priority = 5
         train_prio_fault.inject_fault(tick)
-        assert train.train_type.priority == train_prio_fault.configuration.new_prio
+        assert (
+            basic_train.train_type.priority == train_prio_fault.configuration.new_prio
+        )
         assert (
             train_prio_fault.interlocking_disruptor.route_controller.method_calls == 1
         )
         train_prio_fault.resolve_fault(tick)
-        assert train.train_type.priority == train_prio_fault.old_prio == 5
+        assert basic_train.train_type.priority == train_prio_fault.old_prio == 5
         assert (
             train_prio_fault.interlocking_disruptor.route_controller.method_calls == 2
         )
 
     def test_resolve_train_not_in_simulation(
-        self, tick, train_prio_fault: TrainPrioFault, train: Train
+        self,
+        tick,
+        train_prio_fault: TrainPrioFault,
+        basic_train: Train,
+        souc: SimulationObjectUpdatingComponent,
     ):
         """tests that nothing happens when resolving the TrainPrioFault while
         the affected train is not in the simulation
         """
 
-        train_prio_fault.train = train
+        train_prio_fault.train = basic_train
         train_prio_fault.old_prio = 3
-        train.train_type.priority = 5
+        basic_train.train_type.priority = 5
+
+        # remove train from sim
+        souc.simulation_objects.remove(basic_train)
+
         assert (
             train_prio_fault.get_train_or_none(
-                train_prio_fault.simulation_object_updater, train.identifier
+                train_prio_fault.simulation_object_updater, basic_train.identifier
             )
             is None
         )
         train_prio_fault.resolve_fault(tick)
-        assert train.train_type.priority == 5
+        assert basic_train.train_type.priority == 5

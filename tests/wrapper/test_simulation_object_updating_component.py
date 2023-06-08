@@ -11,16 +11,6 @@ class TestSimulationObjectUpdatingComponent:
     """Tests for the SimulationObjectUpdatingComponent"""
 
     @pytest.fixture
-    def traffic_update(self, monkeypatch):
-        def set_traffic_light_state(identifier: str, state: str) -> None:
-            # pylint: disable=unused-argument
-            pass  # we don't care what happens here
-
-        monkeypatch.setattr(
-            trafficlight, "setRedYellowGreenState", set_traffic_light_state
-        )
-
-    @pytest.fixture
     def component(self, traffic_update) -> SimulationObjectUpdatingComponent:
         # pylint: disable=unused-argument,attribute-defined-outside-init
 

@@ -291,27 +291,12 @@ def another_track_speed_limit_fault_configuration(
 
 
 @pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-# pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
-
-
-@pytest.fixture
-def train_prio_fault_configuration_data(train: Train) -> dict:
+def train_prio_fault_configuration_data(basic_train: Train) -> dict:
     return {
         "start_tick": 50,
         "end_tick": 500,
         "description": "test TrainPrioFault",
-        "affected_element_id": train.identifier,
+        "affected_element_id": basic_train.identifier,
         "new_prio": 3,
         "strategy": "regular",
     }
@@ -334,43 +319,28 @@ def another_train_prio_fault_configuration(
 
 @pytest.fixture
 def train_speed_fault_configuration(
-    train: Train,
+    basic_train: Train,
 ) -> TrainSpeedFaultConfiguration:
     return TrainSpeedFaultConfiguration.create(
         start_tick=40,
         end_tick=400,
         description="test TrainSpeedFault",
-        affected_element_id=train.identifier,
+        affected_element_id=basic_train.identifier,
         new_speed=30,
         strategy="regular",
     )
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-# pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
 
 
 # ------------- TrainSpeedFaultConfiguration ----------------
 
 
 @pytest.fixture
-def train_speed_fault_configuration_data(train: Train) -> dict:
+def train_speed_fault_configuration_data(basic_train: Train) -> dict:
     return {
         "start_tick": 40,
         "end_tick": 400,
         "description": "test TrainSpeedFault",
-        "affected_element_id": train.identifier,
+        "affected_element_id": basic_train.identifier,
         "new_speed": 30,
         "strategy": "regular",
     }

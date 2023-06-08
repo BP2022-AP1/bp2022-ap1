@@ -22,13 +22,13 @@ class TestTrackSpeedLimitFault:
         pass
 
     @pytest.fixture
-    def track_speed_limit_fault_configuration(self, track: Track):
+    def track_speed_limit_fault_configuration(self, basic_track: Track):
         return TrackSpeedLimitFaultConfiguration.create(
             **{
                 "start_tick": 4,
                 "end_tick": 130,
                 "description": "test TrackSpeedLimitFault",
-                "affected_element_id": track.identifier,
+                "affected_element_id": basic_track.identifier,
                 "new_speed_limit": 60,
                 "strategy": "regular",
             }
@@ -40,12 +40,12 @@ class TestTrackSpeedLimitFault:
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
         event_bus: EventBus,
         interlocking_disruptor: IInterlockingDisruptor,
-        simulation_object_updater: SimulationObjectUpdatingComponent,
+        souc: SimulationObjectUpdatingComponent,
     ):
         return TrackSpeedLimitFault(
             configuration=track_speed_limit_fault_configuration,
             event_bus=event_bus,
-            simulation_object_updater=simulation_object_updater,
+            simulation_object_updater=souc,
             interlocking_disruptor=interlocking_disruptor,
         )
 
@@ -61,41 +61,31 @@ class TestTrackSpeedLimitFault:
         self,
         tick,
         track_speed_limit_fault: TrackSpeedLimitFault,
-        track: Track,
-        # the following arguments are needed fixtures
-        # pylint: disable=unused-argument
-        speed_update,
-        combine_track_and_wrapper
-        # pylint: enable=unused-argument
+        basic_track: Track,
     ):
-        track.max_speed = 100
-        assert track.max_speed == 100
+        basic_track.max_speed = 100
+        assert basic_track.max_speed == 100
         track_speed_limit_fault.inject_fault(tick=tick)
-        assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
+        assert (
+            basic_track.max_speed
+            == track_speed_limit_fault.configuration.new_speed_limit
+        )
         # assert (
         #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
         #     == 1
         # )
 
     def test_resolve_track_speed_limit_fault(
-        self,
-        tick,
-        track_speed_limit_fault: TrackSpeedLimitFault,
-        track: Track,
-        # the following arguments are needed fixtures
-        # pylint: disable=unused-argument
-        speed_update,
-        combine_track_and_wrapper,
-        # pylint: enable=unused-argument
+        self, tick, track_speed_limit_fault: TrackSpeedLimitFault, basic_track: Track
     ):
-        track.max_speed = 100
+        basic_track.max_speed = 100
         track_speed_limit_fault.inject_fault(tick=tick)
         # assert (
         #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
         #     == 1
         # )
         track_speed_limit_fault.resolve_fault(tick=tick)
-        assert track.max_speed == track_speed_limit_fault.old_speed_limit
+        assert basic_track.max_speed == track_speed_limit_fault.old_speed_limit
         # assert (
         #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
         #     == 2

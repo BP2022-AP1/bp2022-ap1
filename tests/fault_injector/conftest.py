@@ -42,13 +42,6 @@ def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
 
 
-@pytest.fixture
-def event_bus(run):
-    bus = EventBus(run_id=run.id)
-    Logger(bus)
-    return bus
-
-
 class MockRouteController:
     method_calls: int = 0
 
@@ -59,68 +52,6 @@ class MockRouteController:
 @pytest.fixture
 def interlocking_disruptor():
     return IInterlockingDisruptor(MockRouteController())
-
-
-@pytest.fixture
-def simulation_object_updater():
-    return SimulationObjectUpdatingComponent()
-
-
-@pytest.fixture
-def edge() -> Edge:
-    return Edge("fault injector track")
-
-
-@pytest.fixture
-def edge_re() -> Edge:
-    return Edge("fault injector track-re")
-
-
-@pytest.fixture
-def track(edge, edge_re):
-    return Track(edge, edge_re)
-
-
-@pytest.fixture
-def combine_track_and_wrapper(
-    track: Track, simulation_object_updater: SimulationObjectUpdatingComponent
-):
-    track.updater = simulation_object_updater
-    simulation_object_updater.simulation_objects.append(track)
-    return track, simulation_object_updater
-
-
-@pytest.fixture
-def combine_platform_and_wrapper(
-    platform: Platform, simulation_object_updater: SimulationObjectUpdatingComponent
-):
-    platform.updater = simulation_object_updater
-    simulation_object_updater.simulation_objects.append(platform)
-    return platform, simulation_object_updater
-
-
-@pytest.fixture
-def combine_train_and_wrapper(
-    train: Train, simulation_object_updater: SimulationObjectUpdatingComponent
-):
-    train.updater = simulation_object_updater
-    simulation_object_updater.simulation_objects.append(train)
-    return train, simulation_object_updater
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-# pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
 
 
 @pytest.fixture

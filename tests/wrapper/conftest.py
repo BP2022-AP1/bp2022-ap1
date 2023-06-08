@@ -5,6 +5,7 @@ from typing import List, Tuple
 import pytest
 from traci import constants, edge, trafficlight, vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
@@ -14,106 +15,6 @@ from src.wrapper.simulation_object_updating_component import (
 )
 from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_builder import TrainBuilder
-
-
-@pytest.fixture
-def results(monkeypatch):
-    def get_subscription_result():
-        def subscription_results():
-            return defaultdict(int)
-
-        dict_ = defaultdict(subscription_results)
-        edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"
-        dict_["fake-sim-train"] = edge_dict
-        return dict_
-
-    monkeypatch.setattr(vehicle, "getAllSubscriptionResults", get_subscription_result)
-
-
-@pytest.fixture
-def all_trains(monkeypatch):
-    def get_id_list():
-        return []
-
-    monkeypatch.setattr(vehicle, "getIDList", get_id_list)
-
-
-@pytest.fixture
-def traffic_update(monkeypatch):
-    def set_traffic_light_state(identifier: str, state: str) -> None:
-        # pylint: disable=unused-argument
-        assert state in ("rr", "GG")
-
-    monkeypatch.setattr(trafficlight, "setRedYellowGreenState", set_traffic_light_state)
-
-
-@pytest.fixture
-def max_speed(monkeypatch):
-    def set_max_speed(train_id: str, speed: float):
-        assert train_id is not None
-        assert speed > 0
-
-    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
-def speed_update(monkeypatch):
-    def set_max_speed(identifier: str, speed: float) -> None:
-        assert identifier is not None
-        assert speed > 0
-
-    monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
-def vehicle_route(monkeypatch):
-    def set_route_id(train_id: str, route_id: str):
-        assert train_id == "fake-sim-train"
-        assert route_id == "testing-route-beta"
-
-    monkeypatch.setattr(vehicle, "setRouteID", set_route_id)
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-def train_subscribe(monkeypatch):
-    def subscribe_train(identifier, subscriptions=None):
-        assert identifier is not None
-        assert subscriptions == [
-            constants.VAR_POSITION,
-            constants.VAR_ROAD_ID,
-            constants.VAR_SPEED,
-        ]
-
-    monkeypatch.setattr(vehicle, "subscribe", subscribe_train)
-
-
-@pytest.fixture
-def train_route_update(monkeypatch):
-    def update_route(identifier, routeID=None):
-        assert identifier is not None
-        assert routeID is not None
-
-    monkeypatch.setattr(vehicle, "setRouteID", update_route)
-
-
-@pytest.fixture
-def edge1() -> Edge:
-    return Edge("a57e4-0")
-
-
-@pytest.fixture
-def edge_re() -> Edge:
-    return Edge("a57e4-0-re")
 
 
 @pytest.fixture
@@ -141,6 +42,7 @@ def train(
             ),
             constants.VAR_ROAD_ID: "a57e4-0",
             constants.VAR_SPEED: 10.2,
+            constants.VAR_STOPSTATE: 0,
         }
     )
     created_train.route = "testing-route"
@@ -156,33 +58,8 @@ def train(
 
 
 @pytest.fixture
-def track(edge1: Edge, edge_re: Edge) -> Track:
-    return Track(edge1, edge_re)
-
-
-@pytest.fixture
-def switch() -> Switch:
-    return Switch(identifier="fancy-switch")
-
-
-@pytest.fixture
-def platform() -> Platform:
-    return Platform(
-        identifier="fancy-city-platform-1",
-        platform_id="fancy-city-platform-1",
-        edge_id="a57e4-0",
-    )
-
-
-@pytest.fixture
-def souc(traffic_update) -> SimulationObjectUpdatingComponent:
-    # pylint: disable=unused-argument
-    return SimulationObjectUpdatingComponent()
-
-
-@pytest.fixture
 def configured_souc(
-    traffic_update, infrastructure_provider
+    traffic_update, infrastructure_provider, event_bus: EventBus
 ) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
     souc = SimulationObjectUpdatingComponent(
@@ -190,6 +67,7 @@ def configured_souc(
             "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
         )
     )
+    souc.event_bus = event_bus
     souc.infrastructure_provider = infrastructure_provider
     return souc
 

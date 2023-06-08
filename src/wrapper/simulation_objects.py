@@ -741,6 +741,7 @@ class Train(SimulationObject):
     _edge: Edge = None
     _speed: float
     _timetable: List[Platform]
+    _stop_state: bool
     train_type: TrainType
     reserved_tracks: List[Track]
     station_index: int = 1
@@ -842,12 +843,15 @@ class Train(SimulationObject):
         self.train_type = Train.TrainType.from_sumo_type(train_type, identifier)
         self._timetable = timetable
         self.reserved_tracks = []
+        self._stop_state = False
+        self._last_stop_state = False
 
         if not from_simulator:
             self._add_to_simulation(identifier, train_type, route_id)
 
     def _add_to_simulation(self, identifier: str, train_type: str, route: str):
         vehicle.add(identifier, routeID=route, typeID=train_type)
+        self.updater.event_bus.spawn_train(self.updater.tick, identifier)
 
     def update(self, data: dict):
         """Gets called whenever a simualtion tick has happened.
@@ -855,8 +859,8 @@ class Train(SimulationObject):
         """
         self._position = data[constants.VAR_POSITION]
         edge_id = data[constants.VAR_ROAD_ID]
-        # self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
+        self._stop_state = (data[constants.VAR_STOPSTATE] & 0b00010000) > 0
 
         if (
             self._edge is None
@@ -896,6 +900,22 @@ class Train(SimulationObject):
             ):  # we reached an edge with a platform
                 self.station_index += 1
 
+            if self._stop_state and not self._last_stop_state:
+                self.updater.event_bus.arrival_train(
+                    self.updater.tick,
+                    self.identifier,
+                    self.timetable[self.station_index],
+                )
+                self._last_stop_state = True
+
+            if not self._stop_state and self._last_stop_state:
+                self.updater.event_bus.departure_train(
+                    self.updater.tick,
+                    self.identifier,
+                    self.timetable[self.station_index],
+                )
+                self._last_stop_state = False
+
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
             )
@@ -907,9 +927,9 @@ class Train(SimulationObject):
         """
         return [
             constants.VAR_POSITION,
-            # constants.VAR_ROUTE,
             constants.VAR_ROAD_ID,
             constants.VAR_SPEED,
+            constants.VAR_STOPSTATE,
         ]
 
     @staticmethod

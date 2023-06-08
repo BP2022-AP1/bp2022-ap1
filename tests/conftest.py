@@ -6,6 +6,7 @@ pytest_plugins = [
     "tests.fixtures.fixtures_logger",
     "tests.fixtures.fixtures_model",
     "tests.fixtures.fixtures_spawner",
+    "tests.fixtures.fixtures_wrapper",
     "celery.contrib.pytest",
 ]
 
