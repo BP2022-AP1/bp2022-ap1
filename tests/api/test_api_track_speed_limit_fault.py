@@ -29,8 +29,8 @@ class TestApiTrackSpeedLimitFault:
             {
                 "affected_element_id": "test",
                 "new_speed_limit": 1,
-                "start_tick": 1,
-                "end_tick": 2,
+                "start_time": 1,
+                "end_time": 2,
                 "inject_probability": 0.5,
                 "resolve_probability": 0.5,
                 "description": "test",

@@ -136,22 +136,22 @@ def config_ids(simulation_configuration, simulation_configuration2):
 @pytest.fixture
 def platform_blocked_fault_configuration():
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="station_1", strategy="regular"
+        start_time=10, end_time=20, affected_element_id="station_1", strategy="regular"
     )
 
 
 @pytest.fixture
 def track_blocked_fault_configuration():
     return TrackBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="section_1", strategy="regular"
+        start_time=10, end_time=20, affected_element_id="section_1", strategy="regular"
     )
 
 
 @pytest.fixture
 def track_speed_limit_fault_configuration():
     return TrackSpeedLimitFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="section_1",
         new_speed_limit=10,
         strategy="regular",
@@ -161,8 +161,8 @@ def track_speed_limit_fault_configuration():
 @pytest.fixture
 def schedule_blocked_fault_configuration():
     return ScheduleBlockedFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="ice_1_passenger",
         strategy="regular",
     )
@@ -171,8 +171,8 @@ def schedule_blocked_fault_configuration():
 @pytest.fixture
 def train_prio_fault_configuration():
     return TrainPrioFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="ice_1_passenger",
         new_prio=1,
         strategy="regular",
@@ -182,8 +182,8 @@ def train_prio_fault_configuration():
 @pytest.fixture
 def train_speed_fault_configuration():
     return TrainSpeedFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="ice_1_passenger",
         new_speed=10,
         strategy="regular",

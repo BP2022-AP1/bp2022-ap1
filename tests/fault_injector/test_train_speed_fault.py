@@ -27,8 +27,8 @@ class TestTrainSpeedFault:
     def train_speed_fault_configuration(self, train: Train):
         return TrainSpeedFaultConfiguration.create(
             **{
-                "start_tick": 40,
-                "end_tick": 400,
+                "start_time": 40,
+                "end_time": 400,
                 "description": "test TrainSpeedFault",
                 "affected_element_id": train.identifier,
                 "new_speed": 30,
