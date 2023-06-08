@@ -125,7 +125,8 @@ class RouteController(Component):
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
-    class RouteQueues():
+
+    class RouteQueues:
         routes_to_be_set: List[Tuple[Route, Train, int]]
         routes_to_be_reserved: List[Tuple[Route, Train]]
         routes_waiting_for_reservations: List[Route]
@@ -134,7 +135,6 @@ class RouteController(Component):
             self.routes_to_be_set = []
             self.routes_to_be_reserved = []
             self.routes_waiting_for_reservations = []
-
 
     interlocking: Interlocking
     router: Router
@@ -200,14 +200,20 @@ class RouteController(Component):
         if tick == 1:
             self.initialize_signals()
         self.tick = tick
-        for interlocking_route, train, route_length in self.route_queues.routes_to_be_set:
+        for (
+            interlocking_route,
+            train,
+            route_length,
+        ) in self.route_queues.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
             was_set = self.set_interlocking_route(
                 interlocking_route, train, route_length
             )
             if was_set:
-                self.route_queues.routes_to_be_set.remove((interlocking_route, train, route_length))
+                self.route_queues.routes_to_be_set.remove(
+                    (interlocking_route, train, route_length)
+                )
         for route, train in self.route_queues.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
@@ -356,7 +362,9 @@ class RouteController(Component):
                 interlocking_route, train, route_length
             )
             if not was_set:
-                self.route_queues.routes_to_be_set.append((interlocking_route, train, route_length))
+                self.route_queues.routes_to_be_set.append(
+                    (interlocking_route, train, route_length)
+                )
             return True
         return False
 

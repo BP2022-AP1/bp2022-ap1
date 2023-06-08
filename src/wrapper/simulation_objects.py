@@ -155,7 +155,7 @@ class Signal(Node):
         GO = 2
 
     _state: "Signal.State"
-    incoming_edge: "Edge"
+    _incoming_edge: "Edge"
     _incoming_index: int
     _controlled_lanes_count: int
 
@@ -165,7 +165,7 @@ class Signal(Node):
 
         :return: The incoming edge
         """
-        return self.incoming_edge
+        return self._incoming_edge
 
     @incoming.setter
     def incoming(self, incoming: "Edge"):
@@ -173,7 +173,7 @@ class Signal(Node):
 
         :param incoming: The incoming edge
         """
-        self.incoming_edge = incoming
+        self._incoming_edge = incoming
 
         lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
         self._controlled_lanes_count = len(lanes)
@@ -592,7 +592,7 @@ class Track(SimulationObject):
         for node in self.nodes:
             if not isinstance(node, Signal):
                 return False
-            if not node.incoming_edge in self.edges:
+            if not node._incoming_edge in self.edges:
                 return False
         return True
 
