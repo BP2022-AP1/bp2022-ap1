@@ -592,7 +592,7 @@ class Track(SimulationObject):
         for node in self.nodes:
             if not isinstance(node, Signal):
                 return False
-            if not node._incoming_edge in self.edges:
+            if not node.incoming in self.edges:
                 return False
         return True
 
