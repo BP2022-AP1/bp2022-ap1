@@ -87,6 +87,8 @@ class Spawner(Component, ISpawnerDisruptor):
         :param tick: The current tick.
         :type tick: int
         """
+        if tick % self.TICKS_PER_SECOND != 0:
+            return
         for schedule in self._schedules.values():
             schedule.maybe_spawn(tick // self.TICKS_PER_SECOND, self)
 
