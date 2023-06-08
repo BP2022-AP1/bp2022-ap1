@@ -125,13 +125,21 @@ class RouteController(Component):
     It calls the router to find a route for a train.
     It makes sure, that the Interlocking sets fahrstrassen along those routes.
     """
+    class RouteQueues():
+        routes_to_be_set: List[Tuple[Route, Train, int]]
+        routes_to_be_reserved: List[Tuple[Route, Train]]
+        routes_waiting_for_reservations: List[Route]
 
-    interlocking: Interlocking = None
-    router: Router = None
-    simulation_object_updating_component: SimulationObjectUpdatingComponent = None
-    routes_to_be_set: List[Tuple[Route, Train, int]] = []
-    routes_to_be_reserved: List[Tuple[Route, Train]] = []
-    routes_waiting_for_reservations: List[Route] = []
+        def __init__(self) -> None:
+            self.routes_to_be_set = []
+            self.routes_to_be_reserved = []
+            self.routes_waiting_for_reservations = []
+
+
+    interlocking: Interlocking
+    router: Router
+    simulation_object_updating_component: SimulationObjectUpdatingComponent
+    route_queues: RouteQueues
     tick: int = 0
     topology: Topology
 
@@ -155,6 +163,8 @@ class RouteController(Component):
         infrastructure_provider = SumoInfrastructureProvider(self, event_bus)
         self.interlocking = Interlocking(infrastructure_provider)
         self.interlocking.prepare(self.topology)
+
+        self.route_queues = RouteController.RouteQueues()
 
     def initialize_signals(self):
         """This method sets which edge is the incoming for each signal."""
@@ -190,33 +200,33 @@ class RouteController(Component):
         if tick == 1:
             self.initialize_signals()
         self.tick = tick
-        for interlocking_route, train, route_length in self.routes_to_be_set:
+        for interlocking_route, train, route_length in self.route_queues.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
             was_set = self.set_interlocking_route(
                 interlocking_route, train, route_length
             )
             if was_set:
-                self.routes_to_be_set.remove((interlocking_route, train, route_length))
-        for route, train in self.routes_to_be_reserved:
+                self.route_queues.routes_to_be_set.remove((interlocking_route, train, route_length))
+        for route, train in self.route_queues.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
             was_reserved = self.reserve_route(route, train)
             if was_reserved:
-                self.routes_to_be_reserved.remove((route, train))
+                self.route_queues.routes_to_be_reserved.remove((route, train))
         for (
             route,
             train,
             interlocking_route,
             route_length,
-        ) in self.routes_waiting_for_reservations:
+        ) in self.route_queues.routes_waiting_for_reservations:
             # This sets the fahrstrasse, if the route is reserved at the first
             # place for that fahrstrasse. The Sumo route was set already.
             reservation_ready = self.set_fahrstrasse_if_reservations_work(
                 route, train, interlocking_route, route_length
             )
             if reservation_ready:
-                self.routes_waiting_for_reservations.remove(
+                self.route_queues.routes_waiting_for_reservations.remove(
                     (route, train, interlocking_route, route_length)
                 )
 
@@ -294,7 +304,7 @@ class RouteController(Component):
 
         if not self.check_if_route_is_reserved(new_route, train):
             if not self.reserve_route(new_route, train):
-                self.routes_to_be_reserved.append((new_route, train))
+                self.route_queues.routes_to_be_reserved.append((new_route, train))
 
         route_length = 0
 
@@ -317,7 +327,7 @@ class RouteController(Component):
                     if not self.set_fahrstrasse_if_reservations_work(
                         new_route[:i], train, interlocking_route, route_length
                     ):
-                        self.routes_waiting_for_reservations.append(
+                        self.route_queues.routes_waiting_for_reservations.append(
                             (new_route[:i], train, interlocking_route, route_length)
                         )
                     return
@@ -331,7 +341,7 @@ class RouteController(Component):
         interlocking_route: Route,
         route_length: int,
     ) -> bool:
-        """This method checks if the given train has reservations, that allow it to continue. 
+        """This method checks if the given train has reservations, that allow it to continue.
         If so, the interlocking route may be set.
 
         :param route: the route
@@ -346,7 +356,7 @@ class RouteController(Component):
                 interlocking_route, train, route_length
             )
             if not was_set:
-                self.routes_to_be_set.append((interlocking_route, train, route_length))
+                self.route_queues.routes_to_be_set.append((interlocking_route, train, route_length))
             return True
         return False
 
@@ -487,7 +497,7 @@ class RouteController(Component):
         return True
 
     def maybe_put_reservations_as_first(self, train: Train, route: List[Node]):
-        """Finds the shortest segment which ends with a reservation for the given train in first place 
+        """Finds the shortest segment which ends with a reservation for the train in first place
         and switches the reservation for the train to the first place.
 
         :param train: The train which reservation may be changed
@@ -598,9 +608,9 @@ class RouteController(Component):
 
     def recalculate_all_routes(self):
         """Recalculates the route for every train in the simulation"""
-        self.routes_to_be_set = []
-        self.routes_to_be_reserved = []
-        self.routes_waiting_for_reservations = []
+        self.route_queues.routes_to_be_set = []
+        self.route_queues.routes_to_be_reserved = []
+        self.route_queues.routes_waiting_for_reservations = []
         trains: list[Train] = self.simulation_object_updating_component.trains
         for train in trains:
             self._free_fahrstrasse(train, train.route)

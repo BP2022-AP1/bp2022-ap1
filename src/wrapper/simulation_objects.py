@@ -597,7 +597,7 @@ class Track(SimulationObject):
         return True
 
     def as_reservation_track(self) -> "ReservationTrack":
-        """Returns a identical ReservationTrack. 
+        """Returns a identical ReservationTrack.
 
         :return: The ReservationTrack
         """
@@ -606,6 +606,7 @@ class Track(SimulationObject):
 
 class ReservationTrack(Track):
     """A Track between two Signals, that has reservations of trains"""
+
     reservations: List[Tuple["Train", Edge]]
 
     def __init__(self, edge1, edge2):
