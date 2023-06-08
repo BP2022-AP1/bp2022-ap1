@@ -295,8 +295,6 @@ class RouteController(Component):
         if not self.check_if_route_is_reserved(new_route, train):
             if not self.reserve_route(new_route, train):
                 self.routes_to_be_reserved.append((new_route, train))
-            else:
-                self.maybe_put_reservations_as_first(train, new_route)
 
         route_length = 0
 
@@ -333,6 +331,7 @@ class RouteController(Component):
         interlocking_route: Route,
         route_length: int,
     ) -> bool:
+        self.maybe_put_reservations_as_first(train, route)
         if self.check_if_route_is_reserved_as_first(route, train):
             was_set = self.set_interlocking_route(
                 interlocking_route, train, route_length
@@ -486,11 +485,18 @@ class RouteController(Component):
                 reserving_trains[reserving_train] = True
             else:
                 break
+        for i, edge in enumerate(edge_route):
+            if not isinstance(edge.track, ReservationTrack):
+                continue
+            if edge.track.reservations[0][0] == train:
+                self.put_reservations_as_first(train, edge_route[:i])
+
+    def put_reservations_as_first(self, train: Train, edge_route: List[Edge]):
         for edge in edge_route:
-            for reserving_train, _ in edge.track.reservations:
-                if reserving_train in reserving_trains:
-                    if reserving_train != train and reserving_trains[reserving_train]:
-                        reserving_trains[reserving_train] = False
+            if not isinstance(edge.track, ReservationTrack):
+                continue
+            edge.track.reservations.remove((train, edge))
+            edge.track.reservations.insert(0, (train, edge))
 
     def get_tracks_of_node_route(self, route: List[Node]) -> List[Track]:
         """This method returns a list of tracks corresponding to the given list of nodes.
