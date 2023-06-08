@@ -430,7 +430,9 @@ class Edge(SimulationObject):
 
         :param track: The track this edge belongs to
         """
-        assert self._track is None and track is not None
+        assert track is not None and (
+            self._track.identifier == track.identifier or self._track is None
+        )
         self._track = track
 
     @max_speed.setter

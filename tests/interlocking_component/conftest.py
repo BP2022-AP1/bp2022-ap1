@@ -165,7 +165,6 @@ def route_controller(
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "example.ppxml"),
     )
-    my_route_controller.initialize_signals()
     return my_route_controller
 
 
