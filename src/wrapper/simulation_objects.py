@@ -155,7 +155,7 @@ class Signal(Node):
         GO = 2
 
     _state: "Signal.State"
-    _incoming_edge: "Edge"
+    incoming_edge: "Edge"
     _incoming_index: int
     _controlled_lanes_count: int
 
@@ -165,7 +165,7 @@ class Signal(Node):
 
         :return: The incoming edge
         """
-        return self._incoming_edge
+        return self.incoming_edge
 
     @incoming.setter
     def incoming(self, incoming: "Edge"):
@@ -173,7 +173,7 @@ class Signal(Node):
 
         :param incoming: The incoming edge
         """
-        self._incoming_edge = incoming
+        self.incoming_edge = incoming
 
         lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
         self._controlled_lanes_count = len(lanes)
@@ -585,18 +585,27 @@ class Track(SimulationObject):
         pass
 
     def should_be_reservation_track(self) -> bool:
+        """Returns if this track is between two signals and should thous be a ReservationTrack.
+
+        :return: If that is the case
+        """
         for node in self.nodes:
             if not isinstance(node, Signal):
                 return False
-            if not node._incoming_edge in self.edges:
+            if not node.incoming_edge in self.edges:
                 return False
         return True
 
     def as_reservation_track(self) -> "ReservationTrack":
+        """Returns a identical ReservationTrack. 
+
+        :return: The ReservationTrack
+        """
         return ReservationTrack(self.edges[0], self.edges[1])
 
 
 class ReservationTrack(Track):
+    """A Track between two Signals, that has reservations of trains"""
     reservations: List[Tuple["Train", Edge]]
 
     def __init__(self, edge1, edge2):

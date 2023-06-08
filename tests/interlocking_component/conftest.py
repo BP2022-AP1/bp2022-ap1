@@ -144,7 +144,7 @@ def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingCompo
         for pot_signal in configured_souc.signals:
             if pot_signal.identifier == identifier:
                 signal = pot_signal
-        return [signal._incoming_edge.identifier, "not_the_incoming_lane"]
+        return [signal.incoming_edge.identifier, "not_the_incoming_lane"]
 
     monkeypatch.setattr(trafficlight, "getControlledLanes", get_controlled_lanes)
 

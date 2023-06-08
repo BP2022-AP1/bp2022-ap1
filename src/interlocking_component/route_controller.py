@@ -130,7 +130,7 @@ class RouteController(Component):
     router: Router = None
     simulation_object_updating_component: SimulationObjectUpdatingComponent = None
     routes_to_be_set: List[Tuple[Route, Train, int]] = []
-    routes_to_be_reserved: List[Route, Train] = []
+    routes_to_be_reserved: List[Tuple[Route, Train]] = []
     routes_waiting_for_reservations: List[Route] = []
     tick: int = 0
     topology: Topology
@@ -210,7 +210,7 @@ class RouteController(Component):
             interlocking_route,
             route_length,
         ) in self.routes_waiting_for_reservations:
-            # This sets the fahrstrasse, if the route is reserved at the first 
+            # This sets the fahrstrasse, if the route is reserved at the first
             # place for that fahrstrasse. The Sumo route was set already.
             reservation_ready = self.set_fahrstrasse_if_reservations_work(
                 route, train, interlocking_route, route_length
@@ -289,7 +289,7 @@ class RouteController(Component):
         new_route = self.router.get_route(
             edge, train.timetable[train.station_index].edge
         )
-        # new_route contains a list of nodes from the node before the starting signal 
+        # new_route contains a list of nodes from the node before the starting signal
         # to end signal of the new route.
 
         if not self.check_if_route_is_reserved(new_route, train):
@@ -331,6 +331,15 @@ class RouteController(Component):
         interlocking_route: Route,
         route_length: int,
     ) -> bool:
+        """This method checks if the given train has reservations, that allow it to continue. 
+        If so, the interlocking route may be set.
+
+        :param route: the route
+        :param train: the train
+        :param interlocking_route: the interlocking route
+        :param route_length: the length of the route
+        :return: if it worked or not
+        """
         self.maybe_put_reservations_as_first(train, route)
         if self.check_if_route_is_reserved_as_first(route, train):
             was_set = self.set_interlocking_route(
@@ -478,6 +487,12 @@ class RouteController(Component):
         return True
 
     def maybe_put_reservations_as_first(self, train: Train, route: List[Node]):
+        """Finds the shortest segment which ends with a reservation for the given train in first place 
+        and switches the reservation for the train to the first place.
+
+        :param train: The train which reservation may be changed
+        :param route: The route along which the reservation may be changed
+        """
         edge_route = self.get_edges_of_node_route(route)
         reserving_trains = {}
         for reserving_train, _ in edge_route[0].track.reservations:
@@ -490,8 +505,14 @@ class RouteController(Component):
                 continue
             if edge.track.reservations[0][0] == train:
                 self.put_reservations_as_first(train, edge_route[:i])
+                break
 
     def put_reservations_as_first(self, train: Train, edge_route: List[Edge]):
+        """Moves reservations of the given train to the first place along the given route.
+
+        :param train: the train which resevations should be moved
+        :param edge_route: the route on which the reservations will be moved
+        """
         for edge in edge_route:
             if not isinstance(edge.track, ReservationTrack):
                 continue
