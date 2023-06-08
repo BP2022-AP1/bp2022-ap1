@@ -584,7 +584,7 @@ class Track(SimulationObject):
     def add_simulation_connections(self) -> None:
         pass
 
-    def should_be_reservation_track(self)->bool:
+    def should_be_reservation_track(self) -> bool:
         for node in self.nodes:
             if not isinstance(node, Signal):
                 return False
