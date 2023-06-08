@@ -592,7 +592,7 @@ class Track(SimulationObject):
         :return: If that is the case
         """
         for node in self.nodes:
-            if not isinstance(node, Signal):
+            if isinstance(node, Switch):
                 return False
             if not node.incoming in self.edges:
                 return False
