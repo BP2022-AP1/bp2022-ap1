@@ -209,3 +209,8 @@ class SimulationObjectUpdatingComponent(Component):
 
         for simulation_object in self._simulation_objects:
             simulation_object.add_simulation_connections()
+
+        for track in self.tracks:
+            if track.should_be_reservation_track():
+                self._simulation_objects.remove(track)
+                self._simulation_objects.append(track.as_reservation_track())

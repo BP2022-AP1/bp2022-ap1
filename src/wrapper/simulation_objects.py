@@ -479,7 +479,6 @@ class Track(SimulationObject):
     "A track on which trains can drive both directions"
 
     _edges = Tuple[Edge, Edge]
-    reservations: List[Tuple["Train", Edge]]
 
     @property
     def edges(self) -> Tuple[Edge, Edge]:
@@ -514,7 +513,6 @@ class Track(SimulationObject):
             self._edges = (edge2, edge1)
 
         super().__init__(identifier=self._edges[0].identifier)
-        self.reservations = []
         edge1.track = self
         edge2.track = self
 
@@ -585,6 +583,25 @@ class Track(SimulationObject):
 
     def add_simulation_connections(self) -> None:
         pass
+
+    def should_be_reservation_track(self)->bool:
+        for node in self.nodes:
+            if not isinstance(node, Signal):
+                return False
+            if not node._incoming_edge in self.edges:
+                return False
+        return True
+
+    def as_reservation_track(self) -> "ReservationTrack":
+        return ReservationTrack(self.edges[0], self.edges[1])
+
+
+class ReservationTrack(Track):
+    reservations: List[Tuple["Train", Edge]]
+
+    def __init__(self, edge1, edge2):
+        super().__init__(edge1, edge2)
+        self.reservations = []
 
 
 class Platform(SimulationObject):
