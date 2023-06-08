@@ -128,6 +128,7 @@ class RouteController(Component):
 
     class RouteQueues:
         """This class capsules all routes, that need to be considered every tick."""
+
         routes_to_be_set: List[Tuple[Route, Train, int]]
         routes_to_be_reserved: List[Tuple[Route, Train]]
         routes_waiting_for_reservations: List[Route]
@@ -167,6 +168,10 @@ class RouteController(Component):
 
         self.route_queues = RouteController.RouteQueues()
 
+        self.initialize_signals()
+
+        self.simulation_object_updating_component.set_up_reservation_tracks()
+
     def initialize_signals(self):
         """This method sets which edge is the incoming for each signal."""
         print("Starting to initialize signals")
@@ -198,8 +203,6 @@ class RouteController(Component):
         print("Signals were initialized")
 
     def next_tick(self, tick: int):
-        if tick == 1:
-            self.initialize_signals()
         self.tick = tick
         for (
             interlocking_route,
