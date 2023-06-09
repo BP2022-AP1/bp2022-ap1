@@ -220,7 +220,6 @@ class Signal(Node):
 
     def set_incoming_index(self):
         """This methods sets the incoming index according to the incoming edge."""
-        lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
         try:
             lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
             self._controlled_lanes_count = len(lanes)
