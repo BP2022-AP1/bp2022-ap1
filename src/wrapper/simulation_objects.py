@@ -899,25 +899,17 @@ class Train(SimulationObject):
             and not edge_id[:1] == ":"
         ):
             if self._edge is not None:
-                try:
-                    assert self._edge.track.reservations[0][1] == self._edge
-                    assert self._edge.track == self.reserved_tracks[0]
-                    if len(self.reserved_tracks) > 1:
-                        assert (
-                            edge_id
-                            == self.reserved_tracks[1].reservations[0][1].identifier
-                        )
-                except Exception as exc:
-                    for track in self.reserved_tracks:
-                        print(track.edges[0].identifier)
+                if edge_id not in list(map(lambda obj: obj.identifier, self._edge.to_node.edges)):
                     raise ValueError(
                         (
                             "A Track was skipped: Old track: "
                             f"{self._edge.identifier}, new track: {edge_id}"
-                        )
-                    ) from exc
-                self._edge.track.reservations.pop(0)
-                self.reserved_tracks.pop(0)
+                        ))
+                if isinstance(self._edge.track, ReservationTrack):
+                    assert self._edge.track.reservations[0][1] == self._edge
+                    assert self._edge.track == self.reserved_tracks[0]
+                    self._edge.track.reservations.pop(0)
+                    self.reserved_tracks.pop(0)
 
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge

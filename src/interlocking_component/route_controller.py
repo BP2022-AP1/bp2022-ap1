@@ -23,6 +23,7 @@ from src.wrapper.simulation_objects import (
     ReservationTrack,
     Track,
     Train,
+    Signal,
 )
 
 
@@ -500,6 +501,8 @@ class RouteController(Component):
 
         for edge in route_as_edges:
             track = edge.track
+            if not isinstance(track, ReservationTrack):
+                continue
             if len(track.reservations) != 0:
                 # In this case, the track is reserved for another train,
                 # and we must check, if that train has reservations beyond that point.
@@ -564,8 +567,19 @@ class RouteController(Component):
         :param route: The route along which the reservation may be changed
         """
         edge_route = self.get_edges_of_node_route(route)
+        print(list(map(lambda obj: obj.identifier, edge_route)))
+        for edge in edge_route:
+            if isinstance(edge.to_node, Signal):
+                print(f"Node {edge.to_node.identifier} has incoming {edge.to_node.incoming.identifier}")
+            if isinstance(edge.from_node, Signal):
+                print(f"Node {edge.from_node.identifier} has incoming {edge.from_node.incoming.identifier}")
         reserving_trains = {}
-        for reserving_train, _ in edge_route[0].track.reservations:
+        first_reservation_track: ReservationTrack
+        for edge in edge_route:
+            if isinstance(edge.track, ReservationTrack):
+                first_reservation_track = edge.track
+                break
+        for reserving_train, _ in first_reservation_track.reservations:
             if reserving_train != train:
                 reserving_trains[reserving_train] = True
             else:
