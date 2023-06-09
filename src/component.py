@@ -9,7 +9,12 @@ class Component(ABC):
     event_bus: EventBus
     priority: int
 
-    PRIORITY_LEVELS: dict[str, int] = {"VERY_HIGH": 10, "HIGH": 9, "MEDIUM": 8, "LOW": 7}
+    PRIORITY_LEVELS: dict[str, int] = {
+        "VERY_HIGH": 10,
+        "HIGH": 9,
+        "MEDIUM": 8,
+        "LOW": 7,
+    }
 
     def __init__(self, event_bus: EventBus, priority: str):
         """Initializes the component.
