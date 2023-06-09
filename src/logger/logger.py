@@ -35,7 +35,7 @@ class Logger(Component):
         """
         The constructor of the logger class
         """
-        super().__init__(event_bus, 7)
+        super().__init__(event_bus, "LOW")
 
         self.callback_handles = []
         self.callback_handles.append(
