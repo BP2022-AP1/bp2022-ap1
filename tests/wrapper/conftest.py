@@ -3,13 +3,16 @@ from collections import defaultdict
 from typing import List, Tuple
 
 import pytest
-from traci import constants, edge, trafficlight, vehicle
 from planpro_importer.reader import PlanProReader
+from traci import constants, edge, trafficlight, vehicle
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
-from src.interlocking_component.route_controller import UninitializedTrain, TopologyInitializer
+from src.interlocking_component.route_controller import (
+    TopologyInitializer,
+    UninitializedTrain,
+)
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -196,7 +199,7 @@ def configured_souc(
         )
     )
     souc.infrastructure_provider = infrastructure_provider
-    path_name=os.path.join("data", "planpro", "example.ppxml")
+    path_name = os.path.join("data", "planpro", "example.ppxml")
     yaramo_topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
     topology_initializer = TopologyInitializer(souc, yaramo_topology)
     topology_initializer.initialize_all()

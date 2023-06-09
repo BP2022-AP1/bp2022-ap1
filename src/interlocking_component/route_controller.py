@@ -120,11 +120,15 @@ class UninitializedTrain:
         self.reserved_tracks = []
 
 
-class TopologyInitializer():
+class TopologyInitializer:
     simulation_object_updating_component: SimulationObjectUpdatingComponent
     topology: Topology
 
-    def __init__(self, simulation_object_updating_component: SimulationObjectUpdatingComponent, topology: Topology) -> None:
+    def __init__(
+        self,
+        simulation_object_updating_component: SimulationObjectUpdatingComponent,
+        topology: Topology,
+    ) -> None:
         self.simulation_object_updating_component = simulation_object_updating_component
         self.topology = topology
 
@@ -161,7 +165,6 @@ class TopologyInitializer():
                 else:
                     signal.incoming = edges_into_signal[1]
         print("Signals were initialized")
-
 
 
 class RouteController(Component):
@@ -212,7 +215,9 @@ class RouteController(Component):
 
         self.route_queues = RouteController.RouteQueues()
 
-        initializer = TopologyInitializer(self.simulation_object_updating_component, self.topology)
+        initializer = TopologyInitializer(
+            self.simulation_object_updating_component, self.topology
+        )
         initializer.initialize_all()
 
     def initialize_signals(self):

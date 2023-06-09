@@ -5,7 +5,6 @@ from typing import List, Tuple
 
 from sumolib import net
 from traci import constants, edge, trafficlight, vehicle
-import traci
 
 
 class SimulationObject(ABC):
@@ -218,9 +217,9 @@ class Signal(Node):
 
     def add_subscriptions(self) -> List[int]:
         return []
-    
+
     def set_incoming_index(self):
-        try: 
+        try:
             lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
             self._controlled_lanes_count = len(lanes)
             for i, lane in enumerate(lanes):
@@ -601,7 +600,7 @@ class Track(SimulationObject):
         for node in self.nodes:
             if isinstance(node, Switch):
                 return False
-            if isinstance(node,Signal) and not node.incoming in self.edges:
+            if isinstance(node, Signal) and not node.incoming in self.edges:
                 return False
         return True
 
