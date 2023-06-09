@@ -120,6 +120,50 @@ class UninitializedTrain:
         self.reserved_tracks = []
 
 
+class TopologyInitializer():
+    simulation_object_updating_component: SimulationObjectUpdatingComponent
+    topology: Topology
+
+    def __init__(self, simulation_object_updating_component: SimulationObjectUpdatingComponent, topology: Topology) -> None:
+        self.simulation_object_updating_component = simulation_object_updating_component
+        self.topology = topology
+
+    def initialize_all(self):
+        self.initialize_signals()
+        self.simulation_object_updating_component.set_up_reservation_tracks()
+
+    def initialize_signals(self):
+        """This method sets which edge is the incoming for each signal."""
+        print("Starting to initialize signals")
+        for yaramo_signal in self.topology.signals.values():
+            signal = None
+            for potentical_signal in self.simulation_object_updating_component.signals:
+                if yaramo_signal.name == potentical_signal.identifier:
+                    signal = potentical_signal
+
+            assert signal is not None
+
+            edges_into_signal = [
+                edge for edge in signal.edges if edge.to_node == signal
+            ]
+            edges_numbers = [
+                edge.identifier.split("-")[1] for edge in edges_into_signal
+            ]
+
+            if yaramo_signal.direction == SignalDirection.IN:
+                if int(edges_numbers[0]) < int(edges_numbers[1]):
+                    signal.incoming = edges_into_signal[0]
+                else:
+                    signal.incoming = edges_into_signal[1]
+            else:
+                if int(edges_numbers[0]) > int(edges_numbers[1]):
+                    signal.incoming = edges_into_signal[0]
+                else:
+                    signal.incoming = edges_into_signal[1]
+        print("Signals were initialized")
+
+
+
 class RouteController(Component):
     """This class coordinates the route of a train.
     It calls the router to find a route for a train.
@@ -168,9 +212,8 @@ class RouteController(Component):
 
         self.route_queues = RouteController.RouteQueues()
 
-        self.initialize_signals()
-
-        self.simulation_object_updating_component.set_up_reservation_tracks()
+        initializer = TopologyInitializer(self.simulation_object_updating_component, self.topology)
+        initializer.initialize_all()
 
     def initialize_signals(self):
         """This method sets which edge is the incoming for each signal."""

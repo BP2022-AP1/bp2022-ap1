@@ -5,6 +5,7 @@ from typing import List, Tuple
 
 from sumolib import net
 from traci import constants, edge, trafficlight, vehicle
+import traci
 
 
 class SimulationObject(ABC):
@@ -175,13 +176,7 @@ class Signal(Node):
         """
         self._incoming_edge = incoming
 
-        lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
-        self._controlled_lanes_count = len(lanes)
-        for i, lane in enumerate(lanes):
-            if incoming.identifier == lane.split("_")[0]:
-                self._incoming_index = i
-
-        self.state = Signal.State.HALT
+        self.set_incoming_index()
 
     @property
     def state(self) -> "Signal.State":
@@ -223,6 +218,18 @@ class Signal(Node):
 
     def add_subscriptions(self) -> List[int]:
         return []
+    
+    def set_incoming_index(self):
+        try: 
+            lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
+            self._controlled_lanes_count = len(lanes)
+            for i, lane in enumerate(lanes):
+                if self._incoming_edge.identifier == lane.split("_")[0]:
+                    self._incoming_index = i
+
+            self.state = Signal.State.HALT
+        except:
+            return
 
     def set_edges(self, simulation_object: net.TLS) -> None:
         self._edge_ids = [my_edge.getID() for my_edge in simulation_object.getEdges()]
@@ -594,7 +601,7 @@ class Track(SimulationObject):
         for node in self.nodes:
             if isinstance(node, Switch):
                 return False
-            if not node.incoming in self.edges:
+            if isinstance(node,Signal) and not node.incoming in self.edges:
                 return False
         return True
 

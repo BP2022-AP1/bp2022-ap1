@@ -4,11 +4,12 @@ from typing import List, Tuple
 
 import pytest
 from traci import constants, edge, trafficlight, vehicle
+from planpro_importer.reader import PlanProReader
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
-from src.interlocking_component.route_controller import UninitializedTrain
+from src.interlocking_component.route_controller import UninitializedTrain, TopologyInitializer
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -150,6 +151,10 @@ def train(
         }
     )
     created_train.reserved_tracks.append(created_train.edge.track)
+    print(created_train.edge.track.identifier)
+    print(created_train.edge.track.nodes[0].identifier)
+    print(created_train.edge.track.nodes[1].identifier)
+    print(isinstance(created_train.edge.track.nodes[1], Switch))
     created_train.edge.track.reservations.append((created_train, created_train.edge))
 
     return created_train
@@ -191,6 +196,10 @@ def configured_souc(
         )
     )
     souc.infrastructure_provider = infrastructure_provider
+    path_name=os.path.join("data", "planpro", "example.ppxml")
+    yaramo_topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
+    topology_initializer = TopologyInitializer(souc, yaramo_topology)
+    topology_initializer.initialize_all()
     return souc
 
 
