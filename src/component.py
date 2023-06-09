@@ -16,7 +16,7 @@ class Component(ABC):
         "LOW": 7,
     }
 
-    def __init__(self, event_bus: EventBus, priority: str):
+    def __init__(self, event_bus: EventBus, priority: str = "LOW"):
         """Initializes the component.
 
         :param event_bus: reference to the global event_bus
@@ -39,7 +39,7 @@ class MockComponent(Component):
     """Mock for a simple component to check if next tick is called"""
 
     def __init__(self):
-        Component.__init__(self, None, 1)
+        Component.__init__(self, None)
 
     def next_tick(self, tick: int):
         pass

@@ -125,7 +125,7 @@ def test_components_are_ordered_correctly():
     communicator = Communicator()
     mock1 = MockComponent()
     mock2 = MockComponent()
-    mock2.priority = 100
+    mock2.priority = 10 # = "VERY_HIGH"
 
     communicator.add_component(mock1)
     communicator.add_component(mock2)
