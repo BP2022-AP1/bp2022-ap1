@@ -137,7 +137,7 @@ class RouteController(Component):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
-        super().__init__(event_bus, 3)
+        super().__init__(event_bus, 8)
         self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 

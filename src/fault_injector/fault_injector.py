@@ -16,7 +16,7 @@ class FaultInjector(Component):
     _faults: list[Fault] = []
 
     def __init__(self, event_bus: EventBus, priority: int):
-        super().__init__(event_bus, 2)
+        super().__init__(event_bus, 9)
 
     def add_fault(self, fault: Fault):
         """Adds faults that should be injected to the fault injector
