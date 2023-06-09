@@ -22,7 +22,9 @@ def generate_planpro():
     topology = ORMImporter().run(polygon)
 
     # Generate Signals
-    TrackSignalGenerator(topology).place_edge_signals()
+    signal_generator = TrackSignalGenerator(topology, split_signals = True)
+    signal_generator.place_switch_signals()
+    signal_generator.place_edge_signals()
 
     # Generate Routes
     RouteGenerator(topology).generate_routes()
@@ -30,7 +32,7 @@ def generate_planpro():
     # Write PlanPro
     generator = Generator()
     generator.generate(
-        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/schwarze_pumpe_v1"
+        topology, "BP2022-AP1", "BP2022-AP1", "data/planpro/schwarze_pumpe_v2"
     )
 
 
