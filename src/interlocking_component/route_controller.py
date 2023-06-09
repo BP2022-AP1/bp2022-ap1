@@ -21,9 +21,9 @@ from src.wrapper.simulation_objects import (
     Node,
     Platform,
     ReservationTrack,
+    Signal,
     Track,
     Train,
-    Signal,
 )
 
 
@@ -122,6 +122,9 @@ class UninitializedTrain:
 
 
 class TopologyInitializer:
+    """This class initializes things in the SimulationObjectUpdatingComponent,
+    that requires information from the yaramo model."""
+
     simulation_object_updating_component: SimulationObjectUpdatingComponent
     topology: Topology
 
@@ -134,6 +137,7 @@ class TopologyInitializer:
         self.topology = topology
 
     def initialize_all(self):
+        """This method initializes the signal direction and the reservation tracks."""
         self.initialize_signals()
         self.simulation_object_updating_component.set_up_reservation_tracks()
 
@@ -570,9 +574,19 @@ class RouteController(Component):
         print(list(map(lambda obj: obj.identifier, edge_route)))
         for edge in edge_route:
             if isinstance(edge.to_node, Signal):
-                print(f"Node {edge.to_node.identifier} has incoming {edge.to_node.incoming.identifier}")
+                print(
+                    (
+                        f"Node {edge.to_node.identifier} has"
+                        "incoming {edge.to_node.incoming.identifier}"
+                    )
+                )
             if isinstance(edge.from_node, Signal):
-                print(f"Node {edge.from_node.identifier} has incoming {edge.from_node.incoming.identifier}")
+                print(
+                    (
+                        f"Node {edge.from_node.identifier} has"
+                        "incoming {edge.from_node.incoming.identifier}"
+                    )
+                )
         reserving_trains = {}
         first_reservation_track: ReservationTrack
         for edge in edge_route:

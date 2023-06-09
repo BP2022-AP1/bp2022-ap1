@@ -4,7 +4,7 @@ from enum import IntEnum
 from typing import List, Tuple
 
 from sumolib import net
-from traci import constants, edge, trafficlight, vehicle
+from traci import FatalTraCIError, constants, edge, trafficlight, vehicle
 
 
 class SimulationObject(ABC):
@@ -219,6 +219,8 @@ class Signal(Node):
         return []
 
     def set_incoming_index(self):
+        """This methods sets the incoming index according to the incoming edge."""
+        lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
         try:
             lanes: List[str] = trafficlight.getControlledLanes(self.identifier)
             self._controlled_lanes_count = len(lanes)
@@ -227,7 +229,7 @@ class Signal(Node):
                     self._incoming_index = i
 
             self.state = Signal.State.HALT
-        except:
+        except FatalTraCIError:
             return
 
     def set_edges(self, simulation_object: net.TLS) -> None:
@@ -899,12 +901,15 @@ class Train(SimulationObject):
             and not edge_id[:1] == ":"
         ):
             if self._edge is not None:
-                if edge_id not in list(map(lambda obj: obj.identifier, self._edge.to_node.edges)):
+                if edge_id not in list(
+                    map(lambda obj: obj.identifier, self._edge.to_node.edges)
+                ):
                     raise ValueError(
                         (
                             "A Track was skipped: Old track: "
                             f"{self._edge.identifier}, new track: {edge_id}"
-                        ))
+                        )
+                    )
                 if isinstance(self._edge.track, ReservationTrack):
                     assert self._edge.track.reservations[0][1] == self._edge
                     assert self._edge.track == self.reserved_tracks[0]
