@@ -21,7 +21,6 @@ from src.wrapper.simulation_objects import (
     Node,
     Platform,
     ReservationTrack,
-    Signal,
     Track,
     Train,
 )
@@ -322,7 +321,7 @@ class RouteController(Component):
         for route in routes:
             if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
                 continue
-            
+
             print("Setting fahrstrasse.")
             self.set_fahrstrasse(train, edge)
             break

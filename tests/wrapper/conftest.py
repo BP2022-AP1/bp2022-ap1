@@ -102,6 +102,15 @@ def train_subscribe(monkeypatch):
 
 
 @pytest.fixture
+def train_setRouteID(monkeypatch):
+    def setRouteID_train(identifier, routeID=None):
+        assert identifier is not None
+        assert routeID is not None
+
+    monkeypatch.setattr(vehicle, "setRouteID", setRouteID_train)
+
+
+@pytest.fixture
 def train_route_update(monkeypatch):
     def update_route(identifier, routeID=None):
         assert identifier is not None
@@ -127,7 +136,7 @@ def edge2() -> Edge:
 
 @pytest.fixture
 def train(
-    train_add, train_route_update, configured_souc: SimulationObjectUpdatingComponent
+    train_add, train_route_update, train_setRouteID, configured_souc: SimulationObjectUpdatingComponent
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
