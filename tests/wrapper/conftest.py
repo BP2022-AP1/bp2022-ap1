@@ -24,7 +24,7 @@ def results(monkeypatch):
 
         dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"
+        edge_dict[constants.VAR_ROAD_ID] = "bf53d-0"
         dict_["fake-sim-train"] = edge_dict
         return dict_
 
@@ -112,17 +112,17 @@ def train_route_update(monkeypatch):
 
 @pytest.fixture
 def edge1() -> Edge:
-    return Edge("a57e4-0")
+    return Edge("bf53d-0")
 
 
 @pytest.fixture
-def edge1_re() -> Edge:
-    return Edge("a57e4-0-re")
+def edge_re() -> Edge:
+    return Edge("bf53d-0-re")
 
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("a57e4-1")
+    return Edge("bf53d-1")
 
 
 @pytest.fixture
@@ -147,7 +147,7 @@ def train(
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "a57e4-0",
+            constants.VAR_ROAD_ID: "bf53d-0",
             constants.VAR_SPEED: 10.2,
         }
     )
@@ -228,8 +228,9 @@ class MockRouteController:
     def set_spawn_fahrstrasse(self, timetable: List[Platform]):
         reservation_placeholder = UninitializedTrain(timetable)
         start = timetable[0].edge
+        end = timetable[1].edge
         self.set_spawn_fahrstrasse_count += 1
-        if start.identifier == "58ab8-1":
+        if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
             return (True, reservation_placeholder)
         return (False, reservation_placeholder)
 

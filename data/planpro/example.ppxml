@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nsPlanPro:PlanPro_Schnittstelle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:nsPlanPro="http://www.plan-pro.org/modell/PlanPro/1.9.0.2" xmlns:nsSignalbegriffe_Ril_301="http://www.plan-pro.org/modell/Signalbegriffe_Ril_301/1.9.0">
   <Identitaet>
-    <Wert>53a6e4cc-aa04-4c01-8749-b512402b0208</Wert>
+    <Wert>62eaadfb-ecf0-4066-8140-f7dd01f3f1f7</Wert>
   </Identitaet>
   <PlanPro_Schnittstelle_Allg>
     <Erzeugung_Zeitstempel>
-      <Wert>2023-05-25T11:44:41.790304</Wert>
+      <Wert>2023-06-02T15:36:12.031764</Wert>
     </Erzeugung_Zeitstempel>
     <Werkzeug_Name>
       <Wert>Werkzeugkoffer</Wert>
@@ -18,17 +18,17 @@
     <Fachdaten>
       <Ausgabe_Fachdaten>
         <Identitaet>
-          <Wert>b1988ad2-68db-4357-a96a-67516bd90b59</Wert>
+          <Wert>a1747492-2d5c-48c8-a8da-d47b2181a6fd</Wert>
         </Identitaet>
         <LST_Zustand_Start>
           <Identitaet>
-            <Wert>1ae19cec-6b29-49ae-b88c-1a28be33898d</Wert>
+            <Wert>6f22ea87-0c34-443c-a950-e8a98678b8f8</Wert>
           </Identitaet>
           <Container/>
         </LST_Zustand_Start>
         <LST_Zustand_Ziel>
           <Identitaet>
-            <Wert>2371b859-1116-4c0d-8f18-85abd6b26f39</Wert>
+            <Wert>cd21136c-a2b7-4cf8-8300-67cd48cf632a</Wert>
           </Identitaet>
           <Container>
             <Aussenelementansteuerung>
@@ -68,7 +68,7 @@
             </Aussenelementansteuerung>
               <Fstr_Fahrweg>
                 <Identitaet>
-                  <Wert>a9ca620d-7089-4ce7-ad94-8e5d00130025</Wert>
+                  <Wert>e7243b9e-4325-4313-9f2a-146d4516f82a</Wert>
                 </Identitaet>
                 <Basis_Objekt_Allg>
                   <Datum_Regelwerk>
@@ -81,10 +81,10 @@
                   <Wert>25.000</Wert>
                 </Begrenzung_A>
                 <Begrenzung_B>
-                  <Wert>0.000</Wert>
+                  <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -95,7 +95,49 @@
                   <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
+                  <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
+                </ID_TOP_Kante>
+              </Bereich_Objekt_Teilbereich>
+              <Bereich_Objekt_Teilbereich>
+                <Begrenzung_A>
+                  <Wert>0.000</Wert>
+                </Begrenzung_A>
+                <Begrenzung_B>
+                  <Wert>175.000</Wert>
+                </Begrenzung_B>
+                <ID_TOP_Kante>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
+                </ID_TOP_Kante>
+              </Bereich_Objekt_Teilbereich>
+                <Fstr_V_Hg>
+                  <Wert>160</Wert>
+                </Fstr_V_Hg>
+                <ID_Start>
+                  <Wert>315df9a5-090a-4159-9c24-81b141f98b3b</Wert> <!-- 94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in -->
+                </ID_Start>
+                <ID_Ziel>
+                  <Wert>7afb3e3b-9fdb-4811-b03a-4c70e82b781c</Wert> <!-- 8710dd8c-f9cc-4674-9956-197809e8f9a9-km-175-in -->
+                </ID_Ziel>
+              </Fstr_Fahrweg>
+              <Fstr_Fahrweg>
+                <Identitaet>
+                  <Wert>385051f8-bbfe-40e1-bfc2-3fe33464bd5c</Wert>
+                </Identitaet>
+                <Basis_Objekt_Allg>
+                  <Datum_Regelwerk>
+                    <Wert>2012-02-24</Wert>
+                  </Datum_Regelwerk>
+                </Basis_Objekt_Allg>
+                <Objektreferenzen/>
+              <Bereich_Objekt_Teilbereich>
+                <Begrenzung_A>
+                  <Wert>25.000</Wert>
+                </Begrenzung_A>
+                <Begrenzung_B>
+                  <Wert>50.000</Wert>
+                </Begrenzung_B>
+                <ID_TOP_Kante>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -106,7 +148,7 @@
                   <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
+                  <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -117,22 +159,22 @@
                   <Wert>175.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
                 <Fstr_V_Hg>
                   <Wert>160</Wert>
                 </Fstr_V_Hg>
                 <ID_Start>
-                  <Wert>31ff2a11-6c07-4920-a01c-9c8970b1e39a</Wert> <!-- f9b738b1-258c-457e-8734-86699efde525-km-25-gegen -->
+                  <Wert>315df9a5-090a-4159-9c24-81b141f98b3b</Wert> <!-- 94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in -->
                 </ID_Start>
                 <ID_Ziel>
-                  <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in -->
+                  <Wert>077f554a-351e-472e-bbd8-2fbdac844af3</Wert> <!-- 61a1600e-997a-4c88-9ec0-89c53d884ef4-km-175-in -->
                 </ID_Ziel>
               </Fstr_Fahrweg>
               <Fstr_Fahrweg>
                 <Identitaet>
-                  <Wert>b9011caa-782e-4a76-b738-a5319e73a888</Wert>
+                  <Wert>bcfb15ec-64ae-46b1-913d-994811d23c03</Wert>
                 </Identitaet>
                 <Basis_Objekt_Allg>
                   <Datum_Regelwerk>
@@ -148,71 +190,7 @@
                   <Wert>0.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>0.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>50.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>0.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>50.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>0.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>175.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-                <Fstr_V_Hg>
-                  <Wert>160</Wert>
-                </Fstr_V_Hg>
-                <ID_Start>
-                  <Wert>9beb9444-95fb-4756-9b19-bd767c805bb2</Wert> <!-- d58eb937-37bb-4f66-ae78-5e2ab079bb42-km-25-gegen -->
-                </ID_Start>
-                <ID_Ziel>
-                  <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in -->
-                </ID_Ziel>
-              </Fstr_Fahrweg>
-              <Fstr_Fahrweg>
-                <Identitaet>
-                  <Wert>77055591-b5fe-4cd6-b625-2dbd7b825396</Wert>
-                </Identitaet>
-                <Basis_Objekt_Allg>
-                  <Datum_Regelwerk>
-                    <Wert>2012-02-24</Wert>
-                  </Datum_Regelwerk>
-                </Basis_Objekt_Allg>
-                <Objektreferenzen/>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>175.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>200.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -223,22 +201,22 @@
                   <Wert>25.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
                 <Fstr_V_Hg>
                   <Wert>160</Wert>
                 </Fstr_V_Hg>
                 <ID_Start>
-                  <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in -->
+                  <Wert>835374aa-361b-4501-b70e-52f67aa75013</Wert> <!-- f3a18358-b059-4033-94cc-9c79ffa4f644-km-25-gegen -->
                 </ID_Start>
                 <ID_Ziel>
-                  <Wert>5de84440-c02d-4ab7-ac0e-42a9e1a71188</Wert> <!-- 91294974-73db-49b6-80fc-5b77ac32b879-km-25-gegen -->
+                  <Wert>6ba99f95-76f1-4a66-bc1f-3ac48e31e803</Wert> <!-- 61a1600e-997a-4c88-9ec0-89c53d884ef4-km-25-gegen -->
                 </ID_Ziel>
               </Fstr_Fahrweg>
               <Fstr_Fahrweg>
                 <Identitaet>
-                  <Wert>5d400055-f1ef-4dba-879a-2f6803046055</Wert>
+                  <Wert>83cd4944-26b9-4476-bcb0-673177952ab7</Wert>
                 </Identitaet>
                 <Basis_Objekt_Allg>
                   <Datum_Regelwerk>
@@ -254,49 +232,7 @@
                   <Wert>0.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>0.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>175.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-                <Fstr_V_Hg>
-                  <Wert>160</Wert>
-                </Fstr_V_Hg>
-                <ID_Start>
-                  <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen -->
-                </ID_Start>
-                <ID_Ziel>
-                  <Wert>0ef3dfd6-fc8c-4717-bbeb-78abc2f69dda</Wert> <!-- 91294974-73db-49b6-80fc-5b77ac32b879-km-175-in -->
-                </ID_Ziel>
-              </Fstr_Fahrweg>
-              <Fstr_Fahrweg>
-                <Identitaet>
-                  <Wert>8bd7bc30-6d79-467a-a645-ecacd3646567</Wert>
-                </Identitaet>
-                <Basis_Objekt_Allg>
-                  <Datum_Regelwerk>
-                    <Wert>2012-02-24</Wert>
-                  </Datum_Regelwerk>
-                </Basis_Objekt_Allg>
-                <Objektreferenzen/>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>175.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>200.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -307,106 +243,22 @@
                   <Wert>25.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
                 <Fstr_V_Hg>
                   <Wert>160</Wert>
                 </Fstr_V_Hg>
                 <ID_Start>
-                  <Wert>0ef3dfd6-fc8c-4717-bbeb-78abc2f69dda</Wert> <!-- 91294974-73db-49b6-80fc-5b77ac32b879-km-175-in -->
+                  <Wert>835374aa-361b-4501-b70e-52f67aa75013</Wert> <!-- f3a18358-b059-4033-94cc-9c79ffa4f644-km-25-gegen -->
                 </ID_Start>
                 <ID_Ziel>
-                  <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen -->
+                  <Wert>638b70d2-d888-4b87-9f8b-d6156f3d1f10</Wert> <!-- 8710dd8c-f9cc-4674-9956-197809e8f9a9-km-25-gegen -->
                 </ID_Ziel>
               </Fstr_Fahrweg>
-              <Fstr_Fahrweg>
-                <Identitaet>
-                  <Wert>c145b4c8-e605-44fb-9180-f8c8481b30d1</Wert>
-                </Identitaet>
-                <Basis_Objekt_Allg>
-                  <Datum_Regelwerk>
-                    <Wert>2012-02-24</Wert>
-                  </Datum_Regelwerk>
-                </Basis_Objekt_Allg>
-                <Objektreferenzen/>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>25.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>0.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>0.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>175.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-                <Fstr_V_Hg>
-                  <Wert>160</Wert>
-                </Fstr_V_Hg>
-                <ID_Start>
-                  <Wert>5de84440-c02d-4ab7-ac0e-42a9e1a71188</Wert> <!-- 91294974-73db-49b6-80fc-5b77ac32b879-km-25-gegen -->
-                </ID_Start>
-                <ID_Ziel>
-                  <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in -->
-                </ID_Ziel>
-              </Fstr_Fahrweg>
-              <Fstr_Fahrweg>
-                <Identitaet>
-                  <Wert>800862d3-da92-4257-860c-f296d068b150</Wert>
-                </Identitaet>
-                <Basis_Objekt_Allg>
-                  <Datum_Regelwerk>
-                    <Wert>2012-02-24</Wert>
-                  </Datum_Regelwerk>
-                </Basis_Objekt_Allg>
-                <Objektreferenzen/>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>25.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>0.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-              <Bereich_Objekt_Teilbereich>
-                <Begrenzung_A>
-                  <Wert>200.000</Wert>
-                </Begrenzung_A>
-                <Begrenzung_B>
-                  <Wert>25.000</Wert>
-                </Begrenzung_B>
-                <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
-                </ID_TOP_Kante>
-              </Bereich_Objekt_Teilbereich>
-                <Fstr_V_Hg>
-                  <Wert>160</Wert>
-                </Fstr_V_Hg>
-                <ID_Start>
-                  <Wert>ce1425ed-a1a0-4c65-8593-393a146ee13d</Wert> <!-- 6fe59d52-0da4-46fd-8deb-9e106dd0bf49-km-25-gegen -->
-                </ID_Start>
-                <ID_Ziel>
-                  <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert> <!-- 74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen -->
-                </ID_Ziel>
-              </Fstr_Fahrweg>
-            <GEO_Kante> <!-- 4330d348-5497-4aa1-93da-e487f57127af to 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+            <GEO_Kante> <!-- bd6d8ab5-5674-49fe-821d-fedcedefcb82 to 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               <Identitaet>
-                <Wert>85065c0f-f6d3-47a7-971b-94efbc50baf0</Wert>
+                <Wert>920e690f-aaf4-4b2f-bb95-1d65067b1e02</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -426,18 +278,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4</Wert>
+                <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>49d80bde-c177-484e-b36a-7416408f0198</Wert>
+                <Wert>6e183f1c-f4c4-45f3-8454-c17db849adfe</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <GEO_Kante> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>afd3f43c-4527-4972-916b-d0b8037bc2be</Wert>
+                <Wert>f2e6afb6-0d8d-4f24-a21f-ec7b5230413c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -457,18 +309,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
+                <Wert>d6b55ecc-d8f6-4bd7-beb9-1403807327be</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>63e2c94c-e7c2-4262-b7a9-8e4631d3f225</Wert>
+                <Wert>89b11e82-2cdd-4bd1-b723-45abb679625c</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <GEO_Kante> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>6e74dea5-644a-4749-a0f7-96a11dd38a68</Wert>
+                <Wert>746baae2-e6cb-4a5d-87a2-609e073475cf</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -488,18 +340,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
+                <Wert>d6b55ecc-d8f6-4bd7-beb9-1403807327be</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>63e2c94c-e7c2-4262-b7a9-8e4631d3f225</Wert>
+                <Wert>89b11e82-2cdd-4bd1-b723-45abb679625c</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <GEO_Kante> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>709405df-156f-4585-afa5-fbd2366cf733</Wert>
+                <Wert>69523063-241c-4ab3-815b-5c00187b8734</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -519,18 +371,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
+                <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>aaa5e0b4-09fb-458a-b204-87821fac6f31</Wert>
+                <Wert>4e042cd8-6862-4a04-94b7-c8fa15a5e97b</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <GEO_Kante> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>25bedca4-8d99-4446-b5a0-f945863ac034</Wert>
+                <Wert>ab336b13-0559-4dec-9e30-7f3ebd77a2a3</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -550,18 +402,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
+                <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>aaa5e0b4-09fb-458a-b204-87821fac6f31</Wert>
+                <Wert>4e042cd8-6862-4a04-94b7-c8fa15a5e97b</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <GEO_Kante> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>a388a1c4-827f-43e4-979e-162c78d0a491</Wert>
+                <Wert>3052c12f-b6f1-461c-8d68-19f64b5626d4</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -581,18 +433,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>fd81483b-bfbe-468b-94ba-eec3d3985018</Wert>
+                <Wert>f1c01c00-b404-4d09-acca-41359232a379</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <GEO_Kante> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>d330526c-d7a3-4024-b33d-eb4b1cfcdd15</Wert>
+                <Wert>91b7d827-2b35-43b1-a423-7976f80c8fbb</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -612,18 +464,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>fd81483b-bfbe-468b-94ba-eec3d3985018</Wert>
+                <Wert>f1c01c00-b404-4d09-acca-41359232a379</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>259e551f-adab-44bf-a998-41caba1c1032</Wert>
+                <Wert>17cad8ff-6145-49b6-aee2-6be5385aaf8c</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to d2965184-b697-4435-9211-70a0e1505727 -->
+            <GEO_Kante> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to 9802f6a1-546b-47c0-994a-383afe9fb07c -->
               <Identitaet>
-                <Wert>3177fe1a-6e7b-4865-9f85-b54429164941</Wert>
+                <Wert>c703073c-b070-49f4-8739-c1a9a0e6da47</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -643,18 +495,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42</Wert>
+                <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>d79ef55a-4d21-48ad-b1b7-c48301656236</Wert>
+                <Wert>0d27843c-dfb0-45e7-bcdf-88d5225b19cc</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>3835ccf0-6038-4214-960e-dc30f4c94047</Wert>
+                <Wert>8a03cc76-897e-4603-b5c6-5b92d2dfff64</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -674,18 +526,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>f82979a4-3314-4d9e-855b-3c3842125772</Wert>
+                <Wert>229be9c4-1618-4f42-8514-b5ab26da4f6a</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>bb2d6bb6-f86c-46a5-b12a-e8500bf72a6b</Wert>
+                <Wert>740fe799-f062-430a-9c46-76f065851b71</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -705,18 +557,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>f82979a4-3314-4d9e-855b-3c3842125772</Wert>
+                <Wert>229be9c4-1618-4f42-8514-b5ab26da4f6a</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>d18a80fa-a5cf-46d9-9c39-a3ec4dfe7bf5</Wert>
+                <Wert>9cfe050b-5e49-45a2-af0e-08c25a742c55</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -736,18 +588,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>b666d598-5ee9-4720-b040-6babc8bf76ce</Wert>
+                <Wert>f7081281-1c66-49fb-93b9-d495c5bec935</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>8fb65ea5-31b2-4432-8b5e-6b57fa107fe8</Wert>
+                <Wert>63f2579d-3369-4cff-a7dd-fc3169273d81</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -767,18 +619,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>b666d598-5ee9-4720-b040-6babc8bf76ce</Wert>
+                <Wert>f7081281-1c66-49fb-93b9-d495c5bec935</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>533cba2a-f714-4a2f-a31f-22a8a60e3b13</Wert>
+                <Wert>261ad32b-3211-4688-8e52-f820cb752bef</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>7214050e-f29a-407e-a37a-24a941a21996</Wert>
+                <Wert>dfb94bcc-6d01-4a43-8b4b-90d8f1bea5ab</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -798,18 +650,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>533cba2a-f714-4a2f-a31f-22a8a60e3b13</Wert>
+                <Wert>261ad32b-3211-4688-8e52-f820cb752bef</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>ea553968-3301-4970-949c-ed0f2fe6dce4</Wert>
+                <Wert>56655e99-6f8e-40cf-86f1-f92c500e516e</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>07324e90-03e0-4bb2-be40-1e4ae7542e45</Wert>
+                <Wert>6b9fbdd2-d35a-49f9-ab79-6b373a820ba2</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -829,18 +681,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>ea553968-3301-4970-949c-ed0f2fe6dce4</Wert>
+                <Wert>56655e99-6f8e-40cf-86f1-f92c500e516e</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Kante> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 to 14f146f9-0804-4623-bb6f-49b3bfeea816 -->
+            <GEO_Kante> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 to a9bf16c4-6a95-46b3-8a35-8e704486a62b -->
               <Identitaet>
-                <Wert>f585ab95-3858-403d-ae70-33d0b7e0de62</Wert>
+                <Wert>11f19d22-c9d3-4b48-8b76-320edf77f7d3</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -860,18 +712,18 @@
                 </Plan_Quelle>
               </GEO_Kante_Allg>
               <ID_GEO_Art>
-                <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49</Wert>
+                <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
               </ID_GEO_Art>
               <ID_GEO_Knoten_A>
-                <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
               </ID_GEO_Knoten_A>
               <ID_GEO_Knoten_B>
-                <Wert>518a0497-01a6-43d5-a169-1d264cce546c</Wert>
+                <Wert>aa233d34-72ab-4f85-bd3f-593faaaf9119</Wert>
               </ID_GEO_Knoten_B>
             </GEO_Kante>
-            <GEO_Knoten> <!-- 4330d348-5497-4aa1-93da-e487f57127af -->
+            <GEO_Knoten> <!-- bd6d8ab5-5674-49fe-821d-fedcedefcb82 -->
               <Identitaet>
-                <Wert>49d80bde-c177-484e-b36a-7416408f0198</Wert>
+                <Wert>6e183f1c-f4c4-45f3-8454-c17db849adfe</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -880,9 +732,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- d2965184-b697-4435-9211-70a0e1505727 -->
+            <GEO_Knoten> <!-- 9802f6a1-546b-47c0-994a-383afe9fb07c -->
               <Identitaet>
-                <Wert>d79ef55a-4d21-48ad-b1b7-c48301656236</Wert>
+                <Wert>0d27843c-dfb0-45e7-bcdf-88d5225b19cc</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -891,9 +743,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 14f146f9-0804-4623-bb6f-49b3bfeea816 -->
+            <GEO_Knoten> <!-- a9bf16c4-6a95-46b3-8a35-8e704486a62b -->
               <Identitaet>
-                <Wert>518a0497-01a6-43d5-a169-1d264cce546c</Wert>
+                <Wert>aa233d34-72ab-4f85-bd3f-593faaaf9119</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -902,9 +754,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <GEO_Knoten> <!-- fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>259e551f-adab-44bf-a998-41caba1c1032</Wert>
+                <Wert>17cad8ff-6145-49b6-aee2-6be5385aaf8c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -913,9 +765,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+            <GEO_Knoten> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               <Identitaet>
-                <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -924,9 +776,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <GEO_Knoten> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -935,9 +787,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <GEO_Knoten> <!-- de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -946,9 +798,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Knoten> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -957,9 +809,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <GEO_Knoten> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>63e2c94c-e7c2-4262-b7a9-8e4631d3f225</Wert>
+                <Wert>89b11e82-2cdd-4bd1-b723-45abb679625c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -968,9 +820,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <GEO_Knoten> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>aaa5e0b4-09fb-458a-b204-87821fac6f31</Wert>
+                <Wert>4e042cd8-6862-4a04-94b7-c8fa15a5e97b</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -979,9 +831,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <GEO_Knoten> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>fd81483b-bfbe-468b-94ba-eec3d3985018</Wert>
+                <Wert>f1c01c00-b404-4d09-acca-41359232a379</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -990,9 +842,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Knoten> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>f82979a4-3314-4d9e-855b-3c3842125772</Wert>
+                <Wert>229be9c4-1618-4f42-8514-b5ab26da4f6a</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1001,9 +853,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Knoten> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>b666d598-5ee9-4720-b040-6babc8bf76ce</Wert>
+                <Wert>f7081281-1c66-49fb-93b9-d495c5bec935</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1012,9 +864,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Knoten> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>533cba2a-f714-4a2f-a31f-22a8a60e3b13</Wert>
+                <Wert>261ad32b-3211-4688-8e52-f820cb752bef</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1023,9 +875,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Knoten> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Knoten> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>ea553968-3301-4970-949c-ed0f2fe6dce4</Wert>
+                <Wert>56655e99-6f8e-40cf-86f1-f92c500e516e</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1034,9 +886,9 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
             </GEO_Knoten>
-            <GEO_Punkt> <!-- 4330d348-5497-4aa1-93da-e487f57127af -->
+            <GEO_Punkt> <!-- bd6d8ab5-5674-49fe-821d-fedcedefcb82 -->
               <Identitaet>
-                <Wert>3d4fb219-3725-4d0a-a0c0-f2050cb4e074</Wert>
+                <Wert>ab240ecf-764b-48ac-b3ad-c9f86c8f8d92</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1059,12 +911,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>49d80bde-c177-484e-b36a-7416408f0198</Wert>
+                <Wert>6e183f1c-f4c4-45f3-8454-c17db849adfe</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- d2965184-b697-4435-9211-70a0e1505727 -->
+            <GEO_Punkt> <!-- 9802f6a1-546b-47c0-994a-383afe9fb07c -->
               <Identitaet>
-                <Wert>b979e765-ed6a-4d6e-81ca-7e1bbafbea22</Wert>
+                <Wert>bd3cb521-64e2-4b90-b7c2-f03b241ccbe7</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1087,12 +939,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>d79ef55a-4d21-48ad-b1b7-c48301656236</Wert>
+                <Wert>0d27843c-dfb0-45e7-bcdf-88d5225b19cc</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 14f146f9-0804-4623-bb6f-49b3bfeea816 -->
+            <GEO_Punkt> <!-- a9bf16c4-6a95-46b3-8a35-8e704486a62b -->
               <Identitaet>
-                <Wert>a05cd6ef-50e5-40ef-b1fb-4c63776e500c</Wert>
+                <Wert>08055694-e103-468d-8cbb-b1ae30eaac05</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1115,12 +967,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>518a0497-01a6-43d5-a169-1d264cce546c</Wert>
+                <Wert>aa233d34-72ab-4f85-bd3f-593faaaf9119</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <GEO_Punkt> <!-- fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>837e55b0-8816-47cd-9b6c-a601e00ea31c</Wert>
+                <Wert>8325d1c4-06f0-4871-b02d-5ccb4bd14b22</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1143,12 +995,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>259e551f-adab-44bf-a998-41caba1c1032</Wert>
+                <Wert>17cad8ff-6145-49b6-aee2-6be5385aaf8c</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+            <GEO_Punkt> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               <Identitaet>
-                <Wert>078ea327-7666-4392-95d8-9946bf92f43e</Wert>
+                <Wert>28497534-77bd-4690-a8b5-6ce5d4df1d36</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1171,12 +1023,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <GEO_Punkt> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>ab5d94a4-6da6-452b-ad6c-782771d208b9</Wert>
+                <Wert>53804a4a-a16f-4c9f-b045-48db7c1790af</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1199,12 +1051,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <GEO_Punkt> <!-- de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>dfe87d36-88e3-4230-9734-8dfb5060e36a</Wert>
+                <Wert>655d9e92-671d-4e6b-b780-0e3f5cdbd4d9</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1227,12 +1079,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Punkt> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>69e6ab65-7402-4530-912c-f17e9263625a</Wert>
+                <Wert>56630799-dbd5-465d-a4b7-9c9ea1193b91</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1255,12 +1107,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <GEO_Punkt> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>2712c613-2906-430a-8b36-96ecea80007a</Wert>
+                <Wert>405843a5-d300-4ce5-9507-d891560c310f</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1283,12 +1135,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>63e2c94c-e7c2-4262-b7a9-8e4631d3f225</Wert>
+                <Wert>89b11e82-2cdd-4bd1-b723-45abb679625c</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <GEO_Punkt> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>820bb51f-d2fa-4999-9295-bc01475f26d4</Wert>
+                <Wert>4d456351-95a7-45dd-82c5-b3813241a76c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1311,12 +1163,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>aaa5e0b4-09fb-458a-b204-87821fac6f31</Wert>
+                <Wert>4e042cd8-6862-4a04-94b7-c8fa15a5e97b</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <GEO_Punkt> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>0e129761-ee1c-439b-ab40-e98b2306b6b8</Wert>
+                <Wert>44d84c32-a93a-4bb5-88f3-6301d864df84</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1339,12 +1191,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>fd81483b-bfbe-468b-94ba-eec3d3985018</Wert>
+                <Wert>f1c01c00-b404-4d09-acca-41359232a379</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Punkt> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>678a3f4f-e3bd-40cc-bce4-9a5b1da678d4</Wert>
+                <Wert>4f2c8150-4107-492c-91a3-d93aa51a4441</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1367,12 +1219,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>f82979a4-3314-4d9e-855b-3c3842125772</Wert>
+                <Wert>229be9c4-1618-4f42-8514-b5ab26da4f6a</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Punkt> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>e722549f-73c3-4637-9511-7f7c7e2661b2</Wert>
+                <Wert>dbe9e50a-6b92-4f35-a925-7dd1c143daef</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1395,12 +1247,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>b666d598-5ee9-4720-b040-6babc8bf76ce</Wert>
+                <Wert>f7081281-1c66-49fb-93b9-d495c5bec935</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Punkt> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>95251210-4eb8-4937-9804-61cc853e26ab</Wert>
+                <Wert>aa16ea2a-a416-4dad-9181-eb7e33b703b4</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1423,12 +1275,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>533cba2a-f714-4a2f-a31f-22a8a60e3b13</Wert>
+                <Wert>261ad32b-3211-4688-8e52-f820cb752bef</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
-            <GEO_Punkt> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <GEO_Punkt> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>fe0703eb-ec39-4e9f-9fff-000810f1c14b</Wert>
+                <Wert>e838be6c-5ea0-4e08-8b2f-62fa39386151</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1451,12 +1303,12 @@
                 </GEO_KoordinatenSystem_LSys>
               </GEO_Punkt_Allg>
               <ID_GEO_Knoten>
-                <Wert>ea553968-3301-4970-949c-ed0f2fe6dce4</Wert>
+                <Wert>56655e99-6f8e-40cf-86f1-f92c500e516e</Wert>
               </ID_GEO_Knoten>
             </GEO_Punkt>
             <Signal>
               <Identitaet>
-                <Wert>24820a45-9f4d-4bbc-82d8-d3fcacb3a5bb</Wert>
+                <Wert>315df9a5-090a-4159-9c24-81b141f98b3b</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1466,7 +1318,7 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -1477,7 +1329,7 @@
                   <Wert>25.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>in</Wert>
@@ -1488,16 +1340,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4-km-25-in</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4-km-25-in</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4-km-25-in</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4-km-25-in</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d-km-25-in</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -1512,7 +1364,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>24820a45-9f4d-4bbc-82d8-d3fcacb3a5bb</Wert>
+                    <Wert>315df9a5-090a-4159-9c24-81b141f98b3b</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -1542,7 +1394,7 @@
             </Signal>
             <Signal>
               <Identitaet>
-                <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert>
+                <Wert>6ba99f95-76f1-4a66-bc1f-3ac48e31e803</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1552,7 +1404,7 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -1563,7 +1415,7 @@
                   <Wert>25.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>gegen</Wert>
@@ -1574,16 +1426,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-25-gegen</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-25-gegen</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-25-gegen</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -1598,7 +1450,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert>
+                    <Wert>6ba99f95-76f1-4a66-bc1f-3ac48e31e803</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -1628,7 +1480,7 @@
             </Signal>
             <Signal>
               <Identitaet>
-                <Wert>5de84440-c02d-4ab7-ac0e-42a9e1a71188</Wert>
+                <Wert>638b70d2-d888-4b87-9f8b-d6156f3d1f10</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1638,7 +1490,7 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -1649,7 +1501,7 @@
                   <Wert>25.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>gegen</Wert>
@@ -1660,16 +1512,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-25-gegen</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-25-gegen</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-25-gegen</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-25-gegen</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-25-gegen</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-25-gegen</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -1684,7 +1536,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>5de84440-c02d-4ab7-ac0e-42a9e1a71188</Wert>
+                    <Wert>638b70d2-d888-4b87-9f8b-d6156f3d1f10</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -1714,7 +1566,7 @@
             </Signal>
             <Signal>
               <Identitaet>
-                <Wert>9beb9444-95fb-4756-9b19-bd767c805bb2</Wert>
+                <Wert>673e9586-fccb-47b4-ac96-7d0f898d6656</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1724,7 +1576,7 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -1735,7 +1587,7 @@
                   <Wert>25.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42</Wert>
+                  <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>gegen</Wert>
@@ -1746,16 +1598,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42-km-25-gegen</Wert>
+                  <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c-km-25-gegen</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42-km-25-gegen</Wert>
+                  <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42-km-25-gegen</Wert>
+                  <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42-km-25-gegen</Wert>
+                  <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c-km-25-gegen</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -1770,7 +1622,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>9beb9444-95fb-4756-9b19-bd767c805bb2</Wert>
+                    <Wert>673e9586-fccb-47b4-ac96-7d0f898d6656</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -1800,7 +1652,7 @@
             </Signal>
             <Signal>
               <Identitaet>
-                <Wert>31ff2a11-6c07-4920-a01c-9c8970b1e39a</Wert>
+                <Wert>8c9d4beb-5df8-460d-bdd1-56191a427cd9</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1810,7 +1662,7 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -1821,7 +1673,7 @@
                   <Wert>25.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                  <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>gegen</Wert>
@@ -1832,16 +1684,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525-km-25-gegen</Wert>
+                  <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e-km-25-gegen</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525-km-25-gegen</Wert>
+                  <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525-km-25-gegen</Wert>
+                  <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e-km-25-gegen</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525-km-25-gegen</Wert>
+                  <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e-km-25-gegen</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -1856,7 +1708,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>31ff2a11-6c07-4920-a01c-9c8970b1e39a</Wert>
+                    <Wert>8c9d4beb-5df8-460d-bdd1-56191a427cd9</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -1886,7 +1738,7 @@
             </Signal>
             <Signal>
               <Identitaet>
-                <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert>
+                <Wert>835374aa-361b-4501-b70e-52f67aa75013</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1896,7 +1748,93 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
+                </ID_Strecke>
+                <Strecke_Km>
+                  <Wert>8,500</Wert>
+                </Strecke_Km>
+              </Punkt_Objekt_Strecke>
+              <Punkt_Objekt_TOP_Kante>
+                <Abstand>
+                  <Wert>25.000</Wert>
+                </Abstand>
+                <ID_TOP_Kante>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
+                </ID_TOP_Kante>
+                <Wirkrichtung>
+                  <Wert>gegen</Wert>
+                </Wirkrichtung>
+                <Seitlicher_Abstand>
+                  <Wert>-3.950</Wert>
+                </Seitlicher_Abstand>
+              </Punkt_Objekt_TOP_Kante>
+              <Bezeichnung>
+                <Bezeichnung_Aussenanlage>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644-km-25-gegen</Wert>
+                </Bezeichnung_Aussenanlage>
+                <Bezeichnung_Lageplan_Kurz>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644-km-25-gegen</Wert>
+                </Bezeichnung_Lageplan_Kurz>
+                <Bezeichnung_Lageplan_Lang>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644-km-25-gegen</Wert>
+                </Bezeichnung_Lageplan_Lang>
+                <Bezeichnung_Tabelle>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644-km-25-gegen</Wert>
+                </Bezeichnung_Tabelle>
+                <Kennzahl>
+                  <Wert>60</Wert>
+                </Kennzahl>
+                <Oertlicher_Elementname>
+                  <Wert>-gegen</Wert>
+                </Oertlicher_Elementname>
+              </Bezeichnung>
+              <Signal_Real>
+                <Signal_Befestigungsart>
+                  <Wert>Mast</Wert>
+                </Signal_Befestigungsart>
+                <Signal_Real_Aktiv>
+                  <ID_Stellelement>
+                    <Wert>835374aa-361b-4501-b70e-52f67aa75013</Wert>
+                  </ID_Stellelement>
+                  <Signal_Funktion>
+                    <Wert>Block_Signal</Wert>
+                  </Signal_Funktion>
+                </Signal_Real_Aktiv>
+                <Signal_Real_Aktiv_Schirm>
+                  <Dunkelschaltung>
+                    <Wert>false</Wert>
+                  </Dunkelschaltung>
+                  <Richtpunktentfernung>
+                    <Wert>150</Wert>
+                  </Richtpunktentfernung>
+                  <Signal_Art>
+                    <Wert>Hauptsignal</Wert>
+                  </Signal_Art>
+                  <Signalsystem>
+                    <Wert>Ks</Wert>
+                  </Signalsystem>
+                  <Streuscheibe_Art>
+                    <Wert>HG</Wert>
+                  </Streuscheibe_Art>
+                  <Streuscheibe_Betriebsstellung>
+                    <Wert>HG4</Wert>
+                  </Streuscheibe_Betriebsstellung>
+                </Signal_Real_Aktiv_Schirm>
+              </Signal_Real>
+            </Signal>
+            <Signal>
+              <Identitaet>
+                <Wert>7afb3e3b-9fdb-4811-b03a-4c70e82b781c</Wert>
+              </Identitaet>
+              <Basis_Objekt_Allg>
+                <Datum_Regelwerk>
+                  <Wert>2012-02-24</Wert>
+                </Datum_Regelwerk>
+              </Basis_Objekt_Allg>
+              <Objektreferenzen/>
+              <Punkt_Objekt_Strecke>
+                <ID_Strecke>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -1907,7 +1845,7 @@
                   <Wert>175.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>in</Wert>
@@ -1918,16 +1856,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-175-in</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-175-in</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-175-in</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8-km-175-in</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9-km-175-in</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -1942,7 +1880,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert>
+                    <Wert>7afb3e3b-9fdb-4811-b03a-4c70e82b781c</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -1972,7 +1910,7 @@
             </Signal>
             <Signal>
               <Identitaet>
-                <Wert>ce1425ed-a1a0-4c65-8593-393a146ee13d</Wert>
+                <Wert>077f554a-351e-472e-bbd8-2fbdac844af3</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -1982,93 +1920,7 @@
               <Objektreferenzen/>
               <Punkt_Objekt_Strecke>
                 <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
-                </ID_Strecke>
-                <Strecke_Km>
-                  <Wert>8,500</Wert>
-                </Strecke_Km>
-              </Punkt_Objekt_Strecke>
-              <Punkt_Objekt_TOP_Kante>
-                <Abstand>
-                  <Wert>25.000</Wert>
-                </Abstand>
-                <ID_TOP_Kante>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49</Wert>
-                </ID_TOP_Kante>
-                <Wirkrichtung>
-                  <Wert>gegen</Wert>
-                </Wirkrichtung>
-                <Seitlicher_Abstand>
-                  <Wert>-3.950</Wert>
-                </Seitlicher_Abstand>
-              </Punkt_Objekt_TOP_Kante>
-              <Bezeichnung>
-                <Bezeichnung_Aussenanlage>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49-km-25-gegen</Wert>
-                </Bezeichnung_Aussenanlage>
-                <Bezeichnung_Lageplan_Kurz>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49-km-25-gegen</Wert>
-                </Bezeichnung_Lageplan_Kurz>
-                <Bezeichnung_Lageplan_Lang>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49-km-25-gegen</Wert>
-                </Bezeichnung_Lageplan_Lang>
-                <Bezeichnung_Tabelle>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49-km-25-gegen</Wert>
-                </Bezeichnung_Tabelle>
-                <Kennzahl>
-                  <Wert>60</Wert>
-                </Kennzahl>
-                <Oertlicher_Elementname>
-                  <Wert>-gegen</Wert>
-                </Oertlicher_Elementname>
-              </Bezeichnung>
-              <Signal_Real>
-                <Signal_Befestigungsart>
-                  <Wert>Mast</Wert>
-                </Signal_Befestigungsart>
-                <Signal_Real_Aktiv>
-                  <ID_Stellelement>
-                    <Wert>ce1425ed-a1a0-4c65-8593-393a146ee13d</Wert>
-                  </ID_Stellelement>
-                  <Signal_Funktion>
-                    <Wert>Block_Signal</Wert>
-                  </Signal_Funktion>
-                </Signal_Real_Aktiv>
-                <Signal_Real_Aktiv_Schirm>
-                  <Dunkelschaltung>
-                    <Wert>false</Wert>
-                  </Dunkelschaltung>
-                  <Richtpunktentfernung>
-                    <Wert>150</Wert>
-                  </Richtpunktentfernung>
-                  <Signal_Art>
-                    <Wert>Hauptsignal</Wert>
-                  </Signal_Art>
-                  <Signalsystem>
-                    <Wert>Ks</Wert>
-                  </Signalsystem>
-                  <Streuscheibe_Art>
-                    <Wert>HG</Wert>
-                  </Streuscheibe_Art>
-                  <Streuscheibe_Betriebsstellung>
-                    <Wert>HG4</Wert>
-                  </Streuscheibe_Betriebsstellung>
-                </Signal_Real_Aktiv_Schirm>
-              </Signal_Real>
-            </Signal>
-            <Signal>
-              <Identitaet>
-                <Wert>0ef3dfd6-fc8c-4717-bbeb-78abc2f69dda</Wert>
-              </Identitaet>
-              <Basis_Objekt_Allg>
-                <Datum_Regelwerk>
-                  <Wert>2012-02-24</Wert>
-                </Datum_Regelwerk>
-              </Basis_Objekt_Allg>
-              <Objektreferenzen/>
-              <Punkt_Objekt_Strecke>
-                <ID_Strecke>
-                  <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                  <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                 </ID_Strecke>
                 <Strecke_Km>
                   <Wert>8,500</Wert>
@@ -2079,7 +1931,7 @@
                   <Wert>175.000</Wert>
                 </Abstand>
                 <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
                 </ID_TOP_Kante>
                 <Wirkrichtung>
                   <Wert>in</Wert>
@@ -2090,16 +1942,16 @@
               </Punkt_Objekt_TOP_Kante>
               <Bezeichnung>
                 <Bezeichnung_Aussenanlage>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-175-in</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-175-in</Wert>
                 </Bezeichnung_Aussenanlage>
                 <Bezeichnung_Lageplan_Kurz>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-175-in</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-175-in</Wert>
                 </Bezeichnung_Lageplan_Kurz>
                 <Bezeichnung_Lageplan_Lang>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-175-in</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-175-in</Wert>
                 </Bezeichnung_Lageplan_Lang>
                 <Bezeichnung_Tabelle>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879-km-175-in</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4-km-175-in</Wert>
                 </Bezeichnung_Tabelle>
                 <Kennzahl>
                   <Wert>60</Wert>
@@ -2114,7 +1966,7 @@
                 </Signal_Befestigungsart>
                 <Signal_Real_Aktiv>
                   <ID_Stellelement>
-                    <Wert>0ef3dfd6-fc8c-4717-bbeb-78abc2f69dda</Wert>
+                    <Wert>077f554a-351e-472e-bbd8-2fbdac844af3</Wert>
                   </ID_Stellelement>
                   <Signal_Funktion>
                     <Wert>Block_Signal</Wert>
@@ -2144,7 +1996,7 @@
             </Signal>
             <Stellelement>
               <Identitaet>
-                <Wert>24820a45-9f4d-4bbc-82d8-d3fcacb3a5bb</Wert>
+                <Wert>315df9a5-090a-4159-9c24-81b141f98b3b</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2161,7 +2013,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert>
+                <Wert>6ba99f95-76f1-4a66-bc1f-3ac48e31e803</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2178,7 +2030,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>5de84440-c02d-4ab7-ac0e-42a9e1a71188</Wert>
+                <Wert>638b70d2-d888-4b87-9f8b-d6156f3d1f10</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2195,7 +2047,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>9beb9444-95fb-4756-9b19-bd767c805bb2</Wert>
+                <Wert>673e9586-fccb-47b4-ac96-7d0f898d6656</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2212,7 +2064,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>31ff2a11-6c07-4920-a01c-9c8970b1e39a</Wert>
+                <Wert>8c9d4beb-5df8-460d-bdd1-56191a427cd9</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2229,7 +2081,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert>
+                <Wert>835374aa-361b-4501-b70e-52f67aa75013</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2246,7 +2098,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>ce1425ed-a1a0-4c65-8593-393a146ee13d</Wert>
+                <Wert>7afb3e3b-9fdb-4811-b03a-4c70e82b781c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2263,7 +2115,7 @@
             </Stellelement>
             <Stellelement>
               <Identitaet>
-                <Wert>0ef3dfd6-fc8c-4717-bbeb-78abc2f69dda</Wert>
+                <Wert>077f554a-351e-472e-bbd8-2fbdac844af3</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2280,7 +2132,7 @@
             </Stellelement>
             <Strecke>
               <Identitaet>
-                <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2296,7 +2148,7 @@
                   <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4</Wert>
+                  <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2307,7 +2159,7 @@
                   <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
+                  <Wert>d6b55ecc-d8f6-4bd7-beb9-1403807327be</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2318,7 +2170,7 @@
                   <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
+                  <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2329,7 +2181,7 @@
                   <Wert>100.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                  <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2340,7 +2192,7 @@
                   <Wert>150.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42</Wert>
+                  <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2351,7 +2203,7 @@
                   <Wert>200.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                  <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2362,7 +2214,7 @@
                   <Wert>200.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                  <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bereich_Objekt_Teilbereich>
@@ -2373,18 +2225,18 @@
                   <Wert>50.000</Wert>
                 </Begrenzung_B>
                 <ID_TOP_Kante>
-                  <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49</Wert>
+                  <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
                 </ID_TOP_Kante>
               </Bereich_Objekt_Teilbereich>
               <Bezeichnung>
                 <Bezeichnung_Strecke>
-                  <Wert>7854</Wert>
+                  <Wert>6257</Wert>
                 </Bezeichnung_Strecke>
               </Bezeichnung>
             </Strecke>
-            <TOP_Kante> <!-- 4330d348-5497-4aa1-93da-e487f57127af to 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+            <TOP_Kante> <!-- bd6d8ab5-5674-49fe-821d-fedcedefcb82 to 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               <Identitaet>
-                <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4</Wert>
+                <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2393,16 +2245,44 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>4330d348-5497-4aa1-93da-e487f57127af</Wert> <!-- 4330d348-5497-4aa1-93da-e487f57127af -->
+                <Wert>bd6d8ab5-5674-49fe-821d-fedcedefcb82</Wert> <!-- bd6d8ab5-5674-49fe-821d-fedcedefcb82 -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>0fd67bd3-88ab-405a-a28d-6defc0439034</Wert> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+                <Wert>4040036b-955e-4372-b2d1-387ca42f7d38</Wert> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
                   <Wert>Ende</Wert>
                 </TOP_Anschluss_A>
                 <TOP_Anschluss_B>
+                  <Wert>Spitze</Wert>
+                </TOP_Anschluss_B>
+                <TOP_Laenge>
+                  <Wert>50.000</Wert>
+                </TOP_Laenge>
+              </TOP_Kante_Allg>
+            </TOP_Kante>
+            <TOP_Kante> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to de577f5b-82e2-49cf-9283-4581b2152ced -->
+              <Identitaet>
+                <Wert>d6b55ecc-d8f6-4bd7-beb9-1403807327be</Wert>
+              </Identitaet>
+              <Basis_Objekt_Allg>
+                <Datum_Regelwerk>
+                  <Wert>2012-02-24</Wert>
+                </Datum_Regelwerk>
+              </Basis_Objekt_Allg>
+              <Objektreferenzen/>
+              <ID_TOP_Knoten_A>
+                <Wert>4040036b-955e-4372-b2d1-387ca42f7d38</Wert> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 -->
+              </ID_TOP_Knoten_A>
+              <ID_TOP_Knoten_B>
+                <Wert>de577f5b-82e2-49cf-9283-4581b2152ced</Wert> <!-- de577f5b-82e2-49cf-9283-4581b2152ced -->
+              </ID_TOP_Knoten_B>
+              <TOP_Kante_Allg>
+                <TOP_Anschluss_A>
+                  <Wert>Rechts</Wert>
+                </TOP_Anschluss_A>
+                <TOP_Anschluss_B>
                   <Wert>Rechts</Wert>
                 </TOP_Anschluss_B>
                 <TOP_Laenge>
@@ -2410,9 +2290,9 @@
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Kante> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <TOP_Kante> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 to 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
+                <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2421,54 +2301,26 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>0fd67bd3-88ab-405a-a28d-6defc0439034</Wert> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+                <Wert>4040036b-955e-4372-b2d1-387ca42f7d38</Wert> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>fd120f4d-f9de-4c74-a161-b6efdfecbe88</Wert> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
-              </ID_TOP_Knoten_B>
-              <TOP_Kante_Allg>
-                <TOP_Anschluss_A>
-                  <Wert>Spitze</Wert>
-                </TOP_Anschluss_A>
-                <TOP_Anschluss_B>
-                  <Wert>Spitze</Wert>
-                </TOP_Anschluss_B>
-                <TOP_Laenge>
-                  <Wert>50.000</Wert>
-                </TOP_Laenge>
-              </TOP_Kante_Allg>
-            </TOP_Kante>
-            <TOP_Kante> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 to 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
-              <Identitaet>
-                <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
-              </Identitaet>
-              <Basis_Objekt_Allg>
-                <Datum_Regelwerk>
-                  <Wert>2012-02-24</Wert>
-                </Datum_Regelwerk>
-              </Basis_Objekt_Allg>
-              <Objektreferenzen/>
-              <ID_TOP_Knoten_A>
-                <Wert>0fd67bd3-88ab-405a-a28d-6defc0439034</Wert> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
-              </ID_TOP_Knoten_A>
-              <ID_TOP_Knoten_B>
-                <Wert>98f9e7bc-9bb6-400d-aad6-a1e1fea15bae</Wert> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+                <Wert>9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e</Wert> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
                   <Wert>Links</Wert>
                 </TOP_Anschluss_A>
                 <TOP_Anschluss_B>
-                  <Wert>Rechts</Wert>
+                  <Wert>Spitze</Wert>
                 </TOP_Anschluss_B>
                 <TOP_Laenge>
                   <Wert>50.000</Wert>
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Kante> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <TOP_Kante> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2477,14 +2329,14 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>fd120f4d-f9de-4c74-a161-b6efdfecbe88</Wert> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+                <Wert>de577f5b-82e2-49cf-9283-4581b2152ced</Wert> <!-- de577f5b-82e2-49cf-9283-4581b2152ced -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>379a71f7-e7d3-47b1-a1f4-39b3da761101</Wert> <!-- 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+                <Wert>fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b</Wert> <!-- fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
-                  <Wert>Rechts</Wert>
+                  <Wert>Links</Wert>
                 </TOP_Anschluss_A>
                 <TOP_Anschluss_B>
                   <Wert>Ende</Wert>
@@ -2494,9 +2346,9 @@
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Kante> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 to d2965184-b697-4435-9211-70a0e1505727 -->
+            <TOP_Kante> <!-- de577f5b-82e2-49cf-9283-4581b2152ced to 9802f6a1-546b-47c0-994a-383afe9fb07c -->
               <Identitaet>
-                <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42</Wert>
+                <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2505,14 +2357,14 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>fd120f4d-f9de-4c74-a161-b6efdfecbe88</Wert> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+                <Wert>de577f5b-82e2-49cf-9283-4581b2152ced</Wert> <!-- de577f5b-82e2-49cf-9283-4581b2152ced -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>d2965184-b697-4435-9211-70a0e1505727</Wert> <!-- d2965184-b697-4435-9211-70a0e1505727 -->
+                <Wert>9802f6a1-546b-47c0-994a-383afe9fb07c</Wert> <!-- 9802f6a1-546b-47c0-994a-383afe9fb07c -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
-                  <Wert>Links</Wert>
+                  <Wert>Spitze</Wert>
                 </TOP_Anschluss_A>
                 <TOP_Anschluss_B>
                   <Wert>Ende</Wert>
@@ -2522,9 +2374,9 @@
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <TOP_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2533,26 +2385,26 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>98f9e7bc-9bb6-400d-aad6-a1e1fea15bae</Wert> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+                <Wert>9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e</Wert> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>193b3656-dd50-49d8-b330-bd20cc346c80</Wert> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+                <Wert>89ee9453-ee4c-45aa-8303-2d7efcc577c4</Wert> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
-                  <Wert>Spitze</Wert>
+                  <Wert>Rechts</Wert>
                 </TOP_Anschluss_A>
                 <TOP_Anschluss_B>
-                  <Wert>Spitze</Wert>
+                  <Wert>Links</Wert>
                 </TOP_Anschluss_B>
                 <TOP_Laenge>
                   <Wert>200.000</Wert>
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Kante> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae to 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <TOP_Kante> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e to 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2561,10 +2413,10 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>98f9e7bc-9bb6-400d-aad6-a1e1fea15bae</Wert> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+                <Wert>9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e</Wert> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>193b3656-dd50-49d8-b330-bd20cc346c80</Wert> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+                <Wert>89ee9453-ee4c-45aa-8303-2d7efcc577c4</Wert> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
@@ -2578,9 +2430,9 @@
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Kante> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 to 14f146f9-0804-4623-bb6f-49b3bfeea816 -->
+            <TOP_Kante> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 to a9bf16c4-6a95-46b3-8a35-8e704486a62b -->
               <Identitaet>
-                <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49</Wert>
+                <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2589,14 +2441,14 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_TOP_Knoten_A>
-                <Wert>193b3656-dd50-49d8-b330-bd20cc346c80</Wert> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+                <Wert>89ee9453-ee4c-45aa-8303-2d7efcc577c4</Wert> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               </ID_TOP_Knoten_A>
               <ID_TOP_Knoten_B>
-                <Wert>14f146f9-0804-4623-bb6f-49b3bfeea816</Wert> <!-- 14f146f9-0804-4623-bb6f-49b3bfeea816 -->
+                <Wert>a9bf16c4-6a95-46b3-8a35-8e704486a62b</Wert> <!-- a9bf16c4-6a95-46b3-8a35-8e704486a62b -->
               </ID_TOP_Knoten_B>
               <TOP_Kante_Allg>
                 <TOP_Anschluss_A>
-                  <Wert>Links</Wert>
+                  <Wert>Spitze</Wert>
                 </TOP_Anschluss_A>
                 <TOP_Anschluss_B>
                   <Wert>Ende</Wert>
@@ -2606,9 +2458,9 @@
                 </TOP_Laenge>
               </TOP_Kante_Allg>
             </TOP_Kante>
-            <TOP_Knoten> <!-- 4330d348-5497-4aa1-93da-e487f57127af -->
+            <TOP_Knoten> <!-- bd6d8ab5-5674-49fe-821d-fedcedefcb82 -->
               <Identitaet>
-                <Wert>4330d348-5497-4aa1-93da-e487f57127af</Wert>
+                <Wert>bd6d8ab5-5674-49fe-821d-fedcedefcb82</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2617,12 +2469,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>49d80bde-c177-484e-b36a-7416408f0198</Wert>
+                <Wert>6e183f1c-f4c4-45f3-8454-c17db849adfe</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- d2965184-b697-4435-9211-70a0e1505727 -->
+            <TOP_Knoten> <!-- 9802f6a1-546b-47c0-994a-383afe9fb07c -->
               <Identitaet>
-                <Wert>d2965184-b697-4435-9211-70a0e1505727</Wert>
+                <Wert>9802f6a1-546b-47c0-994a-383afe9fb07c</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2631,12 +2483,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>d79ef55a-4d21-48ad-b1b7-c48301656236</Wert>
+                <Wert>0d27843c-dfb0-45e7-bcdf-88d5225b19cc</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- 14f146f9-0804-4623-bb6f-49b3bfeea816 -->
+            <TOP_Knoten> <!-- a9bf16c4-6a95-46b3-8a35-8e704486a62b -->
               <Identitaet>
-                <Wert>14f146f9-0804-4623-bb6f-49b3bfeea816</Wert>
+                <Wert>a9bf16c4-6a95-46b3-8a35-8e704486a62b</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2645,12 +2497,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>518a0497-01a6-43d5-a169-1d264cce546c</Wert>
+                <Wert>aa233d34-72ab-4f85-bd3f-593faaaf9119</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- 379a71f7-e7d3-47b1-a1f4-39b3da761101 -->
+            <TOP_Knoten> <!-- fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b -->
               <Identitaet>
-                <Wert>379a71f7-e7d3-47b1-a1f4-39b3da761101</Wert>
+                <Wert>fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2659,12 +2511,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>259e551f-adab-44bf-a998-41caba1c1032</Wert>
+                <Wert>17cad8ff-6145-49b6-aee2-6be5385aaf8c</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- 0fd67bd3-88ab-405a-a28d-6defc0439034 -->
+            <TOP_Knoten> <!-- 4040036b-955e-4372-b2d1-387ca42f7d38 -->
               <Identitaet>
-                <Wert>0fd67bd3-88ab-405a-a28d-6defc0439034</Wert>
+                <Wert>4040036b-955e-4372-b2d1-387ca42f7d38</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2673,12 +2525,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- 98f9e7bc-9bb6-400d-aad6-a1e1fea15bae -->
+            <TOP_Knoten> <!-- 9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e -->
               <Identitaet>
-                <Wert>98f9e7bc-9bb6-400d-aad6-a1e1fea15bae</Wert>
+                <Wert>9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2687,12 +2539,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- fd120f4d-f9de-4c74-a161-b6efdfecbe88 -->
+            <TOP_Knoten> <!-- de577f5b-82e2-49cf-9283-4581b2152ced -->
               <Identitaet>
-                <Wert>fd120f4d-f9de-4c74-a161-b6efdfecbe88</Wert>
+                <Wert>de577f5b-82e2-49cf-9283-4581b2152ced</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2701,12 +2553,12 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
-            <TOP_Knoten> <!-- 193b3656-dd50-49d8-b330-bd20cc346c80 -->
+            <TOP_Knoten> <!-- 89ee9453-ee4c-45aa-8303-2d7efcc577c4 -->
               <Identitaet>
-                <Wert>193b3656-dd50-49d8-b330-bd20cc346c80</Wert>
+                <Wert>89ee9453-ee4c-45aa-8303-2d7efcc577c4</Wert>
               </Identitaet>
               <Basis_Objekt_Allg>
                 <Datum_Regelwerk>
@@ -2715,7 +2567,7 @@
               </Basis_Objekt_Allg>
               <Objektreferenzen/>
               <ID_GEO_Knoten>
-                <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
               </ID_GEO_Knoten>
             </TOP_Knoten>
                <Unterbringung>
@@ -2764,11 +2616,11 @@
                     <Wert>BE199B7D-A86C-4682-8E08-4B23DE2CF5A3</Wert>
                   </Identitaet>
                   <ID_Ausgabe_Fachdaten>
-                    <Wert>b1988ad2-68db-4357-a96a-67516bd90b59</Wert>
+                    <Wert>a1747492-2d5c-48c8-a8da-d47b2181a6fd</Wert>
                   </ID_Ausgabe_Fachdaten>
                   <LST_Objekte_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>b1988ad2-68db-4357-a96a-67516bd90b59</Wert>
+                            <Wert>a1747492-2d5c-48c8-a8da-d47b2181a6fd</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
                             <Wert>F4CE3AF8-13B1-4E12-BB4D-982BEA37466E</Wert>
@@ -2777,190 +2629,181 @@
                             <Wert>C35FDB88-889E-539E-A68B-6079265F70D9</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>4330d348-5497-4aa1-93da-e487f57127af</Wert>
+                            <Wert>bd6d8ab5-5674-49fe-821d-fedcedefcb82</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>49d80bde-c177-484e-b36a-7416408f0198</Wert>
+                            <Wert>6e183f1c-f4c4-45f3-8454-c17db849adfe</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>d2965184-b697-4435-9211-70a0e1505727</Wert>
+                            <Wert>9802f6a1-546b-47c0-994a-383afe9fb07c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>d79ef55a-4d21-48ad-b1b7-c48301656236</Wert>
+                            <Wert>0d27843c-dfb0-45e7-bcdf-88d5225b19cc</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>14f146f9-0804-4623-bb6f-49b3bfeea816</Wert>
+                            <Wert>a9bf16c4-6a95-46b3-8a35-8e704486a62b</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>518a0497-01a6-43d5-a169-1d264cce546c</Wert>
+                            <Wert>aa233d34-72ab-4f85-bd3f-593faaaf9119</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>379a71f7-e7d3-47b1-a1f4-39b3da761101</Wert>
+                            <Wert>fb98b355-4fb8-4f7c-b734-5c8e3bc93b9b</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>259e551f-adab-44bf-a998-41caba1c1032</Wert>
+                            <Wert>17cad8ff-6145-49b6-aee2-6be5385aaf8c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>0fd67bd3-88ab-405a-a28d-6defc0439034</Wert>
+                            <Wert>4040036b-955e-4372-b2d1-387ca42f7d38</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>b17367a6-90e0-4137-8391-52b569b7625a</Wert>
+                            <Wert>4a1ab8a6-2927-48bb-983f-76555a488472</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>98f9e7bc-9bb6-400d-aad6-a1e1fea15bae</Wert>
+                            <Wert>9eb72f10-f1f6-4d55-a9ed-7e20b8b7448e</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>5898f0fe-fc57-45f2-aa4b-679fcca42169</Wert>
+                            <Wert>989bf83f-3506-4a3f-a006-60901fa461b6</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>fd120f4d-f9de-4c74-a161-b6efdfecbe88</Wert>
+                            <Wert>de577f5b-82e2-49cf-9283-4581b2152ced</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>10561927-5907-42dd-b01f-0393543b8fd0</Wert>
+                            <Wert>779d6703-3b4b-4c2b-a8bd-af674fb0e7f4</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>193b3656-dd50-49d8-b330-bd20cc346c80</Wert>
+                            <Wert>89ee9453-ee4c-45aa-8303-2d7efcc577c4</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>72867595-6c73-42a2-a818-1f8882c83249</Wert>
+                            <Wert>fa5b085b-b234-4150-9a88-cda96d907022</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>cc797e7a-d36a-4b22-b7c9-510678ea57e4</Wert>
+                            <Wert>94a6f92a-0c2a-40dc-87d6-ccd0e55bf53d</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>85065c0f-f6d3-47a7-971b-94efbc50baf0</Wert>
+                            <Wert>920e690f-aaf4-4b2f-bb95-1d65067b1e02</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>04684440-e019-4146-9a41-3532c4dc6b16</Wert>
+                            <Wert>d6b55ecc-d8f6-4bd7-beb9-1403807327be</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>afd3f43c-4527-4972-916b-d0b8037bc2be</Wert>
+                            <Wert>f2e6afb6-0d8d-4f24-a21f-ec7b5230413c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>6e74dea5-644a-4749-a0f7-96a11dd38a68</Wert>
+                            <Wert>746baae2-e6cb-4a5d-87a2-609e073475cf</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>63e2c94c-e7c2-4262-b7a9-8e4631d3f225</Wert>
+                            <Wert>89b11e82-2cdd-4bd1-b723-45abb679625c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>5c409c80-9d70-4634-8a34-127f73129444</Wert>
+                            <Wert>bf05e3db-5b34-4e89-8406-31413fe9a917</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>709405df-156f-4585-afa5-fbd2366cf733</Wert>
+                            <Wert>69523063-241c-4ab3-815b-5c00187b8734</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>25bedca4-8d99-4446-b5a0-f945863ac034</Wert>
+                            <Wert>ab336b13-0559-4dec-9e30-7f3ebd77a2a3</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>aaa5e0b4-09fb-458a-b204-87821fac6f31</Wert>
+                            <Wert>4e042cd8-6862-4a04-94b7-c8fa15a5e97b</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>f9b738b1-258c-457e-8734-86699efde525</Wert>
+                            <Wert>a51fad9c-2ac2-4f38-aae2-6eab45ae346e</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>a388a1c4-827f-43e4-979e-162c78d0a491</Wert>
+                            <Wert>3052c12f-b6f1-461c-8d68-19f64b5626d4</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>d330526c-d7a3-4024-b33d-eb4b1cfcdd15</Wert>
+                            <Wert>91b7d827-2b35-43b1-a423-7976f80c8fbb</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>fd81483b-bfbe-468b-94ba-eec3d3985018</Wert>
+                            <Wert>f1c01c00-b404-4d09-acca-41359232a379</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>d58eb937-37bb-4f66-ae78-5e2ab079bb42</Wert>
+                            <Wert>64f673bc-7d9f-4091-9110-2128e0285d3c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>3177fe1a-6e7b-4865-9f85-b54429164941</Wert>
+                            <Wert>c703073c-b070-49f4-8739-c1a9a0e6da47</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>74b5a339-3eb5-4853-9534-7a9cf7d58ab8</Wert>
+                            <Wert>61a1600e-997a-4c88-9ec0-89c53d884ef4</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>3835ccf0-6038-4214-960e-dc30f4c94047</Wert>
+                            <Wert>8a03cc76-897e-4603-b5c6-5b92d2dfff64</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>bb2d6bb6-f86c-46a5-b12a-e8500bf72a6b</Wert>
+                            <Wert>740fe799-f062-430a-9c46-76f065851b71</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>f82979a4-3314-4d9e-855b-3c3842125772</Wert>
+                            <Wert>229be9c4-1618-4f42-8514-b5ab26da4f6a</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>91294974-73db-49b6-80fc-5b77ac32b879</Wert>
+                            <Wert>8710dd8c-f9cc-4674-9956-197809e8f9a9</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>d18a80fa-a5cf-46d9-9c39-a3ec4dfe7bf5</Wert>
+                            <Wert>9cfe050b-5e49-45a2-af0e-08c25a742c55</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>8fb65ea5-31b2-4432-8b5e-6b57fa107fe8</Wert>
+                            <Wert>63f2579d-3369-4cff-a7dd-fc3169273d81</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>7214050e-f29a-407e-a37a-24a941a21996</Wert>
+                            <Wert>dfb94bcc-6d01-4a43-8b4b-90d8f1bea5ab</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>07324e90-03e0-4bb2-be40-1e4ae7542e45</Wert>
+                            <Wert>6b9fbdd2-d35a-49f9-ab79-6b373a820ba2</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>b666d598-5ee9-4720-b040-6babc8bf76ce</Wert>
+                            <Wert>f7081281-1c66-49fb-93b9-d495c5bec935</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>533cba2a-f714-4a2f-a31f-22a8a60e3b13</Wert>
+                            <Wert>261ad32b-3211-4688-8e52-f820cb752bef</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>ea553968-3301-4970-949c-ed0f2fe6dce4</Wert>
+                            <Wert>56655e99-6f8e-40cf-86f1-f92c500e516e</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>6fe59d52-0da4-46fd-8deb-9e106dd0bf49</Wert>
+                            <Wert>f3a18358-b059-4033-94cc-9c79ffa4f644</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>f585ab95-3858-403d-ae70-33d0b7e0de62</Wert>
+                            <Wert>11f19d22-c9d3-4b48-8b76-320edf77f7d3</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>24820a45-9f4d-4bbc-82d8-d3fcacb3a5bb</Wert>
+                            <Wert>315df9a5-090a-4159-9c24-81b141f98b3b</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>4267c0f2-c826-4986-81f2-b27254cc39a7</Wert>
+                            <Wert>6ba99f95-76f1-4a66-bc1f-3ac48e31e803</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>5de84440-c02d-4ab7-ac0e-42a9e1a71188</Wert>
+                            <Wert>638b70d2-d888-4b87-9f8b-d6156f3d1f10</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>9beb9444-95fb-4756-9b19-bd767c805bb2</Wert>
+                            <Wert>673e9586-fccb-47b4-ac96-7d0f898d6656</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>31ff2a11-6c07-4920-a01c-9c8970b1e39a</Wert>
+                            <Wert>8c9d4beb-5df8-460d-bdd1-56191a427cd9</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>04e82a9a-208a-46f6-88cb-db866ea62c95</Wert>
+                            <Wert>835374aa-361b-4501-b70e-52f67aa75013</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>ce1425ed-a1a0-4c65-8593-393a146ee13d</Wert>
+                            <Wert>7afb3e3b-9fdb-4811-b03a-4c70e82b781c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>0ef3dfd6-fc8c-4717-bbeb-78abc2f69dda</Wert>
+                            <Wert>077f554a-351e-472e-bbd8-2fbdac844af3</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>8a65e689-cc40-419d-8555-4d84162e4f47</Wert>
+                            <Wert>125cc064-8505-40a4-b2bd-3987ffe32512</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>a9ca620d-7089-4ce7-ad94-8e5d00130025</Wert>
+                            <Wert>e7243b9e-4325-4313-9f2a-146d4516f82a</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>b9011caa-782e-4a76-b738-a5319e73a888</Wert>
+                            <Wert>385051f8-bbfe-40e1-bfc2-3fe33464bd5c</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>77055591-b5fe-4cd6-b625-2dbd7b825396</Wert>
+                            <Wert>bcfb15ec-64ae-46b1-913d-994811d23c03</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
-                            <Wert>5d400055-f1ef-4dba-879a-2f6803046055</Wert>
-                        </ID_LST_Objekt_Planungsbereich>
-                         <ID_LST_Objekt_Planungsbereich>
-                            <Wert>8bd7bc30-6d79-467a-a645-ecacd3646567</Wert>
-                        </ID_LST_Objekt_Planungsbereich>
-                         <ID_LST_Objekt_Planungsbereich>
-                            <Wert>c145b4c8-e605-44fb-9180-f8c8481b30d1</Wert>
-                        </ID_LST_Objekt_Planungsbereich>
-                         <ID_LST_Objekt_Planungsbereich>
-                            <Wert>800862d3-da92-4257-860c-f296d068b150</Wert>
+                            <Wert>83cd4944-26b9-4476-bcb0-673177952ab7</Wert>
                         </ID_LST_Objekt_Planungsbereich>
                          <ID_LST_Objekt_Planungsbereich>
                             <Wert>C35FDB88-889E-539E-A68B-6079265F70D9</Wert>

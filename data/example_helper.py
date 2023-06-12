@@ -61,21 +61,21 @@ def setup() -> Topology:
     edge8.intermediate_geo_nodes.append(DbrefGeoNode(250, 30))
     edge8.intermediate_geo_nodes.append(DbrefGeoNode(275, 30))
 
-    switch1.set_connection_head_edge(edge2)
+    switch1.set_connection_head_edge(edge1)
+    switch1.set_connection_right_edge(edge2)
     switch1.set_connection_left_edge(edge4)
-    switch1.set_connection_right_edge(edge1)
 
-    switch2.set_connection_head_edge(edge7)
+    switch2.set_connection_head_edge(edge4)
+    switch2.set_connection_right_edge(edge7)
     switch2.set_connection_left_edge(edge8)
-    switch2.set_connection_right_edge(edge4)
 
-    switch3.set_connection_head_edge(edge2)
-    switch3.set_connection_left_edge(edge6)
-    switch3.set_connection_right_edge(edge5)
+    switch3.set_connection_head_edge(edge6)
+    switch3.set_connection_right_edge(edge2)
+    switch3.set_connection_left_edge(edge5)
 
-    switch4.set_connection_head_edge(edge7)
-    switch4.set_connection_left_edge(edge11)
+    switch4.set_connection_head_edge(edge11)
     switch4.set_connection_right_edge(edge8)
+    switch4.set_connection_left_edge(edge7)
 
     node1.set_connection_head_edge(edge1)
 
