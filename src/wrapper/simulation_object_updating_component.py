@@ -151,8 +151,8 @@ class SimulationObjectUpdatingComponent(Component):
             train = next(
                 (train for train in self.trains if train.identifier == vehicle)
             )
-            self._simulation_objects.remove(train)
             self.infrastructure_provider.train_drove_off_track(train, train.edge)
+            self._simulation_objects.remove(train)
 
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)

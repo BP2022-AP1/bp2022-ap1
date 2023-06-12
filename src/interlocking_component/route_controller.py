@@ -584,14 +584,14 @@ class RouteController(Component):
                 print(
                     (
                         f"Node {edge.to_node.identifier} has"
-                        "incoming {edge.to_node.incoming.identifier}"
+                        f"incoming {edge.to_node.incoming.identifier}"
                     )
                 )
             if isinstance(edge.from_node, Signal):
                 print(
                     (
                         f"Node {edge.from_node.identifier} has"
-                        "incoming {edge.from_node.incoming.identifier}"
+                        f"incoming {edge.from_node.incoming.identifier}"
                     )
                 )
         reserving_trains = {}

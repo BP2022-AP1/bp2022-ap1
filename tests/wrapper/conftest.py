@@ -226,9 +226,8 @@ class MockRouteController:
     reserve_for_initialized_train_count = 0
     set_spawn_fahrstrasse_count = 0
 
-    def set_spawn_fahrstrasse(self, timetable: List[Platform]):
+    def set_spawn_fahrstrasse(self, timetable: List[Platform], start: Edge):
         reservation_placeholder = UninitializedTrain(timetable)
-        start = timetable[0].edge
         end = timetable[1].edge
         self.set_spawn_fahrstrasse_count += 1
         if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
