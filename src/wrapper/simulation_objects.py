@@ -887,10 +887,7 @@ class Train(SimulationObject):
                 self.current_platform is not None
                 and self.edge == self.current_platform.edge
             ):
-                print("next station")
                 self._station_index += 1
-
-            print(">", self._stop_state, self._last_stop_state)
 
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
