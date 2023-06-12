@@ -294,7 +294,7 @@ class RouteController(Component):
                 )
 
     def set_spawn_fahrstrasse(
-        self, timetable: List[Platform]
+        self, timetable: List[Platform], starting_edge: Edge
     ) -> Tuple[str, UninitializedTrain]:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
@@ -306,7 +306,7 @@ class RouteController(Component):
         :return: The id of the first SUMO Route and the placholder for reservations.
         """
         train_to_be_initialized = UninitializedTrain(timetable)
-        self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
+        self.set_fahrstrasse(train_to_be_initialized, starting_edge)
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
@@ -395,6 +395,7 @@ class RouteController(Component):
                         )
                     return
         # If the no interlocking route is found an error is raised
+        print(list(map(lambda obj: obj.identifier, new_route)))
         raise KeyError()
 
     def set_fahrstrasse_if_reservations_work(
@@ -500,7 +501,7 @@ class RouteController(Component):
         # This is needed so the reservations on the train are inserted in the right order.
         train_reservation_start = len(train.reserved_tracks)
 
-        if not self.check_if_reservation_ends_in_opposing_reservation(route):
+        if self.check_if_reservation_ends_in_opposing_reservation(route):
             return False
 
         for edge in route_as_edges:
@@ -553,15 +554,21 @@ class RouteController(Component):
         :return: if  the last track is reserved for a train in the opposing direction
         """
         route_as_edges = self.get_edges_of_node_route(route)
-        last_edge = route_as_edges[-1]
+        last_reservation_edge: Edge
+        for edge in reversed(route_as_edges):
+            if isinstance(edge.track, ReservationTrack):
+                last_reservation_edge = edge
+                break
+        if last_reservation_edge is None:
+            return False
         # If a route to be reserved leads into a track that is reserved for
         # or occupied by an opposing train, i.e. a train that will leave that
         # section by moving into the section the route to be reserved comes from,
         # the reservation of that route fails.
-        for _, edge in last_edge.track.reservations:
-            if edge != last_edge:
-                return False
-        return True
+        for _, edge in last_reservation_edge.track.reservations:
+            if edge != last_reservation_edge:
+                return True
+        return False
 
     def maybe_put_reservations_as_first(self, train: Train, route: List[Node]):
         """Finds the shortest segment which ends with a reservation for the train in first place
@@ -593,6 +600,8 @@ class RouteController(Component):
             if isinstance(edge.track, ReservationTrack):
                 first_reservation_track = edge.track
                 break
+        if first_reservation_track is None:
+            return
         for reserving_train, _ in first_reservation_track.reservations:
             if reserving_train != train:
                 reserving_trains[reserving_train] = True
