@@ -136,7 +136,10 @@ def edge2() -> Edge:
 
 @pytest.fixture
 def train(
-    train_add, train_route_update, train_setRouteID, configured_souc: SimulationObjectUpdatingComponent
+    train_add,
+    train_route_update,
+    train_setRouteID,
+    configured_souc: SimulationObjectUpdatingComponent,
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
