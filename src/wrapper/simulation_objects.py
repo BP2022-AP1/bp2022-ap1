@@ -876,29 +876,10 @@ class Train(SimulationObject):
             and not edge_id[:1] == ":"
         ):
             if hasattr(self, "_edge"):
-                try:
-                    assert self._edge.track.reservations[0][1] == self._edge
-                    assert self._edge.track == self.reserved_tracks[0]
-                    if len(self.reserved_tracks) > 1:
-                        assert (
-                            edge_id
-                            == self.reserved_tracks[1].reservations[0][1].identifier
-                        )
-                except Exception as exc:
-                    for track in self.reserved_tracks:
-                        print(track.edges[0].identifier)
-                    raise ValueError(
-                        (
-                            "A Track was skipped: Old track: "
-                            f"{self._edge.identifier}, new track: {edge_id}"
-                        )
-                    ) from exc
-                self._edge.track.reservations.pop(0)
-                self.reserved_tracks.pop(0)
-
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
                 )
+
             self._edge = next(
                 item for item in self.updater.edges if item.identifier == edge_id
             )
@@ -906,27 +887,30 @@ class Train(SimulationObject):
                 self.current_platform is not None
                 and self.edge == self.current_platform.edge
             ):
+                print("next station")
                 self._station_index += 1
 
-            if self._stop_state and not self._last_stop_state:
-                self.updater.event_bus.arrival_train(
-                    self.updater.tick,
-                    self.identifier,
-                    self.timetable[self.station_index],
-                )
-                self._last_stop_state = True
-
-            if not self._stop_state and self._last_stop_state:
-                self.updater.event_bus.departure_train(
-                    self.updater.tick,
-                    self.identifier,
-                    self.timetable[self.station_index],
-                )
-                self._last_stop_state = False
+            print(">", self._stop_state, self._last_stop_state)
 
             self.updater.infrastructure_provider.train_drove_onto_track(
                 self, self._edge
             )
+
+        if self._stop_state and not self._last_stop_state:
+            self.updater.event_bus.arrival_train(
+                self.updater.tick,
+                self.identifier,
+                self.timetable[self.station_index],
+            )
+            self._last_stop_state = True
+
+        if not self._stop_state and self._last_stop_state:
+            self.updater.event_bus.departure_train(
+                self.updater.tick,
+                self.identifier,
+                self.timetable[self.station_index],
+            )
+            self._last_stop_state = False
 
     def add_subscriptions(self) -> List[int]:
         """Gets called when this object is created to allow

@@ -239,19 +239,21 @@ class TestTrain:
         mocked_event_bus: EventBus,
     ):
         # pylint: disable=unused-argument
-        p1_id = Platform("station-1", edge_id="a57e4-0", platform_id="station-1")
-        p1_id.updater = configured_souc
-        p2_id = Platform("station-2", edge_id="a57e4-1", platform_id="station-2")
-        p2_id.updater = configured_souc
+        platform_1 = Platform("station-1", edge_id="a57e4-0", platform_id="station-1")
+        platform_1.updater = configured_souc
+        platform_2 = Platform("station-2", edge_id="a57e4-1", platform_id="station-2")
+        platform_2.updater = configured_souc
 
         train = Train(
             identifier=f"{uuid4()}_42",
-            timetable=[p1_id, p2_id],
+            timetable=[platform_1, platform_2],
             train_type="cargo",
             updater=configured_souc,
         )
 
-        assert train.current_platform is not None and train.current_platform == p1_id
+        assert (
+            train.current_platform is not None and train.current_platform == platform_1
+        )
 
         train.update(
             {
@@ -262,27 +264,38 @@ class TestTrain:
             }
         )
 
+        assert (
+            train.current_platform is not None and train.current_platform == platform_2
+        )
+
         train.update(
             {
                 constants.VAR_POSITION: (0, 0),
-                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_ROAD_ID: "a57e4-1",
                 constants.VAR_SPEED: 10,
                 constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 0
             }
         )
 
-        assert train.current_platform is not None and train.current_platform == p2_id
-
         train.update(
             {
                 constants.VAR_POSITION: (0, 0),
-                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_ROAD_ID: "a57e4-1",
                 constants.VAR_SPEED: 10,
                 constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
             }
         )
 
-        assert mocked_event_bus.depart_station_calls == 1
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "c6b16-0",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 1
+            }
+        )
+
+        assert mocked_event_bus.depart_station_calls == 2
         assert mocked_event_bus.arrive_station_calls == 2
 
 

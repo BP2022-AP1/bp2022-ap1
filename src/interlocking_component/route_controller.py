@@ -261,6 +261,23 @@ class RouteController(Component):
             # if the train has reached the last station, don't allocate a new fahrstraße
             return
 
+        try:
+            assert train.edge.track.reservations[0][1] == train.edge.identifier
+            assert train.edge.track == train.reserved_tracks[0]
+            if len(train.reserved_tracks) > 1:
+                assert (
+                    train.edge.identifier
+                    == train.reserved_tracks[1].reservations[0][1].identifier
+                )
+        except Exception as exc:
+            for track in train.reserved_tracks:
+                print(track.edges[0].identifier)
+            raise ValueError(
+                ("Something is off: Track segment " f"{train.edge.identifier}")
+            ) from exc
+        train.edge.track.reservations.pop(0)
+        train.reserved_tracks.pop(0)
+
         routes = self._get_interlocking_routes_for_edge(edge)
         for route in routes:
             if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
