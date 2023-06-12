@@ -200,14 +200,14 @@ class RouteController(Component):
     def __init__(
         self,
         event_bus: EventBus,
-        priority: int,
+        priority: str,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
         path_name: str = os.getenv("PLANPRO_PATH"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
-        super().__init__(event_bus, priority)
+        super().__init__(event_bus, "MEDIUM")
         self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
