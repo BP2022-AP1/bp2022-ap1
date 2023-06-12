@@ -59,7 +59,7 @@ def train(
 
 @pytest.fixture
 def configured_souc(
-    traffic_update, infrastructure_provider, event_bus: EventBus
+    traffic_update, infrastructure_provider, mocked_event_bus: EventBus
 ) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
     souc = SimulationObjectUpdatingComponent(
@@ -67,7 +67,7 @@ def configured_souc(
             "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
         )
     )
-    souc.event_bus = event_bus
+    souc.event_bus = mocked_event_bus
     souc.infrastructure_provider = infrastructure_provider
     return souc
 
@@ -115,3 +115,45 @@ def spawner(
 ) -> Tuple[SimulationObjectUpdatingComponent, TrainBuilder]:
     # pylint: disable=unused-argument
     return (configured_souc, TrainBuilder(configured_souc, MockRouteController()))
+
+
+@pytest.fixture
+def mocked_event_bus():
+    class EventBusMock:
+        spawn_train_calls = 0
+        remove_train_calls = 0
+        depart_station_calls = 0
+        arrive_station_calls = 0
+
+        def spawn_train(self, tick: int, identifier: str):
+            assert tick is not None
+            assert identifier is not None
+
+            self.spawn_train_calls += 1
+
+        def remove_train(self, tick: int, identifier: str):
+            assert tick is not None
+            assert identifier is not None
+
+            self.remove_train_calls += 1
+
+        def departure_train(self, tick: int, identifier: str, platform: Platform):
+            assert tick is not None
+            assert identifier is not None
+            assert platform is not None
+
+            self.depart_station_calls += 1
+
+        def arrival_train(self, tick: int, identifier: str, platform: Platform):
+            assert tick is not None
+            assert identifier is not None
+            assert platform is not None
+
+            self.arrive_station_calls += 1
+
+    return EventBusMock()
+
+
+@pytest.fixture
+def mocked_souc(mocked_event_bus: EventBus) -> SimulationObjectUpdatingComponent:
+    return SimulationObjectUpdatingComponent(event_bus=mocked_event_bus)

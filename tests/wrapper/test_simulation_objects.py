@@ -159,9 +159,11 @@ class TestTrain:
         train.timetable = ["asdf"]
         assert train.timetable == ["asdf"]
 
-    def test_spawning(self, train_add, souc):
+    def test_spawning(self, mocked_event_bus, mocked_souc, train_add):
         # pylint: disable=unused-argument
-        Train(identifier="fancy-rb-001", train_type="fancy-rb", updater=souc)
+        Train(identifier="fancy-rb-001", train_type="fancy-rb", updater=mocked_souc)
+
+        assert mocked_event_bus.spawn_train_calls == 1
 
     def test_update(
         self,
