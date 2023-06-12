@@ -140,7 +140,12 @@ def event_bus(run) -> EventBus:
 @pytest.fixture
 def basic_train(souc: SimulationObjectUpdatingComponent, train_add, max_speed) -> Train:
     # pylint: disable=unused-argument
-    train = Train(identifier="basic-train", train_type="cargo", updater=souc)
+    train = Train(
+        identifier="basic-train",
+        train_type="cargo",
+        updater=souc,
+        timetable=[],
+    )
     souc.simulation_objects.append(train)
     return train
 

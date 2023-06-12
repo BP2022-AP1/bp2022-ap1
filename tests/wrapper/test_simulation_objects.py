@@ -3,6 +3,7 @@ from uuid import uuid4
 import pytest
 from traci import constants
 
+from src.event_bus.event_bus import EventBus
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -96,6 +97,7 @@ class TestTrack:
         assert basic_track.blocked
 
     def test_length(self, basic_track: Track):
+        # pylint: disable=protected-access
         basic_track.edges[0]._length = 100
         basic_track.edges[1]._length = 100
         assert (
@@ -231,7 +233,10 @@ class TestTrain:
         )
 
     def test_current_platform(
-        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+        self,
+        configured_souc: SimulationObjectUpdatingComponent,
+        train_add,
+        mocked_event_bus: EventBus,
     ):
         # pylint: disable=unused-argument
         p1_id = Platform("station-1", edge_id="a57e4-0", platform_id="station-1")
@@ -253,10 +258,14 @@ class TestTrain:
                 constants.VAR_POSITION: (0, 0),
                 constants.VAR_ROAD_ID: "a57e4-0",
                 constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,
             }
         )
 
         assert train.current_platform is not None and train.current_platform == p2_id
+
+        assert mocked_event_bus.depart_station_calls == 1
+        assert mocked_event_bus.arrive_station_calls == 2
 
 
 class TestSwitch:

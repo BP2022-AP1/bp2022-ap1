@@ -1,7 +1,6 @@
 import pytest
-from traci import trafficlight
-from src.event_bus.event_bus import EventBus
 
+from src.event_bus.event_bus import EventBus
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )

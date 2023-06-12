@@ -1,9 +1,8 @@
 import os
-from collections import defaultdict
 from typing import List, Tuple
 
 import pytest
-from traci import constants, edge, trafficlight, vehicle
+from traci import constants
 
 from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (
@@ -13,7 +12,7 @@ from src.interlocking_component.route_controller import UninitializedTrain
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Train
 from src.wrapper.train_builder import TrainBuilder
 
 
@@ -27,7 +26,7 @@ def train(
     train_add,
     train_route_update,
     configured_souc: SimulationObjectUpdatingComponent,
-    edge1: Edge,
+    basic_edge1: Edge,
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
@@ -44,7 +43,7 @@ def train(
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "a57e4-0",
+            constants.VAR_ROAD_ID: basic_edge1.identifier,
             constants.VAR_SPEED: 10.2,
             constants.VAR_STOPSTATE: 0,
         }
@@ -123,6 +122,8 @@ def spawner(
 @pytest.fixture
 def mocked_event_bus():
     class EventBusMock:
+        """Mocks the event bus to test if it gets correctly called"""
+
         spawn_train_calls = 0
         remove_train_calls = 0
         depart_station_calls = 0
