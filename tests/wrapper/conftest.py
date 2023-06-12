@@ -24,7 +24,10 @@ def edge2() -> Edge:
 
 @pytest.fixture
 def train(
-    train_add, train_route_update, configured_souc: SimulationObjectUpdatingComponent
+    train_add,
+    train_route_update,
+    configured_souc: SimulationObjectUpdatingComponent,
+    edge1: Edge,
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
@@ -33,6 +36,7 @@ def train(
         timetable=[],
         from_simulator=True,
     )
+    created_train.train_type.priority = 0
     created_train.updater = configured_souc
     created_train.update(
         {
@@ -98,7 +102,6 @@ class MockRouteController:
         self.set_spawn_fahrstrasse_count += 1
         if start.identifier == "58ab8-1":
             return (True, reservation_placeholder)
-            # return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return (False, reservation_placeholder)
 
     def reserve_for_initialized_train(

@@ -17,7 +17,9 @@ class TestSimulationObjectUpdatingComponent:
 
         self.signal = Signal("fancy-signal")
         self.edge = Edge("fancy-edge")
-        self.platform = Platform("fancy-platform")
+        self.platform = Platform(
+            "fancy-platform", edge_id="fancy-edge", platform_id="platform-1"
+        )
         self.switch = Switch("fancy-switch")
 
         component = SimulationObjectUpdatingComponent()

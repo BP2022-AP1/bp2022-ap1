@@ -174,8 +174,10 @@ def another_spawner_configuration(
 
 
 @pytest.fixture
-def platform() -> Platform:
-    return Platform("fault injector platform")
+def platform(edge: Edge, edge_re: Edge) -> Platform:
+    return Platform(
+        "fault injector platform", platform_id="platform-1", edge_id=edge.identifier
+    )
 
 
 @pytest.fixture
