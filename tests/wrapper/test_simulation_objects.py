@@ -258,11 +258,29 @@ class TestTrain:
                 constants.VAR_POSITION: (0, 0),
                 constants.VAR_ROAD_ID: "a57e4-0",
                 constants.VAR_SPEED: 10,
-                constants.VAR_STOPSTATE: 0,
+                constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
+            }
+        )
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 0
             }
         )
 
         assert train.current_platform is not None and train.current_platform == p2_id
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
+            }
+        )
 
         assert mocked_event_bus.depart_station_calls == 1
         assert mocked_event_bus.arrive_station_calls == 2
