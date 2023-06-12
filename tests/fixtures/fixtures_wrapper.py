@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 from typing import Tuple
 
@@ -22,7 +23,7 @@ def results(monkeypatch):
 
         dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"  # type: ignore
+        edge_dict[constants.VAR_ROAD_ID] = "bf53d-0"  # type: ignore
         dict_["fake-sim-train"] = edge_dict
         return dict_
 
@@ -127,7 +128,9 @@ def train_route_update(monkeypatch):
 @pytest.fixture
 def souc(traffic_update, event_bus: EventBus) -> SimulationObjectUpdatingComponent:
     # pylint: disable=unused-argument
-    return SimulationObjectUpdatingComponent(event_bus=event_bus)
+    return SimulationObjectUpdatingComponent(
+        event_bus=event_bus,
+    )
 
 
 @pytest.fixture
@@ -153,7 +156,7 @@ def basic_train(souc: SimulationObjectUpdatingComponent, train_add, max_speed) -
 @pytest.fixture
 def basic_edge1(souc: SimulationObjectUpdatingComponent, speed_update) -> Edge:
     # pylint: disable=unused-argument
-    edge = Edge("a57e4-0")
+    edge = Edge("bf53d-0")
     edge.updater = souc
     souc.simulation_objects.append(edge)
     return edge
@@ -162,7 +165,7 @@ def basic_edge1(souc: SimulationObjectUpdatingComponent, speed_update) -> Edge:
 @pytest.fixture
 def basic_edge1_re(souc: SimulationObjectUpdatingComponent, speed_update) -> Edge:
     # pylint: disable=unused-argument
-    edge = Edge("a57e4-0-re")
+    edge = Edge("bf53d-0-re")
     edge.updater = souc
     souc.simulation_objects.append(edge)
     return edge
