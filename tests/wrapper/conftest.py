@@ -116,7 +116,7 @@ def edge1() -> Edge:
 
 
 @pytest.fixture
-def edge_re() -> Edge:
+def edge1_re() -> Edge:
     return Edge("bf53d-0-re")
 
 
