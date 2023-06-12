@@ -18,7 +18,7 @@ from src.wrapper.train_builder import TrainBuilder
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("a57e4-1")
+    return Edge("bf53d-1")
 
 
 @pytest.fixture
@@ -98,8 +98,9 @@ class MockRouteController:
     def set_spawn_fahrstrasse(self, timetable: List[Platform]):
         reservation_placeholder = UninitializedTrain(timetable)
         start = timetable[0].edge
+        end = timetable[1].edge
         self.set_spawn_fahrstrasse_count += 1
-        if start.identifier == "58ab8-1":
+        if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
             return (True, reservation_placeholder)
         return (False, reservation_placeholder)
 
