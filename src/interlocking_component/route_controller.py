@@ -225,36 +225,6 @@ class RouteController(Component):
         )
         initializer.initialize_all()
 
-    def initialize_signals(self):
-        """This method sets which edge is the incoming for each signal."""
-        print("Starting to initialize signals")
-        for yaramo_signal in self.topology.signals.values():
-            signal = None
-            for potentical_signal in self.simulation_object_updating_component.signals:
-                if yaramo_signal.name == potentical_signal.identifier:
-                    signal = potentical_signal
-
-            assert signal is not None
-
-            edges_into_signal = [
-                edge for edge in signal.edges if edge.to_node == signal
-            ]
-            edges_numbers = [
-                edge.identifier.split("-")[1] for edge in edges_into_signal
-            ]
-
-            if yaramo_signal.direction == SignalDirection.IN:
-                if int(edges_numbers[0]) < int(edges_numbers[1]):
-                    signal.incoming = edges_into_signal[0]
-                else:
-                    signal.incoming = edges_into_signal[1]
-            else:
-                if int(edges_numbers[0]) > int(edges_numbers[1]):
-                    signal.incoming = edges_into_signal[0]
-                else:
-                    signal.incoming = edges_into_signal[1]
-        print("Signals were initialized")
-
     def next_tick(self, tick: int):
         self.tick = tick
         for (
@@ -307,6 +277,7 @@ class RouteController(Component):
         """
         train_to_be_initialized = UninitializedTrain(timetable)
         self.set_fahrstrasse(train_to_be_initialized, starting_edge)
+        print(f"______________________{train_to_be_initialized.route}")
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
@@ -338,15 +309,21 @@ class RouteController(Component):
         :param edge: the edge it just entered
         :type edge: Edge
         """
+        print(train.station_index)
         if train.station_index >= len(train.timetable):
             # if the train has reached the last station, don't allocate a new fahrstraße
+            print("No new route needed")
             return
 
         routes = self._get_interlocking_routes_for_edge(edge)
+        print(routes[0].get_last_segment_of_route())
+        print(routes)
+        print(train.route)
         for route in routes:
             if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
                 continue
-
+            
+            print("Setting fahrstrasse.")
             self.set_fahrstrasse(train, edge)
             break
 
@@ -395,7 +372,6 @@ class RouteController(Component):
                         )
                     return
         # If the no interlocking route is found an error is raised
-        print(list(map(lambda obj: obj.identifier, new_route)))
         raise KeyError()
 
     def set_fahrstrasse_if_reservations_work(
@@ -578,22 +554,6 @@ class RouteController(Component):
         :param route: The route along which the reservation may be changed
         """
         edge_route = self.get_edges_of_node_route(route)
-        print(list(map(lambda obj: obj.identifier, edge_route)))
-        for edge in edge_route:
-            if isinstance(edge.to_node, Signal):
-                print(
-                    (
-                        f"Node {edge.to_node.identifier} has"
-                        f"incoming {edge.to_node.incoming.identifier}"
-                    )
-                )
-            if isinstance(edge.from_node, Signal):
-                print(
-                    (
-                        f"Node {edge.from_node.identifier} has"
-                        f"incoming {edge.from_node.incoming.identifier}"
-                    )
-                )
         reserving_trains = {}
         first_reservation_track: ReservationTrack
         for edge in edge_route:

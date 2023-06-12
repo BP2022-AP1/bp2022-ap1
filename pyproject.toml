@@ -174,7 +174,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.insert-config]
     help = "Inserts the configs into the database"
-    cmd = "python scripts/insert_simple_simulation.py"
+    cmd = "python scripts/insert_slightly_complicated_simulation.py"
     envfile = [".env.shared", ".env.secret"]
 
     [tool.poe.tasks.cov]
