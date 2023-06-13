@@ -3,6 +3,7 @@ This module contains the fault injector class
 """
 
 from src.component import Component
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_types.fault import Fault
 
 
@@ -13,6 +14,9 @@ class FaultInjector(Component):
     """
 
     _faults: list[Fault] = []
+
+    def __init__(self, event_bus: EventBus, priority: str):
+        super().__init__(event_bus, "HIGH")
 
     def add_fault(self, fault: Fault):
         """Adds faults that should be injected to the fault injector

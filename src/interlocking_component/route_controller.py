@@ -147,14 +147,14 @@ class RouteController(Component):
     def __init__(
         self,
         event_bus: EventBus,
-        priority: int,
+        priority: str,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
         path_name: str = os.getenv("PLANPRO_PATH"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
-        super().__init__(event_bus, priority)
+        super().__init__(event_bus, "MEDIUM")
         self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
@@ -214,7 +214,9 @@ class RouteController(Component):
             if was_reserved:
                 self.routes_to_be_reserved.remove((route, train))
 
-    def set_spawn_fahrstrasse(self, timetable: List[Platform]) -> str:
+    def set_spawn_fahrstrasse(
+        self, timetable: List[Platform]
+    ) -> Tuple[str, UninitializedTrain]:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
@@ -222,7 +224,7 @@ class RouteController(Component):
         :param timetable: The timetable of the train. The spawn fahrstrasse
         will lead from the first to the second platform on the list.
         :raises KeyError: The route could not be found in the interlocking.
-        :return: The id of the first SUMO Route.
+        :return: The id of the first SUMO Route and the placholder for reservations.
         """
         train_to_be_initialized = UninitializedTrain(timetable)
         self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
