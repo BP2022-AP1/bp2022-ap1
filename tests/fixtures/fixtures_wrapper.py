@@ -153,7 +153,7 @@ def basic_train(souc: SimulationObjectUpdatingComponent, train_add, max_speed) -
 @pytest.fixture
 def basic_edge1(souc: SimulationObjectUpdatingComponent, speed_update) -> Edge:
     # pylint: disable=unused-argument
-    edge = Edge("a57e4-0")
+    edge = Edge("bf53d-0")
     edge.updater = souc
     souc.simulation_objects.append(edge)
     return edge
@@ -162,7 +162,7 @@ def basic_edge1(souc: SimulationObjectUpdatingComponent, speed_update) -> Edge:
 @pytest.fixture
 def basic_edge1_re(souc: SimulationObjectUpdatingComponent, speed_update) -> Edge:
     # pylint: disable=unused-argument
-    edge = Edge("a57e4-0-re")
+    edge = Edge("bf53d-0-re")
     edge.updater = souc
     souc.simulation_objects.append(edge)
     return edge

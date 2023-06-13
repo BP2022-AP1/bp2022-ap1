@@ -239,9 +239,9 @@ class TestTrain:
         mocked_event_bus: EventBus,
     ):
         # pylint: disable=unused-argument
-        p1_id = Platform("station-1", edge_id="a57e4-0", platform_id="station-1")
+        p1_id = Platform("station-1", edge_id="bf53d-0", platform_id="station-1")
         p1_id.updater = configured_souc
-        p2_id = Platform("station-2", edge_id="a57e4-1", platform_id="station-2")
+        p2_id = Platform("station-2", edge_id="bf53d-1", platform_id="station-2")
         p2_id.updater = configured_souc
 
         train = Train(
@@ -256,7 +256,7 @@ class TestTrain:
         train.update(
             {
                 constants.VAR_POSITION: (0, 0),
-                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_ROAD_ID: "bf53d-0",
                 constants.VAR_SPEED: 10,
                 constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
             }
@@ -265,7 +265,7 @@ class TestTrain:
         train.update(
             {
                 constants.VAR_POSITION: (0, 0),
-                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_ROAD_ID: "bf53d-0",
                 constants.VAR_SPEED: 10,
                 constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 0
             }
@@ -276,9 +276,18 @@ class TestTrain:
         train.update(
             {
                 constants.VAR_POSITION: (0, 0),
-                constants.VAR_ROAD_ID: "a57e4-0",
+                constants.VAR_ROAD_ID: "bf53d-1",
                 constants.VAR_SPEED: 10,
                 constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
+            }
+        )
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "bf53d-1",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 1
             }
         )
 
