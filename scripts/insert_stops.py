@@ -1,5 +1,5 @@
-from copy import copy
 import os
+from copy import copy
 from typing import Dict
 
 from sumolib import xml
