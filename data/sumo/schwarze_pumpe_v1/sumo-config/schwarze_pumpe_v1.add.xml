@@ -5,12 +5,12 @@
 
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
     <!-- StoppingPlaces -->
-    <busStop id="bs_0" lane="b2daa-1_0" startPos="689.97" endPos="789.97"/>
-    <busStop id="bs_1" lane="f8127-1_0" startPos="446.74" endPos="546.74"/>
-    <busStop id="bs_2" lane="1c363-1_0" startPos="212.54" endPos="312.54"/>
-    <busStop id="bs_3" lane="f7740-1_0" startPos="1303.24" endPos="1403.24"/>
-    <busStop id="bs_4" lane="eefc2-1_0" startPos="174.00" endPos="274.00"/>
-    <busStop id="bs_5" lane="45e38-2_0" startPos="888.51" endPos="988.51"/>
-    <busStop id="bs_6" lane="ce5c2-1-re_0" startPos="892.98" endPos="992.98"/>
-    <busStop id="bs_7" lane="d8c47-4_0" startPos="596.78" endPos="696.78"/>
+    <busStop id="bs_0" lane="778f7-2_0" startPos="689.97" endPos="789.97"/>
+    <busStop id="bs_1" lane="62329-2_0" startPos="446.74" endPos="546.74"/>
+    <busStop id="bs_2" lane="a1f25-2_0" startPos="212.54" endPos="312.54"/>
+    <busStop id="bs_3" lane="97d11-2_0" startPos="1303.24" endPos="1403.24"/>
+    <busStop id="bs_4" lane="dc73f-2_0" startPos="174.00" endPos="274.00"/>
+    <busStop id="bs_5" lane="50821-2_0" startPos="888.51" endPos="988.51"/>
+    <busStop id="bs_6" lane="4cf62-2-re_0" startPos="892.98" endPos="992.98"/>
+    <busStop id="bs_7" lane="1bda8-4_0" startPos="596.78" endPos="696.78"/>
 </additional>
