@@ -42,13 +42,6 @@ def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
 
 
-@pytest.fixture
-def event_bus(run):
-    bus = EventBus(run_id=run.id)
-    Logger(bus)
-    return bus
-
-
 class MockRouteController:
     method_calls: int = 0
 

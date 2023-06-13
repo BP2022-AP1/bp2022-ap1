@@ -3,6 +3,7 @@ from uuid import uuid4
 import pytest
 from traci import constants
 
+from src.event_bus.event_bus import EventBus
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -46,19 +47,18 @@ class TestSignal:
 class TestEdge:
     """Tests for the edge component"""
 
-    def test_update_speed(self, edge1: Edge, speed_update):
-        # pylint: disable=unused-argument
-        edge1.max_speed = 100
+    def test_update_speed(self, basic_edge1: Edge):
+        basic_edge1.max_speed = 100
 
-        assert edge1.max_speed == 100
+        assert basic_edge1.max_speed == 100
 
-    def test_default_blocked(self, edge1: Edge):
-        assert not edge1.blocked
+    def test_default_blocked(self, basic_edge1: Edge):
+        assert not basic_edge1.blocked
 
-    def test_update_blocked(self, edge1: Edge):
-        edge1.blocked = True
+    def test_update_blocked(self, basic_edge1: Edge):
+        basic_edge1.blocked = True
 
-        assert edge1.blocked
+        assert basic_edge1.blocked
 
 
 class TestNode:
@@ -74,50 +74,51 @@ class TestNode:
 class TestTrack:
     """Tests the track component"""
 
-    def test_update_speed(self, track: Track, speed_update):
-        # pylint: disable=unused-argument
+    def test_update_speed(self, basic_track: Track):
+        basic_track.max_speed = (100, 200)
+        assert basic_track.edges[0].max_speed == 100
+        assert basic_track.edges[1].max_speed == 200
+        assert basic_track.max_speed == (100, 200)
 
-        track.max_speed = (100, 200)
-        assert track.edges[0].max_speed == 100
-        assert track.edges[1].max_speed == 200
-        assert track.max_speed == (100, 200)
+        basic_track.max_speed = 150
+        assert basic_track.edges[0].max_speed == 150
+        assert basic_track.edges[1].max_speed == 150
+        assert basic_track.max_speed == 150
 
-        track.max_speed = 150
-        assert track.edges[0].max_speed == 150
-        assert track.edges[1].max_speed == 150
-        assert track.max_speed == 150
+    def test_blocked(self, basic_track: Track):
+        basic_track.blocked = (True, False)
+        assert basic_track.edges[0].blocked
+        assert not basic_track.edges[1].blocked
+        assert basic_track.blocked == (True, False)
 
-    def test_blocked(self, track: Track):
-        track.blocked = (True, False)
-        assert track.edges[0].blocked
-        assert not track.edges[1].blocked
-        assert track.blocked == (True, False)
+        basic_track.blocked = True
+        assert basic_track.edges[0].blocked
+        assert basic_track.edges[1].blocked
+        assert basic_track.blocked
 
-        track.blocked = True
-        assert track.edges[0].blocked
-        assert track.edges[1].blocked
-        assert track.blocked
-
-    def test_length(self, track: Track):
+    def test_length(self, basic_track: Track):
         # pylint: disable=protected-access
-        track.edges[0]._length = 100
-        track.edges[1]._length = 100
-        assert track.length == track.edges[0].length == track.edges[1].length
+        basic_track.edges[0]._length = 100
+        basic_track.edges[1]._length = 100
+        assert (
+            basic_track.length
+            == basic_track.edges[0].length
+            == basic_track.edges[1].length
+        )
 
 
 class TestTrain:
     """Tests for the train object"""
 
     def test_edge(
-        self, train: Train, souc: SimulationObjectUpdatingComponent, edge1: Edge
+        self, train: Train, souc: SimulationObjectUpdatingComponent, basic_edge1: Edge
     ):
         souc.simulation_objects.append(train)
-        souc.simulation_objects.append(edge1)
 
         train.updater = souc
-        edge1.updater = souc
+        basic_edge1.updater = souc
 
-        assert train.edge.identifier == edge1.identifier
+        assert train.edge.identifier == basic_edge1.identifier
 
     def test_position(self, train: Train):
         assert train.position == (
@@ -161,13 +162,16 @@ class TestTrain:
         train.timetable = ["asdf"]
         assert train.timetable == ["asdf"]
 
-    def test_spawning(self, train_add):
+    def test_spawning(self, mocked_event_bus, mocked_souc, train_add):
         # pylint: disable=unused-argument
         Train(
             identifier="fancy-rb-001",
             train_type="fancy-rb",
+            updater=mocked_souc,
             timetable=["platform-1", "platform-2"],
         )
+
+        assert mocked_event_bus.spawn_train_calls == 1
 
     def test_update(
         self,
@@ -189,6 +193,7 @@ class TestTrain:
                 ),
                 constants.VAR_ROAD_ID: "bf53d-1",
                 constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,
             }
         )
         train.route = "ending-route"
@@ -228,7 +233,10 @@ class TestTrain:
         )
 
     def test_current_platform(
-        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+        self,
+        configured_souc: SimulationObjectUpdatingComponent,
+        train_add,
+        mocked_event_bus: EventBus,
     ):
         # pylint: disable=unused-argument
         p1_id = Platform("station-1", edge_id="bf53d-0", platform_id="station-1")
@@ -250,32 +258,63 @@ class TestTrain:
                 constants.VAR_POSITION: (0, 0),
                 constants.VAR_ROAD_ID: "bf53d-0",
                 constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
+            }
+        )
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "bf53d-0",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 0
             }
         )
 
         assert train.current_platform is not None and train.current_platform == p2_id
 
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "bf53d-1",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 16,  # set the isBusStop bit to 1
+            }
+        )
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "bf53d-1",
+                constants.VAR_SPEED: 10,
+                constants.VAR_STOPSTATE: 0,  # set the isBusStop bit to 1
+            }
+        )
+
+        assert mocked_event_bus.depart_station_calls == 2
+        assert mocked_event_bus.arrive_station_calls == 2
+
 
 class TestSwitch:
     """Tests for the switch object"""
 
-    def test_state(self, switch: Switch):
-        assert switch.state == Switch.State.LEFT
-        switch.state = Switch.State.RIGHT
-        assert switch.state == Switch.State.RIGHT
+    def test_state(self, basic_switch: Switch):
+        assert basic_switch.state == Switch.State.LEFT
+        basic_switch.state = Switch.State.RIGHT
+        assert basic_switch.state == Switch.State.RIGHT
 
-    def test_invalid_state(self, switch: Switch):
+    def test_invalid_state(self, basic_switch: Switch):
         def bad_state():
-            switch.state = "left"
+            basic_switch.state = "left"
 
         pytest.raises(ValueError, bad_state)
 
-    def test_update(self, switch: Switch):
-        switch.update({"state": "right"})
-        assert switch.state == Switch.State.LEFT
+    def test_update(self, basic_switch: Switch):
+        basic_switch.update({"state": "right"})
+        assert basic_switch.state == Switch.State.LEFT
 
-    def test_subscription(self, switch: Switch):
-        assert len(switch.add_subscriptions()) == 0
+    def test_subscription(self, basic_switch: Switch):
+        assert len(basic_switch.add_subscriptions()) == 0
 
 
 class TestPlatform:
@@ -283,24 +322,17 @@ class TestPlatform:
 
     def test_edge(
         self,
-        configured_souc: SimulationObjectUpdatingComponent,
-        platform: Platform,
-        edge1: Edge,
+        basic_platform: Platform,
+        basic_edge1: Edge,
     ):
-        configured_souc.simulation_objects.append(edge1)
-        configured_souc.simulation_objects.append(platform)
+        assert basic_platform.edge.identifier == basic_edge1.identifier
 
-        edge1.updater = configured_souc
-        platform.updater = configured_souc
+    def test_platform_id(self, basic_platform: Platform):
+        assert basic_platform.platform_id == "platform-1"
 
-        assert platform.edge.identifier == edge1.identifier
+    def test_update(self, basic_platform: Platform):
+        basic_platform.update({})
+        assert basic_platform.platform_id == "platform-1"
 
-    def test_platform_id(self, platform: Platform):
-        assert platform.platform_id == "fancy-city-platform-1"
-
-    def test_update(self, platform: Platform):
-        platform.update({})
-        assert platform.platform_id == "fancy-city-platform-1"
-
-    def test_subscription(self, platform: Platform):
-        assert len(platform.add_subscriptions()) == 0
+    def test_subscription(self, basic_platform: Platform):
+        assert len(basic_platform.add_subscriptions()) == 0

@@ -21,13 +21,13 @@ class TestPlatformBlockedFault:
         pass
 
     @pytest.fixture
-    def platform_blocked_fault_configuration(self, platform: Platform):
+    def platform_blocked_fault_configuration(self, basic_platform: Platform):
         return PlatformBlockedFaultConfiguration.create(
             **{
                 "start_tick": 20,
                 "end_tick": 200,
                 "description": "test PlatformBlockedFault",
-                "affected_element_id": platform.identifier,
+                "affected_element_id": basic_platform.identifier,
                 "strategy": "regular",
             }
         )
@@ -37,13 +37,13 @@ class TestPlatformBlockedFault:
         self,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
         event_bus: EventBus,
-        simulation_object_updater: SimulationObjectUpdatingComponent,
+        souc: SimulationObjectUpdatingComponent,
         interlocking_disruptor: IInterlockingDisruptor,
     ):
         return PlatformBlockedFault(
             configuration=platform_blocked_fault_configuration,
             event_bus=event_bus,
-            simulation_object_updater=simulation_object_updater,
+            simulation_object_updater=souc,
             interlocking_disruptor=interlocking_disruptor,
         )
 
@@ -51,30 +51,24 @@ class TestPlatformBlockedFault:
         self,
         tick,
         platform_blocked_fault: PlatformBlockedFault,
-        platform: Platform,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_platform_and_wrapper,
+        basic_platform: Platform,
     ):
-        assert not platform.blocked
+        assert not basic_platform.blocked
         platform_blocked_fault.inject_fault(tick)
         assert (
             platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
             == 1
         )
-        assert platform.blocked
+        assert basic_platform.blocked
 
     def test_resolve_platform_blocked_fault(
         self,
         tick,
         platform_blocked_fault: PlatformBlockedFault,
-        platform: Platform,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_platform_and_wrapper,
+        basic_platform: Platform,
     ):
         platform_blocked_fault.inject_fault(tick)
-        assert platform.blocked
+        assert basic_platform.blocked
         assert (
             platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
             == 1
@@ -84,4 +78,4 @@ class TestPlatformBlockedFault:
             platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
             == 2
         )
-        assert not platform.blocked
+        assert not basic_platform.blocked

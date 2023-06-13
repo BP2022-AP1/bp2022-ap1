@@ -760,13 +760,6 @@ def mock_train_spawner() -> object:
 
 
 @pytest.fixture
-def event_bus(run) -> EventBus:
-    bus = EventBus(run_id=run.id)
-    Logger(bus)
-    return bus
-
-
-@pytest.fixture
 def spawner(
     spawner_configuration: SpawnerConfiguration,
     event_bus: EventBus,

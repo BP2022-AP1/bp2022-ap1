@@ -1,6 +1,6 @@
 import os
 from os import path
-from typing import List
+from typing import List, Optional
 
 import sumolib
 import traci
@@ -30,7 +30,16 @@ class SimulationObjectUpdatingComponent(Component):
 
     _simulation_objects: List[SimulationObject]
     _sumo_configuration = None
+    _tick: int = 0
     infrastructure_provider: SumoInfrastructureProvider = None
+
+    @property
+    def tick(self) -> int:
+        """Returns the current simulation tick
+
+        :return: The current simulation tick
+        """
+        return self._tick
 
     @property
     def simulation_objects(self) -> List[SimulationObject]:
@@ -99,7 +108,7 @@ class SimulationObjectUpdatingComponent(Component):
     def __init__(
         self,
         event_bus: EventBus = None,
-        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
+        sumo_configuration: Optional[str] = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new SimulationObjectUpdatingComponent.
 
@@ -129,6 +138,7 @@ class SimulationObjectUpdatingComponent(Component):
                     )
 
     def next_tick(self, tick: int):
+        self._tick = tick
         subscription_results = traci.vehicle.getAllSubscriptionResults()
         self._remove_stale_vehicles()
 
@@ -145,13 +155,16 @@ class SimulationObjectUpdatingComponent(Component):
         vehicles_to_remove = stored_vehicles - simulation_vehicles
 
         for vehicle in vehicles_to_remove:
-            train = next(
+            train: Train = next(
                 (train for train in self.trains if train.identifier == vehicle)
             )
             self._simulation_objects.remove(train)
             self.infrastructure_provider.train_drove_off_track(train, train.edge)
+            self.event_bus.remove_train(self.tick, train.identifier)
 
     def _fetch_initial_simulation_objects(self):
+        assert self._sumo_configuration is not None
+
         folder = path.dirname(self._sumo_configuration)
         inputs = next(sumolib.xml.parse(self._sumo_configuration, "input"))
         net_file = path.join(folder, inputs["net-file"][0].getAttribute("value"))

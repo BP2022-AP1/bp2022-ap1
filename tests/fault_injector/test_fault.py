@@ -4,6 +4,9 @@ from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
 from src.fault_injector.fault_types.fault import Fault
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 class TestFault:
@@ -38,13 +41,13 @@ class TestFault:
         self,
         configuration,
         event_bus,
-        simulation_object_updater,
+        souc: SimulationObjectUpdatingComponent,
         interlocking_disruptor,
     ):
         return self.MockSpecialFault(
             configuration,
             event_bus,
-            simulation_object_updater,
+            souc,
             interlocking_disruptor,
         )
 
