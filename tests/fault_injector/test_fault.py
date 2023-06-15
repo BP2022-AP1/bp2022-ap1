@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from src.fault_injector.fault_configurations.fault_configuration import (
@@ -29,8 +31,8 @@ class TestFault:
     @pytest.fixture
     def configuration(self):
         configuration = self.MockConfiguration()
-        configuration.start_tick = 3
-        configuration.end_tick = 30
+        configuration.start_time = 3
+        configuration.end_time = 30
         return configuration
 
     @pytest.fixture
@@ -49,7 +51,7 @@ class TestFault:
         )
 
     def test_next_tick(self, fault: MockSpecialFault):
-        for tick in range(50):
+        for tick in range(3000):
             fault.next_tick(tick)
-        assert fault.tick_injected == 3
-        assert fault.tick_resolved == 30
+        assert int(float(fault.tick_injected) * float(os.getenv("TICK_LENGTH"))) == 3
+        assert int(float(fault.tick_resolved) * float(os.getenv("TICK_LENGTH"))) == 30

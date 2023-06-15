@@ -68,8 +68,8 @@ class TestFailingDict:
         (
             TrainSpeedFaultConfiguration,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrainSpeedFault",
                 "affected_element_id": "12345678",
                 "new_speed": 40,
@@ -79,8 +79,8 @@ class TestFailingDict:
         (
             PlatformBlockedFaultConfiguration,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "PlatformBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -89,8 +89,8 @@ class TestFailingDict:
         (
             ScheduleBlockedFaultConfiguration,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "ScheduleBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -99,8 +99,8 @@ class TestFailingDict:
         (
             TrackBlockedFaultConfiguration,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrackBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -109,8 +109,8 @@ class TestFailingDict:
         (
             TrainPrioFaultConfiguration,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrainPrioFault",
                 "affected_element_id": "12345678",
                 "new_prio": 1,
@@ -120,8 +120,8 @@ class TestFailingDict:
         (
             TrackSpeedLimitFaultConfiguration,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrackSpeedLimitFault",
                 "affected_element_id": "12345678",
                 "new_speed_limit": 60,
@@ -168,8 +168,8 @@ class TestCorrectFilledDict:
         (
             TrainSpeedFaultConfiguration(
                 **{
-                    "start_tick": 1,
-                    "end_tick": 100,
+                    "start_time": 1,
+                    "end_time": 100,
                     "description": "TrainSpeedFault",
                     "affected_element_id": "12345678",
                     "new_speed": 40,
@@ -182,8 +182,8 @@ class TestCorrectFilledDict:
         (
             PlatformBlockedFaultConfiguration(
                 **{
-                    "start_tick": 1,
-                    "end_tick": 100,
+                    "start_time": 1,
+                    "end_time": 100,
                     "description": "PlatformBlockedFault",
                     "affected_element_id": "12345678",
                     "strategy": "regular",
@@ -195,8 +195,8 @@ class TestCorrectFilledDict:
         (
             ScheduleBlockedFaultConfiguration(
                 **{
-                    "start_tick": 1,
-                    "end_tick": 100,
+                    "start_time": 1,
+                    "end_time": 100,
                     "description": "ScheduleBlockedFault",
                     "affected_element_id": "12345678",
                     "strategy": "regular",
@@ -208,8 +208,8 @@ class TestCorrectFilledDict:
         (
             TrackBlockedFaultConfiguration(
                 **{
-                    "start_tick": 1,
-                    "end_tick": 100,
+                    "start_time": 1,
+                    "end_time": 100,
                     "description": "TrackBlockedFault",
                     "affected_element_id": "12345678",
                     "strategy": "regular",
@@ -221,8 +221,8 @@ class TestCorrectFilledDict:
         (
             TrainPrioFaultConfiguration(
                 **{
-                    "start_tick": 1,
-                    "end_tick": 100,
+                    "start_time": 1,
+                    "end_time": 100,
                     "description": "TrainPrioFault",
                     "affected_element_id": "12345678",
                     "new_prio": 1,
@@ -235,8 +235,8 @@ class TestCorrectFilledDict:
         (
             TrackSpeedLimitFaultConfiguration(
                 **{
-                    "start_tick": 1,
-                    "end_tick": 100,
+                    "start_time": 1,
+                    "end_time": 100,
                     "description": "TrackSpeedLimitFault",
                     "affected_element_id": "12345678",
                     "new_speed_limit": 60,

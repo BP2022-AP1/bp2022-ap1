@@ -268,6 +268,16 @@ class LogCollector:
         train_enter_df = train_enter_df.sort_values("tick")
         train_leave_df = train_leave_df.sort_values("tick")
 
+        if train_enter_df.empty or train_leave_df.empty:
+            return pd.DataFrame(
+                columns=[
+                    "train_id",
+                    "block_section_id",
+                    "block_section_length",
+                    "enter_tick",
+                    "leave_tick",
+                ]
+            )
         train_enter_first = train_enter_df.iloc[0].tick < train_leave_df.iloc[0].tick
         train_enter_last = train_enter_df.iloc[-1].tick >= train_leave_df.iloc[-1].tick
         block_section_ids = train_enter_df.block_section_id

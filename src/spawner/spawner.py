@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 
 from peewee import ForeignKeyField
@@ -78,6 +79,7 @@ class Spawner(Component, ISpawnerDisruptor):
     train_spawner: TrainBuilder
 
     PRIORITY: str = "LOW"
+    TICKS_PER_SECOND: int = int(1 / float(os.environ["TICK_LENGTH"]))
 
     def next_tick(self, tick: int):
         """Called to announce that the next tick occurred.
@@ -85,8 +87,10 @@ class Spawner(Component, ISpawnerDisruptor):
         :param tick: The current tick.
         :type tick: int
         """
+        if tick % self.TICKS_PER_SECOND != 0:
+            return
         for schedule in self._schedules.values():
-            schedule.maybe_spawn(tick, self)
+            schedule.maybe_spawn(tick // self.TICKS_PER_SECOND, self)
 
     def __init__(
         self,
