@@ -174,8 +174,10 @@ def another_spawner_configuration(
 
 
 @pytest.fixture
-def platform() -> Platform:
-    return Platform("fault injector platform")
+def platform(edge: Edge, edge_re: Edge) -> Platform:
+    return Platform(
+        "fault injector platform", platform_id="platform-1", edge_id=edge.identifier
+    )
 
 
 @pytest.fixture
@@ -302,7 +304,11 @@ def train_add(monkeypatch):
 @pytest.fixture
 # pylint: disable-next=unused-argument
 def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
+    return Train(
+        identifier="fault injector train",
+        train_type="cargo",
+        timetable=["platform-1", "platform-2"],
+    )
 
 
 @pytest.fixture
@@ -344,21 +350,6 @@ def train_speed_fault_configuration(
         new_speed=30,
         strategy="regular",
     )
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-# pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
 
 
 # ------------- TrainSpeedFaultConfiguration ----------------

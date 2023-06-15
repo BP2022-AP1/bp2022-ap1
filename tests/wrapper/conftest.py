@@ -82,6 +82,8 @@ def vehicle_route(monkeypatch):
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, routeID=None, typeID=None):
+        # pylint: disable=invalid-name, unused-argument
+        # We want to use the same signature as the TraCI methods
         assert identifier is not None
         assert typeID is not None
 
@@ -113,6 +115,8 @@ def train_setRouteID(monkeypatch):
 @pytest.fixture
 def train_route_update(monkeypatch):
     def update_route(identifier, routeID=None):
+        # pylint: disable=invalid-name
+        # We want to use the same signature as the TraCI methods
         assert identifier is not None
         assert routeID is not None
 
@@ -125,7 +129,7 @@ def edge1() -> Edge:
 
 
 @pytest.fixture
-def edge_re() -> Edge:
+def edge1_re() -> Edge:
     return Edge("bf53d-0-re")
 
 
@@ -140,6 +144,7 @@ def train(
     train_route_update,
     train_setRouteID,
     configured_souc: SimulationObjectUpdatingComponent,
+    edge1: Edge,
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
@@ -148,6 +153,7 @@ def train(
         timetable=[],
         from_simulator=True,
     )
+    created_train.train_type.priority = 0
     created_train.updater = configured_souc
     created_train.update(
         {
@@ -176,8 +182,11 @@ def train(
 
 
 @pytest.fixture
-def track(edge1: Edge, edge_re: Edge) -> Track:
-    return Track(edge1, edge_re)
+def track(edge1, edge1_re):
+    track = Track(edge1, edge1_re)
+    #    edge1._track = track
+    #    edge1_re._track = track
+    return track
 
 
 @pytest.fixture
@@ -186,11 +195,11 @@ def switch() -> Switch:
 
 
 @pytest.fixture
-def platform() -> Platform:
+def platform(edge1: Edge) -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="bf53d-0",
+        edge_id=edge1.identifier,
     )
 
 
@@ -244,7 +253,6 @@ class MockRouteController:
         self.set_spawn_fahrstrasse_count += 1
         if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
             return (True, reservation_placeholder)
-            # return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return (False, reservation_placeholder)
 
     def reserve_for_initialized_train(

@@ -77,8 +77,16 @@ def edge_re() -> Edge:
 
 
 @pytest.fixture
+def platform() -> Platform:
+    return Platform("fancy-platform", platform_id="platform-1", edge_id="fancy-edge")
+
+
+@pytest.fixture
 def track(edge, edge_re):
-    return Track(edge, edge_re)
+    track = Track(edge, edge_re)
+    edge._track = track
+    edge_re._track = track
+    return track
 
 
 @pytest.fixture
@@ -120,7 +128,11 @@ def train_add(monkeypatch):
 @pytest.fixture
 # pylint: disable-next=unused-argument
 def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
+    return Train(
+        identifier="fault injector train",
+        train_type="cargo",
+        timetable=["platform-1", "platform-2"],
+    )
 
 
 @pytest.fixture

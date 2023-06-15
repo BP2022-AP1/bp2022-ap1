@@ -26,7 +26,8 @@ class TestSignal:
         assert signal.state == Signal.State.HALT
 
     def test_update_state(self, traffic_update):
-        # pylint: disable=unused-argument
+        # pylint: disable=unused-argument, protected-access
+        # We need to set the signal properties manually
         signal = Signal("fancy-signal")
         signal._incoming_index = 0
         signal._controlled_lanes_count = 2
@@ -37,7 +38,7 @@ class TestSignal:
     def test_accessible_edges(self):
         signal = Signal("fancy-signal")
         edges = [Edge("a"), Edge("b"), Edge("a-re"), Edge("b-re")]
-        signal._edges = edges
+        signal._edges = edges  # pylint: disable=protected-access
 
         assert signal.get_edges_accessible_from(edges[0]) == [edges[1], edges[3]]
 
@@ -64,8 +65,8 @@ class TestNode:
     """Tests for the node abstract class"""
 
     def test_accessible_edges(self):
-        node = Node()
-        node._edges = ["a", "b"]  # type: ignore
+        node = Node("fancy-node")
+        node._edges = ["a", "b"]  # type: ignore # pylint: disable=protected-access
 
         assert node.get_edges_accessible_from("a") == ["a", "b"]
 
@@ -98,6 +99,7 @@ class TestTrack:
         assert track.blocked
 
     def test_length(self, track: Track):
+        # pylint: disable=protected-access
         track.edges[0]._length = 100
         track.edges[1]._length = 100
         assert track.length == track.edges[0].length == track.edges[1].length
@@ -161,7 +163,11 @@ class TestTrain:
 
     def test_spawning(self, train_add):
         # pylint: disable=unused-argument
-        Train(identifier="fancy-rb-001", train_type="fancy-rb")
+        Train(
+            identifier="fancy-rb-001",
+            train_type="fancy-rb",
+            timetable=["platform-1", "platform-2"],
+        )
 
     def test_update(
         self,
@@ -211,8 +217,8 @@ class TestTrain:
         self, configured_souc: SimulationObjectUpdatingComponent, train_add
     ):
         # pylint: disable=unused-argument
-        p1_id = "station-1"
-        p2_id = "station-2"
+        p1_id = Platform("station-1", edge_id="a57e4-1", platform_id="station-1")
+        p2_id = Platform("station-2", edge_id="58ab8-2", platform_id="station-2")
 
         Train(
             identifier=f"{uuid4()}_42",
@@ -220,6 +226,34 @@ class TestTrain:
             train_type="cargo",
             updater=configured_souc,
         )
+
+    def test_current_platform(
+        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+    ):
+        # pylint: disable=unused-argument
+        p1_id = Platform("station-1", edge_id="bf53d-0", platform_id="station-1")
+        p1_id.updater = configured_souc
+        p2_id = Platform("station-2", edge_id="bf53d-1", platform_id="station-2")
+        p2_id.updater = configured_souc
+
+        train = Train(
+            identifier=f"{uuid4()}_42",
+            timetable=[p1_id, p2_id],
+            train_type="cargo",
+            updater=configured_souc,
+        )
+
+        assert train.current_platform is not None and train.current_platform == p1_id
+
+        train.update(
+            {
+                constants.VAR_POSITION: (0, 0),
+                constants.VAR_ROAD_ID: "bf53d-0",
+                constants.VAR_SPEED: 10,
+            }
+        )
+
+        assert train.current_platform is not None and train.current_platform == p2_id
 
 
 class TestSwitch:
