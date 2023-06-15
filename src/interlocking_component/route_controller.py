@@ -386,7 +386,15 @@ class RouteController(Component):
         :param route_length: the length of the route
         :return: if it worked or not
         """
+        if isinstance(train.edge.track, ReservationTrack) and isinstance(train, Train):
+            print("before")
+            for train, edge in train.edge.track.reservations:
+                print(f"{train.identifier} for edge {edge.identifier}")
         self.maybe_put_reservations_as_first(train, route)
+        if isinstance(train.edge.track, ReservationTrack) and isinstance(train, Train):
+            print("after")
+            for train, edge in train.edge.track.reservations:
+                print(f"{train.identifier} for edge {edge.identifier}")
         if self.check_if_route_is_reserved_as_first(route, train):
             was_set = self.set_interlocking_route(
                 interlocking_route, train, route_length
@@ -563,10 +571,19 @@ class RouteController(Component):
                 reserving_trains[reserving_train] = True
             else:
                 break
+        if len(reserving_trains) == 0:
+            return
         for i, edge in enumerate(edge_route):
             if not isinstance(edge.track, ReservationTrack):
                 continue
             if edge.track.reservations[0][0] == train:
+                print(
+                    "_____________________________Reservation put as first_____________________"
+                )
+                print(reserving_trains)
+                print(train.identifier)
+                for edge in edge_route:
+                    print(edge.identifier)
                 self.put_reservations_as_first(train, edge_route[:i])
                 break
 
