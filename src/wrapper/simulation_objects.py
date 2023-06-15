@@ -882,8 +882,6 @@ class Train(SimulationObject):
         if not from_simulator:
             self._add_to_simulation(identifier, train_type, route_id)
 
-        self.route = route_id
-
     def _add_to_simulation(self, identifier: str, train_type: str, route: str):
         vehicle.add(identifier, routeID=route, typeID=train_type)
 
