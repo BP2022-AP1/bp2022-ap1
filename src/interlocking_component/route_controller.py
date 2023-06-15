@@ -142,7 +142,6 @@ class TopologyInitializer:
 
     def initialize_signals(self):
         """This method sets which edge is the incoming for each signal."""
-        print("Starting to initialize signals")
         for yaramo_signal in self.topology.signals.values():
             signal = None
             for potentical_signal in self.simulation_object_updating_component.signals:
@@ -168,7 +167,6 @@ class TopologyInitializer:
                     signal.incoming = edges_into_signal[0]
                 else:
                     signal.incoming = edges_into_signal[1]
-        print("Signals were initialized")
 
 
 class RouteController(Component):
@@ -182,7 +180,7 @@ class RouteController(Component):
 
         routes_to_be_set: List[Tuple[Route, Train, int]]
         routes_to_be_reserved: List[Tuple[Route, Train]]
-        routes_waiting_for_reservations: List[Route]
+        routes_waiting_for_reservations: List[Tuple[List[Node], Train, Route, float, List[Node]]]
 
         def __init__(self) -> None:
             self.routes_to_be_set = []
@@ -251,15 +249,16 @@ class RouteController(Component):
             train,
             interlocking_route,
             route_length,
+            entire_route
         ) in self.route_queues.routes_waiting_for_reservations:
             # This sets the fahrstrasse, if the route is reserved at the first
             # place for that fahrstrasse. The Sumo route was set already.
             reservation_ready = self.set_fahrstrasse_if_reservations_work(
-                route, train, interlocking_route, route_length
+                route, train, interlocking_route, route_length, entire_route
             )
             if reservation_ready:
                 self.route_queues.routes_waiting_for_reservations.remove(
-                    (route, train, interlocking_route, route_length)
+                    (route, train, interlocking_route, route_length, entire_route)
                 )
 
     def set_spawn_fahrstrasse(
@@ -275,9 +274,7 @@ class RouteController(Component):
         :return: The id of the first SUMO Route and the placholder for reservations.
         """
         train_to_be_initialized = UninitializedTrain(timetable)
-        print(starting_edge.identifier, timetable[1].identifier)
         self.set_fahrstrasse(train_to_be_initialized, starting_edge)
-        print(f"______________________{train_to_be_initialized.route}")
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
@@ -361,10 +358,10 @@ class RouteController(Component):
                     train.route = interlocking_route.id
 
                     if not self.set_fahrstrasse_if_reservations_work(
-                        new_route[:i], train, interlocking_route, route_length
+                        new_route[:i], train, interlocking_route, route_length, new_route
                     ):
                         self.route_queues.routes_waiting_for_reservations.append(
-                            (new_route[:i], train, interlocking_route, route_length)
+                            (new_route[:i], train, interlocking_route, route_length, new_route)
                         )
                     return
         # If the no interlocking route is found an error is raised
@@ -376,6 +373,7 @@ class RouteController(Component):
         train: Train,
         interlocking_route: Route,
         route_length: int,
+        entire_route: List[Node]
     ) -> bool:
         """This method checks if the given train has reservations, that allow it to continue.
         If so, the interlocking route may be set.
@@ -386,13 +384,15 @@ class RouteController(Component):
         :param route_length: the length of the route
         :return: if it worked or not
         """
-        if isinstance(train.edge.track, ReservationTrack) and isinstance(train, Train):
-            print("before")
+        should_print = isinstance(train, Train) and isinstance(train.edge.track, ReservationTrack) and train.edge.track.reservations[0][0] != train
+        if should_print:
+            print(train.identifier)
+            print("_____________________________before___________________________________________________________________________")
             for train, edge in train.edge.track.reservations:
                 print(f"{train.identifier} for edge {edge.identifier}")
-        self.maybe_put_reservations_as_first(train, route)
-        if isinstance(train.edge.track, ReservationTrack) and isinstance(train, Train):
-            print("after")
+        self.maybe_put_reservations_as_first(train, entire_route)
+        if should_print:
+            print("______________________________after_______________________________________________________________________________")
             for train, edge in train.edge.track.reservations:
                 print(f"{train.identifier} for edge {edge.identifier}")
         if self.check_if_route_is_reserved_as_first(route, train):
@@ -557,6 +557,7 @@ class RouteController(Component):
         :param train: The train which reservation may be changed
         :param route: The route along which the reservation may be changed
         """
+        print("maybe put reservations first")
         edge_route = self.get_edges_of_node_route(route)
         reserving_trains = {}
         first_reservation_track: ReservationTrack = None
@@ -565,6 +566,7 @@ class RouteController(Component):
                 first_reservation_track = edge.track
                 break
         if first_reservation_track is None:
+            print("not putting reservations first because no track")
             return
         for reserving_train, _ in first_reservation_track.reservations:
             if reserving_train != train:
@@ -572,20 +574,23 @@ class RouteController(Component):
             else:
                 break
         if len(reserving_trains) == 0:
+            print("not putting reservations first because no trains in front")
             return
         for i, edge in enumerate(edge_route):
             if not isinstance(edge.track, ReservationTrack):
                 continue
             if edge.track.reservations[0][0] == train:
                 print(
-                    "_____________________________Reservation put as first_____________________"
+                    "_____________________________Reservation put as first______________________________________"
                 )
-                print(reserving_trains)
+                for my_train in reserving_trains:
+                    print(my_train.identifier)
                 print(train.identifier)
-                for edge in edge_route:
-                    print(edge.identifier)
                 self.put_reservations_as_first(train, edge_route[:i])
+                for edge in edge_route[:i]:
+                    print(edge.identifier)
                 break
+        print("finish putting reservations first")
 
     def put_reservations_as_first(self, train: Train, edge_route: List[Edge]):
         """Moves reservations of the given train to the first place along the given route.

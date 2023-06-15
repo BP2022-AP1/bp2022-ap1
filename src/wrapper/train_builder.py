@@ -45,7 +45,6 @@ class TrainBuilder:
             return False
 
         train = Train(identifier, timetable, train_type, self._updater, route_id=route)
-        print(train.route)
         traci.vehicle.subscribe(train.identifier, train.add_subscriptions())
 
         self._updater.simulation_objects.append(train)
