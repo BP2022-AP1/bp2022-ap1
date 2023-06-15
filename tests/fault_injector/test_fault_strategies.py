@@ -1,3 +1,4 @@
+import os
 from typing import Tuple
 
 import pytest
@@ -11,12 +12,20 @@ from src.fault_injector.fault_strategies import (
 )
 
 
+def tick_to_second(tick: int) -> int:
+    """converts a tick into a second"""
+    return int(float(tick) * float(os.getenv("TICK_LENGTH")))
+
+
 class TestFaultStrategies:
     """Test fault strategies"""
 
     @pytest.fixture
     def regular_ticks(self):
-        return (4, 109)
+        return (
+            int(float(4) * float(os.getenv("TICK_LENGTH"))),
+            int(float(109) * float(os.getenv("TICK_LENGTH"))),
+        )
 
     @pytest.fixture
     def seed(self):
@@ -286,8 +295,8 @@ class TestFaultStrategies:
     def regular_configuration(self, regular_ticks):
         return FaultConfiguration(
             **{
-                "start_tick": regular_ticks[0],
-                "end_tick": regular_ticks[1],
+                "start_time": regular_ticks[0],
+                "end_time": regular_ticks[1],
                 "strategy": "regular",
             }
         )
@@ -311,7 +320,7 @@ class TestFaultStrategies:
         for tick in range(200):
             assert regular_fault_strategy.should_inject(
                 tick, regular_configuration, False
-            ) == (tick == regular_ticks[0])
+            ) == (tick_to_second(tick) == regular_ticks[0])
             assert not regular_fault_strategy.should_resolve(
                 tick, regular_configuration, False
             )
@@ -321,7 +330,7 @@ class TestFaultStrategies:
             )
             assert regular_fault_strategy.should_resolve(
                 tick, regular_configuration, True
-            ) == (tick == regular_ticks[1])
+            ) == (tick_to_second(tick) == regular_ticks[1])
 
     def test_inject_random_strategy(
         self,

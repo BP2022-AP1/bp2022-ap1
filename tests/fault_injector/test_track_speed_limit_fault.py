@@ -25,8 +25,8 @@ class TestTrackSpeedLimitFault:
     def track_speed_limit_fault_configuration(self, track: Track):
         return TrackSpeedLimitFaultConfiguration.create(
             **{
-                "start_tick": 4,
-                "end_tick": 130,
+                "start_time": 4,
+                "end_time": 130,
                 "description": "test TrackSpeedLimitFault",
                 "affected_element_id": track.identifier,
                 "new_speed_limit": 60,

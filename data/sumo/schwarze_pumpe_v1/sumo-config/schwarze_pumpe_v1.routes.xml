@@ -1587,7 +1587,7 @@
 	<route edges="cde55-1-re cde55-0-re 77c0f-0 77c0f-1" color="87,139,100" id="route_ACF340E8-90EA-4026-A988-04F032BCDE55-KM-25-GEGEN-720C4D8A-24D4-43E2-AF29-522F59177C0F-KM-45-IN"/>
 	<route edges="cde55-1-re cde55-0-re 62329-4-re 62329-3-re" color="186,54,133" id="route_ACF340E8-90EA-4026-A988-04F032BCDE55-KM-25-GEGEN-790282B9-02C2-470A-9A34-46F435A62329-KM-1158.2633980168873-GEGEN"/>
 
-	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28" />
+	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28" maxSpeed="100" />
 
 	<vType id="ice" accel="5" decel="1.3" length="60.00" vClass="rail_electric" color="192,192,192" />
 

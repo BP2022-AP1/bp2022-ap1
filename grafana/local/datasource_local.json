@@ -1,0 +1,21 @@
+{
+  "access": "proxy",
+  "basicAuth": false,
+  "basicAuthPassword": "",
+  "basicAuthUser": "",
+  "database": "",
+  "isDefault": false,
+  "jsonData": {
+    "timeout": 600
+  },
+  "name": "simulation-runs",
+  "orgId": 1,
+  "password": "",
+  "readOnly": true,
+  "secureJsonFields": {},
+  "type": "grafana-simple-json-datasource",
+  "typeLogoUrl": "",
+  "url": "http://host.docker.internal:5000/pandas-component/",
+  "user": "",
+  "withCredentials": false
+}

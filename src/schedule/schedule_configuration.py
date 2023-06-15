@@ -9,14 +9,14 @@ class ScheduleConfiguration(SerializableBaseModel):
     schedule_type = TextField()
     strategy_type = TextField()
 
-    strategy_start_tick = IntegerField(null=True)
-    strategy_end_tick = IntegerField(null=True)
+    strategy_start_time = IntegerField(null=True)
+    strategy_end_time = IntegerField(null=True)
 
     train_schedule_train_type = TextField(null=True)
 
     regular_strategy_frequency = IntegerField(null=True)
 
-    random_strategy_trains_per_1000_ticks = FloatField(null=True)
+    random_strategy_trains_per_1000_seconds = FloatField(null=True)
     random_strategy_seed = IntegerField(null=True)
 
     demand_strategy_power_station = TextField(null=True)
@@ -37,11 +37,11 @@ class ScheduleConfiguration(SerializableBaseModel):
         return {
             "schedule_type": self.schedule_type,
             "strategy_type": self.strategy_type,
-            "strategy_start_tick": self.strategy_start_tick,
-            "strategy_end_tick": self.strategy_end_tick,
+            "strategy_start_time": self.strategy_start_time,
+            "strategy_end_time": self.strategy_end_time,
             "train_schedule_train_type": self.train_schedule_train_type,
             "regular_strategy_frequency": self.regular_strategy_frequency,
-            "random_strategy_trains_per_1000_ticks": self.random_strategy_trains_per_1000_ticks,
+            "random_strategy_trains_per_1000_seconds": self.random_strategy_trains_per_1000_seconds,
             "random_strategy_seed": self.random_strategy_seed,
             "demand_strategy_power_station": self.demand_strategy_power_station,
             "demand_strategy_scaling_factor": self.demand_strategy_scaling_factor,

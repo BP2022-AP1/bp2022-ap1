@@ -24,8 +24,8 @@ class TestPlatformBlockedFault:
     def platform_blocked_fault_configuration(self, platform: Platform):
         return PlatformBlockedFaultConfiguration.create(
             **{
-                "start_tick": 20,
-                "end_tick": 200,
+                "start_time": 20,
+                "end_time": 200,
                 "description": "test PlatformBlockedFault",
                 "affected_element_id": platform.identifier,
                 "strategy": "regular",

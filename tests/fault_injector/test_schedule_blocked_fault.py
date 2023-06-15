@@ -27,8 +27,8 @@ class TestScheduleBlockedFault:
     def schedule_blocked_fault_configuration(self, schedule):
         return ScheduleBlockedFaultConfiguration.create(
             **{
-                "start_tick": 30,
-                "end_tick": 300,
+                "start_time": 30,
+                "end_time": 300,
                 "description": "test ScheduleBlockedFault",
                 "affected_element_id": schedule.id,
                 "strategy": "regular",

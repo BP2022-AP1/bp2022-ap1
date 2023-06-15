@@ -82,8 +82,8 @@ class TokenConfiguration(Schema):
 class FaultConfiguration(Schema):
     """Schema for the FaultConfiguration"""
 
-    start_tick = fields.Integer()
-    end_tick = fields.Integer()
+    start_time = fields.Integer()
+    end_time = fields.Integer()
     inject_probability = fields.Float()
     resolve_probability = fields.Float()
     description = fields.String(required=True)

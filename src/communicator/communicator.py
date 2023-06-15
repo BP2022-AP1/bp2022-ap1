@@ -50,6 +50,7 @@ class Communicator:
         self._components = components if components is not None else []
         self._sort_components()
         self._max_tick = max_tick
+        self._step_length = 0.02
 
     def run(self) -> str:
         """
@@ -85,6 +86,8 @@ class Communicator:
                 "--quit-on-end",
                 "--delay",
                 str(delay),
+                "--step-length",
+                os.getenv("TICK_LENGTH"),
                 "--time-to-teleport",
                 str(time_to_teleport),
             ],
@@ -121,6 +124,8 @@ class Communicator:
                 checkBinary("sumo"),
                 "-c",
                 configuration,
+                "--step-length",
+                os.getenv("TICK_LENGTH"),
                 "--time-to-teleport",
                 str(time_to_teleport),
             ],

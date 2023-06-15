@@ -154,6 +154,7 @@ class SimulationObjectUpdatingComponent(Component):
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)
         inputs = next(sumolib.xml.parse(self._sumo_configuration, "input"))
+        print(inputs)
         net_file = path.join(folder, inputs["net-file"][0].getAttribute("value"))
         additional_file = path.join(
             folder, inputs["additional-files"][0].getAttribute("value")
