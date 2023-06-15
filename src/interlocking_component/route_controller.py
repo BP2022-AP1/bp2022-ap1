@@ -180,7 +180,9 @@ class RouteController(Component):
 
         routes_to_be_set: List[Tuple[Route, Train, int]]
         routes_to_be_reserved: List[Tuple[Route, Train]]
-        routes_waiting_for_reservations: List[Tuple[List[Node], Train, Route, float, List[Node]]]
+        routes_waiting_for_reservations: List[
+            Tuple[List[Node], Train, Route, float, List[Node]]
+        ]
 
         def __init__(self) -> None:
             self.routes_to_be_set = []
@@ -249,7 +251,7 @@ class RouteController(Component):
             train,
             interlocking_route,
             route_length,
-            entire_route
+            entire_route,
         ) in self.route_queues.routes_waiting_for_reservations:
             # This sets the fahrstrasse, if the route is reserved at the first
             # place for that fahrstrasse. The Sumo route was set already.
@@ -358,10 +360,20 @@ class RouteController(Component):
                     train.route = interlocking_route.id
 
                     if not self.set_fahrstrasse_if_reservations_work(
-                        new_route[:i], train, interlocking_route, route_length, new_route
+                        new_route[:i],
+                        train,
+                        interlocking_route,
+                        route_length,
+                        new_route,
                     ):
                         self.route_queues.routes_waiting_for_reservations.append(
-                            (new_route[:i], train, interlocking_route, route_length, new_route)
+                            (
+                                new_route[:i],
+                                train,
+                                interlocking_route,
+                                route_length,
+                                new_route,
+                            )
                         )
                     return
         # If the no interlocking route is found an error is raised
@@ -373,7 +385,7 @@ class RouteController(Component):
         train: Train,
         interlocking_route: Route,
         route_length: int,
-        entire_route: List[Node]
+        entire_route: List[Node],
     ) -> bool:
         """This method checks if the given train has reservations, that allow it to continue.
         If so, the interlocking route may be set.
@@ -384,17 +396,7 @@ class RouteController(Component):
         :param route_length: the length of the route
         :return: if it worked or not
         """
-        should_print = isinstance(train, Train) and isinstance(train.edge.track, ReservationTrack) and train.edge.track.reservations[0][0] != train
-        if should_print:
-            print(train.identifier)
-            print("_____________________________before___________________________________________________________________________")
-            for train, edge in train.edge.track.reservations:
-                print(f"{train.identifier} for edge {edge.identifier}")
         self.maybe_put_reservations_as_first(train, entire_route)
-        if should_print:
-            print("______________________________after_______________________________________________________________________________")
-            for train, edge in train.edge.track.reservations:
-                print(f"{train.identifier} for edge {edge.identifier}")
         if self.check_if_route_is_reserved_as_first(route, train):
             was_set = self.set_interlocking_route(
                 interlocking_route, train, route_length
@@ -432,7 +434,7 @@ class RouteController(Component):
             # to the block section the train drives into.
         return was_set
 
-    def check_if_route_is_reserved(self, route: List[Node], train) -> bool:
+    def check_if_route_is_reserved(self, route: List[Node], train: Train, entire_route: List[Node]) -> bool:
         """This method checks, if the given route is fully reserved for the given train.
 
         :param route: the route to check
@@ -440,7 +442,8 @@ class RouteController(Component):
         :return: if the route is reserved for the train
         """
         route_as_tracks = self.get_tracks_of_node_route(route)
-        for track in route_as_tracks:
+        entire_route_as_tracks = self.get_tracks_of_node_route(entire_route)
+        for i, track in enumerate(entire_route_as_tracks):
             if not isinstance(track, ReservationTrack):
                 continue
             train_found = False
@@ -449,9 +452,11 @@ class RouteController(Component):
                     train_found = True
             if not train_found:
                 return False
+            if i >= len(route_as_tracks):
+                break
         return True
 
-    def check_if_route_is_reserved_as_first(self, route: List[Node], train) -> bool:
+    def check_if_route_is_reserved_as_first(self, route: List[Node], train: Train, entire_route: List[Node]) -> bool:
         """This method checks, if the given route is fully reserved for the given train
         and if the train is in the first position in the queue.
 
@@ -460,11 +465,14 @@ class RouteController(Component):
         :return: if the route is reserved for the train
         """
         route_as_tracks = self.get_tracks_of_node_route(route)
-        for track in route_as_tracks:
+        entire_route_as_tracks = self.get_tracks_of_node_route(entire_route)
+        for i, track in enumerate(entire_route_as_tracks):
             if not isinstance(track, ReservationTrack):
                 continue
             if len(track.reservations) == 0 or track.reservations[0][0] != train:
                 return False
+            if i >= len(route_as_tracks):
+                break            
         return True
 
     def reserve_route(self, route: List[Node], train: Train) -> bool:
@@ -557,40 +565,33 @@ class RouteController(Component):
         :param train: The train which reservation may be changed
         :param route: The route along which the reservation may be changed
         """
-        print("maybe put reservations first")
         edge_route = self.get_edges_of_node_route(route)
-        reserving_trains = {}
         first_reservation_track: ReservationTrack = None
         for edge in edge_route:
             if isinstance(edge.track, ReservationTrack):
                 first_reservation_track = edge.track
                 break
         if first_reservation_track is None:
-            print("not putting reservations first because no track")
+            # Not putting reservations first because no reservation track on the entire route
             return
+        reserving_trains = 0
         for reserving_train, _ in first_reservation_track.reservations:
             if reserving_train != train:
-                reserving_trains[reserving_train] = True
+                reserving_trains += 1
             else:
                 break
-        if len(reserving_trains) == 0:
-            print("not putting reservations first because no trains in front")
+        if reserving_trains == 0:
+            # There are no train reservations before the train.
             return
         for i, edge in enumerate(edge_route):
             if not isinstance(edge.track, ReservationTrack):
                 continue
+            if edge.track.reservations[0][0].edge == edge:
+                # The train this is reserved for is already on the swgment, that may be swaped.
+                return
             if edge.track.reservations[0][0] == train:
-                print(
-                    "_____________________________Reservation put as first______________________________________"
-                )
-                for my_train in reserving_trains:
-                    print(my_train.identifier)
-                print(train.identifier)
                 self.put_reservations_as_first(train, edge_route[:i])
-                for edge in edge_route[:i]:
-                    print(edge.identifier)
                 break
-        print("finish putting reservations first")
 
     def put_reservations_as_first(self, train: Train, edge_route: List[Edge]):
         """Moves reservations of the given train to the first place along the given route.
