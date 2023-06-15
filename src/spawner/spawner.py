@@ -78,7 +78,7 @@ class Spawner(Component, ISpawnerDisruptor):
     _schedules: dict[str, Schedule]
     train_spawner: TrainBuilder
 
-    PRIORITY: int = 0  # This will need to be set to the correct value
+    PRIORITY: str = "LOW"
     TICKS_PER_SECOND: int = int(1 / float(os.environ["TICK_LENGTH"]))
 
     def next_tick(self, tick: int):

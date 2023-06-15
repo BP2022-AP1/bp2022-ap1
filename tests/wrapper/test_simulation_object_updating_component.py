@@ -26,7 +26,9 @@ class TestSimulationObjectUpdatingComponent:
 
         self.signal = Signal("fancy-signal")
         self.edge = Edge("fancy-edge")
-        self.platform = Platform("fancy-platform")
+        self.platform = Platform(
+            "fancy-platform", edge_id="fancy-edge", platform_id="platform-1"
+        )
         self.switch = Switch("fancy-switch")
 
         component = SimulationObjectUpdatingComponent()
@@ -64,7 +66,7 @@ class TestSimulationObjectUpdatingComponent:
     def test_load(self, configured_souc: SimulationObjectUpdatingComponent):
         assert len(configured_souc.signals) == 8
         assert len(configured_souc.edges) == 32
-        assert len(configured_souc.platforms) == 3
+        assert len(configured_souc.platforms) == 4
         assert len(configured_souc.switches) == 4
         assert len(configured_souc.tracks) == 16
 

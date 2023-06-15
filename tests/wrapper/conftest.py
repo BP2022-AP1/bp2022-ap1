@@ -24,7 +24,7 @@ def results(monkeypatch):
 
         dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "a57e4-0"
+        edge_dict[constants.VAR_ROAD_ID] = "bf53d-0"
         dict_["fake-sim-train"] = edge_dict
         return dict_
 
@@ -78,6 +78,8 @@ def vehicle_route(monkeypatch):
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, routeID=None, typeID=None):
+        # pylint: disable=invalid-name, unused-argument
+        # We want to use the same signature as the TraCI methods
         assert identifier is not None
         assert typeID is not None
 
@@ -100,6 +102,8 @@ def train_subscribe(monkeypatch):
 @pytest.fixture
 def train_route_update(monkeypatch):
     def update_route(identifier, routeID=None):
+        # pylint: disable=invalid-name
+        # We want to use the same signature as the TraCI methods
         assert identifier is not None
         assert routeID is not None
 
@@ -108,22 +112,25 @@ def train_route_update(monkeypatch):
 
 @pytest.fixture
 def edge1() -> Edge:
-    return Edge("a57e4-0")
+    return Edge("bf53d-0")
 
 
 @pytest.fixture
-def edge_re() -> Edge:
-    return Edge("a57e4-0-re")
+def edge1_re() -> Edge:
+    return Edge("bf53d-0-re")
 
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("a57e4-1")
+    return Edge("bf53d-1")
 
 
 @pytest.fixture
 def train(
-    train_add, train_route_update, configured_souc: SimulationObjectUpdatingComponent
+    train_add,
+    train_route_update,
+    configured_souc: SimulationObjectUpdatingComponent,
+    edge1: Edge,
 ) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
@@ -132,6 +139,7 @@ def train(
         timetable=[],
         from_simulator=True,
     )
+    created_train.train_type.priority = 0
     created_train.updater = configured_souc
     created_train.update(
         {
@@ -139,7 +147,7 @@ def train(
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "a57e4-0",
+            constants.VAR_ROAD_ID: "bf53d-0",
             constants.VAR_SPEED: 10.2,
         }
     )
@@ -156,8 +164,11 @@ def train(
 
 
 @pytest.fixture
-def track(edge1: Edge, edge_re: Edge) -> Track:
-    return Track(edge1, edge_re)
+def track(edge1, edge1_re):
+    track = Track(edge1, edge1_re)
+    #    edge1._track = track
+    #    edge1_re._track = track
+    return track
 
 
 @pytest.fixture
@@ -166,11 +177,11 @@ def switch() -> Switch:
 
 
 @pytest.fixture
-def platform() -> Platform:
+def platform(edge1: Edge) -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="a57e4-0",
+        edge_id=edge1.identifier,
     )
 
 
@@ -217,10 +228,10 @@ class MockRouteController:
     def set_spawn_fahrstrasse(self, timetable: List[Platform]):
         reservation_placeholder = UninitializedTrain(timetable)
         start = timetable[0].edge
+        end = timetable[1].edge
         self.set_spawn_fahrstrasse_count += 1
-        if start.identifier == "58ab8-1":
+        if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
             return (True, reservation_placeholder)
-            # return "route_74B5A339-3EB5-4853-9534-7A9CF7D58AB8-KM-25-GEGEN-91294974-73DB-49B6-80FC-5B77AC32B879-KM-175-IN"
         return (False, reservation_placeholder)
 
     def reserve_for_initialized_train(

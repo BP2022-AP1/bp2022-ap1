@@ -107,7 +107,7 @@ class SimulationObjectUpdatingComponent(Component):
         :param sumo_configuration: the path to the `.sumocfg` file
         (relative to the root of the project), defaults to None
         """
-        super().__init__(priority=10, event_bus=event_bus)
+        super().__init__(priority="VERY_HIGH", event_bus=event_bus)
         self._simulation_objects = []
         self._sumo_configuration = sumo_configuration
         if sumo_configuration is not None:

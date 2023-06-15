@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from interlocking.interlockinginterface import Interlocking
 from interlocking.model.route import Route
@@ -103,14 +103,31 @@ class UninitializedTrain:
 
     identifier: str = "/not_a_real_train"
     reserved_tracks: List[Track] = None
-    station_index: int = 1
     reserved_until_station_index: int = 1
     timetable: List[Platform] = None
     route: str = None
+    _station_index: int = 1
 
-    def __init__(self, timetable: str):
+    def __init__(self, timetable: List[Platform]):
         self.timetable = timetable
         self.reserved_tracks = []
+
+    @property
+    def current_platform(self) -> Optional[Platform]:
+        """Returns the platform the train is driving to.
+
+        :return: The next station
+        """
+        if self._station_index >= len(self.timetable):
+            return None
+
+        return self.timetable[self._station_index]
+
+    def depart_platform(self):
+        """Used when the mock train departs from a platform.
+        The real train does not have this method as it checks for departures automatically.
+        """
+        self._station_index += 1
 
 
 class RouteController(Component):
@@ -130,14 +147,14 @@ class RouteController(Component):
     def __init__(
         self,
         event_bus: EventBus,
-        priority: int,
+        priority: str,
         simulation_object_updating_component: SimulationObjectUpdatingComponent,
         path_name: str = os.getenv("PLANPRO_PATH"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
         """
-        super().__init__(event_bus, priority)
+        super().__init__(event_bus, "MEDIUM")
         self.simulation_object_updating_component = simulation_object_updating_component
         self.router = Router()
 
@@ -197,7 +214,9 @@ class RouteController(Component):
             if was_reserved:
                 self.routes_to_be_reserved.remove((route, train))
 
-    def set_spawn_fahrstrasse(self, timetable: List[Platform]) -> str:
+    def set_spawn_fahrstrasse(
+        self, timetable: List[Platform]
+    ) -> Tuple[str, UninitializedTrain]:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
         This also sets a fahrstrasse for that train.
@@ -205,7 +224,7 @@ class RouteController(Component):
         :param timetable: The timetable of the train. The spawn fahrstrasse
         will lead from the first to the second platform on the list.
         :raises KeyError: The route could not be found in the interlocking.
-        :return: The id of the first SUMO Route.
+        :return: The id of the first SUMO Route and the placholder for reservations.
         """
         train_to_be_initialized = UninitializedTrain(timetable)
         self.set_fahrstrasse(train_to_be_initialized, timetable[0].edge)
@@ -240,7 +259,7 @@ class RouteController(Component):
         :param edge: the edge it just entered
         :type edge: Edge
         """
-        if train.station_index >= len(train.timetable):
+        if train.current_platform is None:
             # if the train has reached the last station, don't allocate a new fahrstraße
             return
 
@@ -261,9 +280,9 @@ class RouteController(Component):
         :param edge: the edge it is currently on
         :type edge: Edge
         """
-        new_route = self.router.get_route(
-            edge, train.timetable[train.station_index].edge
-        )
+        assert train.current_platform is not None
+
+        new_route = self.router.get_route(edge, train.current_platform.edge)
         # new_route contains a list of signals from starting signal to end signal of the new route.
 
         route_length = 0
