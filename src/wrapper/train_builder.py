@@ -37,9 +37,7 @@ class TrainBuilder:
 
         assert len(timetable) >= 2
 
-        starting_edge = timetable[0].edge.from_node.get_edges_accessible_from(
-            timetable[0].edge
-        )[0]
+        starting_edge = timetable[0].edge
 
         route, reservation_placeholder = self._get_first_route(timetable, starting_edge)
 

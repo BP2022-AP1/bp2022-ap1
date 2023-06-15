@@ -901,7 +901,9 @@ class Train(SimulationObject):
             or self._edge.identifier != edge_id
             and not edge_id[:1] == ":"
         ):
+            print(f"--> Neue Edge ist: {edge_id}")
             if self._edge is not None:
+                print(f"Alte Edge war: {self._edge.identifier}")
                 if edge_id not in list(
                     map(lambda obj: obj.identifier, self._edge.to_node.edges)
                 ):

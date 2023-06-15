@@ -275,6 +275,7 @@ class RouteController(Component):
         :return: The id of the first SUMO Route and the placholder for reservations.
         """
         train_to_be_initialized = UninitializedTrain(timetable)
+        print(starting_edge.identifier, timetable[1].identifier)
         self.set_fahrstrasse(train_to_be_initialized, starting_edge)
         print(f"______________________{train_to_be_initialized.route}")
         return train_to_be_initialized.route, train_to_be_initialized
