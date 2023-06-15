@@ -45,8 +45,8 @@ from tests.decorators import recreate_db_setup
             TrainSpeedFaultConfiguration,
             TrainSpeedFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrainSpeedFault",
                 "affected_element_id": "12345678",
                 "new_speed": 40,
@@ -57,8 +57,8 @@ from tests.decorators import recreate_db_setup
             PlatformBlockedFaultConfiguration,
             PlatformBlockedFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "PlatformBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -68,8 +68,8 @@ from tests.decorators import recreate_db_setup
             TrackBlockedFaultConfiguration,
             TrackBlockedFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrackBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -79,8 +79,8 @@ from tests.decorators import recreate_db_setup
             TrainPrioFaultConfiguration,
             TrainPrioFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrainPrioFault",
                 "affected_element_id": "12345678",
                 "new_prio": 1,
@@ -91,8 +91,8 @@ from tests.decorators import recreate_db_setup
             TrackSpeedLimitFaultConfiguration,
             TrackSpeedLimitFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrackSpeedLimitFault",
                 "affected_element_id": "12345678",
                 "new_speed_limit": 60,
@@ -152,8 +152,8 @@ class TestAffectedElementDoesNotExistScheduleBlockedFault:
     def schedule_blocked_fault_configuration(self):
         return ScheduleBlockedFaultConfiguration(
             **{
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "ScheduleBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",

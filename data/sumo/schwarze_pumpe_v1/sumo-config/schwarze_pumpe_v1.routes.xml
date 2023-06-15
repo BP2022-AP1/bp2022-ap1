@@ -953,7 +953,7 @@
 	<route edges="910f1-1-re 910f1-0-re a4bef-0 a4bef-1" color="59,133,59" id="route_CF571E31-ED30-4921-8453-F556EA6910F1-KM-25-GEGEN-EAE222A6-3B7F-404E-BBCE-1A591DFA4BEF-KM-1076.2964162094613-IN"/>
 	<route edges="910f1-1-re 910f1-0-re f8127-2-re f8127-1-re" color="53,105,38" id="route_CF571E31-ED30-4921-8453-F556EA6910F1-KM-25-GEGEN-C35B9A4B-854B-4236-897D-6408EEFF8127-KM-25-GEGEN"/>
 
-	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28" maxSpeed="2" />
+	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28" maxSpeed="100" />
 
 	<vType id="ice" accel="5" decel="1.3" length="60.00" vClass="rail_electric" color="192,192,192" />
 

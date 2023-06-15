@@ -20,7 +20,7 @@ class Schedule(ABC):
 
     id: str
     _blocked: bool
-    _ticks_to_be_spawned: list[int]
+    _seconds_to_be_spawned: list[int]
     strategy: ScheduleStrategy
 
     STRATEGY_CLASSES: dict[str, type] = {
@@ -46,31 +46,31 @@ class Schedule(ABC):
     def __init__(self, strategy: ScheduleStrategy, id_: str):
         """Constructs a Schedule."""
         self._blocked = False
-        self._ticks_to_be_spawned = []
+        self._seconds_to_be_spawned = []
         self.strategy = strategy
         self.id = id_  # pylint: disable=invalid-name
 
     @abstractmethod
-    def _spawn(self, spawner: SpawnerProtocol, tick: int) -> bool:
+    def _spawn(self, spawner: SpawnerProtocol, seconds: int) -> bool:
         """Spawns a vehicle.
 
         :param spawner: The calling Spawner.
-        :param tick: The current tick
+        :param seconds: The elapsed seconds
         """
         raise NotImplementedError()
 
-    def maybe_spawn(self, tick: int, spawner: SpawnerProtocol):
+    def maybe_spawn(self, seconds: int, spawner: SpawnerProtocol):
         """Spawns a vehicle if the schedule strategy allows it.
 
-        :param tick: The current tick
+        :param seconds: The elapsed seconds
         :param spawner: The calling spawner.
         """
-        if not self._blocked and self.strategy.should_spawn(tick):
-            self._ticks_to_be_spawned.append(tick)
+        if not self._blocked and self.strategy.should_spawn(seconds):
+            self._seconds_to_be_spawned.append(seconds)
 
-        if len(self._ticks_to_be_spawned) > 0:
-            if self._spawn(spawner, self._ticks_to_be_spawned[-1]):
-                self._ticks_to_be_spawned.pop()
+        if len(self._seconds_to_be_spawned) > 0:
+            if self._spawn(spawner, self._seconds_to_be_spawned[-1]):
+                self._seconds_to_be_spawned.pop()
 
     def block(self):
         """Blocks the schedule.

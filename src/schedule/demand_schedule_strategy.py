@@ -19,8 +19,8 @@ class DemandScheduleStrategy(ScheduleStrategy):
         """
         assert schedule_configuration.strategy_type == "DemandScheduleStrategy"
         return cls(
-            start_tick=schedule_configuration.strategy_start_tick,
-            end_tick=schedule_configuration.strategy_end_tick,
+            start_time=schedule_configuration.strategy_start_time,
+            end_time=schedule_configuration.strategy_end_time,
             power_station=schedule_configuration.demand_strategy_power_station,
             scaling_factor=schedule_configuration.demand_strategy_scaling_factor,
             start_datetime=schedule_configuration.demand_strategy_start_datetime,
@@ -53,32 +53,32 @@ class DemandScheduleStrategy(ScheduleStrategy):
     power_station: str
     scaling_factor: float
     start_datetime: datetime
-    spawn_ticks: list[int]
+    spawn_seconds: list[int]
     _api: SmardApi
 
     def __init__(
         self,
-        start_tick: int,
-        end_tick: int,
+        start_time: int,
+        end_time: int,
         power_station: str,
         scaling_factor: float,
         start_datetime: datetime,
     ):
         """Creates a new instance of this class.
 
-        :param start_tick: The tick at which the schedule strategy starts.
-        :param end_tick: The tick at which the schedule strategy ends.
+        :param start_time: The time in seconds at which the schedule strategy starts.
+        :param end_time: The time in seconds at which the schedule strategy ends.
         :param power_station: The power station to use for the calculation.
         :param scaling_factor: The scaling factor to multiply the coal consumption with.
         :param start_datetime: The start datetime for the used data.
         """
-        super().__init__(start_tick, end_tick)
+        super().__init__(start_time, end_time)
         self.power_station = power_station
         self.scaling_factor = scaling_factor
         self.start_datetime = start_datetime
-        self.spawn_ticks = []
+        self.spawn_seconds = []
         self._api = SmardApi()
-        self._calculate_spawn_ticks()
+        self._calculate_spawn_seconds()
 
     def compute_coal_consumption(self, produced_electrical_energy: float) -> float:
         """Computes the coal consumption for the given amount of electrical energy
@@ -112,21 +112,21 @@ class DemandScheduleStrategy(ScheduleStrategy):
         coal_consumption = self.compute_coal_consumption(produced_electrical_power)
         return coal_consumption / self.COAL_PER_TRAIN
 
-    def _calculate_spawn_ticks(self):
+    def _calculate_spawn_seconds(self):
         """Calculates the ticks at which trains should spawn."""
         end_datetime = self.start_datetime + timedelta(
-            seconds=self.end_tick - self.start_tick
+            seconds=self.end_time - self.start_time
         )
         data = self._api.get_data(self.start_datetime, end_datetime)
         train_accumulator = 0.0
         for quarter_hour, entry in enumerate(data):
             train_accumulator += self._compute_trains_to_spawn(entry.value)
-            tick = int(quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_tick)
+            second = int(quarter_hour * self.SECONDS_PER_QUARTER_HOUR + self.start_time)
             while train_accumulator >= 1.0:
-                self.spawn_ticks.append(tick)
+                self.spawn_seconds.append(second)
                 train_accumulator -= 1.0
-                tick += 1
+                second += 1
 
-    def should_spawn(self, tick: int) -> bool:
+    def should_spawn(self, seconds: int) -> bool:
         """Returns whether a train should spawn at the given tick."""
-        return super().should_spawn(tick) and tick in self.spawn_ticks
+        return super().should_spawn(seconds) and seconds in self.spawn_seconds

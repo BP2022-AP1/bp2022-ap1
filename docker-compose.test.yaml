@@ -6,9 +6,6 @@ services:
     env_file:
       - .env.test
 
-  celery-worker:
-    env_file:
-      - .env.test
 
   grafana:
     env_file:
