@@ -104,12 +104,12 @@ def train_subscribe(monkeypatch):
 
 
 @pytest.fixture
-def train_setRouteID(monkeypatch):
-    def setRouteID_train(identifier, routeID=None):
+def train_set_route_id(monkeypatch):
+    def set_route_id_train(identifier, route_id=None):
         assert identifier is not None
-        assert routeID is not None
+        assert route_id is not None
 
-    monkeypatch.setattr(vehicle, "setRouteID", setRouteID_train)
+    monkeypatch.setattr(vehicle, "setRouteID", set_route_id_train)
 
 
 @pytest.fixture
@@ -142,7 +142,7 @@ def edge2() -> Edge:
 def train(
     train_add,
     train_route_update,
-    train_setRouteID,
+    train_set_route_id,
     configured_souc: SimulationObjectUpdatingComponent,
     edge1: Edge,
 ) -> Train:
