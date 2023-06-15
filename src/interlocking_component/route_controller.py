@@ -337,7 +337,7 @@ class RouteController(Component):
         # new_route contains a list of nodes from the node before the starting signal
         # to end signal of the new route.
 
-        if not self.check_if_route_is_reserved(new_route, train):
+        if not self.check_if_route_is_reserved(new_route, train, new_route):
             if not self.reserve_route(new_route, train):
                 self.route_queues.routes_to_be_reserved.append((new_route, train))
 
@@ -397,7 +397,7 @@ class RouteController(Component):
         :return: if it worked or not
         """
         self.maybe_put_reservations_as_first(train, entire_route)
-        if self.check_if_route_is_reserved_as_first(route, train):
+        if self.check_if_route_is_reserved_as_first(route, train, entire_route):
             was_set = self.set_interlocking_route(
                 interlocking_route, train, route_length
             )
@@ -434,7 +434,9 @@ class RouteController(Component):
             # to the block section the train drives into.
         return was_set
 
-    def check_if_route_is_reserved(self, route: List[Node], train: Train, entire_route: List[Node]) -> bool:
+    def check_if_route_is_reserved(
+        self, route: List[Node], train: Train, entire_route: List[Node]
+    ) -> bool:
         """This method checks, if the given route is fully reserved for the given train.
 
         :param route: the route to check
@@ -456,7 +458,9 @@ class RouteController(Component):
                 break
         return True
 
-    def check_if_route_is_reserved_as_first(self, route: List[Node], train: Train, entire_route: List[Node]) -> bool:
+    def check_if_route_is_reserved_as_first(
+        self, route: List[Node], train: Train, entire_route: List[Node]
+    ) -> bool:
         """This method checks, if the given route is fully reserved for the given train
         and if the train is in the first position in the queue.
 
@@ -472,7 +476,7 @@ class RouteController(Component):
             if len(track.reservations) == 0 or track.reservations[0][0] != train:
                 return False
             if i >= len(route_as_tracks):
-                break            
+                break
         return True
 
     def reserve_route(self, route: List[Node], train: Train) -> bool:
