@@ -349,7 +349,7 @@ class RouteController(Component):
         :type edge: Edge
         """
         assert train.current_platform is not None
-  
+
         new_route = self.router.get_route(
             edge, train.timetable[train.station_index].edge
         )
