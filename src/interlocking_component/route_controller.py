@@ -309,16 +309,12 @@ class RouteController(Component):
         :param edge: the edge it just entered
         :type edge: Edge
         """
-        print(train.station_index)
         if train.station_index >= len(train.timetable):
             # if the train has reached the last station, don't allocate a new fahrstraße
             print("No new route needed")
             return
 
         routes = self._get_interlocking_routes_for_edge(edge)
-        print(routes[0].get_last_segment_of_route())
-        print(routes)
-        print(train.route)
         for route in routes:
             if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
                 continue
@@ -555,7 +551,7 @@ class RouteController(Component):
         """
         edge_route = self.get_edges_of_node_route(route)
         reserving_trains = {}
-        first_reservation_track: ReservationTrack
+        first_reservation_track: ReservationTrack = None
         for edge in edge_route:
             if isinstance(edge.track, ReservationTrack):
                 first_reservation_track = edge.track
