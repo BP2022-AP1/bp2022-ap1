@@ -15,10 +15,10 @@ with db.atomic():
     regular_schedule = ScheduleConfiguration.create(
         schedule_type="TrainSchedule",
         strategy_type="RegularScheduleStrategy",
-        strategy_start_tick=100,
-        strategy_end_tick=20000,
+        strategy_start_time=2,
+        strategy_end_time=400,
         train_schedule_train_type="regio",
-        regular_strategy_frequency=3000,
+        regular_strategy_frequency=60,
     )
     print(f"regular schedule: {regular_schedule.id}")
     for index, platform in enumerate(platforms):

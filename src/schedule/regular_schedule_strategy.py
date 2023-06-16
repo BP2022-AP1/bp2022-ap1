@@ -16,30 +16,30 @@ class RegularScheduleStrategy(ScheduleStrategy):
         """
         assert schedule_configuration.strategy_type == "RegularScheduleStrategy"
         return cls(
-            start_tick=schedule_configuration.strategy_start_tick,
-            end_tick=schedule_configuration.strategy_end_tick,
+            start_time=schedule_configuration.strategy_start_time,
+            end_time=schedule_configuration.strategy_end_time,
             frequency=schedule_configuration.regular_strategy_frequency,
         )
 
     frequency: int
 
-    def __init__(self, start_tick: int, end_tick: int, frequency: int):
+    def __init__(self, start_time: int, end_time: int, frequency: int):
         """Initializer for RegularScheduleStrategy
 
-        :param start_tick: The tick when train spawning should start
-        :param end_tick: The tick when train spawning should end
-        :param frequency: The frquency at which trains should spawn
+        :param start_time: The time in seconds when train spawning should start
+        :param end_time: The time in seconds when train spawning should end
+        :param frequency: The frequency at which trains should spawn
         """
-        super().__init__(start_tick, end_tick)
+        super().__init__(start_time, end_time)
         self.frequency = frequency
 
-    def should_spawn(self, tick: int) -> bool:
+    def should_spawn(self, seconds: int) -> bool:
         """Determines whether a vehicle should be spawned at the current tick
 
-        :param tick: The current tick
+        :param seconds: The elapsed seconds
         :return: True if a vehicle should be spawned, False otherwise
         """
         return (
-            super().should_spawn(tick)
-            and (tick - self.start_tick) % self.frequency == 0
+            super().should_spawn(seconds)
+            and (seconds - self.start_time) % self.frequency == 0
         )
