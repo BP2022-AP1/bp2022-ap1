@@ -21,13 +21,13 @@ class TestTrackBlockedFault:
         pass
 
     @pytest.fixture
-    def track_blocked_fault_configuration(self, track: Track):
+    def track_blocked_fault_configuration(self, basic_track: Track):
         return TrackBlockedFaultConfiguration.create(
             **{
                 "start_time": 30,
                 "end_time": 300,
                 "description": "test TrackBlockedFault",
-                "affected_element_id": track.identifier,
+                "affected_element_id": basic_track.identifier,
                 "strategy": "regular",
             }
         )
@@ -37,13 +37,13 @@ class TestTrackBlockedFault:
         self,
         track_blocked_fault_configuration: TrackBlockedFaultConfiguration,
         event_bus: EventBus,
-        simulation_object_updater: SimulationObjectUpdatingComponent,
+        souc: SimulationObjectUpdatingComponent,
         interlocking_disruptor: IInterlockingDisruptor,
     ):
         return TrackBlockedFault(
             configuration=track_blocked_fault_configuration,
             event_bus=event_bus,
-            simulation_object_updater=simulation_object_updater,
+            simulation_object_updater=souc,
             interlocking_disruptor=interlocking_disruptor,
         )
 
@@ -51,36 +51,30 @@ class TestTrackBlockedFault:
         self,
         tick,
         track_blocked_fault: TrackBlockedFault,
-        track: Track,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_track_and_wrapper,
+        basic_track: Track,
     ):
-        assert not track.blocked
+        assert not basic_track.blocked
         track_blocked_fault.inject_fault(tick)
         assert (
             track_blocked_fault.interlocking_disruptor.route_controller.method_calls
             == 1
         )
-        assert track.blocked
+        assert basic_track.blocked
 
     def test_resolve_track_blocked_fault(
         self,
         tick,
         track_blocked_fault: TrackBlockedFault,
-        track: Track,
-        # the following argument is a needed fixture
-        # pylint: disable-next=unused-argument
-        combine_track_and_wrapper,
+        basic_track: Track,
     ):
         track_blocked_fault.inject_fault(tick)
-        assert track.blocked
+        assert basic_track.blocked
         assert (
             track_blocked_fault.interlocking_disruptor.route_controller.method_calls
             == 1
         )
         track_blocked_fault.resolve_fault(tick)
-        assert not track.blocked
+        assert not basic_track.blocked
         assert (
             track_blocked_fault.interlocking_disruptor.route_controller.method_calls
             == 2

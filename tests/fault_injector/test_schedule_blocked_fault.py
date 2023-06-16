@@ -40,7 +40,7 @@ class TestScheduleBlockedFault:
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
         event_bus: EventBus,
-        simulation_object_updater: SimulationObjectUpdatingComponent,
+        souc: SimulationObjectUpdatingComponent,
         interlocking_disruptor: IInterlockingDisruptor,
         spawner: Spawner,
     ):
@@ -48,7 +48,7 @@ class TestScheduleBlockedFault:
             configuration=schedule_blocked_fault_configuration,
             event_bus=event_bus,
             spawner=spawner,
-            simulation_object_updater=simulation_object_updater,
+            simulation_object_updater=souc,
             interlocking_disruptor=interlocking_disruptor,
         )
 
