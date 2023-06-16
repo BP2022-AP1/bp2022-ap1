@@ -465,7 +465,7 @@ class RouteController(Component):
         route_as_tracks = self.get_tracks_of_node_route(route)
         entire_route_as_tracks = self.get_tracks_of_node_route(entire_route)
         for i, track in enumerate(entire_route_as_tracks):
-            if not isinstance(track, ReservationTrack):
+            if not track.is_reservation_track:
                 continue
             train_found = False
             for reserved_train, _ in track.reservations:
@@ -490,7 +490,7 @@ class RouteController(Component):
         route_as_tracks = self.get_tracks_of_node_route(route)
         entire_route_as_tracks = self.get_tracks_of_node_route(entire_route)
         for i, track in enumerate(entire_route_as_tracks):
-            if not isinstance(track, ReservationTrack):
+            if not track.is_reservation_track:
                 continue
             if len(track.reservations) == 0 or track.reservations[0][0] != train:
                 return False
@@ -517,7 +517,7 @@ class RouteController(Component):
 
         for edge in route_as_edges:
             track = edge.track
-            if not isinstance(track, ReservationTrack):
+            if not track.is_reservation_track:
                 continue
             if len(track.reservations) != 0:
                 # In this case, the track is reserved for another train,
@@ -567,7 +567,7 @@ class RouteController(Component):
         route_as_edges = self.get_edges_of_node_route(route)
         last_reservation_edge: Edge
         for edge in reversed(route_as_edges):
-            if isinstance(edge.track, ReservationTrack):
+            if edge.track.is_reservation_track:
                 last_reservation_edge = edge
                 break
         if last_reservation_edge is None:
@@ -591,7 +591,7 @@ class RouteController(Component):
         edge_route = self.get_edges_of_node_route(route)
         first_reservation_track: ReservationTrack = None
         for edge in edge_route:
-            if isinstance(edge.track, ReservationTrack):
+            if edge.track.is_reservation_track:
                 first_reservation_track = edge.track
                 break
         if first_reservation_track is None:
@@ -607,7 +607,7 @@ class RouteController(Component):
             # There are no train reservations before the train.
             return
         for i, edge in enumerate(edge_route):
-            if not isinstance(edge.track, ReservationTrack):
+            if not edge.track.is_reservation_track:
                 continue
             if edge.track.reservations[0][0].edge == edge:
                 # The train this is reserved for is already on the swgment, that may be swaped.
@@ -623,7 +623,7 @@ class RouteController(Component):
         :param edge_route: the route on which the reservations will be moved
         """
         for edge in edge_route:
-            if not isinstance(edge.track, ReservationTrack):
+            if not edge.track.is_reservation_track:
                 continue
             edge.track.reservations.remove((train, edge))
             edge.track.reservations.insert(0, (train, edge))

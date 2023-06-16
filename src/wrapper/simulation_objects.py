@@ -486,6 +486,7 @@ class Track(SimulationObject):
     "A track on which trains can drive both directions"
 
     _edges = Tuple[Edge, Edge]
+    is_reservation_track = False
 
     @property
     def edges(self) -> Tuple[Edge, Edge]:
@@ -615,6 +616,7 @@ class ReservationTrack(Track):
     """A Track between two Signals, that has reservations of trains"""
 
     reservations: List[Tuple["Train", Edge]]
+    is_reservation_track = True
 
     def __init__(self, edge1, edge2):
         super().__init__(edge1, edge2)
@@ -916,7 +918,7 @@ class Train(SimulationObject):
                             f"{self._edge.identifier}, new track: {edge_id}"
                         )
                     )
-                if isinstance(self._edge.track, ReservationTrack):
+                if self._edge.track.is_reservation_track:
                     assert self._edge.track.reservations[0][1] == self._edge
                     assert self._edge.track == self.reserved_tracks[0]
                     self._edge.track.reservations.pop(0)
