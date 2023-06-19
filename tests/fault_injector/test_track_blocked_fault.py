@@ -24,8 +24,8 @@ class TestTrackBlockedFault:
     def track_blocked_fault_configuration(self, track: Track):
         return TrackBlockedFaultConfiguration.create(
             **{
-                "start_tick": 30,
-                "end_tick": 300,
+                "start_time": 30,
+                "end_time": 300,
                 "description": "test TrackBlockedFault",
                 "affected_element_id": track.identifier,
                 "strategy": "regular",

@@ -28,13 +28,19 @@ def _post_data(path, data):
             timeout=10,
         )
     except RequestException as exception:
-        print("An exception while initializing Grafana occurred\n", exception)
+        print(
+            "An exception while initializing Grafana occurred\n", exception, path, data
+        )
         return None
 
 
 def initialize_grafana():
     """Initialize Grafana"""
-    with open("grafana/local/datasource.json", "r", encoding="UTF-8") as file:
+    data_source_file_path = "grafana/local/datasource.json"
+    if os.environ["GRAFANA_HOST"] == "localhost":
+        data_source_file_path = "grafana/local/datasource_local.json"
+
+    with open(data_source_file_path, "r", encoding="UTF-8") as file:
         data_source = json.load(file)
     result = _post_data(
         f"http://{os.environ['GRAFANA_HOST']}:3000/api/datasources", data_source
@@ -42,6 +48,13 @@ def initialize_grafana():
     if result is None:
         return
     try:
+        result_json = result.json()
+        if (
+            "message" in result_json
+            and result_json["message"]
+            == "data source with the same name already exists"
+        ):
+            return
         data_source_uid = result.json()["datasource"]["uid"]
     except KeyError as exception:
         print("An exception while initializing Grafana occurred\n", exception)
