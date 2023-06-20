@@ -79,6 +79,7 @@ class DemandScheduleStrategy(ScheduleStrategy):
         self.spawn_seconds = []
         self._api = SmardApi()
         self._calculate_spawn_seconds()
+        print('spawn_seconds', self.spawn_seconds)
 
     def compute_coal_consumption(self, produced_electrical_energy: float) -> float:
         """Computes the coal consumption for the given amount of electrical energy

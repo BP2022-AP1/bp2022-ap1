@@ -20,7 +20,7 @@ with db.atomic():
         strategy_start_time=0,
         strategy_end_time=7200,
         train_schedule_train_type="regio",
-        regular_strategy_frequency=1800,
+        regular_strategy_frequency=180,
     )
     platforms2 = ["bs_2", "bs_3"]
     demand_schedule = ScheduleConfiguration.create(
@@ -30,7 +30,7 @@ with db.atomic():
         strategy_end_time=7200,
         train_schedule_train_type="cargo",
         demand_strategy_power_station="schwarze_pumpe",
-        demand_strategy_scaling_factor=1.0,
+        demand_strategy_scaling_factor=3.0,
         demand_strategy_start_datetime=datetime(2020, 1, 1, 0, 0, 0),
     )
     print(f"regular schedule: {regular_schedule.id}")
