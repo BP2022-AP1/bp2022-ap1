@@ -23,18 +23,16 @@ with db.atomic():
         regular_strategy_frequency=180,
     )
     platforms2 = ["bs_2", "bs_3"]
-    demand_schedule = ScheduleConfiguration.create(
+
+    random_schedule = ScheduleConfiguration.create(
         schedule_type="TrainSchedule",
-        strategy_type="DemandScheduleStrategy",
+        strategy_type="RandomScheduleStrategy",
         strategy_start_time=0,
         strategy_end_time=7200,
-        train_schedule_train_type="cargo",
-        demand_strategy_power_station="schwarze_pumpe",
-        demand_strategy_scaling_factor=3.0,
-        demand_strategy_start_datetime=datetime(2020, 1, 1, 0, 0, 0),
+        random_strategy_trains_per_1000_seconds=2.0,
     )
     print(f"regular schedule: {regular_schedule.id}")
-    print(f"demand schedule: {demand_schedule.id}")
+    print(f"radom schedule: {random_schedule.id}")
     for index, platform in enumerate(platforms):
         ScheduleConfigurationXSimulationPlatform.create(
             schedule_configuration_id=regular_schedule,
@@ -44,7 +42,7 @@ with db.atomic():
 
     for index, platform in enumerate(platforms2):
         ScheduleConfigurationXSimulationPlatform.create(
-            schedule_configuration_id=demand_schedule,
+            schedule_configuration_id=random_schedule,
             simulation_platform_id=platform,
             index=index,
         )
@@ -60,7 +58,7 @@ with db.atomic():
 
     SpawnerConfigurationXSchedule(
         spawner_configuration_id=spawner_configuration,
-        schedule_configuration_id=demand_schedule,
+        schedule_configuration_id=random_schedule,
     ).save()
 
     simulation_configuration = SimulationConfiguration.create()
