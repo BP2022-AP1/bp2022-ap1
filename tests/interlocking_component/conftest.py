@@ -311,6 +311,7 @@ def sumo_edge() -> Edge:
         """
 
         identifier = "test_id-re"
+        length = 100
 
     return EdgeMock()
 
