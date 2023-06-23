@@ -30,8 +30,8 @@ def mock_event_bus() -> EventBus:
         remove_fahrstrasse_count = 0
         set_signal_go_count = 0
         set_signal_halt_count = 0
-        train_enter_block_section_count = 0
-        train_leave_block_section_count = 0
+        train_enter_edge_count = 0
+        train_leave_edge_count = 0
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
@@ -49,23 +49,23 @@ def mock_event_bus() -> EventBus:
             elif state_after == Signal.State.HALT:
                 self.set_signal_halt_count += 1
 
-        def train_enter_block_section(
+        def train_enter_edge(
             self,
             tick: int,
             train_id: str,
-            block_section_id: str,
-            block_section_length: float,
+            edge_id: str,
+            edge_length: float,
         ) -> Type[None]:
-            self.train_enter_block_section_count += 1
+            self.train_enter_edge_count += 1
 
-        def train_leave_block_section(
+        def train_leave_edge(
             self,
             tick: int,
             train_id: str,
-            block_section_id: str,
-            block_section_length: float = 0,
+            edge_id: str,
+            edge_length: float = 0,
         ) -> Type[None]:
-            self.train_leave_block_section_count += 1
+            self.train_leave_edge_count += 1
 
         # pylint: enable=unused-argument
 

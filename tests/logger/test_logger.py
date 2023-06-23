@@ -11,8 +11,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
-    TrainEnterBlockSectionLogEntry,
-    TrainLeaveBlockSectionLogEntry,
+    TrainEnterEdgeLogEntry,
+    TrainLeaveEdgeLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -193,26 +193,26 @@ class TestLogger:
         assert log_entry.state_after == state_after
 
     @freeze_time()
-    def test_train_enter_block_section(
-        self, run, tick, train_id, block_section_id, block_section_length, event_bus
+    def test_train_enter_edge(
+        self, run, tick, train_id, edge_id, edge_length, event_bus
     ):
         event = Event(
-            EventType.TRAIN_ENTER_BLOCK_SECTION,
+            EventType.TRAIN_ENTER_EDGE,
             {
                 "tick": tick,
                 "train_id": train_id,
-                "block_section_id": block_section_id,
-                "block_section_length": block_section_length,
+                "edge_id": edge_id,
+                "edge_length": edge_length,
             },
         )
         logger = Logger(event_bus=event_bus)
-        logger.train_enter_block_section(event)
+        logger.train_enter_edge(event)
         log_entry = (
-            TrainEnterBlockSectionLogEntry.select()
+            TrainEnterEdgeLogEntry.select()
             .where(
-                (TrainEnterBlockSectionLogEntry.tick == tick)
-                & (TrainEnterBlockSectionLogEntry.train_id == train_id)
-                & (TrainEnterBlockSectionLogEntry.block_section_id == block_section_id)
+                (TrainEnterEdgeLogEntry.tick == tick)
+                & (TrainEnterEdgeLogEntry.train_id == train_id)
+                & (TrainEnterEdgeLogEntry.edge_id == edge_id)
             )
             .first()
         )
@@ -220,35 +220,35 @@ class TestLogger:
         assert log_entry.tick == tick
         assert (
             log_entry.message
-            == f"Train with ID {train_id} entered block section with ID {block_section_id} with "
-            f"length {block_section_length}"
+            == f"Train with ID {train_id} entered block section with ID {edge_id} with "
+            f"length {edge_length}"
         )
         assert log_entry.run_id.id == run.id
         assert log_entry.train_id == train_id
-        assert log_entry.block_section_id == block_section_id
-        assert log_entry.block_section_length == block_section_length
+        assert log_entry.edge_id == edge_id
+        assert log_entry.edge_length == edge_length
 
     @freeze_time()
-    def test_train_leave_block_section(
-        self, run, tick, train_id, block_section_id, block_section_length, event_bus
+    def test_train_leave_edge(
+        self, run, tick, train_id, edge_id, edge_length, event_bus
     ):
         event = Event(
-            EventType.TRAIN_LEAVE_BLOCK_SECTION,
+            EventType.TRAIN_LEAVE_EDGE,
             {
                 "tick": tick,
                 "train_id": train_id,
-                "block_section_id": block_section_id,
-                "block_section_length": block_section_length,
+                "edge_id": edge_id,
+                "edge_length": block_section_length,
             },
         )
         logger = Logger(event_bus=event_bus)
-        logger.train_leave_block_section(event)
+        logger.train_leave_edge(event)
         log_entry = (
-            TrainLeaveBlockSectionLogEntry.select()
+            TrainLeaveEdgeLogEntry.select()
             .where(
-                (TrainLeaveBlockSectionLogEntry.tick == tick)
-                & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
-                & (TrainLeaveBlockSectionLogEntry.block_section_id == block_section_id)
+                (TrainLeaveEdgeLogEntry.tick == tick)
+                & (TrainLeaveEdgeLogEntry.train_id == train_id)
+                & (TrainLeaveEdgeLogEntry.edge_id == block_section_id)
             )
             .first()
         )
@@ -260,7 +260,7 @@ class TestLogger:
         )
         assert log_entry.run_id.id == run.id
         assert log_entry.train_id == train_id
-        assert log_entry.block_section_id == block_section_id
+        assert log_entry.edge_id == block_section_id
 
     @freeze_time()
     def test_inject_platform_blocked_fault(

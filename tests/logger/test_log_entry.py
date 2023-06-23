@@ -34,8 +34,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
-    TrainEnterBlockSectionLogEntry,
-    TrainLeaveBlockSectionLogEntry,
+    TrainEnterEdgeLogEntry,
+    TrainLeaveEdgeLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -491,15 +491,15 @@ class TestLogEntry:
         """Tests for TrainEnterBlockSectionLogEntry."""
 
         @pytest.fixture
-        def train_enter_block_section_log_entry_as_dict(
+        def train_enter_edge_log_entry_as_dict(
             self,
             timestamp,
             tick,
             message,
             run,
             train_id,
-            block_section_id,
-            block_section_length,
+            edge_id,
+            edge_length,
         ):
             """TrainEnterBlockSectionLogEntry as dict with all fields set."""
             return {
@@ -508,20 +508,20 @@ class TestLogEntry:
                 "message": message,
                 "run_id": run.id,
                 "train_id": train_id,
-                "block_section_id": block_section_id,
-                "block_section_length": block_section_length,
+                "edge_id": edge_id,
+                "edge_length": edge_length,
             }
 
         @pytest.fixture
-        def train_enter_block_section_log_entry_as_dict_serialized(
+        def train_enter_edge_log_entry_as_dict_serialized(
             self,
             timestamp,
             tick,
             message,
             run,
             train_id,
-            block_section_id,
-            block_section_length,
+            edge_id,
+            edge_length,
         ):
             """TrainEnterBlockSectionLogEntry as dict with all fields set."""
             return {
@@ -530,12 +530,12 @@ class TestLogEntry:
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
-                "block_section_id": block_section_id,
+                "edge_id": block_section_id,
                 "block_section_length": block_section_length,
             }
 
         @pytest.fixture
-        def empty_train_enter_block_section_log_entry_as_dict(self):
+        def empty_train_enter_edge_log_entry_as_dict(self):
             """TrainEnterBlockSectionLogEntry as dict with no fields set."""
             return {}
 
@@ -543,35 +543,35 @@ class TestLogEntry:
         def setup_method(self):
             pass
 
-        def test_create(self, train_enter_block_section_log_entry_as_dict):
+        def test_create(self, train_enter_edge_log_entry_as_dict):
             """Test that TrainEnterBlockSectionLogEntry can be created."""
-            train_enter_block_section_log_entry = TrainEnterBlockSectionLogEntry.create(
-                **train_enter_block_section_log_entry_as_dict
+            train_enter_edge_log_entry = TrainEnterEdgeLogEntry.create(
+                **train_enter_edge_log_entry_as_dict
             )
             assert (
-                TrainEnterBlockSectionLogEntry.select()
-                .where(
-                    TrainEnterBlockSectionLogEntry.id
-                    == train_enter_block_section_log_entry.id
+                    TrainEnterEdgeLogEntry.select()
+                    .where(
+                        TrainEnterEdgeLogEntry.id
+                        == train_enter_edge_log_entry.id
                 )
-                .first()
-                == train_enter_block_section_log_entry
+                    .first()
+                    == train_enter_edge_log_entry
             )
 
         def test_create_empty_fails(
-            self, empty_train_enter_block_section_log_entry_as_dict
+            self, empty_train_enter_edge_log_entry_as_dict
         ):
             """Tests that TrainEnterBlockSectionLogEntry cannot be created with no fields set."""
             with pytest.raises(IntegrityError):
-                TrainEnterBlockSectionLogEntry.create(
-                    **empty_train_enter_block_section_log_entry_as_dict
+                TrainEnterEdgeLogEntry.create(
+                    **empty_train_enter_edge_log_entry_as_dict
                 )
 
     class TestTrainLeaveBlockSectionLogEntry:
         """Tests for TrainLeaveBlockSectionLogEntry."""
 
         @pytest.fixture
-        def train_leave_block_section_log_entry_as_dict(
+        def train_leave_edge_log_entry_as_dict(
             self,
             timestamp,
             tick,
@@ -591,7 +591,7 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        def train_leave_block_section_log_entry_as_dict_serialized(
+        def train_leave_edge_log_entry_as_dict_serialized(
             self,
             timestamp,
             tick,
@@ -611,7 +611,7 @@ class TestLogEntry:
             }
 
         @pytest.fixture
-        def empty_train_leave_block_section_log_entry_as_dict(self):
+        def empty_train_leave_edge_log_entry_as_dict(self):
             """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
             return {}
 
@@ -619,28 +619,28 @@ class TestLogEntry:
         def setup_method(self):
             pass
 
-        def test_create(self, train_leave_block_section_log_entry_as_dict):
+        def test_create(self, train_leave_edge_log_entry_as_dict):
             """Test that TrainLeaveBlockSectionLogEntry can be created."""
-            train_leave_block_section_log_entry = TrainLeaveBlockSectionLogEntry.create(
-                **train_leave_block_section_log_entry_as_dict
+            train_leave_edge_log_entry = TrainLeaveEdgeLogEntry.create(
+                **train_leave_edge_log_entry_as_dict
             )
             assert (
-                TrainLeaveBlockSectionLogEntry.select()
-                .where(
-                    TrainLeaveBlockSectionLogEntry.id
-                    == train_leave_block_section_log_entry.id
+                    TrainLeaveEdgeLogEntry.select()
+                    .where(
+                        TrainLeaveEdgeLogEntry.id
+                        == train_leave_edge_log_entry.id
                 )
-                .first()
-                == train_leave_block_section_log_entry
+                    .first()
+                    == train_leave_edge_log_entry
             )
 
         def test_create_empty_fails(
-            self, empty_train_leave_block_section_log_entry_as_dict
+            self, empty_train_leave_edge_log_entry_as_dict
         ):
             """Test that TrainLeaveBlockSectionLogEntry cannot be created with empty dict."""
             with pytest.raises(IntegrityError):
-                TrainLeaveBlockSectionLogEntry.create(
-                    **empty_train_leave_block_section_log_entry_as_dict
+                TrainLeaveEdgeLogEntry.create(
+                    **empty_train_leave_edge_log_entry_as_dict
                 )
 
     class TestInjectFaultLogEntry:

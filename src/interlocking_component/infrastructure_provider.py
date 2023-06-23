@@ -81,7 +81,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
 
         self.route_controller.maybe_set_fahrstrasse(train, edge)
 
-        self.event_bus.train_enter_block_section(
+        self.event_bus.train_enter_edge(
             self.route_controller.tick,
             train.identifier,
             edge.identifier,
@@ -100,7 +100,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
 
         self.route_controller.maybe_free_fahrstrasse(edge)
 
-        self.event_bus.train_leave_block_section(
+        self.event_bus.train_leave_edge(
             self.route_controller.tick,
             train.identifier,
             edge.identifier,

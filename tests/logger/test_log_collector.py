@@ -203,7 +203,7 @@ class TestLogCollector:
         return departure_arrival_df
 
     @pytest.fixture
-    def _enter_leave_block_section_1_df(self):
+    def _enter_leave_edge_1_df(self):
         return pd.DataFrame(
             [
                 [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5],
@@ -213,13 +213,13 @@ class TestLogCollector:
             columns=[
                 "enter_tick",
                 "leave_tick",
-                "block_section_id",
-                "block_section_length",
+                "edge_id",
+                "edge_length",
             ],
         )
 
     @pytest.fixture
-    def _enter_leave_block_section_2_df(self):
+    def _enter_leave_edge_2_df(self):
         return pd.DataFrame(
             [
                 [self.second_to_tick(10), self.second_to_tick(20), "section_1", 10.5],
@@ -229,13 +229,13 @@ class TestLogCollector:
             columns=[
                 "enter_tick",
                 "leave_tick",
-                "block_section_id",
-                "block_section_length",
+                "edge_id",
+                "edge_length",
             ],
         )
 
     @pytest.fixture
-    def _enter_leave_block_section_3_df(self):
+    def _enter_leave_edge_3_df(self):
         return pd.DataFrame(
             [
                 [None, self.second_to_tick(20), "section_1", None],
@@ -245,13 +245,13 @@ class TestLogCollector:
             columns=[
                 "enter_tick",
                 "leave_tick",
-                "block_section_id",
-                "block_section_length",
+                "edge_id",
+                "edge_length",
             ],
         )
 
     @pytest.fixture
-    def _enter_leave_block_section_4_df(self):
+    def _enter_leave_edge_4_df(self):
         return pd.DataFrame(
             [
                 [None, self.second_to_tick(20), "section_1", None],
@@ -261,13 +261,13 @@ class TestLogCollector:
             columns=[
                 "enter_tick",
                 "leave_tick",
-                "block_section_id",
-                "block_section_length",
+                "edge_id",
+                "edge_length",
             ],
         )
 
     @pytest.fixture
-    def _enter_leave_block_section_all_df(self):
+    def _enter_leave_edge_all_df(self):
         return pd.DataFrame(
             [
                 [None, self.second_to_tick(20), "section_1", None, "cargo_4_cargo"],
@@ -334,8 +334,8 @@ class TestLogCollector:
             columns=[
                 "enter_tick",
                 "leave_tick",
-                "block_section_id",
-                "block_section_length",
+                "edge_id",
+                "edge_length",
                 "train_id",
             ],
         )
@@ -485,38 +485,38 @@ class TestLogCollector:
         )
 
     @staticmethod
-    def setup_enter_leave_block_section_1(event_bus):
-        event_bus.train_enter_block_section(
+    def setup_enter_leave_edge_1(event_bus):
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(10),
             "ice_1_passenger",
             "section_1",
             10.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(20),
             "ice_1_passenger",
             "section_1",
             10.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(30),
             "ice_1_passenger",
             "section_2",
             20.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(40),
             "ice_1_passenger",
             "section_2",
             20.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(50),
             "ice_1_passenger",
             "section_3",
             30.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(60),
             "ice_1_passenger",
             "section_3",
@@ -524,32 +524,32 @@ class TestLogCollector:
         )
 
     @staticmethod
-    def setup_enter_leave_block_section_2(event_bus):
-        event_bus.train_enter_block_section(
+    def setup_enter_leave_edge_2(event_bus):
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(10),
             "ice_2_passenger",
             "section_1",
             10.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(20),
             "ice_2_passenger",
             "section_1",
             10.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(30),
             "ice_2_passenger",
             "section_2",
             20.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(40),
             "ice_2_passenger",
             "section_2",
             20.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(50),
             "ice_2_passenger",
             "section_3",
@@ -557,32 +557,32 @@ class TestLogCollector:
         )
 
     @staticmethod
-    def setup_enter_leave_block_section_3(event_bus):
-        event_bus.train_leave_block_section(
+    def setup_enter_leave_edge_3(event_bus):
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(20),
             "ice_3_passenger",
             "section_1",
             10.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(30),
             "ice_3_passenger",
             "section_2",
             20.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(40),
             "ice_3_passenger",
             "section_2",
             20.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(50),
             "ice_3_passenger",
             "section_3",
             30.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(60),
             "ice_3_passenger",
             "section_3",
@@ -590,26 +590,26 @@ class TestLogCollector:
         )
 
     @staticmethod
-    def setup_enter_leave_block_section_4(event_bus):
-        event_bus.train_leave_block_section(
+    def setup_enter_leave_edge_4(event_bus):
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(20),
             "cargo_4_cargo",
             "section_1",
             10.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(30),
             "cargo_4_cargo",
             "section_2",
             20.5,
         )
-        event_bus.train_leave_block_section(
+        event_bus.train_leave_edge(
             TestLogCollector.second_to_tick(40),
             "cargo_4_cargo",
             "section_2",
             20.5,
         )
-        event_bus.train_enter_block_section(
+        event_bus.train_enter_edge(
             TestLogCollector.second_to_tick(50),
             "cargo_4_cargo",
             "section_3",
@@ -779,30 +779,30 @@ class TestLogCollector:
             _departure_arrival_4_df,
         )
 
-    def test_enter_leave_block_section_1(
-        self, _enter_leave_block_section_1_df, event_bus, log_collector: LogCollector
+    def test_enter_leave_edge_1(
+        self, _enter_leave_edge_1_df, event_bus, log_collector: LogCollector
     ):
-        self.setup_enter_leave_block_section_1(event_bus)
+        self.setup_enter_leave_edge_1(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(
+            log_collector.get_edge_times_of_train(
                 event_bus.run_id, "ice_1_passenger"
             ),
-            _enter_leave_block_section_1_df,
+            _enter_leave_edge_1_df,
         )
 
-    def test_enter_leave_block_section_2(
-        self, _enter_leave_block_section_2_df, event_bus, log_collector: LogCollector
+    def test_enter_leave_edge_2(
+        self, _enter_leave_edge_2_df, event_bus, log_collector: LogCollector
     ):
-        self.setup_enter_leave_block_section_2(event_bus)
+        self.setup_enter_leave_edge_2(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(
+            log_collector.get_edge_times_of_train(
                 event_bus.run_id, "ice_2_passenger"
             ),
-            _enter_leave_block_section_2_df,
+            _enter_leave_edge_2_df,
         )
 
-    def test_enter_leave_block_section_3(
-        self, _enter_leave_block_section_3_df, event_bus, log_collector: LogCollector
+    def test_enter_leave_edge_3(
+        self, _enter_leave_edge_3_df, event_bus, log_collector: LogCollector
     ):
         self.setup_enter_leave_block_section_3(event_bus)
         assert_frame_equal(

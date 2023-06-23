@@ -9,8 +9,8 @@ from src.logger.log_entry import (
     ResolveFaultLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
-    TrainEnterBlockSectionLogEntry,
-    TrainLeaveBlockSectionLogEntry,
+    TrainEnterEdgeLogEntry,
+    TrainLeaveEdgeLogEntry,
     TrainSpawnLogEntry,
 )
 
@@ -52,11 +52,11 @@ class LogCollector:
         trains_departures = TrainDepartureLogEntry.select(
             TrainDepartureLogEntry.train_id
         ).distinct()
-        trains_enter = TrainEnterBlockSectionLogEntry.select(
-            TrainEnterBlockSectionLogEntry.train_id
+        trains_enter = TrainEnterEdgeLogEntry.select(
+            TrainEnterEdgeLogEntry.train_id
         ).distinct()
-        trains_leave = TrainLeaveBlockSectionLogEntry.select(
-            TrainLeaveBlockSectionLogEntry.train_id
+        trains_leave = TrainLeaveEdgeLogEntry.select(
+            TrainLeaveEdgeLogEntry.train_id
         ).distinct()
 
         # pylint will not recognize that peewee results are iterable
@@ -207,31 +207,31 @@ class LogCollector:
         departures_arrivals_df = departures_arrivals_df.reset_index(drop=True)
         return departures_arrivals_df
 
-    def _get_trains_block_section(self, run_id: UUID) -> list[str]:
+    def _get_trains_edge(self, run_id: UUID) -> list[str]:
         """Returns a list of all trains that have entered or left a block
         section in the given run.
         :param run_id: The id of the run.
         :return: A list of all trains that have entered or left a block"""
 
         trains_enter = (
-            TrainEnterBlockSectionLogEntry.select(
-                TrainEnterBlockSectionLogEntry.train_id
+            TrainEnterEdgeLogEntry.select(
+                TrainEnterEdgeLogEntry.train_id
             )
             .distinct()
-            .where(TrainEnterBlockSectionLogEntry.run_id == run_id)
+            .where(TrainEnterEdgeLogEntry.run_id == run_id)
         )
         trains_leave = (
-            TrainLeaveBlockSectionLogEntry.select(
-                TrainLeaveBlockSectionLogEntry.train_id
+            TrainLeaveEdgeLogEntry.select(
+                TrainLeaveEdgeLogEntry.train_id
             )
             .distinct()
-            .where(TrainLeaveBlockSectionLogEntry.run_id == run_id)
+            .where(TrainLeaveEdgeLogEntry.run_id == run_id)
         )
         train_ids = {t.train_id for t in trains_enter}
         train_ids = train_ids.union({t.train_id for t in trains_leave})
         return list(train_ids)
 
-    def get_block_section_times_of_train(
+    def get_edge_times_of_train(
         self, run_id: UUID, train_id: str
     ) -> pd.DataFrame:
         """Returns a DataFrame containing all block section times of the
@@ -245,25 +245,25 @@ class LogCollector:
         # pylint: disable=not-an-iterable
         train_enter_df = pd.DataFrame(
             [
-                [e.tick, e.block_section_id, e.block_section_length]
-                for e in TrainEnterBlockSectionLogEntry.select().where(
-                    (TrainEnterBlockSectionLogEntry.run_id == run_id)
-                    & (TrainEnterBlockSectionLogEntry.train_id == train_id)
+                [e.tick, e.edge_id, e.edge_length]
+                for e in TrainEnterEdgeLogEntry.select().where(
+                    (TrainEnterEdgeLogEntry.run_id == run_id)
+                    & (TrainEnterEdgeLogEntry.train_id == train_id)
                 )
             ],
-            columns=["tick", "block_section_id", "block_section_length"],
+            columns=["tick", "edge_id", "edge_length"],
         )
         # pylint will not recognize that peewee results are iterable
         # pylint: disable=not-an-iterable
         train_leave_df = pd.DataFrame(
             [
-                [e.tick, e.block_section_id]
-                for e in TrainLeaveBlockSectionLogEntry.select().where(
-                    (TrainLeaveBlockSectionLogEntry.run_id == run_id)
-                    & (TrainLeaveBlockSectionLogEntry.train_id == train_id)
+                [e.tick, e.edge_id]
+                for e in TrainLeaveEdgeLogEntry.select().where(
+                    (TrainLeaveEdgeLogEntry.run_id == run_id)
+                    & (TrainLeaveEdgeLogEntry.train_id == train_id)
                 )
             ],
-            columns=["tick", "block_section_id"],
+            columns=["tick", "edge_id"],
         )
         train_enter_df = train_enter_df.sort_values("tick")
         train_leave_df = train_leave_df.sort_values("tick")
@@ -272,38 +272,38 @@ class LogCollector:
             return pd.DataFrame(
                 columns=[
                     "train_id",
-                    "block_section_id",
-                    "block_section_length",
+                    "edge_id",
+                    "edge_length",
                     "enter_tick",
                     "leave_tick",
                 ]
             )
         train_enter_first = train_enter_df.iloc[0].tick < train_leave_df.iloc[0].tick
         train_enter_last = train_enter_df.iloc[-1].tick >= train_leave_df.iloc[-1].tick
-        block_section_ids = train_enter_df.block_section_id
-        block_lengths = train_enter_df.block_section_length
+        edge_ids = train_enter_df.edge_id
+        block_lengths = train_enter_df.edge_length
         enter_ticks = train_enter_df.tick
         leave_ticks = train_leave_df.tick
         if not train_enter_first:
             enter_ticks = [None] + list(enter_ticks)
-            block_section_ids = [train_leave_df.iloc[0].block_section_id] + list(
-                block_section_ids
+            edge_ids = [train_leave_df.iloc[0].edge_id] + list(
+                edge_ids
             )
             block_lengths = [None] + list(block_lengths)
         if train_enter_last:
             leave_ticks = list(leave_ticks) + [None]
-        block_section_times_df = pd.DataFrame(
-            zip(enter_ticks, leave_ticks, block_section_ids, block_lengths),
+        edge_times_df = pd.DataFrame(
+            zip(enter_ticks, leave_ticks, edge_ids, block_lengths),
             columns=[
                 "enter_tick",
                 "leave_tick",
-                "block_section_id",
-                "block_section_length",
+                "edge_id",
+                "edge_length",
             ],
         )
-        return block_section_times_df
+        return edge_times_df
 
-    def get_block_section_times_all_trains(self, run_id: UUID) -> pd.DataFrame:
+    def get_edge_times_all_trains(self, run_id: UUID) -> pd.DataFrame:
         """Returns a DataFrame containing all block section times of all
         trains in the given run.
         :param run_id: The id of the run.
@@ -311,16 +311,16 @@ class LogCollector:
         trains in the given run."""
 
         df_list = []
-        for train_id in self._get_trains_block_section(run_id):
-            block_section_times_df = self.get_block_section_times_of_train(
+        for train_id in self._get_trains_edge(run_id):
+            edge_times_df = self.get_edge_times_of_train(
                 run_id, train_id
             )
-            block_section_times_df["train_id"] = train_id
-            df_list += [block_section_times_df]
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.sort_values(["train_id", "leave_tick"], inplace=True)
-        block_section_times_df = block_section_times_df.reset_index(drop=True)
-        return block_section_times_df
+            edge_times_df["train_id"] = train_id
+            df_list += [edge_times_df]
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.sort_values(["train_id", "leave_tick"], inplace=True)
+        edge_times_df = edge_times_df.reset_index(drop=True)
+        return edge_times_df
 
     def get_train_spawn_times(self, run_id: UUID) -> pd.DataFrame:
         """Returns a DataFrame containing all spawn events of trains in the given run.
