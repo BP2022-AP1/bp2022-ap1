@@ -703,11 +703,11 @@
             "uid": "DATASOURCE_UID"
           },
           "refId": "A",
-          "target": "get_verkehrsmenge_by_config_id:${config_id}",
+          "target": "get_verkehrsarbeit_by_config_id:${config_id}",
           "type": "table"
         }
       ],
-      "title": "Verkehrsmenge Zugkilometer",
+      "title": "Verkehrsarbeit Zugkilometer",
       "transformations": [
         {
           "id": "filterFieldsByName",
@@ -855,11 +855,11 @@
             "uid": "DATASOURCE_UID"
           },
           "refId": "A",
-          "target": "get_average_verkehrsmenge_by_config_id:${config_id}",
+          "target": "get_average_verkehrsarbeit_by_config_id:${config_id}",
           "type": "table"
         }
       ],
-      "title": "Durchschnittliche Verkehrsmenge nach Typ",
+      "title": "Durchschnittliche Verkehrsarbeit nach Typ",
       "type": "bargauge"
     },
     {

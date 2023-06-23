@@ -321,10 +321,10 @@ class DataScience:
         return spawn_df
 
     # --- SCALARS
-    def get_verkehrsmenge_by_run_id(self, run_id: UUID) -> pd.DataFrame:
-        """Returns the verkehrsmenge by a given run id
+    def get_verkehrsarbeit_by_run_id(self, run_id: UUID) -> pd.DataFrame:
+        """Returns the verkehrsarbeit by a given run id
         :param run_id: run id
-        :return: dataframe of verkehrsmenge
+        :return: dataframe of verkehrsarbeit
         """
 
         block_section_times_df = self.log_collector.get_block_section_times_all_trains(
@@ -340,7 +340,7 @@ class DataScience:
         grouped_df = block_section_times_df.groupby("train_type").apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsmenge": data["block_section_length"].sum(),
+                    "verkehrsarbeit": data["block_section_length"].sum(),
                 }
             )
         )
@@ -348,7 +348,7 @@ class DataScience:
         all_df = pd.DataFrame(
             {
                 "train_type": ["all"],
-                "verkehrsmenge": [grouped_df["verkehrsmenge"].sum()],
+                "verkehrsarbeit": [grouped_df["verkehrsarbeit"].sum()],
             }
         )
         grouped_df = pd.concat(
@@ -764,10 +764,10 @@ class DataScience:
         out_df["departure_second"] = out_df["departure_second"].astype("Int64")
         return out_df
 
-    def get_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
-        """Returns the verkehrsmenge by a given config id
+    def get_verkehrsarbeit_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+        """Returns the verkehrsarbeit by a given config id
         :param config_id: config id
-        :return: verkehrsmenge dataframe
+        :return: verkehrsarbeit dataframe
         """
 
         df_list = []
@@ -818,10 +818,10 @@ class DataScience:
         del grouped_df["leave_tick"]
         return grouped_df
 
-    def get_average_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
-        """Returns the average verkehrsmenge by a given config id
+    def get_average_verkehrsarbeit_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+        """Returns the average verkehrsarbeit by a given config id
         :param config_id: config id
-        :return: verkehrsmenge dataframe
+        :return: verkehrsarbeit dataframe
         """
 
         df_list = []
@@ -842,7 +842,7 @@ class DataScience:
         grouped_df = block_section_times_df.groupby(["run_id", "train_type"]).apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsmenge": data["block_section_length"].sum(),
+                    "verkehrsarbeit": data["block_section_length"].sum(),
                 }
             )
         )
@@ -851,13 +851,13 @@ class DataScience:
             lambda data: pd.Series(
                 {
                     "train_type": "all",
-                    "verkehrsmenge": data["verkehrsmenge"].sum(),
+                    "verkehrsarbeit": data["verkehrsarbeit"].sum(),
                 }
             )
         )
         all_df.reset_index(inplace=True)
         grouped_df = pd.concat([grouped_df, all_df], axis=0)
-        grouped_df = grouped_df.groupby(["train_type"]).agg({"verkehrsmenge": "mean"})
+        grouped_df = grouped_df.groupby(["train_type"]).agg({"verkehrsarbeit": "mean"})
         grouped_df.reset_index(inplace=True)
         return grouped_df
 
@@ -1019,12 +1019,12 @@ class DataScience:
 
         return out_df
 
-    def get_verkehrsmenge_by_multi_config(
+    def get_verkehrsarbeit_by_multi_config(
         self, config_id_list: list[UUID]
     ) -> pd.DataFrame:
-        """Returns the verkehrsmenge of given configs
+        """Returns the verkehrsarbeit of given configs
         :param config_id_list: list of simulation configuration ids
-        :return: dataframe of verkehrsmenge
+        :return: dataframe of verkehrsarbeit
         """
         df_list = []
         for run_id in Run.select().where(

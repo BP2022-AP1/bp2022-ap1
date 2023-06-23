@@ -67,7 +67,7 @@ class TestGrafanaDataRegistration:
             "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
             "get_coal_demand_by_run_id:${run_id}",
             "test_get_spawn_events_by_run_id:${run_id}",
-            "get_verkehrsmenge_by_run_id:${run_id}",
+            "get_verkehrsarbeit_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
@@ -75,12 +75,12 @@ class TestGrafanaDataRegistration:
             "get_coal_spawn_events_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
-            "get_verkehrsmenge_by_config_id:${config_id}",
+            "get_verkehrsarbeit_by_config_id:${config_id}",
             "get_verkehrsleistung_by_config_id:${config_id}",
-            "get_average_verkehrsmenge_by_config_id:${config_id}",
+            "get_average_verkehrsarbeit_by_config_id:${config_id}",
             "get_average_verkehrsleistung_by_config_id:${config_id}",
             "get_window_by_multi_config:${config_ids}",
-            "get_verkehrsmenge_by_multi_config:${config_ids}",
+            "get_verkehrsarbeit_by_multi_config:${config_ids}",
             "get_verkehrsleistung_by_multi_config:${config_ids}",
         ]
 
@@ -175,17 +175,17 @@ class TestGrafanaDataRegistration:
             spawn_events_by_run_id_df,
         )
 
-    def test_get_verkehrsmenge_by_run_id(
+    def test_get_verkehrsarbeit_by_run_id(
         self,
         _run_id: str,
         event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
-        verkehrsmenge_df: pd.DataFrame,
+        verkehrsarbeit_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
         assert_frame_equal(
-            grafana_data_registrator.get_verkehrsmenge_by_run_id(_run_id, None),
-            verkehrsmenge_df,
+            grafana_data_registrator.get_verkehrsarbeit_by_run_id(_run_id, None),
+            verkehrsarbeit_df,
         )
 
     def test_get_verkehrsleistung_by_run_id(
@@ -317,17 +317,17 @@ class TestGrafanaDataRegistration:
             window_all_by_config_id_df,
         )
 
-    def test_get_verkehrsmenge_by_config_id(
+    def test_get_verkehrsarbeit_by_config_id(
         self,
         _config_id: str,
         event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
-        verkehrsmenge_by_config_id_df: pd.DataFrame,
+        verkehrsarbeit_by_config_id_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
         assert_frame_equal(
-            grafana_data_registrator.get_verkehrsmenge_by_config_id(_config_id, None),
-            verkehrsmenge_by_config_id_df,
+            grafana_data_registrator.get_verkehrsarbeit_by_config_id(_config_id, None),
+            verkehrsarbeit_by_config_id_df,
         )
 
     def test_get_verkehrsleistung_by_config_id(
@@ -345,19 +345,19 @@ class TestGrafanaDataRegistration:
             verkehrsleistung_by_config_id_df,
         )
 
-    def test_get_average_verkehrsmenge_by_config_id(
+    def test_get_average_verkehrsarbeit_by_config_id(
         self,
         _config_id: str,
         event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
-        average_verkehrsmenge_by_config_id_df: pd.DataFrame,
+        average_verkehrsarbeit_by_config_id_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
         assert_frame_equal(
-            grafana_data_registrator.get_average_verkehrsmenge_by_config_id(
+            grafana_data_registrator.get_average_verkehrsarbeit_by_config_id(
                 _config_id, None
             ),
-            average_verkehrsmenge_by_config_id_df,
+            average_verkehrsarbeit_by_config_id_df,
         )
 
     def test_get_average_verkehrsleistung_by_config_id(
@@ -392,19 +392,19 @@ class TestGrafanaDataRegistration:
             window_by_multi_config_df,
         )
 
-    def test_get_verkehrsmenge_by_multi_config(
+    def test_get_verkehrsarbeit_by_multi_config(
         self,
         _multi_config: str,
         event_bus: EventBus,
         grafana_data_registrator: GrafanaDataRegistrator,
-        verkehrsmenge_by_multi_config_df: pd.DataFrame,
+        verkehrsarbeit_by_multi_config_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
         assert_frame_equal(
-            grafana_data_registrator.get_verkehrsmenge_by_multi_config(
+            grafana_data_registrator.get_verkehrsarbeit_by_multi_config(
                 _multi_config, None
             ),
-            verkehrsmenge_by_multi_config_df,
+            verkehrsarbeit_by_multi_config_df,
         )
 
     def test_get_verkehrsleistung_by_multi_config(

@@ -253,11 +253,11 @@
             "uid": "DATASOURCE_UID"
           },
           "refId": "A",
-          "target": "get_verkehrsmenge_by_multi_config:${config_ids}",
+          "target": "get_verkehrsarbeit_by_multi_config:${config_ids}",
           "type": "table"
         }
       ],
-      "title": "Verkehrsmenge",
+      "title": "Verkehrsarbeit",
       "type": "bargauge"
     },
     {

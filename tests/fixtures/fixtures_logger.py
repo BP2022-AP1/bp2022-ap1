@@ -389,11 +389,11 @@ def spawn_coal_events_by_config_id_head_df(
 
 
 @pytest.fixture
-def verkehrsmenge_df():
+def verkehrsarbeit_df():
     return pd.DataFrame(
         {
             "train_type": ["cargo", "passenger", "all"],
-            "verkehrsmenge": [20.5, 143.5, 164.0],
+            "verkehrsarbeit": [20.5, 143.5, 164.0],
         }
     )
 
@@ -486,15 +486,15 @@ def window_all_by_config_id_df():
 
 
 @pytest.fixture
-def verkehrsmenge_by_config_id_df(run):
-    verkehrsmenge_df = pd.DataFrame(
+def verkehrsarbeit_by_config_id_df(run):
+    verkehrsarbeit_df = pd.DataFrame(
         {
             "run_id": [run.id],
             "block_section_length": pd.Series([164.0]),
         }
     )
-    verkehrsmenge_df.set_index("run_id", inplace=True)
-    return verkehrsmenge_df
+    verkehrsarbeit_df.set_index("run_id", inplace=True)
+    return verkehrsarbeit_df
 
 
 @pytest.fixture
@@ -511,14 +511,14 @@ def verkehrsleistung_by_config_id_df(run):
 
 
 @pytest.fixture
-def average_verkehrsmenge_by_config_id_df():
-    verkehrsmenge = pd.DataFrame(
+def average_verkehrsarbeit_by_config_id_df():
+    verkehrsarbeit = pd.DataFrame(
         {
             "train_type": ["all", "cargo", "passenger"],
-            "verkehrsmenge": pd.Series([164.0, 20.5, 143.5]),
+            "verkehrsarbeit": pd.Series([164.0, 20.5, 143.5]),
         }
     )
-    return verkehrsmenge
+    return verkehrsarbeit
 
 
 @pytest.fixture
@@ -549,7 +549,7 @@ def window_by_multi_config_df(simulation_configuration):
 
 
 @pytest.fixture
-def verkehrsmenge_by_multi_config_df(simulation_configuration):
+def verkehrsarbeit_by_multi_config_df(simulation_configuration):
     return pd.DataFrame(
         {
             "config_readable_id": [

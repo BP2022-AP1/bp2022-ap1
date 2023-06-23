@@ -174,15 +174,15 @@ class TestDataScience:
         assert_frame_equal(spawn_events_by_run_id_df, spawn_events_df)
         # will be fixed by Lucas after Schedules are updated with new tick system
 
-    def test_get_verkehrsmenge_by_run_id(
+    def test_get_verkehrsarbeit_by_run_id(
         self,
         event_bus: EventBus,
         data_science: DataScience,
-        verkehrsmenge_df: pd.DataFrame,
+        verkehrsarbeit_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
-        _verkehrsmenge_df = data_science.get_verkehrsmenge_by_run_id(event_bus.run_id)
-        assert_frame_equal(_verkehrsmenge_df, verkehrsmenge_df)
+        _verkehrsarbeit_df = data_science.get_verkehrsarbeit_by_run_id(event_bus.run_id)
+        assert_frame_equal(_verkehrsarbeit_df, verkehrsarbeit_df)
 
     def test_get_verkehrsleistung_by_run_id(
         self,
@@ -306,18 +306,18 @@ class TestDataScience:
         window_df = data_science.get_window_all_by_config_id(simulation_configuration)
         assert_frame_equal(window_df, window_all_by_config_id_df)
 
-    def test_get_verkehrsmenge_by_config_id(
+    def test_get_verkehrsarbeit_by_config_id(
         self,
         event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
-        verkehrsmenge_by_config_id_df: pd.DataFrame,
+        verkehrsarbeit_by_config_id_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
-        verkehrsmenge_df = data_science.get_verkehrsmenge_by_config_id(
+        verkehrsarbeit_df = data_science.get_verkehrsarbeit_by_config_id(
             simulation_configuration
         )
-        assert_frame_equal(verkehrsmenge_df, verkehrsmenge_by_config_id_df)
+        assert_frame_equal(verkehrsarbeit_df, verkehrsarbeit_by_config_id_df)
 
     def test_get_verkehrsleistung_by_config_id(
         self,
@@ -327,23 +327,23 @@ class TestDataScience:
         verkehrsleistung_by_config_id_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
-        verkehrsmenge_df = data_science.get_verkehrsleistung_by_config_id(
+        verkehrsarbeit_df = data_science.get_verkehrsleistung_by_config_id(
             simulation_configuration
         )
-        assert_frame_equal(verkehrsmenge_df, verkehrsleistung_by_config_id_df)
+        assert_frame_equal(verkehrsarbeit_df, verkehrsleistung_by_config_id_df)
 
-    def test_get_average_verkehrsmenge_by_config_id(
+    def test_get_average_verkehrsarbeit_by_config_id(
         self,
         event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
-        average_verkehrsmenge_by_config_id_df: pd.DataFrame,
+        average_verkehrsarbeit_by_config_id_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
-        verkehrsmenge_df = data_science.get_average_verkehrsmenge_by_config_id(
+        verkehrsarbeit_df = data_science.get_average_verkehrsarbeit_by_config_id(
             simulation_configuration
         )
-        assert_frame_equal(verkehrsmenge_df, average_verkehrsmenge_by_config_id_df)
+        assert_frame_equal(verkehrsarbeit_df, average_verkehrsarbeit_by_config_id_df)
 
     def test_get_average_verkehrsleistung_by_config_id(
         self,
@@ -373,18 +373,18 @@ class TestDataScience:
         window_df = data_science.get_window_by_multi_config([simulation_configuration])
         assert_frame_equal(window_df, window_by_multi_config_df)
 
-    def test_get_verkehrsmenge_by_multi_config(
+    def test_get_verkehrsarbeit_by_multi_config(
         self,
         event_bus: EventBus,
         simulation_configuration: SimulationConfiguration,
         data_science: DataScience,
-        verkehrsmenge_by_multi_config_df: pd.DataFrame,
+        verkehrsarbeit_by_multi_config_df: pd.DataFrame,
     ):
         setup_logs_block_sections(event_bus)
-        verkehrsmenge_df = data_science.get_verkehrsmenge_by_multi_config(
+        verkehrsarbeit_df = data_science.get_verkehrsarbeit_by_multi_config(
             [simulation_configuration]
         )
-        assert_frame_equal(verkehrsmenge_df, verkehrsmenge_by_multi_config_df)
+        assert_frame_equal(verkehrsarbeit_df, verkehrsarbeit_by_multi_config_df)
 
     def test_get_verkehrsleistung_by_multi_config(
         self,
