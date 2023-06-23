@@ -800,23 +800,19 @@ class TestLogCollector:
     def test_enter_leave_edge_3(
         self, _enter_leave_edge_3_df, event_bus, log_collector: LogCollector
     ):
-        self.setup_enter_leave_block_section_3(event_bus)
+        self.setup_enter_leave_edge_3(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(
-                event_bus.run_id, "ice_3_passenger"
-            ),
-            _enter_leave_block_section_3_df,
+            log_collector.get_edge_times_of_train(event_bus.run_id, "ice_3_passenger"),
+            _enter_leave_edge_3_df,
         )
 
-    def test_enter_leave_block_section_4(
-        self, _enter_leave_block_section_4_df, event_bus, log_collector: LogCollector
+    def test_enter_leave_edge_4(
+        self, _enter_leave_edge_4_df, event_bus, log_collector: LogCollector
     ):
-        self.setup_enter_leave_block_section_4(event_bus)
+        self.setup_enter_leave_edge_4(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_of_train(
-                event_bus.run_id, "cargo_4_cargo"
-            ),
-            _enter_leave_block_section_4_df,
+            log_collector.get_edge_times_of_train(event_bus.run_id, "cargo_4_cargo"),
+            _enter_leave_edge_4_df,
         )
 
     def test_departure_arrival_all(
@@ -875,16 +871,16 @@ class TestLogCollector:
             _departure_arrival_all_df,
         )
 
-    def test_enter_leave_block_section_all(
-        self, _enter_leave_block_section_all_df, event_bus, log_collector: LogCollector
+    def test_enter_leave_edge_all(
+        self, _enter_leave_edge_all_df, event_bus, log_collector: LogCollector
     ):
-        self.setup_enter_leave_block_section_1(event_bus)
-        self.setup_enter_leave_block_section_2(event_bus)
-        self.setup_enter_leave_block_section_3(event_bus)
-        self.setup_enter_leave_block_section_4(event_bus)
+        self.setup_enter_leave_edge_1(event_bus)
+        self.setup_enter_leave_edge_2(event_bus)
+        self.setup_enter_leave_edge_3(event_bus)
+        self.setup_enter_leave_edge_4(event_bus)
         assert_frame_equal(
-            log_collector.get_block_section_times_all_trains(event_bus.run_id),
-            _enter_leave_block_section_all_df,
+            log_collector.get_edge_times_all_trains(event_bus.run_id),
+            _enter_leave_edge_all_df,
         )
 
     def test_get_train_spawn_times(

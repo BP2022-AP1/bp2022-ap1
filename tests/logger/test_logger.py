@@ -238,7 +238,7 @@ class TestLogger:
                 "tick": tick,
                 "train_id": train_id,
                 "edge_id": edge_id,
-                "edge_length": block_section_length,
+                "edge_length": edge_length,
             },
         )
         logger = Logger(event_bus=event_bus)
@@ -248,7 +248,7 @@ class TestLogger:
             .where(
                 (TrainLeaveEdgeLogEntry.tick == tick)
                 & (TrainLeaveEdgeLogEntry.train_id == train_id)
-                & (TrainLeaveEdgeLogEntry.edge_id == block_section_id)
+                & (TrainLeaveEdgeLogEntry.edge_id == edge_id)
             )
             .first()
         )
@@ -256,11 +256,11 @@ class TestLogger:
         assert log_entry.tick == tick
         assert (
             log_entry.message
-            == f"Train with ID {train_id} left block section with ID {block_section_id}"
+            == f"Train with ID {train_id} left block section with ID {edge_id}"
         )
         assert log_entry.run_id.id == run.id
         assert log_entry.train_id == train_id
-        assert log_entry.edge_id == block_section_id
+        assert log_entry.edge_id == edge_id
 
     @freeze_time()
     def test_inject_platform_blocked_fault(

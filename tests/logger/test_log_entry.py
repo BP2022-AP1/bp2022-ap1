@@ -530,8 +530,8 @@ class TestLogEntry:
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
-                "edge_id": block_section_id,
-                "block_section_length": block_section_length,
+                "edge_id": edge_id,
+                "edge_length": edge_length,
             }
 
         @pytest.fixture
@@ -573,7 +573,7 @@ class TestLogEntry:
             message,
             run,
             train_id,
-            block_section_id,
+            edge_id,
         ):
             """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
             return {
@@ -582,7 +582,7 @@ class TestLogEntry:
                 "message": message,
                 "run_id": run.id,
                 "train_id": train_id,
-                "block_section_id": block_section_id,
+                "edge_id": edge_id,
             }
 
         @pytest.fixture
@@ -593,7 +593,7 @@ class TestLogEntry:
             message,
             run,
             train_id,
-            block_section_id,
+            edge_id,
         ):
             """TrainLeaveBlockSectionLogEntry as dict with all fields set."""
             return {
@@ -602,7 +602,7 @@ class TestLogEntry:
                 "message": message,
                 "run_id": str(run.id),
                 "train_id": train_id,
-                "block_section_id": block_section_id,
+                "edge_id": edge_id,
             }
 
         @pytest.fixture
