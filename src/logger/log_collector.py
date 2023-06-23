@@ -214,16 +214,12 @@ class LogCollector:
         :return: A list of all trains that have entered or left a block"""
 
         trains_enter = (
-            TrainEnterEdgeLogEntry.select(
-                TrainEnterEdgeLogEntry.train_id
-            )
+            TrainEnterEdgeLogEntry.select(TrainEnterEdgeLogEntry.train_id)
             .distinct()
             .where(TrainEnterEdgeLogEntry.run_id == run_id)
         )
         trains_leave = (
-            TrainLeaveEdgeLogEntry.select(
-                TrainLeaveEdgeLogEntry.train_id
-            )
+            TrainLeaveEdgeLogEntry.select(TrainLeaveEdgeLogEntry.train_id)
             .distinct()
             .where(TrainLeaveEdgeLogEntry.run_id == run_id)
         )
@@ -231,9 +227,7 @@ class LogCollector:
         train_ids = train_ids.union({t.train_id for t in trains_leave})
         return list(train_ids)
 
-    def get_edge_times_of_train(
-        self, run_id: UUID, train_id: str
-    ) -> pd.DataFrame:
+    def get_edge_times_of_train(self, run_id: UUID, train_id: str) -> pd.DataFrame:
         """Returns a DataFrame containing all block section times of the
         given train in the given run.
         :param run_id: The id of the run.
@@ -286,9 +280,7 @@ class LogCollector:
         leave_ticks = train_leave_df.tick
         if not train_enter_first:
             enter_ticks = [None] + list(enter_ticks)
-            edge_ids = [train_leave_df.iloc[0].edge_id] + list(
-                edge_ids
-            )
+            edge_ids = [train_leave_df.iloc[0].edge_id] + list(edge_ids)
             block_lengths = [None] + list(block_lengths)
         if train_enter_last:
             leave_ticks = list(leave_ticks) + [None]
@@ -312,9 +304,7 @@ class LogCollector:
 
         df_list = []
         for train_id in self._get_trains_edge(run_id):
-            edge_times_df = self.get_edge_times_of_train(
-                run_id, train_id
-            )
+            edge_times_df = self.get_edge_times_of_train(run_id, train_id)
             edge_times_df["train_id"] = train_id
             df_list += [edge_times_df]
         edge_times_df = pd.concat(df_list, axis=0)

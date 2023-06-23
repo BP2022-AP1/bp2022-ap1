@@ -784,9 +784,7 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_edge_1(event_bus)
         assert_frame_equal(
-            log_collector.get_edge_times_of_train(
-                event_bus.run_id, "ice_1_passenger"
-            ),
+            log_collector.get_edge_times_of_train(event_bus.run_id, "ice_1_passenger"),
             _enter_leave_edge_1_df,
         )
 
@@ -795,9 +793,7 @@ class TestLogCollector:
     ):
         self.setup_enter_leave_edge_2(event_bus)
         assert_frame_equal(
-            log_collector.get_edge_times_of_train(
-                event_bus.run_id, "ice_2_passenger"
-            ),
+            log_collector.get_edge_times_of_train(event_bus.run_id, "ice_2_passenger"),
             _enter_leave_edge_2_df,
         )
 

@@ -32,9 +32,9 @@ from src.spawner.spawner import (
 )
 from tests.decorators import recreate_db_setup
 from tests.fixtures.fixtures_logger import (
-    setup_logs_edges,
     setup_logs_departure_arrival,
     setup_logs_departure_arrival_alt,
+    setup_logs_edges,
 )
 from tests.logger.test_log_collector import TestLogCollector
 

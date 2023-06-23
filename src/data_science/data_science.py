@@ -137,11 +137,7 @@ class DataScience:
         """
         if current_tick > leave_tick:
             return edge_length
-        return (
-                edge_length
-                * (current_tick - enter_tick)
-                / (leave_tick - enter_tick)
-        )
+        return edge_length * (current_tick - enter_tick) / (leave_tick - enter_tick)
 
     def _calculate_verkehrsleistung_by_tick(
         self, edge_times_df: pd.DataFrame, tick: int, start_tick: int
@@ -173,9 +169,7 @@ class DataScience:
         :param delta_tick: delta tick
         :return: dataframe of verkehrsleistung
         """
-        edge_times_df = self.log_collector.get_edge_times_all_trains(
-            run_id
-        )
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
         edge_times_df.dropna(inplace=True)
         edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
@@ -260,9 +254,7 @@ class DataScience:
         :return: dataframe of verkehrsleistung
         """
 
-        edge_times_df = self.log_collector.get_edge_times_all_trains(
-            run_id
-        )
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
         edge_times_df.dropna(inplace=True)
         edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
@@ -327,9 +319,7 @@ class DataScience:
         :return: dataframe of verkehrsmenge
         """
 
-        edge_times_df = self.log_collector.get_edge_times_all_trains(
-            run_id
-        )
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
         edge_times_df.dropna(inplace=True)
         edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
@@ -364,9 +354,7 @@ class DataScience:
         :param run_id: run id
         :return: dataframe of verkehrsleistung
         """
-        edge_times_df = self.log_collector.get_edge_times_all_trains(
-            run_id
-        )
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
         edge_times_df.dropna(inplace=True)
         edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
@@ -513,9 +501,7 @@ class DataScience:
 
         verkehrsleistung = []
         for run_id in edge_times_df["run_id"].unique():
-            source_df = edge_times_df[
-                edge_times_df["run_id"] == run_id
-            ]
+            source_df = edge_times_df[edge_times_df["run_id"] == run_id]
             verkehrsleistung.append(
                 self._calculate_verkehrsleistung_momentarily_by_tick(
                     source_df, tick, delta_tick
@@ -535,9 +521,7 @@ class DataScience:
         """
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
-            )
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
             edge_times_df["run_id"] = run_id.id
             df_list.append(edge_times_df)
         edge_times_df = pd.concat(df_list, axis=0)
@@ -772,9 +756,7 @@ class DataScience:
 
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
-            )
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
             edge_times_df["run_id"] = run_id.id
             df_list.append(edge_times_df)
         edge_times_df = pd.concat(df_list, axis=0)
@@ -796,9 +778,7 @@ class DataScience:
         """
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
-            )
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
             edge_times_df["run_id"] = run_id.id
             df_list.append(edge_times_df)
         edge_times_df = pd.concat(df_list, axis=0)
@@ -826,12 +806,10 @@ class DataScience:
 
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
             )
-            edge_times_df["train_type"] = edge_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
             edge_times_df["run_id"] = run_id.id
             df_list.append(edge_times_df)
         edge_times_df = pd.concat(df_list, axis=0)
@@ -869,12 +847,10 @@ class DataScience:
         :return: verkehrsleistung dataframe"""
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
             )
-            edge_times_df["train_type"] = edge_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
             edge_times_df["run_id"] = run_id.id
             df_list.append(edge_times_df)
         edge_times_df = pd.concat(df_list, axis=0)
@@ -1030,17 +1006,15 @@ class DataScience:
         for run_id in Run.select().where(
             Run.simulation_configuration << config_id_list
         ):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
-            )
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
             edge_times_df["run_id"] = run_id.id
             edge_times_df["config_id"] = run_id.simulation_configuration.id
             edge_times_df[
                 "config_readable_id"
             ] = run_id.simulation_configuration.readable_id
-            edge_times_df["train_type"] = edge_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
+            )
             df_list.append(edge_times_df)
         edge_times_df = pd.concat(df_list, axis=0)
         edge_times_df.dropna(inplace=True)
@@ -1092,12 +1066,10 @@ class DataScience:
         for run_id in Run.select().where(
             Run.simulation_configuration << config_id_list
         ):
-            edge_times_df = (
-                self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
             )
-            edge_times_df["train_type"] = edge_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
             edge_times_df["run_id"] = run_id.id
             edge_times_df["config_id"] = run_id.simulation_configuration.id
             edge_times_df[

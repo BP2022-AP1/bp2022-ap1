@@ -549,18 +549,13 @@ class TestLogEntry:
                 **train_enter_edge_log_entry_as_dict
             )
             assert (
-                    TrainEnterEdgeLogEntry.select()
-                    .where(
-                        TrainEnterEdgeLogEntry.id
-                        == train_enter_edge_log_entry.id
-                )
-                    .first()
-                    == train_enter_edge_log_entry
+                TrainEnterEdgeLogEntry.select()
+                .where(TrainEnterEdgeLogEntry.id == train_enter_edge_log_entry.id)
+                .first()
+                == train_enter_edge_log_entry
             )
 
-        def test_create_empty_fails(
-            self, empty_train_enter_edge_log_entry_as_dict
-        ):
+        def test_create_empty_fails(self, empty_train_enter_edge_log_entry_as_dict):
             """Tests that TrainEnterBlockSectionLogEntry cannot be created with no fields set."""
             with pytest.raises(IntegrityError):
                 TrainEnterEdgeLogEntry.create(
@@ -625,18 +620,13 @@ class TestLogEntry:
                 **train_leave_edge_log_entry_as_dict
             )
             assert (
-                    TrainLeaveEdgeLogEntry.select()
-                    .where(
-                        TrainLeaveEdgeLogEntry.id
-                        == train_leave_edge_log_entry.id
-                )
-                    .first()
-                    == train_leave_edge_log_entry
+                TrainLeaveEdgeLogEntry.select()
+                .where(TrainLeaveEdgeLogEntry.id == train_leave_edge_log_entry.id)
+                .first()
+                == train_leave_edge_log_entry
             )
 
-        def test_create_empty_fails(
-            self, empty_train_leave_edge_log_entry_as_dict
-        ):
+        def test_create_empty_fails(self, empty_train_leave_edge_log_entry_as_dict):
             """Test that TrainLeaveBlockSectionLogEntry cannot be created with empty dict."""
             with pytest.raises(IntegrityError):
                 TrainLeaveEdgeLogEntry.create(
