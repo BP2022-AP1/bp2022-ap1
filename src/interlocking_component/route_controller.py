@@ -442,15 +442,6 @@ class RouteController(Component):
         was_set = self.interlocking.set_route(interlocking_route.yaramo_route)
         if was_set:
             self.event_bus.create_fahrstrasse(self.tick, interlocking_route.id)
-            self.event_bus.train_enter_block_section(
-                self.tick,
-                train.identifier,
-                interlocking_route.id,
-                route_length,
-            )
-            # Right now a fahrstrasse is always from one Signal to the next.
-            # Because of this the fahrstrasse is identical
-            # to the block section the train drives into.
         return was_set
 
     def check_if_route_is_reserved(
@@ -680,9 +671,6 @@ class RouteController(Component):
             # This frees the route in the interlocking
             self.interlocking.free_route(route.yaramo_route)
             self.event_bus.remove_fahrstrasse(self.tick, route.id)
-            self.event_bus.train_leave_block_section(
-                self.tick, train.identifier, route.id, 0
-            )
 
     def _get_interlocking_routes_for_edge(self, edge: Edge) -> List[Route]:
         """This method returns the interlocking route corresponding to the given edge.
