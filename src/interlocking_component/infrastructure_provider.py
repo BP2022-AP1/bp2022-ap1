@@ -98,7 +98,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_out(track_segment_id)
 
-        self.route_controller.maybe_free_fahrstrasse(train, edge)
+        self.route_controller.maybe_free_fahrstrasse(edge)
 
         self.event_bus.train_leave_block_section(
             self.route_controller.tick,
