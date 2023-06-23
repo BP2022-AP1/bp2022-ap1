@@ -16,8 +16,8 @@ from src.logger.log_entry import (
     SetSignalLogEntry,
     TrainArrivalLogEntry,
     TrainDepartureLogEntry,
-    TrainEnterBlockSectionLogEntry,
-    TrainLeaveBlockSectionLogEntry,
+    TrainEnterEdgeLogEntry,
+    TrainLeaveEdgeLogEntry,
     TrainRemoveLogEntry,
     TrainSpawnLogEntry,
 )
@@ -69,12 +69,12 @@ class Logger(Component):
         )
         self.callback_handles.append(
             self.event_bus.register_callback(
-                self.train_enter_block_section, EventType.TRAIN_ENTER_BLOCK_SECTION
+                self.train_enter_edge, EventType.TRAIN_ENTER_EDGE
             )
         )
         self.callback_handles.append(
             self.event_bus.register_callback(
-                self.train_leave_block_section, EventType.TRAIN_LEAVE_BLOCK_SECTION
+                self.train_leave_edge, EventType.TRAIN_LEAVE_EDGE
             )
         )
         self.callback_handles.append(
@@ -250,39 +250,39 @@ class Logger(Component):
             state_after=event.arguments["state_after"],
         )
 
-    def train_enter_block_section(self, event: Event) -> Type[None]:
+    def train_enter_edge(self, event: Event) -> Type[None]:
         """
-        This function should be called when a train enters a block section. This should include a
-        train identifier, the block section identifier and the length of the block section.
+        This function should be called when a train enters an edge section. This should include a
+        train identifier, the edge identifier and the length of the edge.
         :param event: the event containing all relevant info
         """
-        TrainEnterBlockSectionLogEntry.create(
+        TrainEnterEdgeLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
             message=f"Train with ID {event.arguments['train_id']} entered block "
-            f"section with ID {event.arguments['block_section_id']} "
-            f"with length {event.arguments['block_section_length']}",
+            f"section with ID {event.arguments['edge_id']} "
+            f"with length {event.arguments['edge_length']}",
             run_id=self.event_bus.run_id,
             train_id=event.arguments["train_id"],
-            block_section_id=event.arguments["block_section_id"],
-            block_section_length=event.arguments["block_section_length"],
+            edge_id=event.arguments["edge_id"],
+            edge_length=event.arguments["edge_length"],
         )
 
-    def train_leave_block_section(self, event: Event) -> Type[None]:
+    def train_leave_edge(self, event: Event) -> Type[None]:
         """
-        This function should be called when a train leaves a block section. This should include a
-        train identifier, the block section identifier and the length of the block section.
+        This function should be called when a train leaves an edge section. This should include a
+        train identifier, the edge identifier and the length of the edge.
         :param event: the event containing all relevant info
         """
-        TrainLeaveBlockSectionLogEntry.create(
+        TrainLeaveEdgeLogEntry.create(
             timestamp=datetime.now(),
             tick=event.arguments["tick"],
             message=f"Train with ID {event.arguments['train_id']} left block "
-            f"section with ID {event.arguments['block_section_id']}",
+            f"section with ID {event.arguments['edge_id']}",
             run_id=self.event_bus.run_id,
             train_id=event.arguments["train_id"],
-            block_section_id=event.arguments["block_section_id"],
-            block_section_length=event.arguments["block_section_length"],
+            edge_id=event.arguments["edge_id"],
+            edge_length=event.arguments["edge_length"],
         )
 
     def inject_platform_blocked_fault(self, event: Event) -> Type[None]:

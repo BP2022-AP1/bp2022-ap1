@@ -34,9 +34,9 @@ from src.spawner.spawner import (
 )
 from tests.decorators import recreate_db_setup
 from tests.fixtures.fixtures_logger import (
-    setup_logs_block_sections,
     setup_logs_departure_arrival,
     setup_logs_departure_arrival_alt,
+    setup_logs_edges,
 )
 from tests.logger.test_log_collector import TestLogCollector
 
@@ -118,7 +118,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsleistung_time_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsleistung_df = data_science.get_verkehrsleistung_time_by_run_id(
             event_bus.run_id,
             delta_tick=self.second_to_tick(10),
@@ -131,7 +131,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsleistung_df = (
             data_science.get_verkehrsleistung_momentarily_time_by_run_id(
                 event_bus.run_id,
@@ -180,7 +180,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsarbeit_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         _verkehrsarbeit_df = data_science.get_verkehrsarbeit_by_run_id(event_bus.run_id)
         assert_frame_equal(_verkehrsarbeit_df, verkehrsarbeit_df)
 
@@ -190,7 +190,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsleistung_by_run_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsleistung_df = data_science.get_verkehrsleistung_by_run_id(
             event_bus.run_id
         )
@@ -207,7 +207,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsleistung_momentarily_time_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsleistung_df = data_science.get_verkehrsleistung_time_by_config_id(
             simulation_configuration,
             delta_tick=self.second_to_tick(10),
@@ -313,7 +313,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsarbeit_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsarbeit_df = data_science.get_verkehrsarbeit_by_config_id(
             simulation_configuration
         )
@@ -326,7 +326,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsleistung_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsarbeit_df = data_science.get_verkehrsleistung_by_config_id(
             simulation_configuration
         )
@@ -339,7 +339,7 @@ class TestDataScience:
         data_science: DataScience,
         average_verkehrsarbeit_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsarbeit_df = data_science.get_average_verkehrsarbeit_by_config_id(
             simulation_configuration
         )
@@ -352,7 +352,7 @@ class TestDataScience:
         data_science: DataScience,
         average_verkehrsleistung_by_config_id_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsleistung_df = data_science.get_average_verkehrsleistung_by_config_id(
             simulation_configuration
         )
@@ -380,7 +380,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsarbeit_by_multi_config_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsarbeit_df = data_science.get_verkehrsarbeit_by_multi_config(
             [simulation_configuration]
         )
@@ -393,7 +393,7 @@ class TestDataScience:
         data_science: DataScience,
         verkehrsleistung_by_multi_config_df: pd.DataFrame,
     ):
-        setup_logs_block_sections(event_bus)
+        setup_logs_edges(event_bus)
         verkehrsleistung_df = data_science.get_verkehrsleistung_by_multi_config(
             [simulation_configuration]
         )

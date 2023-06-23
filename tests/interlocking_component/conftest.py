@@ -30,8 +30,8 @@ def mock_event_bus() -> EventBus:
         remove_fahrstrasse_count = 0
         set_signal_go_count = 0
         set_signal_halt_count = 0
-        train_enter_block_section_count = 0
-        train_leave_block_section_count = 0
+        train_enter_edge_count = 0
+        train_leave_edge_count = 0
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
@@ -49,23 +49,23 @@ def mock_event_bus() -> EventBus:
             elif state_after == Signal.State.HALT:
                 self.set_signal_halt_count += 1
 
-        def train_enter_block_section(
+        def train_enter_edge(
             self,
             tick: int,
             train_id: str,
-            block_section_id: str,
-            block_section_length: float,
+            edge_id: str,
+            edge_length: float,
         ) -> Type[None]:
-            self.train_enter_block_section_count += 1
+            self.train_enter_edge_count += 1
 
-        def train_leave_block_section(
+        def train_leave_edge(
             self,
             tick: int,
             train_id: str,
-            block_section_id: str,
-            block_section_length: float = 0,
+            edge_id: str,
+            edge_length: float = 0,
         ) -> Type[None]:
-            self.train_leave_block_section_count += 1
+            self.train_leave_edge_count += 1
 
         # pylint: enable=unused-argument
 
@@ -165,7 +165,6 @@ def route_controller(
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "example.ppxml"),
     )
-    my_route_controller.initialize_signals()
     return my_route_controller
 
 
@@ -235,13 +234,14 @@ def mock_route_controller(
         simulation_object_updating_component = configured_souc
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
+        tick = 100
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
-        def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
+        def maybe_free_fahrstrasse(self, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
 
         # pylint: enable=unused-argument
@@ -311,6 +311,7 @@ def sumo_edge() -> Edge:
         """
 
         identifier = "test_id-re"
+        length = 100
 
     return EdgeMock()
 

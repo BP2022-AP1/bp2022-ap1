@@ -87,12 +87,12 @@ def state_after():
 
 
 @pytest.fixture
-def block_section_id():
+def edge_id():
     return "Test Block Section id"
 
 
 @pytest.fixture
-def block_section_length():
+def edge_length():
     return 101.53
 
 
@@ -408,7 +408,7 @@ def verkehrsleistung_by_run_id_df():
                 [second_to_tick(40), second_to_tick(60), second_to_tick(60)],
                 dtype="Int64",
             ),
-            "block_section_length": [20.5, 143.5, 164.0],
+            "edge_length": [20.5, 143.5, 164.0],
             "verkehrsleistung": [1845.0, 8610.0, 10455.0],
         }
     )
@@ -490,7 +490,7 @@ def verkehrsarbeit_by_config_id_df(run):
     verkehrsarbeit_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "block_section_length": pd.Series([164.0]),
+            "edge_length": pd.Series([164.0]),
         }
     )
     verkehrsarbeit_df.set_index("run_id", inplace=True)
@@ -502,7 +502,7 @@ def verkehrsleistung_by_config_id_df(run):
     verkehrsleistung_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "block_section_length": pd.Series([164.0]),
+            "edge_length": pd.Series([164.0]),
             "verkehrsleistung": pd.Series([9840.0]),
         }
     )
@@ -558,7 +558,7 @@ def verkehrsarbeit_by_multi_config_df(simulation_configuration):
                 simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
-            "block_section_length": pd.Series([164.0, 20.5, 143.5]),
+            "edge_length": pd.Series([164.0, 20.5, 143.5]),
         }
     )
 
@@ -597,8 +597,8 @@ def setup_logs_departure_arrival_alt(event_bus2):
     TestLogCollector.setup_departure_arrival_4_alt(event_bus2)
 
 
-def setup_logs_block_sections(event_bus):
-    TestLogCollector.setup_enter_leave_block_section_1(event_bus)
-    TestLogCollector.setup_enter_leave_block_section_2(event_bus)
-    TestLogCollector.setup_enter_leave_block_section_3(event_bus)
-    TestLogCollector.setup_enter_leave_block_section_4(event_bus)
+def setup_logs_edges(event_bus):
+    TestLogCollector.setup_enter_leave_edge_1(event_bus)
+    TestLogCollector.setup_enter_leave_edge_2(event_bus)
+    TestLogCollector.setup_enter_leave_edge_3(event_bus)
+    TestLogCollector.setup_enter_leave_edge_4(event_bus)

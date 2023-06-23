@@ -3,12 +3,16 @@ from collections import defaultdict
 from typing import List, Tuple
 
 import pytest
+from planpro_importer.reader import PlanProReader
 from traci import constants, edge, trafficlight, vehicle
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
-from src.interlocking_component.route_controller import UninitializedTrain
+from src.interlocking_component.route_controller import (
+    TopologyInitializer,
+    UninitializedTrain,
+)
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -100,6 +104,15 @@ def train_subscribe(monkeypatch):
 
 
 @pytest.fixture
+def train_set_route_id(monkeypatch):
+    def set_route_id_train(identifier, route_id=None):
+        assert identifier is not None
+        assert route_id is not None
+
+    monkeypatch.setattr(vehicle, "setRouteID", set_route_id_train)
+
+
+@pytest.fixture
 def train_route_update(monkeypatch):
     def update_route(identifier, routeID=None):
         # pylint: disable=invalid-name
@@ -129,6 +142,7 @@ def edge2() -> Edge:
 def train(
     train_add,
     train_route_update,
+    train_set_route_id,
     configured_souc: SimulationObjectUpdatingComponent,
     edge1: Edge,
 ) -> Train:
@@ -158,6 +172,10 @@ def train(
         }
     )
     created_train.reserved_tracks.append(created_train.edge.track)
+    print(created_train.edge.track.identifier)
+    print(created_train.edge.track.nodes[0].identifier)
+    print(created_train.edge.track.nodes[1].identifier)
+    print(isinstance(created_train.edge.track.nodes[1], Switch))
     created_train.edge.track.reservations.append((created_train, created_train.edge))
 
     return created_train
@@ -202,6 +220,10 @@ def configured_souc(
         )
     )
     souc.infrastructure_provider = infrastructure_provider
+    path_name = os.path.join("data", "planpro", "example.ppxml")
+    yaramo_topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
+    topology_initializer = TopologyInitializer(souc, yaramo_topology)
+    topology_initializer.initialize_all()
     return souc
 
 
@@ -225,9 +247,8 @@ class MockRouteController:
     reserve_for_initialized_train_count = 0
     set_spawn_fahrstrasse_count = 0
 
-    def set_spawn_fahrstrasse(self, timetable: List[Platform]):
+    def set_spawn_fahrstrasse(self, timetable: List[Platform], start: Edge):
         reservation_placeholder = UninitializedTrain(timetable)
-        start = timetable[0].edge
         end = timetable[1].edge
         self.set_spawn_fahrstrasse_count += 1
         if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
