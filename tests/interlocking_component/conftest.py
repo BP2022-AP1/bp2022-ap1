@@ -234,13 +234,14 @@ def mock_route_controller(
         simulation_object_updating_component = configured_souc
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
+        tick = 100
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
-        def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
+        def maybe_free_fahrstrasse(self, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
 
         # pylint: enable=unused-argument
