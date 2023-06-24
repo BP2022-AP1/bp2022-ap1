@@ -780,7 +780,6 @@ class Train(SimulationObject):
     _station_index: int = 0
     train_type: TrainType
     reserved_tracks: List[Track]
-    station_index: int = 0
     reserved_until_station_index: int = 1
 
     @property

@@ -251,12 +251,12 @@ class RouteController(Component):
 
     def next_tick(self, tick: int):
         self.tick = tick
-        for (interlocking_route,) in self.route_queues.routes_to_be_set:
+        for interlocking_route in self.route_queues.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
             was_set = self.set_interlocking_route(interlocking_route)
             if was_set:
-                self.route_queues.routes_to_be_set.remove((interlocking_route))
+                self.route_queues.routes_to_be_set.remove(interlocking_route)
         for route, train in self.route_queues.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
@@ -350,7 +350,7 @@ class RouteController(Component):
         assert train.current_platform is not None
 
         new_route = self.router.get_route(
-            edge, train.timetable[train.station_index].edge
+            edge, train.timetable[train._station_index].edge
         )
         # new_route contains a list of nodes from the node before the starting signal
         # to end signal of the new route.

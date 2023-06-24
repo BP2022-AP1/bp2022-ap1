@@ -294,7 +294,6 @@
             }
           },
           "mappings": [],
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -381,7 +380,7 @@
               }
             ]
           },
-          "unit": "lengthkm"
+          "unit": "lengthm"
         },
         "overrides": []
       },

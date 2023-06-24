@@ -159,7 +159,7 @@ class DataScience:
         )
         if tick == start_tick:
             return 0
-        return source_df["dist"].sum() * 3600 / self.tick_to_second(tick - start_tick)
+        return source_df["dist"].sum() * 3.6 / self.tick_to_second(tick - start_tick)
 
     def get_verkehrsleistung_time_by_run_id(
         self, run_id: UUID, delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH")))
@@ -243,7 +243,7 @@ class DataScience:
             tick,
             delta_tick,
         )
-        return np.sum(dist_series) * 3600 / self.tick_to_second(delta_tick)
+        return np.sum(dist_series) * 3.6 / self.tick_to_second(delta_tick)
 
     def get_verkehrsleistung_momentarily_time_by_run_id(
         self, run_id: UUID, delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH")))
@@ -375,7 +375,7 @@ class DataScience:
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second(row["leave_tick"] - row["enter_tick"]),
             axis=1,
         )
@@ -791,7 +791,7 @@ class DataScience:
         )
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
@@ -883,7 +883,7 @@ class DataScience:
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
@@ -1110,7 +1110,7 @@ class DataScience:
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
