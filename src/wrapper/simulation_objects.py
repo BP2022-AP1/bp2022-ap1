@@ -462,6 +462,8 @@ class Edge(SimulationObject):
         result._from = simulation_object.getFromNode().getID()
         result._to = simulation_object.getToNode().getID()
 
+        result._max_speed = 44.4444
+
         return result
 
     def add_simulation_connections(self) -> None:
@@ -715,9 +717,10 @@ class Train(SimulationObject):
             """
             return Train.TrainType(instance, name=train_type)
 
-        def __init__(self, identifier, name: str = None):
+        def __init__(self, identifier, name: str = None, max_speed: float = 32):
             SimulationObject.__init__(self, identifier)
             self._name = name
+            self._max_speed = max_speed
 
         def update(self, data: dict) -> None:
             self._max_speed = data[constants.VAR_MAXSPEED]
@@ -853,6 +856,7 @@ class Train(SimulationObject):
 
         if not from_simulator:
             self._add_to_simulation(identifier, train_type, route_id)
+        self.train_type.max_speed = self.train_type._max_speed
 
     def _add_to_simulation(self, identifier: str, train_type: str, route: str):
         vehicle.add(identifier, routeID=route, typeID=train_type)

@@ -90,6 +90,8 @@ class Communicator:
                 os.getenv("TICK_LENGTH"),
                 "--time-to-teleport",
                 str(time_to_teleport),
+                "--fcd-output",
+                "fcd_output_testestest",
             ],
             port=self._port,
         )

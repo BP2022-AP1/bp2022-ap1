@@ -95,12 +95,12 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.db-test]
     help = "Call DB utilities for test database"
-    cmd = "python3 db/local/db.py"
+    cmd = "python db/local/db.py"
     envfile = ".env.test"
 
     [tool.poe.tasks.db]
     help = "Call DB utilities for dev and prod database"
-    cmd = "python3 db/local/db.py"
+    cmd = "python db/local/db.py"
     envfile = [".env.shared", ".env.secret"]
 
     [tool.poe.tasks.test]
@@ -199,3 +199,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
+
+# curl -X POST http://localhost:5000/run -H 'Content-Type: application/json' -d '{"simulation_configuration": ""}'

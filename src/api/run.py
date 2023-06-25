@@ -19,14 +19,13 @@ def get_all_run_ids(token):
 
 
 @bp.route("/run", methods=["post"])
-@token_required()
-def create_run(token):
+def create_run():
     """Create a run"""
     schema = schemas.RunConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.run.create_run(body, token)
+    return impl.run.create_run(body, None)
 
 
 @bp.route("/run/<identifier>", methods=["get"])
