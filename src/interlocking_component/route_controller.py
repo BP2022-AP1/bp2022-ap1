@@ -130,12 +130,6 @@ class UninitializedTrain:
 
         return self.timetable[self._station_index]
 
-    def depart_platform(self):
-        """Used when the mock train departs from a platform.
-        The real train does not have this method as it checks for departures automatically.
-        """
-        self._station_index += 1
-
 
 class TopologyInitializer:
     """This class initializes things in the SimulationObjectUpdatingComponent,
