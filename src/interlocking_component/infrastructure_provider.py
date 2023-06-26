@@ -88,9 +88,9 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         :type edge: Edge
         """
         if train._edge.track.is_reservation_track:
-            assert train._edge.track.reservations[0][1] == train._edge
-            assert train._edge.track == train.reserved_tracks[0]
-            train._edge.track.reservations.pop(0)
+            assert train.edge.track.reservations[0][1] == train.edge
+            assert train.edge.track == train.reserved_tracks[0]
+            train.edge.track.reservations.pop(0)
             train.reserved_tracks.pop(0)
 
         track_segment_id = edge.identifier.split("-re")[0]
