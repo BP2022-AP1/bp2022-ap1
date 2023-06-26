@@ -299,7 +299,7 @@ def sumo_train(sumo_edge: Edge) -> Train:
 
         identifier = "Test_Train"
         edge = sumo_edge
-        reserved_tracks = sumo_edge.track
+        reserved_tracks = [sumo_edge.track]
 
     return TrainMock()
 
