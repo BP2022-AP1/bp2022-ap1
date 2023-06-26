@@ -113,7 +113,7 @@ class UninitializedTrain:
     reserved_until_station_index: int = 1
     timetable: List[Platform] = None
     route: str = None
-    station_index: int = 1
+    _station_index: int = 1
 
     def __init__(self, timetable: List[Platform]):
         self.timetable = timetable
@@ -342,7 +342,7 @@ class RouteController(Component):
         assert train.current_platform is not None
 
         new_route = self.router.get_route(
-            edge, train.timetable[train.station_index].edge
+            edge, train.current_platform.edge
         )
         # new_route contains a list of nodes from the node before the starting signal
         # to end signal of the new route.
