@@ -712,6 +712,8 @@ class RouteController(Component):
         self.route_queues.routes_waiting_for_reservations = []
         trains: list[Train] = self.simulation_object_updating_component.trains
         for train in trains:
-            for interlocking_route in self._get_interlocking_routes_for_edge(train.edge):
+            for interlocking_route in self._get_interlocking_routes_for_edge(
+                train.edge
+            ):
                 self._free_fahrstrasse(train, interlocking_route)
             self.set_fahrstrasse(train, train.edge)
