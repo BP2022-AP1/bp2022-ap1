@@ -18,7 +18,7 @@ from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Signal, Train, ReservationTrack
+from src.wrapper.simulation_objects import Edge, ReservationTrack, Signal, Train
 
 
 @pytest.fixture
@@ -313,7 +313,7 @@ def sumo_edge(reservation_track: ReservationTrack) -> Edge:
 
         identifier = "test_id-re"
         track = reservation_track
-        
+
         def __init__(self) -> None:
             self.track.reservations.append(("this should be a train", self))
 
@@ -331,7 +331,7 @@ def reservation_track() -> ReservationTrack:
         is_reservation_track = True
         reservations = []
 
-    return ReservationTrack()
+    return ReservationTrackMock()
 
 
 # pylint: disable=invalid-name
