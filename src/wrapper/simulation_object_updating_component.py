@@ -97,9 +97,9 @@ class SimulationObjectUpdatingComponent(Component):
         return [x for x in self._simulation_objects if isinstance(x, Track)]
 
     def __init__(
-        self,
-        event_bus: EventBus = None,
-        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
+            self,
+            event_bus: EventBus = None,
+            sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new SimulationObjectUpdatingComponent.
 
@@ -129,9 +129,6 @@ class SimulationObjectUpdatingComponent(Component):
                     )
 
     def next_tick(self, tick: int):
-        if tick == 1:
-            for signal in self.signals:
-                signal.set_incoming_index()
         subscription_results = traci.vehicle.getAllSubscriptionResults()
         self._remove_stale_vehicles()
 
@@ -151,8 +148,9 @@ class SimulationObjectUpdatingComponent(Component):
             train = next(
                 (train for train in self.trains if train.identifier == vehicle)
             )
-            self.infrastructure_provider.train_drove_off_track(train, train.edge)
             self._simulation_objects.remove(train)
+            print('removing train', train.identifier)
+            self.infrastructure_provider.train_drove_off_track(train, train.edge)
 
     def _fetch_initial_simulation_objects(self):
         folder = path.dirname(self._sumo_configuration)
@@ -213,10 +211,3 @@ class SimulationObjectUpdatingComponent(Component):
 
         for simulation_object in self._simulation_objects:
             simulation_object.add_simulation_connections()
-
-    def set_up_reservation_tracks(self):
-        """This method updates relevant tracks to be ReservationTracks"""
-        for track in self.tracks:
-            if track.should_be_reservation_track():
-                self._simulation_objects.remove(track)
-                self._simulation_objects.append(track.as_reservation_track())
