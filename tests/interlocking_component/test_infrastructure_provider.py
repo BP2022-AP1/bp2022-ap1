@@ -84,6 +84,8 @@ class TestInfrastructurProvider:
         sumo_train: Train,
         sumo_edge: Edge,
     ):
+        assert len(sumo_train.reserved_tracks) == 1
+        assert len(sumo_edge.track.reservations) == 1
         interlocking_mock_infrastructure_provider.train_drove_off_track(
             sumo_train, sumo_edge
         )
@@ -95,3 +97,5 @@ class TestInfrastructurProvider:
             interlocking_mock_infrastructure_provider.route_controller.interlocking
         )
         assert interlocking.tds_count_out_count == 1
+        assert len(sumo_train.reserved_tracks) == 0
+        assert len(sumo_edge.track.reservations) == 0
