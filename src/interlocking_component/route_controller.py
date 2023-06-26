@@ -335,9 +335,7 @@ class RouteController(Component):
         """
         assert train.current_platform is not None
 
-        new_route = self.router.get_route(
-            edge, train.current_platform.edge
-        )
+        new_route = self.router.get_route(edge, train.current_platform.edge)
         # new_route contains a list of nodes from the node before the starting signal
         # to end signal of the new route.
 
