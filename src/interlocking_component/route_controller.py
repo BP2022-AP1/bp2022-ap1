@@ -113,7 +113,7 @@ class UninitializedTrain:
     reserved_until_station_index: int = 1
     timetable: List[Platform] = None
     route: str = None
-    _station_index: int = 1
+    station_index: int = 1
 
     def __init__(self, timetable: List[Platform]):
         self.timetable = timetable
@@ -196,7 +196,7 @@ class RouteController(Component):
         """This class capsules all routes, that need to be considered every tick."""
 
         routes_to_be_set: List[Route]
-        routes_to_be_reserved: List[Tuple[Route, Train]]
+        routes_to_be_reserved: List[Tuple[List[Node], Train]]
         routes_waiting_for_reservations: List[
             Tuple[List[Node], Train, Route, List[Node]]
         ]
@@ -243,12 +243,12 @@ class RouteController(Component):
 
     def next_tick(self, tick: int):
         self.tick = tick
-        for (interlocking_route,) in self.route_queues.routes_to_be_set:
+        for interlocking_route in self.route_queues.routes_to_be_set:
             # This tries to set the fahrstrasse in the interlocking.
             # The Sumo route was already set and the route was reserved.
             was_set = self.set_interlocking_route(interlocking_route)
             if was_set:
-                self.route_queues.routes_to_be_set.remove((interlocking_route))
+                self.route_queues.routes_to_be_set.remove(interlocking_route)
         for route, train in self.route_queues.routes_to_be_reserved:
             # This tries to reserve the route and then also set the interlocking route.
             # The Sumo route was set already.
@@ -407,7 +407,7 @@ class RouteController(Component):
         if self.check_if_route_is_reserved_as_first(route, train, entire_route):
             was_set = self.set_interlocking_route(interlocking_route)
             if not was_set:
-                self.route_queues.routes_to_be_set.append((interlocking_route))
+                self.route_queues.routes_to_be_set.append(interlocking_route)
             return True
         return False
 

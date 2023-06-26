@@ -777,7 +777,6 @@ class Train(SimulationObject):
     _edge: Edge
     _speed: float
     _timetable: List[Platform]
-    _station_index: int = 0
     train_type: TrainType
     reserved_tracks: List[Track]
     station_index: int = 0
