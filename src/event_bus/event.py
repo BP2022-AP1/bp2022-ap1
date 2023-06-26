@@ -12,8 +12,8 @@ class EventType(Enum):
     CREATE_FAHRSTRASSE = auto()
     REMOVE_FAHRSTRASSE = auto()
     SET_SIGNAL = auto()
-    TRAIN_ENTER_BLOCK_SECTION = auto()
-    TRAIN_LEAVE_BLOCK_SECTION = auto()
+    TRAIN_ENTER_EDGE = auto()
+    TRAIN_LEAVE_EDGE = auto()
     INJECT_FAULT = auto()
     RESOLVE_FAULT = auto()
 
