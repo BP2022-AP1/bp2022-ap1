@@ -87,7 +87,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         :param edge: The edge the train drove off of
         :type edge: Edge
         """
-        if train._edge.track.is_reservation_track:
+        if train.edge.track.is_reservation_track:
             assert train.edge.track.reservations[0][1] == train.edge
             assert train.edge.track == train.reserved_tracks[0]
             train.edge.track.reservations.pop(0)
