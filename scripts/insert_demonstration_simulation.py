@@ -15,6 +15,7 @@ from src.spawner.spawner import (
 from src.fault_injector.fault_configurations.train_speed_fault_configuration import TrainSpeedFaultConfigurationXSimulationConfiguration, TrainSpeedFaultConfiguration
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import TrackSpeedLimitFaultConfiguration, TrackSpeedLimitFaultConfigurationXSimulationConfiguration
 from src.fault_injector.fault_configurations.track_blocked_fault_configuration import TrackBlockedFaultConfiguration, TrackBlockedFaultConfigurationXSimulationConfiguration
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import ScheduleBlockedFaultConfiguration, ScheduleBlockedFaultConfigurationXSimulationConfiguration
 
 with db.atomic():
     platforms = ["bs_0", "bs_1"]
@@ -24,7 +25,7 @@ with db.atomic():
         strategy_start_time=0,
         strategy_end_time=7200,
         train_schedule_train_type="regio",
-        regular_strategy_frequency=400,
+        regular_strategy_frequency=90,
     )
     platforms2 = ["bs_2", "bs_3"]
     # demand_schedule = ScheduleConfiguration.create(
@@ -75,11 +76,22 @@ with db.atomic():
         spawner_configuration=spawner_configuration,
     )
 
+    schedule_blocked_fault_configuration = ScheduleBlockedFaultConfiguration.create(
+                start_time=600,
+                end_time=950,
+                description="test ScheduleBlockedFault",
+                affected_element_id=regular_schedule.id,
+                strategy="regular",
+    )
+    ScheduleBlockedFaultConfigurationXSimulationConfiguration.create(
+        simulation_configuration=simulation_configuration, schedule_blocked_fault_configuration=schedule_blocked_fault_configuration
+    )
+
     # train_speed_fault_configuration = TrainSpeedFaultConfiguration.create(
-    #             affected_element_id=str(regular_schedule.id) + "_8000_regio",
+    #             affected_element_id=str(regular_schedule.id) + "_4500_regio",
     #             new_speed=15,
-    #             start_time=1000,
-    #             end_time=700,
+    #             start_time=500,
+    #             end_time=2000,
     #             description="test TrainSpeedFault",
     #             strategy="regular",
     # )
@@ -114,14 +126,14 @@ with db.atomic():
     #     simulation_configuration=simulation_configuration, track_blocked_fault_configuration=track_blocked_fault_configuration_1
     # )
 
-    track_blocked_fault_configuration_2 = TrackBlockedFaultConfiguration.create(
-                affected_element_id="d5792-0-re",
-                start_time=200,
-                end_time=3000,
-                description="test TrackBlockedFault",
-                strategy="regular",
-    )
-
-    TrackBlockedFaultConfigurationXSimulationConfiguration.create(
-        simulation_configuration=simulation_configuration, track_blocked_fault_configuration=track_blocked_fault_configuration_2
-    )
+    # track_blocked_fault_configuration_2 = TrackBlockedFaultConfiguration.create(
+    #             affected_element_id="d5792-0-re",
+    #             start_time=350,
+    #             end_time=3000,
+    #             description="test TrackBlockedFault 2",
+    #             strategy="regular",
+    # )
+# 
+    # TrackBlockedFaultConfigurationXSimulationConfiguration.create(
+    #     simulation_configuration=simulation_configuration, track_blocked_fault_configuration=track_blocked_fault_configuration_2
+    # )
