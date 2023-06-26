@@ -66,7 +66,7 @@ class TestGrafanaDataRegistration:
             "get_verkehrsleistung_time_by_run_id:${run_id}",
             "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
             "get_coal_demand_by_run_id:${run_id}",
-            "test_get_spawn_events_by_run_id:${run_id}",
+            "get_spawn_events_by_run_id:${run_id}",
             "get_verkehrsarbeit_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_window_size_time_by_config_id:${config_id}",

@@ -43,7 +43,7 @@
         "enable": true,
         "iconColor": "orange",
         "name": "Train Spawns",
-        "query": "test_get_spawn_events_by_run_id:${run_id}",
+        "query": "get_spawn_events_by_run_id:${run_id}",
         "target": {
           "limit": 100,
           "matchAny": false,
@@ -86,187 +86,7 @@
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 1
-      },
-      "id": 10,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-simple-json-datasource",
-            "uid": "DATASOURCE_UID"
-          },
-          "refId": "A",
-          "target": "get_verkehrsleistung_time_by_run_id:${run_id}",
-          "type": "timeserie"
-        }
-      ],
-      "title": "Verkehrsleistung akkumuliert",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "grafana-simple-json-datasource",
-        "uid": "DATASOURCE_UID"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 1
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-simple-json-datasource",
-            "uid": "DATASOURCE_UID"
-          },
-          "refId": "A",
-          "target": "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
-          "type": "timeserie"
-        }
-      ],
-      "title": "Verkehrsleistung momentan",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "grafana-simple-json-datasource",
-        "uid": "DATASOURCE_UID"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "Kohlebedarf",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -315,7 +135,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 1
       },
       "id": 13,
       "options": {
@@ -323,7 +143,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -345,11 +165,102 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "grafana-simple-json-datasource",
+        "uid": "DATASOURCE_UID"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Verkehrsleistung",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-simple-json-datasource",
+            "uid": "DATASOURCE_UID"
+          },
+          "refId": "A",
+          "target": "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
+          "type": "timeserie"
+        }
+      ],
+      "title": "Verkehrsleistung",
+      "type": "timeseries"
+    },
+    {
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 9
       },
       "id": 6,
       "title": "Scalar",
@@ -365,6 +276,7 @@
           "color": {
             "mode": "continuous-GrYlRd"
           },
+          "decimals": 0,
           "mappings": [],
           "min": 0,
           "thresholds": {
@@ -380,15 +292,46 @@
               }
             ]
           },
-          "unit": "lengthm"
+          "unit": "km"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 2,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 0,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 1,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                    }
+                  ]
+              }
+            ]
+          }
+          ]
       },
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 10
       },
       "id": 2,
       "options": {
@@ -445,13 +388,44 @@
           },
           "unit": "velocitykmh"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 2,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 0,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 1,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 10
       },
       "id": 4,
       "options": {

@@ -330,7 +330,7 @@ class DataScience:
         grouped_df = edge_times_df.groupby("train_type").apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsarbeit": data["edge_length"].sum(),
+                    "verkehrsarbeit": data["edge_length"].sum() / 1000.0,
                 }
             )
         )
