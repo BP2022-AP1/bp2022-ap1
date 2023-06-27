@@ -18,7 +18,7 @@ from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Signal, Train
+from src.wrapper.simulation_objects import Edge, ReservationTrack, Signal, Train
 
 
 @pytest.fixture
@@ -291,27 +291,47 @@ def yaramo_signal():
 
 
 @pytest.fixture
-def sumo_train() -> Train:
+def sumo_train(sumo_edge: Edge) -> Train:
     class TrainMock:
         """This mocks a train coming from SUMO with the same attributes,
         but not the functionality.
         """
 
         identifier = "Test_Train"
+        edge = sumo_edge
+        reserved_tracks = [sumo_edge.track]
 
     return TrainMock()
 
 
 @pytest.fixture
-def sumo_edge() -> Edge:
+def sumo_edge(reservation_track: ReservationTrack) -> Edge:
     class EdgeMock:
         """This mocks an edge coming from SUMO with the same attributes,
         but not the functionality.
         """
 
         identifier = "test_id-re"
+        track = reservation_track
+
+        def __init__(self) -> None:
+            self.track.reservations.append(("this should be a train", self))
 
     return EdgeMock()
+
+
+@pytest.fixture
+def reservation_track() -> ReservationTrack:
+    class ReservationTrackMock:
+        """This mocks an edge coming from SUMO with the same attributes,
+        but not the functionality.
+        """
+
+        identifier = "test_id"
+        is_reservation_track = True
+        reservations = []
+
+    return ReservationTrackMock()
 
 
 # pylint: disable=invalid-name
