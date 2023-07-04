@@ -29,8 +29,8 @@ class DemandScheduleStrategy(ScheduleStrategy):
     TOTAL_ELECTRICAL_POWER: float = 10632.75  # in MW
     # [see result from research/coal_consumption/coal_consumption.ipynb section 46]
 
-    COAL_ENERGY_CONTENT: float = 5.56  # in MWh/t (= 20 MJ/kg)
-    # [source: https://www.energie-lexikon.info/kohle.html]
+    COAL_ENERGY_CONTENT: float = 2.46  # in MWh/t
+    # [source: hhttps://braunkohle.de/wp-content/uploads/2019/08/Bodenschatz-Braunkohle-%E2%80%93-Langfassung.pdf]
 
     SECONDS_PER_QUARTER_HOUR: int = (60 / 4) * 60
     COAL_PER_WAGGON: float = 60  # in tons [source: interview]
