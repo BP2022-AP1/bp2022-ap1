@@ -706,18 +706,12 @@ def get_spawner_configuration(options, token):
     :param token: Token object of the current user
 
     """
-    config_id = options["identifier"]
-    configs = SpawnerConfiguration.select().where(SpawnerConfiguration.id == config_id)
+    identifier = options["identifier"]
+    configs = SpawnerConfiguration.select().where(SpawnerConfiguration.id == identifier)
     if not configs.exists():
         return "Id not found", 404
     config = configs.get()
-    config_data = config.to_dict()
-    schedules = [
-        str(reference.schedule_configuration_id.id)
-        for reference in config.schedule_configuration_references
-    ]
-
-    return {**config_data, "schedule": schedules}, 200
+    return config.to_dict(), 200
 
 
 def delete_spawner_configuration(options, token):

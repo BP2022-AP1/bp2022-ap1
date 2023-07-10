@@ -19,6 +19,19 @@ class SpawnerConfiguration(SerializableBaseModel):
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
 
+    def to_dict(self):
+        data = super().to_dict()
+        schedules = [
+            str(reference.schedule_configuration_id.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
+            for reference in self.schedule_configuration_references
+        ]
+        return {
+            "schedule": schedules,
+            **data,
+        }
+
 
 class SpawnerConfigurationXSchedule(BaseModel):
     """Reference table class for m:n relation
