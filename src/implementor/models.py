@@ -24,6 +24,8 @@ class SimulationConfiguration(SerializableBaseModel):
         data = super().to_dict()
         spawner_ids = [
             str(reference.spawner_configuration.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.spawner_configuration_references
         ]
         # Should be only one spawner
@@ -31,33 +33,46 @@ class SimulationConfiguration(SerializableBaseModel):
 
         platform_blocked_fault_ids = [
             str(reference.platform_blocked_fault_configuration.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.platform_blocked_fault_configuration_references
         ]
 
         schedule_blocked_fault_ids = [
             str(reference.schedule_blocked_fault_configuration.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.schedule_blocked_fault_configuration_references
         ]
 
         track_blocked_fault_ids = [
             str(reference.track_blocked_fault_configuration.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.track_blocked_fault_configuration_references
         ]
 
         track_speed_limit_fault_ids = [
             str(reference.track_speed_limit_fault_configuration.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.track_speed_limit_fault_configuration_references
         ]
 
         train_speed_fault_ids = [
             str(reference.train_speed_fault_configuration.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.train_speed_fault_configuration_references
         ]
 
         train_prio_fault_ids = [
             str(reference.train_prio_fault_configuration.id)
+            #  It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.train_prio_fault_configuration_references
         ]
+        # pylint: disable-next=no-member
         run_ids = [str(run.id) for run in self.runs]
         return {
             "description": self.description,

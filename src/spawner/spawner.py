@@ -23,6 +23,8 @@ class SpawnerConfiguration(SerializableBaseModel):
         data = super().to_dict()
         schedules = [
             str(reference.schedule_configuration_id.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
             for reference in self.schedule_configuration_references
         ]
         return {
