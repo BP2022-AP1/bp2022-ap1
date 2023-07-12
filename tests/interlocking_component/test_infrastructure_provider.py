@@ -97,5 +97,6 @@ class TestInfrastructurProvider:
             interlocking_mock_infrastructure_provider.route_controller.interlocking
         )
         assert interlocking.tds_count_out_count == 1
+        assert interlocking.remove_reservation_count == 1
         assert len(sumo_train.reserved_tracks) == 0
         assert len(sumo_edge.track.reservations) == 0
