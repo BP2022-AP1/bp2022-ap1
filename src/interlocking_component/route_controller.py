@@ -661,6 +661,12 @@ class RouteController(Component):
         :param edge: The edge the train drove off of
         :type edge: Edge
         """
+        if train.edge.track.is_reservation_track:
+            assert train.edge.track.reservations[0][1] == train.edge
+            assert train.edge.track == train.reserved_tracks[0]
+            train.edge.track.reservations.pop(0)
+            train.reserved_tracks.pop(0)
+            
         routes = self._get_interlocking_routes_for_edge(edge)
         for route in routes:
             if route.get_last_segment_of_route() != edge.identifier.split("-re")[0]:
