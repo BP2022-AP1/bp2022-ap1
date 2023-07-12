@@ -661,7 +661,7 @@ class RouteController(Component):
         :param edge: The edge the train drove off of
         :type edge: Edge
         """
-        self.remove_reservation(train)
+        self.remove_reservation(train, edge)
 
         routes = self._get_interlocking_routes_for_edge(edge)
         for route in routes:
@@ -686,15 +686,16 @@ class RouteController(Component):
                 self.tick, train.identifier, route.id, 0
             )
 
-    def remove_reservation(self, train: Train):
-        """Removes the reservation of the given train on the edge it is on, if it is a ReservationTrack
+    def remove_reservation(self, train: Train, edge: Edge):
+        """Removes the reservation of the given train on the given edge it is on,
+        if it is a ReservationTrack
 
-        :param train: _description_
-        :param edge: _description_
+        :param train: the train
+        :param edge: the edge
         """
-        if train.edge.track.is_reservation_track:
-            assert train.reserved_tracks[0].reservations[0][1] == train.edge
-            assert train.edge.track == train.reserved_tracks[0]
+        if edge.track.is_reservation_track:
+            assert train.reserved_tracks[0].reservations[0][1] == edge
+            assert edge.track == train.reserved_tracks[0]
             train.reserved_tracks[0].reservations.pop(0)
             train.reserved_tracks.pop(0)
 
