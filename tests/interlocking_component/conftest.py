@@ -243,7 +243,7 @@ def mock_route_controller(
 
         def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
-            
+
         def remove_reservation(self, train: Train, edge: Edge):
             self.remove_reservation_count += 1
 
