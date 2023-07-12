@@ -88,7 +88,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         :type edge: Edge
         """
         self.route_controller.remove_reservation(train, edge)
-        
+
         track_segment_id = edge.identifier.split("-re")[0]
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_out(track_segment_id)
