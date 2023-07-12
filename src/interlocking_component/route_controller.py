@@ -611,7 +611,8 @@ class RouteController(Component):
                 continue
             first_reserving_train = edge.track.reservations[0][0]
             if edge in first_reserving_train.reserved_tracks[0].edges:
-                # The train this is reserved for is already driving towards the segment, that may be swaped.
+                # The train this is reserved for is already driving towards the segment,
+                # that may be swaped.
                 return
             if edge.track.reservations[0][0] == train:
                 self.put_reservations_as_first(train, edge_route[:i])
