@@ -89,14 +89,10 @@ class TestInfrastructurProvider:
         interlocking_mock_infrastructure_provider.train_drove_off_track(
             sumo_train, sumo_edge
         )
-        assert (
-            interlocking_mock_infrastructure_provider.route_controller.maybe_free_fahrstrasse_count
-            == 1
-        )
-        interlocking = (
-            interlocking_mock_infrastructure_provider.route_controller.interlocking
-        )
-        assert interlocking.tds_count_out_count == 1
+        route_controller = interlocking_mock_infrastructure_provider.route_controller
+        assert route_controller.maybe_free_fahrstrasse_count == 1
+        assert route_controller.remove_reservation_count == 1
+        interlocking = route_controller.interlocking
         assert interlocking.remove_reservation_count == 1
         assert len(sumo_train.reserved_tracks) == 0
         assert len(sumo_edge.track.reservations) == 0
