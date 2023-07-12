@@ -403,7 +403,7 @@ class RouteController(Component):
         :param route_length: the length of the route
         :return: if it worked or not
         """
-        if not self.check_if_route_is_reserved(entire_route, train, entire_route):
+        if not self.check_if_route_is_reserved(route, train, entire_route):
             if not self.reserve_route(entire_route, train):
                 return False
 
