@@ -692,8 +692,8 @@ class RouteController(Component):
         :param edge: the edge
         """
         if edge.track.is_reservation_track:
+            assert train.reserved_tracks[0].reservations[0][0] == train
             assert train.reserved_tracks[0].reservations[0][1] == edge
-            assert edge.track == train.reserved_tracks[0]
             train.reserved_tracks[0].reservations.pop(0)
             train.reserved_tracks.pop(0)
 
