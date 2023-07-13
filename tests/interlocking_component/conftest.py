@@ -307,6 +307,9 @@ def sumo_train(sumo_edge: Edge) -> Train:
         edge = sumo_edge
         reserved_tracks = [sumo_edge.track]
 
+        def __init__(self) -> None:
+            self.reserved_tracks[0].reservations.append((self, self.edge))
+
     return TrainMock()
 
 
