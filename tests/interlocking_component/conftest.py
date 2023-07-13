@@ -224,6 +224,7 @@ def mock_interlocking() -> Interlocking:
 def mock_route_controller(
     mock_interlocking: Interlocking,
     configured_souc: SimulationObjectUpdatingComponent,
+    route_controller,
 ) -> RouteController:
     class RouteControllerMock:
         """This mocks the route controller in a way,
@@ -246,6 +247,7 @@ def mock_route_controller(
 
         def remove_reservation(self, train: Train, edge: Edge):
             self.remove_reservation_count += 1
+            RouteController.remove_reservation(None, train, edge)
 
         # pylint: enable=unused-argument
 
