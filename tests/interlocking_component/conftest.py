@@ -247,7 +247,7 @@ def mock_route_controller(
 
         def remove_reservation(self, train: Train, edge: Edge):
             self.remove_reservation_count += 1
-            RouteController.remove_reservation(None, train, edge)
+            route_controller.remove_reservation(train, edge)
 
         # pylint: enable=unused-argument
 
