@@ -323,9 +323,6 @@ def sumo_edge(reservation_track: ReservationTrack) -> Edge:
         identifier = "test_id-re"
         track = reservation_track
 
-        def __init__(self) -> None:
-            self.track.reservations.append(("this should be a train", self))
-
     return EdgeMock()
 
 
