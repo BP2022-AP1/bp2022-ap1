@@ -111,9 +111,13 @@ class TestSpawnerConfiguration:
         del obj_dict["updated_at"]
         del obj_dict["readable_id"]
 
-        assert obj_dict == {
-            "id": str(spawner_configuration.id),
-        }
+        schedules = [
+            str(reference.schedule_configuration_id.id)
+            for reference in spawner_configuration.schedule_configuration_references
+        ]
+        assert set(obj_dict["schedule"]) == set(schedules)
+        del obj_dict["schedule"]
+        assert obj_dict == {"id": str(spawner_configuration.id)}
 
 
 class TestSpawnerConfigurationXSchedule:
