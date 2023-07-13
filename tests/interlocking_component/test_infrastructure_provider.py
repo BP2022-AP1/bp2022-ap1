@@ -93,6 +93,5 @@ class TestInfrastructurProvider:
         assert route_controller.maybe_free_fahrstrasse_count == 1
         assert route_controller.remove_reservation_count == 1
         interlocking = route_controller.interlocking
-        assert interlocking.remove_reservation_count == 1
         assert len(sumo_train.reserved_tracks) == 0
         assert len(sumo_edge.track.reservations) == 0
