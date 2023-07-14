@@ -224,6 +224,7 @@ def mock_interlocking() -> Interlocking:
 def mock_route_controller(
     mock_interlocking: Interlocking,
     configured_souc: SimulationObjectUpdatingComponent,
+    route_controller,
 ) -> RouteController:
     class RouteControllerMock:
         """This mocks the route controller in a way,
@@ -234,6 +235,7 @@ def mock_route_controller(
         simulation_object_updating_component = configured_souc
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
+        remove_reservation_count = 0
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
@@ -242,6 +244,10 @@ def mock_route_controller(
 
         def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
+
+        def remove_reservation(self, train: Train, edge: Edge):
+            self.remove_reservation_count += 1
+            route_controller.remove_reservation(train, edge)
 
         # pylint: enable=unused-argument
 
@@ -301,6 +307,9 @@ def sumo_train(sumo_edge: Edge) -> Train:
         edge = sumo_edge
         reserved_tracks = [sumo_edge.track]
 
+        def __init__(self) -> None:
+            self.reserved_tracks[0].reservations.append((self, self.edge))
+
     return TrainMock()
 
 
@@ -313,9 +322,6 @@ def sumo_edge(reservation_track: ReservationTrack) -> Edge:
 
         identifier = "test_id-re"
         track = reservation_track
-
-        def __init__(self) -> None:
-            self.track.reservations.append(("this should be a train", self))
 
     return EdgeMock()
 
