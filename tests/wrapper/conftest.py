@@ -137,6 +137,7 @@ def edge1_re() -> Edge:
 def edge2() -> Edge:
     return Edge("bf53d-1")
 
+
 @pytest.fixture
 def max_speed(monkeypatch):
     # pylint: disable-next=unused-argument
@@ -144,6 +145,7 @@ def max_speed(monkeypatch):
         pass
 
     monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
 
 @pytest.fixture
 def train(

@@ -300,6 +300,7 @@ def train_add(monkeypatch):
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
+
 @pytest.fixture
 def max_speed(monkeypatch):
     # pylint: disable-next=unused-argument
