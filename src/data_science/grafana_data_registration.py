@@ -67,15 +67,6 @@ class GrafanaDataRegistrator:
         """
         run_id = self._get_run_id_from_param(param)
         return self.data_science.get_faults_by_run_id(run_id)
-
-    def get_verkehrsleistung_time_by_run_id(self, param, _) -> pd.DataFrame:
-        """Returns a list of all faults by grafana params
-        :param param: Grafana params
-        :param _: ignored input time range
-        :return: dataframe of verkehrsleistung"""
-        run_id = self._get_run_id_from_param(param)
-        return self.data_science.get_verkehrsleistung_time_by_run_id(run_id)
-
     def get_verkehrsleistung_momentarily_time_by_run_id(self, param, _) -> pd.DataFrame:
         """Returns the momentary verkehrsleistung over time by grafana params
         :param param: Grafana params
@@ -258,7 +249,6 @@ class GrafanaDataRegistrator:
         :return: list of all grafana functions"""
         return [
             "get_faults_by_run_id:${run_id}",
-            "get_verkehrsleistung_time_by_run_id:${run_id}",
             "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
             "get_coal_demand_by_run_id:${run_id}",
             "get_spawn_events_by_run_id:${run_id}",
@@ -297,10 +287,6 @@ def define_and_register_data():
     )
     dg.add_metric_reader(
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
-    )
-    dg.add_metric_reader(
-        "get_verkehrsleistung_time_by_run_id",
-        grafana_data_registrator.get_verkehrsleistung_time_by_run_id,
     )
     dg.add_metric_reader(
         "get_verkehrsleistung_momentarily_time_by_run_id",
