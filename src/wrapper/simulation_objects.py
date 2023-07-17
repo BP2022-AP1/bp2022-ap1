@@ -40,7 +40,7 @@ class SimulationObject(ABC):
     @staticmethod
     @abstractmethod
     def from_simulation(
-            simulation_object, updater: "SimulationObjectUpdatingComponent"
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
     ) -> "SimulationObject":
         """This method is called to initialize the object from the simulator.
         When using SUMO, the simulation will not be started when this method is called.
@@ -90,7 +90,7 @@ class Node(SimulationObject):
         self._edge_ids = [
             my_edge.getID()
             for my_edge in simulation_object.getOutgoing()
-                           + simulation_object.getIncoming()
+            + simulation_object.getIncoming()
         ]
 
     def get_edge_to(self, other_node: "Node") -> "Edge":
@@ -117,7 +117,7 @@ class Node(SimulationObject):
 
     @staticmethod
     def from_simulation(
-            simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
     ) -> Optional["SimulationObject"]:
         if simulation_object.getID() in [x.identifier for x in updater.signals]:
             # We need to update the signal with our data
@@ -209,7 +209,7 @@ class Signal(Node):
             "G" * self._incoming_index
             + target_state
             + "G" * ((self._controlled_lanes_count - self._incoming_index) - 1),
-            )
+        )
 
         self._state = target
 
@@ -239,7 +239,7 @@ class Signal(Node):
 
     @staticmethod
     def from_simulation(
-            simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: net.TLS, updater: "SimulationObjectUpdatingComponent"
     ) -> "Signal":
         result = Signal(identifier=simulation_object.getID())
         result.updater = updater
@@ -308,7 +308,7 @@ class Switch(Node):
 
     @staticmethod
     def from_simulation(
-            simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
+        simulation_object: net.node.Node, updater: "SimulationObjectUpdatingComponent"
     ) -> "Switch":
         # see: https://sumo.dlr.de/pydoc/sumolib.net.node.html
         result = Switch(identifier=simulation_object.getID())
@@ -350,13 +350,13 @@ class Switch(Node):
 
         for connection in connections:
             if (
-                    directions_to[connection.getTo().getID()] == 2
-                    and connection.getTo().getID() not in self._head_ids
+                directions_to[connection.getTo().getID()] == 2
+                and connection.getTo().getID() not in self._head_ids
             ):
                 self._head_ids.append(connection.getTo().getID())
             if (
-                    directions_from[connection.getFrom().getID()] == 2
-                    and connection.getFrom().getID() not in self._head_ids
+                directions_from[connection.getFrom().getID()] == 2
+                and connection.getFrom().getID() not in self._head_ids
             ):
                 self._head_ids.append(connection.getFrom().getID())
 
@@ -577,7 +577,7 @@ class Track(SimulationObject):
 
     @staticmethod
     def from_simulation(
-            simulation_object, updater: "SimulationObjectUpdatingComponent"
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
     ) -> None:
         pass
 
@@ -635,7 +635,7 @@ class Platform(SimulationObject):
 
     @staticmethod
     def from_simulation(
-            simulation_object, updater: "SimulationObjectUpdatingComponent"
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
     ) -> "Platform":
         result = Platform(
             identifier=simulation_object.id,
@@ -727,7 +727,7 @@ class Train(SimulationObject):
 
         @staticmethod
         def from_simulation(
-                simulation_object, updater: "SimulationObjectUpdatingComponent"
+            simulation_object, updater: "SimulationObjectUpdatingComponent"
         ) -> None:
             pass
 
@@ -825,13 +825,13 @@ class Train(SimulationObject):
         self._timetable = timetable
 
     def __init__(
-            self,
-            identifier: str,
-            timetable: List[Platform],
-            train_type: str = None,
-            updater: "SimulationObjectUpdatingComponent" = None,
-            from_simulator: bool = False,
-            route_id: str = None,
+        self,
+        identifier: str,
+        timetable: List[Platform],
+        train_type: str = None,
+        updater: "SimulationObjectUpdatingComponent" = None,
+        from_simulator: bool = False,
+        route_id: str = None,
     ):
         """Creates a new train from the given parameters.
         When initializing manually, `timetable` and `train_type` are mandatory
@@ -866,9 +866,9 @@ class Train(SimulationObject):
         # self._route = data[constants.VAR_ROUTE]
         self._speed = data[constants.VAR_SPEED]
         if (
-                not hasattr(self, "_edge")
-                or self._edge.identifier != edge_id
-                and not edge_id[:1] == ":"
+            not hasattr(self, "_edge")
+            or self._edge.identifier != edge_id
+            and not edge_id[:1] == ":"
         ):
             if hasattr(self, "_edge"):
                 try:
@@ -876,8 +876,8 @@ class Train(SimulationObject):
                     assert self._edge.track == self.reserved_tracks[0]
                     if len(self.reserved_tracks) > 1:
                         assert (
-                                edge_id
-                                == self.reserved_tracks[1].reservations[0][1].identifier
+                            edge_id
+                            == self.reserved_tracks[1].reservations[0][1].identifier
                         )
                 except Exception as exc:
                     for track in self.reserved_tracks:
@@ -898,8 +898,8 @@ class Train(SimulationObject):
                 item for item in self.updater.edges if item.identifier == edge_id
             )
             if (
-                    self.current_platform is not None
-                    and self.edge == self.current_platform.edge
+                self.current_platform is not None
+                and self.edge == self.current_platform.edge
             ):
                 self._station_index += 1
 
@@ -921,7 +921,7 @@ class Train(SimulationObject):
 
     @staticmethod
     def from_simulation(
-            simulation_object, updater: "SimulationObjectUpdatingComponent"
+        simulation_object, updater: "SimulationObjectUpdatingComponent"
     ) -> None:
         # Nothing to do (we dont load trains from the sim)
         pass

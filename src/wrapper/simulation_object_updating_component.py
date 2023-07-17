@@ -97,9 +97,9 @@ class SimulationObjectUpdatingComponent(Component):
         return [x for x in self._simulation_objects if isinstance(x, Track)]
 
     def __init__(
-            self,
-            event_bus: EventBus = None,
-            sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
+        self,
+        event_bus: EventBus = None,
+        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new SimulationObjectUpdatingComponent.
 
@@ -149,7 +149,7 @@ class SimulationObjectUpdatingComponent(Component):
                 (train for train in self.trains if train.identifier == vehicle)
             )
             self._simulation_objects.remove(train)
-            print('removing train', train.identifier)
+            print("removing train", train.identifier)
             self.infrastructure_provider.train_drove_off_track(train, train.edge)
 
     def _fetch_initial_simulation_objects(self):

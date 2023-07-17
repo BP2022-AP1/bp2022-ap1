@@ -145,11 +145,11 @@ class RouteController(Component):
     topology: Topology
 
     def __init__(
-            self,
-            event_bus: EventBus,
-            priority: str,
-            simulation_object_updating_component: SimulationObjectUpdatingComponent,
-            path_name: str = os.getenv("PLANPRO_PATH"),
+        self,
+        event_bus: EventBus,
+        priority: str,
+        simulation_object_updating_component: SimulationObjectUpdatingComponent,
+        path_name: str = os.getenv("PLANPRO_PATH"),
     ):
         """This method instantiates the interlocking and the infrastructure_provider
         and must be called before the interlocking can be used.
@@ -176,10 +176,10 @@ class RouteController(Component):
 
             # print('yaramo_signal.name: ', yaramo_signal.name)
             if yaramo_signal.name == "e184b101-3118-4907-88df-91d13205fd02-km-45-gegen":
-                print('signal: ', signal)
+                print("signal: ", signal)
                 continue
             if signal is None:
-                print('signal is None', yaramo_signal.name)
+                print("signal is None", yaramo_signal.name)
                 continue
 
             assert signal is not None
@@ -223,7 +223,7 @@ class RouteController(Component):
                 self.routes_to_be_reserved.remove((route, train))
 
     def set_spawn_fahrstrasse(
-            self, timetable: List[Platform]
+        self, timetable: List[Platform]
     ) -> Tuple[str, UninitializedTrain]:
         """This method can be called when instanciating a train
         to get back the first SUMO Route it should drive.
@@ -239,7 +239,7 @@ class RouteController(Component):
         return train_to_be_initialized.route, train_to_be_initialized
 
     def reserve_for_initialized_train(
-            self, reservation_placeholder: UninitializedTrain, train: Train
+        self, reservation_placeholder: UninitializedTrain, train: Train
     ):
         """This method replaces a placeholder train with a train,
         that should be the one the reservations were held for.
@@ -252,9 +252,9 @@ class RouteController(Component):
                 if reserved_train == reservation_placeholder:
                     i = track.reservations.index((reserved_train, edge))
                     track.reservations = (
-                            track.reservations[:i]
-                            + [(train, edge)]
-                            + track.reservations[i + 1 :]
+                        track.reservations[:i]
+                        + [(train, edge)]
+                        + track.reservations[i + 1 :]
                     )
         train.reserved_tracks = reservation_placeholder.reserved_tracks
 
@@ -300,10 +300,10 @@ class RouteController(Component):
 
             for interlocking_route in self.interlocking.routes:
                 if (
-                        interlocking_route.start_signal.yaramo_signal.name
-                        == new_route[1].identifier
-                        and interlocking_route.end_signal.yaramo_signal.name
-                        == end_node_candidat.identifier
+                    interlocking_route.start_signal.yaramo_signal.name
+                    == new_route[1].identifier
+                    and interlocking_route.end_signal.yaramo_signal.name
+                    == end_node_candidat.identifier
                 ):
                     # This sets the route in SUMO.
                     # The SUMO route is also set when the interlocking fahrstrasse could not be set,
@@ -331,7 +331,7 @@ class RouteController(Component):
         raise KeyError()
 
     def set_interlocking_route(
-            self, interlocking_route, train: Train, route_length: int
+        self, interlocking_route, train: Train, route_length: int
     ) -> bool:
         """This method sets the interlocking route.
 
@@ -390,7 +390,7 @@ class RouteController(Component):
                 last_track_of_reserving_train = reserving_train.reserved_tracks[-1]
                 if last_track_of_reserving_train == track:
                     if reserving_train.reserved_until_station_index + 1 < len(
-                            reserving_train.timetable
+                        reserving_train.timetable
                     ):
                         # When the reservation reached the end of the trains route,
                         # there will be no more reservations.
@@ -400,7 +400,7 @@ class RouteController(Component):
                             ].edge,
                             reserving_train.timetable[
                                 reserving_train.reserved_until_station_index + 1
-                                ].edge,
+                            ].edge,
                         )
                         was_reserved = self.reserve_route(next_route, reserving_train)
                         # Here the entire route to the next platform is reserved,
@@ -420,7 +420,7 @@ class RouteController(Component):
         return True
 
     def check_if_reservation_ends_in_opposing_reservation(
-            self, route: List[Node]
+        self, route: List[Node]
     ) -> bool:
         """This method checks if the given route ends on a track,
         that is reserved for a train in the opposing direction.

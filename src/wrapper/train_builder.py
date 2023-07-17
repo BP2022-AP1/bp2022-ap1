@@ -16,15 +16,15 @@ class TrainBuilder:
     """A factory to construct trains wich drive through the simulation"""
 
     def __init__(
-            self,
-            updater: SimulationObjectUpdatingComponent,
-            route_controller: RouteController,
+        self,
+        updater: SimulationObjectUpdatingComponent,
+        route_controller: RouteController,
     ):
         self._updater: SimulationObjectUpdatingComponent = updater
         self.route_controller: RouteController = route_controller
 
     def spawn_train(
-            self, identifier: str, timetable: List[str], train_type: str
+        self, identifier: str, timetable: List[str], train_type: str
     ) -> bool:
         """Spawns a new train in the simulation
 
@@ -54,7 +54,7 @@ class TrainBuilder:
         return True
 
     def _get_first_route(
-            self, timetable: List[Platform]
+        self, timetable: List[Platform]
     ) -> Tuple[str, UninitializedTrain]:
         return self.route_controller.set_spawn_fahrstrasse(timetable)
 
