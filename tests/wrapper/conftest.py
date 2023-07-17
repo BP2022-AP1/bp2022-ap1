@@ -61,13 +61,13 @@ def max_speed(monkeypatch):
     monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
 
 
-@pytest.fixture
-def speed_update(monkeypatch):
-    def set_max_speed(identifier: str, speed: float) -> None:
-        assert identifier is not None
-        assert speed > 0
-
-    monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
+#@pytest.fixture
+#def speed_update(monkeypatch):
+#    def set_max_speed(identifier: str, speed: float) -> None:
+#        assert identifier is not None
+#        assert speed > 0
+#
+#    monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
 
 
 @pytest.fixture
