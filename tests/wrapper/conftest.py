@@ -275,7 +275,10 @@ class MockRouteController:
 
 @pytest.fixture
 def spawner(
-    configured_souc: SimulationObjectUpdatingComponent, train_add, train_subscribe, max_speed
+    configured_souc: SimulationObjectUpdatingComponent,
+    train_add,
+    train_subscribe,
+    max_speed,
 ) -> Tuple[SimulationObjectUpdatingComponent, TrainBuilder]:
     # pylint: disable=unused-argument
     return (configured_souc, TrainBuilder(configured_souc, MockRouteController()))
