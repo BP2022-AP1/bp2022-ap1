@@ -17,7 +17,9 @@ The documentation is structured into three parts: This README, the [Wiki](https:
 
 ## Setup
 
-TODO: Short introduction to setup
+We're using `poetry` to manage our dependencies. You can find the documentation of `poetry` here: [poetry documentation](https://python-poetry.org/docs/). To set up this project, you need to install `poetry` and run `poetry install` in the root directory of this project. This will install all dependencies and create a virtual environment. You can activate the virtual environment with a `poetry shell`.
+
+Within the virtual environment, you can run `poe` to run commands. Essential commands are `poe dev` to run the development server and `poe test` to run the tests. You can find more commands in the section Commands. Be sure that you have docker installed.
 
 ## Commands
 
