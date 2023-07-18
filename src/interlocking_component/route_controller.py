@@ -176,10 +176,10 @@ class RouteController(Component):
 
             # print('yaramo_signal.name: ', yaramo_signal.name)
             if yaramo_signal.name == "e184b101-3118-4907-88df-91d13205fd02-km-45-gegen":
-                print('signal: ', signal)
+                print("signal: ", signal)
                 continue
             if signal is None:
-                print('signal is None', yaramo_signal.name)
+                print("signal is None", yaramo_signal.name)
                 continue
 
             assert signal is not None
