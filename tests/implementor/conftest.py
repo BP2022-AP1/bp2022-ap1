@@ -45,6 +45,7 @@ from src.spawner.spawner import (
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
+# pylint: disable=duplicate-code
 @pytest.fixture
 def token():
     clear_token = "token"
