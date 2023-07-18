@@ -787,7 +787,7 @@ class Train(SimulationObject):
     _timetable: List[Platform]
     _station_index: int = 0
     train_type: TrainType
-    reserved_tracks: List[Track]
+    reserved_tracks: List[ReservationTrack]
     station_index: int = 0
     reserved_until_station_index: int = 1
 
@@ -927,11 +927,6 @@ class Train(SimulationObject):
                             f"{self._edge.identifier}, new track: {edge_id}"
                         )
                     )
-                if self._edge.track.is_reservation_track:
-                    assert self._edge.track.reservations[0][1] == self._edge
-                    assert self._edge.track == self.reserved_tracks[0]
-                    self._edge.track.reservations.pop(0)
-                    self.reserved_tracks.pop(0)
 
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge
