@@ -2,6 +2,7 @@ import hashlib
 
 import pytest
 from traci import vehicle
+
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
     PlatformBlockedFaultConfigurationXSimulationConfiguration,
