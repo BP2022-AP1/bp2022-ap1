@@ -5,10 +5,12 @@ from unittest.mock import Mock
 import pytest
 
 from src import implementor as impl
+from tests.api.utils import verify_delete_schedule, verify_get_single_schedule
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
 
+# pylint: disable=duplicate-code
 class TestApiCoalDemandSchedule:
     """
     Test the /schedule/coal-demand endpoint
@@ -110,27 +112,15 @@ class TestApiCoalDemandSchedule:
         assert not mock.called
 
     def test_get_single(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(impl.schedule, "get_schedule", mock)
-        response = client.get(
-            f"/schedule/coal-demand/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 200
-        assert mock.call_args.args == (
-            {"identifier": str(object_id), "strategy": "coal-demand"},
-            token,
+        verify_get_single_schedule(
+            client, "schedule/coal-demand", clear_token, token, mock, "coal-demand"
         )
 
     def test_delete(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
         mock = Mock(return_value=(str(), 204))
         monkeypatch.setattr(impl.schedule, "delete_schedule", mock)
-        response = client.delete(
-            f"/schedule/coal-demand/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 204
-        assert mock.call_args.args == (
-            {"identifier": str(object_id), "strategy": "coal-demand"},
-            token,
+        verify_delete_schedule(
+            client, "schedule/coal-demand", clear_token, token, mock, "coal-demand"
         )

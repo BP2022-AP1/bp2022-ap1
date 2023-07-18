@@ -4,8 +4,11 @@ from unittest.mock import Mock
 import pytest
 
 from src import implementor as impl
+from tests.api.utils import verify_delete, verify_get_single
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
+
+# pylint: disable=duplicate-code
 
 
 class TestApiRun:
@@ -45,25 +48,23 @@ class TestApiRun:
         assert not mock.called
 
     def test_get_single(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(impl.run, "get_run", mock)
-        response = client.get(f"/run/{object_id}", headers={TOKEN_HEADER: clear_token})
-        assert response.status_code == 200
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
+        verify_get_single(
+            client,
+            "run",
+            clear_token,
             token,
+            mock,
         )
 
     def test_delete(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
         mock = Mock(return_value=(str(), 204))
         monkeypatch.setattr(impl.run, "delete_run", mock)
-        response = client.delete(
-            f"/run/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 204
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
+        verify_delete(
+            client,
+            "run",
+            clear_token,
             token,
+            mock,
         )

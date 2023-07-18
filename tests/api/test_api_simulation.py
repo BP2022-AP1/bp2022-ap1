@@ -4,20 +4,24 @@ from unittest.mock import Mock
 import pytest
 
 from src import implementor as impl
+from tests.api.utils import verify_delete, verify_get_single
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
 
-def get_expected_data(data, exception=list()):
-    expected_data = dict()
+def get_expected_data(data, exceptions):
+    expected_data = {}
     for key, val in data.items():
-        if key in exception:
+        if key in exceptions:
             expected_data[key] = val
         elif isinstance(val, list):
             expected_data[key] = [uuid.UUID(v) for v in val]
         else:
             expected_data[key] = uuid.UUID(val)
     return expected_data
+
+
+# pylint: disable=duplicate-code
 
 
 class TestApiSimulation:
@@ -59,7 +63,7 @@ class TestApiSimulation:
             "/simulation", headers={TOKEN_HEADER: clear_token}, json=data
         )
         assert response.status_code == 201
-        expected_data = get_expected_data(data, ["description"])
+        expected_data = get_expected_data(data, exceptions=["description"])
         assert mock.call_args.args == (
             expected_data,
             token,
@@ -80,17 +84,9 @@ class TestApiSimulation:
         assert not mock.called
 
     def test_get_single(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(impl.simulation, "get_simulation_configuration", mock)
-        response = client.get(
-            f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 200
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
-            token,
-        )
+        verify_get_single(client, "simulation", clear_token, token, mock)
 
     @pytest.mark.parametrize(
         "data",
@@ -110,13 +106,13 @@ class TestApiSimulation:
     )
     def test_update(self, client, clear_token, token, data, monkeypatch):
         object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(impl.simulation, "update_simulation_configuration", mock)
         response = client.put(
             f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}, json=data
         )
 
-        expected_data = get_expected_data(data, exception=["description"])
+        expected_data = get_expected_data(data, exceptions=["description"])
         assert response.status_code == 200
         assert mock.call_args.args == (
             {"identifier": str(object_id)},
@@ -125,14 +121,6 @@ class TestApiSimulation:
         )
 
     def test_delete(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
         mock = Mock(return_value=(str(), 204))
         monkeypatch.setattr(impl.simulation, "delete_simulation_configuration", mock)
-        response = client.delete(
-            f"/simulation/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 204
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
-            token,
-        )
+        verify_delete(client, "simulation", clear_token, token, mock)

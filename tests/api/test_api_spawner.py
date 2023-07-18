@@ -4,8 +4,11 @@ from unittest.mock import Mock
 import pytest
 
 from src import implementor as impl
+from tests.api.utils import verify_delete, verify_get_single
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
+
+# pylint: disable=duplicate-code
 
 
 class TestApiSpawner:
@@ -32,7 +35,6 @@ class TestApiSpawner:
             "/component/spawner", headers={TOKEN_HEADER: clear_token}, json=data
         )
         assert response.status_code == 201
-        # TODO map every existing key to uuid
         expected_data = {
             "schedule": [uuid.UUID(identifier) for identifier in data["schedule"]],
         }
@@ -56,35 +58,31 @@ class TestApiSpawner:
         assert not mock.called
 
     def test_get_single(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(
             impl.component,
             "get_spawner_configuration",
             mock,
         )
-        response = client.get(
-            f"/component/spawner/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 200
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
+        verify_get_single(
+            client,
+            "component/spawner",
+            clear_token,
             token,
+            mock,
         )
 
     def test_delete(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
         mock = Mock(return_value=(str(), 204))
         monkeypatch.setattr(
             impl.component,
             "delete_spawner_configuration",
             mock,
         )
-        response = client.delete(
-            f"/component/spawner/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 204
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
+        verify_delete(
+            client,
+            "component/spawner",
+            clear_token,
             token,
+            mock,
         )

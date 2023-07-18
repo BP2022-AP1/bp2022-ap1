@@ -4,8 +4,11 @@ from unittest.mock import Mock
 import pytest
 
 from src import implementor as impl
+from tests.api.utils import verify_delete, verify_get_single
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
+
+# pylint: disable=duplicate-code
 
 
 class TestApiTrackBlockedFault:
@@ -78,33 +81,27 @@ class TestApiTrackBlockedFault:
         assert not mock.called
 
     def test_get_single(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(
             impl.component, "get_track_blocked_fault_configuration", mock
         )
-        response = client.get(
-            f"/component/fault-injection/track-blocked-fault/{object_id}",
-            headers={TOKEN_HEADER: clear_token},
-        )
-        assert response.status_code == 200
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
+        verify_get_single(
+            client,
+            "component/fault-injection/track-blocked-fault",
+            clear_token,
             token,
+            mock,
         )
 
     def test_delete(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
         mock = Mock(return_value=(str(), 204))
         monkeypatch.setattr(
             impl.component, "delete_track_blocked_fault_configuration", mock
         )
-        response = client.delete(
-            f"/component/fault-injection/track-blocked-fault/{object_id}",
-            headers={TOKEN_HEADER: clear_token},
-        )
-        assert response.status_code == 204
-        assert mock.call_args.args == (
-            {"identifier": str(object_id)},
+        verify_delete(
+            client,
+            "component/fault-injection/track-blocked-fault",
+            clear_token,
             token,
+            mock,
         )

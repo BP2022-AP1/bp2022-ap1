@@ -4,8 +4,11 @@ from unittest.mock import Mock
 import pytest
 
 from src import implementor as impl
+from tests.api.utils import verify_delete_schedule, verify_get_single_schedule
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
+
+# pylint: disable=duplicate-code
 
 
 class TestApiRegularSchedule:
@@ -68,27 +71,25 @@ class TestApiRegularSchedule:
         assert not mock.called
 
     def test_get_single(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
-        mock = Mock(return_value=(dict(), 200))
+        mock = Mock(return_value=({}, 200))
         monkeypatch.setattr(impl.schedule, "get_schedule", mock)
-        response = client.get(
-            f"/schedule/regular/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 200
-        assert mock.call_args.args == (
-            {"identifier": str(object_id), "strategy": "regular"},
+        verify_get_single_schedule(
+            client,
+            "schedule/regular",
+            clear_token,
             token,
+            mock,
+            "regular",
         )
 
     def test_delete(self, client, clear_token, token, monkeypatch):
-        object_id = uuid.uuid4()
         mock = Mock(return_value=(str(), 204))
         monkeypatch.setattr(impl.schedule, "delete_schedule", mock)
-        response = client.delete(
-            f"/schedule/regular/{object_id}", headers={TOKEN_HEADER: clear_token}
-        )
-        assert response.status_code == 204
-        assert mock.call_args.args == (
-            {"identifier": str(object_id), "strategy": "regular"},
+        verify_delete_schedule(
+            client,
+            "schedule/regular",
+            clear_token,
             token,
+            mock,
+            "regular",
         )
