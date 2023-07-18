@@ -7,7 +7,13 @@ from src.fault_injector.fault_configurations.platform_blocked_fault_configuratio
 )
 
 
+# pylint: disable=duplicate-code
 class TestPlatformBlockedFaultConfiguration:
+    """
+    Tests for correct functionality of platform blocked fault configuration endpoint
+    if the input data is valid.
+    """
+
     def test_get_all_platform_blocked_fault_configuration_ids(
         self, token, platform_blocked_fault_configuration_data
     ):
@@ -22,7 +28,7 @@ class TestPlatformBlockedFaultConfiguration:
         assert status == 200
         assert str(config.id) in result
 
-    def test_get_all_platform_blocked_fault_configuration_ids(
+    def test_get_all_platform_blocked_fault_configuration_ids_with_simulation(
         self,
         token,
         platform_blocked_fault_configuration_data,
@@ -49,7 +55,7 @@ class TestPlatformBlockedFaultConfiguration:
         assert str(another_config.id) not in result
 
     def test_create_platform_blocked_fault_configuration(
-        token, platform_blocked_fault_configuration_data
+        self, token, platform_blocked_fault_configuration_data
     ):
         response = impl.component.create_platform_blocked_fault_configuration(
             platform_blocked_fault_configuration_data, token
@@ -113,7 +119,6 @@ class TestPlatformBlockedFaultConfiguration:
     def test_delete_platform_blocked_fault_configuration_not_found(
         self,
         token,
-        platform_blocked_fault_configuration_data,
     ):
         object_id = uuid.uuid4()
         response = impl.component.delete_platform_blocked_fault_configuration(

@@ -8,7 +8,13 @@ from src.fault_injector.fault_configurations.schedule_blocked_fault_configuratio
 )
 
 
+# pylint: disable=duplicate-code
 class TestScheduleBlockedFaultConfiguration:
+    """
+    Tests for correct functionality of schedule blocked fault configuration endpoint
+    if the input data is valid.
+    """
+
     def test_get_all_schedule_blocked_fault_configuration_ids(
         self, token, schedule_blocked_fault_configuration_data
     ):
@@ -23,7 +29,7 @@ class TestScheduleBlockedFaultConfiguration:
         assert status == 200
         assert str(config.id) in result
 
-    def test_get_all_schedule_blocked_fault_configuration_ids(
+    def test_get_all_schedule_blocked_fault_configuration_ids_with_simulation(
         self,
         token,
         schedule_blocked_fault_configuration_data,
@@ -50,13 +56,12 @@ class TestScheduleBlockedFaultConfiguration:
         assert str(another_config.id) not in result
 
     def test_create_schedule_blocked_fault_configuration(
-        token, schedule_blocked_fault_configuration_data
+        self, token, schedule_blocked_fault_configuration_data
     ):
-        def compare(a: object, b: object) -> bool:
-            if isinstance(a, UUID) or isinstance(b, UUID):
-                return str(a) == str(b)
-            else:
-                return a == b
+        def compare(first: object, second: object) -> bool:
+            if isinstance(first, UUID) or isinstance(second, UUID):
+                return str(first) == str(second)
+            return first == second
 
         response = impl.component.create_schedule_blocked_fault_configuration(
             schedule_blocked_fault_configuration_data, token
@@ -121,7 +126,6 @@ class TestScheduleBlockedFaultConfiguration:
     def test_delete_schedule_blocked_fault_configuration_not_found(
         self,
         token,
-        schedule_blocked_fault_configuration_data,
     ):
         object_id = uuid.uuid4()
         response = impl.component.delete_schedule_blocked_fault_configuration(

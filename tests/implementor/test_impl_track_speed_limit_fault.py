@@ -7,8 +7,12 @@ from src.fault_injector.fault_configurations.track_speed_limit_fault_configurati
 )
 
 
+# pylint: disable=duplicate-code
 class TestTrackSpeedLimitFaultConfiguration:
-    """Test for TrackSpeedLimitFaultConfiguration"""
+    """
+    Tests for correct functionality of track speed limit fault configuration endpoint
+    if the input data is valid.
+    """
 
     def test_get_all_track_speed_limit_fault_configuration_ids(
         self, token, track_speed_limit_fault_configuration_data

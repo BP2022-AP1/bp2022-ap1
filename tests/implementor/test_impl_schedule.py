@@ -5,7 +5,13 @@ from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.spawner.spawner import SpawnerConfiguration, SpawnerConfigurationXSchedule
 
 
+# pylint: disable=duplicate-code
 class TestScheduleConfiguration:
+    """
+    Tests for correct functionality of schedule configuration endpoint
+    if the input data is valid.
+    """
+
     @pytest.mark.parametrize(
         "strategy, configuration_fixture, not_found_configuration_fixture",
         [
@@ -63,21 +69,17 @@ class TestScheduleConfiguration:
         configuration_data = request.getfixturevalue(configuration_data_fixture)
         strategy = configuration_data.pop("strategy_type")
         configuration_data["platforms"] = platform_ids
-        response = impl.schedule.create_schedule(
+        (result, status) = impl.schedule.create_schedule(
             configuration_data, {"strategy": strategy}, token
         )
-        (result, status) = response
         assert status == 201
         assert result["id"] is not None
-        config_id = result["id"]
-        config = ScheduleConfiguration.get_by_id(config_id)
+        config = ScheduleConfiguration.get_by_id(result["id"])
         assert config is not None
         assert config.strategy_type == strategy
         for key, value in configuration_data.items():
             assert getattr(config, key) == value
-        platform_reference = [
-            reference for reference in config.train_schedule_platform_references
-        ]
+        platform_reference = list(config.train_schedule_platform_references)
         for reference in platform_reference:
             platform_id = platform_ids[reference.index]
             assert platform_id == reference.simulation_platform_id
@@ -102,10 +104,9 @@ class TestScheduleConfiguration:
         configuration = request.getfixturevalue(configuration_fixture)
         strategy = configuration_data.pop("strategy_type")
 
-        response = impl.schedule.get_schedule(
+        (result, status) = impl.schedule.get_schedule(
             {"strategy": strategy, "identifier": str(configuration.id)}, token
         )
-        (result, status) = response
         assert status == 200
         configuration_data["strategy_type"] = strategy
         for key, item in configuration_data.items():

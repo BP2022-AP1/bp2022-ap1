@@ -7,7 +7,13 @@ from src.fault_injector.fault_configurations.track_blocked_fault_configuration i
 )
 
 
+# pylint: disable=duplicate-code
 class TestTrackBlockedFaultConfiguration:
+    """
+    Tests for correct functionality of track blocked fault configuration endpoint
+    if the input data is valid.
+    """
+
     def test_get_all_track_blocked_fault_configuration_ids(
         self, token, track_blocked_fault_configuration_data
     ):
@@ -22,7 +28,7 @@ class TestTrackBlockedFaultConfiguration:
         assert status == 200
         assert str(config.id) in result
 
-    def test_get_all_track_blocked_fault_configuration_ids(
+    def test_get_all_track_blocked_fault_configuration_ids_with_simulation(
         self,
         token,
         track_blocked_fault_configuration_data,
@@ -49,7 +55,7 @@ class TestTrackBlockedFaultConfiguration:
         assert str(another_config.id) not in result
 
     def test_create_track_blocked_fault_configuration(
-        token, track_blocked_fault_configuration_data
+        self, token, track_blocked_fault_configuration_data
     ):
         response = impl.component.create_track_blocked_fault_configuration(
             track_blocked_fault_configuration_data, token
@@ -112,7 +118,6 @@ class TestTrackBlockedFaultConfiguration:
     def test_delete_track_blocked_fault_configuration_not_found(
         self,
         token,
-        track_blocked_fault_configuration_data,
     ):
         object_id = uuid.uuid4()
         response = impl.component.delete_track_blocked_fault_configuration(

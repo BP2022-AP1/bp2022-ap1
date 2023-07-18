@@ -7,7 +7,13 @@ from src.fault_injector.fault_configurations.train_prio_fault_configuration impo
 )
 
 
+# pylint: disable=duplicate-code
 class TestTrainPrioFaultConfiguration:
+    """
+    Tests for correct functionality of train prio fault configuration endpoint
+    if the input data is valid.
+    """
+
     def test_get_all_train_prio_fault_configuration_ids(
         self, token, train_prio_fault_configuration_data
     ):
@@ -20,7 +26,7 @@ class TestTrainPrioFaultConfiguration:
         assert status == 200
         assert str(config.id) in result
 
-    def test_get_all_train_prio_fault_configuration_ids(
+    def test_get_all_train_prio_fault_configuration_ids_with_simulation(
         self,
         token,
         train_prio_fault_configuration_data,
@@ -47,7 +53,7 @@ class TestTrainPrioFaultConfiguration:
         assert str(another_config.id) not in result
 
     def test_create_train_prio_fault_configuration(
-        token, train_prio_fault_configuration_data
+        self, token, train_prio_fault_configuration_data
     ):
         response = impl.component.create_train_prio_fault_configuration(
             train_prio_fault_configuration_data, token
@@ -110,7 +116,6 @@ class TestTrainPrioFaultConfiguration:
     def test_delete_train_prio_fault_configuration_not_found(
         self,
         token,
-        train_prio_fault_configuration_data,
     ):
         object_id = uuid.uuid4()
         response = impl.component.delete_train_prio_fault_configuration(

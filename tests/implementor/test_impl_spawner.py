@@ -6,8 +6,12 @@ from src.spawner.spawner import (
 )
 
 
+# pylint: disable=duplicate-code
 class TestSpawnerConfiguration:
-    """Tests for SpawnerConfiguration"""
+    """
+    Tests for correct functionality of spawner configuration endpoint
+    if the input data is valid.
+    """
 
     def test_get_single_spawner_configuration(self, token, spawner_configuration):
         result, status = impl.component.get_spawner_configuration(
@@ -73,7 +77,7 @@ class TestSpawnerConfiguration:
         assert status == 200
         assert str(config.id) in result
 
-    def test_get_all_spawner_configuration_ids(
+    def test_get_all_spawner_configuration_ids_with_simulation(
         self,
         token,
         spawner_configuration_data,
