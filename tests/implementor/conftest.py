@@ -1,7 +1,7 @@
 import hashlib
 
 import pytest
-
+from traci import vehicle
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
     PlatformBlockedFaultConfigurationXSimulationConfiguration,
@@ -292,8 +292,30 @@ def another_track_speed_limit_fault_configuration(
 
 
 @pytest.fixture
+def train_add(monkeypatch):
+    # definition of function set by the traci module
+    # pylint: disable-next=unused-argument disable-next=invalid-name
+    def add_train(identifier, routeID=None, typeID=None):
+        assert identifier is not None
+        assert typeID is not None
+
+    monkeypatch.setattr(vehicle, "add", add_train)
+
+
+@pytest.fixture
+def max_speed(monkeypatch):
+    # definition of function set by the traci module
+    # pylint: disable-next=unused-argument
+    def set_max_speed(train_id: str, speed: float):
+        pass
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
+@pytest.fixture
+# Need train_add and max_speed as fixtures to make sure that the traci module is patched
 # pylint: disable-next=unused-argument
-def train() -> Train:
+def train(train_add, max_speed) -> Train:
     return Train(
         identifier="fault injector train",
         train_type="cargo",
