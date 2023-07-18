@@ -5,7 +5,17 @@
 | CI & CD   | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=dev)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Adev) | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Amain) |
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=dev)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=dev)                                      | [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=main)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=main)                                      |
 
-A REST API for simulations and analysis of train traffic on the LEAG rail network. Create one of many component configurations, for example, for defining the interlocking, train schedules, and faults. You can't edit an already specified component configuration but can delete it if it's no longer connected to a simulation configuration. Simulation configurations hold connections to the component configuration. You could add connections to component configurations and remove it if it's not connected to a run. A run is the execution of the defined simulation. After deleting every run, you can delete the simulation configuration.
+A REST API for simulations and analysis of train traffic on the LEAG rail network. Create one of many component configurations, for example, for defining the interlocking, train schedules, and faults. Simulation configurations hold connections to the component configuration. You could add connections to component configurations. A run is the execution of the defined simulation.
+
+**USED TECHNOLOGIES**
+
+- [SUMO](https://sumo.dlr.de/): handles the main simulation logic
+- [TraCI](https://sumo.dlr.de/docs/TraCI.html): used to edit a running simulation
+- [Celery](https://docs.celeryq.dev/en/stable/): the simulation is executed within a Celery worker
+- [peewee](http://docs.peewee-orm.com/en/latest/): interaction with the database
+- [Flask](https://flask.palletsprojects.com/en/2.3.x/): used to implement the REST-API
+
+**STRUCTURE OF DOCUMENTATION** 
 
 The documentation is structured into three parts: This README, the [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki) and the [documentation of the REST-API](https://bp2022-ap1.github.io/bp2022-ap1/). The following table gives an overview of the content of each part.
 
@@ -140,7 +150,9 @@ You can rollback the last migration with `poe db rollback`.
 
 ## Testing
 
-TODO Short introduction to testing
+We use `pytest` for testing. You can run the tests with `poe test`. This will also start the test database, drop and recreate all its tables, run the tests and then stop the database container again. 
+
+We use `monkeypatch` to mock connections to `TraCI` and `SUMO`.
 
 ### Decorators for Database recreation
 
