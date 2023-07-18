@@ -2,9 +2,9 @@ import uuid
 from unittest.mock import Mock
 
 import pytest
-from tests.api.utils import verify_get_single_schedule, verify_delete_schedule
 
 from src import implementor as impl
+from tests.api.utils import verify_delete_schedule, verify_get_single_schedule
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
