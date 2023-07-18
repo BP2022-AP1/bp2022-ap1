@@ -72,7 +72,9 @@ class TestSpawnerConfiguration:
     def test_get_all_spawner_configuration_ids(self, token, spawner_configuration_data):
         config = SpawnerConfiguration.create(**spawner_configuration_data)
 
-        response = impl.component.get_all_spawner_configuration_ids({}, token)
+        response = impl.component.get_all_spawner_configuration_ids(
+            {"simulationId": None}, token
+        )
         (result, status) = response
         assert status == 200
         assert str(config.id) in result
