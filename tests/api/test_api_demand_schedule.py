@@ -1,8 +1,10 @@
+import datetime
 import uuid
 from unittest.mock import Mock
+
 import pytest
+
 from src import implementor as impl
-import datetime
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
 

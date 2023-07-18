@@ -1,7 +1,9 @@
 import uuid
 from unittest.mock import Mock
-from src import implementor as impl
+
 import pytest
+
+from src import implementor as impl
 
 TOKEN_HEADER = "bp2022-ap1-api-key"
 
