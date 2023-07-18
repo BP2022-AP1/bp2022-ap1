@@ -21,10 +21,11 @@ class TestTrackSpeedLimitFaultConfiguration:
             **track_speed_limit_fault_configuration_data
         )
 
-        response = impl.component.get_all_track_speed_limit_fault_configuration_ids(
-            {}, token
-        )
-        (result, status) = response
+        (
+            result,
+            status,
+        ) = impl.component.get_all_track_speed_limit_fault_configuration_ids({}, token)
+
         assert status == 200
         assert str(config.id) in result
 
@@ -45,10 +46,12 @@ class TestTrackSpeedLimitFaultConfiguration:
             track_speed_limit_fault_configuration=config,
         )
 
-        response = impl.component.get_all_track_speed_limit_fault_configuration_ids(
+        (
+            result,
+            status,
+        ) = impl.component.get_all_track_speed_limit_fault_configuration_ids(
             {"simulationId": str(empty_simulation_configuration.id)}, token
         )
-        (result, status) = response
 
         assert status == 200
         assert str(config.id) in result
@@ -57,10 +60,10 @@ class TestTrackSpeedLimitFaultConfiguration:
     def test_create_track_speed_limit_fault_configuration(
         self, token, track_speed_limit_fault_configuration_data
     ):
-        response = impl.component.create_track_speed_limit_fault_configuration(
+        (result, status) = impl.component.create_track_speed_limit_fault_configuration(
             track_speed_limit_fault_configuration_data, token
         )
-        (result, status) = response
+
         assert status == 201
         assert result["id"]
         configs = TrackSpeedLimitFaultConfiguration.select().where(
@@ -80,10 +83,10 @@ class TestTrackSpeedLimitFaultConfiguration:
             **track_speed_limit_fault_configuration_data
         )
 
-        response = impl.component.get_track_speed_limit_fault_configuration(
+        (result, status) = impl.component.get_track_speed_limit_fault_configuration(
             {"identifier": str(config.id)}, token
         )
-        (result, status) = response
+
         assert status == 200
         assert str(config.id) == result["id"]
         assert str(config.updated_at) == result["updated_at"]
@@ -105,10 +108,10 @@ class TestTrackSpeedLimitFaultConfiguration:
         config = TrackSpeedLimitFaultConfiguration.create(
             **track_speed_limit_fault_configuration_data
         )
-        response = impl.component.delete_track_speed_limit_fault_configuration(
+        (result, status) = impl.component.delete_track_speed_limit_fault_configuration(
             {"identifier": str(config.id)}, token
         )
-        (result, status) = response
+
         assert status == 204
         assert result == "Deleted track-speed-limit-fault configuration"
         assert (
@@ -125,10 +128,10 @@ class TestTrackSpeedLimitFaultConfiguration:
         track_speed_limit_fault_configuration_data,
     ):
         object_id = uuid.uuid4()
-        response = impl.component.delete_track_speed_limit_fault_configuration(
+        (result, status) = impl.component.delete_track_speed_limit_fault_configuration(
             {"identifier": object_id}, token
         )
-        (result, status) = response
+
         assert status == 404
         assert result == "Id not found"
 
@@ -145,10 +148,10 @@ class TestTrackSpeedLimitFaultConfiguration:
             simulation_configuration=empty_simulation_configuration,
             track_speed_limit_fault_configuration=config,
         )
-        response = impl.component.delete_track_speed_limit_fault_configuration(
+        (result, status) = impl.component.delete_track_speed_limit_fault_configuration(
             {"identifier": str(config.id)}, token
         )
-        (result, status) = response
+
         assert status == 400
         assert (
             result

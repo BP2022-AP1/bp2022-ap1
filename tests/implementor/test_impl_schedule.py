@@ -45,8 +45,9 @@ class TestScheduleConfiguration:
             not_found_configuration_fixture
         )
 
-        response = impl.schedule.get_all_schedule_ids({"strategy": strategy}, token)
-        (result, status) = response
+        (result, status) = impl.schedule.get_all_schedule_ids(
+            {"strategy": strategy}, token
+        )
         assert status == 200
         assert str(configuration.id) in result
         assert str(not_found_configuration.id) not in result
@@ -124,14 +125,13 @@ class TestScheduleConfiguration:
         ],
     )
     def test_get_single_schedule_configuration_not_found(self, token, strategy):
-        response = impl.schedule.get_schedule(
+        (result, status) = impl.schedule.get_schedule(
             {
                 "strategy": strategy,
                 "identifier": "00000000-0000-0000-0000-000000000000",
             },
             token,
         )
-        (result, status) = response
         assert status == 404
         assert result == "Schedule not found"
 
@@ -147,10 +147,9 @@ class TestScheduleConfiguration:
         self, token, strategy, configuration_fixture, request: pytest.FixtureRequest
     ):
         configuration = request.getfixturevalue(configuration_fixture)
-        response = impl.schedule.delete_schedule(
+        (result, status) = impl.schedule.delete_schedule(
             {"strategy": strategy, "identifier": str(configuration.id)}, token
         )
-        (result, status) = response
         assert status == 204
         assert result == "Schedule deleted"
         configs = ScheduleConfiguration.select().where(
@@ -167,14 +166,13 @@ class TestScheduleConfiguration:
         ],
     )
     def test_delete_schedule_configuration_not_found(self, strategy, token):
-        response = impl.schedule.delete_schedule(
+        (result, status) = impl.schedule.delete_schedule(
             {
                 "strategy": strategy,
                 "identifier": "00000000-0000-0000-0000-000000000000",
             },
             token,
         )
-        (result, status) = response
         assert status == 404
         assert result == "Schedule not found"
 
@@ -196,10 +194,10 @@ class TestScheduleConfiguration:
             spawner_configuration_id=spawner,
             schedule_configuration_id=configuration,
         ).save()
-        response = impl.schedule.delete_schedule(
+        (result, status) = impl.schedule.delete_schedule(
             {"strategy": strategy, "identifier": str(configuration.id)}, token
         )
-        (result, status) = response
+
         assert status == 400
         assert (
             result == "Schedule configuration is referenced by a spawner configuration"

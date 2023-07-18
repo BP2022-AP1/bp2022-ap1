@@ -72,10 +72,10 @@ class TestSpawnerConfiguration:
     def test_get_all_spawner_configuration_ids(self, token, spawner_configuration_data):
         config = SpawnerConfiguration.create(**spawner_configuration_data)
 
-        response = impl.component.get_all_spawner_configuration_ids(
+        (result, status) = impl.component.get_all_spawner_configuration_ids(
             {"simulationId": None}, token
         )
-        (result, status) = response
+
         assert status == 200
         assert str(config.id) in result
 
@@ -92,20 +92,19 @@ class TestSpawnerConfiguration:
             spawner_configuration=config,
         )
 
-        response = impl.component.get_all_spawner_configuration_ids(
+        (result, status) = impl.component.get_all_spawner_configuration_ids(
             {"simulationId": str(empty_simulation_configuration.id)}, token
         )
-        (result, status) = response
 
         assert status == 200
         assert str(config.id) in result
         assert str(another_config.id) not in result
 
     def test_create_spawner_configuration(self, token, spawner_configuration_data):
-        response = impl.component.create_spawner_configuration(
+        (result, status) = impl.component.create_spawner_configuration(
             spawner_configuration_data, token
         )
-        (result, status) = response
+
         assert status == 201
         assert result["id"]
         configs = SpawnerConfiguration.select().where(
@@ -124,9 +123,9 @@ class TestSpawnerConfiguration:
         self,
         token,
     ):
-        response = impl.component.create_spawner_configuration(
+        (result, status) = impl.component.create_spawner_configuration(
             {"schedule": ["00000000-0000-0000-0000-000000000000"]}, token
         )
-        (result, status) = response
+
         assert status == 404
         assert result == "Schedule not found"

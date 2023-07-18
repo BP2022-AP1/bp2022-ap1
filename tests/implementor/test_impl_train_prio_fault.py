@@ -21,8 +21,10 @@ class TestTrainPrioFaultConfiguration:
             **train_prio_fault_configuration_data
         )
 
-        response = impl.component.get_all_train_prio_fault_configuration_ids({}, token)
-        (result, status) = response
+        (result, status) = impl.component.get_all_train_prio_fault_configuration_ids(
+            {}, token
+        )
+
         assert status == 200
         assert str(config.id) in result
 
@@ -43,10 +45,9 @@ class TestTrainPrioFaultConfiguration:
             train_prio_fault_configuration=config,
         )
 
-        response = impl.component.get_all_train_prio_fault_configuration_ids(
+        (result, status) = impl.component.get_all_train_prio_fault_configuration_ids(
             {"simulationId": str(empty_simulation_configuration.id)}, token
         )
-        (result, status) = response
 
         assert status == 200
         assert str(config.id) in result
@@ -55,10 +56,10 @@ class TestTrainPrioFaultConfiguration:
     def test_create_train_prio_fault_configuration(
         self, token, train_prio_fault_configuration_data
     ):
-        response = impl.component.create_train_prio_fault_configuration(
+        (result, status) = impl.component.create_train_prio_fault_configuration(
             train_prio_fault_configuration_data, token
         )
-        (result, status) = response
+
         assert status == 201
         assert result["id"]
         configs = TrainPrioFaultConfiguration.select().where(
@@ -76,10 +77,10 @@ class TestTrainPrioFaultConfiguration:
             **train_prio_fault_configuration_data
         )
 
-        response = impl.component.get_train_prio_fault_configuration(
+        (result, status) = impl.component.get_train_prio_fault_configuration(
             {"identifier": str(config.id)}, token
         )
-        (result, status) = response
+
         assert status == 200
         assert str(config.id) == result["id"]
         assert str(config.updated_at) == result["updated_at"]
@@ -101,10 +102,10 @@ class TestTrainPrioFaultConfiguration:
         config = TrainPrioFaultConfiguration.create(
             **train_prio_fault_configuration_data
         )
-        response = impl.component.delete_train_prio_fault_configuration(
+        (result, status) = impl.component.delete_train_prio_fault_configuration(
             {"identifier": str(config.id)}, token
         )
-        (result, status) = response
+
         assert status == 204
         assert result == "Deleted train-prio-fault configuration"
         assert (
@@ -118,10 +119,10 @@ class TestTrainPrioFaultConfiguration:
         token,
     ):
         object_id = uuid.uuid4()
-        response = impl.component.delete_train_prio_fault_configuration(
+        (result, status) = impl.component.delete_train_prio_fault_configuration(
             {"identifier": object_id}, token
         )
-        (result, status) = response
+
         assert status == 404
         assert result == "Id not found"
 
@@ -138,10 +139,10 @@ class TestTrainPrioFaultConfiguration:
             simulation_configuration=empty_simulation_configuration,
             train_prio_fault_configuration=config,
         )
-        response = impl.component.delete_train_prio_fault_configuration(
+        (result, status) = impl.component.delete_train_prio_fault_configuration(
             {"identifier": str(config.id)}, token
         )
-        (result, status) = response
+
         assert status == 400
         assert (
             result
