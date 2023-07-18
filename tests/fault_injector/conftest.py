@@ -126,8 +126,17 @@ def train_add(monkeypatch):
 
 
 @pytest.fixture
+def max_speed(monkeypatch):
+    # pylint: disable-next=unused-argument
+    def set_max_speed(train_id: str, speed: float):
+        pass
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
+@pytest.fixture
 # pylint: disable-next=unused-argument
-def train(train_add) -> Train:
+def train(train_add, max_speed) -> Train:
     return Train(
         identifier="fault injector train",
         train_type="cargo",
