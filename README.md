@@ -21,9 +21,9 @@ The documentation is structured into three parts: This README, the [Wiki](https:
 
 | Place                                                              | Content                                                                                                                                                                                                      |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| README                                                             | The readme contains information about the basic development process. That includes the setup, available commands for developer, a description of the environment variables, database management and testing. |
-| [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki)              | The wiki introduces the architecture with its components. The other chapters contains descriptions of the components itself.                                                                                 |
-| [REST-API documentation](https://bp2022-ap1.github.io/bp2022-ap1/) | The REST-API contains information for the enduser about the interaction with the REST-API. This includes available paths, the allowed request bodies and responses.                                          |
+| README                                                             | The readme contains information about the basic development process. That includes the setup, available commands for developers, a description of the environment variables, database management and testing. |
+| [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki)              | The wiki introduces the architecture with its components. The other chapters contain descriptions of the components itself.                                                                                 |
+| [REST-API documentation](https://bp2022-ap1.github.io/bp2022-ap1/) | The REST-API documentation contains information for the enduser about the interaction with the REST-API. This includes available paths, the allowed request bodies and responses.                                          |
 
 ## Setup
 
@@ -53,6 +53,18 @@ Run `poe test` to run our testing framework and starting the test database. It u
 
 Run `poe test-deps` to run the needed container for tests. These are the test database, a celery-worker, and a redis database.
 
+### `poe test-lf`
+
+Run `poe test-lf` to start the test database and run our testing framework for tests that failed last time.
+
+### `poe test-ff`
+
+Run `poe test-ff` to start the test database and run our testing framework, tests that failed last time first.
+
+### `poe test-nf`
+
+Run `poe test-nf` to start the test database and run our testing framework with new tests first.
+
 ### `poe ci`
 
 Run `poe ci` to run formatting, linting and testing in preparation for a pull request.
@@ -76,6 +88,10 @@ Run `poe prod` to start the database, celery-worker, a redis database, and the w
 ### `poe gui`
 
 Run `poe gui` to start the database and the development server. You can access the endpoint of the REST-API at port 5010. This command disables the celery worker and enables the GUI representation of the simulation.
+
+### `poe insert-config`
+
+Run `poe insert-config` to insert a previously selected config. By default this is one of the configs in `/scripts`.
 
 ## Environment variables
 
