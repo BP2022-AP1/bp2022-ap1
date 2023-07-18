@@ -122,17 +122,19 @@ def combine_train_and_wrapper(
     return train, simulation_object_updater
 
 
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name, unused-argument
+# disabling invalid-name allows the names routeID and typeID, despite the fact,
+# that they don't follow snake_case
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, typeID=None):
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
         assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
 
-# pylint: enable=invalid-name
+# pylint: enable=invalid-name, unused-argument
 
 
 @pytest.fixture
