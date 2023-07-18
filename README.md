@@ -73,6 +73,10 @@ Run `poe dev` to start the database, a celery-worker, a redis database, and the 
 
 Run `poe prod` to start the database, celery-worker, a redis database, and the waitress production server. You can access the endpoint of the REST-API at port 8090.
 
+### `poe gui`
+
+Run `poe gui` to start the database and the development server. You can access the endpoint of the REST-API at port 5010. This command disables the celery worker and enables the GUI representation of the simulation.
+
 ## Environment variables
 
 We're loading public environment variables with docker compose and secret ones with poe. We have four files that contain environment variables.
