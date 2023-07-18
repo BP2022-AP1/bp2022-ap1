@@ -5,9 +5,15 @@
 | CI & CD   | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=dev)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Adev) | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Amain) |
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=dev)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=dev)                                      | [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=main)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=main)                                      |
 
-TODO: Short introduction to the project
+A REST API for simulations and analysis of train traffic on the LEAG rail network. Create one of many component configurations, for example, for defining the interlocking, train schedules, and faults. You can't edit an already specified component configuration but can delete it if it's no longer connected to a simulation configuration. Simulation configurations hold connections to the component configuration. You could add connections to component configurations and remove it if it's not connected to a run. A run is the execution of the defined simulation. After deleting every run, you can delete the simulation configuration.
 
-TODO: Short introduction to usage of documentation
+The documentation is structured into three parts: This README, the [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki) and the [documentation of the REST-API](https://bp2022-ap1.github.io/bp2022-ap1/). The following table gives an overview of the content of each part.
+
+| Place                                                              | Content                                                                                                                                                                                                      |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| README                                                             | The readme contains information about the basic development process. That includes the setup, available commands for developer, a description of the environment variables, database management and testing. |
+| [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki)              | The wiki introduces the architecture with its components. The other chapters contains descriptions of the components itself.                                                                                 |
+| [REST-API documentation](https://bp2022-ap1.github.io/bp2022-ap1/) | The REST-API contains information for the enduser about the interaction with the REST-API. This includes available paths, the allowed request bodies and responses.                                          |
 
 ## Setup
 
