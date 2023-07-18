@@ -66,7 +66,7 @@ paths:
       summary: Create a new simulation configuration. A simulation configuration
         contains at least a spawner configuration. You can add additional
         fault injection configurations too.
-        It returns id connected to the simulation. Use this id to start a run.
+        It returns the id connected to the simulation. Use this id to start a run.
       tags:
         - simulation
 
@@ -89,7 +89,7 @@ paths:
         "404":
           description: Simulation not found
         "400":
-          description: Simulation configuration is used in a run
+          description: Simulation configuration is used by a run
       summary: Delete a simulation configuration if no run references the simulation configuration.
       tags:
         - simulation
@@ -268,7 +268,7 @@ paths:
       operationId: get_all_spawner_configuration_ids
       parameters:
         - description:
-            Specify id of simulation if you only want to get the spawner
+            Specify the id of simulation if you only want to get the spawner
             configuration of a single simulation
           in: query
           name: simulationId
@@ -419,7 +419,6 @@ paths:
         For example, with a regular schedule, a train starts at intervals that you specify.
         Specify the gap with the field 'regular_strategy_frequency'
         and the interval where the schedule should be active with 'start_tick' and 'end_tick'.
-        Use 'inject_probability' and 'resolve_probability' to adjust the probability of the schedule becoming active.
         Use 'schedule_type' to specify the acting objects, for example, TrainSchedule.
         Use 'train_schedule_train_type' to select this even more by defining the train type (Coal or passenger trains)
       tags:
@@ -472,7 +471,7 @@ paths:
           description: Id not found
       summary:
         Get all information about a schedule including the interval between the trains,
-        the starting tick and ending tick of the schedule and the injection and resolve possibility.
+        the starting tick and ending tick of the schedule.
       tags:
         - schedule
 
@@ -528,7 +527,7 @@ paths:
         and the interval where the schedule should be active with 'start_tick' and 'end_tick'.
         Use 'inject_probability' and 'resolve_probability' to adjust the probability of the schedule becoming active.
         Use 'schedule_type' to specify the acting objects, for example, TrainSchedule.
-        Use 'train_schedule_train_type' to select this even more by defining the train type (Coal or passenger trains)
+        Use 'train_schedule_train_type' to select this even more by defining the train type (coal or passenger trains).
       tags:
         - schedule
 
@@ -579,7 +578,7 @@ paths:
           description: Id not found
       summary:
         Get all information about a schedule including the probability to spawn trains,
-        the starting tick and ending tick of the schedule and the injection and resolve possibility.
+        the starting tick and ending tick of the schedule.
       tags:
         - schedule
 
@@ -630,14 +629,13 @@ paths:
           description: Platform not found
       summary:
         Insert a new Coal demand schedule. It returns the id of the configuration object. Use this in the spawner configuration.
-        The schedule decides to spawn a train based on data from the Bundesnetzagentur
+        The schedule decides to spawn trains based on data of the Federal Network Agency
         about electricity production from coal in East Germany with a temporal resolution of 15 min.
         You can specify the power station, a scaling factor, and the starting point of the data.
         If you want to read more, take a look at https://github.com/BP2022-AP1/bp2022-ap1/wiki/Coal-Consumption.
-        You must also define the interval where the schedule should be active with 'start_tick' and 'end_tick.'
-        Use 'inject_probability' and 'resolve_probability' to adjust the probability of the schedule becoming active.
+        You must also define the interval where the schedule should be active with 'start_tick' and 'end_tick'.
         Use 'schedule_type' to specify the acting objects, for example, TrainSchedule.
-        Use 'train_schedule_train_type' to select this even more by defining the train type (Coal or passenger trains).
+        Use 'train_schedule_train_type' to select this even more by defining the train type (coal or passenger trains).
       tags:
         - schedule
 
@@ -689,7 +687,7 @@ paths:
           description: Id not found
       summary:
         Get all information about a schedule including the power station, scaling factor and starting time of the data,
-        the starting tick and ending tick of the schedule and the injection and resolve possibility.
+        the starting tick and ending tick of the schedule.
       tags:
         - schedule
 
@@ -751,11 +749,12 @@ paths:
         "401":
           description: Token is missing
       summary:
-        Insert a new schedule-blocked-fault component. It returns the id of the
+        Insert a new schedule-blocked-fault configuration. It returns the id of the
         configuration object. Use this in the simulation configuration.
         A schedule-blocked fault prohibits a train from a schedule to spawning for some time.
-        You define the affected schedule with the field 'affected_element_id'.
-        You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
+        You can define the blocked schedule with the field 'affected_element_id'.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick' and
+        the resolution probability of the fault with 'inject_probability' and 'resolve_probability'.
         Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
         Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
       tags:
@@ -807,7 +806,7 @@ paths:
         "404":
           description: Id not found
       summary: Get all information about a schedule-blocked-fault configuration.
-        This includes the stategy, starting tick, ending tick, injection and resolve propability and the affected element id.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability and the affected element id.
       tags:
         - fault-injector
 
@@ -869,9 +868,9 @@ paths:
         "401":
           description: Token is missing
       summary:
-        Insert a new track-blocked-fault component. It returns the id of the
+        Insert a new track-blocked-fault configuration. It returns the id of the
         configuration object. Use this in the simulation configuration.
-        A track-blocked fault blocks a track on the rails system for an some time.
+        A track-blocked fault blocks a track on the rail system for an some time.
         You define the affected track with the field 'affected_element_id'.
         You can find the id of the tracks in the SUMO configuration.
         You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
@@ -926,7 +925,7 @@ paths:
         "404":
           description: Id not found
       summary: Get all information about a track-blocked-fault configuration.
-        This includes the stategy, starting tick, ending tick, injection and resolve propability and the affected element id.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability and the affected element id.
       tags:
         - fault-injector
 
@@ -960,7 +959,7 @@ paths:
           description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of track-speed-limit-fault configurations. Use this in the simulation configuration.
+      summary: Get the ids of track-speed-limit-fault configurations. Use this in the simulation configuration.
       tags:
         - fault-injector
 
@@ -988,12 +987,12 @@ paths:
         "401":
           description: Token is missing
       summary:
-        Insert a new track-speed-limit-fault component. It returns the id of the
+        Insert a new track-speed-limit-fault configuration. It returns the id of the
         configuration object. Use this in the simulation configuration.
         A track-speed-limit fault edits the maximum allowed speed of a train on a track for some time.
         You define the affected track with the field 'affected_element_id'.
         You can find the id of the tracks in the SUMO configuration.
-        Set the temporal speed limit with 'new_speed'.
+        Set the new temporal speed limit with 'new_speed'.
         You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
         Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
         Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
@@ -1048,7 +1047,7 @@ paths:
           description: Id not found
       summary:
         Get all information about a track-speed-limit-fault configuration.
-        This includes the stategy, starting tick, ending tick, injection and resolve propability, the affected element id and the new speed limit.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability, the affected element id and the new speed limit.
       tags:
         - fault-injector
 
@@ -1107,13 +1106,14 @@ paths:
           description: Successfully created new train-prio-fault configuration object
         "401":
           description: Token is missing
-      summary: Insert a new train-prio-fault component. It returns the id of the
+      summary:
+        Insert a new train-prio-fault configuration. It returns the id of the
         configuration object. Use this in the simulation configuration.
-        A train-prio fault edits the priority  of a train for some time.
+        A train-prio fault edits the priority of a train for some time.
         You define the affected train with the field 'affected_element_id'.
         The ids of a train are composed of the id of the connected schedule,
         the tick when the train spawns, and the train type (either cargo or passenger).
-        Set the temporal priority  with 'new_prio'.
+        Set the temporal priority with 'new_prio'.
         You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
         Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
         Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
@@ -1166,7 +1166,7 @@ paths:
         "404":
           description: Id not found
       summary: Get all information about a train-prio-fault configuration.
-        This includes the stategy, starting tick, ending tick, injection and resolve propability, the affected element id and the new prio.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability, the affected element id and the new prio.
       tags:
         - fault-injector
 
@@ -1179,7 +1179,7 @@ paths:
       operationId: get_all_train_speed_fault_configuration_ids
       parameters:
         - description:
-            Specify id of simulation if you only want to get the train-speed-fault
+            Specify the id of simulation if you only want to get the train-speed-fault
             configuration of a single simulation
           in: query
           name: simulationId
@@ -1226,9 +1226,9 @@ paths:
         "401":
           description: Token is missing
       summary:
-        Insert a new train-speed-fault component. It returns the id of the
+        Insert a new train-speed-fault configuration. It returns the id of the
         configuration object. Use this in the simulation configuration.
-        A train-speed fault edits the maximum speed of a train for some time.
+        A train-speed fault edits the maximum speed of a train for a specified period of time.
         You define the affected train with the field 'affected_element_id'.
         The ids of a train are composed of the id of the connected schedule,
         the tick when the train spawns, and the train type (either cargo or passenger).
@@ -1284,7 +1284,7 @@ paths:
         "404":
           description: Id not found
       summary: Get all information about a train-speed-fault configuration.
-        This includes the stategy, starting tick, ending tick, injection and resolve propability, the affected element id and the new speed.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability, the affected element id and the new speed.
       tags:
         - fault-injector
 
@@ -1318,7 +1318,7 @@ paths:
           description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of platform-blocked-fault configurations. Use this in the simulation configuration.
+      summary: Get the ids of platform-blocked-fault configurations. Use this in the simulation configuration.
       tags:
         - fault-injector
 
@@ -1344,9 +1344,9 @@ paths:
         "401":
           description: Token is missing
       summary:
-        Insert a new platform-blocked-fault component. It returns the id of the
+        Insert a new platform-blocked-fault configuration. It returns the id of the
         configuration object. Use this in the simulation configuration.
-        A platform-blocked fault blocks a platform for trains for some time.
+        A platform-blocked fault blocks a platform for trains for a specified period of time.
         You define the affected platform with the field 'affected_element_id'.
         You can find the ids of the platforms in the SUMO configuration.
         You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
@@ -1400,7 +1400,7 @@ paths:
         "404":
           description: Id not found
       summary: Get all information about a platform-blocked-fault configuration.
-        This includes the stategy, starting tick, ending tick, injection and resolve propability and the affected element id.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability and the affected element id.
       tags:
         - fault-injector
 
@@ -1428,7 +1428,7 @@ paths:
         "403":
           description: Permission is missing
       summary:
-        Create new token with specified permission specified in body if current
+        Create a new token with specified permission specified in body if current
         user is admin.
         Returns the clear token. Please provide this token in future requests in the header.
       tags:
@@ -1452,7 +1452,7 @@ components:
         created_at:
           type: string
           format: date
-        speakable_id:
+        readable_id:
           type: string
 
     BasicSimulationConfiguration:
@@ -1513,8 +1513,8 @@ components:
 
     GetSimulationConfiguration:
       allOf:
-        - $ref: "#/components/schemas/BasicModel"
         - $ref: "#/components/schemas/UpdateSimulationConfiguration"
+        - $ref: "#/components/schemas/BasicModel"
         - type: object
           required:
             - run
