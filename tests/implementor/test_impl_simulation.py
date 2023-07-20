@@ -7,8 +7,12 @@ from src.implementor.models import Run, SimulationConfiguration, Token
 from src.spawner.spawner import SpawnerConfiguration
 
 
+# pylint: disable=duplicate-code
 class TestSimulationImplementor:
-    """Tests for SimulationImplementor"""
+    """
+    Tests for correct functionality of simulation configuration endpoint
+    if the input data is valid.
+    """
 
     def test_get_all_simulation_ids(self, token):
         simulation = SimulationConfiguration()

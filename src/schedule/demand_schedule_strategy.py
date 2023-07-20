@@ -27,9 +27,14 @@ class DemandScheduleStrategy(ScheduleStrategy):
         )
 
     TOTAL_ELECTRICAL_POWER: float = 10632.75  # in MW
-    COAL_ENERGY_CONTENT: float = 2.5  # in MWh/t
+    # [see result from research/coal_consumption/coal_consumption.ipynb section 46]
+
+    COAL_ENERGY_CONTENT: float = 2.46  # in MWh/t
+    # [source: https://braunkohle.de/wp-content/uploads/2019/08
+    # /Bodenschatz-Braunkohle-%E2%80%93-Langfassung.pdf]
+
     SECONDS_PER_QUARTER_HOUR: int = (60 / 4) * 60
-    COAL_PER_WAGGON: float = 73.0 - 40.0  # in tons
+    COAL_PER_WAGGON: float = 60  # in tons [source: interview]
     WAGGONS_PER_TRAIN: int = 16
     COAL_PER_TRAIN: float = COAL_PER_WAGGON * WAGGONS_PER_TRAIN  # in tons
     POWER_STATIONS: dict[str, dict[str, float]] = {

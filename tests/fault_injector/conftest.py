@@ -50,6 +50,8 @@ def event_bus(run):
 
 
 class MockRouteController:
+    """Mock up for RouteController"""
+
     method_calls: int = 0
 
     def recalculate_all_routes(self):
@@ -81,12 +83,16 @@ def platform() -> Platform:
     return Platform("fancy-platform", platform_id="platform-1", edge_id="fancy-edge")
 
 
+# pylint: disable=protected-access
 @pytest.fixture
 def track(edge, edge_re):
     track = Track(edge, edge_re)
     edge._track = track
     edge_re._track = track
     return track
+
+
+# pylint: enable=protected-access
 
 
 @pytest.fixture
@@ -116,6 +122,9 @@ def combine_train_and_wrapper(
     return train, simulation_object_updater
 
 
+# pylint: disable=invalid-name, unused-argument
+# disabling invalid-name allows the names routeID and typeID, despite the fact,
+# that they don't follow snake_case
 @pytest.fixture
 def train_add(monkeypatch):
     def add_train(identifier, routeID=None, typeID=None):
@@ -125,9 +134,21 @@ def train_add(monkeypatch):
     monkeypatch.setattr(vehicle, "add", add_train)
 
 
+# pylint: enable=invalid-name, unused-argument
+
+
+@pytest.fixture
+def max_speed(monkeypatch):
+    # pylint: disable-next=unused-argument
+    def set_max_speed(train_id: str, speed: float):
+        pass
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
 @pytest.fixture
 # pylint: disable-next=unused-argument
-def train(train_add) -> Train:
+def train(train_add, max_speed) -> Train:
     return Train(
         identifier="fault injector train",
         train_type="cargo",
