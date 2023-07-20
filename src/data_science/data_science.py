@@ -125,39 +125,35 @@ class DataScience:
         self,
         enter_tick: int,
         leave_tick: int,
-        block_section_length: float,
+        edge_length: float,
         current_tick: int,
     ) -> float:
         """Returns the fraction length of a block section that has been passed until a given tick
         :param enter_tick: enter tick
         :param leave_tick: leave tick
-        :param block_section_length: block_section_length
+        :param edge_length: edge_length
         :param current_tick: current tick
         :return: block section length
         """
         if current_tick > leave_tick:
-            return block_section_length
-        return (
-            block_section_length
-            * (current_tick - enter_tick)
-            / (leave_tick - enter_tick)
-        )
+            return edge_length
+        return edge_length * (current_tick - enter_tick) / (leave_tick - enter_tick)
 
     def _calculate_verkehrsleistung_by_tick(
-        self, block_section_times_df: pd.DataFrame, tick: int, start_tick: int
+        self, edge_times_df: pd.DataFrame, tick: int, start_tick: int
     ) -> float:
         """Returns the verkehrsleistung by a given tick
-        :param block_section_times_df: dataframe of block section times
+        :param edge_times_df: dataframe of edge times
         :param tick: tick
         :param start_tick: start tick
         :return: verkehrsleistung
         """
-        source_df = block_section_times_df.drop(
-            block_section_times_df[block_section_times_df["enter_tick"] > tick].index
+        source_df = edge_times_df.drop(
+            edge_times_df[edge_times_df["enter_tick"] > tick].index
         )
         source_df["dist"] = source_df.apply(
             lambda row: self._get_interpolate_passed_section_length_by_tick(
-                row["enter_tick"], row["leave_tick"], row["block_section_length"], tick
+                row["enter_tick"], row["leave_tick"], row["edge_length"], tick
             ),
             axis=1,
         )
@@ -173,25 +169,23 @@ class DataScience:
         :param delta_tick: delta tick
         :return: dataframe of verkehrsleistung
         """
-        block_section_times_df = self.log_collector.get_block_section_times_all_trains(
-            run_id
-        )
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
         verkehrsleistung_df = pd.DataFrame(
             {
                 "tick": np.arange(
                     0,
-                    block_section_times_df["leave_tick"].max() + 1,
+                    edge_times_df["leave_tick"].max() + 1,
                     delta_tick,
                 )
             }
         )
         verkehrsleistung_df["verkehrsleistung"] = verkehrsleistung_df.apply(
             lambda row: self._calculate_verkehrsleistung_by_tick(
-                block_section_times_df,
+                edge_times_df,
                 row["tick"],
                 0,
             ),
@@ -211,7 +205,7 @@ class DataScience:
         self,
         enter_tick: int,
         leave_tick: int,
-        block_section_length: float,
+        edge_length: float,
         current_tick: int,
         delta_tick: int,
     ) -> float:
@@ -219,33 +213,33 @@ class DataScience:
         for the duration of delta_tick
         :param enter_tick: enter tick
         :param leave_tick: leave tick
-        :param block_section_length: block_section_length
+        :param edge_length: edge_length
         :param current_tick: current tick
         :param delta_tick: delta tick
         :return: block section length
         """
         max_edge = np.minimum(leave_tick, current_tick)
         min_edge = np.maximum(enter_tick, current_tick - delta_tick)
-        return block_section_length * (max_edge - min_edge) / (leave_tick - enter_tick)
+        return edge_length * (max_edge - min_edge) / (leave_tick - enter_tick)
 
     def _calculate_verkehrsleistung_momentarily_by_tick(
-        self, block_section_times_df: pd.DataFrame, tick: int, delta_tick: int
+        self, edge_times_df: pd.DataFrame, tick: int, delta_tick: int
     ) -> float:
         """Returns the verkehrsleistung by a given tick for the duration of delta_tick
-        :param block_section_times_df: dataframe of block section times
+        :param edge_times_df: dataframe of block section times
         :param tick: tick
         :param delta_tick: delta tick
         :return: verkehrsleistung
         """
 
-        source_df = block_section_times_df.loc[
-            (block_section_times_df["leave_tick"] >= tick - delta_tick)
-            & (block_section_times_df["enter_tick"] <= tick)
+        source_df = edge_times_df.loc[
+            (edge_times_df["leave_tick"] >= tick - delta_tick)
+            & (edge_times_df["enter_tick"] <= tick)
         ]
         dist_series = self._get_section_length_momentarily_by_tick(
             source_df["enter_tick"],
             source_df["leave_tick"],
-            source_df["block_section_length"],
+            source_df["edge_length"],
             tick,
             delta_tick,
         )
@@ -260,25 +254,23 @@ class DataScience:
         :return: dataframe of verkehrsleistung
         """
 
-        block_section_times_df = self.log_collector.get_block_section_times_all_trains(
-            run_id
-        )
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
         verkehrsleistung_df = pd.DataFrame(
             {
                 "tick": np.arange(
                     0,
-                    block_section_times_df["leave_tick"].max() + 1,
+                    edge_times_df["leave_tick"].max() + 1,
                     delta_tick,
                 )
             }
         )
         verkehrsleistung_df["verkehrsleistung"] = verkehrsleistung_df.apply(
             lambda row: self._calculate_verkehrsleistung_momentarily_by_tick(
-                block_section_times_df, row["tick"], delta_tick=delta_tick
+                edge_times_df, row["tick"], delta_tick=delta_tick
             ),
             axis=1,
         )
@@ -327,20 +319,18 @@ class DataScience:
         :return: dataframe of verkehrsmenge
         """
 
-        block_section_times_df = self.log_collector.get_block_section_times_all_trains(
-            run_id
-        )
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        block_section_times_df["train_type"] = block_section_times_df["train_id"].apply(
+        edge_times_df["train_type"] = edge_times_df["train_id"].apply(
             lambda train_id: train_id.split("_")[2]
         )
-        grouped_df = block_section_times_df.groupby("train_type").apply(
+        grouped_df = edge_times_df.groupby("train_type").apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsmenge": data["block_section_length"].sum(),
+                    "verkehrsmenge": data["edge_length"].sum(),
                 }
             )
         )
@@ -364,29 +354,27 @@ class DataScience:
         :param run_id: run id
         :return: dataframe of verkehrsleistung
         """
-        block_section_times_df = self.log_collector.get_block_section_times_all_trains(
-            run_id
-        )
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        block_section_times_df["train_type"] = block_section_times_df["train_id"].apply(
+        edge_times_df["train_type"] = edge_times_df["train_id"].apply(
             lambda train_id: train_id.split("_")[2]
         )
 
-        grouped_df = block_section_times_df.groupby("train_type").apply(
+        grouped_df = edge_times_df.groupby("train_type").apply(
             lambda data: pd.Series(
                 {
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"]
+            lambda row: row["edge_length"]
             * 3600
             / self.tick_to_second(row["leave_tick"] - row["enter_tick"]),
             axis=1,
@@ -399,7 +387,7 @@ class DataScience:
                 "train_type": ["all"],
                 "enter_tick": [0],
                 "leave_tick": [grouped_df["leave_tick"].max()],
-                "block_section_length": [grouped_df["block_section_length"].sum()],
+                "edge_length": [grouped_df["edge_length"].sum()],
                 "verkehrsleistung": [grouped_df["verkehrsleistung"].sum()],
             }
         )
@@ -502,20 +490,18 @@ class DataScience:
         return window_size_df
 
     def _calculate_verkehrsleistung_momentarily_by_tick_multiple_runs(
-        self, block_section_times_df: pd.DataFrame, tick: int, delta_tick: int
+        self, edge_times_df: pd.DataFrame, tick: int, delta_tick: int
     ) -> float:
         """Calculates the verkehrsleistung momentarily by a given tick
-        :param block_section_times_df: dataframe of block section times
+        :param edge_times_df: dataframe of block section times
         :param tick: tick
         :param delta_tick: delta tick
         :return: verkehrsleistung momentarily
         """
 
         verkehrsleistung = []
-        for run_id in block_section_times_df["run_id"].unique():
-            source_df = block_section_times_df[
-                block_section_times_df["run_id"] == run_id
-            ]
+        for run_id in edge_times_df["run_id"].unique():
+            source_df = edge_times_df[edge_times_df["run_id"] == run_id]
             verkehrsleistung.append(
                 self._calculate_verkehrsleistung_momentarily_by_tick(
                     source_df, tick, delta_tick
@@ -535,25 +521,23 @@ class DataScience:
         """
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
-            )
-            block_section_times_df["run_id"] = run_id.id
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["run_id"] = run_id.id
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
         verkehrsleistung_df = pd.DataFrame(
             {
                 "tick": np.arange(
                     0,
-                    block_section_times_df["leave_tick"].max() + 1,
+                    edge_times_df["leave_tick"].max() + 1,
                     delta_tick,
                 )
             }
         )
         verkehrsleistung_df["verkehrsleistung"] = verkehrsleistung_df.apply(
             lambda row: self._calculate_verkehrsleistung_momentarily_by_tick_multiple_runs(
-                block_section_times_df, row["tick"], delta_tick
+                edge_times_df, row["tick"], delta_tick
             ),
             axis=1,
         )
@@ -772,18 +756,16 @@ class DataScience:
 
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
-            )
-            block_section_times_df["run_id"] = run_id.id
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["run_id"] = run_id.id
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby("run_id").agg(
-            {"enter_tick": "min", "leave_tick": "max", "block_section_length": "sum"}
+        grouped_df = edge_times_df.groupby("run_id").agg(
+            {"enter_tick": "min", "leave_tick": "max", "edge_length": "sum"}
         )
         del grouped_df["enter_tick"]
         del grouped_df["leave_tick"]
@@ -796,21 +778,19 @@ class DataScience:
         """
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
-            )
-            block_section_times_df["run_id"] = run_id.id
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["run_id"] = run_id.id
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby("run_id").agg(
-            {"leave_tick": "max", "block_section_length": "sum"}
+        grouped_df = edge_times_df.groupby("run_id").agg(
+            {"leave_tick": "max", "edge_length": "sum"}
         )
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"]
+            lambda row: row["edge_length"]
             * 3600
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
@@ -826,23 +806,21 @@ class DataScience:
 
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
             )
-            block_section_times_df["train_type"] = block_section_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
-            block_section_times_df["run_id"] = run_id.id
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+            edge_times_df["run_id"] = run_id.id
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby(["run_id", "train_type"]).apply(
+        grouped_df = edge_times_df.groupby(["run_id", "train_type"]).apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsmenge": data["block_section_length"].sum(),
+                    "verkehrsmenge": data["edge_length"].sum(),
                 }
             )
         )
@@ -869,25 +847,23 @@ class DataScience:
         :return: verkehrsleistung dataframe"""
         df_list = []
         for run_id in Run.select().where(Run.simulation_configuration == config_id):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
             )
-            block_section_times_df["train_type"] = block_section_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
-            block_section_times_df["run_id"] = run_id.id
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+            edge_times_df["run_id"] = run_id.id
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby(["run_id", "train_type"]).apply(
+        grouped_df = edge_times_df.groupby(["run_id", "train_type"]).apply(
             lambda data: pd.Series(
                 {
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
@@ -898,7 +874,7 @@ class DataScience:
                     "train_type": "all",
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
@@ -906,7 +882,7 @@ class DataScience:
         grouped_df = pd.concat([grouped_df, all_df], axis=0)
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"]
+            lambda row: row["edge_length"]
             * 3600
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
@@ -1030,44 +1006,42 @@ class DataScience:
         for run_id in Run.select().where(
             Run.simulation_configuration << config_id_list
         ):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
-            )
-            block_section_times_df["run_id"] = run_id.id
-            block_section_times_df["config_id"] = run_id.simulation_configuration.id
-            block_section_times_df[
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["run_id"] = run_id.id
+            edge_times_df["config_id"] = run_id.simulation_configuration.id
+            edge_times_df[
                 "config_readable_id"
             ] = run_id.simulation_configuration.readable_id
-            block_section_times_df["train_type"] = block_section_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
+            )
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby(
+        grouped_df = edge_times_df.groupby(
             ["config_id", "config_readable_id", "run_id", "train_type"]
         ).apply(
             lambda data: pd.Series(
                 {
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
 
         grouped_df = grouped_df.groupby(
             ["config_id", "config_readable_id", "train_type"]
-        ).agg({"block_section_length": "mean"})
+        ).agg({"edge_length": "mean"})
         grouped_df.reset_index(inplace=True)
         all_df = grouped_df.groupby(["config_id", "config_readable_id"]).apply(
             lambda data: pd.Series(
                 {
                     "train_type": "all",
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
@@ -1092,31 +1066,29 @@ class DataScience:
         for run_id in Run.select().where(
             Run.simulation_configuration << config_id_list
         ):
-            block_section_times_df = (
-                self.log_collector.get_block_section_times_all_trains(run_id)
+            edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
+            edge_times_df["train_type"] = edge_times_df["train_id"].apply(
+                lambda train_id: train_id.split("_")[2]
             )
-            block_section_times_df["train_type"] = block_section_times_df[
-                "train_id"
-            ].apply(lambda train_id: train_id.split("_")[2])
-            block_section_times_df["run_id"] = run_id.id
-            block_section_times_df["config_id"] = run_id.simulation_configuration.id
-            block_section_times_df[
+            edge_times_df["run_id"] = run_id.id
+            edge_times_df["config_id"] = run_id.simulation_configuration.id
+            edge_times_df[
                 "config_readable_id"
             ] = run_id.simulation_configuration.readable_id
-            df_list.append(block_section_times_df)
-        block_section_times_df = pd.concat(df_list, axis=0)
-        block_section_times_df.dropna(inplace=True)
-        block_section_times_df["time"] = block_section_times_df.apply(
+            df_list.append(edge_times_df)
+        edge_times_df = pd.concat(df_list, axis=0)
+        edge_times_df.dropna(inplace=True)
+        edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = block_section_times_df.groupby(
+        grouped_df = edge_times_df.groupby(
             ["config_id", "config_readable_id", "run_id", "train_type"]
         ).apply(
             lambda data: pd.Series(
                 {
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
@@ -1129,7 +1101,7 @@ class DataScience:
                     "train_type": "all",
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "block_section_length": data["block_section_length"].sum(),
+                    "edge_length": data["edge_length"].sum(),
                 }
             )
         )
@@ -1137,7 +1109,7 @@ class DataScience:
         grouped_df = pd.concat([grouped_df, all_df], axis=0)
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["block_section_length"]
+            lambda row: row["edge_length"]
             * 3600
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
