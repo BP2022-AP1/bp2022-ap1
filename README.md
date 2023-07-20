@@ -14,8 +14,9 @@ A REST API for simulations and analysis of train traffic on the LEAG rail networ
 - [Celery](https://docs.celeryq.dev/en/stable/): the simulation is executed within a Celery worker
 - [peewee](http://docs.peewee-orm.com/en/latest/): interaction with the database
 - [Flask](https://flask.palletsprojects.com/en/2.3.x/): used to implement the REST-API
+- [yaramo](https://github.com/simulate-digital-rail/yaramo): railway model focusing on interoperability between different existing planning formats
 
-**STRUCTURE OF DOCUMENTATION** 
+**STRUCTURE OF DOCUMENTATION**
 
 The documentation is structured into three parts: This README, the [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki) and the [documentation of the REST-API](https://bp2022-ap1.github.io/bp2022-ap1/). The following table gives an overview of the content of each part.
 
@@ -170,7 +171,7 @@ You can rollback the last migration with `poe db rollback`.
 
 ## Testing
 
-We use `pytest` for testing. You can run the tests with `poe test`. This will also start the test database, drop and recreate all its tables, run the tests and then stop the database container again. 
+We use `pytest` for testing. You can run the tests with `poe test`. This will also start the test database, drop and recreate all its tables, run the tests and then stop the database container again.
 
 We use `monkeypatch` to mock connections to `TraCI` and `SUMO`.
 
