@@ -360,7 +360,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SpawnerConfiguration"
+                $ref: "#/components/schemas/GetSpawnerConfiguration"
           description: Successful operation
         "401":
           description: Token is missing
@@ -1436,26 +1436,48 @@ paths:
 
 components:
   schemas:
-    BasicModel:
+    CreateSimulationConfiguration:
       type: object
       required:
-        - id
-        - updated_at
-        - created_at
+        - spawner
       properties:
-        id:
+        description:
+          type: string
+        platform_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        schedule_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_speed_limit_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_speed_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_prio_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        spawner:
           type: string
           format: uuid
-        updated_at:
-          type: string
-          format: date
-        created_at:
-          type: string
-          format: date
-        readable_id:
-          type: string
 
-    BasicSimulationConfiguration:
+    UpdateSimulationConfiguration:
       type: object
       properties:
         description:
@@ -1490,40 +1512,69 @@ components:
           items:
             type: string
             format: uuid
-
-    CreateSimulationConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicSimulationConfiguration"
-        - type: object
-          required:
-            - spawner
-          properties:
-            spawner:
-              type: string
-              format: uuid
-
-    UpdateSimulationConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicSimulationConfiguration"
-        - type: object
-          properties:
-            spawner:
-              type: string
-              format: uuid
+        spawner:
+          type: string
+          format: uuid
 
     GetSimulationConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/UpdateSimulationConfiguration"
-        - $ref: "#/components/schemas/BasicModel"
-        - type: object
-          required:
-            - run
-          properties:
-            run:
-              type: array
-              items:
-                type: string
-                format: uuid
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - run
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        run:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description:
+          type: string
+        platform_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        schedule_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_speed_limit_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_speed_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_prio_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        spawner:
+          type: string
+          format: uuid
 
     SpawnerConfiguration:
       type: object
@@ -1537,15 +1588,37 @@ components:
             format: uuid
 
     GetSpawnerConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/SpawnerConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - schedule
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        schedule:
+          type: array
+          items:
+            type: string
+            format: uuid
 
-    BasicFaultConfiguration:
+    TrainSpeedFaultConfiguration:
       type: object
       required:
         - description
         - strategy
+        - affected_element_id
+        - new_speed
       properties:
         description:
           type: string
@@ -1566,112 +1639,437 @@ components:
         resolve_probability:
           type: number
           format: float
-
-    TrainSpeedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicFaultConfiguration"
-        - type: object
-          required:
-            - affected_element_id
-            - new_speed
-          properties:
-            affected_element_id:
-              type: string
-            new_speed:
-              type: number
-              format: float
+        affected_element_id:
+          type: string
+        new_speed:
+          type: number
+          format: float
 
     GetTrainSpeedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - affected_element_id
+        - new_speed
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        affected_element_id:
+          type: string
+        new_speed:
+          type: number
+          format: float
 
     TrainPrioFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicFaultConfiguration"
-        - type: object
-          required:
-            - affected_element_id
-            - new_prio
-          properties:
-            affected_element_id:
-              type: string
-            new_prio:
-              type: number
-              format: float
+      type: object
+      required:
+
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+        new_prio:
+          type: number
+          format: float
 
     GetTrainPrioFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/TrainPrioFaultConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - affected_element_id
+        - new_prio
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+        new_prio:
+          type: number
+          format: float
 
     ScheduleBlockedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicFaultConfiguration"
-        - type: object
-          required:
+      type: object
+      required:
+        - description
+        - strategy
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
             - affected_element_id
-          properties:
-            affected_element_id:
-              type: string
-              format: uuid
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
 
     GetScheduleBlockedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+            - affected_element_id
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
 
     TrackSpeedLimitFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicFaultConfiguration"
-        - type: object
-          required:
-            - new_speed_limit
-            - affected_element_id
-          properties:
-            affected_element_id:
-              type: string
-              format: uuid
-            new_speed_limit:
-              type: integer
-              format: int32
+      type: object
+      required:
+        - description
+        - strategy
+        - new_speed_limit
+        - affected_element_id
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+        new_speed_limit:
+          type: integer
+          format: int32
 
     GetTrackSpeedLimitFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - new_speed_limit
+        - affected_element_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+        new_speed_limit:
+          type: integer
+          format: int32
 
     TrackBlockedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicFaultConfiguration"
-        - type: object
-          required:
-            - affected_element_id
-          properties:
-            affected_element_id:
-              type: string
-              format: uuid
+      type: object
+      required:
+        - description
+        - strategy
+        - affected_element_id
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
 
     GetTrackBlockedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - affected_element_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
 
     PlatformBlockedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicFaultConfiguration"
-        - type: object
-          required:
-            - affected_element_id
-          properties:
-            affected_element_id:
-              type: string
-              format: uuid
+      type: object
+      required:
+        - description
+        - strategy
+        - affected_element_id
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
 
     GetPlatformBlockedFaultConfiguration:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/PlatformBlockedFaultConfiguration"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - affected_element_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
 
     RunConfiguration:
       type: object
@@ -1693,13 +2091,93 @@ components:
           type: number
           format: float
 
-    BasicSchedule:
+    CreateRegularSchedule:
       type: object
       required:
         - schedule_type
         - strategy_start_tick
         - strategy_end_tick
         - train_schedule_train_type
+        - regular_strategy_frequency
+      properties:
+        strategy_type:
+          type: string
+          enum:
+            - RegularScheduleStrategy
+            - RandomScheduleStrategy
+            - DemandScheduleStrategy
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        regular_strategy_frequency:
+          type: integer
+          format: int32
+
+    GetRegularSchedule:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - regular_strategy_frequency
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        regular_strategy_frequency:
+          type: integer
+          format: int32
+
+    CreateRandomSchedule:
+      type: object
+      required:
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - random_strategy_trains_per_1000_ticks
+        - random_strategy_seed
       properties:
         schedule_type:
           type: string
@@ -1716,47 +2194,6 @@ components:
           enum:
             - passenger
             - cargo
-
-    ExtendedSchedule:
-      allOf:
-        - $ref: "#/components/schemas/BasicModel"
-        - $ref: "#/components/schemas/BasicSchedule"
-        - type: object
-          required:
-            - strategy_type
-          properties:
-            strategy_type:
-              type: string
-              enum:
-                - RegularScheduleStrategy
-                - RandomScheduleStrategy
-                - DemandScheduleStrategy
-
-    RegularSchedule:
-      type: object
-      required:
-        - regular_strategy_frequency
-      properties:
-        regular_strategy_frequency:
-          type: integer
-          format: int32
-
-    CreateRegularSchedule:
-      allOf:
-        - $ref: "#/components/schemas/BasicSchedule"
-        - $ref: "#/components/schemas/RegularSchedule"
-
-    GetRegularSchedule:
-      allOf:
-        - $ref: "#/components/schemas/RegularSchedule"
-        - $ref: "#/components/schemas/ExtendedSchedule"
-
-    RandomSchedule:
-      type: object
-      required:
-        - random_strategy_trains_per_1000_ticks
-        - random_strategy_seed
-      properties:
         random_strategy_trains_per_1000_ticks:
           type: number
           format: float
@@ -1764,23 +2201,85 @@ components:
           type: integer
           format: int32
 
-    CreateRandomSchedule:
-      allOf:
-        - $ref: "#/components/schemas/BasicSchedule"
-        - $ref: "#/components/schemas/RandomSchedule"
-
     GetRandomSchedule:
-      allOf:
-        - $ref: "#/components/schemas/RandomSchedule"
-        - $ref: "#/components/schemas/ExtendedSchedule"
-
-    DemandSchedule:
       type: object
       required:
+        - id
+        - updated_at
+        - created_at
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - random_strategy_trains_per_1000_ticks
+        - random_strategy_seed
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        strategy_type:
+          type: string
+          enum:
+            - RegularScheduleStrategy
+            - RandomScheduleStrategy
+            - DemandScheduleStrategy
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        random_strategy_trains_per_1000_ticks:
+          type: number
+          format: float
+        random_strategy_seed:
+          type: integer
+          format: int32
+
+    CreateDemandSchedule:
+      type: object
+      required:
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
         - demand_strategy_power_station
         - demand_strategy_scaling_factor
         - demand_strategy_start_datetime
       properties:
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
         demand_strategy_power_station:
           type: string
         demand_strategy_scaling_factor:
@@ -1790,15 +2289,61 @@ components:
           type: string
           format: date
 
-    CreateDemandSchedule:
-      allOf:
-        - $ref: "#/components/schemas/BasicSchedule"
-        - $ref: "#/components/schemas/DemandSchedule"
-
     GetDemandSchedule:
-      allOf:
-        - $ref: "#/components/schemas/DemandSchedule"
-        - $ref: "#/components/schemas/ExtendedSchedule"
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - demand_strategy_power_station
+        - demand_strategy_scaling_factor
+        - demand_strategy_start_datetime
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        strategy_type:
+          type: string
+          enum:
+            - RegularScheduleStrategy
+            - RandomScheduleStrategy
+            - DemandScheduleStrategy
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        demand_strategy_power_station:
+          type: string
+        demand_strategy_scaling_factor:
+          type: number
+          format: float
+        demand_strategy_start_datetime:
+          type: string
+          format: date
 
     Token:
       type: object
