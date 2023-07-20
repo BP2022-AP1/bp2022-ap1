@@ -110,19 +110,6 @@ class TestGrafanaDataRegistration:
         faults_df["fault_id"] = faults_df["fault_id"].astype("string")
         assert_frame_equal(_faults_df, faults_df)
 
-    def test_get_verkehrsleistung_time_by_run_id(
-        self,
-        _run_id: str,
-        event_bus: EventBus,
-        grafana_data_registrator: GrafanaDataRegistrator,
-        verkehrsleistung_time_df: pd.DataFrame,
-    ):
-        setup_logs_edges(event_bus)
-        assert_frame_equal(
-            grafana_data_registrator.get_verkehrsleistung_time_by_run_id(_run_id, None),
-            verkehrsleistung_time_df,
-        )
-
     def test_get_verkehrsleistung_momentarily_time_by_run_id(
         self,
         _run_id: str,

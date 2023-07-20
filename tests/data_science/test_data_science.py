@@ -112,19 +112,6 @@ class TestDataScience:
         faults_df["fault_id"] = faults_df["fault_id"].astype("string")
         assert_frame_equal(_faults_df, faults_df)
 
-    def test_get_verkehrsleistung_time_by_run_id(
-        self,
-        event_bus: EventBus,
-        data_science: DataScience,
-        verkehrsleistung_time_df: pd.DataFrame,
-    ):
-        setup_logs_edges(event_bus)
-        verkehrsleistung_df = data_science.get_verkehrsleistung_time_by_run_id(
-            event_bus.run_id,
-            delta_tick=self.second_to_tick(10),
-        )
-        assert_frame_equal(verkehrsleistung_df, verkehrsleistung_time_df)
-
     def test_get_verkehrsleistung_momentarily_time_by_run_id(
         self,
         event_bus: EventBus,

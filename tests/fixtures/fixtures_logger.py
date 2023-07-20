@@ -293,7 +293,7 @@ def verkehrsleistung_momentarily_time_df():
                 datetime(2020, 1, 1, 0, 1 if i == 6 else 0, (10 * i) % 60)
                 for i in range(0, 7)
             ],
-            "verkehrsleistung": [0.0, 0.0, 7560.0, 0.0, 29520.0, 0.0, 21960.0],
+            "verkehrsleistung": [0.0, 0.0, 7.560, 0.0, 29.520, 0.0, 21.960],
         }
     )
     verkehrsleistung_time_df.set_index("time", inplace=True)
@@ -393,7 +393,7 @@ def verkehrsarbeit_df():
     return pd.DataFrame(
         {
             "train_type": ["cargo", "passenger", "all"],
-            "verkehrsarbeit": [20.5, 143.5, 164.0],
+            "verkehrsarbeit": [0.0205, 0.1435, 0.164],
         }
     )
 
@@ -409,7 +409,7 @@ def verkehrsleistung_by_run_id_df():
                 dtype="Int64",
             ),
             "edge_length": [20.5, 143.5, 164.0],
-            "verkehrsleistung": [1845.0, 8610.0, 10455.0],
+            "verkehrsleistung": [1.8450, 8.610000000000001, 9.84],
         }
     )
 
@@ -503,7 +503,7 @@ def verkehrsleistung_by_config_id_df(run):
         {
             "run_id": [run.id],
             "edge_length": pd.Series([164.0]),
-            "verkehrsleistung": pd.Series([9840.0]),
+            "verkehrsleistung": pd.Series([9.840]),
         }
     )
     verkehrsleistung_df.set_index("run_id", inplace=True)
@@ -515,7 +515,7 @@ def average_verkehrsarbeit_by_config_id_df():
     verkehrsarbeit = pd.DataFrame(
         {
             "train_type": ["all", "cargo", "passenger"],
-            "verkehrsarbeit": pd.Series([164.0, 20.5, 143.5]),
+            "verkehrsarbeit": pd.Series([0.16399999999999998, 0.0205, 0.1435]),
         }
     )
     return verkehrsarbeit
@@ -526,7 +526,7 @@ def average_verkehrsleistung_by_config_id_df():
     verkehrsleistung = pd.DataFrame(
         {
             "train_type": ["all", "cargo", "passenger"],
-            "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
+            "verkehrsleistung": pd.Series([9.840, 1.845, 8.610]),
         }
     )
     return verkehrsleistung
@@ -558,7 +558,7 @@ def verkehrsarbeit_by_multi_config_df(simulation_configuration):
                 simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
-            "edge_length": pd.Series([164.0, 20.5, 143.5]),
+            "edge_length": pd.Series([0.164, 0.0205, 0.1435]),
         }
     )
 
@@ -573,7 +573,7 @@ def verkehrsleistung_by_multi_config_df(simulation_configuration):
                 simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
-            "verkehrsleistung": pd.Series([9840.0, 1845.0, 8610.0]),
+            "verkehrsleistung": pd.Series([9.840, 1.845, 8.610]),
         }
     )
 

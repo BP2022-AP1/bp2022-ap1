@@ -67,6 +67,7 @@ class GrafanaDataRegistrator:
         """
         run_id = self._get_run_id_from_param(param)
         return self.data_science.get_faults_by_run_id(run_id)
+
     def get_verkehrsleistung_momentarily_time_by_run_id(self, param, _) -> pd.DataFrame:
         """Returns the momentary verkehrsleistung over time by grafana params
         :param param: Grafana params
