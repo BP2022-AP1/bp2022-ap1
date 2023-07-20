@@ -39,7 +39,6 @@ with db.atomic():
         strategy_end_time=7200,
         train_schedule_train_type="regio",
         regular_strategy_frequency=180,
-        regular_strategy_frequency=400,
     )
     platforms2 = ["bs_2", "bs_3"]
 
