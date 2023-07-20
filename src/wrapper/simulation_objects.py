@@ -6,6 +6,9 @@ from typing import List, Optional, Tuple, Union
 from sumolib import net
 from traci import FatalTraCIError, constants, edge, trafficlight, vehicle
 
+MAX_TRAIN_SPEED: float = 22.222222
+MAX_TRACK_SPEED: float = 22.222222
+
 
 class SimulationObject(ABC):
     """This class represents an object inside the sumo simulation.
@@ -471,6 +474,8 @@ class Edge(SimulationObject):
         result._from = simulation_object.getFromNode().getID()
         result._to = simulation_object.getToNode().getID()
 
+        result._max_speed = MAX_TRACK_SPEED
+
         return result
 
     def add_simulation_connections(self) -> None:
@@ -753,9 +758,12 @@ class Train(SimulationObject):
             """
             return Train.TrainType(instance, name=train_type)
 
-        def __init__(self, identifier, name: str = None):
+        def __init__(
+            self, identifier, name: str = None, max_speed: float = MAX_TRAIN_SPEED
+        ):
             SimulationObject.__init__(self, identifier)
             self._name = name
+            self._max_speed = max_speed
 
         def update(self, data: dict) -> None:
             self._max_speed = data[constants.VAR_MAXSPEED]
@@ -777,10 +785,9 @@ class Train(SimulationObject):
     _edge: Edge
     _speed: float
     _timetable: List[Platform]
-    _station_index: int = 0
     train_type: TrainType
-    reserved_tracks: List[Track]
-    station_index: int = 0
+    reserved_tracks: List[ReservationTrack]
+    _station_index: int = 0
     reserved_until_station_index: int = 1
 
     @property
@@ -891,6 +898,7 @@ class Train(SimulationObject):
 
         if not from_simulator:
             self._add_to_simulation(identifier, train_type, route_id)
+        self.train_type.max_speed = self.train_type._max_speed
 
     def _add_to_simulation(self, identifier: str, train_type: str, route: str):
         vehicle.add(identifier, routeID=route, typeID=train_type)
@@ -918,11 +926,6 @@ class Train(SimulationObject):
                             f"{self._edge.identifier}, new track: {edge_id}"
                         )
                     )
-                if self._edge.track.is_reservation_track:
-                    assert self._edge.track.reservations[0][1] == self._edge
-                    assert self._edge.track == self.reserved_tracks[0]
-                    self._edge.track.reservations.pop(0)
-                    self.reserved_tracks.pop(0)
 
                 self.updater.infrastructure_provider.train_drove_off_track(
                     self, self._edge

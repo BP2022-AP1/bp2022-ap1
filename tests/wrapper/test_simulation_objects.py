@@ -161,7 +161,7 @@ class TestTrain:
         train.timetable = ["asdf"]
         assert train.timetable == ["asdf"]
 
-    def test_spawning(self, train_add):
+    def test_spawning(self, train_add, max_speed):
         # pylint: disable=unused-argument
         Train(
             identifier="fancy-rb-001",
@@ -214,7 +214,7 @@ class TestTrain:
         assert len(train.add_subscriptions()) > 0
 
     def test_spawn_loaded_net(
-        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+        self, configured_souc: SimulationObjectUpdatingComponent, train_add, max_speed
     ):
         # pylint: disable=unused-argument
         p1_id = Platform("station-1", edge_id="a57e4-1", platform_id="station-1")
@@ -228,7 +228,7 @@ class TestTrain:
         )
 
     def test_current_platform(
-        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+        self, configured_souc: SimulationObjectUpdatingComponent, train_add, max_speed
     ):
         # pylint: disable=unused-argument
         p1_id = Platform("station-1", edge_id="bf53d-0", platform_id="station-1")

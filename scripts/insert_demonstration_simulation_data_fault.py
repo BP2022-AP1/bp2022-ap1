@@ -1,6 +1,10 @@
 from datetime import datetime
 
 from src.base_model import db
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+    ScheduleBlockedFaultConfigurationXSimulationConfiguration,
+)
 from src.implementor.models import SimulationConfiguration
 from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
@@ -10,10 +14,6 @@ from src.spawner.spawner import (
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
     SpawnerConfigurationXSimulationConfiguration,
-)
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
-    ScheduleBlockedFaultConfiguration,
-    ScheduleBlockedFaultConfigurationXSimulationConfiguration,
 )
 
 with db.atomic():
