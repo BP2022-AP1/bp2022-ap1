@@ -32,6 +32,8 @@ We're using `poetry` to manage our dependencies. You can find the documentation 
 
 Within the virtual environment, you can run `poe` to run commands. Essential commands are `poe dev` to run the development server and `poe test` to run the tests. You can find more commands in the section Commands. Be sure that you have docker installed.
 
+Additionally, you need to install SUMO to run simulations. 
+
 ## Commands
 
 We're using `poethepoet` to define some handy commands for development. When you're not using the poetry shell, add a `poetry run` before every `poe`.
