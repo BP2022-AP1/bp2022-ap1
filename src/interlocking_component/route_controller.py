@@ -159,7 +159,6 @@ class TopologyInitializer:
                 if yaramo_signal.name == potentical_signal.identifier:
                     signal = potentical_signal
 
-
             assert signal is not None
 
             edges_into_signal = [
