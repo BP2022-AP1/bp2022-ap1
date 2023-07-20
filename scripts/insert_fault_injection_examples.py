@@ -1,5 +1,22 @@
 from datetime import datetime
+
 from src.base_model import db
+from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
+    ScheduleBlockedFaultConfiguration,
+    ScheduleBlockedFaultConfigurationXSimulationConfiguration,
+)
+from src.fault_injector.fault_configurations.track_blocked_fault_configuration import (
+    TrackBlockedFaultConfiguration,
+    TrackBlockedFaultConfigurationXSimulationConfiguration,
+)
+from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
+    TrackSpeedLimitFaultConfiguration,
+    TrackSpeedLimitFaultConfigurationXSimulationConfiguration,
+)
+from src.fault_injector.fault_configurations.train_speed_fault_configuration import (
+    TrainSpeedFaultConfiguration,
+    TrainSpeedFaultConfigurationXSimulationConfiguration,
+)
 from src.implementor.models import SimulationConfiguration
 from src.schedule.schedule_configuration import (
     ScheduleConfiguration,
@@ -10,11 +27,6 @@ from src.spawner.spawner import (
     SpawnerConfigurationXSchedule,
     SpawnerConfigurationXSimulationConfiguration,
 )
-
-from src.fault_injector.fault_configurations.train_speed_fault_configuration import TrainSpeedFaultConfigurationXSimulationConfiguration, TrainSpeedFaultConfiguration
-from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import TrackSpeedLimitFaultConfiguration, TrackSpeedLimitFaultConfigurationXSimulationConfiguration
-from src.fault_injector.fault_configurations.track_blocked_fault_configuration import TrackBlockedFaultConfiguration, TrackBlockedFaultConfigurationXSimulationConfiguration
-from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import ScheduleBlockedFaultConfiguration, ScheduleBlockedFaultConfigurationXSimulationConfiguration
 
 with db.atomic():
     platforms = ["bs_0", "bs_1"]
@@ -123,27 +135,27 @@ with db.atomic():
     #     simulation_configuration=simulation_configuration, track_speed_limit_fault_configuration=track_speed_limit_fault_configuration
     # )
 
-
     # track_blocked_fault_configuration_1 = TrackBlockedFaultConfiguration.create(
     #             affected_element_id="b8f37-2-re",
     #             start_time=200,
     #             end_time=3000,
     #             description="test TrackBlockedFault",
     #             strategy="regular",
-    # ) 
+    # )
     # TrackBlockedFaultConfigurationXSimulationConfiguration.create(
     #     simulation_configuration=simulation_configuration, track_blocked_fault_configuration=track_blocked_fault_configuration_1
     # )
 
     track_blocked_fault_configuration_2 = TrackBlockedFaultConfiguration.create(
-                affected_element_id="d5792-0-re",
-                start_time=200,
-                end_time=3000,
-                description="test TrackBlockedFault",
-                strategy="regular",
+        affected_element_id="d5792-0-re",
+        start_time=200,
+        end_time=3000,
+        description="test TrackBlockedFault",
+        strategy="regular",
     )
     TrackBlockedFaultConfigurationXSimulationConfiguration.create(
-        simulation_configuration=simulation_configuration, track_blocked_fault_configuration=track_blocked_fault_configuration_2
+        simulation_configuration=simulation_configuration,
+        track_blocked_fault_configuration=track_blocked_fault_configuration_2,
     )
 
     # schedule_blocked_fault_configuration = ScheduleBlockedFaultConfiguration.create(
