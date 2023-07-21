@@ -29,10 +29,11 @@ with db.atomic():
         strategy_type="RandomScheduleStrategy",
         strategy_start_time=0,
         strategy_end_time=7200,
+        train_schedule_train_type="regio",
         random_strategy_trains_per_1000_seconds=2.0,
     )
     print(f"regular schedule: {regular_schedule.id}")
-    print(f"radom schedule: {random_schedule.id}")
+    print(f"random schedule: {random_schedule.id}")
     for index, platform in enumerate(platforms):
         ScheduleConfigurationXSimulationPlatform.create(
             schedule_configuration_id=regular_schedule,
