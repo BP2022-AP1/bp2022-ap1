@@ -2083,8 +2083,22 @@ components:
     GetRun:
       type: object
       required:
+        - id
+        - updated_at
+        - created_at
         - state
       properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
         state:
           type: string
         progress:
