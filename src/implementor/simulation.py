@@ -167,54 +167,7 @@ def get_simulation_configuration(options, token):
         return "Simulation not found", 404
 
     simulation_configuration = simulation_configurations.get()
-
-    spawner_ids = [
-        str(reference.spawner_configuration.id)
-        for reference in simulation_configuration.spawner_configuration_references
-    ]
-    spawner_id = spawner_ids[0]
-
-    platform_blocked_fault_ids = [
-        str(reference.platform_blocked_fault_configuration.id)
-        for reference in simulation_configuration.platform_blocked_fault_configuration_references
-    ]
-
-    schedule_blocked_fault_ids = [
-        str(reference.schedule_blocked_fault_configuration.id)
-        for reference in simulation_configuration.schedule_blocked_fault_configuration_references
-    ]
-
-    track_blocked_fault_ids = [
-        str(reference.track_blocked_fault_configuration.id)
-        for reference in simulation_configuration.track_blocked_fault_configuration_references
-    ]
-
-    track_speed_limit_fault_ids = [
-        str(reference.track_speed_limit_fault_configuration.id)
-        for reference in simulation_configuration.track_speed_limit_fault_configuration_references
-    ]
-
-    train_speed_fault_ids = [
-        str(reference.train_speed_fault_configuration.id)
-        for reference in simulation_configuration.train_speed_fault_configuration_references
-    ]
-
-    train_prio_fault_ids = [
-        str(reference.train_prio_fault_configuration.id)
-        for reference in simulation_configuration.train_prio_fault_configuration_references
-    ]
-
-    return {
-        "id": str(simulation_configuration.id),
-        "description": simulation_configuration.description,
-        "spawner": spawner_id,
-        "platform_blocked_fault": platform_blocked_fault_ids,
-        "schedule_blocked_fault": schedule_blocked_fault_ids,
-        "track_blocked_fault": track_blocked_fault_ids,
-        "track_speed_limit_fault": track_speed_limit_fault_ids,
-        "train_speed_fault": train_speed_fault_ids,
-        "train_prio_fault": train_prio_fault_ids,
-    }, 200
+    return simulation_configuration.to_dict(), 200
 
 
 def update_simulation_configuration(options, body, token):
@@ -233,6 +186,9 @@ def update_simulation_configuration(options, body, token):
         return "Run not found", 404
 
     simulation = simulation_configurations.get()
+
+    if simulation.runs.count() > 0:
+        return "Simulation configuration is used in a run", 400
 
     try:
         with db.atomic():
@@ -335,8 +291,9 @@ def delete_simulation_configuration(options, token):
 
     simulation_configuration = simulation_configurations.get()
 
-    if len(simulation_configuration.runs) > 0:
+    if simulation_configuration.runs.count() > 0:
         return "Simulation configuration is used in a run", 400
+
     with db.atomic():
         SpawnerConfigurationXSimulationConfiguration.delete().where(
             SpawnerConfigurationXSimulationConfiguration.simulation_configuration

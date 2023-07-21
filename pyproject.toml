@@ -36,10 +36,11 @@ pandas = "^2.0.0"
 grafana-pandas-datasource = { git = "https://github.com/BP2022-AP1/grafana-pandas-datasource.git" }
 matplotlib = "^3.7.1"
 scipy = "1.9.2"
-requests = "^2.28.2"
+requests = "^2.31.0"
 celery = "^5.2.7"
 pytest-profiling = "^1.7.0"
 pytest-split = "^0.8.1"
+human-readable-ids = "^0.1.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
@@ -133,7 +134,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.test-docker-deps]
     help = "Initializes needed docker containers for tests"
-    cmd = "docker compose up -d grafana-test redis postgresql-test --wait"
+    cmd = "docker compose -f docker-compose.yaml -f docker-compose.test.yaml up -d grafana redis postgresql --wait"
 
     [tool.poe.tasks.test-pytest]
     help = "Run test with pytest"
@@ -151,27 +152,30 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.dev]
     help = "Run flask app in development mode and run db"
-    cmd = "docker compose up dev"
-    envfile = ".env.secret"
+    cmd = "docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up dev"
 
     [tool.poe.tasks.prod]
     help = "Run flask app in development mode and run db"
-    cmd = "docker compose up prod"
-    envfile = ".env.secret"
+    cmd = "docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up prod"
 
     [tool.poe.tasks.gui]
     help = "Run flask app in development mode with gui"
     sequence = ["gui-deps", "sleep", "gui-flask"]
-    envfile = [".env.shared", ".env.secret"]
+    envfile = [".env.shared", ".env.dev", ".env.gui"]
 
     [tool.poe.tasks.gui-deps]
     help = "Run database and grafana for gui"
-    cmd = "docker compose up postgresql grafana-dev -d"
+    cmd = "docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d postgresql grafana"
 
     [tool.poe.tasks.gui-flask]
     help = "Run flask app in development mode with gui"
     cmd = "flask -A src run --debug"
     env = { "DISABLE_CELERY" = "true" }
+
+    [tool.poe.tasks.insert-config]
+    help = "Inserts the configs into the database"
+    cmd = "python scripts/insert_demonstration_simulation.py"
+    envfile = [".env.shared", ".env.secret"]
 
     [tool.poe.tasks.cov]
     help = "Run coverage report"

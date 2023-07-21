@@ -11,6 +11,9 @@ from sumolib import checkBinary
 
 from src.communicator.celery import celery
 from src.component import Component
+from src.wrapper.simulation_object_updating_component import (
+    SimulationObjectUpdatingComponent,
+)
 
 
 class Communicator:
@@ -39,9 +42,7 @@ class Communicator:
         components: List[Component] = None,
         max_tick: int = 86_400,
         sumo_port: int = None,
-        sumo_configuration: str = os.path.join(
-            "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
-        ),
+        sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):
         """Creates a new Communicator object"""
         self._configuration = sumo_configuration
@@ -49,6 +50,7 @@ class Communicator:
         self._components = components if components is not None else []
         self._sort_components()
         self._max_tick = max_tick
+        self._step_length = 0.02
 
     def run(self) -> str:
         """
@@ -74,6 +76,7 @@ class Communicator:
 
     def _run_with_gui(self):
         delay = os.getenv("SUMO_GUI_DELAY", 10)
+        time_to_teleport = os.getenv("SUMO_TIME_TO_TELEPORT", -1)
         traci.start(
             [
                 checkBinary("sumo-gui"),
@@ -82,7 +85,11 @@ class Communicator:
                 "--start",
                 "--quit-on-end",
                 "--delay",
-                delay,
+                str(delay),
+                "--step-length",
+                os.getenv("TICK_LENGTH"),
+                "--time-to-teleport",
+                str(time_to_teleport),
             ],
             port=self._port,
         )
@@ -111,7 +118,19 @@ class Communicator:
         """
 
         components = pickle.loads(components_pickle)
-        traci.start([checkBinary("sumo"), "-c", configuration], port=port)
+        time_to_teleport = os.getenv("SUMO_TIME_TO_TELEPORT", -1)
+        traci.start(
+            [
+                checkBinary("sumo"),
+                "-c",
+                configuration,
+                "--step-length",
+                os.getenv("TICK_LENGTH"),
+                "--time-to-teleport",
+                str(time_to_teleport),
+            ],
+            port=port,
+        )
 
         def update_state(max_tick: int, current_tick: int, sumo_running: bool):
             self.update_state(
@@ -180,6 +199,15 @@ def run_simulation_steps(
     sumo_running = True
     current_tick = 1
 
+    souc = next(
+        (
+            component
+            for component in components
+            if type(component) == SimulationObjectUpdatingComponent
+        )
+    )
+    souc.add_subscriptions()
+
     components.sort(key=lambda x: x.priority, reverse=True)
 
     update_state(current_tick, max_tick, sumo_running)
@@ -187,6 +215,7 @@ def run_simulation_steps(
     while current_tick <= max_tick:
         for component in components:
             component.next_tick(current_tick)
+
         traci.simulationStep()
         current_tick += 1
         update_state(current_tick, max_tick, sumo_running)

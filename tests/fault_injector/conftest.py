@@ -1,6 +1,7 @@
 import pytest
 from traci import vehicle
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
 from src.logger.logger import Logger
@@ -27,13 +28,39 @@ def token():
 
 
 @pytest.fixture
-def logger(run):
-    return Logger(run_id=run.id)
+def simulation_configuration(token):
+    return SimulationConfiguration.create(token=token.id)
 
 
 @pytest.fixture
-def interlocking():
-    return IInterlockingDisruptor()
+def simulation_configuration2(token):
+    return SimulationConfiguration.create(token=token.id)
+
+
+@pytest.fixture
+def run(simulation_configuration):
+    return Run.create(simulation_configuration=simulation_configuration.id)
+
+
+@pytest.fixture
+def event_bus(run):
+    bus = EventBus(run_id=run.id)
+    Logger(bus)
+    return bus
+
+
+class MockRouteController:
+    """Mock up for RouteController"""
+
+    method_calls: int = 0
+
+    def recalculate_all_routes(self):
+        self.method_calls += 1
+
+
+@pytest.fixture
+def interlocking_disruptor():
+    return IInterlockingDisruptor(MockRouteController())
 
 
 @pytest.fixture
@@ -52,13 +79,20 @@ def edge_re() -> Edge:
 
 
 @pytest.fixture
-def track(edge, edge_re):
-    return Track(edge, edge_re)
+def platform() -> Platform:
+    return Platform("fancy-platform", platform_id="platform-1", edge_id="fancy-edge")
 
 
+# pylint: disable=protected-access
 @pytest.fixture
 def track(edge, edge_re):
-    return Track(edge, edge_re)
+    track = Track(edge, edge_re)
+    edge._track = track
+    edge_re._track = track
+    return track
+
+
+# pylint: enable=protected-access
 
 
 @pytest.fixture
@@ -88,20 +122,38 @@ def combine_train_and_wrapper(
     return train, simulation_object_updater
 
 
+# pylint: disable=invalid-name, unused-argument
+# disabling invalid-name allows the names routeID and typeID, despite the fact,
+# that they don't follow snake_case
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
 
+# pylint: enable=invalid-name, unused-argument
+
+
+@pytest.fixture
+def max_speed(monkeypatch):
+    # pylint: disable-next=unused-argument
+    def set_max_speed(train_id: str, speed: float):
+        pass
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
 @pytest.fixture
 # pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
+def train(train_add, max_speed) -> Train:
+    return Train(
+        identifier="fault injector train",
+        train_type="cargo",
+        timetable=["platform-1", "platform-2"],
+    )
 
 
 @pytest.fixture
@@ -133,9 +185,9 @@ class MockTrainSpawner:
 
 
 @pytest.fixture
-def spawner(spawner_configuration, logger):
+def spawner(spawner_configuration, event_bus):
     spawner = Spawner(
-        logger=logger,
+        event_bus=event_bus,
         configuration=spawner_configuration,
         train_spawner=MockTrainSpawner(),
     )

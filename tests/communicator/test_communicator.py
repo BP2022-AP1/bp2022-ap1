@@ -24,7 +24,7 @@ def mock_traci(monkeypatch):
         return
 
     monkeypatch.setattr(
-        traci.simulation, "getAllSubscriptionResults", get_all_subscription_results
+        traci.vehicle, "getAllSubscriptionResults", get_all_subscription_results
     )
     monkeypatch.setattr(traci, "simulationStep", simulation_step)
     monkeypatch.setattr(traci, "start", start)
@@ -54,15 +54,19 @@ class TestCommunicator:
         mock_traci,
     ):  # pylint: disable=unused-argument
         mock = MockComponent()
-        communicator = Communicator(components=[mock])
+        communicator = Communicator(
+            components=[mock],
+            sumo_configuration=os.path.join(
+                "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            ),
+        )
         run_id = communicator.run()
         while Communicator.state(run_id) != "PROGRESS":
             if Communicator.state(run_id) == "FAILURE":
                 assert False
             sleep(1)
         Communicator.stop(run_id)
-
-        assert next_tick_mock.called
+        assert next_tick_mock.assert_called
 
     @patch("src.component.MockComponent.next_tick")
     def test_component_next_tick_is_called_add(
@@ -70,16 +74,20 @@ class TestCommunicator:
         mock_traci,
     ):  # pylint: disable=unused-argument
         mock = MockComponent()
-        communicator = Communicator()
+        communicator = Communicator(
+            sumo_configuration=os.path.join(
+                "data", "sumo", "example", "sumo-config", "example.scenario.sumocfg"
+            ),
+        )
         communicator.add_component(mock)
         run_id = communicator.run()
+        assert run_id != "no id available"
         while Communicator.state(run_id) != "PROGRESS":
             if Communicator.state(run_id) == "FAILURE":
                 assert False
             sleep(1)
         Communicator.stop(run_id)
-
-        assert next_tick_mock.called
+        assert next_tick_mock.assert_called
 
 
 @patch("src.communicator.communicator.Communicator._run_with_gui")
@@ -117,7 +125,7 @@ def test_components_are_ordered_correctly():
     communicator = Communicator()
     mock1 = MockComponent()
     mock2 = MockComponent()
-    mock2.priority = 100
+    mock2.priority = 10  # = "VERY_HIGH"
 
     communicator.add_component(mock1)
     communicator.add_component(mock2)

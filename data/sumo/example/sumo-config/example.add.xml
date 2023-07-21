@@ -1,5 +1,12 @@
-<additional>
-  <busStop id="station-0" lane="8f1ba-1_0" />
-  <busStop id="station-1" lane="7df3b-1_0" />
-  <busStop id="station-2" lane="e5339-1_0" />
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2023-06-02 15:37:40 by Eclipse SUMO netedit Version 1.15.0
+-->
+
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <!-- StoppingPlaces -->
+    <busStop id="bs_0" lane="85d3c-1_0" startPos="49.91" endPos="59.91"/>
+    <busStop id="bs_1" lane="84ef4-1_0" startPos="51.96" endPos="61.96"/>
+    <busStop id="bs_2" lane="8f9a9-1_0" startPos="55.35" endPos="65.35"/>
+    <busStop id="bs_3" lane="bf53d-0_0" startPos="7.14" endPos="17.14"/>
 </additional>

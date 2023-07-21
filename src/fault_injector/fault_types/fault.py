@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
@@ -9,7 +10,6 @@ from src.fault_injector.fault_strategies import (
     RegularFaultStrategy,
 )
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -21,9 +21,9 @@ class Fault(ABC):
 
     injected: bool = False
     configuration: FaultConfiguration
-    logger: Logger
+    event_bus: EventBus
     simulation_object_updater: SimulationObjectUpdatingComponent
-    interlocking: IInterlockingDisruptor
+    interlocking_disruptor: IInterlockingDisruptor
     strategy: FaultStrategy
 
     STRATEGY_CLASSES: dict[str, type] = {
@@ -34,15 +34,15 @@ class Fault(ABC):
     def __init__(
         self,
         configuration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
     ):
         self.configuration = configuration
         self.strategy = self.create_strategy_from_configuration(configuration)
-        self.logger = logger
+        self.event_bus = event_bus
         self.simulation_object_updater = simulation_object_updater
-        self.interlocking = interlocking
+        self.interlocking_disruptor = interlocking_disruptor
 
     def create_strategy_from_configuration(
         self, configuration: FaultConfiguration

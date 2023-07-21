@@ -1,11 +1,11 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.platform_blocked_fault import PlatformBlockedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -21,15 +21,11 @@ class TestPlatformBlockedFault:
         pass
 
     @pytest.fixture
-    def platform(self) -> Platform:
-        return Platform("fault injector platform")
-
-    @pytest.fixture
     def platform_blocked_fault_configuration(self, platform: Platform):
         return PlatformBlockedFaultConfiguration.create(
             **{
-                "start_tick": 20,
-                "end_tick": 200,
+                "start_time": 20,
+                "end_time": 200,
                 "description": "test PlatformBlockedFault",
                 "affected_element_id": platform.identifier,
                 "strategy": "regular",
@@ -40,15 +36,15 @@ class TestPlatformBlockedFault:
     def platform_blocked_fault(
         self,
         platform_blocked_fault_configuration: PlatformBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
     ):
         return PlatformBlockedFault(
             configuration=platform_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     def test_inject_platform_blocked_fault(
@@ -61,8 +57,11 @@ class TestPlatformBlockedFault:
         combine_platform_and_wrapper,
     ):
         assert not platform.blocked
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
+        platform_blocked_fault.inject_fault(tick)
+        assert (
+            platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 1
+        )
         assert platform.blocked
 
     def test_resolve_platform_blocked_fault(
@@ -74,9 +73,15 @@ class TestPlatformBlockedFault:
         # pylint: disable-next=unused-argument
         combine_platform_and_wrapper,
     ):
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.inject_fault(tick)
+        platform_blocked_fault.inject_fault(tick)
         assert platform.blocked
-        with pytest.raises(NotImplementedError):
-            platform_blocked_fault.resolve_fault(tick)
+        assert (
+            platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 1
+        )
+        platform_blocked_fault.resolve_fault(tick)
+        assert (
+            platform_blocked_fault.interlocking_disruptor.route_controller.method_calls
+            == 2
+        )
         assert not platform.blocked

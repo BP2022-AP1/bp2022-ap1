@@ -24,25 +24,31 @@ def fixture_client(app):
 
 @pytest.fixture(name="clear_admin_token")
 def fixture_clear_hashed_token():
-    return "token"
+    return "admin_token"
 
 
 @pytest.fixture(name="admin_token", autouse=True)
 def fixture_admin_token(clear_admin_token):
     hashed_token = hashlib.sha256(clear_admin_token.encode()).hexdigest()
-    name = "admin"
+    token = Token.select().where(Token.hashedToken == hashed_token)
+    if token.exists():
+        return token.get()
+    name = "user"
     permission = "admin"
     return Token.create(name=name, permission=permission, hashedToken=hashed_token)
 
 
 @pytest.fixture(name="clear_token")
 def fixture_not_hashed_token():
-    return "token"
+    return "user_token"
 
 
 @pytest.fixture(name="token", autouse=True)
 def fixture_token(clear_token):
     hashed_token = hashlib.sha256(clear_token.encode()).hexdigest()
+    token = Token.select().where(Token.hashedToken == hashed_token)
+    if token.exists():
+        return token.get()
     name = "user"
     permission = "user"
     return Token.create(name=name, permission=permission, hashedToken=hashed_token)

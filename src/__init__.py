@@ -14,6 +14,9 @@ from src.api.schedule import bp as schedule_bp
 from src.api.simulation import bp as simulation_bp
 from src.api.token import bp as token_bp
 from src.data_science.grafana_data_registration import define_and_register_data
+from src.implementor.models import Token
+from src.implementor.permission import Permission
+from src.implementor.token import hash_token
 
 
 def _post_data(path, data):
@@ -25,13 +28,19 @@ def _post_data(path, data):
             timeout=10,
         )
     except RequestException as exception:
-        print("An exception while initializing Grafana occurred\n", exception)
+        print(
+            "An exception while initializing Grafana occurred\n", exception, path, data
+        )
         return None
 
 
 def initialize_grafana():
     """Initialize Grafana"""
-    with open("grafana/local/datasource.json", "r", encoding="UTF-8") as file:
+    data_source_file_path = "grafana/local/datasource.json"
+    if os.environ["GRAFANA_HOST"] == "localhost":
+        data_source_file_path = "grafana/local/datasource_local.json"
+
+    with open(data_source_file_path, "r", encoding="UTF-8") as file:
         data_source = json.load(file)
     result = _post_data(
         f"http://{os.environ['GRAFANA_HOST']}:3000/api/datasources", data_source
@@ -39,6 +48,13 @@ def initialize_grafana():
     if result is None:
         return
     try:
+        result_json = result.json()
+        if (
+            "message" in result_json
+            and result_json["message"]
+            == "data source with the same name already exists"
+        ):
+            return
         data_source_uid = result.json()["datasource"]["uid"]
     except KeyError as exception:
         print("An exception while initializing Grafana occurred\n", exception)
@@ -61,6 +77,28 @@ def initialize_grafana():
                 f"http://{os.environ['GRAFANA_HOST']}:3000/api/dashboards/db",
                 data_dashboard,
             )
+
+
+def insert_first_token():
+    """
+    Insert first admin token defined in env variables.
+    """
+    name = "first-admin-token"
+    permission = Permission.ADMIN.value
+    clear_token = os.getenv("FIRST_ADMIN_TOKEN", None)
+    if clear_token is not None:
+        hashed_token = hash_token(clear_token)
+        if (
+            Token.select()
+            .where(
+                (Token.hashedToken == hashed_token)
+                & (Token.name == name)
+                & (Token.permission == permission)
+            )
+            .exists()
+        ):
+            return
+        Token.create(hashedToken=hashed_token, permission=permission, name=name)
 
 
 def create_app(test_config=None) -> Flask:
@@ -94,5 +132,6 @@ def create_app(test_config=None) -> Flask:
 
     define_and_register_data()
     initialize_grafana()
+    insert_first_token()
 
     return app

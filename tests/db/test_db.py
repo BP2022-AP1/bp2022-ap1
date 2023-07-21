@@ -1,10 +1,8 @@
 from datetime import datetime
-from uuid import UUID
 
-import marshmallow as marsh
 from peewee import IntegerField
 
-from src.base_model import BaseModel, SerializableBaseModel, db
+from src.base_model import SerializableBaseModel, db
 from tests.decorators import recreate_db_setup
 
 
@@ -46,6 +44,7 @@ class TestDB:
             "updated_at": str(test_obj.updated_at),
             "created_at": str(test_obj.created_at),
             "test_value": 1,
+            "readable_id": test_obj.readable_id,
         }.items() == test_obj.to_dict().items()
 
     def test_created_at(self):

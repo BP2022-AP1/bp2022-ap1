@@ -1,22 +1,29 @@
 from abc import ABC, abstractmethod
 
-from src.logger.logger import Logger
+from src.event_bus.event_bus import EventBus
 
 
 class Component(ABC):
     """Interface for components that receive ticks."""
 
-    logger: Logger
+    event_bus: EventBus
     priority: int
 
-    def __init__(self, logger: Logger, priority: int):
+    PRIORITY_LEVELS: dict[str, int] = {
+        "VERY_HIGH": 10,
+        "HIGH": 9,
+        "MEDIUM": 8,
+        "LOW": 7,
+    }
+
+    def __init__(self, event_bus: EventBus, priority: str = "LOW"):
         """Initializes the component.
 
-        :param logger: reference to the gobal logger
+        :param event_bus: reference to the global event_bus
         :param priority: priority of the component for sorting purposes
         """
-        self.logger = logger
-        self.priority = priority
+        self.event_bus = event_bus
+        self.priority = self.PRIORITY_LEVELS[priority]
 
     @abstractmethod
     def next_tick(self, tick: int):
@@ -32,7 +39,7 @@ class MockComponent(Component):
     """Mock for a simple component to check if next tick is called"""
 
     def __init__(self):
-        Component.__init__(self, None, 1)
+        Component.__init__(self, None)
 
     def next_tick(self, tick: int):
         pass

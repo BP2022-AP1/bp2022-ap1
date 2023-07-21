@@ -1,17 +1,22 @@
 import os
 from collections import defaultdict
-from typing import Tuple
+from typing import List, Tuple
 
 import pytest
-from traci import constants, edge, simulation, trafficlight, vehicle
+from planpro_importer.reader import PlanProReader
+from traci import constants, edge, trafficlight, vehicle
 
 from src.interlocking_component.infrastructure_provider import (
     SumoInfrastructureProvider,
 )
+from src.interlocking_component.route_controller import (
+    TopologyInitializer,
+    UninitializedTrain,
+)
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Track, Train
+from src.wrapper.simulation_objects import Edge, Platform, Switch, Track, Train
 from src.wrapper.train_builder import TrainBuilder
 
 
@@ -21,15 +26,13 @@ def results(monkeypatch):
         def subscription_results():
             return defaultdict(int)
 
-        dict = defaultdict(subscription_results)
+        dict_ = defaultdict(subscription_results)
         edge_dict = defaultdict(int)
-        edge_dict[constants.VAR_ROAD_ID] = "cfc57-0"
-        dict["fake-sim-train"] = edge_dict
-        return dict
+        edge_dict[constants.VAR_ROAD_ID] = "bf53d-0"
+        dict_["fake-sim-train"] = edge_dict
+        return dict_
 
-    monkeypatch.setattr(
-        simulation, "getAllSubscriptionResults", get_subscription_result
-    )
+    monkeypatch.setattr(vehicle, "getAllSubscriptionResults", get_subscription_result)
 
 
 @pytest.fixture
@@ -78,31 +81,72 @@ def vehicle_route(monkeypatch):
 
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    def add_train(identifier, routeID=None, typeID=None):
+        # pylint: disable=invalid-name, unused-argument
+        # We want to use the same signature as the TraCI methods
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
 
 @pytest.fixture
-def edge1() -> Edge:
-    return Edge("cfc57-0")
+def train_subscribe(monkeypatch):
+    def subscribe_train(identifier, subscriptions=None):
+        assert identifier is not None
+        assert subscriptions == [
+            constants.VAR_POSITION,
+            constants.VAR_ROAD_ID,
+            constants.VAR_SPEED,
+        ]
+
+    monkeypatch.setattr(vehicle, "subscribe", subscribe_train)
 
 
 @pytest.fixture
-def edge_re() -> Edge:
-    return Edge("cfc57-0-re")
+def train_set_route_id(monkeypatch):
+    def set_route_id_train(identifier, route_id=None):
+        assert identifier is not None
+        assert route_id is not None
+
+    monkeypatch.setattr(vehicle, "setRouteID", set_route_id_train)
+
+
+@pytest.fixture
+def train_route_update(monkeypatch):
+    def update_route(identifier, routeID=None):
+        # pylint: disable=invalid-name
+        # We want to use the same signature as the TraCI methods
+        assert identifier is not None
+        assert routeID is not None
+
+    monkeypatch.setattr(vehicle, "setRouteID", update_route)
+
+
+@pytest.fixture
+def edge1() -> Edge:
+    return Edge("bf53d-0")
+
+
+@pytest.fixture
+def edge1_re() -> Edge:
+    return Edge("bf53d-0-re")
 
 
 @pytest.fixture
 def edge2() -> Edge:
-    return Edge("cfc57-1")
+    return Edge("bf53d-1")
 
 
 @pytest.fixture
-def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Train:
+def train(
+    train_add,
+    train_route_update,
+    train_set_route_id,
+    max_speed,
+    configured_souc: SimulationObjectUpdatingComponent,
+    edge1: Edge,
+) -> Train:
     # pylint: disable=unused-argument
     created_train = Train(
         identifier="fake-sim-train",
@@ -110,6 +154,7 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
         timetable=[],
         from_simulator=True,
     )
+    created_train.train_type.priority = 0
     created_train.updater = configured_souc
     created_train.update(
         {
@@ -117,23 +162,32 @@ def train(train_add, configured_souc: SimulationObjectUpdatingComponent) -> Trai
                 100,
                 100,
             ),
-            constants.VAR_ROAD_ID: "cfc57-0",
-            constants.VAR_ROUTE: "testing-route",
+            constants.VAR_ROAD_ID: "bf53d-0",
             constants.VAR_SPEED: 10.2,
         }
     )
+    created_train.route = "testing-route"
     created_train.train_type.update(
         {
             constants.VAR_MAXSPEED: 11,
         }
     )
+    created_train.reserved_tracks.append(created_train.edge.track)
+    print(created_train.edge.track.identifier)
+    print(created_train.edge.track.nodes[0].identifier)
+    print(created_train.edge.track.nodes[1].identifier)
+    print(isinstance(created_train.edge.track.nodes[1], Switch))
+    created_train.edge.track.reservations.append((created_train, created_train.edge))
 
     return created_train
 
 
 @pytest.fixture
-def track(edge1: Edge, edge_re: Edge) -> Track:
-    return Track(edge1, edge_re)
+def track(edge1, edge1_re):
+    track = Track(edge1, edge1_re)
+    #    edge1._track = track
+    #    edge1_re._track = track
+    return track
 
 
 @pytest.fixture
@@ -142,11 +196,11 @@ def switch() -> Switch:
 
 
 @pytest.fixture
-def platform() -> Platform:
+def platform(edge1: Edge) -> Platform:
     return Platform(
         identifier="fancy-city-platform-1",
         platform_id="fancy-city-platform-1",
-        edge_id="cfc57-0",
+        edge_id=edge1.identifier,
     )
 
 
@@ -167,12 +221,18 @@ def configured_souc(
         )
     )
     souc.infrastructure_provider = infrastructure_provider
+    path_name = os.path.join("data", "planpro", "example.ppxml")
+    yaramo_topology = PlanProReader(path_name).read_topology_from_plan_pro_file()
+    topology_initializer = TopologyInitializer(souc, yaramo_topology)
+    topology_initializer.initialize_all()
     return souc
 
 
 @pytest.fixture
 def infrastructure_provider() -> SumoInfrastructureProvider:
     class IPMock:
+        """Mock for the infrastructure provider"""
+
         def train_drove_onto_track(self, train: Train, edge: Edge):
             pass
 
@@ -183,16 +243,33 @@ def infrastructure_provider() -> SumoInfrastructureProvider:
 
 
 class MockRouteController:
-    def set_spawn_fahrstrasse(self, start: Track, end: Track):
-        print(start.identifier, end.identifier, start.identifier == "7df3b-1-re")
-        if start.identifier == "7df3b-1-re":
-            return True
-        return False
+    """Mock for the route controller"""
+
+    reserve_for_initialized_train_count = 0
+    set_spawn_fahrstrasse_count = 0
+
+    def set_spawn_fahrstrasse(self, timetable: List[Platform], start: Edge):
+        reservation_placeholder = UninitializedTrain(timetable)
+        end = timetable[1].edge
+        self.set_spawn_fahrstrasse_count += 1
+        if start.identifier == "bf53d-0" and end.identifier == "8f9a9-1":
+            return (True, reservation_placeholder)
+        return (False, reservation_placeholder)
+
+    def reserve_for_initialized_train(
+        self, reservation_placeholder: UninitializedTrain, train: Train
+    ):
+        assert isinstance(reservation_placeholder, UninitializedTrain)
+        assert isinstance(train, Train)
+        self.reserve_for_initialized_train_count += 1
 
 
 @pytest.fixture
 def spawner(
-    configured_souc: SimulationObjectUpdatingComponent, train_add
+    configured_souc: SimulationObjectUpdatingComponent,
+    train_add,
+    train_subscribe,
+    max_speed,
 ) -> Tuple[SimulationObjectUpdatingComponent, TrainBuilder]:
     # pylint: disable=unused-argument
     return (configured_souc, TrainBuilder(configured_souc, MockRouteController()))

@@ -1,10 +1,7 @@
-from uuid import UUID
-
-import marshmallow as marsh
-import peewee
 import pytest
 
 from src.base_model import BaseModel
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
@@ -34,7 +31,6 @@ from src.fault_injector.fault_types.track_speed_limit_fault import TrackSpeedLim
 from src.fault_injector.fault_types.train_prio_fault import TrainPrioFault
 from src.fault_injector.fault_types.train_speed_fault import TrainSpeedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
@@ -49,8 +45,8 @@ from tests.decorators import recreate_db_setup
             TrainSpeedFaultConfiguration,
             TrainSpeedFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrainSpeedFault",
                 "affected_element_id": "12345678",
                 "new_speed": 40,
@@ -61,8 +57,8 @@ from tests.decorators import recreate_db_setup
             PlatformBlockedFaultConfiguration,
             PlatformBlockedFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "PlatformBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -72,8 +68,8 @@ from tests.decorators import recreate_db_setup
             TrackBlockedFaultConfiguration,
             TrackBlockedFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrackBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -83,8 +79,8 @@ from tests.decorators import recreate_db_setup
             TrainPrioFaultConfiguration,
             TrainPrioFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrainPrioFault",
                 "affected_element_id": "12345678",
                 "new_prio": 1,
@@ -95,8 +91,8 @@ from tests.decorators import recreate_db_setup
             TrackSpeedLimitFaultConfiguration,
             TrackSpeedLimitFault,
             {
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "TrackSpeedLimitFault",
                 "affected_element_id": "12345678",
                 "new_speed_limit": 60,
@@ -106,7 +102,9 @@ from tests.decorators import recreate_db_setup
     ],
 )
 class TestAffectedElementDoesNotExist:
-    """Test cases where the requested element for injecting a fault does not exist (in the simulation)"""
+    """Test cases where the requested element for injecting a
+    fault does not exist (in the simulation)
+    """
 
     @recreate_db_setup
     def setup_method(self):
@@ -120,16 +118,16 @@ class TestAffectedElementDoesNotExist:
     def fault(
         self,
         fault_configuration: FaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         fault_type: Fault,
     ):
         return fault_type(
             configuration=fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     def test_injection(self, tick, fault: Fault):
@@ -142,7 +140,9 @@ class TestAffectedElementDoesNotExist:
 
 
 class TestAffectedElementDoesNotExistScheduleBlockedFault:
-    """Tests cases where the requested element for injecting a schedule blocked fault does not exist (in the simulation)"""
+    """Tests cases where the requested element for injecting a schedule "
+    "blocked fault does not exist (in the simulation)
+    """
 
     @recreate_db_setup
     def setup_method(self):
@@ -152,8 +152,8 @@ class TestAffectedElementDoesNotExistScheduleBlockedFault:
     def schedule_blocked_fault_configuration(self):
         return ScheduleBlockedFaultConfiguration(
             **{
-                "start_tick": 1,
-                "end_tick": 100,
+                "start_time": 1,
+                "end_time": 100,
                 "description": "ScheduleBlockedFault",
                 "affected_element_id": "12345678",
                 "strategy": "regular",
@@ -164,16 +164,16 @@ class TestAffectedElementDoesNotExistScheduleBlockedFault:
     def schedule_blocked_fault(
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
             configuration=schedule_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
             spawner=spawner,
         )
 

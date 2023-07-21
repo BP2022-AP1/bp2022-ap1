@@ -4,7 +4,9 @@ from datetime import datetime
 
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import SimulationConfiguration, Token
+from src.logger.logger import Logger
 from src.schedule.demand_schedule_strategy import DemandScheduleStrategy
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
 from src.schedule.regular_schedule_strategy import RegularScheduleStrategy
@@ -22,12 +24,12 @@ from src.spawner.spawner import (
 
 
 @pytest.fixture
-def strategy_start_tick() -> int:
+def strategy_start_time() -> int:
     return 1000
 
 
 @pytest.fixture
-def strategy_end_tick() -> int:
+def strategy_end_time() -> int:
     return 2000
 
 
@@ -37,7 +39,7 @@ def regular_strategy_frequency() -> int:
 
 
 @pytest.fixture
-def random_strategy_trains_per_1000_ticks() -> float:
+def random_strategy_trains_per_1000_seconds() -> float:
     return 10.0
 
 
@@ -47,9 +49,9 @@ def random_strategy_seed() -> int:
 
 
 @pytest.fixture
-def random_strategy_spawn_ticks() -> list[int]:
-    # These are the ticks at which trains are spawned when using seed=42
-    # and trains_per_1000_ticks=10.0
+def random_strategy_spawn_seconds() -> list[int]:
+    # These are the seconds at which trains are spawned when using seed=42
+    # and trains_per_1000_seconds=10.0
     return [
         1019,
         1124,
@@ -66,7 +68,7 @@ def random_strategy_spawn_ticks() -> list[int]:
 
 
 @pytest.fixture
-def demand_strategy_spawn_ticks() -> list[int]:
+def demand_strategy_spawn_seconds() -> list[int]:
     return [
         4600,
         7300,
@@ -513,13 +515,13 @@ def demand_strategy_all_none_interval() -> tuple[datetime, datetime]:
 
 @pytest.fixture
 def regular_train_schedule_data(
-    strategy_start_tick: int, strategy_end_tick: int, regular_strategy_frequency: int
+    strategy_start_time: int, strategy_end_time: int, regular_strategy_frequency: int
 ) -> dict[str, any]:
     return {
         "schedule_type": "TrainSchedule",
         "strategy_type": "RegularScheduleStrategy",
-        "strategy_start_tick": strategy_start_tick,
-        "strategy_end_tick": strategy_end_tick,
+        "strategy_start_time": strategy_start_time,
+        "strategy_end_time": strategy_end_time,
         "train_schedule_train_type": "passenger",
         "regular_strategy_frequency": regular_strategy_frequency,
     }
@@ -527,37 +529,37 @@ def regular_train_schedule_data(
 
 @pytest.fixture
 def random_train_schedule_data(
-    strategy_start_tick: int,
-    strategy_end_tick: int,
-    random_strategy_trains_per_1000_ticks: float,
+    strategy_start_time: int,
+    strategy_end_time: int,
+    random_strategy_trains_per_1000_seconds: float,
     random_strategy_seed: int,
 ) -> dict[str, any]:
     return {
         "schedule_type": "TrainSchedule",
         "strategy_type": "RandomScheduleStrategy",
-        "strategy_start_tick": strategy_start_tick,
-        "strategy_end_tick": strategy_end_tick,
+        "strategy_start_time": strategy_start_time,
+        "strategy_end_time": strategy_end_time,
         "train_schedule_train_type": "cargo",
-        "random_strategy_trains_per_1000_ticks": random_strategy_trains_per_1000_ticks,
+        "random_strategy_trains_per_1000_seconds": random_strategy_trains_per_1000_seconds,
         "random_strategy_seed": random_strategy_seed,
     }
 
 
 @pytest.fixture
 def demand_train_schedule_data(
-    strategy_start_tick: int,
+    strategy_start_time: int,
     demand_strategy_power_station: str,
     demand_strategy_scaling_factor: float,
     demand_strategy_available_interval: tuple[datetime, datetime],
 ) -> dict[str, any]:
-    ticks = (
+    seconds = (
         demand_strategy_available_interval[1] - demand_strategy_available_interval[0]
     ).total_seconds()
     return {
         "schedule_type": "TrainSchedule",
         "strategy_type": "DemandScheduleStrategy",
-        "strategy_start_tick": strategy_start_tick,
-        "strategy_end_tick": strategy_start_tick + int(ticks),
+        "strategy_start_time": strategy_start_time,
+        "strategy_end_time": strategy_start_time + int(seconds),
         "train_schedule_train_type": "cargo",
         "demand_strategy_power_station": demand_strategy_power_station,
         "demand_strategy_scaling_factor": demand_strategy_scaling_factor,
@@ -742,10 +744,11 @@ def mock_train_spawner() -> object:
         def spawn_train(
             self, identifier: str, timetable: list[str], train_type: str
         ) -> bool:
+            ticks_per_second = int(1.0 / float(os.environ["TICK_LENGTH"]))
             if self._next_spawn_fails:
                 self._next_spawn_fails = False
                 return False
-            self.spawn_history.append(int(identifier.split("_")[1]))
+            self.spawn_history.append(int(identifier.split("_")[1]) // ticks_per_second)
             self.identifier = identifier
             self.timetable = timetable
             self.train_type = train_type
@@ -758,13 +761,20 @@ def mock_train_spawner() -> object:
 
 
 @pytest.fixture
+def event_bus(run) -> EventBus:
+    bus = EventBus(run_id=run.id)
+    Logger(bus)
+    return bus
+
+
+@pytest.fixture
 def spawner(
     spawner_configuration: SpawnerConfiguration,
-    mock_logger: object,
+    event_bus: EventBus,
     mock_train_spawner: object,
 ) -> Spawner:
     return Spawner(
         configuration=spawner_configuration,
-        logger=mock_logger,
+        event_bus=event_bus,
         train_spawner=mock_train_spawner,
     )

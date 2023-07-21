@@ -1,3 +1,5 @@
+import os
+
 from src.schedule.schedule import Schedule, SpawnerProtocol
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.schedule_strategy import ScheduleStrategy
@@ -5,6 +7,8 @@ from src.schedule.schedule_strategy import ScheduleStrategy
 
 class TrainSchedule(Schedule):
     """A schedule for spawning SUMO trains."""
+
+    TICKS_PER_SECOND = int(1.0 / float(os.environ["TICK_LENGTH"]))
 
     @classmethod
     def from_schedule_configuration(cls, schedule_configuration: ScheduleConfiguration):
@@ -15,7 +19,7 @@ class TrainSchedule(Schedule):
         """
         assert schedule_configuration.schedule_type == "TrainSchedule"
         platform_ids = [
-            platform_reference.id
+            platform_reference.simulation_platform_id
             for platform_reference in sorted(
                 schedule_configuration.train_schedule_platform_references,
                 key=lambda ref: ref.index,
@@ -47,13 +51,15 @@ class TrainSchedule(Schedule):
         self.platform_ids = platform_ids
         super().__init__(strategy, id_)
 
-    def _spawn(self, spawner: SpawnerProtocol, tick: int) -> bool:
+    def _spawn(self, spawner: SpawnerProtocol, seconds: int) -> bool:
         """Spawns a vehicle.
 
         :param spawner: The calling Spawner.
-        :param tick: The current tick
+        :param seconds: The elapsed seconds
         :return: if the spawning was successful
         """
         return spawner.train_spawner.spawn_train(
-            f"{self.id}_{tick}_{self.train_type}", self.platform_ids, self.train_type
+            f"{self.id}_{seconds * self.TICKS_PER_SECOND}_{self.train_type}",
+            self.platform_ids,
+            self.train_type,
         )

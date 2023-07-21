@@ -27,7 +27,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
     TrainSpeedFaultConfigurationXSimulationConfiguration,
 )
-from src.implementor.models import Run, SimulationConfiguration, Token
+from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.interlocking_configuration import (
     InterlockingConfiguration,
 )
@@ -45,6 +45,7 @@ from src.spawner.spawner import (
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
+# pylint: disable=duplicate-code
 @pytest.fixture
 def token():
     clear_token = "token"
@@ -64,12 +65,12 @@ def interlocking_configuration():
 
 
 @pytest.fixture
-def strategy_start_tick() -> int:
+def strategy_start_time() -> int:
     return 1000
 
 
 @pytest.fixture
-def strategy_end_tick() -> int:
+def strategy_end_time() -> int:
     return 2000
 
 
@@ -80,13 +81,13 @@ def regular_strategy_frequency() -> int:
 
 @pytest.fixture
 def regular_train_schedule_data(
-    strategy_start_tick: int, strategy_end_tick: int, regular_strategy_frequency: int
+    strategy_start_time: int, strategy_end_time: int, regular_strategy_frequency: int
 ) -> dict[str, any]:
     return {
         "schedule_type": "TrainSchedule",
         "strategy_type": "RegularScheduleStrategy",
-        "strategy_start_tick": strategy_start_tick,
-        "strategy_end_tick": strategy_end_tick,
+        "strategy_start_time": strategy_start_time,
+        "strategy_end_time": strategy_end_time,
         "train_schedule_train_type": "passenger",
         "regular_strategy_frequency": regular_strategy_frequency,
     }
@@ -134,28 +135,39 @@ def regular_train_schedule(
 
 
 @pytest.fixture
-def spawner_configuration(
+def spawner_configuration_data(
     regular_train_schedule: TrainSchedule,
+) -> dict[str, any]:
+    return {
+        "schedule": [regular_train_schedule.id],
+    }
+
+
+@pytest.fixture
+def spawner_configuration(
+    spawner_configuration_data: dict[str, any],
 ) -> SpawnerConfiguration:
     configuration = SpawnerConfiguration()
     configuration.save()
-    SpawnerConfigurationXSchedule(
-        spawner_configuration_id=configuration.id,
-        schedule_configuration_id=regular_train_schedule.id,
-    ).save()
+    for schedule_configuration_id in spawner_configuration_data["schedule"]:
+        SpawnerConfigurationXSchedule(
+            spawner_configuration_id=configuration.id,
+            schedule_configuration_id=schedule_configuration_id,
+        ).save()
     return configuration
 
 
 @pytest.fixture
 def another_spawner_configuration(
-    regular_train_schedule: TrainSchedule,
+    spawner_configuration_data: dict[str, any],
 ) -> SpawnerConfiguration:
     configuration = SpawnerConfiguration()
     configuration.save()
-    SpawnerConfigurationXSchedule(
-        spawner_configuration_id=configuration.id,
-        schedule_configuration_id=regular_train_schedule.id,
-    ).save()
+    for schedule_configuration_id in spawner_configuration_data["schedule"]:
+        SpawnerConfigurationXSchedule(
+            spawner_configuration_id=configuration.id,
+            schedule_configuration_id=schedule_configuration_id,
+        ).save()
     return configuration
 
 
@@ -163,15 +175,17 @@ def another_spawner_configuration(
 
 
 @pytest.fixture
-def platform() -> Platform:
-    return Platform("fault injector platform")
+def platform(edge: Edge) -> Platform:
+    return Platform(
+        "fault injector platform", platform_id="platform-1", edge_id=edge.identifier
+    )
 
 
 @pytest.fixture
 def platform_blocked_fault_configuration_data(platform: Platform) -> dict:
     return {
-        "start_tick": 20,
-        "end_tick": 200,
+        "start_time": 20,
+        "end_time": 200,
         "description": "test PlatformBlockedFault",
         "affected_element_id": platform.identifier,
         "strategy": "regular",
@@ -217,8 +231,8 @@ def track(edge, edge_re):
 @pytest.fixture
 def track_blocked_fault_configuration_data(track: Track) -> dict:
     return {
-        "start_tick": 30,
-        "end_tick": 300,
+        "start_time": 30,
+        "end_time": 300,
         "description": "test TrackBlockedFault",
         "affected_element_id": track.identifier,
         "strategy": "regular",
@@ -249,8 +263,8 @@ def track_speed_limit_fault_configuration_data(
     track: Track,
 ) -> dict:
     return {
-        "start_tick": 4,
-        "end_tick": 130,
+        "start_time": 4,
+        "end_time": 130,
         "description": "test TrackSpeedLimitFault",
         "affected_element_id": track.identifier,
         "new_speed_limit": 60,
@@ -281,25 +295,41 @@ def another_track_speed_limit_fault_configuration(
 
 @pytest.fixture
 def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
+    # definition of function set by the traci module
+    # pylint: disable-next=unused-argument disable-next=invalid-name
+    def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert route is not None
-        assert train_type is not None
+        assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
 
 
 @pytest.fixture
+def max_speed(monkeypatch):
+    # definition of function set by the traci module
+    # pylint: disable-next=unused-argument
+    def set_max_speed(train_id: str, speed: float):
+        pass
+
+    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
+
+
+@pytest.fixture
+# Need train_add and max_speed as fixtures to make sure that the traci module is patched
 # pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
+def train(train_add, max_speed) -> Train:
+    return Train(
+        identifier="fault injector train",
+        train_type="cargo",
+        timetable=["platform-1", "platform-2"],
+    )
 
 
 @pytest.fixture
 def train_prio_fault_configuration_data(train: Train) -> dict:
     return {
-        "start_tick": 50,
-        "end_tick": 500,
+        "start_time": 50,
+        "end_time": 500,
         "description": "test TrainPrioFault",
         "affected_element_id": train.identifier,
         "new_prio": 3,
@@ -319,47 +349,14 @@ def another_train_prio_fault_configuration(
     return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
 
 
-# ------------- TrainSpeedLimitFaultConfiguration ----------------
-
-
-@pytest.fixture
-def train_speed_fault_configuration(
-    train: Train,
-) -> TrainSpeedFaultConfiguration:
-    return TrainSpeedFaultConfiguration.create(
-        start_tick=40,
-        end_tick=400,
-        description="test TrainSpeedFault",
-        affected_element_id=train.identifier,
-        new_speed=30,
-        strategy="regular",
-    )
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, route, train_type):
-        assert identifier is not None
-        assert route is not None
-        assert train_type is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-# pylint: disable-next=unused-argument
-def train(train_add) -> Train:
-    return Train(identifier="fault injector train", train_type="cargo")
-
-
 # ------------- TrainSpeedFaultConfiguration ----------------
 
 
 @pytest.fixture
 def train_speed_fault_configuration_data(train: Train) -> dict:
     return {
-        "start_tick": 40,
-        "end_tick": 400,
+        "start_time": 40,
+        "end_time": 400,
         "description": "test TrainSpeedFault",
         "affected_element_id": train.identifier,
         "new_speed": 30,
@@ -398,8 +395,8 @@ def schedule():
 @pytest.fixture
 def schedule_blocked_fault_configuration_data(schedule) -> dict:
     return {
-        "start_tick": 30,
-        "end_tick": 300,
+        "start_time": 30,
+        "end_time": 300,
         "description": "test ScheduleBlockedFault",
         "affected_element_id": schedule.id,
         "strategy": "regular",

@@ -7,7 +7,13 @@ from src.implementor.models import Run, SimulationConfiguration, Token
 from src.spawner.spawner import SpawnerConfiguration
 
 
+# pylint: disable=duplicate-code
 class TestSimulationImplementor:
+    """
+    Tests for correct functionality of simulation configuration endpoint
+    if the input data is valid.
+    """
+
     def test_get_all_simulation_ids(self, token):
         simulation = SimulationConfiguration()
         simulation.save()
@@ -30,16 +36,16 @@ class TestSimulationImplementor:
 
         def verify_references(key: str):
             """
-            Verifies that the references between the simulation configuration and the component configuration exist
+            Verifies that the references between the simulation configuration
+            and the component configuration exist
+
             :param key: The key of the component configuration
             """
             assert set(simulation_configuration_data[key]) == set(
-                [
-                    getattr(reference, f"{key}_configuration").id
-                    for reference in getattr(
-                        simulation_configuration, f"{key}_configuration_references"
-                    )
-                ]
+                getattr(reference, f"{key}_configuration").id
+                for reference in getattr(
+                    simulation_configuration, f"{key}_configuration_references"
+                )
             )
 
         verify_references("platform_blocked_fault")
@@ -68,19 +74,18 @@ class TestSimulationImplementor:
     def test_get_single_simulation_configuration(
         self, token, simulation_configuration_full
     ):
+        run = Run.create(simulation_configuration=simulation_configuration_full)
         result, status = impl.simulation.get_simulation_configuration(
             {"identifier": str(simulation_configuration_full.id)}, token
         )
         assert status == 200
 
         def verify_references(key: str):
-            set(result[key]) == set(
-                [
-                    str(getattr(reference, f"{key}_configuration").id)
-                    for reference in getattr(
-                        simulation_configuration_full, f"{key}_configuration_references"
-                    )
-                ]
+            assert set(result[key]) == set(
+                str(getattr(reference, f"{key}_configuration").id)
+                for reference in getattr(
+                    simulation_configuration_full, f"{key}_configuration_references"
+                )
             )
 
         verify_references("platform_blocked_fault")
@@ -95,8 +100,9 @@ class TestSimulationImplementor:
             for reference in simulation_configuration_full.spawner_configuration_references
         ]
         spawner = spawners[0]
-
         assert result["spawner"] == str(spawner.id)
+
+        assert result["runs"] == [str(run.id)]
 
     def test_update_simulation_configuration_not_found(self, token):
         result, status = impl.simulation.get_simulation_configuration(
@@ -104,6 +110,18 @@ class TestSimulationImplementor:
         )
         assert status == 404
         assert result == "Simulation not found"
+
+    def test_update_simulation_configuration_with_run(
+        self, token, empty_simulation_configuration
+    ):
+        Run.create(simulation_configuration=empty_simulation_configuration)
+        result, status = impl.simulation.update_simulation_configuration(
+            {"identifier": str(empty_simulation_configuration.id)},
+            token,
+            {},
+        )
+        assert status == 400
+        assert result == "Simulation configuration is used in a run"
 
     def test_delete_simulation_configuration(
         self, token, simulation_configuration_full

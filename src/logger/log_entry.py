@@ -86,19 +86,19 @@ class SetSignalLogEntry(LogEntry):
     state_after = IntegerField(null=False)
 
 
-class TrainEnterBlockSectionLogEntry(LogEntry):
-    """A LogEntry that represents the entry of a train into a block section."""
+class TrainEnterEdgeLogEntry(LogEntry):
+    """A LogEntry that represents the entry of a train into an edge."""
 
     train_id = TextField(null=False)
-    block_section_id = TextField(null=False)
-    block_section_length = FloatField(null=False)
+    edge_id = TextField(null=False)
+    edge_length = FloatField(null=False)
 
 
-class TrainLeaveBlockSectionLogEntry(LogEntry):
-    """A LogEntry that represents the leaving of a train from a block section."""
+class TrainLeaveEdgeLogEntry(LogEntry):
+    """A LogEntry that represents the leaving of a train from an edge."""
 
     train_id = TextField(null=False)
-    block_section_id = TextField(null=False)
+    edge_id = TextField(null=False)
 
 
 class InjectFaultLogEntry(LogEntry):

@@ -1,10 +1,15 @@
-from typing import List
+from typing import List, Tuple
 
-from src.interlocking_component.route_controller import RouteController
+import traci
+
+from src.interlocking_component.route_controller import (
+    RouteController,
+    UninitializedTrain,
+)
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Platform, Train
+from src.wrapper.simulation_objects import Edge, Platform, Train
 
 
 class TrainBuilder:
@@ -28,25 +33,32 @@ class TrainBuilder:
         :param train_type: the type of the train (corresponds to a sumo train type)
         :return: if the spawning was successful
         """
-        timetable = self._convert_timetable(timetable)
+        timetable: List[Platform] = self._convert_timetable(timetable)
 
         assert len(timetable) >= 2
 
-        route = self._get_first_route(timetable[0], timetable[1])
+        starting_edge = timetable[0].edge
+
+        route, reservation_placeholder = self._get_first_route(timetable, starting_edge)
 
         if not route:
             return False
 
-        self._updater.simulation_objects.append(
-            Train(identifier, timetable, train_type, self._updater)
+        train = Train(identifier, timetable, train_type, self._updater, route_id=route)
+        traci.vehicle.subscribe(train.identifier, train.add_subscriptions())
+
+        self._updater.simulation_objects.append(train)
+
+        self.route_controller.reserve_for_initialized_train(
+            reservation_placeholder, train
         )
 
         return True
 
-    def _get_first_route(self, from_platform: Platform, to_platform: Platform) -> str:
-        return self.route_controller.set_spawn_fahrstrasse(
-            from_platform.track, to_platform.track
-        )
+    def _get_first_route(
+        self, timetable: List[Platform], starting_edge: Edge
+    ) -> Tuple[str, UninitializedTrain]:
+        return self.route_controller.set_spawn_fahrstrasse(timetable, starting_edge)
 
     def _convert_timetable(self, timetable: List[str]):
         converted = []

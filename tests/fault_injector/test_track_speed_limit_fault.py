@@ -1,12 +1,12 @@
 import pytest
 from traci import edge
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.track_speed_limit_fault_configuration import (
     TrackSpeedLimitFaultConfiguration,
 )
 from src.fault_injector.fault_types.track_speed_limit_fault import TrackSpeedLimitFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -25,8 +25,8 @@ class TestTrackSpeedLimitFault:
     def track_speed_limit_fault_configuration(self, track: Track):
         return TrackSpeedLimitFaultConfiguration.create(
             **{
-                "start_tick": 4,
-                "end_tick": 130,
+                "start_time": 4,
+                "end_time": 130,
                 "description": "test TrackSpeedLimitFault",
                 "affected_element_id": track.identifier,
                 "new_speed_limit": 60,
@@ -38,15 +38,15 @@ class TestTrackSpeedLimitFault:
     def track_speed_limit_fault(
         self,
         track_speed_limit_fault_configuration: TrackSpeedLimitFaultConfiguration,
-        logger: Logger,
-        interlocking: IInterlockingDisruptor,
+        event_bus: EventBus,
+        interlocking_disruptor: IInterlockingDisruptor,
         simulation_object_updater: SimulationObjectUpdatingComponent,
     ):
         return TrackSpeedLimitFault(
             configuration=track_speed_limit_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     @pytest.fixture
@@ -70,9 +70,12 @@ class TestTrackSpeedLimitFault:
     ):
         track.max_speed = 100
         assert track.max_speed == 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick=tick)
+        track_speed_limit_fault.inject_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.configuration.new_speed_limit
+        # assert (
+        #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
+        #     == 1
+        # )
 
     def test_resolve_track_speed_limit_fault(
         self,
@@ -86,8 +89,14 @@ class TestTrackSpeedLimitFault:
         # pylint: enable=unused-argument
     ):
         track.max_speed = 100
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.inject_fault(tick=tick)
-        with pytest.raises(NotImplementedError):
-            track_speed_limit_fault.resolve_fault(tick=tick)
+        track_speed_limit_fault.inject_fault(tick=tick)
+        # assert (
+        #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
+        #     == 1
+        # )
+        track_speed_limit_fault.resolve_fault(tick=tick)
         assert track.max_speed == track_speed_limit_fault.old_speed_limit
+        # assert (
+        #     track_speed_limit_fault.interlocking_disruptor.route_controller.method_calls
+        #     == 2
+        # )

@@ -1,6 +1,5 @@
+import os
 from itertools import zip_longest
-
-import pytest
 
 from src.implementor.models import SimulationConfiguration
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
@@ -10,6 +9,7 @@ from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
+    SpawnerConfigurationXSimulationConfiguration,
 )
 from tests.decorators import recreate_db_setup
 
@@ -25,11 +25,11 @@ class TestSpawner:
         self,
         spawner: Spawner,
         spawner_configuration: SpawnerConfiguration,
-        mock_logger: object,
+        event_bus: object,
         mock_train_spawner: object,
     ):
         assert spawner.configuration == spawner_configuration
-        assert spawner.logger == mock_logger
+        assert spawner.event_bus == event_bus
         assert spawner.train_spawner == mock_train_spawner
 
     def test_get_schedules(
@@ -45,8 +45,8 @@ class TestSpawner:
             schedule = spawner.get_schedule(configuration.id)
             assert schedule.id == configuration.id
             assert schedule.train_type == configuration.train_schedule_train_type
-            assert schedule.strategy.start_tick == configuration.strategy_start_tick
-            assert schedule.strategy.end_tick == configuration.strategy_end_tick
+            assert schedule.strategy.start_time == configuration.strategy_start_time
+            assert schedule.strategy.end_time == configuration.strategy_end_time
             if isinstance(schedule.strategy, RegularScheduleStrategy):
                 assert (
                     schedule.strategy.frequency
@@ -54,36 +54,39 @@ class TestSpawner:
                 )
             elif isinstance(schedule.strategy, RandomScheduleStrategy):
                 assert (
-                    schedule.strategy.trains_per_1000_ticks
-                    == configuration.random_strategy_trains_per_1000_ticks
+                    schedule.strategy.trains_per_1000_seconds
+                    == configuration.random_strategy_trains_per_1000_seconds
                 )
 
     def test_next_tick(
         self,
         spawner: Spawner,
         mock_train_spawner: object,
-        strategy_start_tick: int,
-        strategy_end_tick: int,
+        strategy_start_time: int,
+        strategy_end_time: int,
         regular_strategy_frequency: int,
-        random_strategy_spawn_ticks: list[int],
+        random_strategy_spawn_seconds: list[int],
     ):
-        regular_spawn_ticks = list(
+        # pylint: disable=protected-access
+
+        ticks_per_second = int(1 / float(os.environ["TICK_LENGTH"]))
+        regular_spawn_seconds = list(
             range(
-                strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
+                strategy_start_time, strategy_end_time + 1, regular_strategy_frequency
             )
         )
-        spawn_ticks = sorted(regular_spawn_ticks + random_strategy_spawn_ticks)
-        for tick in range(strategy_start_tick, strategy_end_tick + 1):
-            spawner.next_tick(tick)
+        spawn_seconds = sorted(regular_spawn_seconds + random_strategy_spawn_seconds)
+        for seconds in range(strategy_start_time, strategy_end_time + 1):
+            spawner.next_tick(seconds * ticks_per_second)
         assert all(
-            len(schedule._ticks_to_be_spawned) == 0
+            len(schedule._seconds_to_be_spawned) == 0
             for schedule in spawner._schedules.values()
         )
         assert all(
-            history_tick == spawn_tick
-            for history_tick, spawn_tick in zip_longest(
+            history_time == spawn_time
+            for history_time, spawn_time in zip_longest(
                 sorted(mock_train_spawner.spawn_history),
-                sorted(spawn_ticks),
+                sorted(spawn_seconds),
                 fillvalue=None,
             )
         )
@@ -106,10 +109,15 @@ class TestSpawnerConfiguration:
         obj_dict = spawner_configuration.to_dict()
         del obj_dict["created_at"]
         del obj_dict["updated_at"]
+        del obj_dict["readable_id"]
 
-        assert obj_dict == {
-            "id": str(spawner_configuration.id),
-        }
+        schedules = [
+            str(reference.schedule_configuration_id.id)
+            for reference in spawner_configuration.schedule_configuration_references
+        ]
+        assert set(obj_dict["schedule"]) == set(schedules)
+        del obj_dict["schedule"]
+        assert obj_dict == {"id": str(spawner_configuration.id)}
 
 
 class TestSpawnerConfigurationXSchedule:
@@ -139,26 +147,12 @@ class TestSpawnerConfigurationXSchedule:
         )
 
 
-class SpawnerConfigurationXSimulationConfiguration:
+class TestSpawnerConfigurationXSimulationConfiguration:
     """Tests for the SpawnerConfigurationXSimulationConfiguration"""
 
     @recreate_db_setup
     def setup_method(self):
         pass
-
-    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
-    def test_creation(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        spawner_configuration: SpawnerConfiguration,
-    ):
-        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
-            spawner_configuration=spawner_configuration,
-            schedule_configuration=simulation_configuration,
-        )
-        spawner_x_simulation.save()
-        assert spawner_x_simulation.spawner_configuration == spawner_configuration
-        assert spawner_x_simulation.schedule_configuration == simulation_configuration
 
     def test_back_references(
         self,
@@ -167,7 +161,7 @@ class SpawnerConfigurationXSimulationConfiguration:
     ):
         spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
             spawner_configuration=spawner_configuration,
-            schedule_configuration=simulation_configuration,
+            simulation_configuration=simulation_configuration,
         )
         spawner_x_simulation.save()
         assert len(simulation_configuration.spawner_configuration_references) == 1
@@ -180,24 +174,3 @@ class SpawnerConfigurationXSimulationConfiguration:
             spawner_configuration.simulation_configuration_references[0]
             == spawner_x_simulation
         )
-
-    @pytest.mark.usefixtures("simulation_configuration, spawner_configuration")
-    def test_serialization(
-        self,
-        simulation_configuration: SimulationConfiguration,
-        spawner_configuration: SpawnerConfiguration,
-    ):
-        spawner_x_simulation = SpawnerConfigurationXSimulationConfiguration(
-            spawner_configuration=spawner_configuration,
-            simulation_configuration=simulation_configuration,
-        )
-        spawner_x_simulation.save()
-        obj_dict = spawner_x_simulation.to_dict()
-        del obj_dict["created_at"]
-        del obj_dict["updated_at"]
-
-        assert obj_dict == {
-            "id": str(spawner_x_simulation.id),
-            "spawner_configuration": str(spawner_x_simulation.id),
-            "schedule_configuration": str(spawner_x_simulation.id),
-        }

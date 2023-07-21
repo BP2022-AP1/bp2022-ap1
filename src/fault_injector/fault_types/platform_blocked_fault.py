@@ -30,8 +30,8 @@ class PlatformBlockedFault(Fault):
         self.platform: Platform = self._get_platform()
         self.platform.blocked = True
 
-        self.interlocking.insert_platform_blocked(self.platform)
-        self.logger.inject_platform_blocked_fault(
+        self.interlocking_disruptor.insert_platform_blocked(self.platform)
+        self.event_bus.inject_platform_blocked_fault(
             tick, self.configuration.id, self.platform.identifier
         )
 
@@ -45,5 +45,5 @@ class PlatformBlockedFault(Fault):
             raise ValueError("Fault not injected")
 
         self.platform.blocked = False
-        self.interlocking.insert_platform_unblocked(self.platform)
-        self.logger.resolve_platform_blocked_fault(tick, self.configuration.id)
+        self.interlocking_disruptor.insert_platform_unblocked(self.platform)
+        self.event_bus.resolve_platform_blocked_fault(tick, self.configuration.id)

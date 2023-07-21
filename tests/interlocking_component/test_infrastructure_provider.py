@@ -51,14 +51,14 @@ class TestInfrastructurProvider:
         assert signal.state == Signal.State.GO
         assert get_rr_count() == rr_count
         assert get_gg_count() == gg_count + 1
-        assert sumo_mock_infrastructure_provider.logger.set_signal_go_count == 1
-        assert sumo_mock_infrastructure_provider.logger.set_signal_halt_count == 0
+        assert sumo_mock_infrastructure_provider.event_bus.set_signal_go_count == 1
+        assert sumo_mock_infrastructure_provider.event_bus.set_signal_halt_count == 0
         sumo_mock_infrastructure_provider.set_signal_state(yaramo_signal, "halt")
         assert signal.state == Signal.State.HALT
         assert get_rr_count() == rr_count + 1
         assert get_gg_count() == gg_count + 1
-        assert sumo_mock_infrastructure_provider.logger.set_signal_go_count == 1
-        assert sumo_mock_infrastructure_provider.logger.set_signal_halt_count == 1
+        assert sumo_mock_infrastructure_provider.event_bus.set_signal_go_count == 1
+        assert sumo_mock_infrastructure_provider.event_bus.set_signal_halt_count == 1
 
     def test_train_drove_onto_track(
         self,
@@ -84,14 +84,15 @@ class TestInfrastructurProvider:
         sumo_train: Train,
         sumo_edge: Edge,
     ):
+        assert len(sumo_train.reserved_tracks) == 1
+        assert len(sumo_edge.track.reservations) == 1
         interlocking_mock_infrastructure_provider.train_drove_off_track(
             sumo_train, sumo_edge
         )
-        assert (
-            interlocking_mock_infrastructure_provider.route_controller.maybe_free_fahrstrasse_count
-            == 1
-        )
-        interlocking = (
-            interlocking_mock_infrastructure_provider.route_controller.interlocking
-        )
+        route_controller = interlocking_mock_infrastructure_provider.route_controller
+        assert route_controller.maybe_free_fahrstrasse_count == 1
+        assert route_controller.remove_reservation_count == 1
+        interlocking = route_controller.interlocking
         assert interlocking.tds_count_out_count == 1
+        assert len(sumo_train.reserved_tracks) == 0
+        assert len(sumo_edge.track.reservations) == 0

@@ -1,11 +1,12 @@
+import os
 from abc import ABC, abstractmethod
 
 from peewee import ForeignKeyField
 
 from src.base_model import BaseModel, SerializableBaseModel
 from src.component import Component
+from src.event_bus.event_bus import EventBus
 from src.implementor.models import SimulationConfiguration
-from src.logger.logger import Logger
 from src.schedule.schedule import Schedule
 from src.schedule.schedule_configuration import ScheduleConfiguration
 from src.schedule.train_schedule import TrainSchedule
@@ -18,6 +19,19 @@ class SpawnerConfiguration(SerializableBaseModel):
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
 
+    def to_dict(self):
+        data = super().to_dict()
+        schedules = [
+            str(reference.schedule_configuration_id.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
+            for reference in self.schedule_configuration_references
+        ]
+        return {
+            "schedule": schedules,
+            **data,
+        }
+
 
 class SpawnerConfigurationXSchedule(BaseModel):
     """Reference table class for m:n relation
@@ -27,7 +41,9 @@ class SpawnerConfigurationXSchedule(BaseModel):
     spawner_configuration_id = ForeignKeyField(
         SpawnerConfiguration, null=False, backref="schedule_configuration_references"
     )
-    schedule_configuration_id = ForeignKeyField(ScheduleConfiguration, null=False)
+    schedule_configuration_id = ForeignKeyField(
+        ScheduleConfiguration, null=False, backref="spawner_configuration_references"
+    )
 
 
 class SpawnerConfigurationXSimulationConfiguration(BaseModel):
@@ -75,7 +91,8 @@ class Spawner(Component, ISpawnerDisruptor):
     _schedules: dict[str, Schedule]
     train_spawner: TrainBuilder
 
-    PRIORITY: int = 0  # This will need to be set to the correct value
+    PRIORITY: str = "LOW"
+    TICKS_PER_SECOND: int = int(1 / float(os.environ["TICK_LENGTH"]))
 
     def next_tick(self, tick: int):
         """Called to announce that the next tick occurred.
@@ -83,18 +100,20 @@ class Spawner(Component, ISpawnerDisruptor):
         :param tick: The current tick.
         :type tick: int
         """
+        if tick % self.TICKS_PER_SECOND != 0:
+            return
         for schedule in self._schedules.values():
-            schedule.maybe_spawn(tick, self)
+            schedule.maybe_spawn(tick // self.TICKS_PER_SECOND, self)
 
     def __init__(
         self,
-        logger: Logger,
+        event_bus: EventBus,
         configuration: SpawnerConfiguration,
         train_spawner: TrainBuilder,
     ):
         """Initializes the spawner.
 
-        :param logger: The logger.
+        :param event_bus: The event_bus.
         :param configuration: The configuration.
         :param train_spawner: The TrainSpawner.
         """
@@ -103,7 +122,9 @@ class Spawner(Component, ISpawnerDisruptor):
         # super(<CLASS>, self).__init__ calls the __init__ method of the next <CLASS> in the MRO
         # call <CLASS>.mro() to see the MRO of <CLASS>
         # pylint: disable=super-with-arguments
-        super(Spawner, self).__init__(logger, self.PRIORITY)  # calls Component.__init__
+        super(Spawner, self).__init__(
+            event_bus, self.PRIORITY
+        )  # calls Component.__init__
         self.configuration = configuration
         self.train_spawner = train_spawner
         self._load_schedules()
@@ -123,7 +144,7 @@ class Spawner(Component, ISpawnerDisruptor):
             schedule = schedule_subclass.from_schedule_configuration(
                 schedule_configuration
             )
-            self._schedules[schedule.id] = schedule
+            self._schedules[str(schedule.id)] = schedule
 
     def get_schedule(self, schedule_id: str) -> Schedule:
         """Returns the schedule with the given id.
@@ -131,18 +152,18 @@ class Spawner(Component, ISpawnerDisruptor):
         :param schedule_id: The id of the schedule.
         :return: The schedule.
         """
-        return self._schedules[schedule_id]
+        return self._schedules[str(schedule_id)]
 
     def block_schedule(self, schedule_id: str):
         """Blocks a schedule.
 
         :param schedule_id: The id of the schedule to block
         """
-        self._schedules[schedule_id].block()
+        self._schedules[str(schedule_id)].block()
 
     def unblock_schedule(self, schedule_id: str):
         """Unblocks a schedule.
 
         :param schedule_id: The id of the schedule to unblock
         """
-        self._schedules[schedule_id].unblock()
+        self._schedules[str(schedule_id)].unblock()

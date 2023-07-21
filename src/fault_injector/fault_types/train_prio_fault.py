@@ -25,8 +25,8 @@ class TrainPrioFault(Fault, TrainMixIn):
         self.old_prio = self.train.train_type.priority
         self.train.train_type.priority = self.configuration.new_prio
 
-        self.interlocking.insert_train_priority_changed(self.train)
-        self.logger.inject_train_prio_fault(
+        self.interlocking_disruptor.insert_train_priority_changed(self.train)
+        self.event_bus.inject_train_prio_fault(
             tick,
             self.configuration.id,
             self.train.identifier,
@@ -47,5 +47,5 @@ class TrainPrioFault(Fault, TrainMixIn):
             self.simulation_object_updater, self.train.identifier
         ):
             self.train.train_type.priority = self.old_prio
-            self.interlocking.insert_train_priority_changed(self.train)
-        self.logger.resolve_train_prio_fault(tick, self.configuration.id)
+            self.interlocking_disruptor.insert_train_priority_changed(self.train)
+        self.event_bus.resolve_train_prio_fault(tick, self.configuration.id)

@@ -2,7 +2,7 @@ from interlocking.infrastructureprovider.infrastructureprovider import (
     InfrastructureProvider,
 )
 
-from src.logger.logger import Logger
+from src.event_bus.event_bus import EventBus
 from src.wrapper.simulation_objects import Edge, Signal, Switch, Train
 
 
@@ -12,19 +12,19 @@ class SumoInfrastructureProvider(InfrastructureProvider):
     """
 
     route_controller: "RouteController"
-    logger: Logger
+    event_bus: EventBus
 
     def __init__(
         self,
         route_controller: "RouteController",
-        logger: Logger,
+        event_bus: EventBus,
     ):
         super().__init__()
         self.route_controller = route_controller
         self.route_controller.simulation_object_updating_component.infrastructure_provider = (
             self
         )
-        self.logger = logger
+        self.event_bus = event_bus
 
     def turn_point(self, yaramo_point, target_orientation):
         super().turn_point(yaramo_point, target_orientation)
@@ -50,7 +50,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
                 signal = potential_signal
                 break
         if target_state == "halt":
-            self.logger.set_signal(
+            self.event_bus.set_signal(
                 self.route_controller.tick,
                 signal.identifier,
                 signal.state,
@@ -58,7 +58,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
             )
             signal.state = Signal.State.HALT
         elif target_state == "go":
-            self.logger.set_signal(
+            self.event_bus.set_signal(
                 self.route_controller.tick,
                 signal.identifier,
                 signal.state,
@@ -81,14 +81,30 @@ class SumoInfrastructureProvider(InfrastructureProvider):
 
         self.route_controller.maybe_set_fahrstrasse(train, edge)
 
+        self.event_bus.train_enter_edge(
+            self.route_controller.tick,
+            train.identifier,
+            edge.identifier,
+            edge.length,
+        )
+
     def train_drove_off_track(self, train: Train, edge: Edge):
         """This method calls tds_count_out with the track_segment_id of the given edge.
 
         :param edge: The edge the train drove off of
         :type edge: Edge
         """
+        self.route_controller.remove_reservation(train, edge)
+
         track_segment_id = edge.identifier.split("-re")[0]
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_out(track_segment_id)
 
-        self.route_controller.maybe_free_fahrstrasse(train, edge)
+        self.route_controller.maybe_free_fahrstrasse(edge)
+
+        self.event_bus.train_leave_edge(
+            self.route_controller.tick,
+            train.identifier,
+            edge.identifier,
+            edge.length,
+        )

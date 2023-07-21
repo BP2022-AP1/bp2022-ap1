@@ -9,14 +9,14 @@ bp = Blueprint("simulation", __name__)
 
 
 @bp.route("/simulation", methods=["get"])
-@token_required
+@token_required()
 def get_all_simulation_ids(token):
     """Get all simulation id"""
     return impl.simulation.get_all_simulation_ids(token)
 
 
 @bp.route("/simulation", methods=["post"])
-@token_required
+@token_required()
 def create_simulation_configuration(token):
     """Create a simulation configuration"""
     schema = schemas.SimulationConfiguration()
@@ -27,7 +27,7 @@ def create_simulation_configuration(token):
 
 
 @bp.route("/simulation/<identifier>", methods=["get"])
-@token_required
+@token_required()
 def get_simulation_configuration(identifier, token):
     """Get a simulation configuration"""
     options = {}
@@ -37,7 +37,7 @@ def get_simulation_configuration(identifier, token):
 
 
 @bp.route("/simulation/<identifier>", methods=["put"])
-@token_required
+@token_required()
 def update_simulation_configuration(identifier, token):
     """Update a simulation configuration"""
     options = {}
@@ -51,7 +51,7 @@ def update_simulation_configuration(identifier, token):
 
 
 @bp.route("/simulation/<identifier>", methods=["delete"])
-@token_required
+@token_required()
 def delete_simulation_configuration(identifier, token):
     """Delete a simulation configuration"""
     options = {}

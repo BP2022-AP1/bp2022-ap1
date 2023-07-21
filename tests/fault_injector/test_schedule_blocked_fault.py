@@ -1,16 +1,12 @@
 import pytest
 
+from src.event_bus.event_bus import EventBus
 from src.fault_injector.fault_configurations.schedule_blocked_fault_configuration import (
     ScheduleBlockedFaultConfiguration,
 )
 from src.fault_injector.fault_types.schedule_blocked_fault import ScheduleBlockedFault
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
-from src.spawner.spawner import (
-    Spawner,
-    SpawnerConfiguration,
-    SpawnerConfigurationXSchedule,
-)
+from src.spawner.spawner import Spawner
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -28,15 +24,11 @@ class TestScheduleBlockedFault:
         pass
 
     @pytest.fixture
-    def logger(self, run):
-        return Logger(run.id)
-
-    @pytest.fixture
     def schedule_blocked_fault_configuration(self, schedule):
         return ScheduleBlockedFaultConfiguration.create(
             **{
-                "start_tick": 30,
-                "end_tick": 300,
+                "start_time": 30,
+                "end_time": 300,
                 "description": "test ScheduleBlockedFault",
                 "affected_element_id": schedule.id,
                 "strategy": "regular",
@@ -47,17 +39,17 @@ class TestScheduleBlockedFault:
     def schedule_blocked_fault(
         self,
         schedule_blocked_fault_configuration: ScheduleBlockedFaultConfiguration,
-        logger: Logger,
+        event_bus: EventBus,
         simulation_object_updater: SimulationObjectUpdatingComponent,
-        interlocking: IInterlockingDisruptor,
+        interlocking_disruptor: IInterlockingDisruptor,
         spawner: Spawner,
     ):
         return ScheduleBlockedFault(
             configuration=schedule_blocked_fault_configuration,
-            logger=logger,
+            event_bus=event_bus,
             spawner=spawner,
             simulation_object_updater=simulation_object_updater,
-            interlocking=interlocking,
+            interlocking_disruptor=interlocking_disruptor,
         )
 
     # It would be better to test if trains spawn after inject_fault.

@@ -1,0 +1,7 @@
+<configuration>
+	<input>
+		<net-file value="schwarze_pumpe_v1.net.xml" />
+		<route-files value="schwarze_pumpe_v1.routes.xml" />
+		<additional-files value="schwarze_pumpe_v1.add.xml"/>
+	</input>
+</configuration>

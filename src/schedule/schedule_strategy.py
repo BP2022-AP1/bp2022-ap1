@@ -7,19 +7,20 @@ class ScheduleStrategy(ABC):
     """An abstract ScheduleStrategy.
     ScheduleStartegies implement the decision logic of
     how a schedule determines whether a vehicle should be spawned
-    at a given tick.
+    at a given time.
     """
 
-    start_tick: int
-    end_tick: int
+    start_time: int
+    end_time: int
 
-    def __init__(self, start_tick: int, end_tick: int):
+    def __init__(self, start_time: int, end_time: int):
         """Initializer for ScheduleStrategy
 
-        :param start_tick: The tick when train spawning should start
+        :param start_time: The time in seconds when train spawning should start
+        :param end_time: The time in seconds when train spawning should end
         """
-        self.start_tick = start_tick
-        self.end_tick = end_tick
+        self.start_time = start_time
+        self.end_time = end_time
 
     @classmethod
     @abstractmethod
@@ -31,11 +32,11 @@ class ScheduleStrategy(ABC):
         """
         raise NotImplementedError()
 
-    def should_spawn(self, tick: int) -> bool:
-        """Determines whether a vehicle should be spawned at the current tick
+    def should_spawn(self, seconds: int) -> bool:
+        """Determines whether a vehicle should be spawned at the current time
 
-        :param tick: The current tick
+        :param seconds: The elapsed seconds
         """
-        after_start_tick = tick >= (self.start_tick if self.start_tick else 0)
-        before_end_tick = tick <= (self.end_tick if self.end_tick else tick)
-        return after_start_tick and before_end_tick
+        is_after_start_second = seconds >= (self.start_time if self.start_time else 0)
+        is_before_end_second = seconds <= (self.end_time if self.end_time else seconds)
+        return is_after_start_second and is_before_end_second

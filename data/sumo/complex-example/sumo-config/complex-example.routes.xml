@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+	<route edges="de139-0 de139-1 de139-2 94742-0 b8e69-0" color="123,91,98" id="route_60BS1-60BS2"/>
+	<route edges="de139-0 de139-1 de139-2 94cb9-0" color="96,225,28" id="route_60BS1-60ES1"/>
+	<route edges="94cb9-0 94cb9-1 b6d5c-0 b6d5c-1 3a70a-0" color="159,63,182" id="route_60ES1-60AS1"/>
+	<route edges="94cb9-0 94cb9-1 cd7fb-0 cd7fb-1 38f16-0" color="100,211,17" id="route_60ES1-60AS2"/>
+	<route edges="b6d5c-1-re b6d5c-0-re 94cb9-1-re 94cb9-0-re de139-2-re" color="93,213,50" id="route_60AS3-60BS7"/>
+	<route edges="cd7fb-1-re cd7fb-0-re 94cb9-1-re 94cb9-0-re de139-2-re" color="229,11,52" id="route_60AS4-60BS7"/>
+	<route edges="3a70a-0 3a70a-1 bb5a5-0 bb5a5-1 a8f44-0" color="124,218,88" id="route_60AS1-60BS3"/>
+	<route edges="38f16-0 38f16-1 bb5a5-0 bb5a5-1 a8f44-0" color="182,147,7" id="route_60AS2-60BS3"/>
+	<route edges="bb5a5-1-re bb5a5-0-re 38f16-1-re 38f16-0-re cd7fb-1-re" color="132,63,142" id="route_60ES2-60AS4"/>
+	<route edges="bb5a5-1-re bb5a5-0-re 3a70a-1-re 3a70a-0-re b6d5c-1-re" color="140,5,238" id="route_60ES2-60AS3"/>
+	<route edges="a8f44-2-re a8f44-1-re a8f44-0-re bb5a5-1-re" color="94,142,17" id="route_60BS4-60ES2"/>
+	<route edges="a8f44-2-re a8f44-1-re a8f44-0-re b8e69-3-re" color="223,8,111" id="route_60BS4-60BS5"/>
+	<route edges="b8e69-0 b8e69-1 b8e69-2 b8e69-3 a8f44-0" color="111,198,175" id="route_60BS2-60BS3"/>
+	<route edges="b8e69-3-re b8e69-2-re" color="86,118,46" id="route_60BS5-60BS6"/>
+	<route edges="b8e69-2-re b8e69-1-re b8e69-0-re 94742-0-re de139-2-re" color="166,221,177" id="route_60BS6-60BS7"/>
+
+	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28" />
+
+	<vType id="ice" accel="5" decel="1.3" length="60.00" vClass="rail_electric" color="192,192,192" />
+
+	<vType id="cargo" accel="2.5" decel="1.3" length="80.00" vClass="rail" color="30,30,30" />
+
+</routes>
