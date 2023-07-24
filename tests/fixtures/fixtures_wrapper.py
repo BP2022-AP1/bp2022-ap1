@@ -91,7 +91,8 @@ def vehicle_route(monkeypatch):
 
 
 @pytest.fixture
-def train_add(monkeypatch):
+def train_add(monkeypatch, max_speed):
+    # pylint: disable=unused-argument
     def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
         assert typeID is not None

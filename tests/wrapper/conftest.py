@@ -54,54 +54,12 @@ def traffic_update(monkeypatch):
 
 
 @pytest.fixture
-def max_speed(monkeypatch):
-    def set_max_speed(train_id: str, speed: float):
-        assert train_id is not None
-        assert speed > 0
-
-    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
-def speed_update(monkeypatch):
-    def set_max_speed(identifier: str, speed: float) -> None:
-        assert identifier is not None
-        assert speed > 0
-
-    monkeypatch.setattr(edge, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
 def vehicle_route(monkeypatch):
     def set_route_id(train_id: str, route_id: str):
         assert train_id == "fake-sim-train"
         assert route_id == "testing-route-beta"
 
     monkeypatch.setattr(vehicle, "setRouteID", set_route_id)
-
-
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        # pylint: disable=invalid-name, unused-argument
-        # We want to use the same signature as the TraCI methods
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-@pytest.fixture
-def train_subscribe(monkeypatch):
-    def subscribe_train(identifier, subscriptions=None):
-        assert identifier is not None
-        assert subscriptions == [
-            constants.VAR_POSITION,
-            constants.VAR_ROAD_ID,
-            constants.VAR_SPEED,
-        ]
-
-    monkeypatch.setattr(vehicle, "subscribe", subscribe_train)
 
 
 @pytest.fixture
