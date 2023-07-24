@@ -26,13 +26,13 @@ class EventBus:
             ["tick", "signal_id", "state_before", "state_after"],
             EventType.SET_SIGNAL,
         ),
-        "train_enter_block_section": (
-            ["tick", "train_id", "block_section_id", "block_section_length"],
-            EventType.TRAIN_ENTER_BLOCK_SECTION,
+        "train_enter_edge": (
+            ["tick", "train_id", "edge_id", "edge_length"],
+            EventType.TRAIN_ENTER_EDGE,
         ),
-        "train_leave_block_section": (
-            ["tick", "train_id", "block_section_id", "block_section_length"],
-            EventType.TRAIN_LEAVE_BLOCK_SECTION,
+        "train_leave_edge": (
+            ["tick", "train_id", "edge_id", "edge_length"],
+            EventType.TRAIN_LEAVE_EDGE,
         ),
         "inject_platform_blocked_fault": (
             ["tick", "platform_blocked_fault_configuration", "affected_element"],
@@ -103,9 +103,9 @@ class EventBus:
     }
 
     callbacks: dict[UUID, tuple[Callable[[Event], None], EventType]]
-    run_id: int
+    run_id: UUID
 
-    def __init__(self, run_id: int):
+    def __init__(self, run_id: UUID):
         self.callbacks = {}
         self.run_id = run_id
 

@@ -43,6 +43,8 @@ def run(simulation_configuration):
 
 
 class MockRouteController:
+    """Mock up for RouteController"""
+
     method_calls: int = 0
 
     def recalculate_all_routes(self):

@@ -10,10 +10,14 @@ from src.implementor.models import Run
 from src.logger.log_entry import LogEntry
 
 
+# pylint: disable=duplicate-code
 @pytest.mark.usefixtures("celery_session_app")
 @pytest.mark.usefixtures("celery_session_worker")
 class TestRunImplementor:
-    """Tests for RunImplementor"""
+    """
+    Tests for correct functionality of run endpoint
+    if the input data is valid.
+    """
 
     def test_get_all_simulation_ids(self, token, empty_simulation_configuration):
         run = Run.create(simulation_configuration=empty_simulation_configuration)

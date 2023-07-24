@@ -161,7 +161,7 @@ build-backend = "poetry.core.masonry.api"
     [tool.poe.tasks.gui]
     help = "Run flask app in development mode with gui"
     sequence = ["gui-deps", "sleep", "gui-flask"]
-    envfile = [".env.shared", ".env.secret"]
+    envfile = [".env.shared", ".env.dev", ".env.gui"]
 
     [tool.poe.tasks.gui-deps]
     help = "Run database and grafana for gui"
@@ -174,7 +174,7 @@ build-backend = "poetry.core.masonry.api"
 
     [tool.poe.tasks.insert-config]
     help = "Inserts the configs into the database"
-    cmd = "python scripts/insert_simple_simulation.py"
+    cmd = "python scripts/insert_demonstration_simulation.py"
     envfile = [".env.shared", ".env.secret"]
 
     [tool.poe.tasks.cov]

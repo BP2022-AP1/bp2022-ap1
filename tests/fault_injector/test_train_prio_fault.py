@@ -24,8 +24,8 @@ class TestTrainPrioFault:
     def train_prio_fault_configuration(self, basic_train):
         return TrainPrioFaultConfiguration.create(
             **{
-                "start_tick": 50,
-                "end_tick": 500,
+                "start_time": 50,
+                "end_time": 500,
                 "description": "test TrainPrioFault",
                 "affected_element_id": basic_train.identifier,
                 "new_prio": 3,

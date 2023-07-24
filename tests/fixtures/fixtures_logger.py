@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import pandas as pd
@@ -79,12 +80,12 @@ def state_after():
 
 
 @pytest.fixture
-def block_section_id():
+def edge_id():
     return "Test Block Section id"
 
 
 @pytest.fixture
-def block_section_length():
+def edge_length():
     return 101.53
 
 
@@ -128,22 +129,22 @@ def config_ids(simulation_configuration, simulation_configuration2):
 @pytest.fixture
 def platform_blocked_fault_configuration():
     return PlatformBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="station_1", strategy="regular"
+        start_time=10, end_time=20, affected_element_id="station_1", strategy="regular"
     )
 
 
 @pytest.fixture
 def track_blocked_fault_configuration():
     return TrackBlockedFaultConfiguration.create(
-        start_tick=10, end_tick=20, affected_element_id="section_1", strategy="regular"
+        start_time=10, end_time=20, affected_element_id="section_1", strategy="regular"
     )
 
 
 @pytest.fixture
 def track_speed_limit_fault_configuration():
     return TrackSpeedLimitFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="section_1",
         new_speed_limit=10,
         strategy="regular",
@@ -153,8 +154,8 @@ def track_speed_limit_fault_configuration():
 @pytest.fixture
 def schedule_blocked_fault_configuration():
     return ScheduleBlockedFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="ice_1_passenger",
         strategy="regular",
     )
@@ -163,8 +164,8 @@ def schedule_blocked_fault_configuration():
 @pytest.fixture
 def train_prio_fault_configuration():
     return TrainPrioFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="ice_1_passenger",
         new_prio=1,
         strategy="regular",
@@ -174,12 +175,16 @@ def train_prio_fault_configuration():
 @pytest.fixture
 def train_speed_fault_configuration():
     return TrainSpeedFaultConfiguration.create(
-        start_tick=10,
-        end_tick=20,
+        start_time=10,
+        end_time=20,
         affected_element_id="ice_1_passenger",
         new_speed=10,
         strategy="regular",
     )
+
+
+def second_to_tick(second: int) -> int:
+    return int(float(second) / float(os.getenv("TICK_LENGTH")))
 
 
 @pytest.fixture
@@ -193,7 +198,7 @@ def faults_log_collector_df(
 ):
     faults_df = pd.DataFrame(
         {
-            "begin_tick": [10, 10, 10, 10, 10, 10],
+            "begin_tick": [second_to_tick(10) for _ in range(6)],
             "fault_type": [
                 "platform_blocked",
                 "track_blocked",
@@ -220,7 +225,7 @@ def faults_log_collector_df(
             ],
             "value_before": [None, None, "100", None, "2", "100"],
             "value_after": [None, None, "10", None, "1", "10"],
-            "end_tick": [20, 20, 20, 20, 20, 20],
+            "end_tick": [second_to_tick(20) for _ in range(6)],
         }
     )
     return faults_df
@@ -323,11 +328,11 @@ def train_spawn_times_df():
     train_spawn_times_df = pd.DataFrame(
         {
             "tick": [
-                4600,
-                7300,
-                10900,
-                13600,
-                17200,
+                second_to_tick(4600),
+                second_to_tick(7300),
+                second_to_tick(10900),
+                second_to_tick(13600),
+                second_to_tick(17200),
             ],
             f"train_id": [f"Kohlezug {i}" for i in range(1, 6)],
         }
@@ -336,7 +341,7 @@ def train_spawn_times_df():
 
 
 @pytest.fixture
-def spawn_events_by_run_id_head_df():
+def spawn_events_by_run_id_df():
     spawn_events_by_run_id_head_df = pd.DataFrame(
         {
             "time": [
@@ -392,8 +397,11 @@ def verkehrsleistung_by_run_id_df():
         {
             "train_type": ["cargo", "passenger", "all"],
             "enter_tick": pd.Series([0, 0, 0], dtype="Int64"),
-            "leave_tick": pd.Series([40, 60, 60], dtype="Int64"),
-            "block_section_length": [20.5, 143.5, 164.0],
+            "leave_tick": pd.Series(
+                [second_to_tick(40), second_to_tick(60), second_to_tick(60)],
+                dtype="Int64",
+            ),
+            "edge_length": [20.5, 143.5, 164.0],
             "verkehrsleistung": [1845.0, 8610.0, 10455.0],
         }
     )
@@ -460,10 +468,10 @@ def window_all_by_config_id_df():
                 "ice_2_passenger",
                 "ice_3_passenger",
             ],
-            "arrival_tick": pd.Series(
+            "arrival_second": pd.Series(
                 [0, 10, 10, 0, 10, 10, 10, 10, 10, 10, 10, 10], dtype="Int64"
             ),
-            "departure_tick": pd.Series(
+            "departure_second": pd.Series(
                 [10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 0, 10], dtype="Int64"
             ),
         }
@@ -475,9 +483,7 @@ def verkehrsmenge_by_config_id_df(run):
     verkehrsmenge_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "enter_tick": pd.Series([10], dtype="Int64"),
-            "leave_tick": pd.Series([60], dtype="Int64"),
-            "block_section_length": pd.Series([164.0]),
+            "edge_length": pd.Series([164.0]),
         }
     )
     verkehrsmenge_df.set_index("run_id", inplace=True)
@@ -489,8 +495,7 @@ def verkehrsleistung_by_config_id_df(run):
     verkehrsleistung_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "leave_tick": pd.Series([60], dtype="Int64"),
-            "block_section_length": pd.Series([164.0]),
+            "edge_length": pd.Series([164.0]),
             "verkehrsleistung": pd.Series([9840.0]),
         }
     )
@@ -530,8 +535,8 @@ def window_by_multi_config_df(simulation_configuration):
                 simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
-            "arrival_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
-            "departure_tick": pd.Series([25 / 3, 20 / 3, 80 / 9]),
+            "arrival_second": pd.Series([25 / 3, 20 / 3, 80 / 9]),
+            "departure_second": pd.Series([25 / 3, 20 / 3, 80 / 9]),
         }
     )
 
@@ -546,7 +551,7 @@ def verkehrsmenge_by_multi_config_df(simulation_configuration):
                 simulation_configuration.readable_id,
             ],
             "train_type": ["all", "cargo", "passenger"],
-            "block_section_length": pd.Series([164.0, 20.5, 143.5]),
+            "edge_length": pd.Series([164.0, 20.5, 143.5]),
         }
     )
 
@@ -585,8 +590,8 @@ def setup_logs_departure_arrival_alt(event_bus2):
     TestLogCollector.setup_departure_arrival_4_alt(event_bus2)
 
 
-def setup_logs_block_sections(event_bus):
-    TestLogCollector.setup_enter_leave_block_section_1(event_bus)
-    TestLogCollector.setup_enter_leave_block_section_2(event_bus)
-    TestLogCollector.setup_enter_leave_block_section_3(event_bus)
-    TestLogCollector.setup_enter_leave_block_section_4(event_bus)
+def setup_logs_edges(event_bus):
+    TestLogCollector.setup_enter_leave_edge_1(event_bus)
+    TestLogCollector.setup_enter_leave_edge_2(event_bus)
+    TestLogCollector.setup_enter_leave_edge_3(event_bus)
+    TestLogCollector.setup_enter_leave_edge_4(event_bus)

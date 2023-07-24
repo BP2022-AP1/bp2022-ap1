@@ -1,6 +1,5 @@
+import os
 from itertools import zip_longest
-
-import pytest
 
 from src.implementor.models import SimulationConfiguration
 from src.schedule.random_schedule_strategy import RandomScheduleStrategy
@@ -46,8 +45,8 @@ class TestSpawner:
             schedule = spawner.get_schedule(configuration.id)
             assert schedule.id == configuration.id
             assert schedule.train_type == configuration.train_schedule_train_type
-            assert schedule.strategy.start_tick == configuration.strategy_start_tick
-            assert schedule.strategy.end_tick == configuration.strategy_end_tick
+            assert schedule.strategy.start_time == configuration.strategy_start_time
+            assert schedule.strategy.end_time == configuration.strategy_end_time
             if isinstance(schedule.strategy, RegularScheduleStrategy):
                 assert (
                     schedule.strategy.frequency
@@ -55,38 +54,39 @@ class TestSpawner:
                 )
             elif isinstance(schedule.strategy, RandomScheduleStrategy):
                 assert (
-                    schedule.strategy.trains_per_1000_ticks
-                    == configuration.random_strategy_trains_per_1000_ticks
+                    schedule.strategy.trains_per_1000_seconds
+                    == configuration.random_strategy_trains_per_1000_seconds
                 )
 
     def test_next_tick(
         self,
         spawner: Spawner,
         mock_train_spawner: object,
-        strategy_start_tick: int,
-        strategy_end_tick: int,
+        strategy_start_time: int,
+        strategy_end_time: int,
         regular_strategy_frequency: int,
-        random_strategy_spawn_ticks: list[int],
+        random_strategy_spawn_seconds: list[int],
     ):
         # pylint: disable=protected-access
 
-        regular_spawn_ticks = list(
+        ticks_per_second = int(1 / float(os.environ["TICK_LENGTH"]))
+        regular_spawn_seconds = list(
             range(
-                strategy_start_tick, strategy_end_tick + 1, regular_strategy_frequency
+                strategy_start_time, strategy_end_time + 1, regular_strategy_frequency
             )
         )
-        spawn_ticks = sorted(regular_spawn_ticks + random_strategy_spawn_ticks)
-        for tick in range(strategy_start_tick, strategy_end_tick + 1):
-            spawner.next_tick(tick)
+        spawn_seconds = sorted(regular_spawn_seconds + random_strategy_spawn_seconds)
+        for seconds in range(strategy_start_time, strategy_end_time + 1):
+            spawner.next_tick(seconds * ticks_per_second)
         assert all(
-            len(schedule._ticks_to_be_spawned) == 0
+            len(schedule._seconds_to_be_spawned) == 0
             for schedule in spawner._schedules.values()
         )
         assert all(
-            history_tick == spawn_tick
-            for history_tick, spawn_tick in zip_longest(
+            history_time == spawn_time
+            for history_time, spawn_time in zip_longest(
                 sorted(mock_train_spawner.spawn_history),
-                sorted(spawn_ticks),
+                sorted(spawn_seconds),
                 fillvalue=None,
             )
         )
@@ -111,9 +111,13 @@ class TestSpawnerConfiguration:
         del obj_dict["updated_at"]
         del obj_dict["readable_id"]
 
-        assert obj_dict == {
-            "id": str(spawner_configuration.id),
-        }
+        schedules = [
+            str(reference.schedule_configuration_id.id)
+            for reference in spawner_configuration.schedule_configuration_references
+        ]
+        assert set(obj_dict["schedule"]) == set(schedules)
+        del obj_dict["schedule"]
+        assert obj_dict == {"id": str(spawner_configuration.id)}
 
 
 class TestSpawnerConfigurationXSchedule:

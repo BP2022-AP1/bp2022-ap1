@@ -18,7 +18,7 @@ from src.interlocking_component.router import Router
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
-from src.wrapper.simulation_objects import Edge, Signal, Train
+from src.wrapper.simulation_objects import Edge, ReservationTrack, Signal, Train
 
 
 @pytest.fixture
@@ -30,8 +30,8 @@ def mock_event_bus() -> EventBus:
         remove_fahrstrasse_count = 0
         set_signal_go_count = 0
         set_signal_halt_count = 0
-        train_enter_block_section_count = 0
-        train_leave_block_section_count = 0
+        train_enter_edge_count = 0
+        train_leave_edge_count = 0
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
@@ -49,23 +49,23 @@ def mock_event_bus() -> EventBus:
             elif state_after == Signal.State.HALT:
                 self.set_signal_halt_count += 1
 
-        def train_enter_block_section(
+        def train_enter_edge(
             self,
             tick: int,
             train_id: str,
-            block_section_id: str,
-            block_section_length: float,
+            edge_id: str,
+            edge_length: float,
         ) -> Type[None]:
-            self.train_enter_block_section_count += 1
+            self.train_enter_edge_count += 1
 
-        def train_leave_block_section(
+        def train_leave_edge(
             self,
             tick: int,
             train_id: str,
-            block_section_id: str,
-            block_section_length: float = 0,
+            edge_id: str,
+            edge_length: float = 0,
         ) -> Type[None]:
-            self.train_leave_block_section_count += 1
+            self.train_leave_edge_count += 1
 
         # pylint: enable=unused-argument
 
@@ -140,7 +140,6 @@ def route_controller(
         simulation_object_updating_component=configured_souc,
         path_name=os.path.join("data", "planpro", "example.ppxml"),
     )
-    my_route_controller.initialize_signals()
     return my_route_controller
 
 
@@ -200,6 +199,7 @@ def mock_interlocking() -> Interlocking:
 def mock_route_controller(
     mock_interlocking: Interlocking,
     configured_souc: SimulationObjectUpdatingComponent,
+    route_controller,
 ) -> RouteController:
     class RouteControllerMock:
         """This mocks the route controller in a way,
@@ -210,14 +210,20 @@ def mock_route_controller(
         simulation_object_updating_component = configured_souc
         maybe_set_fahrstrasse_count = 0
         maybe_free_fahrstrasse_count = 0
+        tick = 100
+        remove_reservation_count = 0
 
         # The following methods must implement the interface of those methods in the real classes
         # pylint: disable=unused-argument
         def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
             self.maybe_set_fahrstrasse_count += 1
 
-        def maybe_free_fahrstrasse(self, train: Train, edge: Edge):
+        def maybe_free_fahrstrasse(self, edge: Edge):
             self.maybe_free_fahrstrasse_count += 1
+
+        def remove_reservation(self, train: Train, edge: Edge):
+            self.remove_reservation_count += 1
+            route_controller.remove_reservation(train, edge)
 
         # pylint: enable=unused-argument
 
@@ -267,30 +273,34 @@ def yaramo_signal():
 
 
 @pytest.fixture
-def sumo_train() -> Train:
+def sumo_train(sumo_edge: Edge) -> Train:
     class TrainMock:
         """This mocks a train coming from SUMO with the same attributes,
         but not the functionality.
         """
 
         identifier = "Test_Train"
+        edge = sumo_edge
+        reserved_tracks = [sumo_edge.track]
+
+        def __init__(self) -> None:
+            self.reserved_tracks[0].reservations.append((self, self.edge))
 
     return TrainMock()
 
 
 @pytest.fixture
-def sumo_edge() -> Edge:
+def sumo_edge(reservation_track: ReservationTrack) -> Edge:
     class EdgeMock:
         """This mocks an edge coming from SUMO with the same attributes,
         but not the functionality.
         """
 
         identifier = "test_id-re"
+        length = 100
+        track = reservation_track
 
     return EdgeMock()
-
-
-# pylint: enable=invalid-name
 
 
 @pytest.fixture

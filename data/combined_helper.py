@@ -23,10 +23,10 @@ def generate_planpro():
 
     # Import from OSM/ORM
     topology = ORMImporter().run(polygon)
-    topology.name = "schwarze_pumpe_v1"
+    topology.name = "schwarze_pumpe_v2"
 
     # Generate Signals
-    signal_generator = TrackSignalGenerator(topology)
+    signal_generator = TrackSignalGenerator(topology, split_signals=True)
     signal_generator.place_switch_signals()
     signal_generator.place_edge_signals()
 

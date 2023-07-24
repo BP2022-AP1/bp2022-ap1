@@ -17,14 +17,151 @@ servers:
 security:
   - ApiKeyAuth: []
 paths:
-  /schedule:
+  # -----------------------------------------------------------------
+  # --------------------------- SIMULATION ---------------------------
+  # ------------------------------------------------------------------
+
+  /simulation:
     get:
-      operationId: get_all_schedule_ids
+      operationId: get_all_simulation_ids
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: Token is missing
+      summary: Get all ids of simulation configurations. Use this to start a run.
+      tags:
+        - simulation
+
+    post:
+      operationId: create_simulation_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSimulationConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
+          description: Successfully created new simulation configuration
+        "401":
+          description: Token is missing
+        "404":
+          description: Configuration not found
+      summary: Create a new simulation configuration. A simulation configuration
+        contains at least a spawner configuration. You can add additional
+        fault injection configurations too.
+        It returns the id connected to the simulation. Use this id to start a run.
+      tags:
+        - simulation
+
+  /simulation/{id}:
+    delete:
+      operationId: delete_simulation_configuration
       parameters:
-        - description:
-            Specify id of simulation if you only want to get all schedules
-            of a single simulation
-          in: query
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing simulation configuration
+      responses:
+        "204":
+          description: Deleted simulation
+        "401":
+          description: Token is missing
+        "404":
+          description: Simulation not found
+        "400":
+          description: Simulation configuration is used by a run
+      summary: Delete a simulation configuration if no run references the simulation configuration.
+      tags:
+        - simulation
+
+    get:
+      operationId: get_simulation_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing simulation configuration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSimulationConfiguration"
+          description: Successful operation
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+      summary:
+        Get all information about a simulation, including the ids of connected
+        components and runs.
+      tags:
+        - simulation
+
+    put:
+      operationId: update_simulation_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing simulation configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSimulationConfiguration"
+      responses:
+        "200":
+          description: Updated simulation configuration
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+        "405":
+          description: It's forbidden to edit an already ran simulation
+      summary:
+        Edit the component configurations connected to the simulation configuration.
+        If you want to change a single component, please povide the complete list with components of the same type
+        comparable with creating a simulation configuration.
+        Editing is only possible if the simulation configuration is not connected to any run.
+      tags:
+        - simulation
+
+  # -----------------------------------------------------------
+  # --------------------------- RUN ---------------------------
+  # -----------------------------------------------------------
+
+  /run:
+    get:
+      operationId: get_all_run_ids
+      parameters:
+        - in: query
           name: simulationId
           schema:
             format: uuid
@@ -40,18 +177,20 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
-          description: Simulation not found
-      summary: Get ids of schedules.
+          description: Simulation id not found
+      summary: Get all ids of your runs.
+      tags:
+        - run
 
     post:
-      operationId: create_schedule
+      operationId: create_run
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Schedule"
+              $ref: "#/components/schemas/RunConfiguration"
       responses:
         "201":
           content:
@@ -60,16 +199,22 @@ paths:
                 properties:
                   id:
                     format: uuid
+                    title: id
                     type: string
                 type: object
-          description: Successfully created new schedule object
+          description: Successfully created and started a new run
         "401":
-          description: API token missing
-      summary: Insert a new schedule. Returns the id of the configuration object.
+          description: Token is missing
+        "404":
+          description: Simulation not found
+      summary: Starts a new run of a given simulation configuration.
+        Returns id connected to the run to get the results and status from.
+      tags:
+        - run
 
-  /schedule/{id}:
+  /run/{id}:
     delete:
-      operationId: delete_schedule
+      operationId: delete_run
       parameters:
         - in: path
           name: id
@@ -77,17 +222,21 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing run
       responses:
         "204":
-          description: Deleted schedule
+          description: Deleted run
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
-          description: Id not found
-      summary: Delete a schedule
+          description: Run not found
+      summary: Delete a run and the connected logs. If the simulation is still
+        running, cancel it.
+      tags:
+        - run
 
     get:
-      operationId: get_schedule
+      operationId: get_run
       parameters:
         - in: path
           name: id
@@ -95,25 +244,31 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing run
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Schedule"
+                $ref: "#/components/schemas/GetRun"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
-          description: Id not found
-      summary: Get all information about a schedule.
+          description: Run not found
+      summary: Get current state and progress of the run.
+      tags:
+        - run
 
-  /component/fault-injection/schedule-blocked-fault:
+  # --------------------------------------------------------------
+  # --------------------------- SPAWNER ---------------------------
+  # ---------------------------------------------------------------
+  /component/spawner:
     get:
-      operationId: get_all_schedule_blocked_fault_configuration_ids
+      operationId: get_all_spawner_configuration_ids
       parameters:
         - description:
-            Specify id of simulation if you only want to get the schedule-blocked-faul
+            Specify the id of simulation if you only want to get the spawner
             configuration of a single simulation
           in: query
           name: simulationId
@@ -131,10 +286,444 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of schedule-blocked-faul configurations.
+      summary: Get ids of spawner configurations. Use this in the simulation configuration.
+      tags:
+        - spawner
+
+    post:
+      operationId: create_spawner_configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpawnerConfiguration"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: id
+                    type: string
+                type: object
+          description: Successfully created new spawner configuration object
+        "400":
+          description: An spawner configuration exists for this simulation already
+        "401":
+          description: Token is missing
+      summary:
+        Insert a new spawner component. Please provide a list of schedules with their id.
+        Returns the id of the configuration object. Use this to reference in the simulation configuration.
+      tags:
+        - spawner
+
+  /component/spawner/{id}:
+    delete:
+      operationId: delete_spawner_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing spawner configuration
+      responses:
+        "204":
+          description: Deleted spawner configuration
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+      summary: Delete a spawner configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - spawner
+
+    get:
+      operationId: get_spawner_configuration
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing spawner configuration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSpawnerConfiguration"
+          description: Successful operation
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+      summary: Get all information about a spawner configuration including the referenced schedules.
+      tags:
+        - spawner
+
+  # ------------------------------------------------------------------------
+  # --------------------------- REGULAR SCHEDULE ---------------------------
+  # ------------------------------------------------------------------------
+  /schedule/regular:
+    get:
+      operationId: get_all_regular_schedule_ids
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: Token is missing
+      summary: Get ids of all regular schedules. Use this id in the spawner configuration.
+      tags:
+        - schedule
+
+    post:
+      operationId: create_regular_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRegularSchedule"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    type: string
+                type: object
+          description: Successfully created new regular schedule object
+        "401":
+          description: Token is missing
+        "404":
+          description: Platform not found
+      summary:
+        Insert a new regular schedule. It returns the id of the configuration object. Use this in the spawner configuration.
+        For example, with a regular schedule, a train starts at intervals that you specify.
+        Specify the gap with the field 'regular_strategy_frequency'
+        and the interval where the schedule should be active with 'start_tick' and 'end_tick'.
+        Use 'schedule_type' to specify the acting objects, for example, TrainSchedule.
+        Use 'train_schedule_train_type' to select this even more by defining the train type (Coal or passenger trains)
+      tags:
+        - schedule
+
+  /schedule/regular/{id}:
+    delete:
+      operationId: delete_regular_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing regular schedule configuration
+      responses:
+        "204":
+          description: Deleted schedule
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+        "400":
+          description: Schedule configuration is referenced by a spawner configuration
+      summary: Delete a schedule. Only possible, if no spawner configuration references the schedule.
+      tags:
+        - schedule
+
+    get:
+      operationId: get_regular_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing regular schedule configuration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetRegularSchedule"
+          description: Successful operation
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+      summary:
+        Get all information about a schedule including the interval between the trains,
+        the starting tick and ending tick of the schedule.
+      tags:
+        - schedule
+
+  # -----------------------------------------------------------------------
+  # --------------------------- RANDOM SCHEDULE ---------------------------
+  # -----------------------------------------------------------------------
+
+  /schedule/random:
+    get:
+      operationId: get_all_random_schedule_ids
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: Token is missing
+      summary: Get ids of all random schedules. Use this id in the spawner configuration.
+      tags:
+        - schedule
+
+    post:
+      operationId: create_random_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRandomSchedule"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    type: string
+                type: object
+          description: Successfully created new random schedule object
+        "401":
+          description: Token is missing
+        "404":
+          description: Platform not found
+      summary:
+        Insert a new random schedule. It returns the id of the configuration object. Use this in the spawner configuration.
+        For example, with a random schedule, a train starts with a specified probability.
+        Specify the probability with the field 'random_strategy_trains_per_1000_ticks'
+        and the interval where the schedule should be active with 'start_tick' and 'end_tick'.
+        Use 'inject_probability' and 'resolve_probability' to adjust the probability of the schedule becoming active.
+        Use 'schedule_type' to specify the acting objects, for example, TrainSchedule.
+        Use 'train_schedule_train_type' to select this even more by defining the train type (coal or passenger trains).
+      tags:
+        - schedule
+
+  /schedule/random/{id}:
+    delete:
+      operationId: delete_random_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing random schedule configuration
+      responses:
+        "204":
+          description: Deleted schedule
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+        "400":
+          description: Schedule configuration is referenced by a spawner configuration
+      summary: Delete a schedule. Only possible, if no spawner configuration references the schedule.
+      tags:
+        - schedule
+
+    get:
+      operationId: get_random_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing random schedule configuration
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetRandomSchedule"
+          description: Successful operation
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+      summary:
+        Get all information about a schedule including the probability to spawn trains,
+        the starting tick and ending tick of the schedule.
+      tags:
+        - schedule
+
+  # -----------------------------------------------------------------------
+  # --------------------------- DEMAND SCHEDULE ---------------------------
+  # -----------------------------------------------------------------------
+
+  /schedule/coal-demand:
+    get:
+      operationId: get_all_demand_schedule_ids
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: Token is missing
+      summary: Get ids of all coal demand schedules. Use this id in the spawner configuration.
+      tags:
+        - schedule
+
+    post:
+      operationId: create_demand_schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDemandSchedule"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    type: string
+                type: object
+          description: Successfully created new coal demand schedule object
+        "401":
+          description: Token is missing
+        "404":
+          description: Platform not found
+      summary:
+        Insert a new Coal demand schedule. It returns the id of the configuration object. Use this in the spawner configuration.
+        The schedule decides to spawn trains based on data of the Federal Network Agency
+        about electricity production from coal in East Germany with a temporal resolution of 15 min.
+        You can specify the power station, a scaling factor, and the starting point of the data.
+        If you want to read more, take a look at https://github.com/BP2022-AP1/bp2022-ap1/wiki/Coal-Consumption.
+        You must also define the interval where the schedule should be active with 'start_tick' and 'end_tick'.
+        Use 'schedule_type' to specify the acting objects, for example, TrainSchedule.
+        Use 'train_schedule_train_type' to select this even more by defining the train type (coal or passenger trains).
+      tags:
+        - schedule
+
+  /schedule/coal-demand/{id}:
+    delete:
+      operationId: delete_demand_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing demand schedule configuration
+      responses:
+        "204":
+          description: Deleted schedule
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+        "400":
+          description: Schedule configuration is referenced by a spawner configuration
+      summary: Delete a schedule. Only possible, if no spawner configuration references the schedule.
+      tags:
+        - schedule
+
+    get:
+      operationId: get_demand_schedule
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            format: uuid
+            type: string
+          description: Id of an existing demand schedule configuration
+
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetDemandSchedule"
+          description: Successful operation
+        "401":
+          description: Token is missing
+        "404":
+          description: Id not found
+      summary:
+        Get all information about a schedule including the power station, scaling factor and starting time of the data,
+        the starting tick and ending tick of the schedule.
+      tags:
+        - schedule
+
+  # ------------------------------------------------------------------------------
+  # --------------------------- SCHEDULE BLOCKED FAULT ---------------------------
+  # ------------------------------------------------------------------------------
+
+  /component/fault-injection/schedule-blocked-fault:
+    get:
+      operationId: get_all_schedule_blocked_fault_configuration_ids
+      parameters:
+        - description:
+            Specify id of simulation if you only want to get the schedule-blocked-fault
+            configuration of a single simulation
+          in: query
+          name: simulationId
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  format: uuid
+                  type: string
+                type: array
+          description: Successful operation
+        "401":
+          description: Token is missing
+        "404":
+          description: Simulation not found
+      summary: Get ids of schedule-blocked-fault configurations. Use this in the simulation configuration.
+      tags:
+        - fault-injector
 
     post:
       operationId: create_schedule_blocked_fault_configuration
@@ -155,13 +744,21 @@ paths:
                     type: string
                 type: object
           description:
-            Successfully created new schedule-blocked-faul configuration
+            Successfully created new schedule-blocked-fault configuration
             object
         "401":
-          description: API token missing
+          description: Token is missing
       summary:
-        Insert a new schedule-blocked-faul component. Returns the id of the
-        configuration object.
+        Insert a new schedule-blocked-fault configuration. It returns the id of the
+        configuration object. Use this in the simulation configuration.
+        A schedule-blocked fault prohibits a train from a schedule to spawning for some time.
+        You can define the blocked schedule with the field 'affected_element_id'.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick' and
+        the resolution probability of the fault with 'inject_probability' and 'resolve_probability'.
+        Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
+        Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
+      tags:
+        - fault-injector
 
   /component/fault-injection/schedule-blocked-fault/{id}:
     delete:
@@ -173,14 +770,18 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing schedule blocked fault configuration
       responses:
         "204":
           description: Deleted schedule-blocked-fault configuration
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Delete a schedule-blocked-fault configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - fault-injector
 
     get:
       operationId: get_schedule_blocked_fault_configuration
@@ -191,18 +792,27 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing schedule blocked fault configuration
+
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ScheduleBlockedFaultConfiguration"
+                $ref: "#/components/schemas/GetScheduleBlockedFaultConfiguration"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Get all information about a schedule-blocked-fault configuration.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability and the affected element id.
+      tags:
+        - fault-injector
+
+  # ---------------------------------------------------------------------------
+  # --------------------------- TRACK BLOCKED FAULT ---------------------------
+  # ---------------------------------------------------------------------------
 
   /component/fault-injection/track-blocked-fault:
     get:
@@ -227,10 +837,12 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of track-blocked-fault configurations.
+      summary: Get ids of track-blocked-fault configurations. Use this in the simulation configuration.
+      tags:
+        - fault-injector
 
     post:
       operationId: create_track_blocked_fault_configuration
@@ -254,10 +866,18 @@ paths:
             Successfully created new track-blocked-fault configuration
             object
         "401":
-          description: API token missing
+          description: Token is missing
       summary:
-        Insert a new track-blocked-fault component. Returns the id of the configuration
-        object.
+        Insert a new track-blocked-fault configuration. It returns the id of the
+        configuration object. Use this in the simulation configuration.
+        A track-blocked fault blocks a track on the rail system for an some time.
+        You define the affected track with the field 'affected_element_id'.
+        You can find the id of the tracks in the SUMO configuration.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
+        Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
+        Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
+      tags:
+        - fault-injector
 
   /component/fault-injection/track-blocked-fault/{id}:
     delete:
@@ -269,14 +889,18 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing track blocked fault configuration
       responses:
         "204":
           description: Deleted track-blocked-fault configuration
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Delete a track-blocked-fault configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - fault-injector
 
     get:
       operationId: get_track_blocked_fault_configuration
@@ -287,18 +911,27 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing track blocked fault configuration
+
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TrackBlockedFaultConfiguration"
+                $ref: "#/components/schemas/GetTrackBlockedFaultConfiguration"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Get all information about a track-blocked-fault configuration.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability and the affected element id.
+      tags:
+        - fault-injector
+
+  # -------------------------------------------------------------------------------
+  # --------------------------- TRACK SPEED LIMIT FAULT ---------------------------
+  # -------------------------------------------------------------------------------
 
   /component/fault-injection/track-speed-limit-fault:
     get:
@@ -323,10 +956,12 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of track-speed-limit-fault configurations.
+      summary: Get the ids of track-speed-limit-fault configurations. Use this in the simulation configuration.
+      tags:
+        - fault-injector
 
     post:
       operationId: create_track_speed_limit_fault_configuration
@@ -350,10 +985,19 @@ paths:
             Successfully created new track-speed-limit-fault configuration
             object
         "401":
-          description: API token missing
+          description: Token is missing
       summary:
-        Insert a new track-speed-limit-fault component. Returns the id of the
-        configuration object.
+        Insert a new track-speed-limit-fault configuration. It returns the id of the
+        configuration object. Use this in the simulation configuration.
+        A track-speed-limit fault edits the maximum allowed speed of a train on a track for some time.
+        You define the affected track with the field 'affected_element_id'.
+        You can find the id of the tracks in the SUMO configuration.
+        Set the new temporal speed limit with 'new_speed'.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
+        Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
+        Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
+      tags:
+        - fault-injector
 
   /component/fault-injection/track-speed-limit-fault/{id}:
     delete:
@@ -365,14 +1009,19 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing track speed limit fault configuration
+
       responses:
         "204":
           description: Deleted track-speed-limit-fault configuration
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Delete a track-speed-limit-fault configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - fault-injector
 
     get:
       operationId: get_track_speed_limit_fault_configuration
@@ -383,18 +1032,28 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing track speed limit fault configuration
+
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TrackSpeedLimitFaultConfiguration"
+                $ref: "#/components/schemas/GetTrackSpeedLimitFaultConfiguration"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
-      summary: Get all information about a track-speed-limit-fault configuration.
+      summary:
+        Get all information about a track-speed-limit-fault configuration.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability, the affected element id and the new speed limit.
+      tags:
+        - fault-injector
+
+  # ------------------------------------------------------------------------
+  # --------------------------- TRAIN PRIO FAULT ---------------------------
+  # ------------------------------------------------------------------------
 
   /component/fault-injection/train-prio-fault:
     get:
@@ -419,10 +1078,12 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of train-prio-fault configurations.
+      summary: Get ids of train-prio-fault configurations. Use this in the simulation configuration.
+      tags:
+        - fault-injector
 
     post:
       operationId: create_train_prio_fault_configuration
@@ -444,10 +1105,20 @@ paths:
                 type: object
           description: Successfully created new train-prio-fault configuration object
         "401":
-          description: API token missing
+          description: Token is missing
       summary:
-        Insert a new train-prio-fault component. Returns the id of the configuration
-        object.
+        Insert a new train-prio-fault configuration. It returns the id of the
+        configuration object. Use this in the simulation configuration.
+        A train-prio fault edits the priority of a train for some time.
+        You define the affected train with the field 'affected_element_id'.
+        The ids of a train are composed of the id of the connected schedule,
+        the tick when the train spawns, and the train type (either cargo or passenger).
+        Set the temporal priority with 'new_prio'.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
+        Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
+        Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
+      tags:
+        - fault-injector
 
   /component/fault-injection/train-prio-fault/{id}:
     delete:
@@ -459,14 +1130,19 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing train prio fault configuration
+
       responses:
         "204":
           description: Deleted train-prio-fault configuration
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Delete a train-prio-fault configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - fault-injector
 
     get:
       operationId: get_train_prio_fault_configuration
@@ -477,25 +1153,33 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing train prio fault configuration
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TrainPrioFaultConfiguration"
+                $ref: "#/components/schemas/GetTrainPrioFaultConfiguration"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Get all information about a train-prio-fault configuration.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability, the affected element id and the new prio.
+      tags:
+        - fault-injector
+
+  # -------------------------------------------------------------------------
+  # --------------------------- TRAIN SPEED FAULT ---------------------------
+  # -------------------------------------------------------------------------
 
   /component/fault-injection/train-speed-fault:
     get:
       operationId: get_all_train_speed_fault_configuration_ids
       parameters:
         - description:
-            Specify id of simulation if you only want to get the train-speed-fault
+            Specify the id of simulation if you only want to get the train-speed-fault
             configuration of a single simulation
           in: query
           name: simulationId
@@ -513,10 +1197,12 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of train-speed-fault configurations.
+      summary: Get ids of train-speed-fault configurations. Use this in the simulation configuration.
+      tags:
+        - fault-injector
 
     post:
       operationId: create_train_speed_fault_configuration
@@ -538,10 +1224,20 @@ paths:
                 type: object
           description: Successfully created new train-speed-fault configuration object
         "401":
-          description: API token missing
+          description: Token is missing
       summary:
-        Insert a new train-speed-fault component. Returns the id of the configuration
-        object.
+        Insert a new train-speed-fault configuration. It returns the id of the
+        configuration object. Use this in the simulation configuration.
+        A train-speed fault edits the maximum speed of a train for a specified period of time.
+        You define the affected train with the field 'affected_element_id'.
+        The ids of a train are composed of the id of the connected schedule,
+        the tick when the train spawns, and the train type (either cargo or passenger).
+        Set the temporal priority with 'new_speed'.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
+        Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
+        Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
+      tags:
+        - fault-injector
 
   /component/fault-injection/train-speed-fault/{id}:
     delete:
@@ -553,14 +1249,18 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing train speed fault configuration
       responses:
         "204":
           description: Deleted train-speed-fault configuration
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Delete a train-speed-fault configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - fault-injector
 
     get:
       operationId: get_train_speed_fault_configuration
@@ -571,18 +1271,26 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing train speed fault configuration
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TrainSpeedFaultConfiguration"
+                $ref: "#/components/schemas/GetTrainSpeedFaultConfiguration"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Get all information about a train-speed-fault configuration.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability, the affected element id and the new speed.
+      tags:
+        - fault-injector
+
+  # ------------------------------------------------------------------------------
+  # --------------------------- PLATFORM BLOCKED FAULT ---------------------------
+  # ------------------------------------------------------------------------------
 
   /component/fault-injection/platform-blocked-fault:
     get:
@@ -607,10 +1315,12 @@ paths:
                 type: array
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Simulation not found
-      summary: Get ids of platform-blocked-fault configurations.
+      summary: Get the ids of platform-blocked-fault configurations. Use this in the simulation configuration.
+      tags:
+        - fault-injector
 
     post:
       operationId: create_platform_blocked_fault_configuration
@@ -632,10 +1342,18 @@ paths:
                 type: object
           description: Successfully created new platform-blocked-fault configuration object
         "401":
-          description: API token missing
+          description: Token is missing
       summary:
-        Insert a new platform-blocked-fault component. Returns the id of the configuration
-        object.
+        Insert a new platform-blocked-fault configuration. It returns the id of the
+        configuration object. Use this in the simulation configuration.
+        A platform-blocked fault blocks a platform for trains for a specified period of time.
+        You define the affected platform with the field 'affected_element_id'.
+        You can find the ids of the platforms in the SUMO configuration.
+        You can specify the amount of time with the fields 'start_tick' and 'end_tick'.
+        Set the injection probability and resolve the fault with 'inject_probability' and 'resolve_probability'id.
+        Additionally, you can set a fault injection, either regular or random, with the field 'strategy'.
+      tags:
+        - fault-injector
 
   /component/fault-injection/platform-blocked-fault/{id}:
     delete:
@@ -647,14 +1365,18 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing platform blocked fault configuration
       responses:
         "204":
           description: Deleted platform-blocked-fault configuration
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Delete a platform-blocked-fault configuration.
+        This is not possible if this configuration is referenced by a simulation configuration.
+      tags:
+        - fault-injector
 
     get:
       operationId: get_platform_blocked_fault_configuration
@@ -665,420 +1387,26 @@ paths:
           schema:
             format: uuid
             type: string
+          description: Id of an existing platform blocked fault configuration
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PlatformBlockedFaultConfiguration"
+                $ref: "#/components/schemas/GetPlatformBlockedFaultConfiguration"
           description: Successful operation
         "401":
-          description: API token missing
+          description: Token is missing
         "404":
           description: Id not found
       summary: Get all information about a platform-blocked-fault configuration.
+        This includes the strategy, starting tick, ending tick, injection and resolution probability and the affected element id.
+      tags:
+        - fault-injector
 
-  /component/interlocking:
-    get:
-      operationId: get_all_interlocking_configuration_ids
-      parameters:
-        - description:
-            Specify id of simulation if you only want to get the interlocking
-            configuration of a single simulation
-          in: query
-          name: simulationId
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  format: uuid
-                  type: string
-                type: array
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Simulation not found
-      summary: Get ids of interlocking configurations.
-
-    post:
-      operationId: create_interlocking_configuration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/InterlockingConfiguration"
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                properties:
-                  id:
-                    format: uuid
-                    title: id
-                    type: string
-                type: object
-          description: Successfully created new interlocking configuration object
-        "400":
-          description: An interlocking configuration exists for this simulation already
-        "401":
-          description: API token missing
-      summary:
-        Insert a new interlocking component. Returns the id of the configuration
-        object.
-
-  /component/interlocking/{id}:
-    delete:
-      operationId: delete_interlocking_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "204":
-          description: Deleted interlocking configuration
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary: Delete an interlocking configuration.
-
-    get:
-      operationId: get_interlocking_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InterlockingConfiguration"
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary: Get all information about a interlocking configuration.
-
-  /component/spawner:
-    get:
-      operationId: get_all_spawner_configuration_ids
-      parameters:
-        - description:
-            Specify id of simulation if you only want to get the spawner
-            configuration of a single simulation
-          in: query
-          name: simulationId
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  format: uuid
-                  type: string
-                type: array
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Simulation not found
-      summary: Get ids of spawner configurations.
-
-    post:
-      operationId: create_spawner_configuration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SpawnerConfiguration"
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                properties:
-                  id:
-                    format: uuid
-                    title: id
-                    type: string
-                type: object
-          description: Successfully created new spawner configuration object
-        "400":
-          description: An spawner configuration exists for this simulation already
-        "401":
-          description: API token missing
-      summary:
-        Insert a new spawner component. Returns the id of the configuration
-        object.
-
-  /component/spawner/{id}:
-    delete:
-      operationId: delete_spawner_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "204":
-          description: Deleted spawner configuration
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary: Delete a spawner configuration.
-
-    get:
-      operationId: get_spawner_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SpawnerConfiguration"
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary: Get all information about a spawner configuration.
-
-  /run:
-    get:
-      operationId: get_all_run_ids
-      parameters:
-        - in: query
-          name: simulationId
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  format: uuid
-                  type: string
-                type: array
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Simulation id not found
-      summary: Get all ids of runs and a simulation.
-
-    post:
-      operationId: create_run
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RunConfiguration"
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                properties:
-                  id:
-                    format: uuid
-                    title: id
-                    type: string
-                type: object
-          description: Successfully created and started a new run
-        "401":
-          description: API token missing
-        "404":
-          description: Simulation id not found
-        "409":
-          description: Run already exists with this id
-      summary:
-        Create a new run. Returns id connected to the run to get the results
-        and status from.
-
-  /run/{id}:
-    delete:
-      operationId: delete_run
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "204":
-          description: Deleted simulation configuration
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary:
-        "Delete a run and the connected results. If the simulation is still\
-        \ running, cancel it."
-
-    get:
-      operationId: get_run
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/RunStatus"
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary: "Get all information about a run, including the progress."
-
-  /simulation:
-    get:
-      operationId: get_all_simulation_ids
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  format: uuid
-                  type: string
-                type: array
-          description: Successful operation
-        "401":
-          description: API token missing
-      summary: Get all ids of simulation configurations.
-
-    post:
-      operationId: create_simulation_configuration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SimulationConfiguration"
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                properties:
-                  id:
-                    format: uuid
-                    title: id
-                    type: string
-                type: object
-          description: Successfully created new simulation configuration
-        "401":
-          description: API token missing
-      summary:
-        Create a new simulation. Returns id connected to the simulation to
-        connect components or runs to it.
-
-  /simulation/{id}:
-    delete:
-      operationId: delete_simulation_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "204":
-          description: Deleted simulation configuration
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary:
-        Delete a simulation configuration and every connected component and
-        run.
-
-    get:
-      operationId: get_simulation_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SimulationConfiguration"
-          description: Successful operation
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-      summary:
-        "Get all information about a simulation, including the ids of connected\
-        \ components and runs."
-
-    put:
-      operationId: update_simulation_configuration
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            format: uuid
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SimulationConfigurationUpdate"
-      responses:
-        "200":
-          description: Updated simulation configuration
-        "401":
-          description: API token missing
-        "404":
-          description: Id not found
-        "405":
-          description: It's forbidden to edit an already ran simulation
-      summary: Edit the component configurations connected to the simulation configuration.
-
+  # ------------------------------------------------------------
+  # --------------------------- TOKEN ---------------------------
+  # -------------------------------------------------------------
   /token:
     post:
       operationId: create_token
@@ -1086,7 +1414,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TokenConfiguration"
+              $ref: "#/components/schemas/Token"
         required: true
       responses:
         "201":
@@ -1096,38 +1424,209 @@ paths:
                 $ref: "#/components/schemas/Token"
           description: Successfully created new token
         "401":
-          description: API token missing
+          description: Token is missing
         "403":
-          description: No rights to execute this action
+          description: Permission is missing
       summary:
-        Create new token with specified permission specified in body if current
-        user is admin
+        Create a new token with specified permission specified in body if current
+        user is admin.
+        Returns the clear token. Please provide this token in future requests in the header.
+      tags:
+        - token
 
 components:
   schemas:
-    Token:
-      type: object
-    SimulationConfiguration:
-      type: object
-    SimulationConfigurationUpdate:
-      type: object
-    InterlockingConfiguration:
-      type: object
-    SpawnerConfiguration:
-      type: object
-    TrainSpeedFaultConfiguration:
-      type: object
-    TrainPrioFaultConfiguration:
-      type: object
-    ScheduleBlockedFaultConfiguration:
-      type: object
-    TrackSpeedLimitFaultConfiguration:
+    CreateSimulationConfiguration:
       type: object
       required:
-        - new_speed_limit
+        - spawner
+      properties:
+        description:
+          type: string
+        platform_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        schedule_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_speed_limit_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_speed_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_prio_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        spawner:
+          type: string
+          format: uuid
+
+    UpdateSimulationConfiguration:
+      type: object
+      properties:
+        description:
+          type: string
+        platform_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        schedule_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_speed_limit_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_speed_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_prio_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        spawner:
+          type: string
+          format: uuid
+
+    GetSimulationConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - run
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        run:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description:
+          type: string
+        platform_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        schedule_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_blocked_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        track_speed_limit_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_speed_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        train_prio_fault:
+          type: array
+          items:
+            type: string
+            format: uuid
+        spawner:
+          type: string
+          format: uuid
+
+    SpawnerConfiguration:
+      type: object
+      required:
+        - schedule
+      properties:
+        schedule:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    GetSpawnerConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - schedule
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        schedule:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    TrainSpeedFaultConfiguration:
+      type: object
+      required:
         - description
         - strategy
+        - affected_element_id
+        - new_speed
       properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
         start_tick:
           type: integer
           format: int32
@@ -1140,39 +1639,740 @@ components:
         resolve_probability:
           type: number
           format: float
+        affected_element_id:
+          type: string
+        new_speed:
+          type: number
+          format: float
+
+    GetTrainSpeedFaultConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - affected_element_id
+        - new_speed
+      properties:
         description:
           type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        affected_element_id:
+          type: string
+        new_speed:
+          type: number
+          format: float
+
+    TrainPrioFaultConfiguration:
+      type: object
+      required:
+
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+        new_prio:
+          type: number
+          format: float
+
+    GetTrainPrioFaultConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - affected_element_id
+        - new_prio
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+        new_prio:
+          type: number
+          format: float
+
+    ScheduleBlockedFaultConfiguration:
+      type: object
+      required:
+        - description
+        - strategy
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+            - affected_element_id
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+
+    GetScheduleBlockedFaultConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+            - affected_element_id
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+
+    TrackSpeedLimitFaultConfiguration:
+      type: object
+      required:
+        - description
+        - strategy
+        - new_speed_limit
+        - affected_element_id
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
         affected_element_id:
           type: string
           format: uuid
         new_speed_limit:
           type: integer
           format: int32
+
+    GetTrackSpeedLimitFaultConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - new_speed_limit
+        - affected_element_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
         strategy:
           type: string
           enum:
             - regular
             - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+        new_speed_limit:
+          type: integer
+          format: int32
+
     TrackBlockedFaultConfiguration:
       type: object
+      required:
+        - description
+        - strategy
+        - affected_element_id
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+
+    GetTrackBlockedFaultConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - description
+        - strategy
+        - affected_element_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+
     PlatformBlockedFaultConfiguration:
       type: object
+      required:
+        - description
+        - strategy
+        - affected_element_id
+      properties:
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+
+    GetPlatformBlockedFaultConfiguration:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - affected_element_id
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        description:
+          type: string
+        strategy:
+          type: string
+          enum:
+            - regular
+            - random
+        start_tick:
+          type: integer
+          format: int32
+        end_tick:
+          type: integer
+          format: int32
+        inject_probability:
+          type: number
+          format: float
+        resolve_probability:
+          type: number
+          format: float
+        affected_element_id:
+          type: string
+          format: uuid
+
     RunConfiguration:
       type: object
+      required:
+        - simulation_configuration
       properties:
         simulation_configuration:
-            type: string
-            format: uuid
-    RunStatus:
+          type: string
+          format: uuid
+
+    GetRun:
       type: object
-    Schedule:
+      required:
+        - id
+        - updated_at
+        - created_at
+        - state
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        state:
+          type: string
+        progress:
+          type: number
+          format: float
+
+    CreateRegularSchedule:
       type: object
-    TokenConfiguration:
+      required:
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - regular_strategy_frequency
+      properties:
+        strategy_type:
+          type: string
+          enum:
+            - RegularScheduleStrategy
+            - RandomScheduleStrategy
+            - DemandScheduleStrategy
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        regular_strategy_frequency:
+          type: integer
+          format: int32
+
+    GetRegularSchedule:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - regular_strategy_frequency
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        regular_strategy_frequency:
+          type: integer
+          format: int32
+
+    CreateRandomSchedule:
+      type: object
+      required:
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - random_strategy_trains_per_1000_ticks
+        - random_strategy_seed
+      properties:
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        random_strategy_trains_per_1000_ticks:
+          type: number
+          format: float
+        random_strategy_seed:
+          type: integer
+          format: int32
+
+    GetRandomSchedule:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - random_strategy_trains_per_1000_ticks
+        - random_strategy_seed
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        strategy_type:
+          type: string
+          enum:
+            - RegularScheduleStrategy
+            - RandomScheduleStrategy
+            - DemandScheduleStrategy
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        random_strategy_trains_per_1000_ticks:
+          type: number
+          format: float
+        random_strategy_seed:
+          type: integer
+          format: int32
+
+    CreateDemandSchedule:
+      type: object
+      required:
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - demand_strategy_power_station
+        - demand_strategy_scaling_factor
+        - demand_strategy_start_datetime
+      properties:
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        demand_strategy_power_station:
+          type: string
+        demand_strategy_scaling_factor:
+          type: number
+          format: float
+        demand_strategy_start_datetime:
+          type: string
+          format: date
+
+    GetDemandSchedule:
+      type: object
+      required:
+        - id
+        - updated_at
+        - created_at
+        - strategy_type
+        - schedule_type
+        - strategy_start_tick
+        - strategy_end_tick
+        - train_schedule_train_type
+        - demand_strategy_power_station
+        - demand_strategy_scaling_factor
+        - demand_strategy_start_datetime
+      properties:
+        id:
+          type: string
+          format: uuid
+        updated_at:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date
+        readable_id:
+          type: string
+        strategy_type:
+          type: string
+          enum:
+            - RegularScheduleStrategy
+            - RandomScheduleStrategy
+            - DemandScheduleStrategy
+        schedule_type:
+          type: string
+          enum:
+            - TrainSchedule
+        strategy_start_tick:
+          type: integer
+          format: int32
+        strategy_end_tick:
+          type: integer
+          format: int32
+        train_schedule_train_type:
+          type: string
+          enum:
+            - passenger
+            - cargo
+        demand_strategy_power_station:
+          type: string
+        demand_strategy_scaling_factor:
+          type: number
+          format: float
+        demand_strategy_start_datetime:
+          type: string
+          format: date
+
+    Token:
+      type: object
+      required:
+        - permission
+        - name
       properties:
         permission:
-          title: permission
           type: string
-      type: object
+          enum:
+            - user
+            - admin
+        name:
+          type: string
+
   securitySchemes:
     ApiKeyAuth:
       in: header

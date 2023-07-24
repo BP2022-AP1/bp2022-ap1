@@ -219,7 +219,7 @@ class TestTrain:
         assert len(train.add_subscriptions()) > 0
 
     def test_spawn_loaded_net(
-        self, configured_souc: SimulationObjectUpdatingComponent, train_add
+        self, configured_souc: SimulationObjectUpdatingComponent, train_add, max_speed
     ):
         # pylint: disable=unused-argument
         p1_id = Platform("station-1", edge_id="a57e4-1", platform_id="station-1")
@@ -237,6 +237,7 @@ class TestTrain:
         configured_souc: SimulationObjectUpdatingComponent,
         train_add,
         mocked_event_bus: EventBus,
+        max_speed,
     ):
         # pylint: disable=unused-argument
         platform_1 = Platform("station-1", edge_id="bf53d-0", platform_id="station-1")

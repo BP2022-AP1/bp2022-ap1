@@ -1,9 +1,15 @@
+import os
 from abc import ABC, abstractmethod
 from random import Random
 
 from src.fault_injector.fault_configurations.fault_configuration import (
     FaultConfiguration,
 )
+
+
+def tick_to_second(tick: int) -> int:
+    """converts a tick into a second"""
+    return int(float(tick) * float(os.getenv("TICK_LENGTH")))
 
 
 class FaultStrategy(ABC):
@@ -50,12 +56,12 @@ class RegularFaultStrategy(FaultStrategy):
     def should_inject(
         self, tick: int, configuration: FaultConfiguration, injected: bool
     ) -> bool:
-        return configuration.start_tick == tick and not injected
+        return configuration.start_time == tick_to_second(tick) and not injected
 
     def should_resolve(
         self, tick: int, configuration: FaultConfiguration, injected: bool
     ) -> bool:
-        return configuration.end_tick == tick and injected
+        return configuration.end_time == tick_to_second(tick) and injected
 
 
 class RandomFaultStrategy(FaultStrategy):

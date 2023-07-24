@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 
 from peewee import ForeignKeyField
@@ -17,6 +18,19 @@ class SpawnerConfiguration(SerializableBaseModel):
     Schedules which are handled in the reference table class `SpawnerConfigurationXSchedule`.
     This class has no fields except the `id` which is needed by the `Spawner`.
     """
+
+    def to_dict(self):
+        data = super().to_dict()
+        schedules = [
+            str(reference.schedule_configuration_id.id)
+            # It is a peewee method
+            # pylint: disable-next=no-member
+            for reference in self.schedule_configuration_references
+        ]
+        return {
+            "schedule": schedules,
+            **data,
+        }
 
 
 class SpawnerConfigurationXSchedule(BaseModel):
@@ -78,6 +92,7 @@ class Spawner(Component, ISpawnerDisruptor):
     train_spawner: TrainBuilder
 
     PRIORITY: str = "LOW"
+    TICKS_PER_SECOND: int = int(1 / float(os.environ["TICK_LENGTH"]))
 
     def next_tick(self, tick: int):
         """Called to announce that the next tick occurred.
@@ -85,8 +100,10 @@ class Spawner(Component, ISpawnerDisruptor):
         :param tick: The current tick.
         :type tick: int
         """
+        if tick % self.TICKS_PER_SECOND != 0:
+            return
         for schedule in self._schedules.values():
-            schedule.maybe_spawn(tick, self)
+            schedule.maybe_spawn(tick // self.TICKS_PER_SECOND, self)
 
     def __init__(
         self,
