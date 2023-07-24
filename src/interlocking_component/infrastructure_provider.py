@@ -75,6 +75,7 @@ class SumoInfrastructureProvider(InfrastructureProvider):
         :param edge: The edge the train drove onto
         :type edge: Edge
         """
+
         track_segment_id = edge.identifier.split("-re")[0]
         # The interlocking does not have two edges per track, so the -re must be removed if there
         self.tds_count_in(track_segment_id)
