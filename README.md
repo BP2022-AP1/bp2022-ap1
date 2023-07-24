@@ -5,30 +5,30 @@
 | CI & CD   | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=dev)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Adev) | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Amain) |
 | Coveralls | [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=dev)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=dev)                                      | [![Coverage Status](https://coveralls.io/repos/github/BP2022-AP1/bp2022-ap1/badge.svg?branch=main)](https://coveralls.io/github/BP2022-AP1/bp2022-ap1?branch=main)                                      |
 
-A REST API for simulations and analysis of train traffic on the LEAG rail network. Create one of many component configurations, for example, for defining the interlocking, train schedules, and faults. Simulation configurations hold connections to the component configuration. You could add connections to component configurations. A run is the execution of the defined simulation.
+A REST-API for simulations and analysis of train traffic on the LEAG rail network. Create one of many component configurations, for example, to define the interlocking, train schedules, and faults. Simulation configurations hold connections to the component configuration. You can add connections to component configurations. A run is the execution of a defined simulation.
 
 **USED TECHNOLOGIES**
 
 - [SUMO](https://sumo.dlr.de/): handles the main simulation logic
-- [TraCI](https://sumo.dlr.de/docs/TraCI.html): used to edit a running simulation
+- [TraCI](https://sumo.dlr.de/docs/TraCI.html): used to modify a running simulation
 - [Celery](https://docs.celeryq.dev/en/stable/): the simulation is executed within a Celery worker
 - [peewee](http://docs.peewee-orm.com/en/latest/): interaction with the database
 - [Flask](https://flask.palletsprojects.com/en/2.3.x/): used to implement the REST-API
 - [yaramo](https://github.com/simulate-digital-rail/yaramo): railway model focusing on interoperability between different existing planning formats
 
-**STRUCTURE OF DOCUMENTATION**
+**STRUCTURE OF THE DOCUMENTATION**
 
 The documentation is structured into three parts: This README, the [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki) and the [documentation of the REST-API](https://bp2022-ap1.github.io/bp2022-ap1/). The following table gives an overview of the content of each part.
 
-| Place                                                              | Content                                                                                                                                                                                                      |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Place                                                              | Content                                                                                                                                                                                                       |
+| ------------------------------------------------------------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | README                                                             | The readme contains information about the basic development process. That includes the setup, available commands for developers, a description of the environment variables, database management and testing. |
-| [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki)              | The wiki introduces the architecture with its components. The other chapters contain descriptions of the components itself.                                                                                 |
-| [REST-API documentation](https://bp2022-ap1.github.io/bp2022-ap1/) | The REST-API documentation contains information for the enduser about the interaction with the REST-API. This includes available paths, the allowed request bodies and responses.                                          |
+| [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki)              | The wiki introduces the architecture with its components. The other chapters contain descriptions of the components itself.                                                                                   |
+| [REST-API documentation](https://bp2022-ap1.github.io/bp2022-ap1/) | The REST-API documentation contains information for the end user about the interaction with the REST-API. This includes available paths, the allowed request bodies and responses.                            |
 
 ## Setup
 
-We're using `poetry` to manage our dependencies. You can find the documentation of `poetry` here: [poetry documentation](https://python-poetry.org/docs/). To set up this project, you need to install `poetry` and run `poetry install` in the root directory of this project. This will install all dependencies and create a virtual environment. You can activate the virtual environment with a `poetry shell`.
+We're using `poetry` to manage our dependencies. You can find the documentation of `poetry` here: [poetry documentation](https://python-poetry.org/docs/). To set up this project, you need to install `poetry` and run `poetry install` in the root directory of this project. This will install all dependencies and create a virtual environment. You can activate the virtual environment with `poetry shell`.
 
 Within the virtual environment, you can run `poe` to run commands. Essential commands are `poe dev` to run the development server and `poe test` to run the tests. You can find more commands in the section Commands. Be sure that you have docker installed.
 
@@ -54,7 +54,7 @@ Run `poe test` to run our testing framework and starting the test database. It u
 
 ### `poe test-deps`
 
-Run `poe test-deps` to run the needed container for tests. These are the test database, a celery-worker, and a redis database.
+Run `poe test-deps` to run the containers required for testing. These are the test database, a celery-worker, and a redis database.
 
 ### `poe test-lf`
 
@@ -98,7 +98,7 @@ Run `poe insert-config` to insert a previously selected config. By default this 
 
 ## Environment variables
 
-We're loading public environment variables with docker compose and secret ones with poe. We have four files that contain environment variables.
+We're loading public environment variables with docker compose and secret environment variables with poe. We have four files that contain environment variables.
 
 ### `.env.shared`
 
