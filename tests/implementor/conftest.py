@@ -1,7 +1,6 @@
 import hashlib
 
 import pytest
-from traci import vehicle
 
 from src.fault_injector.fault_configurations.platform_blocked_fault_configuration import (
     PlatformBlockedFaultConfiguration,
@@ -315,23 +314,6 @@ def another_train_prio_fault_configuration(
     train_prio_fault_configuration_data,
 ):
     return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
-
-
-# ------------- TrainSpeedLimitFaultConfiguration ----------------
-
-
-@pytest.fixture
-def train_speed_fault_configuration(
-    basic_train: Train,
-) -> TrainSpeedFaultConfiguration:
-    return TrainSpeedFaultConfiguration.create(
-        start_tick=40,
-        end_tick=400,
-        description="test TrainSpeedFault",
-        affected_element_id=basic_train.identifier,
-        new_speed=30,
-        strategy="regular",
-    )
 
 
 # ------------- TrainSpeedFaultConfiguration ----------------

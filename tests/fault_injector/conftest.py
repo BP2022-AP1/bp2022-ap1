@@ -1,20 +1,13 @@
 import pytest
-from traci import vehicle
 
-from src.event_bus.event_bus import EventBus
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.schedule.schedule import ScheduleConfiguration
 from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
 )
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
-from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
 @pytest.fixture

@@ -64,7 +64,6 @@ class TestTrainSpeedFault:
         tick,
         train_speed_fault: TrainSpeedFault,
         basic_train: Train,
-        souc: SimulationObjectUpdatingComponent,
     ):
         basic_train.train_type.max_speed = 100
         train_speed_fault.inject_fault(tick=tick)
