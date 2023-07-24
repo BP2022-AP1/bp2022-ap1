@@ -274,6 +274,7 @@ class RouteController(Component):
         print("setting spawn fahrstrasse")
         train_to_be_initialized = UninitializedTrain(timetable, "/not_a_real_train_" + str(self.tick))
         self.set_fahrstrasse(train_to_be_initialized, starting_edge)
+        print(train_to_be_initialized.state)
         if train_to_be_initialized.state == Train.State.DRIVING:
             return train_to_be_initialized.route, train_to_be_initialized
         else:
@@ -409,13 +410,17 @@ class RouteController(Component):
         :return: if it worked or not
         """
         if not self.check_if_route_is_reserved(route, train, entire_route):
+            print("reserving new")
             if not self.reserve_route(entire_route, train):
+                print("reservation failed")
                 return False
 
         self.maybe_put_reservations_as_first(train, entire_route)
         if self.check_if_route_is_reserved_as_first(route, train, entire_route):
+            print("reserved as first")
             was_set = self.set_interlocking_route(interlocking_route)
             if not was_set:
+                print("fahrstrasse not set")
                 self.route_queues.routes_to_be_set.append(interlocking_route)
                 train.state = Train.State.WAITING_FOR_FAHRSTRASSE
             return True
@@ -471,14 +476,11 @@ class RouteController(Component):
         :return: if the route is reserved for the train
         """
         route_as_tracks = self.get_tracks_of_node_route(route)
-        entire_route_as_tracks = self.get_tracks_of_node_route(entire_route)
-        for i, track in enumerate(entire_route_as_tracks):
-            if not track.is_reservation_track:
-                continue
-            if len(track.reservations) == 0 or track.reservations[0][0] != train:
-                return False
-            if i >= len(route_as_tracks):
+        for i, reserved_track in enumerate(train.reserved_tracks):
+            if reserved_track not in route_as_tracks and i != 0:
                 break
+            if len(reserved_track.reservations) == 0 or reserved_track.reservations[0][0] != train:
+                return False
         return True
 
     def reserve_route(self, route: List[Node], train: Train) -> bool:
