@@ -285,7 +285,7 @@ class RouteController(Component):
         return None, train_to_be_initialized
 
     def remove_train_from_queues(self, train_to_be_removed: Train):
-        """This method removes a train from all queues where fahrstrassen or 
+        """This method removes a train from all queues where fahrstrassen or
         things like that may be set in the next_tick method
 
         :param train_to_be_removed: The train, that will not be considered anymore
