@@ -2104,6 +2104,12 @@ components:
         progress:
           type: number
           format: float
+        simulation:
+          type: string
+          format: uuid
+        process_id:
+          type: integer
+          format: uuid
 
     CreateRegularSchedule:
       type: object
