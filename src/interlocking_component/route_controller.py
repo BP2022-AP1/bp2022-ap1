@@ -109,7 +109,7 @@ class UninitializedTrain:
     """
 
     identifier: str = "/not_a_real_train"
-    reserved_tracks: List[Track] = None
+    reserved_tracks: List[ReservationTrack] = None
     reserved_until_station_index: int = 1
     timetable: List[Platform] = None
     route: str = None
@@ -282,6 +282,8 @@ class RouteController(Component):
         :param reservation_placeholder: The placeholder, that has reservations
         :param train: The train that will get those reservations
         """
+        #for track in reservation_placeholder.reserved_tracks:
+        #    print(track.identifier, "is first reserved for: ", track.reservations[0][0].identifier)
         for track in reservation_placeholder.reserved_tracks:
             for reserved_train, edge in track.reservations:
                 if reserved_train == reservation_placeholder:
@@ -292,6 +294,8 @@ class RouteController(Component):
                         + track.reservations[i + 1 :]
                     )
         train.reserved_tracks = reservation_placeholder.reserved_tracks
+        #for track in reservation_placeholder.reserved_tracks:
+        #    print(track.identifier, "is first reserved for: ", track.reservations[0][0].identifier)
 
     def maybe_set_fahrstrasse(self, train: Train, edge: Edge):
         """This method should be called when a train enters a new track_segment.

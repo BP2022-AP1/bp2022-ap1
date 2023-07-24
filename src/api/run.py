@@ -9,41 +9,37 @@ bp = Blueprint("run", __name__)
 
 
 @bp.route("/run", methods=["get"])
-@token_required()
-def get_all_run_ids(token):
+def get_all_run_ids():
     """Get all run id"""
     options = {}
     options["simulationId"] = request.args.get("simulationId")
 
-    return impl.run.get_all_run_ids(options, token)
+    return impl.run.get_all_run_ids(options, None)
 
 
 @bp.route("/run", methods=["post"])
-@token_required()
-def create_run(token):
+def create_run():
     """Create a run"""
     schema = schemas.RunConfiguration()
 
     body = parser.parse(schema, request, location="json")
 
-    return impl.run.create_run(body, token)
+    return impl.run.create_run(body, None)
 
 
 @bp.route("/run/<identifier>", methods=["get"])
-@token_required()
-def get_run(identifier, token):
+def get_run(identifier):
     """Get a run"""
     options = {}
     options["identifier"] = identifier
 
-    return impl.run.get_run(options, token)
+    return impl.run.get_run(options, None)
 
 
 @bp.route("/run/<identifier>", methods=["delete"])
-@token_required()
-def delete_run(identifier, token):
+def delete_run(identifier):
     """Delete a run"""
     options = {}
     options["identifier"] = identifier
 
-    return impl.run.delete_run(options, token)
+    return impl.run.delete_run(options, None)
