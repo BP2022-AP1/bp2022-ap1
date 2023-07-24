@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 import pytest
 from planpro_importer.reader import PlanProReader
-from traci import constants, edge, trafficlight, vehicle
+from traci import constants, trafficlight, vehicle
 
 from src.event_bus.event_bus import EventBus
 from src.interlocking_component.infrastructure_provider import (

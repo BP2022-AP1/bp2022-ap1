@@ -944,7 +944,7 @@ class Train(SimulationObject):
             self.updater.event_bus.arrival_train(
                 self.updater.tick,
                 self.identifier,
-                self.current_platform,
+                self.timetable[self._station_index - 1],
             )
             self._last_stop_state = True
 
@@ -952,7 +952,7 @@ class Train(SimulationObject):
             self.updater.event_bus.departure_train(
                 self.updater.tick,
                 self.identifier,
-                self.current_platform,
+                self.timetable[self._station_index - 1],
             )
             self._last_stop_state = False
 
