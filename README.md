@@ -21,7 +21,7 @@ A REST-API for simulations and analysis of train traffic on the LEAG rail networ
 The documentation is structured into three parts: This README, the [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki) and the [documentation of the REST-API](https://bp2022-ap1.github.io/bp2022-ap1/). The following table gives an overview of the content of each part.
 
 | Place                                                              | Content                                                                                                                                                                                                       |
-| ------------------------------------------------------------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | README                                                             | The readme contains information about the basic development process. That includes the setup, available commands for developers, a description of the environment variables, database management and testing. |
 | [Wiki](https://github.com/BP2022-AP1/bp2022-ap1/wiki)              | The wiki introduces the architecture with its components. The other chapters contain descriptions of the components itself.                                                                                   |
 | [REST-API documentation](https://bp2022-ap1.github.io/bp2022-ap1/) | The REST-API documentation contains information for the end user about the interaction with the REST-API. This includes available paths, the allowed request bodies and responses.                            |
@@ -133,7 +133,7 @@ There is a ```planpro_helper.py``` in the ```data``` directory, which main metho
 
 There is a ```sumo_config_helper.py``` in the ```data``` directory, which main method uses yaramo to get a sumo-config from a PlanPro file. The name can not be chosen, but is the one from the input PlanPro file. There is a directory inside the ```sumo``` subdirectory with that name. Inside there is the ```sumo-config```directory with the SUMO files.
 
-By running `bin/db` you can manage the `dev` database and the `test` database.
+By running `poe db` and `poe db-test` you can manage the `dev` database and the `test` database.
 
 ## Database Management
 
