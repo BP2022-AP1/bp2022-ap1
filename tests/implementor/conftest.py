@@ -27,7 +27,7 @@ from src.fault_injector.fault_configurations.train_speed_fault_configuration imp
     TrainSpeedFaultConfiguration,
     TrainSpeedFaultConfigurationXSimulationConfiguration,
 )
-from src.implementor.models import Run, SimulationConfiguration, Token
+from src.implementor.models import SimulationConfiguration, Token
 from src.interlocking_component.interlocking_configuration import (
     InterlockingConfiguration,
 )
@@ -45,6 +45,7 @@ from src.spawner.spawner import (
 from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
+# pylint: disable=duplicate-code
 @pytest.fixture
 def token():
     clear_token = "token"
@@ -174,7 +175,7 @@ def another_spawner_configuration(
 
 
 @pytest.fixture
-def platform(edge: Edge, edge_re: Edge) -> Platform:
+def platform(edge: Edge) -> Platform:
     return Platform(
         "fault injector platform", platform_id="platform-1", edge_id=edge.identifier
     )
@@ -294,6 +295,8 @@ def another_track_speed_limit_fault_configuration(
 
 @pytest.fixture
 def train_add(monkeypatch):
+    # definition of function set by the traci module
+    # pylint: disable-next=unused-argument disable-next=invalid-name
     def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
         assert typeID is not None
@@ -303,6 +306,7 @@ def train_add(monkeypatch):
 
 @pytest.fixture
 def max_speed(monkeypatch):
+    # definition of function set by the traci module
     # pylint: disable-next=unused-argument
     def set_max_speed(train_id: str, speed: float):
         pass
@@ -311,6 +315,7 @@ def max_speed(monkeypatch):
 
 
 @pytest.fixture
+# Need train_add and max_speed as fixtures to make sure that the traci module is patched
 # pylint: disable-next=unused-argument
 def train(train_add, max_speed) -> Train:
     return Train(
@@ -342,23 +347,6 @@ def another_train_prio_fault_configuration(
     train_prio_fault_configuration_data,
 ):
     return TrainPrioFaultConfiguration.create(**train_prio_fault_configuration_data)
-
-
-# ------------- TrainSpeedLimitFaultConfiguration ----------------
-
-
-@pytest.fixture
-def train_speed_fault_configuration(
-    train: Train,
-) -> TrainSpeedFaultConfiguration:
-    return TrainSpeedFaultConfiguration.create(
-        start_time=40,
-        end_time=400,
-        description="test TrainSpeedFault",
-        affected_element_id=train.identifier,
-        new_speed=30,
-        strategy="regular",
-    )
 
 
 # ------------- TrainSpeedFaultConfiguration ----------------
