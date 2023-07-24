@@ -116,7 +116,9 @@ class UninitializedTrain:
     _station_index: int = 1
     state: Train.State = Train.State.DRIVING
 
-    def __init__(self, timetable: List[Platform], identifier: str = "/not_a_real_train"):
+    def __init__(
+        self, timetable: List[Platform], identifier: str = "/not_a_real_train"
+    ):
         self.identifier = identifier
         self.timetable = timetable
         self.reserved_tracks = []
@@ -272,24 +274,42 @@ class RouteController(Component):
         :return: The id of the first SUMO Route and the placholder for reservations.
         """
         print("setting spawn fahrstrasse")
-        train_to_be_initialized = UninitializedTrain(timetable, "/not_a_real_train_" + str(self.tick))
+        train_to_be_initialized = UninitializedTrain(
+            timetable, "/not_a_real_train_" + str(self.tick)
+        )
         self.set_fahrstrasse(train_to_be_initialized, starting_edge)
         if train_to_be_initialized.state == Train.State.DRIVING:
             return train_to_be_initialized.route, train_to_be_initialized
-        else:
-            self.remove_train_from_queues(train_to_be_initialized)
-            self.remove_reservations_for_train(train_to_be_initialized)
-            return None, train_to_be_initialized
-        
+        self.remove_train_from_queues(train_to_be_initialized)
+        self.remove_reservations_for_train(train_to_be_initialized)
+        return None, train_to_be_initialized
+
     def remove_train_from_queues(self, train_to_be_removed: Train):
-        for route, train, interlocking_route, entire_route in self.route_queues.routes_waiting_for_reservations:
+        """This method removes a train from all queues where fahrstrassen or 
+        things like that may be set in the next_tick method
+
+        :param train_to_be_removed: The train, that will not be considered anymore
+        """
+        for (
+            route,
+            train,
+            interlocking_route,
+            entire_route,
+        ) in self.route_queues.routes_waiting_for_reservations:
             if train == train_to_be_removed:
-                self.route_queues.routes_waiting_for_reservations.remove((route, train, interlocking_route, entire_route))
+                self.route_queues.routes_waiting_for_reservations.remove(
+                    (route, train, interlocking_route, entire_route)
+                )
         for train, interlocking_route in self.route_queues.routes_to_be_set:
             if train == train_to_be_removed:
                 self.route_queues.routes_to_be_set.remove((train, interlocking_route))
 
     def remove_reservations_for_train(self, train: Train):
+        """This Methods removes all reservations made by an train.
+        It deletes them in the train and in the tracks.
+
+        :param train: The train, that will have it's reservations removed
+        """
         for track in train.reserved_tracks:
             for reserved_train, edge in track.reservations:
                 if reserved_train == train:
@@ -410,7 +430,7 @@ class RouteController(Component):
                 return False
 
         self.maybe_put_reservations_as_first(train, entire_route)
-        if self.check_if_route_is_reserved_as_first(route, train, entire_route):
+        if self.check_if_route_is_reserved_as_first(route, train):
             was_set = self.set_interlocking_route(interlocking_route)
             if not was_set:
                 self.route_queues.routes_to_be_set.append((train, interlocking_route))
@@ -458,7 +478,7 @@ class RouteController(Component):
         return True
 
     def check_if_route_is_reserved_as_first(
-        self, route: List[Node], train: Train, entire_route: List[Node]
+        self, route: List[Node], train: Train
     ) -> bool:
         """This method checks, if the given route is fully reserved for the given train
         and if the train is in the first position in the queue.
@@ -471,7 +491,10 @@ class RouteController(Component):
         for i, reserved_track in enumerate(train.reserved_tracks):
             if reserved_track not in route_as_tracks and i != 0:
                 break
-            if len(reserved_track.reservations) == 0 or reserved_track.reservations[0][0] != train:
+            if (
+                len(reserved_track.reservations) == 0
+                or reserved_track.reservations[0][0] != train
+            ):
                 return False
         return True
 
