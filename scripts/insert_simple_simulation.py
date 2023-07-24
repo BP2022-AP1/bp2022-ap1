@@ -18,7 +18,7 @@ with db.atomic():
         strategy_start_time=2,
         strategy_end_time=400,
         train_schedule_train_type="regio",
-        regular_strategy_frequency=60,
+        regular_strategy_frequency=300,
     )
     print(f"regular schedule: {regular_schedule.id}")
     for index, platform in enumerate(platforms):
