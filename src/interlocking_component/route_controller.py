@@ -285,9 +285,9 @@ class RouteController(Component):
         for route, train, interlocking_route, entire_route in self.route_queues.routes_waiting_for_reservations:
             if train == train_to_be_removed:
                 self.route_queues.routes_waiting_for_reservations.remove((route, train, interlocking_route, entire_route))
-        for interlocking_route in self.route_queues.routes_to_be_set:
-            if train == train_to_be_removed:
-                self.route_queues.routes_waiting_for_reservations.remove(interlocking_route)
+                for interlocking_route_in_queue in self.route_queues.routes_to_be_set:
+                    if interlocking_route_in_queue == interlocking_route:
+                        self.route_queues.routes_waiting_for_reservations.remove(interlocking_route)
 
     def remove_reservations_for_train(self, train: Train):
         for track in train.reserved_tracks:
