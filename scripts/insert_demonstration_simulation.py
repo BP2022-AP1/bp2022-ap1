@@ -29,7 +29,7 @@ with db.atomic():
         strategy_type="RandomScheduleStrategy",
         strategy_start_time=0,
         strategy_end_time=7200,
-        train_schedule_train_type="regio",
+        train_schedule_train_type="cargo",
         random_strategy_trains_per_1000_seconds=2.0,
     )
     print(f"regular schedule: {regular_schedule.id}")
