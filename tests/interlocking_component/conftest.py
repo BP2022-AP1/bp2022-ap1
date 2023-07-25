@@ -304,5 +304,19 @@ def sumo_edge(reservation_track: ReservationTrack) -> Edge:
 
 
 @pytest.fixture
+def reservation_track() -> ReservationTrack:
+    class ReservationTrackMock:
+        """This mocks an edge coming from SUMO with the same attributes,
+        but not the functionality.
+        """
+
+        identifier = "test_id"
+        is_reservation_track = True
+        reservations = []
+
+    return ReservationTrackMock()
+
+
+@pytest.fixture
 def router() -> Router:
     return Router()
