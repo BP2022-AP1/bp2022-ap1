@@ -33,9 +33,7 @@ class Router:
             try:
                 current_node = sorted_distances[current_index][0]
             except Exception as exc:
-                raise ValueError(
-                    f"No route could be found from {start_edge.identifier} to {end_edge.identifier}"
-                ) from exc
+                raise ValueError("No route could be found.") from exc
             if current_node == end_edge.from_node:
                 break
             edge_to_current_node = previous_nodes[current_node].get_edge_to(
