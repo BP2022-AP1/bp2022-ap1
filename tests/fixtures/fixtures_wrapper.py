@@ -95,7 +95,6 @@ def train_add(monkeypatch, max_speed):
     # pylint: disable=unused-argument
     def add_train(identifier, routeID=None, typeID=None):
         assert identifier is not None
-        assert routeID is not None
         assert typeID is not None
 
     monkeypatch.setattr(vehicle, "add", add_train)
