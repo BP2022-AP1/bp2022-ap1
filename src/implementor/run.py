@@ -222,13 +222,13 @@ def get_run(options, token):
     run = runs.get()
     progress = Communicator.progress(str(run.process_id))
     state = Communicator.state(str(run.process_id))
-
-    return {"state": state, "progress": progress}, 200
+    information = run.to_dict()
+    return {"state": state, "progress": progress, **information}, 200
 
 
 def delete_run(options, token):
     """
-    :param options: A dictionary containing all the paramters for the Operations
+    :param options: A dictionary containing all the parameters for the Operations
         options["id"]
     :param token: Token object of the current user
 
