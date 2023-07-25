@@ -24,7 +24,7 @@
           "type": "grafana-simple-json-datasource",
           "uid": "DATASOURCE_UID"
         },
-        "enable": true,
+        "enable": false,
         "iconColor": "red",
         "name": "Coal Train Spawn Events",
         "query": "get_coal_spawn_events_by_config_id:${config_id}",
@@ -530,7 +530,7 @@
           "type": "table"
         }
       ],
-      "title": "Verkehrsleistung Zugkilometer pro Stunde",
+      "title": "Verkehrsleistung Histogramm",
       "transformations": [
         {
           "id": "filterFieldsByName",
@@ -707,14 +707,14 @@
           "type": "table"
         }
       ],
-      "title": "Verkehrsarbeit Zugkilometer",
+      "title": "Verkehrsarbeit Histogramm",
       "transformations": [
         {
           "id": "filterFieldsByName",
           "options": {
             "include": {
               "names": [
-                "block_section_length"
+                "edge_length"
               ]
             }
           }
@@ -826,7 +826,38 @@
           },
           "unit": "lengthkm"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 0,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 1,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 2,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -966,7 +997,38 @@
           },
           "unit": "velocitykmh"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 0,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 1,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 2,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -1030,7 +1092,7 @@
       "type": "row"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",

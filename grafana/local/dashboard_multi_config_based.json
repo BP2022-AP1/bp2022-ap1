@@ -224,7 +224,38 @@
           },
           "unit": "lengthkm"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 0,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 1,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 2,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -287,7 +318,38 @@
           },
           "unit": "velocitykmh"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 0,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 2,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 1,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
