@@ -723,9 +723,7 @@ class DataScience:
         edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = edge_times_df.groupby("run_id").agg(
-            {"edge_length": "sum"}
-        )
+        grouped_df = edge_times_df.groupby("run_id").agg({"edge_length": "sum"})
         grouped_df["edge_length"] = grouped_df["edge_length"] / 1000.0
         return grouped_df
 
