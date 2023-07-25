@@ -490,7 +490,7 @@ def verkehrsarbeit_by_config_id_df(run):
     verkehrsarbeit_df = pd.DataFrame(
         {
             "run_id": [run.id],
-            "edge_length": pd.Series([164.0]),
+            "edge_length": pd.Series([0.164]),
         }
     )
     verkehrsarbeit_df.set_index("run_id", inplace=True)

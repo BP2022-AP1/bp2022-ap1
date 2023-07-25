@@ -724,10 +724,9 @@ class DataScience:
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
         grouped_df = edge_times_df.groupby("run_id").agg(
-            {"enter_tick": "min", "leave_tick": "max", "edge_length": "sum"}
+            {"edge_length": "sum"}
         )
-        del grouped_df["enter_tick"]
-        del grouped_df["leave_tick"]
+        grouped_df["edge_length"] = grouped_df["edge_length"] / 1000.0
         return grouped_df
 
     def get_verkehrsleistung_by_config_id(self, config_id: UUID) -> pd.DataFrame:
