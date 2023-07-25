@@ -1883,10 +1883,10 @@
 	<route edges="ea4f8-2-re ea4f8-1-re ea4f8-0-re e8482-0" color="15,114,20" id="route_84B0D366-42B4-4E01-939D-61C1071EA4F8-KM-45-GEGEN-1FE987F9-0680-4C74-AE8C-C57E40AE8482-KM-25-IN"/>
 	<route edges="ea4f8-2-re ea4f8-1-re ea4f8-0-re 14d3d-0" color="6,13,120" id="route_84B0D366-42B4-4E01-939D-61C1071EA4F8-KM-45-GEGEN-EAE7E229-9DF3-4882-8BF0-956977814D3D-KM-25-IN"/>
 
-	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28" maxSpeed="22" />
+	<vType id="regio" accel="2.5" decel="1.3" length="20.00" vClass="rail" color="193,18,28"/>
 
-	<vType id="ice" accel="5" decel="1.3" length="60.00" vClass="rail_electric" color="192,192,192" maxSpeed="22" />
+	<vType id="ice" accel="5" decel="1.3" length="60.00" vClass="rail_electric" color="192,192,192"/>
 
-	<vType id="cargo" accel="2.5" decel="1.3" length="80.00" vClass="rail" color="30,30,30" maxSpeed="22" />
+	<vType id="cargo" accel="2.5" decel="1.3" length="80.00" vClass="rail" color="30,30,30"/>
 
 </routes>
