@@ -1,6 +1,6 @@
 import pytest
-from traci import trafficlight
 
+from src.event_bus.event_bus import EventBus
 from src.wrapper.simulation_object_updating_component import (
     SimulationObjectUpdatingComponent,
 )
@@ -9,16 +9,6 @@ from src.wrapper.simulation_objects import Edge, Platform, Signal, Switch, Train
 
 class TestSimulationObjectUpdatingComponent:
     """Tests for the SimulationObjectUpdatingComponent"""
-
-    @pytest.fixture
-    def traffic_update(self, monkeypatch):
-        def set_traffic_light_state(identifier: str, state: str) -> None:
-            # pylint: disable=unused-argument
-            pass  # we don't care what happens here
-
-        monkeypatch.setattr(
-            trafficlight, "setRedYellowGreenState", set_traffic_light_state
-        )
 
     @pytest.fixture
     def component(self, traffic_update) -> SimulationObjectUpdatingComponent:
@@ -104,13 +94,16 @@ class TestSimulationObjectUpdatingComponent:
     def test_stale_train_is_removed(
         self,
         configured_souc: SimulationObjectUpdatingComponent,
-        train: Train,
+        mocked_event_bus: EventBus,
+        basic_train: Train,
         results,
         all_trains,
     ):
         # pylint: disable=unused-argument
-        configured_souc.simulation_objects.append(train)
+        configured_souc.simulation_objects.append(basic_train)
         configured_souc.next_tick(1)
         configured_souc.next_tick(2)
+
+        assert mocked_event_bus.remove_train_calls == 1
 
         assert len(configured_souc.trains) == 0

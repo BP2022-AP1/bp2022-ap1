@@ -1,20 +1,13 @@
 import pytest
-from traci import vehicle
 
-from src.event_bus.event_bus import EventBus
 from src.implementor.models import Run, SimulationConfiguration, Token
 from src.interlocking_component.route_controller import IInterlockingDisruptor
-from src.logger.logger import Logger
 from src.schedule.schedule import ScheduleConfiguration
 from src.spawner.spawner import (
     Spawner,
     SpawnerConfiguration,
     SpawnerConfigurationXSchedule,
 )
-from src.wrapper.simulation_object_updating_component import (
-    SimulationObjectUpdatingComponent,
-)
-from src.wrapper.simulation_objects import Edge, Platform, Track, Train
 
 
 @pytest.fixture
@@ -42,13 +35,6 @@ def run(simulation_configuration):
     return Run.create(simulation_configuration=simulation_configuration.id)
 
 
-@pytest.fixture
-def event_bus(run):
-    bus = EventBus(run_id=run.id)
-    Logger(bus)
-    return bus
-
-
 class MockRouteController:
     """Mock up for RouteController"""
 
@@ -61,99 +47,6 @@ class MockRouteController:
 @pytest.fixture
 def interlocking_disruptor():
     return IInterlockingDisruptor(MockRouteController())
-
-
-@pytest.fixture
-def simulation_object_updater():
-    return SimulationObjectUpdatingComponent()
-
-
-@pytest.fixture
-def edge() -> Edge:
-    return Edge("fault injector track")
-
-
-@pytest.fixture
-def edge_re() -> Edge:
-    return Edge("fault injector track-re")
-
-
-@pytest.fixture
-def platform() -> Platform:
-    return Platform("fancy-platform", platform_id="platform-1", edge_id="fancy-edge")
-
-
-# pylint: disable=protected-access
-@pytest.fixture
-def track(edge, edge_re):
-    track = Track(edge, edge_re)
-    edge._track = track
-    edge_re._track = track
-    return track
-
-
-# pylint: enable=protected-access
-
-
-@pytest.fixture
-def combine_track_and_wrapper(
-    track: Track, simulation_object_updater: SimulationObjectUpdatingComponent
-):
-    track.updater = simulation_object_updater
-    simulation_object_updater.simulation_objects.append(track)
-    return track, simulation_object_updater
-
-
-@pytest.fixture
-def combine_platform_and_wrapper(
-    platform: Platform, simulation_object_updater: SimulationObjectUpdatingComponent
-):
-    platform.updater = simulation_object_updater
-    simulation_object_updater.simulation_objects.append(platform)
-    return platform, simulation_object_updater
-
-
-@pytest.fixture
-def combine_train_and_wrapper(
-    train: Train, simulation_object_updater: SimulationObjectUpdatingComponent
-):
-    train.updater = simulation_object_updater
-    simulation_object_updater.simulation_objects.append(train)
-    return train, simulation_object_updater
-
-
-# pylint: disable=invalid-name, unused-argument
-# disabling invalid-name allows the names routeID and typeID, despite the fact,
-# that they don't follow snake_case
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-# pylint: enable=invalid-name, unused-argument
-
-
-@pytest.fixture
-def max_speed(monkeypatch):
-    # pylint: disable-next=unused-argument
-    def set_max_speed(train_id: str, speed: float):
-        pass
-
-    monkeypatch.setattr(vehicle, "setMaxSpeed", set_max_speed)
-
-
-@pytest.fixture
-# pylint: disable-next=unused-argument
-def train(train_add, max_speed) -> Train:
-    return Train(
-        identifier="fault injector train",
-        train_type="cargo",
-        timetable=["platform-1", "platform-2"],
-    )
 
 
 @pytest.fixture
