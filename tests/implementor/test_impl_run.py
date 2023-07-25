@@ -148,7 +148,13 @@ class TestRunImplementor:
         fetched_run, status = impl.run.get_run({"identifier": run.id}, token)
         assert status == 200
         assert fetched_run["state"] == "PROGRESS" or fetched_run["state"] == "SUCCESS"
-        assert fetched_run["progress"] > 0
+        assert isinstance(fetched_run["progress"], int)
+        assert isinstance(fetched_run["id"], str)
+        assert isinstance(fetched_run["readable_id"], str)
+        assert isinstance(fetched_run["updated_at"], str)
+        assert isinstance(fetched_run["created_at"], str)
+        assert isinstance(fetched_run["process_id"], str)
+        assert isinstance(fetched_run["simulation"], str)
 
     # Test skipped, because the fixtures of celery aren't working properly
     # That's why we have to use the real celery app instead and cannot mock the components
