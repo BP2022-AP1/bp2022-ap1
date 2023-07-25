@@ -111,31 +111,6 @@ def configured_souc(traffic_update) -> SimulationObjectUpdatingComponent:
     return souc
 
 
-@pytest.fixture
-def traffic_update(monkeypatch):
-    rr_count = 0
-    gg_count = 0
-
-    def set_traffic_light_state(identifier: str, state: str) -> None:
-        # pylint: disable=unused-argument
-        nonlocal rr_count, gg_count
-        assert state in ("rG", "GG")
-        if state == "rG":
-            rr_count += 1
-        else:
-            gg_count += 1
-
-    def get_rr_count() -> int:
-        return rr_count
-
-    def get_gg_count() -> int:
-        return gg_count
-
-    monkeypatch.setattr(trafficlight, "setRedYellowGreenState", set_traffic_light_state)
-
-    return (get_rr_count, get_gg_count)
-
-
 # pylint: disable=protected-access
 @pytest.fixture
 def controlled_lanes(monkeypatch, configured_souc: SimulationObjectUpdatingComponent):
@@ -340,20 +315,6 @@ def reservation_track() -> ReservationTrack:
         reservations = []
 
     return ReservationTrackMock()
-
-
-# pylint: disable=invalid-name
-@pytest.fixture
-def train_add(monkeypatch):
-    def add_train(identifier, routeID=None, typeID=None):
-        assert identifier is not None
-        assert routeID is not None
-        assert typeID is not None
-
-    monkeypatch.setattr(vehicle, "add", add_train)
-
-
-# pylint: enable=invalid-name
 
 
 @pytest.fixture

@@ -24,13 +24,13 @@ class TestTrainSpeedFault:
         pass
 
     @pytest.fixture
-    def train_speed_fault_configuration(self, train: Train):
+    def train_speed_fault_configuration(self, basic_train: Train):
         return TrainSpeedFaultConfiguration.create(
             **{
                 "start_time": 40,
                 "end_time": 400,
                 "description": "test TrainSpeedFault",
-                "affected_element_id": train.identifier,
+                "affected_element_id": basic_train.identifier,
                 "new_speed": 30,
                 "strategy": "regular",
             }
@@ -41,13 +41,13 @@ class TestTrainSpeedFault:
         self,
         train_speed_fault_configuration: TrainSpeedFaultConfiguration,
         event_bus: EventBus,
-        simulation_object_updater: SimulationObjectUpdatingComponent,
+        souc: SimulationObjectUpdatingComponent,
         interlocking_disruptor: IInterlockingDisruptor,
     ):
         return TrainSpeedFault(
             configuration=train_speed_fault_configuration,
             event_bus=event_bus,
-            simulation_object_updater=simulation_object_updater,
+            simulation_object_updater=souc,
             interlocking_disruptor=interlocking_disruptor,
         )
 
@@ -63,17 +63,14 @@ class TestTrainSpeedFault:
         self,
         tick,
         train_speed_fault: TrainSpeedFault,
-        train: Train,
-        # the following arguments are needed fixtures
-        # pylint: disable=unused-argument
-        max_speed,
-        train_add,
-        combine_train_and_wrapper,
-        # pylint: enable=unused-argument
+        basic_train: Train,
     ):
-        train.train_type.max_speed = 100
+        basic_train.train_type.max_speed = 100
         train_speed_fault.inject_fault(tick=tick)
-        assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
+        assert (
+            basic_train.train_type.max_speed
+            == train_speed_fault.configuration.new_speed
+        )
         # assert (
         #     train_speed_fault.interlocking_disruptor.route_controller.method_calls == 1
         # )
@@ -82,41 +79,46 @@ class TestTrainSpeedFault:
         self,
         tick,
         train_speed_fault: TrainSpeedFault,
-        train: Train,
-        # the following arguments are needed fixtures
-        # pylint: disable=unused-argument
-        max_speed,
-        train_add,
-        combine_train_and_wrapper,
-        # pylint: enable=unused-argument
+        basic_train: Train,
     ):
-        train.train_type.max_speed = 50
+        basic_train.train_type.max_speed = 50
         train_speed_fault.inject_fault(tick=tick)
-        assert train.train_type.max_speed == train_speed_fault.configuration.new_speed
+        assert (
+            basic_train.train_type.max_speed
+            == train_speed_fault.configuration.new_speed
+        )
         # assert (
         #     train_speed_fault.interlocking_disruptor.route_controller.method_calls == 1
         # )
         train_speed_fault.resolve_fault(tick=tick)
-        assert train.train_type.max_speed == train_speed_fault.old_speed == 50
+        assert basic_train.train_type.max_speed == train_speed_fault.old_speed == 50
         # assert (
         #     train_speed_fault.interlocking_disruptor.route_controller.method_calls == 2
         # )
 
     def test_resolve_train_not_in_simulation(
-        self, tick, train_speed_fault: TrainSpeedFault, train: Train
+        self,
+        tick,
+        train_speed_fault: TrainSpeedFault,
+        basic_train: Train,
+        souc: SimulationObjectUpdatingComponent,
     ):
         """tests that nothing happens when resolving the TrainSpeedFault
         while the affected train is not in the simulation
         """
 
-        train_speed_fault.train = train
+        train_speed_fault.train = basic_train
         train_speed_fault.old_speed = 3
-        train.train_type._max_speed = 5
+        basic_train.train_type._max_speed = 5
+
+        # remove train from sim
+        souc.simulation_objects.remove(basic_train)
+
         assert (
             train_speed_fault.get_train_or_none(
-                train_speed_fault.simulation_object_updater, train.identifier
+                train_speed_fault.simulation_object_updater, basic_train.identifier
             )
             is None
         )
         train_speed_fault.resolve_fault(tick)
-        assert train.train_type.max_speed == 5
+        assert basic_train.train_type.max_speed == 5
