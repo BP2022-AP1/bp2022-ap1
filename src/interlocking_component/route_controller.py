@@ -273,7 +273,6 @@ class RouteController(Component):
         :raises KeyError: The route could not be found in the interlocking.
         :return: The id of the first SUMO Route and the placholder for reservations.
         """
-        print("setting spawn fahrstrasse")
         train_to_be_initialized = UninitializedTrain(
             timetable, "/not_a_real_train_" + str(self.tick)
         )
@@ -305,10 +304,10 @@ class RouteController(Component):
                 self.route_queues.routes_to_be_set.remove((train, interlocking_route))
 
     def remove_reservations_for_train(self, train: Train):
-        """This Methods removes all reservations made by an train.
+        """This Method removes all reservations made by a train.
         It deletes them in the train and in the tracks.
 
-        :param train: The train, that will have it's reservations removed
+        :param train: The train, that will have its reservations removed
         """
         for track in train.reserved_tracks:
             for reserved_train, edge in track.reservations:
