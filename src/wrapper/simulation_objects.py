@@ -780,13 +780,20 @@ class Train(SimulationObject):
         def add_simulation_connections(self) -> None:
             pass
 
+    class State(IntEnum):
+        """The possible states of the signal"""
+
+        DRIVING = 1
+        WAITING_FOR_RESERVATION = 2
+        WAITING_FOR_FAHRSTRASSE = 3
+
     _position: Tuple[float, float]
     _route: str
     _edge: Edge
     _speed: float
     _timetable: List[Platform]
+    state: State = State.DRIVING
     _stop_state: bool
-    _station_index: int = 0
     train_type: TrainType
     reserved_tracks: List[ReservationTrack]
     _station_index: int = 0
