@@ -40,7 +40,7 @@ class Communicator:
     def __init__(
         self,
         components: List[Component] = None,
-        max_tick: int = 86_400,
+        max_tick: int = int(86_400.0 / float(os.getenv("TICK_LENGTH"))),
         sumo_port: int = None,
         sumo_configuration: str = os.getenv("SUMO_CONFIG_PATH"),
     ):

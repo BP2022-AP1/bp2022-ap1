@@ -191,7 +191,8 @@ def create_run(body, token):
 
     process_id = communicator.run()
 
-    Run.update({Run.process_id: process_id}).where(Run.id == run.id).execute()
+    if process_id != "no id available":
+        Run.update({Run.process_id: process_id}).where(Run.id == run.id).execute()
 
     return (
         {

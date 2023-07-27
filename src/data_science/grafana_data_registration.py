@@ -68,14 +68,6 @@ class GrafanaDataRegistrator:
         run_id = self._get_run_id_from_param(param)
         return self.data_science.get_faults_by_run_id(run_id)
 
-    def get_verkehrsleistung_time_by_run_id(self, param, _) -> pd.DataFrame:
-        """Returns a list of all faults by grafana params
-        :param param: Grafana params
-        :param _: ignored input time range
-        :return: dataframe of verkehrsleistung"""
-        run_id = self._get_run_id_from_param(param)
-        return self.data_science.get_verkehrsleistung_time_by_run_id(run_id)
-
     def get_verkehrsleistung_momentarily_time_by_run_id(self, param, _) -> pd.DataFrame:
         """Returns the momentary verkehrsleistung over time by grafana params
         :param param: Grafana params
@@ -101,13 +93,13 @@ class GrafanaDataRegistrator:
         run_id = self._get_run_id_from_param(param)
         return self.data_science.get_spawn_events_by_run_id(run_id)
 
-    def get_verkehrsmenge_by_run_id(self, param, _) -> pd.DataFrame:
-        """Returns the verkehrsmenge by grafana params
+    def get_verkehrsarbeit_by_run_id(self, param, _) -> pd.DataFrame:
+        """Returns the verkehrsarbeit by grafana params
         :param param: Grafana params
         :param _: ignored input time range
-        :return: dataframe of verkehrsmenge"""
+        :return: dataframe of verkehrsarbeit"""
         run_id = self._get_run_id_from_param(param)
-        return self.data_science.get_verkehrsmenge_by_run_id(run_id)
+        return self.data_science.get_verkehrsarbeit_by_run_id(run_id)
 
     def get_verkehrsleistung_by_run_id(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsleistung by grafana params
@@ -167,13 +159,13 @@ class GrafanaDataRegistrator:
         config_id = self._get_config_id_from_param(param)
         return self.data_science.get_window_all_by_config_id(config_id)
 
-    def get_verkehrsmenge_by_config_id(self, param, _) -> pd.DataFrame:
-        """Returns the verkehrsmenge by grafana params
+    def get_verkehrsarbeit_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the verkehrsarbeit by grafana params
         :param param: Grafana params
         :param _: ignored input time range
-        :return: dataframe of verkehrsmenge"""
+        :return: dataframe of verkehrsarbeit"""
         config_id = self._get_config_id_from_param(param)
-        return self.data_science.get_verkehrsmenge_by_config_id(config_id)
+        return self.data_science.get_verkehrsarbeit_by_config_id(config_id)
 
     def get_verkehrsleistung_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsleistung by grafana params
@@ -183,13 +175,13 @@ class GrafanaDataRegistrator:
         config_id = self._get_config_id_from_param(param)
         return self.data_science.get_verkehrsleistung_by_config_id(config_id)
 
-    def get_average_verkehrsmenge_by_config_id(self, param, _) -> pd.DataFrame:
-        """Returns the average verkehrsmenge by grafana params
+    def get_average_verkehrsarbeit_by_config_id(self, param, _) -> pd.DataFrame:
+        """Returns the average verkehrsarbeit by grafana params
         :param param: Grafana params
         :param _: ignored input time range
-        :return: dataframe of average verkehrsmenge"""
+        :return: dataframe of average verkehrsarbeit"""
         config_id = self._get_config_id_from_param(param)
-        return self.data_science.get_average_verkehrsmenge_by_config_id(config_id)
+        return self.data_science.get_average_verkehrsarbeit_by_config_id(config_id)
 
     def get_average_verkehrsleistung_by_config_id(self, param, _) -> pd.DataFrame:
         """Returns the average verkehrsleistung by grafana params
@@ -209,13 +201,13 @@ class GrafanaDataRegistrator:
         config_ids = self._get_config_id_list_from_param(param)
         return self.data_science.get_window_by_multi_config(config_ids)
 
-    def get_verkehrsmenge_by_multi_config(self, param, _) -> pd.DataFrame:
-        """Returns the verkehrsmengen of multiple configs by grafana params
+    def get_verkehrsarbeit_by_multi_config(self, param, _) -> pd.DataFrame:
+        """Returns the verkehrsarbeitn of multiple configs by grafana params
         :param param: Grafana params
         :param _: ignored input time range
-        :return: dataframe of verkehrsmengen of multiple configs"""
+        :return: dataframe of verkehrsarbeitn of multiple configs"""
         config_ids = self._get_config_id_list_from_param(param)
-        return self.data_science.get_verkehrsmenge_by_multi_config(config_ids)
+        return self.data_science.get_verkehrsarbeit_by_multi_config(config_ids)
 
     def get_verkehrsleistung_by_multi_config(self, param, _) -> pd.DataFrame:
         """Returns the verkehrsleistung of multiple configs by grafana params
@@ -258,11 +250,10 @@ class GrafanaDataRegistrator:
         :return: list of all grafana functions"""
         return [
             "get_faults_by_run_id:${run_id}",
-            "get_verkehrsleistung_time_by_run_id:${run_id}",
             "get_verkehrsleistung_momentarily_time_by_run_id:${run_id}",
             "get_coal_demand_by_run_id:${run_id}",
-            "test_get_spawn_events_by_run_id:${run_id}",
-            "get_verkehrsmenge_by_run_id:${run_id}",
+            "get_spawn_events_by_run_id:${run_id}",
+            "get_verkehrsarbeit_by_run_id:${run_id}",
             "get_verkehrsleistung_by_run_id:${run_id}",
             "get_window_size_time_by_config_id:${config_id}",
             "get_verkehrsleistung_time_by_config_id:${config_id}",
@@ -270,12 +261,12 @@ class GrafanaDataRegistrator:
             "get_coal_spawn_events_by_config_id:${config_id}",
             "get_window_by_config_id:${config_id}",
             "get_window_all_by_config_id:${config_id}",
-            "get_verkehrsmenge_by_config_id:${config_id}",
+            "get_verkehrsarbeit_by_config_id:${config_id}",
             "get_verkehrsleistung_by_config_id:${config_id}",
-            "get_average_verkehrsmenge_by_config_id:${config_id}",
+            "get_average_verkehrsarbeit_by_config_id:${config_id}",
             "get_average_verkehrsleistung_by_config_id:${config_id}",
             "get_window_by_multi_config:${config_ids}",
-            "get_verkehrsmenge_by_multi_config:${config_ids}",
+            "get_verkehrsarbeit_by_multi_config:${config_ids}",
             "get_verkehrsleistung_by_multi_config:${config_ids}",
         ]
 
@@ -288,7 +279,7 @@ def define_and_register_data():
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
     )
     dg.add_annotation_reader(
-        "test_get_spawn_events_by_run_id",
+        "get_spawn_events_by_run_id",
         grafana_data_registrator.get_spawn_events_by_run_id,
     )
     dg.add_annotation_reader(
@@ -299,10 +290,6 @@ def define_and_register_data():
         "get_faults_by_run_id", grafana_data_registrator.get_faults_by_run_id
     )
     dg.add_metric_reader(
-        "get_verkehrsleistung_time_by_run_id",
-        grafana_data_registrator.get_verkehrsleistung_time_by_run_id,
-    )
-    dg.add_metric_reader(
         "get_verkehrsleistung_momentarily_time_by_run_id",
         grafana_data_registrator.get_verkehrsleistung_momentarily_time_by_run_id,
     )
@@ -311,8 +298,8 @@ def define_and_register_data():
         grafana_data_registrator.get_coal_demand_by_run_id,
     )
     dg.add_metric_reader(
-        "get_verkehrsmenge_by_run_id",
-        grafana_data_registrator.get_verkehrsmenge_by_run_id,
+        "get_verkehrsarbeit_by_run_id",
+        grafana_data_registrator.get_verkehrsarbeit_by_run_id,
     )
     dg.add_metric_reader(
         "get_verkehrsleistung_by_run_id",
@@ -338,16 +325,16 @@ def define_and_register_data():
         grafana_data_registrator.get_window_all_by_config_id,
     )
     dg.add_metric_reader(
-        "get_verkehrsmenge_by_config_id",
-        grafana_data_registrator.get_verkehrsmenge_by_config_id,
+        "get_verkehrsarbeit_by_config_id",
+        grafana_data_registrator.get_verkehrsarbeit_by_config_id,
     )
     dg.add_metric_reader(
         "get_verkehrsleistung_by_config_id",
         grafana_data_registrator.get_verkehrsleistung_by_config_id,
     )
     dg.add_metric_reader(
-        "get_average_verkehrsmenge_by_config_id",
-        grafana_data_registrator.get_average_verkehrsmenge_by_config_id,
+        "get_average_verkehrsarbeit_by_config_id",
+        grafana_data_registrator.get_average_verkehrsarbeit_by_config_id,
     )
     dg.add_metric_reader(
         "get_average_verkehrsleistung_by_config_id",
@@ -358,8 +345,8 @@ def define_and_register_data():
         grafana_data_registrator.get_window_by_multi_config,
     )
     dg.add_metric_reader(
-        "get_verkehrsmenge_by_multi_config",
-        grafana_data_registrator.get_verkehrsmenge_by_multi_config,
+        "get_verkehrsarbeit_by_multi_config",
+        grafana_data_registrator.get_verkehrsarbeit_by_multi_config,
     )
     dg.add_metric_reader(
         "get_verkehrsleistung_by_multi_config",

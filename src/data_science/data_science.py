@@ -159,47 +159,7 @@ class DataScience:
         )
         if tick == start_tick:
             return 0
-        return source_df["dist"].sum() * 3600 / self.tick_to_second(tick - start_tick)
-
-    def get_verkehrsleistung_time_by_run_id(
-        self, run_id: UUID, delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH")))
-    ) -> pd.DataFrame:
-        """Returns the accumulated verkehrsleistung over a period of time by a given run id
-        :param run_id: the run id
-        :param delta_tick: delta tick
-        :return: dataframe of verkehrsleistung
-        """
-        edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
-        edge_times_df.dropna(inplace=True)
-        edge_times_df["time"] = edge_times_df.apply(
-            lambda row: row["leave_tick"] - row["enter_tick"], axis=1
-        )
-        verkehrsleistung_df = pd.DataFrame(
-            {
-                "tick": np.arange(
-                    0,
-                    edge_times_df["leave_tick"].max() + 1,
-                    delta_tick,
-                )
-            }
-        )
-        verkehrsleistung_df["verkehrsleistung"] = verkehrsleistung_df.apply(
-            lambda row: self._calculate_verkehrsleistung_by_tick(
-                edge_times_df,
-                row["tick"],
-                0,
-            ),
-            axis=1,
-        )
-        verkehrsleistung_df["time"] = verkehrsleistung_df["tick"].apply(
-            lambda x: self.tick_to_second(x) + self.unix_2020
-        )
-        verkehrsleistung_df["time"] = verkehrsleistung_df["time"].apply(
-            pd.to_datetime, unit="s"
-        )
-        verkehrsleistung_df.set_index("time", inplace=True)
-        del verkehrsleistung_df["tick"]
-        return verkehrsleistung_df
+        return source_df["dist"].sum() * 3.6 / self.tick_to_second(tick - start_tick)
 
     def _get_section_length_momentarily_by_tick(
         self,
@@ -243,7 +203,7 @@ class DataScience:
             tick,
             delta_tick,
         )
-        return np.sum(dist_series) * 3600 / self.tick_to_second(delta_tick)
+        return np.sum(dist_series) * 3.6 / self.tick_to_second(delta_tick)
 
     def get_verkehrsleistung_momentarily_time_by_run_id(
         self, run_id: UUID, delta_tick=int(float(10) / float(os.getenv("TICK_LENGTH")))
@@ -313,10 +273,10 @@ class DataScience:
         return spawn_df
 
     # --- SCALARS
-    def get_verkehrsmenge_by_run_id(self, run_id: UUID) -> pd.DataFrame:
-        """Returns the verkehrsmenge by a given run id
+    def get_verkehrsarbeit_by_run_id(self, run_id: UUID) -> pd.DataFrame:
+        """Returns the verkehrsarbeit by a given run id
         :param run_id: run id
-        :return: dataframe of verkehrsmenge
+        :return: dataframe of verkehrsarbeit
         """
 
         edge_times_df = self.log_collector.get_edge_times_all_trains(run_id)
@@ -330,7 +290,7 @@ class DataScience:
         grouped_df = edge_times_df.groupby("train_type").apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsmenge": data["edge_length"].sum(),
+                    "verkehrsarbeit": data["edge_length"].sum() / 1000.0,
                 }
             )
         )
@@ -338,7 +298,7 @@ class DataScience:
         all_df = pd.DataFrame(
             {
                 "train_type": ["all"],
-                "verkehrsmenge": [grouped_df["verkehrsmenge"].sum()],
+                "verkehrsarbeit": [grouped_df["verkehrsarbeit"].sum()],
             }
         )
         grouped_df = pd.concat(
@@ -373,12 +333,6 @@ class DataScience:
             )
         )
 
-        grouped_df["verkehrsleistung"] = grouped_df.apply(
-            lambda row: row["edge_length"]
-            * 3600
-            / self.tick_to_second(row["leave_tick"] - row["enter_tick"]),
-            axis=1,
-        )
         grouped_df["enter_tick"] = grouped_df["enter_tick"].astype("Int64")
         grouped_df["leave_tick"] = grouped_df["leave_tick"].astype("Int64")
         grouped_df.reset_index(inplace=True)
@@ -388,13 +342,18 @@ class DataScience:
                 "enter_tick": [0],
                 "leave_tick": [grouped_df["leave_tick"].max()],
                 "edge_length": [grouped_df["edge_length"].sum()],
-                "verkehrsleistung": [grouped_df["verkehrsleistung"].sum()],
             }
         )
 
         grouped_df = pd.concat(
             [grouped_df, all_df],
             ignore_index=True,
+        )
+        grouped_df["verkehrsleistung"] = grouped_df.apply(
+            lambda row: row["edge_length"]
+            * 3.6
+            / self.tick_to_second(row["leave_tick"] - row["enter_tick"]),
+            axis=1,
         )
         grouped_df.reset_index(inplace=True)
         del grouped_df["index"]
@@ -748,10 +707,10 @@ class DataScience:
         out_df["departure_second"] = out_df["departure_second"].astype("Int64")
         return out_df
 
-    def get_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
-        """Returns the verkehrsmenge by a given config id
+    def get_verkehrsarbeit_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+        """Returns the verkehrsarbeit by a given config id
         :param config_id: config id
-        :return: verkehrsmenge dataframe
+        :return: verkehrsarbeit dataframe
         """
 
         df_list = []
@@ -764,11 +723,8 @@ class DataScience:
         edge_times_df["time"] = edge_times_df.apply(
             lambda row: row["leave_tick"] - row["enter_tick"], axis=1
         )
-        grouped_df = edge_times_df.groupby("run_id").agg(
-            {"enter_tick": "min", "leave_tick": "max", "edge_length": "sum"}
-        )
-        del grouped_df["enter_tick"]
-        del grouped_df["leave_tick"]
+        grouped_df = edge_times_df.groupby("run_id").agg({"edge_length": "sum"})
+        grouped_df["edge_length"] = grouped_df["edge_length"] / 1000.0
         return grouped_df
 
     def get_verkehrsleistung_by_config_id(self, config_id: UUID) -> pd.DataFrame:
@@ -791,17 +747,17 @@ class DataScience:
         )
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
         del grouped_df["leave_tick"]
         return grouped_df
 
-    def get_average_verkehrsmenge_by_config_id(self, config_id: UUID) -> pd.DataFrame:
-        """Returns the average verkehrsmenge by a given config id
+    def get_average_verkehrsarbeit_by_config_id(self, config_id: UUID) -> pd.DataFrame:
+        """Returns the average verkehrsarbeit by a given config id
         :param config_id: config id
-        :return: verkehrsmenge dataframe
+        :return: verkehrsarbeit dataframe
         """
 
         df_list = []
@@ -820,7 +776,7 @@ class DataScience:
         grouped_df = edge_times_df.groupby(["run_id", "train_type"]).apply(
             lambda data: pd.Series(
                 {
-                    "verkehrsmenge": data["edge_length"].sum(),
+                    "verkehrsarbeit": data["edge_length"].sum() / 1000.0,
                 }
             )
         )
@@ -829,13 +785,13 @@ class DataScience:
             lambda data: pd.Series(
                 {
                     "train_type": "all",
-                    "verkehrsmenge": data["verkehrsmenge"].sum(),
+                    "verkehrsarbeit": data["verkehrsarbeit"].sum(),
                 }
             )
         )
         all_df.reset_index(inplace=True)
         grouped_df = pd.concat([grouped_df, all_df], axis=0)
-        grouped_df = grouped_df.groupby(["train_type"]).agg({"verkehrsmenge": "mean"})
+        grouped_df = grouped_df.groupby(["train_type"]).agg({"verkehrsarbeit": "mean"})
         grouped_df.reset_index(inplace=True)
         return grouped_df
 
@@ -883,7 +839,7 @@ class DataScience:
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )
@@ -995,12 +951,12 @@ class DataScience:
 
         return out_df
 
-    def get_verkehrsmenge_by_multi_config(
+    def get_verkehrsarbeit_by_multi_config(
         self, config_id_list: list[UUID]
     ) -> pd.DataFrame:
-        """Returns the verkehrsmenge of given configs
+        """Returns the verkehrsarbeit of given configs
         :param config_id_list: list of simulation configuration ids
-        :return: dataframe of verkehrsmenge
+        :return: dataframe of verkehrsarbeit
         """
         df_list = []
         for run_id in Run.select().where(
@@ -1028,7 +984,7 @@ class DataScience:
                 {
                     "enter_tick": 0,
                     "leave_tick": data["leave_tick"].max(),
-                    "edge_length": data["edge_length"].sum(),
+                    "edge_length": data["edge_length"].sum() / 1000.0,
                 }
             )
         )
@@ -1110,7 +1066,7 @@ class DataScience:
 
         grouped_df["verkehrsleistung"] = grouped_df.apply(
             lambda row: row["edge_length"]
-            * 3600
+            * 3.6
             / self.tick_to_second_float(row["leave_tick"]),
             axis=1,
         )

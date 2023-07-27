@@ -43,7 +43,7 @@
         "enable": true,
         "iconColor": "orange",
         "name": "Train Spawns",
-        "query": "test_get_spawn_events_by_run_id:${run_id}",
+        "query": "get_spawn_events_by_run_id:${run_id}",
         "target": {
           "limit": 100,
           "matchAny": false,
@@ -86,7 +86,7 @@
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "Kohlebedarf",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -126,7 +126,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "masst"
         },
         "overrides": []
       },
@@ -136,7 +137,7 @@
         "x": 0,
         "y": 1
       },
-      "id": 10,
+      "id": 13,
       "options": {
         "legend": {
           "calcs": [],
@@ -156,11 +157,11 @@
             "uid": "DATASOURCE_UID"
           },
           "refId": "A",
-          "target": "get_verkehrsleistung_time_by_run_id:${run_id}",
+          "target": "get_coal_demand_by_run_id:${run_id}",
           "type": "timeserie"
         }
       ],
-      "title": "Verkehrsleistung akkumuliert",
+      "title": "Kohlebedarf",
       "type": "timeseries"
     },
     {
@@ -176,7 +177,7 @@
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "Verkehrsleistung",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -216,7 +217,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "velocitykmh"
         },
         "overrides": []
       },
@@ -250,99 +252,7 @@
           "type": "timeserie"
         }
       ],
-      "title": "Verkehrsleistung momentan",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "grafana-simple-json-datasource",
-        "uid": "DATASOURCE_UID"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "masst"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 9
-      },
-      "id": 13,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-simple-json-datasource",
-            "uid": "DATASOURCE_UID"
-          },
-          "refId": "A",
-          "target": "get_coal_demand_by_run_id:${run_id}",
-          "type": "timeserie"
-        }
-      ],
-      "title": "Kohlebedarf",
+      "title": "Verkehrsleistung",
       "type": "timeseries"
     },
     {
@@ -350,7 +260,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 9
       },
       "id": 6,
       "title": "Scalar",
@@ -366,6 +276,7 @@
           "color": {
             "mode": "continuous-GrYlRd"
           },
+          "decimals": 0,
           "mappings": [],
           "min": 0,
           "thresholds": {
@@ -381,15 +292,46 @@
               }
             ]
           },
-          "unit": "lengthkm"
+          "unit": "km"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 2,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 0,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 1,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                    }
+                  ]
+              }
+            ]
+          }
+          ]
       },
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 10
       },
       "id": 2,
       "options": {
@@ -412,11 +354,11 @@
             "uid": "DATASOURCE_UID"
           },
           "refId": "A",
-          "target": "get_verkehrsmenge_by_run_id:${run_id}",
+          "target": "get_verkehrsarbeit_by_run_id:${run_id}",
           "type": "table"
         }
       ],
-      "title": "Verkehrsmenge",
+      "title": "Verkehrsarbeit",
       "type": "bargauge"
     },
     {
@@ -446,13 +388,44 @@
           },
           "unit": "velocitykmh"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "train_type"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "all": {
+                        "index": 2,
+                        "text": "Alle"
+                      },
+                      "cargo": {
+                        "index": 0,
+                        "text": "Güterverkehr"
+                      },
+                      "regio": {
+                        "index": 1,
+                        "text": "Regionalverkehr"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 10
       },
       "id": 4,
       "options": {
