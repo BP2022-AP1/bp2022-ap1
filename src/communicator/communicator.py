@@ -61,7 +61,7 @@ class Communicator:
         :return: The id of the celery task
         """
         celery_disabled = os.getenv("DISABLE_CELERY", False)
-
+        gui_disabled = os.getenv("DISABLE_GUI", False)
         if not celery_disabled:
             process = self._run.delay(
                 max_tick=self._max_tick,
@@ -70,6 +70,9 @@ class Communicator:
                 port=self._port,
             )
             return process.id
+        elif celery_disabled and gui_disabled:
+            self._run_without_gui()
+            return "no id available"
         else:
             self._run_with_gui()
             return "no id available"
@@ -86,6 +89,26 @@ class Communicator:
                 "--quit-on-end",
                 "--delay",
                 str(delay),
+                "--step-length",
+                os.getenv("TICK_LENGTH"),
+                "--time-to-teleport",
+                str(time_to_teleport),
+            ],
+            port=self._port,
+        )
+
+        run_simulation_steps(self._components, self._max_tick)
+
+        traci.close(wait=False)
+
+    def _run_without_gui(self):
+        delay = os.getenv("SUMO_GUI_DELAY", 10)
+        time_to_teleport = os.getenv("SUMO_TIME_TO_TELEPORT", -1)
+        traci.start(
+            [
+                checkBinary("sumo"),
+                "-c",
+                self._configuration,
                 "--step-length",
                 os.getenv("TICK_LENGTH"),
                 "--time-to-teleport",
