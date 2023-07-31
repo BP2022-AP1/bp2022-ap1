@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  sumo-flask:
+    build:
+      context: .
+      dockerfile: ./compose/sumo-flask/Dockerfile
+    env_file:
+      - .env.shared
+      - .env.dev
+    environment:
+      - DISABLE_CELERY=true
+      - DISABLE_GUI=true
+    volumes:
+      - .:/app
+    ports:
+      - "5010:5000"
+    depends_on:
+      - postgresql
+      - grafana
+
+  postgresql:
+    env_file:
+      - .env.dev
+
+  celery-worker:
+    env_file:
+      - .env.dev
+
+  grafana:
+    env_file:
+      - .env.dev
