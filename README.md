@@ -84,6 +84,11 @@ Run `poe db-test` to run helper functions for the test database. See more about 
 
 Run `poe dev` to start the database, a celery-worker, a redis database, and the development server. You can access the endpoint of the REST-API at port 5010.
 
+### `poe dev-without-celery`
+
+Run `poe dev-without-celery` to start the database, a redis database, and the development server. You can access the endpoint of the REST-API at port 5010.
+The command disables the celery worker and doesn't show the GUI representation of the simulation.
+
 ### `poe prod`
 
 Run `poe prod` to start the database, celery-worker, a redis database, and the waitress production server. You can access the endpoint of the REST-API at port 8090.

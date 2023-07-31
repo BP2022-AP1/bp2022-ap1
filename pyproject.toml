@@ -172,6 +172,10 @@ build-backend = "poetry.core.masonry.api"
     cmd = "flask -A src run --debug"
     env = { "DISABLE_CELERY" = "true" }
 
+    [tool.poe.tasks.dev-without-celery]
+    help = "Run flask app in development mode without celery"
+    cmd = "docker compose -f docker-compose.yaml -f docker-compose.dev-without-celery.yaml up sumo-flask"
+
     [tool.poe.tasks.insert-config]
     help = "Inserts the configs into the database"
     cmd = "python scripts/insert_demonstration_simulation.py"
