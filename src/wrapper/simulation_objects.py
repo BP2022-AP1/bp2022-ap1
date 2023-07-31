@@ -985,3 +985,83 @@ class Train(SimulationObject):
     def add_simulation_connections(self) -> None:
         # Nothing to do (we dont load trains from the sim)
         pass
+
+
+class SimulationObjectLists:
+    """Keeps all simulation objects in a list.
+    Also handles the adding and removing of objects from the simulation.
+    """
+
+    _simulation_objects: List[SimulationObject]
+
+    @property
+    def tick(self) -> int:
+        """Returns the current simulation tick
+
+        :return: The current simulation tick
+        """
+        return self._tick
+
+    @property
+    def simulation_objects(self) -> List[SimulationObject]:
+        """Returns a list of all objects in the simulation
+
+        :return: the objects in the simulation
+        """
+        return self._simulation_objects
+
+    @property
+    def trains(self) -> List[Train]:
+        """Returns all trains in the simulation
+
+        :return: The trains in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Train)]
+
+    @property
+    def nodes(self) -> List[Node]:
+        """Returns all nodes in the simulation
+
+        :return: The nodes in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Node)]
+
+    @property
+    def switches(self) -> List[Switch]:
+        """Returns all switches in the simulation
+
+        :return: The switches in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Switch)]
+
+    @property
+    def signals(self) -> List[Signal]:
+        """Returns all signals in the simulation
+
+        :return: The signals in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Signal)]
+
+    @property
+    def platforms(self) -> List[Platform]:
+        """Returns all platforms in the simulation
+
+        :return: The platforms in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Platform)]
+
+    @property
+    def edges(self) -> List[Edge]:
+        """Returns all tracks in the simulation
+
+        :return: The tracks in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Edge)]
+
+    @property
+    def tracks(self) -> List[Track]:
+        """Returns all tracks in the simulation
+
+        :return: The tracks in the simulation
+        """
+        return [x for x in self._simulation_objects if isinstance(x, Track)]
