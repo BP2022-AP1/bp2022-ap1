@@ -1,5 +1,12 @@
 # bp2022-ap1
 
+## ⚠️ Running the application is currently inoperable ⚠️
+
+Running the application with `poe dev` and `poe prod` is currently inoperable.
+The code contains cyclic dependencies between the InfrastructureProvider, Interlocking and RouteController. Please fix [#593](https://github.com/BP2022-AP1/bp2022-ap1/issues/593) and [#547](https://github.com/BP2022-AP1/bp2022-ap1/issues/547) first. 
+
+Until then you can use `poe dev-without-celery` or `poe gui` (if you have sumo installed).
+
 |           | `dev`                                                                                                                                                                                                 | `main`                                                                                                                                                                                                  |
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | CI & CD   | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=dev)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Adev) | [![CI](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/BP2022-AP1/bp2022-ap1/actions/workflows/python-app.yml?query=branch%3Amain) |
